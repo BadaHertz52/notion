@@ -77,7 +77,7 @@ const initialState =[{
   pages:[]
 }];
 
-export default function makeList (state:ListState =initialState, action: ListAction){
+export default function list (state:ListState =initialState, action: ListAction){
   switch (action.type) {
     case ADD_LIST:
       return state.concat(action.list);

@@ -75,7 +75,7 @@ const initialState ={
 ]
 };
 
-export default function makePage(state:PagesState =initialState , action :PageAction){
+export default function page(state:PagesState =initialState , action :PageAction){
   const pageIndex = state.ides.indexOf(action.pageId);
   const targetPage =state.pages[pageIndex];
   switch (action.type) {
