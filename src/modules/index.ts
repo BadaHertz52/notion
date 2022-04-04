@@ -1,8 +1,9 @@
 import {combineReducers} from 'redux';
+import notion from './notion';
 import list from './list';
-import page from './page';
+import user from './user';
 
-const rootReducer = combineReducers({list, page});
+const rootReducer = combineReducers({notion , list ,user});
 
 export default rootReducer ;
 export type RootSatate = ReturnType<typeof rootReducer>;
