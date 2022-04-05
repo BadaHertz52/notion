@@ -6,4 +6,4 @@ import user from './user';
 const rootReducer = combineReducers({notion , list ,user});
 
 export default rootReducer ;
-export type RootSatate = ReturnType<typeof rootReducer>;
+export type RootState = ReturnType<typeof rootReducer>;
