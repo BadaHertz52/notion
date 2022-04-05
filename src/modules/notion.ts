@@ -1,25 +1,30 @@
 //TYPE 
-type Block ={
+export type BlockType ="text"|
+"toggle"|
+"todo"|
+"header1"|
+"header2"|
+"header3" |
+"page" ;
+
+export type Block ={
   id:string,
   contents:string, //html를 string 으로 
-  type:"text"|
-  "toggle"|
-  "todo"|
-  "header1"|
-  "header2"|
-  "header3" |
-  "page",
+  type: BlockType,
+  icon: string | null ,
+  editTime: Date
   //className 
 }
-type Page ={
+export type Page ={
   id:string, // parent/me/children
   header:string ,
+  icon: string |null
   blocks : Block[],
   blockIdes : string[],
   subPageIdes:string[],
 };
 
-type Notion={ 
+export type Notion={ 
   pageIdes :String[],
   pages: Page[],
 };
@@ -34,29 +39,17 @@ const DELETE_BLOCK ="notion/DELETE_BLOCK" as const;
 export const addBlock =(pageId:string, block:Block)=> ({
   type:ADD_BLOCK ,
   pageId:pageId,
-  block:{
-    id:block.id,
-    contents:block.contents,
-    type:block.type
-  }
+  block:block
 });
 export const editBlock =(pageId:string, block:Block)=> ({
   type:EDIT_BLOCK ,
   pageId:pageId,
-  block:{
-    id:block.id,
-    contents:block.contents,
-    type:block.type
-  }
+  block:block
 });
 export const deleteBlock =(pageId:string, block:Block)=> ({
   type:DELETE_BLOCK ,
   pageId:pageId,
-  block:{
-    id:block.id,
-    contents:block.contents,
-    type:block.type
-  }
+  block:block
 });
 
 type NotionAction = 
@@ -67,19 +60,20 @@ ReturnType <typeof deleteBlock>
 
 //reducer
 const initialState ={
-  pageIdes:[String(Date.now)],
+  pageIdes:['12345'],
   pages:[
   {
-    id: String(Date.now),
-    header:"",
+    id: '12345',
+    header:"welocome notion",
+    icon:"☺️" ,
     blocks:[],
-    blockIdes:[String(Date.now)],
+    blockIdes:[],
     subPageIdes:[],
   }
 ]
 };
 
-export default function notion (state:Notion =initialState , action :NotionAction){
+export default function notion (state:Notion =initialState , action :NotionAction) :Notion{
   const pageIndex = state.pageIdes.indexOf(action.pageId);
   const targetPage =state.pages[pageIndex];
   switch (action.type) {
@@ -101,20 +95,24 @@ export default function notion (state:Notion =initialState , action :NotionActio
         state.pages[pageIndex] = page_addedBlock;
       }
       
-    break;
+      return state
     case EDIT_BLOCK:
       let blockIndex = targetPage.blockIdes.indexOf(action.block.id);
       state.pages[pageIndex].blocks[blockIndex] =action.block ; 
-    break;
+      return state
 
     case DELETE_BLOCK:
       blockIndex =targetPage.blockIdes.indexOf(action.block.id);
+
       const newBlocks = targetPage.blocks.filter((block:Block)=> block.id !== action.block.id);
+
       const newBlockIdes = targetPage.blockIdes.filter((id:String)=> id !== action.block.id );
+
       targetPage.blocks =newBlocks ;
       targetPage.blockIdes =newBlockIdes;
-    break;
+
+      return state;
     default:
-      break;
+      return state;
   }
 };
