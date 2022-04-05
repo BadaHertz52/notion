@@ -1,9 +1,11 @@
-type Item ={
+
+export type Item ={
   id:string,
   header:string,
+  icon:string |null
 };
 
-type List = Item[];
+export type List = Item[];
 
 const ADD_ITEM ="list/ADD_ITEM" as const ;
 const EDIT_ITEM ="list/EDIT_ITEM" as const ;
@@ -30,12 +32,13 @@ ReturnType <typeof editItem>|
 ReturnType <typeof deleteItem>
 ;
 
-const initialState =[{
-  id:String(Date.now),
-  header:"welcome notion"
+const initialState :List=[{
+  id:"12345",
+  header:"welcome notion",
+  icon: '☺' 
 }];
 
-export default function list(state:List =initialState ,action:ListAction){
+export default function list(state:List =initialState ,action:ListAction):List{
   switch (action.type) {
     case ADD_ITEM:
       return state.concat(action.item);
@@ -44,12 +47,10 @@ export default function list(state:List =initialState ,action:ListAction){
       const itemIndexs = state.map(item => item.id);
       const index = itemIndexs.indexOf(action.item.id);
       state[index] = action.item ;
-      break;
-    
+      return state;
     case DELETE_ITEM :
       return state.filter((item: Item) => item.id !== action.item.id);
-      
     default:
-      break;
+      return state
   }
 }
