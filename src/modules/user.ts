@@ -3,26 +3,27 @@ const DELETE_FAVORITES ="user/DELETE_FAVORITES" as const ;
 const ADD_TRASH ="user/ADD_TRASH" as const ;
 const CLEAN_TRASH ="user/CLEAN_TRASH" as const ;
 
-export const addFavorites =(listId:string)=>({
+export const addFavorites =(itemId:string)=>({
   type:ADD_FAVORITES,
-  listId :listId
+  itemId :itemId
 });
-export const deleteFavorites =(listId:string)=>({
+export const deleteFavorites =(itemId:string)=>({
   type:DELETE_FAVORITES,
-  listId:listId
+  itemId:itemId
 });
 
-export const addTrash =(listId: string)=>({
+export const addTrash =(itemId:string)=>({
   type: ADD_TRASH,
-  listId:listId
+  itemId:itemId
 });
-export const cleanTrash =(listId: string)=>({
+export const cleanTrash =(itemId: string)=>({
   type: CLEAN_TRASH,
-  listId:listId
+  itemId:itemId
 });
 
 type UserState = {
   userName:string,
+  userEmail:string,
   favorites:string[],
   trash:string[]
 };
@@ -34,21 +35,34 @@ ReturnType<typeof cleanTrash>;
 const initialState ={
   userName:"amet",
   userEmail:"amet@notion.com",
-  favorites:[],
+  favorites:["12345"],
   trash:[]
 };
 
-export default function user (state:UserState =initialState, action:UserAction){
+export default function user (state:UserState =initialState, action:UserAction):UserState{
   switch (action.type) {
     case ADD_FAVORITES :
-      return state.favorites.concat(action.listId);
+      return {
+        ...state,
+        favorites:
+        state.favorites.concat(action.itemId)}
+        ;
     case DELETE_FAVORITES :
-      return state.favorites.filter((id:string)=> id !== action.listId);
+      return {
+        ...state,
+        favorites:state.favorites.filter((id:string)=> id !== action.itemId)
+      } ;
     case ADD_TRASH :
-      return state.trash.concat(action.listId);
+      return {
+        ...state,
+        trash:state.trash.concat(action.itemId)
+      } 
     case CLEAN_TRASH :
-      return state.trash.filter((id:string)=> id !== action.listId)
+      return {
+        ...state,
+        trash :state.trash.filter((id:string)=> id !== action.itemId)
+      } 
     default:
-      break;
+      return state;
   }
 }
