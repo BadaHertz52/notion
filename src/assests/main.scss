@@ -1,0 +1,19 @@
+@import './editor';
+@import './sideBar';
+
+#inner {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+}
+
+button {
+  @include initialBtn
+}
+ul{
+  margin: 0;
+  padding:0
+}
+li{
+  list-style: none;
+}

@@ -1,0 +1,130 @@
+#sideBar {
+  width: 30%;
+  position: relative;
+  height: 100%;
+  background-color: #F7F6F3;
+  -webkit-transition-timing-function: ease-in;
+          transition-timing-function: ease-in;
+  -webkit-transition-property: -webkit-box-shadow;
+  transition-property: -webkit-box-shadow;
+  transition-property: box-shadow;
+  transition-property: box-shadow, -webkit-box-shadow;
+}
+
+#sideBar_inner {
+  z-index: 999;
+  height: 100%;
+  width: 100%;
+}
+
+#sideBar .itemInner {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 10px 14px;
+  font-size: 14px;
+  text-align: center;
+}
+
+#sideBar .itemInner span {
+  color: rgba(25, 23, 17, 0.6);
+  font-weight: 500;
+}
+
+#sideBar .itemInner #record-icon, #sideBar .itemInner svg {
+  margin-right: 8px;
+}
+
+#sideBar .itemInner svg {
+  font-size: 18px;
+  font-weight: bolder;
+  color: rgba(55, 53, 47, 0.65);
+}
+
+#sideBar .sideBarBtn {
+  color: rgba(55, 53, 47, 0.65);
+  font-weight: bolder;
+  font-size: 20px;
+}
+
+#sideBar .sideBarBtn svg {
+  margin-right: 0;
+}
+
+#sideBar #openSideBarBtn {
+  position: absolute;
+  top: 10px;
+  right: -10%;
+}
+
+#sideBar .switcher .itemInner {
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+#sideBar .switcher .itemInner > div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+#sideBar #record-icon {
+  background-color: #B9B8B6;
+  color: #F7F6F3;
+  border-radius: 3px;
+  text-align: center;
+  width: 18px;
+  height: 18px;
+  text-transform: uppercase;
+}
+
+#sideBar #record-icon div {
+  font-size: 12.5px;
+}
+
+#sideBar .user {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+#sideBar .user div:first-child {
+  font-weight: 500;
+}
+
+#sideBar .user div:nth-child(2) {
+  margin-top: -5px;
+  -webkit-transform: rotate(90deg);
+          transform: rotate(90deg);
+}
+
+#sideBar .user div:nth-child(2) svg {
+  margin-right: 0;
+  color: rgba(55, 53, 47, 0.65);
+  font-weight: bolder;
+}
+
+#inner {
+  width: 100vw;
+  height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+button {
+  border: none;
+  background-color: transparent;
+  padding: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  list-style: none;
+}
+/*# sourceMappingURL=main.css.map */
