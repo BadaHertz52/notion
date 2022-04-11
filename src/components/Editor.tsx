@@ -1,22 +1,20 @@
 import React from 'react';
-import { Block, Notion, Page } from '../modules/notion';
+import { Block, Page } from '../modules/notion';
 import BlockComponent from './BlockComponent';
 //icon
 
-
-
 type EditorProps ={
-  block:Block,
   page:Page,
-  notion:Notion,
-  editBlock : ()=> void
+  editBlock : (pageId:string , block:Block)=> void
 }
 
-const Editor =({page,block ,editBlock}:EditorProps)=>{
+const Editor =({page, editBlock}:EditorProps)=>{
 
   const TopBar =()=>{
     return(
+      <div className="topbar">
 
+      </div>
     )
   };
 
