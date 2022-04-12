@@ -1,2 +1,8 @@
 @import './frame';
 @import './menu';
+
+#editor {
+  flex-grow: 1;
+  flex-shrink: 1;
+  height: 100%;
+}
