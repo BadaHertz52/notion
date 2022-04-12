@@ -16,16 +16,19 @@ export type Block ={
   //className 
 }
 export type Page ={
-  id:string, // parent/me/children
+  id:string, 
   header:string ,
-  icon: string |null
+  icon: string |null,
+  cover: ImageData |null,
+  comment: string| null,
   blocks : Block[],
   blockIdes : string[],
   subPageIdes:string[],
+  parentId: string[] | null 
 };
 
 export type Notion={ 
-  pageIdes :String[],
+  pageIdes :string [],
   pages: Page[],
 };
 
@@ -60,15 +63,40 @@ ReturnType <typeof deleteBlock>
 
 //reducer
 const initialState ={
-  pageIdes:['12345'],
+  pageIdes:['12345' ,'1234', '123' ],
   pages:[
   {
     id: '12345',
     header:"welocome notion",
-    icon:"☺️" ,
+    icon:'👋' ,
+    cover: null,
+    comment:  null,
     blocks:[],
     blockIdes:[],
     subPageIdes:[],
+    parentId: ['1111' , '2222']
+  },
+  {
+    id: '1234',
+    header:"welocome notion",
+    icon:'👋' ,
+    cover: null,
+    comment:  null,
+    blocks:[],
+    blockIdes:[],
+    subPageIdes:[],
+    parentId: null
+  },
+  {
+    id: '123',
+    header:"welocome notion",
+    icon:'👋' ,
+    cover: null,
+    comment:  null,
+    blocks:[],
+    blockIdes:[],
+    subPageIdes:[],
+    parentId:null
   }
 ]
 };
@@ -106,7 +134,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
 
       const newBlocks = targetPage.blocks.filter((block:Block)=> block.id !== action.block.id);
 
-      const newBlockIdes = targetPage.blockIdes.filter((id:String)=> id !== action.block.id );
+      const newBlockIdes = targetPage.blockIdes.filter((id:string )=> id !== action.block.id );
 
       targetPage.blocks =newBlocks ;
       targetPage.blockIdes =newBlockIdes;
