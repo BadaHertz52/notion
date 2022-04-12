@@ -35,8 +35,19 @@ ReturnType <typeof deleteItem>
 const initialState :List=[{
   id:"12345",
   header:"welcome notion",
-  icon: '☺' 
-}];
+  icon: '👋' 
+},
+{
+  id:"1234",
+  header:"welcome notion",
+  icon: '👋' 
+},
+{
+  id:"123",
+  header:"welcome notion",
+  icon: '👋' 
+},
+];
 
 export default function list(state:List =initialState ,action:ListAction):List{
   switch (action.type) {
