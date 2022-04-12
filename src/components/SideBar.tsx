@@ -27,16 +27,18 @@ type ItemTemplageProp ={
 const ItemTemplate =({item}:ItemTemplageProp)=>{
   return (
   <div className='itemInner'>
-    <button className='toggleBtn'>
-      <IoMdArrowDropright/>
-    </button>
-    <div className='pageName'>
-      {item.icon !==null && 
-        <span>
-          {item.icon}
-        </span>
-        }
-      <span>{item.header}</span>
+    <div className='pageContent'>
+      <button className='toggleBtn'>
+        <IoMdArrowDropright/>
+      </button>
+      <div className='pageName'>
+        {item.icon !==null && 
+          <span>
+            {item.icon}
+          </span>
+          }
+        <span>{item.header}</span>
+      </div>
     </div>
     <div className="pageFun">
       <button  
@@ -49,7 +51,7 @@ const ItemTemplate =({item}:ItemTemplageProp)=>{
         className='addPageBtn'
         title="Quickly add a page inside"
       >
-        <AiOutlinePlusSquare/>
+        <AiOutlinePlus/>
       </button>
     </div>
   </div>
@@ -130,41 +132,48 @@ const SideBar =({user ,notion, list }:SideBarProps)=>{
         <div className="srcoller">
           <div className="favorites">
             <div className="header">
-              FAVORITES 
+              <span>FAVORITES </span>
             </div>
             <div className="list">
               <ListTemplate targetList={favorites}/>
             </div>
           </div>
-          <div className="private"></div>
+          <div className="private">
             <div className="header">
-              PRIVATE
+              <span>PRIVATE</span>
+              <button 
+                className='addPageBtn'
+                title="Quickly add a page inside"
+              >
+                <AiOutlinePlus/>
+              </button>
             </div>
             <div className="list">
               <ListTemplate targetList={list}/>
             </div>
+          </div>
+          <div className="fun2">
+            <button>
+              <div className="itemInner">
+                <HiTemplate/>
+                <span>Templates</span>
+              </div>
+            </button>
+            <button>
+              <div className="itemInner">
+                <HiDownload/>
+                <span>Import</span>
+              </div>
+            </button>
+            <button>
+              <div className="itemInner">
+                <BsFillTrash2Fill/>
+                <span>Trash</span>
+              </div>
+            </button>
+          </div>
         </div>
-        <div className="fun2">
-          <button>
-            <div className="itemInner">
-              <HiTemplate/>
-              <span>Templates</span>
-            </div>
-          </button>
-          <button>
-            <div className="itemInner">
-              <HiDownload/>
-              <span>Import</span>
-            </div>
-          </button>
-          <button>
-            <div className="itemInner">
-              <BsFillTrash2Fill/>
-              <span>Trash</span>
-            </div>
-          </button>
-        </div>
-        <div>
+        <div className= "addNewPage">
           <button>
             <AiOutlinePlus/>
             <span>New page</span>
