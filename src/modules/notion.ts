@@ -17,10 +17,12 @@ export type Block ={
 }
 export type Page ={
   id:string, 
-  header:string ,
-  icon: string |null,
-  cover: ImageData |null,
-  comment: string| null,
+  header : {
+    title: string,
+    icon: string |null,
+    cover: ImageData |null,
+    comment: string| null,
+  }
   blocks : Block[],
   blockIdes : string[],
   subPageIdes:string[],
@@ -67,21 +69,26 @@ const initialState ={
   pages:[
   {
     id: '12345',
-    header:"welocome notion",
-    icon:'👋' ,
-    cover: null,
-    comment:  null,
-    blocks:[],
+    header : {
+      title:"welcoome notion",
+      icon:'👋' ,
+      cover: null,
+      comment:  null,
+    },
+    blocks:[
+    ],
     blockIdes:[],
     subPageIdes:[],
     parentId: ['1111' , '2222']
   },
   {
     id: '1234',
-    header:"welocome notion",
-    icon:'👋' ,
-    cover: null,
-    comment:  null,
+    header : {
+      title:"welcoome notion",
+      icon:'👋' ,
+      cover: null,
+      comment:  null,
+    },
     blocks:[],
     blockIdes:[],
     subPageIdes:[],
@@ -89,10 +96,12 @@ const initialState ={
   },
   {
     id: '123',
-    header:"welocome notion",
-    icon:'👋' ,
-    cover: null,
-    comment:  null,
+    header : {
+      title:"welcoome notion",
+      icon:'👋' ,
+      cover: null,
+      comment:  null,
+    },
     blocks:[],
     blockIdes:[],
     subPageIdes:[],

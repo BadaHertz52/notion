@@ -37,7 +37,7 @@ const ItemTemplate =({item}:ItemTemplageProp)=>{
             {item.icon}
           </span>
           }
-        <span>{item.header}</span>
+        <span>{item.title}</span>
       </div>
     </div>
     <div className="pageFun">
@@ -81,8 +81,8 @@ const SideBar =({user ,notion, list }:SideBarProps)=>{
   const recordIcon =user.userName.substring(0,1);
   const favorites:List = notion.pages.filter((page:Page)=> user.favorites.includes(page.id)).map((page:Page)=> ({
     id:page.id,
-    header:page.header,
-    icon:page.icon
+    title:page.header.title,
+    icon:page.header.icon
   }));
 
 
