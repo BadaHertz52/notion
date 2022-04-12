@@ -10,10 +10,20 @@ const NotionRouter =()=>{
   const firstPage = notion.pages[0];
   const [targetPage, setTargetPage]= useState<Page>(firstPage);
 
+  const [pagePath, setPagePath]= useState<string []|null>(targetPage.parentId);
+
+  const [newPage, setNewPage] =useState<boolean>(true);
+
   return(
     <div id="inner">
-      <SideBarContainer />
-      <EditorContainer page={targetPage}/>
+      <SideBarContainer 
+        setNewPage ={setNewPage}
+      />
+      <EditorContainer 
+      pagePath ={pagePath}
+      page={targetPage}
+      newPage ={newPage}
+      setNewPage={setNewPage}/>
     </div>
   )
 };
