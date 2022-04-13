@@ -5,7 +5,7 @@ import Menu from './Menu';
 //icon
 import { AiOutlinePlus } from 'react-icons/ai';
 import { CgMenuBoxed } from 'react-icons/cg';
-import { Block, BlockType, Page } from '../modules/notion';
+import { Block,Page } from '../modules/notion';
 
 
 type BlockProp ={
@@ -18,7 +18,7 @@ type BlockProp ={
 const BlockComponent=({ key,block ,page ,editBlock}:BlockProp)=>{
   const className =`${block.type} block`;
   const innerRef= useRef<HTMLElement>(null);
-  const [type, setType]= useState<BlockType>(block.type);
+  const [type, setType]= useState<string>(block.type);
   
   const onChange =(event:ContentEditableEvent)=>{
     const pageId =page.id ;

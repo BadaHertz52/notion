@@ -1,7 +1,7 @@
 import React, { Dispatch } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../modules';
-import { Block, BlockType } from '../modules/notion';
+import { Block} from '../modules/notion';
 //icon
 import {BiCommentDetail} from 'react-icons/bi';
 import { BsArrowClockwise, BsLink45Deg } from 'react-icons/bs';
@@ -12,7 +12,7 @@ import { HiOutlineMenuAlt1 } from 'react-icons/hi';
 
 type MenuProps ={
   block:Block,
-  setType :Dispatch<React.SetStateAction<BlockType>>
+  setType :Dispatch<React.SetStateAction<string>>
 };
 
 const SwitchBtn =()=>{
@@ -25,16 +25,17 @@ const SwitchBtn =()=>{
     </div>
   )
 }
-const Menu=({block ,setType}:MenuProps)=>{
+const Menu=({block ,setType }:MenuProps)=>{
   const userName =useSelector((state:RootState)=> state.user.userName);
   const today = new Date().getDate();
-  const year = block.editTime.getFullYear();
-  const month  =block.editTime.getMonth()+1;
-  const date = block.editTime.getDate() ;
-  const hour = block.editTime.getHours();
-  const min =block.editTime.getMinutes();
+  const editTime = new Date(block.editTime);
+  const year = editTime?.getFullYear();
+  const month  =editTime?.getMonth()+1;
+  const date = editTime?.getDate() ;
+  const hour = editTime?.getHours();
+  const min =editTime?.getMinutes();
   return(
-    <>
+    <div className='menu'>
       <div className='blockMenu'> 
         <div className='menu_search'></div>
         <div className="menu_edit">
@@ -97,9 +98,8 @@ const Menu=({block ,setType}:MenuProps)=>{
         </div>
       </div>
       <div className='blockSubMenu'>
-
       </div>
-    </>
+    </div>
   )
 };
 
