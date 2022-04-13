@@ -1,7 +1,7 @@
 
 export type Item ={
   id:string,
-  title:string,
+  header:string,
   icon:string |null
 };
 
@@ -34,20 +34,9 @@ ReturnType <typeof deleteItem>
 
 const initialState :List=[{
   id:"12345",
-  title:"welcome notion",
-  icon: '👋' 
-},
-{
-  id:"1234",
-  title:"welcome notion",
-  icon: '👋' 
-},
-{
-  id:"123",
-  title:"welcome notion",
-  icon: '👋' 
-},
-];
+  header:"welcome notion",
+  icon: '☺' 
+}];
 
 export default function list(state:List =initialState ,action:ListAction):List{
   switch (action.type) {
