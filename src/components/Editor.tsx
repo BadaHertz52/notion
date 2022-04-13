@@ -1,42 +1,60 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, ReactComponentElement, SetStateAction, useState } from 'react';
 
 import { Block, Page } from '../modules/notion';
 import BlockComponent from './BlockComponent';
 //icon
-import { AiOutlineClockCircle, AiOutlineStar } from 'react-icons/ai';
+import { AiOutlineClockCircle, AiOutlineMenu, AiOutlineStar } from 'react-icons/ai';
 import { BiMessageDetail } from 'react-icons/bi';
 import { BsThreeDots } from 'react-icons/bs';
 import {GrDocumentText ,GrDocument} from 'react-icons/gr';
+import { FiChevronsLeft } from 'react-icons/fi';
+import { Side } from '../modules/side';
 
 type EditorProps ={
   page:Page,
   pagePath: string []| null
   editBlock : (pageId:string , block:Block)=> void,
-  newPage:boolean,
-  setNewPage:Dispatch<SetStateAction<boolean>>
+  side: Side ,
+  lockSideBar  : ()=> void ,
+  leftSideBar  : ()=> void ,
+  closeSideBar  : ()=> void ,
+  openNewPage  : ()=> void ,
+  closeNewPage : ()=> void 
 }
 
-const Editor =({ newPage,page, pagePath, editBlock}:EditorProps)=>{
-
+const Editor =({ page, pagePath, editBlock ,side,  lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage}:EditorProps)=>{
 
   const TopBar =()=>{
+    
     return(
       <div className="topbar">
-        <div className="pagePathes">
-          {pagePath == null ? 
-            <div className="pagePath">
-              <span>{page.header}</span>
-            </div>
-          :
-            pagePath.map((path:string )=>
-            <div className="pagePath" key={pagePath.indexOf(path)}>
-              <span>/</span> 
-              <span>{path}</span>
-            </div>
-            )
-          }
+        <div className='topbarLeft'>
+          <button 
+          className='sideBarBtn'
+          onMouseOver={leftSideBar}
+          onMouseOut={closeSideBar}
+          >
+            {side.sideState ==="close" && 
+            <AiOutlineMenu/>}
+            {side.sideState ==="left" &&
+            <FiChevronsLeft/>}
+          </button>
+          <div className="pagePathes">
+            {pagePath == null ? 
+              <div className="pagePath">
+                <span>{page.header}</span>
+              </div>
+            :
+              pagePath.map((path:string )=>
+              <div className="pagePath" key={pagePath.indexOf(path)}>
+                <span>/</span> 
+                <span className='pageLink'><a href='path'>{path}</a></span>
+              </div>
+              )
+            }
+          </div>
         </div>
-        <div className="pageFn">
+        <div className="topbarRight">
           <button
             title='Share or publish to the web'
           >
@@ -70,7 +88,7 @@ const Editor =({ newPage,page, pagePath, editBlock}:EditorProps)=>{
   const Frame =()=>{
     return(
       <div className='frame'>
-        {newPage ?
+        {side.newPage ?
           <div className='newPageFrame framInner'>
             <div className='pageHeader'>
               <div className='pageTitle'>

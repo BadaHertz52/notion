@@ -18,7 +18,12 @@ type SideBarProps ={
     trash:string[],
   },
   list: List,
-  notion:Notion
+  notion:Notion,
+  lockSideBar  : ()=> void ,
+  leftSideBar  : ()=> void ,
+  closeSideBar  : ()=> void ,
+  openNewPage  : ()=> void ,
+  closeNewPage : ()=> void 
 };
 
 type ItemTemplageProp ={
@@ -26,7 +31,7 @@ type ItemTemplageProp ={
 }
 const ItemTemplate =({item}:ItemTemplageProp)=>{
   return (
-  <div className='itemInner'>
+  <div className='itemInner pageLink'>
     <div className='pageContent'>
       <button className='toggleBtn'>
         <IoMdArrowDropright/>
@@ -61,7 +66,7 @@ type ListTemplateProp ={
   targetList: List
 };
 
-const ListTemplate =({targetList}:ListTemplateProp)=>{
+const ListTemplate =({targetList }:ListTemplateProp)=>{
   return(
     <ul>
     {targetList.map((item:Item)=> 
@@ -77,7 +82,8 @@ const ListTemplate =({targetList}:ListTemplateProp)=>{
   )
 };
 
-const SideBar =({user ,notion, list }:SideBarProps)=>{
+const SideBar =({user ,notion, list ,lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage
+}:SideBarProps)=>{
   const recordIcon =user.userName.substring(0,1);
   const favorites:List = notion.pages.filter((page:Page)=> user.favorites.includes(page.id)).map((page:Page)=> ({
     id:page.id,
@@ -104,7 +110,8 @@ const SideBar =({user ,notion, list }:SideBarProps)=>{
                 <div><FiCode/></div>
               </div>
             </div>
-            <button id='closeSideBarBtn' className ="sideBarBtn">
+            <button id='closeSideBarBtn' 
+            className ="sideBarBtn">
               <FiChevronsLeft/>
             </button>
           </div>
@@ -180,9 +187,6 @@ const SideBar =({user ,notion, list }:SideBarProps)=>{
           </button>
         </div>
       </div>
-      <button className='sideBarBtn ' id="openSideBarBtn">
-        <FiChevronsLeft/>
-      </button>
     </div>
     </>
   )
