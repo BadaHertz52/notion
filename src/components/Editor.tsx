@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, useEffect, useState } from 'react';
 
 import { Block, Page } from '../modules/notion';
 import BlockComponent from './BlockComponent';
