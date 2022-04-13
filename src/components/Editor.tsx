@@ -71,7 +71,7 @@ const Editor =({ newPage,page, pagePath, editBlock}:EditorProps)=>{
     return(
       <div className='frame'>
         {newPage ?
-          <div className='newPageFrame'>
+          <div className='newPageFrame framInner'>
             <div className='pageHeader'>
               <div className='pageTitle'>
                 Untitled
@@ -100,7 +100,7 @@ const Editor =({ newPage,page, pagePath, editBlock}:EditorProps)=>{
             </div>
           </div>
         :
-          <>
+          <div className='framInner'>
             <div className='pageHeader'>
               {page.header.cover !== null &&        
                 <div className='pageCover'>
@@ -133,7 +133,7 @@ const Editor =({ newPage,page, pagePath, editBlock}:EditorProps)=>{
                 />)}
               </div>
             </div>
-          </>
+          </div>
         }
 
       </div>
