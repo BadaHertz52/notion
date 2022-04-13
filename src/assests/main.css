@@ -1,3 +1,36 @@
+div {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.pageLink:hover {
+  background-color: rgba(49, 45, 33, 0.11);
+}
+
+button {
+  border: none;
+  background-color: transparent;
+  padding: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  list-style: none;
+}
+
+a:link, a:active, a:visited {
+  text-decoration: none;
+  color: inherit;
+}
+
+.menu {
+  display: none;
+}
+
 .editor {
   -webkit-box-flex: 1;
       -ms-flex-positive: 1;
@@ -25,17 +58,31 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
 }
 
-.editor .topbarLeft,
-.editor .topbarRight {
+.editor .pagePathes,
+.editor .pageFun {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   height: 100%;
+}
+
+.editor .pagePathes {
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  -ms-flex-negative: 1;
+      flex-shrink: 1;
+}
+
+.editor .pageFun,
+.editor .sideBarBtn {
+  -webkit-box-flex: 0;
+      -ms-flex-positive: 0;
+          flex-grow: 0;
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
 }
 
 .editor .sideBarBtn,
@@ -49,12 +96,30 @@
   margin-left: 5px;
 }
 
+.editor .sideBarBtn {
+  font-size: 18px;
+}
+
 .editor .pagePathes span {
   margin-right: 5px;
 }
 
 .editor .pagePathes .pagePath:first-child span:first-child {
   display: none;
+}
+
+.editor .pageFun {
+  width: 180PX;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  font-size: 18px;
+}
+
+.editor .pageFun svg {
+  font-size: 20px;
 }
 
 .editor .frame {
@@ -65,6 +130,121 @@
           flex-grow: 1;
   -ms-flex-negative: 1;
       flex-shrink: 1;
+}
+
+.editor .frame_inner {
+  width: 100%;
+  height: 100%;
+}
+
+.editor .pageHeader,
+.editor .pageContent {
+  max-width: 100%;
+  width: 100%;
+  padding: 0 calc(96px);
+}
+
+.editor .pageHeader > div {
+  position: relative;
+}
+
+.editor .pageHeader .deco {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  margin-top: 8px;
+  margin-bottom: 4px;
+  height: 24px;
+}
+
+.editor .pageHeader .deco button {
+  height: 100%;
+  color: #B9B8B6;
+  -webkit-box-flex: 0;
+      -ms-flex-positive: 0;
+          flex-grow: 0;
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+  padding-left: 6px;
+  padding-right: 8px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-size: 14px;
+}
+
+.editor .pageHeader .deco button svg {
+  padding-right: 5px;
+}
+
+.editor .pageHeader .pageIcon {
+  width: 78px;
+  height: 78px;
+  -webkit-transition: opacity 100ms ease-in 0s;
+  transition: opacity 100ms ease-in 0s;
+  opacity: 1;
+  font-size: 48px;
+}
+
+.editor .pageHeader .comment {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin: 8px 0;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #d6d6d6;
+  width: 100%;
+}
+
+.editor .pageHeader .comment > div {
+  font-size: 14px;
+}
+
+.editor .pageHeader .comment .firstLetter {
+  width: 24px;
+  height: 24px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  text-align: center;
+  border-radius: 50%;
+  border: 1px solid black;
+  margin-right: 5px;
+}
+
+.editor .pageHeader .comment .firstLetter span {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  padding: 5px;
+  font-size: 14px;
+}
+
+.editor .pageHeader .pageTitle {
+  font-size: 40px;
+}
+
+.editor .newPageFrame {
+  color: #B9B8B6;
+}
+
+.editor .newPageFrame span {
+  color: #B9B8B6;
+}
+
+div {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 
 .pageLink:hover {
