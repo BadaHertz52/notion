@@ -1,10 +1,94 @@
-#editor {
+.editor {
   -webkit-box-flex: 1;
       -ms-flex-positive: 1;
           flex-grow: 1;
   -ms-flex-negative: 1;
       flex-shrink: 1;
   height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.editor .topbar {
+  width: 100%;
+  height: 45px;
+  -webkit-box-flex: 0;
+      -ms-flex-positive: 0;
+          flex-grow: 0;
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.editor .topbarLeft,
+.editor .topbarRight {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 100%;
+}
+
+.editor .sideBarBtn,
+.editor .pagePathes {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-left: 5px;
+}
+
+.editor .pagePathes span {
+  margin-right: 5px;
+}
+
+.editor .pagePathes .pagePath:first-child span:first-child {
+  display: none;
+}
+
+.editor .frame {
+  width: 100%;
+  height: calc(100% - 45px);
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  -ms-flex-negative: 1;
+      flex-shrink: 1;
+}
+
+.pageLink:hover {
+  background-color: rgba(49, 45, 33, 0.11);
+}
+
+button {
+  border: none;
+  background-color: transparent;
+  padding: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  list-style: none;
+}
+
+a:link, a:active, a:visited {
+  text-decoration: none;
+  color: inherit;
 }
 
 #sideBar {
@@ -42,10 +126,6 @@
   padding: 5px 14px;
   font-size: 14px;
   text-align: center;
-}
-
-#sideBar .itemInner:hover {
-  background-color: rgba(49, 45, 33, 0.11);
 }
 
 #sideBar .itemInner span {
@@ -288,20 +368,5 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-}
-
-button {
-  border: none;
-  background-color: transparent;
-  padding: 0;
-}
-
-ul {
-  margin: 0;
-  padding: 0;
-}
-
-li {
-  list-style: none;
 }
 /*# sourceMappingURL=main.css.map */

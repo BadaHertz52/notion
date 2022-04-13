@@ -7,13 +7,3 @@
   display: flex;
 }
 
-button {
-  @include initialBtn
-}
-ul{
-  margin: 0;
-  padding:0
-}
-li{
-  list-style: none;
-}
