@@ -1,8 +1,159 @@
-@import './frame';
+@import './block';
+@import './common';
 @import './menu';
 
-#editor {
+.editor {
   flex-grow: 1;
   flex-shrink: 1;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  // topbar ---
+  .topbar {
+    width:100%;
+    height: 45px ;
+    flex-grow: 0;
+    flex-shrink: 0;
+    display: flex;
+  }
+  .pagePathes ,
+  .pageFun {
+    display: flex;
+    height: 100%;
+  }
+  .pagePathes{
+    flex-grow: 1;
+    flex-shrink: 1;
+  }
+  .pageFun,
+  .sideBarBtn{
+    flex-grow: 0;
+    flex-shrink: 0;
+  }
+  .sideBarBtn ,
+  .pagePathes {
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+  }
+  .sideBarBtn {
+    font : {
+      size:18px
+    }
+  }
+  .pagePathes{
+    span{
+      margin-right :5px
+    }
+    .pagePath:first-child  span:first-child{
+      display: none;
+    }
+  }
+  .pageFun{
+    width: 180PX;
+    display: flex;
+    justify-content: space-around;
+    font-size: 18px;
+    svg{
+      font : {
+        size: 20px
+      }
+    }
+  }
+  // --topbar
+
+  //frame ----
+  .frame {
+    width: 100%;
+    height: calc(100% - 45px);
+    flex-grow: 1;
+    flex-shrink: 1;
+  }
+  .frame_inner {
+    width: 100%;
+    height: 100%;
+  }
+  .pageHeader, 
+  .pageContent{
+    max-width: 100%;
+    width: 100%;
+    padding: 0 calc(96px );
+    // padding-left: calc(96px +env(safe-area-inset-left));
+  }
+  .pageHeader {
+    
+    &> div{
+      position: relative;
+    }
+    .deco{
+      display: flex;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      margin-top: 8px;
+      margin-bottom: 4px;
+      height: 24px;
+      button{
+      height: 100%;
+      color:$mud;
+      flex-grow: 0;
+      flex-shrink: 0;
+      padding : {
+        left: 6px;
+        right: 8px
+      }
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      svg{
+        padding-right: 5px;
+      }
+      }
+    }
+    .pageIcon{
+      width: 78px;
+      height: 78px;
+      transition: opacity 100ms ease-in 0s;
+      opacity: 1;
+      font-size: 48px;
+    }
+    .comment {
+      display: flex;
+      margin: 8px 0;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid $lightMud;
+      width: 100%;
+      &>div {
+        font-size: 14px;
+      }
+      .firstLetter {
+        width: 24px;
+        height: 24px;
+        box-sizing: border-box;
+        text-align: center;
+        border-radius: 50%;
+        border: 1px solid black;
+        margin-right: 5px;
+        span{
+          width: fit-content;
+          height: fit-content;
+          padding: 5px;
+          font-size: 14px;
+        }
+      }
+      .commentContent{
+      }
+    }
+    .pageTitle{
+      font-size: 40px;
+    }
+  }
+
+
+  .newPageFrame{
+    color: $mud;
+    span{
+      color: $mud;
+    }
+  }
+  // --frame
 }
