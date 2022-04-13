@@ -1,4 +1,4 @@
-import React, { Dispatch, ReactComponentElement, SetStateAction, useState } from 'react';
+import React, { Dispatch, ReactComponentElement, SetStateAction, useEffect, useRef, useState } from 'react';
 
 import { Block, Page } from '../modules/notion';
 import BlockComponent from './BlockComponent';
@@ -25,14 +25,23 @@ type EditorProps ={
 const Editor =({ page, pagePath, editBlock ,side,  lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage}:EditorProps)=>{
 
   const TopBar =()=>{
-    
+    const [title, setTitle]= useState<string>("");
+
+    useEffect(()=>{
+      if(side.sideState ==="left"){
+        setTitle("Lock sideBar open")
+      }
+    },[side.sideState])
     return(
       <div className="topbar">
         <div className='topbarLeft'>
           <button 
           className='sideBarBtn'
-          onMouseOver={leftSideBar}
+          onMouseMove={leftSideBar}
           onMouseOut={closeSideBar}
+          onClick={lockSideBar}
+          title ={title}
+          aria-label ={title}
           >
             {side.sideState ==="close" && 
             <AiOutlineMenu/>}
