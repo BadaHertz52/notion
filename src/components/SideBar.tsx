@@ -65,12 +65,12 @@ const ListTemplate =({targetList}:ListTemplateProp)=>{
   return(
     <ul>
     {targetList.map((item:Item)=> 
-      <li>
-        <button className='first page'>
+      <li key={item.id}>
+        <div className='first page'>
           <ItemTemplate item={item}/>
-        </button>
-        <button className="inside page">
-        </button>
+        </div>
+        <div className="inside page">
+        </div>
       </li> 
     )}
   </ul>
