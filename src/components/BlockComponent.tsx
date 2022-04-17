@@ -1,63 +1,55 @@
-import React, { useRef, useState } from 'react';
+import React, { CSSProperties, useRef} from 'react';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
-import Menu from './Menu';
-
 //icon
-import { AiOutlinePlus } from 'react-icons/ai';
-import { CgMenuBoxed } from 'react-icons/cg';
-import { Block,Page } from '../modules/notion';
+import { Block,blockSample,Page } from '../modules/notion';
 
 
 type BlockProp ={
-  key : string, 
   block:Block,
   page:Page,
+  setTargetBlock : (block:Block)=>void ,
+  setFnStyle :(style:CSSProperties)=>void,
   editBlock : (pageId:string, newBlock:Block)=> void
 };
 
-const BlockComponent=({ key,block ,page ,editBlock}:BlockProp)=>{
+const BlockComponent=({block ,page , setTargetBlock, setFnStyle, editBlock}:BlockProp)=>{
   const className =`${block.type} block`;
+  const blockRef =useRef<HTMLDivElement>(null);
   const innerRef= useRef<HTMLElement>(null);
-  const [type, setType]= useState<string>(block.type);
-  
   const onChange =(event:ContentEditableEvent)=>{
     const pageId =page.id ;
     const content = event.target.value;
     const newBlock ={
       ...block,
-      type: type,
       content: content 
     } 
     editBlock(pageId, newBlock)
   };
 
-  const showMenu =()=>{
-
+  const onShowBlockFn =()=>{
+    setTargetBlock(block);
+    setFnStyle({
+      display:"block" ,
+      position: "absolute",
+      top: `${blockRef.current?.offsetTop}px`,
+      left:`calc(${blockRef.current?.offsetLeft}px - 40px)`
+    });
   };
-
-  const addBlock =()=>{
-
+  const onDisappearBlockFn =()=>{
+    setTargetBlock(blockSample);
+    setFnStyle({
+      display:"none" ,
+      top:0,
+      left:0
+    })
   };
-
   return(
-    <div className={className} key={key}>
-      <div className='blockFun'>
-        <button 
-          className='addBlock'
-          onClick={addBlock}
-          title="Click  to add a block below"
-        >
-          <AiOutlinePlus/>
-        </button>
-        <button 
-          className='menuBtn'
-          onClick={showMenu}
-          title ="Click to open menu"
-        >
-          <CgMenuBoxed/>
-          <Menu block={block} setType={setType}/>
-        </button>
-      </div>
+    <div 
+      className={className} 
+      onMouseEnter ={onShowBlockFn}
+      onMouseLeave={onDisappearBlockFn}
+      ref={blockRef}
+    >
       <ContentEditable
         className="contentEditable"
         innerRef ={innerRef}

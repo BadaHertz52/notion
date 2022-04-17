@@ -1,15 +1,17 @@
 import React, { CSSProperties, useEffect, useState } from 'react';
 
-import { Block, Page } from '../modules/notion';
+import { Block, blockSample, Page } from '../modules/notion';
 import BlockComponent from './BlockComponent';
 //icon
-import { AiOutlineClockCircle, AiOutlineMenu, AiOutlineStar } from 'react-icons/ai';
+import { AiOutlineClockCircle, AiOutlineMenu, AiOutlinePlus, AiOutlineStar } from 'react-icons/ai';
 import { BiMessageDetail } from 'react-icons/bi';
 import { BsFillEmojiSmileFill, BsThreeDots } from 'react-icons/bs';
 import {GrDocumentText ,GrDocument} from 'react-icons/gr';
 import { FiChevronsLeft } from 'react-icons/fi';
 import { Side } from '../modules/side';
 import { MdInsertPhoto } from 'react-icons/md';
+import { CgMenuBoxed } from 'react-icons/cg';
+import Menu from './Menu';
 
 type EditorProps ={
   userName : string,
@@ -29,6 +31,9 @@ type CommentProp ={
 }
 const Editor =({ userName, page, pagePath, editBlock ,side,  lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage}:EditorProps)=>{
 
+  const [targetBlock, setTargetBlock]=useState<Block>(blockSample); 
+  const [fnStyle, setFnStyle] =useState<CSSProperties>({display:"none"});
+  
   const TopBar =()=>{
     const [title, setTitle]= useState<string>("");
 
@@ -123,14 +128,23 @@ const Editor =({ userName, page, pagePath, editBlock ,side,  lockSideBar, leftSi
   }
   const Frame =()=>{
     const [decoOpen ,setdecoOpen] =useState<boolean>(true);
-
+    
     const headerStyle: CSSProperties ={
       marginTop: page.header.cover !==null? "10px": "30px" 
     };
 
     const headerBottomStyle :CSSProperties ={
       marginTop: page.header.cover !==null ? "-39px" :"0"
-    }
+    };
+
+    const showMenu =()=>{
+
+    };
+  
+    const addBlock =()=>{
+  
+    };
+  
     return(
       <div className='frame'>
         {side.newPage ?
@@ -251,11 +265,36 @@ const Editor =({ userName, page, pagePath, editBlock ,side,  lockSideBar, leftSi
               <div className='pageContent_inner'>
                 {page.blocks.map((block:Block)=>
                 <BlockComponent 
+                  setTargetBlock={setTargetBlock}
+                  setFnStyle={setFnStyle}
                   key={block.id}
                   page ={page}
                   block={block}
                   editBlock={editBlock}
                 />)}
+                <div 
+                className='blockFn'
+                id='blockFn'
+                style={fnStyle}
+                >
+                  <button 
+                    className='addBlock'
+                    onClick={addBlock}
+                    title="Click  to add a block below"
+                  >
+                    <AiOutlinePlus/>
+                  </button>
+                  <button 
+                    className='menuBtn'
+                    onClick={showMenu}
+                    title ="Click to open menu"
+                  >
+                    <CgMenuBoxed/>
+                    <Menu 
+                    block={targetBlock} 
+                    />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
