@@ -22,6 +22,13 @@ export type Block ={
   icon: string | null ,
   editTime: string 
   //className 
+} ;
+export  const blockSample ={
+  id:"",
+  contents:"",
+  type:"text",
+  icon:null,
+  editTime:""
 }
 export type Page ={
   id:string, 
