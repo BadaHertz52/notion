@@ -1,3 +1,16 @@
+.block {
+  position: relative;
+  width: 100%;
+}
+
+.blockFn {
+  display: none;
+}
+
+.blockFn.on {
+  display: block;
+}
+
 div {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
@@ -50,6 +63,8 @@ a:link, a:active, a:visited {
 .editor .topbar {
   width: 100%;
   height: 45px;
+  padding-left: 12px;
+  padding-right: 14px;
   -webkit-box-flex: 0;
       -ms-flex-positive: 0;
           flex-grow: 0;
@@ -93,11 +108,11 @@ a:link, a:active, a:visited {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  margin-left: 5px;
 }
 
 .editor .sideBarBtn {
   font-size: 18px;
+  margin-right: 5px;
 }
 
 .editor .pagePathes span {
