@@ -1,0 +1,10 @@
+.block {
+  position: relative;
+  width: 100%;
+}
+.blockFn {
+  display: none;
+}
+.blockFn.on{
+  display: block;
+}
