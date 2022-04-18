@@ -12,15 +12,17 @@ export type BlockType= "text"|"toggle"|"todo" |"todo done"|"h1"|"h2"|"h3" |"page
 
 export type Block ={
   id:string,
-  contents:string, //html를 string 으로 
+  contents:string, //html를 string 으로
+  subBlocks :Block[] |null, //toggle 을 위한 
   type: BlockType ,
   icon: string | null ,
   editTime: string 
-  //className 
+  
 } ;
 export  const blockSample ={
   id:"",
   contents:"",
+  subBlocks :null,
   type:text,
   icon:null,
   editTime:""
@@ -87,56 +89,65 @@ const initialState ={
     },
     blocks:[{
       id:"text",
-      contents:"안녕", //html를 string 으로 
+      contents:"안녕", 
+      subBlocks :null,
       type: text,
       icon:  null ,
       editTime: JSON.stringify(Date.now),
     },{
       id:"toggle",
-      contents:"toggle toggle ", //html를 string 으로 
+      contents:"toggle toggle ",
+      subBlocks :null, 
       type: toggle,
       icon:  null ,
       editTime: JSON.stringify(Date.now),
     },{
       id:"todo",
-      contents:"todo", //html를 string 으로 
+      contents:"todo", 
+      subBlocks :null,
       type: todo,
       icon:  null ,
       editTime: JSON.stringify(Date.now),
     },{
       id:"todo done",
-      contents:"todo done", //html를 string 으로 
+      contents:"todo done",
+      subBlocks :null,
       type: todo_done,
       icon:  null ,
       editTime: JSON.stringify(Date.now),
     },{
       id:"h1",
-      contents:"header1", //html를 string 으로 
+      contents:"header1", 
+      subBlocks :null,
       type: h1,
       icon:  null ,
       editTime: JSON.stringify(Date.now),
     },{
       id:"h2",
-      contents:"header2", //html를 string 으로 
+      contents:"header2",
+      subBlocks :null, 
       type: h2,
       icon:  null ,
       editTime: JSON.stringify(Date.now),
     },{
       id:"h3",
-      contents:"header3", //html를 string 으로 
+      contents:"header3", 
+      subBlocks :null,
       type: h3,
       icon:  null ,
       editTime: JSON.stringify(Date.now),
     },{
       id:"page",
-      contents:"page page page", //html를 string 으로 
+      contents:"page page page",
+      subBlocks :null,
       type: page,
       icon:  null ,
       editTime: JSON.stringify(Date.now),
     },
     {
       id:"page2",
-      contents:"page2", //html를 string 으로 
+      contents:"page2",
+      subBlocks :null,
       type: page,
       icon: "🌈" ,
       editTime: JSON.stringify(Date.now),
