@@ -31,8 +31,8 @@ const BlockComponent=({block ,page , setTargetBlock, setFnStyle, editBlock}:Bloc
     setFnStyle({
       display:"block" ,
       position: "absolute",
-      top: `${blockRef.current?.offsetTop}px`,
-      left:`calc(${blockRef.current?.offsetLeft}px - 40px)`
+      top: `calc(${blockRef.current?.offsetTop}px + 5px)`,
+      left:`calc(${blockRef.current?.offsetLeft}px - 45px)`
     });
   };
   const onDisappearBlockFn =()=>{
