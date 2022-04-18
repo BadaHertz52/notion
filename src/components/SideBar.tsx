@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { CSSProperties, useState } from 'react';
 import { Item, List } from '../modules/list';
 import { Notion, Page } from '../modules/notion';
 
@@ -31,10 +31,23 @@ type ItemTemplageProp ={
   item:Item
 }
 const ItemTemplate =({item}:ItemTemplageProp)=>{
+  const [toggle, setToggle] =useState<boolean>(false);
+  const toggleStyle:CSSProperties={
+    transform: toggle? "rotate(90deg)" : "rotate(0deg)" 
+  };
+
+  const onClickToggle =()=>{
+    setToggle(!toggle)
+  };
+  
   return (
   <div className='itemInner pageLink'>
     <div className='pageContent'>
-      <button className='toggleBtn'>
+      <button 
+        className='toggleBtn'
+        style={toggleStyle}
+        onClick={onClickToggle}
+      >
         <MdPlayArrow/>
       </button>
       <div className='pageName'>
