@@ -1,14 +1,119 @@
+div {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.pageLink:hover {
+  background-color: rgba(49, 45, 33, 0.11);
+}
+
+button {
+  border: none;
+  background-color: transparent;
+  padding: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  list-style: none;
+}
+
+a:link, a:active, a:visited {
+  text-decoration: none;
+  color: inherit;
+}
+
 .block {
   position: relative;
   width: 100%;
+  height: -webkit-min-content;
+  height: -moz-min-content;
+  height: min-content;
+  margin-top: 1rem;
+  margin-bottom: 1px;
 }
 
-.blockFn {
-  display: none;
+.block,
+.blockFn button {
+  font-size: 1rem;
+  line-height: 24px;
 }
 
-.blockFn.on {
-  display: block;
+.blockFn button {
+  color: #a3a3a2;
+  font-size: 1.2rem;
+  font-weight: bolder;
+}
+
+.blockFn button:hover,
+.toggle.block .left:hover {
+  background-color: #d6d6d6;
+}
+
+.contentEditable {
+  font-size: inherit;
+}
+
+.contentEditable:focus-visible {
+  outline: none;
+}
+
+.h1.block {
+  margin-top: 32px;
+  font-size: 40px;
+  font-weight: 700;
+}
+
+.h2.block {
+  margin-top: 22.4px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.h3.block {
+  font-size: 1rem;
+}
+
+.text.block {
+  margin-top: 2px;
+}
+
+.todo.block,
+.toggle.block,
+.page.block {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.todo.block .left,
+.toggle.block .left,
+.page.block .left {
+  margin-right: 4px;
+  font-size: 17px;
+}
+
+.todo.block svg,
+.toggle.block svg,
+.page.block svg {
+  font-size: inherit;
+}
+
+.toggle.block button {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  color: #a3a3a2;
 }
 
 div {
@@ -51,6 +156,7 @@ a:link, a:active, a:visited {
   -ms-flex-negative: 1;
       flex-shrink: 1;
   height: 100%;
+  overflow-y: scroll;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -58,6 +164,20 @@ a:link, a:active, a:visited {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+}
+
+.editor::-webkit-scrollbar {
+  background: transparent;
+  width: 10px;
+  height: 10px;
+}
+
+.editor::-webkit-scrollbar-thumb {
+  background-color: #D3D1CB;
+}
+
+.editor::-webkit-scrollbar-track {
+  background-color: #edece9;
 }
 
 .editor .topbar {
@@ -288,13 +408,13 @@ a:link, a:active, a:visited {
 
 #sideBar {
   width: 240px;
+  height: 100%;
   -ms-flex-negative: 0;
       flex-shrink: 0;
   -webkit-box-flex: 0;
       -ms-flex-positive: 0;
           flex-grow: 0;
   position: relative;
-  height: 100%;
   background-color: #F7F6F3;
   -webkit-transition-timing-function: ease-in;
           transition-timing-function: ease-in;
@@ -563,5 +683,6 @@ a:link, a:active, a:visited {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  overflow-y: hidden;
 }
 /*# sourceMappingURL=main.css.map */
