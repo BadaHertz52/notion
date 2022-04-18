@@ -272,7 +272,8 @@ const Editor =({ userName, page, pagePath, editBlock ,side,  lockSideBar, leftSi
                   block={block}
                   editBlock={editBlock}
                 />)}
-                <div 
+              </div>
+              <div 
                 className='blockFn'
                 id='blockFn'
                 style={fnStyle}
@@ -295,7 +296,6 @@ const Editor =({ userName, page, pagePath, editBlock ,side,  lockSideBar, leftSi
                     />
                   </button>
                 </div>
-              </div>
             </div>
           </div>
         }
