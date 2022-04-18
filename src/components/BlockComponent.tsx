@@ -12,11 +12,13 @@ type BlockProp ={
   setTargetBlock : (block:Block)=>void ,
   setFnStyle :(style:CSSProperties)=>void,
   editBlock : (pageId:string, newBlock:Block)=> void,
-  addBlock : (pageId:string, newBlock:Block)=> void,
+  addBlock : (pageId:string, newBlock:Block, nextBlockIndex:number)=> void,
 };
 
 const BlockComponent=({block ,page , setTargetBlock, setFnStyle, editBlock ,addBlock}:BlockProp)=>{
-  const pageId =page.id ;
+  const pageId:string =page.id ;
+  const blockIndex:number = page.blockIdes.indexOf(block.id) ;
+  const nextBlockIndex :number= blockIndex +1; 
   const className =`${block.type} block`;
   const blockRef =useRef<HTMLDivElement>(null);
   const innerRef= useRef<HTMLElement>(null);
@@ -25,31 +27,44 @@ const BlockComponent=({block ,page , setTargetBlock, setFnStyle, editBlock ,addB
     transform: toggle? "rotate(90deg)" : "rotate(0deg)" 
   }
   const [editedBlock, setEditedBlock] =useState<Block>(blockSample);
+  const  editTime = JSON.stringify(Date.now());
 
   const onChange =(event:ContentEditableEvent)=>{
     const contents = event.target.value;
     const newBlock :Block ={
       ...block,
       contents: contents,
-      editTime: JSON.stringify(Date.now())
+      editTime: editTime
     } ;
     setEditedBlock(newBlock);
-   // console.log("newBlock", newBlock)
-    //
   };
+  const makeSubBlock =()=>{
+    const newToggleBlock:Block ={
+      ...block, 
+      editTime :editTime ,
+      subBlocks:{
+        blocks:block.subBlocks.blocks!==null? [...block.subBlocks.blocks , blockSample] : [blockSample] ,
+        blockIdes: block.subBlocks.blockIdes !==null? [...block.subBlocks.blockIdes , blockSample.id] : [blockSample.id] ,
+      } 
+    };
+    editBlock(pageId, newToggleBlock);
+  };
+  const makeNewBlock =()=> addBlock(pageId, blockSample, nextBlockIndex);
   const onKeyup =(event: React.KeyboardEvent<HTMLDivElement>)=>{
-    if(event.key === "Enter"){
+    if(event.code === "Enter"){
+      // 새로운 블록 만들기 
       if(block.type.includes("toggle")){
+        //subBtn 
         setToggle(true);
-        const newToggleBlock:Block ={
-          ...block, 
-          subBlocks: block.subBlocks!==null? [...block.subBlocks , blockSample] : [blockSample]
-        };
-        editBlock(pageId, newToggleBlock);
+        makeSubBlock();
       }else{
-        addBlock(pageId, blockSample);
+        //새로운 버튼 
+        makeNewBlock();
       }
+    }else if(event.code ==="Tab"){
+      makeSubBlock();
     }else{
+      // 블록 내용 수정 
       editBlock(pageId, editedBlock)
     }
   };
@@ -81,41 +96,62 @@ const BlockComponent=({block ,page , setTargetBlock, setFnStyle, editBlock ,addB
       onMouseLeave={onDisappearBlockFn}
       ref={blockRef}
     >
-      {block.type ==="todo" &&
-        <button className='checkbox left'>
-          <GrCheckbox />
-        </button>
-      }
-      {block.type ==="todo done" &&
-        <button className='checkbox left'>
-          <GrCheckboxSelected />
-        </button>
-      }
-      {block.type ==="toggle" &&
-        <button 
-          className='blockToggleBtn left' 
-          onClick={onClickToggleBtn}
-          style ={toggleStyle}
-        >
-          <MdPlayArrow/>
-        </button>
-      }
-      {block.type ==="page" &&
-        <div className='pageIcon left'>
-        {block.icon == null?
-          < GrDocumentText/>
-        :
-          block.icon
+      <div className='mainBlock'>
+        {block.type ==="todo" &&
+          <button className='checkbox left'>
+            <GrCheckbox />
+          </button>
         }
+        {block.type ==="todo done" &&
+          <button className='checkbox left'>
+            <GrCheckboxSelected />
+          </button>
+        }
+        {block.type ==="toggle" &&
+          <button 
+            className='blockToggleBtn left' 
+            onClick={onClickToggleBtn}
+            style ={toggleStyle}
+          >
+            <MdPlayArrow/>
+          </button>
+        }
+        {block.type ==="page" &&
+          <div className='pageIcon left'>
+          {block.icon == null?
+            < GrDocumentText/>
+          :
+            block.icon
+          }
+          </div>
+        }
+        <ContentEditable
+          className="contentEditable"
+          innerRef ={innerRef}
+          html ={block.contents}
+          onChange={onChange}
+          onKeyUp={onKeyup}
+        />
+      </div>
+      {block.subBlocks !==null && 
+      (block.type !== "toggle" || 
+        (block.type ==="toggle" && toggle
+        )
+      ) &&
+        <div className='subBlocks'>
+          {block.subBlocks.blocks?.map((subBlock :Block)=> 
+          <BlockComponent
+            key={block.subBlocks.blockIdes?.indexOf(subBlock.id)}
+            block={subBlock}
+            page={page}
+            setFnStyle={setFnStyle}
+            setTargetBlock={setTargetBlock}
+            editBlock={editBlock} 
+            addBlock={addBlock}
+          />)
+          }
         </div>
       }
-      <ContentEditable
-        className="contentEditable"
-        innerRef ={innerRef}
-        html ={block.contents}
-        onChange={onChange}
-        onKeyUp={onKeyup}
-      />
     </div>
 
   )
