@@ -13,16 +13,22 @@ export type BlockType= "text"|"toggle"|"todo" |"todo done"|"h1"|"h2"|"h3" |"page
 export type Block ={
   id:string,
   contents:string, //html를 string 으로
-  subBlocks :Block[] |null, //toggle 을 위한 
+  subBlocks : {
+    blocks : Block[] |null,
+    blockIdes: string[]|null
+  } //toggle 을 위한 
   type: BlockType ,
   icon: string | null ,
   editTime: string 
   
 } ;
 export  const blockSample ={
-  id:"",
-  contents:"",
-  subBlocks :null,
+  id:`blockSample_${JSON.stringify(Date.now)}`,
+  contents:"blocksample",
+  subBlocks : {
+    blocks : null,
+    blockIdes: null
+  } ,
   type:text,
   icon:null,
   editTime:""
@@ -53,10 +59,11 @@ const DELETE_BLOCK ="notion/DELETE_BLOCK" as const;
 
 
 
-export const addBlock =(pageId:string, block:Block)=> ({
+export const addBlock =(pageId:string, block:Block ,nextBlockIndex:number)=> ({
   type:ADD_BLOCK ,
   pageId:pageId,
-  block:block
+  block:block,
+  nextBlockIndex :nextBlockIndex
 });
 export const editBlock =(pageId:string, block:Block)=> ({
   type:EDIT_BLOCK ,
@@ -90,56 +97,80 @@ const initialState ={
     blocks:[{
       id:"text",
       contents:"안녕", 
-      subBlocks :null,
+      subBlocks :{
+        blocks : null,
+        blockIdes: null
+      } ,
       type: text,
       icon:  null ,
       editTime: JSON.stringify(Date.now),
     },{
       id:"toggle",
       contents:"toggle toggle ",
-      subBlocks :null, 
+      subBlocks :{
+        blocks : null,
+        blockIdes: null
+      } , 
       type: toggle,
       icon:  null ,
       editTime: JSON.stringify(Date.now),
     },{
       id:"todo",
       contents:"todo", 
-      subBlocks :null,
+      subBlocks :{
+        blocks : null,
+        blockIdes: null
+      } ,
       type: todo,
       icon:  null ,
       editTime: JSON.stringify(Date.now),
     },{
       id:"todo done",
       contents:"todo done",
-      subBlocks :null,
+      subBlocks :{
+        blocks : null,
+        blockIdes: null
+      } ,
       type: todo_done,
       icon:  null ,
       editTime: JSON.stringify(Date.now),
     },{
       id:"h1",
       contents:"header1", 
-      subBlocks :null,
+      subBlocks :{
+        blocks : null,
+        blockIdes: null
+      } ,
       type: h1,
       icon:  null ,
       editTime: JSON.stringify(Date.now),
     },{
       id:"h2",
       contents:"header2",
-      subBlocks :null, 
+      subBlocks :{
+        blocks : null,
+        blockIdes: null
+      } , 
       type: h2,
       icon:  null ,
       editTime: JSON.stringify(Date.now),
     },{
       id:"h3",
       contents:"header3", 
-      subBlocks :null,
+      subBlocks :{
+        blocks : null,
+        blockIdes: null
+      } ,
       type: h3,
       icon:  null ,
       editTime: JSON.stringify(Date.now),
     },{
-      id:"page",
+      id:"page1",
       contents:"page page page",
-      subBlocks :null,
+      subBlocks :{
+        blocks : null,
+        blockIdes: null
+      } ,
       type: page,
       icon:  null ,
       editTime: JSON.stringify(Date.now),
@@ -147,13 +178,16 @@ const initialState ={
     {
       id:"page2",
       contents:"page2",
-      subBlocks :null,
+      subBlocks :{
+        blocks : null,
+        blockIdes: null
+      } ,
       type: page,
       icon: "🌈" ,
       editTime: JSON.stringify(Date.now),
     }
     ],
-    blockIdes:[],
+    blockIdes:["text", 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page', 'page2'],
     subPageIdes:[],
     parentId: ['1111' , '2222']
   },
@@ -193,8 +227,8 @@ export default function notion (state:Notion =initialState , action :NotionActio
     case ADD_BLOCK:
       const page_addedBlock ={
         ...targetPage,
-        blocks :state.pages[pageIndex].blocks.concat(action.block),
-        blockIdes:state.pages[pageIndex].blockIdes.concat(action.block.id),
+        blocks : state.pages[pageIndex].blocks.splice(action.nextBlockIndex,0, action.block),
+        blockIdes:state.pages[pageIndex].blockIdes.splice(action.nextBlockIndex,0, action.block.id),
       } ;
 
       const page_addedSubPage ={
@@ -211,6 +245,8 @@ export default function notion (state:Notion =initialState , action :NotionActio
       return state
     case EDIT_BLOCK:
       let blockIndex = targetPage.blockIdes.indexOf(action.block.id);
+
+      console.log("blockIndex", blockIndex )
       state.pages[pageIndex].blocks[blockIndex] =action.block ; 
       return state
 
