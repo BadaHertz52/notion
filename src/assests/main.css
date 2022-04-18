@@ -35,6 +35,26 @@ a:link, a:active, a:visited {
   height: min-content;
   margin-top: 1rem;
   margin-bottom: 1px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.mainBlock {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.subBlocks {
+  margin-left: 20px;
 }
 
 .block,
@@ -80,17 +100,6 @@ a:link, a:active, a:visited {
 
 .text.block {
   margin-top: 2px;
-}
-
-.todo.block,
-.toggle.block,
-.page.block {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
 }
 
 .todo.block .left,

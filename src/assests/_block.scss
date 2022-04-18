@@ -8,6 +8,15 @@
     top:1rem;
     bottom:1px;
   }
+  display: flex;
+  flex-direction: column;
+}
+.mainBlock{
+  display: flex;
+  align-items: center;
+}
+.subBlocks {
+  margin-left: 20px;
 }
 .block , 
 .blockFn button {
@@ -63,8 +72,6 @@
 .todo.block, 
 .toggle.block ,
 .page.block {
-  display: flex;
-  align-items: center;
   .left {
     width: 18px;
     height: 18px;
