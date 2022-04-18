@@ -6,8 +6,10 @@
   flex-grow: 1;
   flex-shrink: 1;
   height: 100%;
+  overflow-y: scroll;
   display: flex;
   flex-direction: column;
+  @include webkitScroll;
   // topbar ---
   .topbar {
     width:100%;
