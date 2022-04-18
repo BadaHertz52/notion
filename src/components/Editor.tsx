@@ -18,7 +18,7 @@ type EditorProps ={
   page:Page,
   pagePath: string []| null
   editBlock : (pageId:string , block:Block)=> void,
-  addBlock : (pageId:string , block:Block)=> void,
+  addBlock : (pageId:string , block:Block ,nextBlockIndex:number)=> void,
   side: Side ,
   lockSideBar  : ()=> void ,
   leftSideBar  : ()=> void ,

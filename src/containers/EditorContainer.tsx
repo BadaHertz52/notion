@@ -18,7 +18,7 @@ type EditorContainerProps ={
 const EditorContainer =({page , pagePath ,side, lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage }:EditorContainerProps)=>{
   const dispatch =useDispatch();
   const editBlock_action = (pageId:string, block:Block)=> {dispatch(editBlock(pageId, block))};
-  const addBlock_action =(pageId:string , block:Block)=>{dispatch(addBlock(pageId,block))};
+  const addBlock_action =(pageId:string , block:Block , nextBlockIndex:number)=>{dispatch(addBlock(pageId,block ,nextBlockIndex))};
   const userName =useSelector((state:RootState)=> state.user.userName) ;
 
   return(
