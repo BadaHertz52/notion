@@ -10,7 +10,7 @@ import {GrDocumentText ,GrDocument} from 'react-icons/gr';
 import { FiChevronsLeft } from 'react-icons/fi';
 import { Side } from '../modules/side';
 import { MdInsertPhoto } from 'react-icons/md';
-import { CgMenuBoxed } from 'react-icons/cg';
+import {CgMenuGridO } from 'react-icons/cg';
 import Menu from './Menu';
 
 type EditorProps ={
@@ -290,7 +290,7 @@ const Editor =({ userName, page, pagePath, editBlock ,side,  lockSideBar, leftSi
                     onClick={showMenu}
                     title ="Click to open menu"
                   >
-                    <CgMenuBoxed/>
+                    <CgMenuGridO/>
                     <Menu 
                     block={targetBlock} 
                     />
