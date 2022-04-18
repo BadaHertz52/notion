@@ -96,6 +96,8 @@ a:link, a:active, a:visited {
 .todo.block .left,
 .toggle.block .left,
 .page.block .left {
+  width: 18px;
+  height: 18px;
   margin-right: 4px;
   font-size: 17px;
 }
@@ -103,6 +105,8 @@ a:link, a:active, a:visited {
 .todo.block svg,
 .toggle.block svg,
 .page.block svg {
+  width: inherit;
+  height: inherit;
   font-size: inherit;
 }
 
