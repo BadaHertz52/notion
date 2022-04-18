@@ -18,6 +18,7 @@ type EditorProps ={
   page:Page,
   pagePath: string []| null
   editBlock : (pageId:string , block:Block)=> void,
+  addBlock : (pageId:string , block:Block)=> void,
   side: Side ,
   lockSideBar  : ()=> void ,
   leftSideBar  : ()=> void ,
@@ -29,7 +30,7 @@ type EditorProps ={
 type CommentProp ={
   comment :string | null
 }
-const Editor =({ userName, page, pagePath, editBlock ,side,  lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage}:EditorProps)=>{
+const Editor =({ userName, page, pagePath, editBlock ,addBlock ,side,  lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage}:EditorProps)=>{
 
   const [targetBlock, setTargetBlock]=useState<Block>(blockSample); 
   const [fnStyle, setFnStyle] =useState<CSSProperties>({display:"none"});
@@ -271,6 +272,7 @@ const Editor =({ userName, page, pagePath, editBlock ,side,  lockSideBar, leftSi
                   page ={page}
                   block={block}
                   editBlock={editBlock}
+                  addBlock ={addBlock}
                 />)}
               </div>
               <div 
