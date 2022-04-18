@@ -4,11 +4,12 @@ import { Notion, Page } from '../modules/notion';
 
 //react-icon
 import {FiCode ,FiChevronsLeft} from 'react-icons/fi';
-import {AiOutlineClockCircle, AiOutlinePlus, AiOutlinePlusSquare} from 'react-icons/ai';
+import {AiOutlineClockCircle, AiOutlinePlus} from 'react-icons/ai';
 import {BiSearchAlt2} from 'react-icons/bi';
 import {BsFillTrash2Fill, BsThreeDots} from 'react-icons/bs';
-import {IoIosSettings, IoMdArrowDropright} from 'react-icons/io';
+import {IoIosSettings} from 'react-icons/io';
 import {HiDownload, HiTemplate} from 'react-icons/hi';
+import { MdPlayArrow } from 'react-icons/md';
 
 type SideBarProps ={
   user:{
@@ -34,7 +35,7 @@ const ItemTemplate =({item}:ItemTemplageProp)=>{
   <div className='itemInner pageLink'>
     <div className='pageContent'>
       <button className='toggleBtn'>
-        <IoMdArrowDropright/>
+        <MdPlayArrow/>
       </button>
       <div className='pageName'>
         {item.icon !==null && 

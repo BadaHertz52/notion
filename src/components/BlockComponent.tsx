@@ -1,5 +1,7 @@
-import React, { CSSProperties, useRef} from 'react';
+import React, { CSSProperties, useRef, useState} from 'react';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
+import { GrCheckbox, GrCheckboxSelected } from 'react-icons/gr';
+import { MdPlayArrow } from 'react-icons/md';
 //icon
 import { Block,blockSample,Page } from '../modules/notion';
 
@@ -16,6 +18,10 @@ const BlockComponent=({block ,page , setTargetBlock, setFnStyle, editBlock}:Bloc
   const className =`${block.type} block`;
   const blockRef =useRef<HTMLDivElement>(null);
   const innerRef= useRef<HTMLElement>(null);
+  const [toggle, setToggle] =useState<boolean>(false);
+  const [toggleBtnStyle, setToggleBtnStyle]=useState<CSSProperties>({
+    transform: "rotate(90deg)",
+  });
   const onChange =(event:ContentEditableEvent)=>{
     const pageId =page.id ;
     const content = event.target.value;
@@ -43,6 +49,21 @@ const BlockComponent=({block ,page , setTargetBlock, setFnStyle, editBlock}:Bloc
       left:0
     })
   };
+
+  const onClickToggleBtn =(event :React.MouseEvent<HTMLElement>)=>{
+    const target = event.target as HTMLElement;
+    setToggle(!toggle);
+    const tagName = target?.tagName ;
+    switch (tagName) {
+      case "SVG":
+        
+        break;
+      case "BUTTON" :
+        break;
+      default:
+        break;
+    }
+  };
   return(
     <div 
       className={className} 
@@ -50,6 +71,20 @@ const BlockComponent=({block ,page , setTargetBlock, setFnStyle, editBlock}:Bloc
       onMouseLeave={onDisappearBlockFn}
       ref={blockRef}
     >
+      {block.type ==="todo" &&
+        <GrCheckbox className='checkbox'/>
+      }
+      {block.type ==="todo done" &&
+        <GrCheckboxSelected className='checkbox'/>
+      }
+      {block.type ==="toggle" &&
+        <button 
+          className='blockToggleBtn' 
+          onClick={(event:React.MouseEvent<HTMLElement>)=>onClickToggleBtn(event)}
+        >
+          <MdPlayArrow/>
+        </button>
+      }
       <ContentEditable
         className="contentEditable"
         innerRef ={innerRef}
