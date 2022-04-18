@@ -1,6 +1,6 @@
 import React, { CSSProperties, useRef, useState} from 'react';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
-import { GrCheckbox, GrCheckboxSelected } from 'react-icons/gr';
+import { GrCheckbox, GrCheckboxSelected, GrDocumentText } from 'react-icons/gr';
 import { MdPlayArrow } from 'react-icons/md';
 //icon
 import { Block,blockSample,Page } from '../modules/notion';
@@ -72,18 +72,31 @@ const BlockComponent=({block ,page , setTargetBlock, setFnStyle, editBlock}:Bloc
       ref={blockRef}
     >
       {block.type ==="todo" &&
-        <GrCheckbox className='checkbox'/>
+        <button className='checkbox left'>
+          <GrCheckbox />
+        </button>
       }
       {block.type ==="todo done" &&
-        <GrCheckboxSelected className='checkbox'/>
+        <button className='checkbox left'>
+          <GrCheckboxSelected />
+        </button>
       }
       {block.type ==="toggle" &&
         <button 
-          className='blockToggleBtn' 
+          className='blockToggleBtn left' 
           onClick={(event:React.MouseEvent<HTMLElement>)=>onClickToggleBtn(event)}
         >
           <MdPlayArrow/>
         </button>
+      }
+      {block.type ==="page" &&
+        <div className='pageIcon left'>
+        {block.icon == null?
+          < GrDocumentText/>
+        :
+          block.icon
+        }
+        </div>
       }
       <ContentEditable
         className="contentEditable"
