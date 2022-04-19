@@ -24,7 +24,7 @@ export type Block ={
 } ;
 export  const blockSample ={
   id:`blockSample_${JSON.stringify(Date.now)}`,
-  contents:"blocksample",
+  contents:"",
   subBlocks : {
     blocks : null,
     blockIdes: null
@@ -235,7 +235,6 @@ export default function notion (state:Notion =initialState , action :NotionActio
         ...page_addedBlock,
         subPageIdes :state.pages[pageIndex].subPageIdes.concat(action.block.id)
       };
-
       if(action.block.type==="page"){
         state.pages[pageIndex] =page_addedSubPage;
       }else{
@@ -246,8 +245,8 @@ export default function notion (state:Notion =initialState , action :NotionActio
     case EDIT_BLOCK:
       let blockIndex = targetPage.blockIdes.indexOf(action.block.id);
 
-      console.log("blockIndex", blockIndex )
       state.pages[pageIndex].blocks[blockIndex] =action.block ; 
+
       return state
 
     case DELETE_BLOCK:
