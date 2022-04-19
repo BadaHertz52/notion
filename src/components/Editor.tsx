@@ -19,6 +19,7 @@ type EditorProps ={
   pagePath: string []| null
   editBlock : (pageId:string , block:Block)=> void,
   addBlock : (pageId:string , block:Block ,nextBlockIndex:number)=> void,
+  deleteBlock : (pageId:string , block:Block)=> void,
   side: Side ,
   lockSideBar  : ()=> void ,
   leftSideBar  : ()=> void ,
@@ -30,7 +31,7 @@ type EditorProps ={
 type CommentProp ={
   comment :string | null
 }
-const Editor =({ userName, page, pagePath, editBlock ,addBlock ,side,  lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage}:EditorProps)=>{
+const Editor =({ userName, page, pagePath, editBlock ,addBlock ,deleteBlock ,side,  lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage}:EditorProps)=>{
 
   const [targetBlock, setTargetBlock]=useState<Block>(blockSample); 
   const [fnStyle, setFnStyle] =useState<CSSProperties>({display:"none"});
@@ -141,11 +142,11 @@ const Editor =({ userName, page, pagePath, editBlock ,addBlock ,side,  lockSideB
     const showMenu =()=>{
 
     };
-  
-    const addBlock =()=>{
-  
+    
+    const makeNewBlock =()=>{
+
     };
-  
+
     return(
       <div className='frame'>
         {side.newPage ?
@@ -273,6 +274,7 @@ const Editor =({ userName, page, pagePath, editBlock ,addBlock ,side,  lockSideB
                   block={block}
                   editBlock={editBlock}
                   addBlock ={addBlock}
+                  deleteBlock={deleteBlock}
                 />)}
               </div>
               <div 
@@ -282,7 +284,7 @@ const Editor =({ userName, page, pagePath, editBlock ,addBlock ,side,  lockSideB
                 >
                   <button 
                     className='addBlock'
-                    onClick={addBlock}
+                    onClick={makeNewBlock}
                     title="Click  to add a block below"
                   >
                     <AiOutlinePlus/>

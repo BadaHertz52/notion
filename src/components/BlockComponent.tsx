@@ -13,9 +13,10 @@ type BlockProp ={
   setFnStyle :(style:CSSProperties)=>void,
   editBlock : (pageId:string, newBlock:Block)=> void,
   addBlock : (pageId:string, newBlock:Block, nextBlockIndex:number)=> void,
+  deleteBlock : (pageId:string, block:Block)=> void,
 };
 
-const BlockComponent=({block ,page , setTargetBlock, setFnStyle, editBlock ,addBlock}:BlockProp)=>{
+const BlockComponent=({block ,page , setTargetBlock, setFnStyle, editBlock ,addBlock ,deleteBlock}:BlockProp)=>{
   const pageId:string =page.id ;
   const blockIndex:number = page.blockIdes.indexOf(block.id) ;
   const nextBlockIndex :number= blockIndex +1; 
@@ -26,7 +27,6 @@ const BlockComponent=({block ,page , setTargetBlock, setFnStyle, editBlock ,addB
   const toggleStyle:CSSProperties={
     transform: toggle? "rotate(90deg)" : "rotate(0deg)" 
   }
-  const [editedBlock, setEditedBlock] =useState<Block>(blockSample);
   const [html ,setHtml] =useState<string>(block.contents);
   const  editTime = JSON.stringify(Date.now());
 
@@ -36,59 +36,66 @@ const BlockComponent=({block ,page , setTargetBlock, setFnStyle, editBlock ,addB
       contents: contents,
       editTime: editTime
     } ;
-    setEditedBlock(newBlock);
     editBlock(pageId,newBlock);
-    console.log("editContents");
   };
 
   const onChange =(event:ContentEditableEvent)=>{   
     const contents = event.target.value;
     setHtml(contents);
     editContents(contents);
-    console.log("change", contents , block.id,event.currentTarget.id );
   };
   
-  const makeSubBlock =()=>{
+  const makeSubBlock =(parentBlock:Block, newSubBlock:Block)=>{
     const newToggleBlock:Block ={
-      ...block, 
+      ...parentBlock, 
       editTime :editTime ,
       subBlocks:{
-        blocks:block.subBlocks.blocks!==null? [...block.subBlocks.blocks , blockSample] : [blockSample] ,
-        blockIdes: block.subBlocks.blockIdes !==null? [...block.subBlocks.blockIdes , blockSample.id] : [blockSample.id] ,
+        blocks:parentBlock.subBlocks.blocks!==null? [...parentBlock.subBlocks.blocks , newSubBlock] : [newSubBlock] ,
+        blockIdes: parentBlock.subBlocks.blockIdes !==null? [...parentBlock.subBlocks.blockIdes , newSubBlock.id] : [newSubBlock.id] ,
       } 
     };
     editBlock(pageId, newToggleBlock);
   };
 
   const onKeyup =(event: React.KeyboardEvent<HTMLDivElement>)=>{
+
     if(event.code === "Enter"){
+      const start = html.indexOf("<div>");
+      const last =html.indexOf("</div>");
+      const newContents = html.substring(start+5, last);
+      setHtml(newContents);
+
+      const newBlock:Block ={
+        id:editTime,
+        editTime:editTime,
+        type:"text",
+        contents:newContents,
+        subBlocks:{
+          blocks:null,
+          blockIdes:null
+        },
+        icon:null,
+      };
       // 새로운 블록 만들기 
       if(block.type.includes("toggle")){
         //subBtn 
         setToggle(true);
-        makeSubBlock();
+        makeSubBlock(block, newBlock);
       }else{
         //새로운 버튼 
-          const start = html.indexOf("<div>");
-          const last =html.indexOf("</div>");
-          const newContents = html.substring(start+5, last);
-          setHtml(newContents);
-          const newBlock:Block ={
-            id:editTime,
-            editTime:editTime,
-            type:"text",
-            contents:newContents,
-            subBlocks:{
-              blocks:null,
-              blockIdes:null
-            },
-            icon:null,
-          }
-          console.log(newBlock, "block" ,block);
           addBlock(pageId, newBlock, nextBlockIndex);
       }
-    } else if(event.code ==="Tab"){
-      makeSubBlock();
+    } 
+    if(event.code ==="Tab" && html ===""){
+      //  이전 블록의 sub 으로 변경 
+      const parentBlock = page.blocks[blockIndex-1];
+      const editedBlock ={
+        ...block,
+        editTime:editTime,
+        contentes:html 
+      }
+      makeSubBlock(parentBlock,editedBlock);
+      deleteBlock(page.id, block);
     }
   };
 
@@ -173,6 +180,7 @@ const BlockComponent=({block ,page , setTargetBlock, setFnStyle, editBlock ,addB
             setTargetBlock={setTargetBlock}
             editBlock={editBlock} 
             addBlock={addBlock}
+            deleteBlock={deleteBlock}
           />)
           }
         </div>

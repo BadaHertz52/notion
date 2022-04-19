@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Editor from '../components/Editor';
 import { RootState } from '../modules';
-import { addBlock, Block, editBlock, Notion, Page } from '../modules/notion';
+import { addBlock, Block, deleteBlock, editBlock, Notion, Page } from '../modules/notion';
 import side, { Side } from '../modules/side';
 
 type EditorContainerProps ={
@@ -16,10 +16,15 @@ type EditorContainerProps ={
   closeNewPage : ()=> void 
 }
 const EditorContainer =({page , pagePath ,side, lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage }:EditorContainerProps)=>{
-  const dispatch =useDispatch();
-  const editBlock_action = (pageId:string, block:Block)=> {dispatch(editBlock(pageId, block))};
-  const addBlock_action =(pageId:string , block:Block , nextBlockIndex:number)=>{dispatch(addBlock(pageId,block ,nextBlockIndex))};
   const userName =useSelector((state:RootState)=> state.user.userName) ;
+
+  const dispatch =useDispatch();
+
+  const editBlock_action = (pageId:string, block:Block)=> {dispatch(editBlock(pageId, block))};
+
+  const addBlock_action =(pageId:string , block:Block , nextBlockIndex:number)=>{dispatch(addBlock(pageId,block ,nextBlockIndex))};
+
+  const deleteBlock_action =(pageId:string,block:Block)=>{dispatch(deleteBlock(pageId,block))};
 
   return(
     <Editor 
@@ -28,6 +33,7 @@ const EditorContainer =({page , pagePath ,side, lockSideBar, leftSideBar,closeSi
       pagePath ={pagePath}
       editBlock ={editBlock_action}
       addBlock ={addBlock_action}
+      deleteBlock={deleteBlock_action}
       side ={side}
       lockSideBar ={lockSideBar}
       leftSideBar ={leftSideBar}
