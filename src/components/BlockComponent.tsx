@@ -27,17 +27,27 @@ const BlockComponent=({block ,page , setTargetBlock, setFnStyle, editBlock ,addB
     transform: toggle? "rotate(90deg)" : "rotate(0deg)" 
   }
   const [editedBlock, setEditedBlock] =useState<Block>(blockSample);
+  const [html ,setHtml] =useState<string>(block.contents);
   const  editTime = JSON.stringify(Date.now());
 
-  const onChange =(event:ContentEditableEvent)=>{
-    const contents = event.target.value;
+  const editContents =(contents :string)=> {
     const newBlock :Block ={
       ...block,
       contents: contents,
       editTime: editTime
     } ;
     setEditedBlock(newBlock);
+    editBlock(pageId,newBlock);
+    console.log("editContents");
   };
+
+  const onChange =(event:ContentEditableEvent)=>{   
+    const contents = event.target.value;
+    setHtml(contents);
+    editContents(contents);
+    console.log("change", contents , block.id,event.currentTarget.id );
+  };
+  
   const makeSubBlock =()=>{
     const newToggleBlock:Block ={
       ...block, 
@@ -49,7 +59,7 @@ const BlockComponent=({block ,page , setTargetBlock, setFnStyle, editBlock ,addB
     };
     editBlock(pageId, newToggleBlock);
   };
-  const makeNewBlock =()=> addBlock(pageId, blockSample, nextBlockIndex);
+
   const onKeyup =(event: React.KeyboardEvent<HTMLDivElement>)=>{
     if(event.code === "Enter"){
       // 새로운 블록 만들기 
@@ -59,15 +69,29 @@ const BlockComponent=({block ,page , setTargetBlock, setFnStyle, editBlock ,addB
         makeSubBlock();
       }else{
         //새로운 버튼 
-        makeNewBlock();
+          const start = html.indexOf("<div>");
+          const last =html.indexOf("</div>");
+          const newContents = html.substring(start+5, last);
+          setHtml(newContents);
+          const newBlock:Block ={
+            id:editTime,
+            editTime:editTime,
+            type:"text",
+            contents:newContents,
+            subBlocks:{
+              blocks:null,
+              blockIdes:null
+            },
+            icon:null,
+          }
+          console.log(newBlock, "block" ,block);
+          addBlock(pageId, newBlock, nextBlockIndex);
       }
-    }else if(event.code ==="Tab"){
+    } else if(event.code ==="Tab"){
       makeSubBlock();
-    }else{
-      // 블록 내용 수정 
-      editBlock(pageId, editedBlock)
     }
   };
+
   const onShowBlockFn =()=>{
     setTargetBlock(block);
     setFnStyle({
@@ -127,8 +151,9 @@ const BlockComponent=({block ,page , setTargetBlock, setFnStyle, editBlock ,addB
         }
         <ContentEditable
           className="contentEditable"
+          id={block.id}
           innerRef ={innerRef}
-          html ={block.contents}
+          html ={html}
           onChange={onChange}
           onKeyUp={onKeyup}
         />
