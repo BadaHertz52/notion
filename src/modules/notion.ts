@@ -221,43 +221,39 @@ const initialState ={
 };
 
 export default function notion (state:Notion =initialState , action :NotionAction) :Notion{
-  const pageIndex = state.pageIdes.indexOf(action.pageId);
-  const targetPage =state.pages[pageIndex];
+  const pageIndex:number = state.pageIdes.indexOf(action.pageId);
+  const targetPage:Page =state.pages[pageIndex];
+  const  blockIndex:number = state.pages[pageIndex]?.blockIdes.indexOf(action.block.id);
+
   switch (action.type) {
     case ADD_BLOCK:
-      const page_addedBlock ={
-        ...targetPage,
-        blocks : state.pages[pageIndex].blocks.splice(action.nextBlockIndex,0, action.block),
-        blockIdes:state.pages[pageIndex].blockIdes.splice(action.nextBlockIndex,0, action.block.id),
-      } ;
+      state.pages[pageIndex].blocks.splice(action.nextBlockIndex,0, action.block);
+      state.pages[pageIndex].blockIdes.splice(action.nextBlockIndex,0, action.block.id);
 
-      const page_addedSubPage ={
-        ...page_addedBlock,
-        subPageIdes :state.pages[pageIndex].subPageIdes.concat(action.block.id)
-      };
-      if(action.block.type==="page"){
-        state.pages[pageIndex] =page_addedSubPage;
-      }else{
-        state.pages[pageIndex] = page_addedBlock;
+      let newPages:Page[] = state.pages.map((page:Page)=>{
+        if((page.id===targetPage.id)&&(action.block.type==="page") ){
+              return{
+                ...page,
+                subPageIdes :state.pages[pageIndex].subPageIdes.concat(action.block.id)
+              }
+            }else{
+              return page
+            }
+      });
+      return {
+        ...state,
+        pages:newPages
       }
-      
-      return state
     case EDIT_BLOCK:
-      let blockIndex = targetPage.blockIdes.indexOf(action.block.id);
 
-      state.pages[pageIndex].blocks[blockIndex] =action.block ; 
-
-      return state
+      targetPage.blocks.splice(blockIndex,1,action.block);
+      
+      return state;
 
     case DELETE_BLOCK:
-      blockIndex =targetPage.blockIdes.indexOf(action.block.id);
 
-      const newBlocks = targetPage.blocks.filter((block:Block)=> block.id !== action.block.id);
-
-      const newBlockIdes = targetPage.blockIdes.filter((id:string )=> id !== action.block.id );
-
-      targetPage.blocks =newBlocks ;
-      targetPage.blockIdes =newBlockIdes;
+      targetPage.blocks.splice(blockIndex,1);
+      targetPage.blockIdes.splice(blockIndex,1);
 
       return state;
     default:
