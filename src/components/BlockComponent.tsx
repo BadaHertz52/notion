@@ -137,24 +137,6 @@ const BlockComponent=({block ,page ,editBlock ,addBlock ,deleteBlock}:BlockProp)
     }
   };
 
-  const onShowBlockFn =()=>{
-    setBlockFn(true);
-    // setFnStyle({
-    //   display:"flex" ,
-    //   flexDirection:"row",
-    //   position: "absolute",
-    //   top: `0`,
-    //   left:`-3rem`
-    // });
-  };
-  const onDisappearBlockFn =()=>{
-    setBlockFn(false);
-    // setFnStyle({
-    //   display:"none" ,
-    //   top:0,
-    //   left:0
-    // })
-  };
 
   const onClickToggleBtn =()=>{
     setToggle(!toggle)
@@ -164,8 +146,8 @@ const BlockComponent=({block ,page ,editBlock ,addBlock ,deleteBlock}:BlockProp)
   return(
     <div 
       className={className} 
-      onMouseEnter ={onShowBlockFn}
-      onMouseLeave={onDisappearBlockFn}
+      onMouseEnter ={()=>setBlockFn(true)}
+      onMouseLeave={()=>setBlockFn(false)}
       ref={blockRef}
     > 
       {blockFn &&
