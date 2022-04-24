@@ -1,22 +1,59 @@
 import React, { CSSProperties, useRef, useState} from 'react';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
+import { AiOutlinePlus } from 'react-icons/ai';
+import { CgMenuGridO } from 'react-icons/cg';
 import { GrCheckbox, GrCheckboxSelected, GrDocumentText } from 'react-icons/gr';
-import { MdArrowDropDown, MdPlayArrow } from 'react-icons/md';
+import { MdPlayArrow } from 'react-icons/md';
 //icon
 import { Block,blockSample,Page } from '../modules/notion';
+import Menu from './Menu';
+type BlockFnProp ={
+  block:Block
+};
 
+const BlockFn =({block}:BlockFnProp)=>{
+  
+  const showMenu =()=>{
 
+  };
+  
+  const makeNewBlock =()=>{
+
+  };
+
+  return (
+    <div 
+    className='blockFn'
+    >
+      <button 
+        className='addBlock'
+        onClick={makeNewBlock}
+        title="Click  to add a block below"
+      >
+        <AiOutlinePlus/>
+      </button>
+      <button 
+        className='menuBtn'
+        onClick={showMenu}
+        title ="Click to open menu"
+      >
+        <CgMenuGridO/>
+        <Menu 
+        block={block} 
+        />
+      </button>
+  </div>
+  )
+}
 type BlockProp ={
   block:Block,
   page:Page,
-  setTargetBlock : (block:Block)=>void ,
-  setFnStyle :(style:CSSProperties)=>void,
   editBlock : (pageId:string, newBlock:Block)=> void,
   addBlock : (pageId:string, newBlock:Block, nextBlockIndex:number)=> void,
   deleteBlock : (pageId:string, block:Block)=> void,
 };
 
-const BlockComponent=({block ,page , setTargetBlock, setFnStyle, editBlock ,addBlock ,deleteBlock}:BlockProp)=>{
+const BlockComponent=({block ,page ,editBlock ,addBlock ,deleteBlock}:BlockProp)=>{
   const pageId:string =page.id ;
   const blockIndex:number = page.blockIdes.indexOf(block.id) ;
   const nextBlockIndex :number= blockIndex +1; 
@@ -29,7 +66,8 @@ const BlockComponent=({block ,page , setTargetBlock, setFnStyle, editBlock ,addB
   }
   const [html ,setHtml] =useState<string>(block.contents);
   const  editTime = JSON.stringify(Date.now());
-
+  const [blockFn , setBlockFn ] =useState<boolean>(false);
+  
   const editContents =(contents :string)=> {
     const newBlock :Block ={
       ...block,
@@ -100,33 +138,41 @@ const BlockComponent=({block ,page , setTargetBlock, setFnStyle, editBlock ,addB
   };
 
   const onShowBlockFn =()=>{
-    setTargetBlock(block);
-    setFnStyle({
-      display:"block" ,
-      position: "absolute",
-      top: `calc(${blockRef.current?.offsetTop}px + 5px)`,
-      left:`calc(${blockRef.current?.offsetLeft}px - 45px)`
-    });
+    setBlockFn(true);
+    // setFnStyle({
+    //   display:"flex" ,
+    //   flexDirection:"row",
+    //   position: "absolute",
+    //   top: `0`,
+    //   left:`-3rem`
+    // });
   };
   const onDisappearBlockFn =()=>{
-    setTargetBlock(blockSample);
-    setFnStyle({
-      display:"none" ,
-      top:0,
-      left:0
-    })
+    setBlockFn(false);
+    // setFnStyle({
+    //   display:"none" ,
+    //   top:0,
+    //   left:0
+    // })
   };
 
   const onClickToggleBtn =()=>{
     setToggle(!toggle)
   };
+
+
   return(
     <div 
       className={className} 
       onMouseEnter ={onShowBlockFn}
       onMouseLeave={onDisappearBlockFn}
       ref={blockRef}
-    >
+    > 
+      {blockFn &&
+        <BlockFn  
+          block={block}
+        />
+      }
       <div className='mainBlock'>
         {block.type ==="todo" &&
           <button className='checkbox left'>
@@ -176,8 +222,6 @@ const BlockComponent=({block ,page , setTargetBlock, setFnStyle, editBlock ,addB
             key={block.subBlocks.blockIdes?.indexOf(subBlock.id)}
             block={subBlock}
             page={page}
-            setFnStyle={setFnStyle}
-            setTargetBlock={setTargetBlock}
             editBlock={editBlock} 
             addBlock={addBlock}
             deleteBlock={deleteBlock}

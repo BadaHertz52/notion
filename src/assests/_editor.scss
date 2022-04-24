@@ -83,11 +83,10 @@
   .pageContent{
     max-width: 100%;
     width: 100%;
-    padding: 0 calc(96px );
     // padding-left: calc(96px +env(safe-area-inset-left));
   }
   .pageHeader {
-    
+    padding: 0 calc(96px);
     &> div{
       position: relative;
     }

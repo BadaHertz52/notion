@@ -42,6 +42,7 @@ a:link, a:active, a:visited {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  padding: 0 calc(96px);
 }
 
 .mainBlock {
@@ -61,6 +62,16 @@ a:link, a:active, a:visited {
 .blockFn button {
   font-size: 1rem;
   line-height: 24px;
+}
+
+.blockFn {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  position: absolute;
+  top: 2px;
+  left: 48px;
+  padding-right: 3rem;
 }
 
 .blockFn button {
@@ -289,6 +300,9 @@ a:link, a:active, a:visited {
 .editor .pageContent {
   max-width: 100%;
   width: 100%;
+}
+
+.editor .pageHeader {
   padding: 0 calc(96px);
 }
 
