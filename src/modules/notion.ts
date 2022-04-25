@@ -10,6 +10,7 @@ const page ="page" as const ;
 
 export type BlockType= "text"|"toggle"|"todo" |"todo done"|"h1"|"h2"|"h3" |"page" ;
 
+
 export type Block ={
   id:string,
   contents:string, //html를 string 으로
@@ -22,6 +23,11 @@ export type Block ={
   editTime: string 
   
 } ;
+export type SubBlocks ={
+  blocks : Block[] |null,
+  blockIdes: string[]|null
+};
+
 export  const blockSample ={
   id:`blockSample_${JSON.stringify(Date.now)}`,
   contents:"",
@@ -56,7 +62,7 @@ export type Notion={
 const ADD_BLOCK ="notion/ADD_BLOCK" as const;
 const EDIT_BLOCK ="notion/EDIT_BLOCK" as const;
 const DELETE_BLOCK ="notion/DELETE_BLOCK" as const;
-
+const MAKE_SUB_BLOCK="notion/MAKE_SUB_BLOCK" as const;
 
 
 export const addBlock =(pageId:string, block:Block ,nextBlockIndex:number)=> ({
@@ -75,11 +81,18 @@ export const deleteBlock =(pageId:string, block:Block)=> ({
   pageId:pageId,
   block:block
 });
+export const makeSubBlock =(pageId:string, mainBlock:Block,subBlock:Block)=> ({
+  type:MAKE_SUB_BLOCK ,
+  pageId:pageId,
+  mainBlock:mainBlock,
+  block:subBlock
+});
 
 type NotionAction = 
 ReturnType<typeof addBlock> | 
 ReturnType<typeof editBlock> | 
-ReturnType <typeof deleteBlock>
+ReturnType <typeof deleteBlock>|
+ReturnType <typeof makeSubBlock>
 ;
 
 //reducer
@@ -225,6 +238,17 @@ export default function notion (state:Notion =initialState , action :NotionActio
   const targetPage:Page =state.pages[pageIndex];
   const  blockIndex:number = state.pages[pageIndex]?.blockIdes.indexOf(action.block.id);
 
+  const deleteData =()=>{
+    targetPage.blocks.splice(blockIndex,1);
+    targetPage.blockIdes.splice(blockIndex,1);
+  };
+
+  const editData=(block:Block)=>{
+    const index:number = state.pages[pageIndex]?.blockIdes.indexOf(block.id)
+    targetPage.blocks.splice(index,1,block);
+    console.log("edit data", targetPage.blocks);
+  };
+
   switch (action.type) {
     case ADD_BLOCK:
       state.pages[pageIndex].blocks.splice(action.nextBlockIndex,0, action.block);
@@ -245,15 +269,23 @@ export default function notion (state:Notion =initialState , action :NotionActio
         pages:newPages
       }
     case EDIT_BLOCK:
+      editData(action.block);
+      console.log("edit", targetPage.blocks)
+      return state;
 
-      targetPage.blocks.splice(blockIndex,1,action.block);
-      
+    case MAKE_SUB_BLOCK:
+      editData(action.mainBlock);
+      if(targetPage.blockIdes.includes(action.block.id)){
+        deleteData();
+      };
+      console.log("make subBlock", targetPage.blocks)
       return state;
 
     case DELETE_BLOCK:
-
-      targetPage.blocks.splice(blockIndex,1);
-      targetPage.blockIdes.splice(blockIndex,1);
+      deleteData();
+      const targetBlock =document.getElementById(action.block.id) as Node;
+      const pageContent_inner = document.getElementsByClassName("pageContent_inner")[0] as Node;
+      pageContent_inner.removeChild(targetBlock);
 
       return state;
     default:

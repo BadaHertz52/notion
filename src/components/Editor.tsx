@@ -18,7 +18,8 @@ type EditorProps ={
   editBlock : (pageId:string , block:Block)=> void,
   addBlock : (pageId:string , block:Block ,nextBlockIndex:number)=> void,
   deleteBlock : (pageId:string , block:Block)=> void,
-  side: Side ,
+  side: Side , 
+  makeSubBlock : (pageId:string ,mainBlock:Block, subBlock:Block)=> void,
   lockSideBar  : ()=> void ,
   leftSideBar  : ()=> void ,
   closeSideBar  : ()=> void ,
@@ -29,7 +30,7 @@ type EditorProps ={
 type CommentProp ={
   comment :string | null
 }
-const Editor =({ userName, page, pagePath, editBlock ,addBlock ,deleteBlock ,side,  lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage}:EditorProps)=>{
+const Editor =({ userName, page, pagePath, editBlock ,addBlock ,deleteBlock, makeSubBlock ,side,  lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage}:EditorProps)=>{
 
 
   const TopBar =()=>{
@@ -261,6 +262,7 @@ const Editor =({ userName, page, pagePath, editBlock ,addBlock ,deleteBlock ,sid
                   editBlock={editBlock}
                   addBlock ={addBlock}
                   deleteBlock={deleteBlock}
+                  makeSubBlock={makeSubBlock}
                 />)}
               </div>
             </div>
