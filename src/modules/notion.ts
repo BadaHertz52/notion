@@ -18,6 +18,7 @@ export type Block ={
     blocks : Block[] |null,
     blockIdes: string[]|null
   } //toggle 을 위한 
+  parents:string[]|null,
   type: BlockType ,
   icon: string | null ,
   editTime: string 
@@ -35,6 +36,7 @@ export  const blockSample ={
     blocks : null,
     blockIdes: null
   } ,
+  parents:null,
   type:text,
   icon:null,
   editTime:""
@@ -50,7 +52,7 @@ export type Page ={
   blocks : Block[],
   blockIdes : string[],
   subPageIdes:string[],
-  parentId: string[] | null 
+  parentsIdes: string[] | null 
 };
 
 export type Notion={ 
@@ -111,9 +113,48 @@ const initialState ={
       id:"text",
       contents:"안녕", 
       subBlocks :{
-        blocks : null,
-        blockIdes: null
+        blocks : [
+          {
+            id:"sub1_1",
+            contents:"sub1_1", 
+            subBlocks :{
+              blocks : [{
+                
+                  id:"sub2_1",
+                  contents:"sub2_1", 
+                  subBlocks :{
+                    blocks : null,
+                    blockIdes: null
+                  } ,
+                  parents:["text", "sub1_1"],
+                  type: text,
+                  icon:  null ,
+                  editTime: JSON.stringify(Date.now),
+                }
+            ],
+              blockIdes: ["sub2_1"]
+            } ,
+            parents:["text"],
+            type: text,
+            icon:  null ,
+            editTime: JSON.stringify(Date.now),
+          },
+          {
+            id:"sub1_2",
+            contents:"sub1_2", 
+            subBlocks :{
+              blocks : null,
+              blockIdes: null
+            } ,
+            parents:["text"],
+            type: text,
+            icon:  null ,
+            editTime: JSON.stringify(Date.now),
+          }
+        ],
+        blockIdes: ["sub1_1", "sub1_2"]
       } ,
+      parents:null,
       type: text,
       icon:  null ,
       editTime: JSON.stringify(Date.now),
@@ -124,6 +165,7 @@ const initialState ={
         blocks : null,
         blockIdes: null
       } , 
+      parents:null,
       type: toggle,
       icon:  null ,
       editTime: JSON.stringify(Date.now),
@@ -134,6 +176,7 @@ const initialState ={
         blocks : null,
         blockIdes: null
       } ,
+      parents:null,
       type: todo,
       icon:  null ,
       editTime: JSON.stringify(Date.now),
@@ -144,6 +187,7 @@ const initialState ={
         blocks : null,
         blockIdes: null
       } ,
+      parents:null,
       type: todo_done,
       icon:  null ,
       editTime: JSON.stringify(Date.now),
@@ -154,6 +198,7 @@ const initialState ={
         blocks : null,
         blockIdes: null
       } ,
+      parents:null,
       type: h1,
       icon:  null ,
       editTime: JSON.stringify(Date.now),
@@ -164,6 +209,7 @@ const initialState ={
         blocks : null,
         blockIdes: null
       } , 
+      parents:null,
       type: h2,
       icon:  null ,
       editTime: JSON.stringify(Date.now),
@@ -174,6 +220,7 @@ const initialState ={
         blocks : null,
         blockIdes: null
       } ,
+      parents:null,
       type: h3,
       icon:  null ,
       editTime: JSON.stringify(Date.now),
@@ -184,6 +231,7 @@ const initialState ={
         blocks : null,
         blockIdes: null
       } ,
+      parents:null,
       type: page,
       icon:  null ,
       editTime: JSON.stringify(Date.now),
@@ -195,6 +243,7 @@ const initialState ={
         blocks : null,
         blockIdes: null
       } ,
+      parents:null,
       type: page,
       icon: "🌈" ,
       editTime: JSON.stringify(Date.now),
@@ -202,7 +251,7 @@ const initialState ={
     ],
     blockIdes:["text", 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page', 'page2'],
     subPageIdes:[],
-    parentId: ['1111' , '2222']
+    parentsIdes: ['1111' , '2222']
   },
   {
     id: '1234',
@@ -215,7 +264,7 @@ const initialState ={
     blocks:[],
     blockIdes:[],
     subPageIdes:[],
-    parentId: null
+    parentsIdes: null
   },
   {
     id: '123',
@@ -228,7 +277,7 @@ const initialState ={
     blocks:[],
     blockIdes:[],
     subPageIdes:[],
-    parentId:null
+    parentsIdes:null
   }
 ]
 };
