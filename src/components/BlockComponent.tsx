@@ -5,7 +5,7 @@ import { CgMenuGridO } from 'react-icons/cg';
 import { GrCheckbox, GrCheckboxSelected, GrDocumentText } from 'react-icons/gr';
 import { MdPlayArrow } from 'react-icons/md';
 //icon
-import { Block,Page, SubBlocks } from '../modules/notion';
+import { Block,blockSample,Page, SubBlocks } from '../modules/notion';
 import Menu from './Menu';
 type BlockFnProp ={
   block:Block
@@ -62,7 +62,6 @@ const BlockComponent=({block ,page ,editBlock ,addBlock ,deleteBlock, makeSubBlo
   const blockRef =useRef<HTMLDivElement>(null);
   const innerRef= useRef<HTMLElement>(null);
   const mainBlockRef =useRef<HTMLDivElement>(null);
-  const [subBlocks, setSubBlocks] =useState<SubBlocks>( block.subBlocks);
   const [toggle, setToggle] =useState<boolean>(false);
   const toggleStyle:CSSProperties={
     transform: toggle? "rotate(90deg)" : "rotate(0deg)" 
@@ -73,7 +72,7 @@ const BlockComponent=({block ,page ,editBlock ,addBlock ,deleteBlock, makeSubBlo
     marginLeft: mainBlockX !==undefined? mainBlockX+16+"px" : "96PX"
   };
   const [html ,setHtml] =useState<string>(block.contents);
-  const [targetBlock, setTargetBlock]=useState<Block>(block);
+  const [targetBlock, setTargetBlock]=useState<Block>(block); // 새로운 블록 만들때 
   const  editTime = JSON.stringify(Date.now());
   const [blockFn , setBlockFn ] =useState<boolean>(false);
   
@@ -86,11 +85,44 @@ const BlockComponent=({block ,page ,editBlock ,addBlock ,deleteBlock, makeSubBlo
     editBlock(pageId,newBlock);
   };
 
+  const changeSubBlock =(contents:string)=>{
+    if(block.parents!==null){
+      let parentId:string =block.parents[0];
+
+      const  firstParentBlock:Block =
+      page.blocks[page.blockIdes.indexOf(parentId)];
+
+      let parentBlock:Block =firstParentBlock;
+      let parentBlocks:Block[] =[firstParentBlock];
+
+      for (let i = 1; i < block.parents.length; i++) {
+        const index = block.parents[i];
+        const elementIndex:number = parentBlock.subBlocks.blockIdes?.indexOf(index) as number;
+        const element:Block = parentBlock.subBlocks.blocks?.splice(elementIndex,1)[0] as Block;
+        console.log("element", element);
+        parentBlocks.push(element);
+        parentBlock =element;
+      }
+  
+      console.log( block.id,"parentBlocks," , parentBlocks);
+    }   
+  }; 
+
+  useEffect(()=>{
+    if(block.id =="sub2_1"){
+      changeSubBlock("");
+    }
+  },[block])
   const onChange =(event:ContentEditableEvent)=>{   
     const contents = event.target.value;
       setHtml(contents);
+      
       if(targetBlock.id === block.id){
-        editContents(contents ,block);
+        if(block.parents==null){
+          editContents(contents ,block);
+        }else{
+          changeSubBlock(contents);
+        }       
       }else{
       const start = contents.indexOf("<div>");
       const last =contents.indexOf("</div>");
@@ -101,7 +133,6 @@ const BlockComponent=({block ,page ,editBlock ,addBlock ,deleteBlock, makeSubBlo
       
   };
   const make_subBlock =(parentBlock:Block, newSubBlock:Block)=>{
-    const mainBlock = document.getElementById(parentBlock.id) as Node ;
 
     const newMainBlock:Block ={
       ...parentBlock, 
@@ -109,7 +140,7 @@ const BlockComponent=({block ,page ,editBlock ,addBlock ,deleteBlock, makeSubBlo
       subBlocks:{
         blocks:parentBlock.subBlocks.blocks!==null? [newSubBlock ,...parentBlock.subBlocks.blocks ]  : [newSubBlock] ,
         blockIdes: parentBlock.subBlocks.blockIdes !==null? [newSubBlock.id,...parentBlock.subBlocks.blockIdes  ] : [newSubBlock.id] ,
-      } 
+      },
     };
     makeSubBlock(page.id, newMainBlock,newSubBlock );
   };
@@ -128,12 +159,17 @@ const BlockComponent=({block ,page ,editBlock ,addBlock ,deleteBlock, makeSubBlo
             blockIdes:null
           },
           icon:null,
+          parents:[]
         };
         setTargetBlock(newBlock);
       if(block.type.includes("toggle")){
         //subBtn 
         setToggle(true);
-        make_subBlock(block, newBlock);
+        const newSubBlock ={
+          ...newBlock,
+          parents:block.parents? block.parents.concat(block.id) : [block.id]
+        }
+        make_subBlock(block, newSubBlock);
       }else{
         //새로운 버튼 
         addBlock(pageId, newBlock, nextBlockIndex);
@@ -231,7 +267,7 @@ const BlockComponent=({block ,page ,editBlock ,addBlock ,deleteBlock, makeSubBlo
           className='subBlocks'
           style ={subBlockStyle}
         >
-          {subBlocks.blocks?.map((subBlock :Block)=> 
+          {block.subBlocks.blocks?.map((subBlock :Block)=> 
           <BlockComponent
             key={block.subBlocks.blockIdes?.indexOf(subBlock.id)}
             block={subBlock}
