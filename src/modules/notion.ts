@@ -10,53 +10,58 @@ const page ="page" as const ;
 
 export type BlockType= "text"|"toggle"|"todo" |"todo done"|"h1"|"h2"|"h3" |"page" ;
 
-
 export type Block ={
   id:string,
   contents:string, //html를 string 으로
-  subBlocks : {
-    blocks : Block[] |null,
-    blockIdes: string[]|null
-  } //toggle 을 위한 
-  parents:string[]|null,
+  firstBlock:boolean,
+  subBlocksId : string[]|null //toggle 을 위한 
+  parentBlocksId: string[]|null // 수정 삭제 시 사용 순서대로 최상위 
   type: BlockType ,
   icon: string | null ,
   editTime: string 
-  
 } ;
-export type SubBlocks ={
-  blocks : Block[] |null,
-  blockIdes: string[]|null
-};
 
-export  const blockSample ={
+export  const blockSample:Block ={
   id:`blockSample_${JSON.stringify(Date.now)}`,
   contents:"",
-  subBlocks : {
-    blocks : null,
-    blockIdes: null
-  } ,
-  parents:null,
+  firstBlock:true,
+  subBlocksId:null ,
+  parentBlocksId: null,
   type:text,
   icon:null,
   editTime:""
 }
 export type Page ={
-  id:string, 
+  id:string , 
   header : {
-    title: string,
+    title: string | null,
     icon: string |null,
     cover: ImageData |null,
     comment: string| null,
   }
-  blocks : Block[],
-  blockIdes : string[],
-  subPageIdes:string[],
-  parentsIdes: string[] | null 
+  firstBlocksId :string[] | null// 첫 메인 블록 아이디 모음
+  blocks : Block[] , // 모든 블럭들 순사척으로 
+  blocksId : string[]  //block  수정시 위치 파악용, 
+  subPagesId:string[] | null,
+  parentssId: string[] | null 
 };
-
+export const  pageSample:Page ={
+  id:"", 
+  header : {
+    title: null,
+    icon: null,
+    cover: null,
+    comment:  null,
+  },
+  firstBlocksId :null,// 첫 메인 블록 아이디 모음
+  blocks :  [blockSample], // 모든 블럭들 순사척으로 
+  blocksId :  [blockSample.id], //block  수정시 위치 파악용
+  subPagesId: null,
+  parentssId:  null 
+};
 export type Notion={ 
-  pageIdes :string [],
+  pagesId :string []|null,
+  firstPagesId: string[]|null
   pages: Page[],
 };
 
@@ -64,7 +69,8 @@ export type Notion={
 const ADD_BLOCK ="notion/ADD_BLOCK" as const;
 const EDIT_BLOCK ="notion/EDIT_BLOCK" as const;
 const DELETE_BLOCK ="notion/DELETE_BLOCK" as const;
-const MAKE_SUB_BLOCK="notion/MAKE_SUB_BLOCK" as const;
+const CHANGE_TO_SUB_BLOCK="notion/CHANGE_TO_SUB_BLOCK" as const;
+const RAISE_BLOCK="notion/RAISE_BLOCK" as const;
 
 
 export const addBlock =(pageId:string, block:Block ,nextBlockIndex:number)=> ({
@@ -76,30 +82,38 @@ export const addBlock =(pageId:string, block:Block ,nextBlockIndex:number)=> ({
 export const editBlock =(pageId:string, block:Block)=> ({
   type:EDIT_BLOCK ,
   pageId:pageId,
-  block:block
+  block:block,
 });
 export const deleteBlock =(pageId:string, block:Block)=> ({
   type:DELETE_BLOCK ,
   pageId:pageId,
   block:block
 });
-export const makeSubBlock =(pageId:string, mainBlock:Block,subBlock:Block)=> ({
-  type:MAKE_SUB_BLOCK ,
+
+export const changeToSub =(pageId:string, block:Block)=> ({
+  type:CHANGE_TO_SUB_BLOCK ,
   pageId:pageId,
-  mainBlock:mainBlock,
-  block:subBlock
+  block:block
+});
+
+export const raiseBlock =(pageId:string, block:Block)=>({
+  type:RAISE_BLOCK,
+  pageId:pageId,
+  block:block
 });
 
 type NotionAction = 
 ReturnType<typeof addBlock> | 
 ReturnType<typeof editBlock> | 
 ReturnType <typeof deleteBlock>|
-ReturnType <typeof makeSubBlock>
+ReturnType <typeof changeToSub>|
+ReturnType < typeof raiseBlock>
 ;
 
 //reducer
-const initialState ={
-  pageIdes:['12345' ,'1234', '123' ],
+const initialState :Notion ={
+  pagesId:['12345' ,'1234', '123' ],
+  firstPagesId :['12345' ,'1234', '123'],
   pages:[
   {
     id: '12345',
@@ -109,129 +123,77 @@ const initialState ={
       cover: null,
       comment:  "comment test",
     },
+    firstBlocksId :["text", 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page', 'page2'],
     blocks:[{
       id:"text",
       contents:"안녕", 
-      subBlocks :{
-        blocks : [
-          {
-            id:"sub1_1",
-            contents:"sub1_1", 
-            subBlocks :{
-              blocks : [{
-                
-                  id:"sub2_1",
-                  contents:"sub2_1", 
-                  subBlocks :{
-                    blocks : null,
-                    blockIdes: null
-                  } ,
-                  parents:["text", "sub1_1"],
-                  type: text,
-                  icon:  null ,
-                  editTime: JSON.stringify(Date.now),
-                }
-            ],
-              blockIdes: ["sub2_1"]
-            } ,
-            parents:["text"],
-            type: text,
-            icon:  null ,
-            editTime: JSON.stringify(Date.now),
-          },
-          {
-            id:"sub1_2",
-            contents:"sub1_2", 
-            subBlocks :{
-              blocks : null,
-              blockIdes: null
-            } ,
-            parents:["text"],
-            type: text,
-            icon:  null ,
-            editTime: JSON.stringify(Date.now),
-          }
-        ],
-        blockIdes: ["sub1_1", "sub1_2"]
-      } ,
-      parents:null,
+      firstBlock:true,
+      subBlocksId: ["sub1_1", "sub1_2"] ,
+      parentBlocksId: null,
       type: text,
       icon:  null ,
       editTime: JSON.stringify(Date.now),
-    },{
+    },
+    {
       id:"toggle",
       contents:"toggle toggle ",
-      subBlocks :{
-        blocks : null,
-        blockIdes: null
-      } , 
-      parents:null,
+      firstBlock:true,
+      subBlocksId:null , 
+      parentBlocksId: null,
       type: toggle,
       icon:  null ,
       editTime: JSON.stringify(Date.now),
     },{
       id:"todo",
       contents:"todo", 
-      subBlocks :{
-        blocks : null,
-        blockIdes: null
-      } ,
-      parents:null,
+      firstBlock:true,
+      subBlocksId:null ,
+      parentBlocksId: null,
       type: todo,
       icon:  null ,
       editTime: JSON.stringify(Date.now),
     },{
       id:"todo done",
       contents:"todo done",
-      subBlocks :{
-        blocks : null,
-        blockIdes: null
-      } ,
-      parents:null,
+      firstBlock:true,
+      subBlocksId:null ,
+      parentBlocksId: null,
       type: todo_done,
       icon:  null ,
       editTime: JSON.stringify(Date.now),
     },{
       id:"h1",
       contents:"header1", 
-      subBlocks :{
-        blocks : null,
-        blockIdes: null
-      } ,
-      parents:null,
+      firstBlock:true,
+      subBlocksId:null ,
+      parentBlocksId: null,
       type: h1,
       icon:  null ,
       editTime: JSON.stringify(Date.now),
     },{
       id:"h2",
       contents:"header2",
-      subBlocks :{
-        blocks : null,
-        blockIdes: null
-      } , 
-      parents:null,
+      firstBlock:true,
+      subBlocksId:null ,
+      parentBlocksId: null,
       type: h2,
       icon:  null ,
       editTime: JSON.stringify(Date.now),
     },{
       id:"h3",
       contents:"header3", 
-      subBlocks :{
-        blocks : null,
-        blockIdes: null
-      } ,
-      parents:null,
+      firstBlock:true,
+      subBlocksId:null ,
+      parentBlocksId: null,
       type: h3,
       icon:  null ,
       editTime: JSON.stringify(Date.now),
     },{
       id:"page1",
       contents:"page page page",
-      subBlocks :{
-        blocks : null,
-        blockIdes: null
-      } ,
-      parents:null,
+      firstBlock:true,
+      subBlocksId:null ,
+      parentBlocksId: null,
       type: page,
       icon:  null ,
       editTime: JSON.stringify(Date.now),
@@ -239,19 +201,46 @@ const initialState ={
     {
       id:"page2",
       contents:"page2",
-      subBlocks :{
-        blocks : null,
-        blockIdes: null
-      } ,
-      parents:null,
+      firstBlock:true,
+      subBlocksId:null ,
+      parentBlocksId: null,
       type: page,
       icon: "🌈" ,
       editTime: JSON.stringify(Date.now),
-    }
+    },
+    {id:"sub1_1",
+    contents:"sub1_1", 
+    firstBlock:false,
+    subBlocksId: ["sub2_1"],
+    parentBlocksId: ["text"],
+    type: text,
+    icon:  null ,
+    editTime: JSON.stringify(Date.now),
+  },
+  {
+    id:"sub1_2",
+    contents:"sub1_2", 
+    firstBlock:false,
+    subBlocksId:null,
+    parentBlocksId: ["text"],
+    type: text,
+    icon:  null ,
+    editTime: JSON.stringify(Date.now),
+  },
+  {
+    id:"sub2_1",
+    contents:"sub2_1", 
+    firstBlock:false,
+    subBlocksId:null,
+    parentBlocksId: ["text", "sub1_1"],
+    type: text,
+    icon:  null ,
+    editTime: JSON.stringify(Date.now),
+  }
     ],
-    blockIdes:["text", 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page', 'page2'],
-    subPageIdes:[],
-    parentsIdes: ['1111' , '2222']
+    blocksId:["text", 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page', 'page2' , 'sub1_1' ,'sub1_2', 'sub2_1'],
+    subPagesId:[],
+    parentssId: null,
   },
   {
     id: '1234',
@@ -261,10 +250,11 @@ const initialState ={
       cover: null,
       comment:  null,
     },
+    firstBlocksId:null,
     blocks:[],
-    blockIdes:[],
-    subPageIdes:[],
-    parentsIdes: null
+    blocksId:[],
+    subPagesId:[],
+    parentssId: null
   },
   {
     id: '123',
@@ -274,64 +264,147 @@ const initialState ={
       cover: null,
       comment:  null,
     },
+    firstBlocksId:null,
     blocks:[],
-    blockIdes:[],
-    subPageIdes:[],
-    parentsIdes:null
+    blocksId:[],
+    subPagesId:[],
+    parentssId:null
   }
 ]
 };
 
 export default function notion (state:Notion =initialState , action :NotionAction) :Notion{
-  const pageIndex:number = state.pageIdes.indexOf(action.pageId);
-  const targetPage:Page =state.pages[pageIndex];
-  const  blockIndex:number = state.pages[pageIndex]?.blockIdes.indexOf(action.block.id);
+  const pageIndex:number = state.pagesId?.indexOf(action.pageId) as number;
+  const targetPage:Page =state.pages[pageIndex] ;
+  const  blockIndex:number = state.pages[pageIndex]?.blocksId?.indexOf(action.block.id) as number;
 
-  const deleteData =()=>{
-    targetPage.blocks.splice(blockIndex,1);
-    targetPage.blockIdes.splice(blockIndex,1);
+  const editBlockData =()=>{
+    targetPage.blocks.splice(blockIndex,1,action.block);
   };
-
-  const editData=(block:Block)=>{
-    const index:number = state.pages[pageIndex]?.blockIdes.indexOf(block.id)
-    targetPage.blocks.splice(index,1,block);
-    console.log("edit data", targetPage.blocks);
+  const updateParentBlock =(subBlock:Block)=>{
+    if(subBlock.parentBlocksId!==null){
+      //find parentBlock
+        const parentBlockId = subBlock.parentBlocksId[-1]  ;
+        const parentBlockIndex:number = targetPage.blocksId.indexOf(parentBlockId);
+        const parentBlock:Block = targetPage.blocks[parentBlockIndex];
+      //edit parentBlock 
+        const editedParentBlock :Block={
+          ...parentBlock,
+          subBlocksId:parentBlock.subBlocksId?
+          [subBlock.id, ...parentBlock.subBlocksId] :[subBlock.id]
+        };
+        //update parentBlock
+        targetPage.blocks.splice(parentBlockIndex,1,editedParentBlock);
+    }else{
+      console.log("can't find parentBlocks of this block")
+    }
   };
 
   switch (action.type) {
     case ADD_BLOCK:
-      state.pages[pageIndex].blocks.splice(action.nextBlockIndex,0, action.block);
-      state.pages[pageIndex].blockIdes.splice(action.nextBlockIndex,0, action.block.id);
+      targetPage.blocks?.splice(action.nextBlockIndex,0, action.block);
+      targetPage.blocksId?.splice(action.nextBlockIndex,0, action.block.id);
 
-      let newPages:Page[] = state.pages.map((page:Page)=>{
-        if((page.id===targetPage.id)&&(action.block.type==="page") ){
-              return{
-                ...page,
-                subPageIdes :state.pages[pageIndex].subPageIdes.concat(action.block.id)
-              }
-            }else{
-              return page
-            }
-      });
-      return {
-        ...state,
-        pages:newPages
+      if(action.block.firstBlock){
+        targetPage.firstBlocksId?.splice(action.nextBlockIndex,0,action.block.id);
+      };
+
+      //subBlock 으로 만들어 졌을 때 
+      if(action.block.parentBlocksId!==null){
+        updateParentBlock(action.block);
       }
+
+      // type 이 page로 생성된 블록 
+      if(action.block.type ==="page"){
+        targetPage.subPagesId?.concat(action.block.id);
+        state.pagesId?.concat(action.block.id);
+        const newPage ={
+          ...pageSample,
+          id:action.block.id, 
+          header : {
+            title: action.block.contents,
+            icon: action.block.icon,
+            cover: null,
+            comment:  null,
+          }
+        };
+        state.pages.concat(newPage);
+      }
+
+      return state; 
+
     case EDIT_BLOCK:
-      editData(action.block);
+      editBlockData();
       console.log("edit", targetPage.blocks)
       return state;
+    
+    case CHANGE_TO_SUB_BLOCK:
+      
+      //1. change  subBlocksId of parentBlock which is action.block's new parentBlock
+      updateParentBlock(action.block);
+      //2. change actoin.block to subBlopck : edit parentsId of action.block 
+      editBlockData();
 
-    case MAKE_SUB_BLOCK:
-      editData(action.mainBlock);
-      if(targetPage.blockIdes.includes(action.block.id)){
-        deleteData();
+      // first-> sub 인 경우  
+      if(action.block.firstBlock){
+        // delte  id from firstBlocksId
+        const index:number = targetPage.firstBlocksId?.indexOf(action.block.id) as number;
+        targetPage.firstBlocksId?.splice(index,1);
       };
-      console.log("make subBlock", targetPage.blocks)
+
+      console.log("CHANGE subBlock", targetPage.blocks);
+      return state;
+
+    case RAISE_BLOCK :
+         // action.block은 EDIT_BLOCK에서 수정 
+      //edit previous parent block 
+      if(action.block.parentBlocksId!==null){
+        // find parent block 
+        const parentId:string =action.block.parentBlocksId[-1];
+        const newParentId:string =action.block.parentBlocksId[-2];
+
+        const parentIndex :number= targetPage.blocksId.indexOf(parentId);
+        const parentBlock:Block = targetPage.blocks[parentIndex];
+
+
+        //edit parent block 
+        const editedParentBlock:Block ={
+          ...parentBlock,
+          subBlocksId: parentBlock.subBlocksId?.filter((id:string)=> id!==action.block.id) as string[]
+        };
+        // update parentBlock
+        targetPage.blocks.splice(parentIndex,1,editedParentBlock);
+
+        if(parentIndex !==0){
+          const newParentIndex :number =targetPage.blocksId.indexOf(newParentId);
+          const newParentBlock:Block = targetPage.blocks[newParentIndex];
+          const editedNewParentBlock:Block ={
+            ...newParentBlock,
+            subBlocksId: newParentBlock.subBlocksId?.concat(action.block.id) as string[],
+          };
+          targetPage.blocks.splice(newParentIndex,1,editedNewParentBlock);
+        }else{
+          // case: action.block.firstBlock = true;
+          targetPage.firstBlocksId?.concat(action.block.id);
+        }
+
+
+      }else{
+        console.log("can't find parentBlocks of this block")
+      }
+    
       return state;
 
     case DELETE_BLOCK:
-      deleteData();
+      targetPage.blocks?.splice(blockIndex,1);
+      targetPage.blocksId?.splice(blockIndex,1);
+
+      if(action.block.firstBlock){
+        const index:number= targetPage.firstBlocksId?.indexOf(action.block.id) as number;
+        targetPage.firstBlocksId?.splice( index,1
+        );
+      };
+
       const targetBlock =document.getElementById(action.block.id) as Node;
       const pageContent_inner = document.getElementsByClassName("pageContent_inner")[0] as Node;
       pageContent_inner.removeChild(targetBlock);
