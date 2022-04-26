@@ -15,11 +15,12 @@ type EditorProps ={
   userName : string,
   page:Page,
   pagePath: string []| null
-  editBlock : (pageId:string , block:Block)=> void,
+  editBlock : (pageId:string , block:Block )=> void,
   addBlock : (pageId:string , block:Block ,nextBlockIndex:number)=> void,
   deleteBlock : (pageId:string , block:Block)=> void,
   side: Side , 
-  makeSubBlock : (pageId:string ,mainBlock:Block, subBlock:Block)=> void,
+  changeToSub : (pageId:string ,block:Block)=> void,
+  raiseBlock: (pageId:string, block:Block)=>void,
   lockSideBar  : ()=> void ,
   leftSideBar  : ()=> void ,
   closeSideBar  : ()=> void ,
@@ -30,7 +31,7 @@ type EditorProps ={
 type CommentProp ={
   comment :string | null
 }
-const Editor =({ userName, page, pagePath, editBlock ,addBlock ,deleteBlock, makeSubBlock ,side,  lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage}:EditorProps)=>{
+const Editor =({ userName, page, pagePath, editBlock ,addBlock ,deleteBlock, changeToSub ,raiseBlock ,side,  lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage}:EditorProps)=>{
 
 
   const TopBar =()=>{
@@ -59,7 +60,12 @@ const Editor =({ userName, page, pagePath, editBlock ,addBlock ,deleteBlock, mak
         <div className="pagePathes">
           {pagePath == null ? 
             <div className="pagePath">
-              <span>{page.header}</span>
+              <span>
+                {page.header.title? 
+                page.header.title 
+                : 
+                ""}
+              </span>
             </div>
           :
             pagePath.map((path:string )=>
@@ -262,7 +268,8 @@ const Editor =({ userName, page, pagePath, editBlock ,addBlock ,deleteBlock, mak
                   editBlock={editBlock}
                   addBlock ={addBlock}
                   deleteBlock={deleteBlock}
-                  makeSubBlock={makeSubBlock}
+                  changeToSub={changeToSub}
+                  raiseBlock={raiseBlock}
                 />)}
               </div>
             </div>
