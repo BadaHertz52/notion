@@ -5,7 +5,7 @@ import { CgMenuGridO } from 'react-icons/cg';
 import { GrCheckbox, GrCheckboxSelected, GrDocumentText } from 'react-icons/gr';
 import { MdPlayArrow } from 'react-icons/md';
 //icon
-import { Block,blockSample,Page, SubBlocks } from '../modules/notion';
+import { Block,blockSample,Page } from '../modules/notion';
 import Menu from './Menu';
 type BlockFnProp ={
   block:Block
@@ -51,10 +51,11 @@ type BlockProp ={
   editBlock : (pageId:string, newBlock:Block)=> void,
   addBlock : (pageId:string, newBlock:Block, nextBlockIndex:number)=> void,
   deleteBlock : (pageId:string, block:Block)=> void,
-  makeSubBlock : (pageId:string ,mainBlock:Block, subBlock:Block)=> void,
+  changeToSub : (pageId:string ,block:Block)=> void,
+  raiseBlock: (pageId:string, block:Block)=>void,
 };
 
-const BlockComponent=({block ,page ,editBlock ,addBlock ,deleteBlock, makeSubBlock}:BlockProp)=>{
+const BlockComponent=({block ,page ,editBlock ,addBlock ,deleteBlock, changeToSub , raiseBlock}:BlockProp)=>{
   const pageId:string =page.id ;
   const blockIndex:number = page.blocksId.indexOf(block.id) ;
   const nextBlockIndex :number= blockIndex +1; 
@@ -62,21 +63,19 @@ const BlockComponent=({block ,page ,editBlock ,addBlock ,deleteBlock, makeSubBlo
   const blockRef =useRef<HTMLDivElement>(null);
   const innerRef= useRef<HTMLElement>(null);
   const mainBlockRef =useRef<HTMLDivElement>(null);
+  const [subBlocks, setSubBlocks]=useState<Block[] | null>(null);
   const [toggle, setToggle] =useState<boolean>(false);
   const toggleStyle:CSSProperties={
     transform: toggle? "rotate(90deg)" : "rotate(0deg)" 
   }
-  // const mainBlockX:number|undefined = mainBlockRef.current?.offsetLeft ;
 
-  // // const subBlockStyle:CSSProperties ={
-  // //   marginLeft: mainBlockX !==undefined? mainBlockX-96+16+"px" : "96PX"
-  // // };
   const [html ,setHtml] =useState<string>(block.contents);
   const [targetBlock, setTargetBlock]=useState<Block>(block); // 새로운 블록 만들때 
   const  editTime = JSON.stringify(Date.now());
   const [blockFn , setBlockFn ] =useState<boolean>(false);
-  
-  const editContents =(contents :string , targetBlock:Block)=> {
+
+
+  const editContents =(contents :string , targetBlock:Block , change:boolean)=> {
     const newBlock :Block ={
       ...targetBlock,
       contents: contents,
@@ -85,68 +84,37 @@ const BlockComponent=({block ,page ,editBlock ,addBlock ,deleteBlock, makeSubBlo
     editBlock(pageId,newBlock);
   };
 
-  const changeSubBlock =(contents:string)=>{
-    if(block.parents!==null){
-      //1. parentBlocks 만들기 
-      let parentId:string =block.parents[0];
-
-      const  firstParentBlock:Block =
-      page.blocks[page.blocksId.indexOf(parentId)];
-
-      let parentBlock:Block =firstParentBlock;
-      let parentBlocks:Block[] =[firstParentBlock];
-
-      for (let i = 1; i < block.parents.length; i++) {
-        const index = block.parents[i];
-        const elementIndex:number = parentBlock.subBlocks.blocksId?.indexOf(index) as number;
-        const element:Block = parentBlock.subBlocks.blocks?.splice(elementIndex,1)[0] as Block;
-        console.log("element", element);
-        parentBlocks.push(element);
-        parentBlock =element;
-      }
-      
-      console.log( block.id,"parentBlocks," , parentBlocks);
-
-      //2. 수정된 블록 업데이트 
-      
-    }   
-  }; 
-
-  useEffect(()=>{
-    if(block.id ==="sub2_1"){
-      changeSubBlock("");
-    }
-  },[block])
   const onChange =(event:ContentEditableEvent)=>{   
     const contents = event.target.value;
       setHtml(contents);
       
       if(targetBlock.id === block.id){
-        if(block.parents==null){
-          editContents(contents ,block);
-        }else{
-          changeSubBlock(contents);
-        }       
+        editContents(contents ,block, false);      
       }else{
+        //when user press eneter 
       const start = contents.indexOf("<div>");
       const last =contents.indexOf("</div>");
       const text =contents.substring(start+5, last);
       const newContents = text=== "<br>" ? "": text;
-      editContents(newContents, targetBlock);
+      editContents(newContents, targetBlock , false);
       }
       
   };
-  const make_subBlock =(parentBlock:Block, newSubBlock:Block)=>{
-
+  const make_subBlock =(parentBlock:Block, subBlock:Block)=>{
     const newMainBlock:Block ={
       ...parentBlock, 
       editTime :editTime ,
-      subBlocks:{
-        blocks:parentBlock.subBlocks.blocks!==null? [newSubBlock ,...parentBlock.subBlocks.blocks ]  : [newSubBlock] ,
-        blocksId: parentBlock.subBlocks.blocksId !==null? [newSubBlock.id,...parentBlock.subBlocks.blocksId  ] : [newSubBlock.id] ,
-      },
+      subBlocksId: parentBlock.subBlocksId? [ subBlock.id ,...parentBlock.subBlocksId]: [subBlock.id],
     };
-    makeSubBlock(page.id, newMainBlock,newSubBlock );
+    const newSubBlock:Block ={
+      ...subBlock,
+      parentBlocksId:parentBlock.parentBlocksId?  [...parentBlock.parentBlocksId, parentBlock.id] : [
+        parentBlock.id
+      ]
+    };
+    addBlock(page.id,newSubBlock,nextBlockIndex);
+    editBlock(page.id, newMainBlock);
+    document.getElementById(newSubBlock.id)?.focus();
   };
 
   const onKeydown =(event: React.KeyboardEvent<HTMLDivElement>)=>{
@@ -158,20 +126,19 @@ const BlockComponent=({block ,page ,editBlock ,addBlock ,deleteBlock, makeSubBlo
           editTime:editTime,
           type:"text",
           contents:"",
-          subBlocks:{
-            blocks:null,
-            blocksId:null
-          },
+          firstBlock:true,
+          subBlocksId:null,
+          parentBlocksId:null,
           icon:null,
-          parents:[]
         };
         setTargetBlock(newBlock);
       if(block.type.includes("toggle")){
         //subBtn 
         setToggle(true);
-        const newSubBlock ={
+        const newSubBlock:Block ={
           ...newBlock,
-          parents:block.parents? block.parents.concat(block.id) : [block.id]
+          firstBlock:false,
+          parentBlocksId:[block.id]
         }
         make_subBlock(block, newSubBlock);
       }else{
@@ -184,13 +151,15 @@ const BlockComponent=({block ,page ,editBlock ,addBlock ,deleteBlock, makeSubBlo
     if(event.code ==="Tab" && blockIndex>0){
       //  이전 블록의 sub 으로 변경 
       blockRef.current?.focus();
-      console.log("tab block", block);
-      const parentBlock = page.blocks[blockIndex-1];
-      const editedBlock ={
+      const newParentBlock:Block = page.blocks[blockIndex-1];
+      const editedBlock:Block ={
         ...block,
+        firstBlock: false,
+        parentBlocksId: newParentBlock.parentBlocksId? newParentBlock.parentBlocksId.concat(newParentBlock.id) : [newParentBlock.id],
         editTime:editTime
       };
-      make_subBlock(parentBlock,editedBlock);
+      changeToSub(page.id, editedBlock);
+      
     };
   };
 
@@ -206,6 +175,18 @@ const BlockComponent=({block ,page ,editBlock ,addBlock ,deleteBlock, makeSubBlo
   const onBlockFocus =()=>{
     innerRef.current?.focus();
   };
+
+  useEffect(()=>{
+    const subBlocksId = block.subBlocksId;
+    if(subBlocksId!==null){
+      const subBlockArray:Block[] = subBlocksId.map((id:string)=>{
+        const index:number = page.blocksId.indexOf(id);
+        const subBlock:Block = page.blocks[index];
+        return subBlock;
+      });
+      setSubBlocks(subBlockArray);
+    }
+  },[block.subBlocksId]);
 
   return(
     <div 
@@ -270,15 +251,16 @@ const BlockComponent=({block ,page ,editBlock ,addBlock ,deleteBlock, makeSubBlo
         <div 
           className='subBlocks'
         >
-          {block.subBlocks.blocks?.map((subBlock :Block)=> 
+          {subBlocks?.map((subBlock :Block)=> 
           <BlockComponent
-            key={block.subBlocks.blocksId?.indexOf(subBlock.id)}
+            key={block.subBlocksId?.indexOf(subBlock.id)}
             block={subBlock}
             page={page}
             editBlock={editBlock} 
             addBlock={addBlock}
             deleteBlock={deleteBlock}
-            makeSubBlock={makeSubBlock}
+            changeToSub={changeToSub}
+            raiseBlock={raiseBlock}
           />)
           }
         </div>
