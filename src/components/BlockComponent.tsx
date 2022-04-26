@@ -56,7 +56,7 @@ type BlockProp ={
 
 const BlockComponent=({block ,page ,editBlock ,addBlock ,deleteBlock, makeSubBlock}:BlockProp)=>{
   const pageId:string =page.id ;
-  const blockIndex:number = page.blockIdes.indexOf(block.id) ;
+  const blockIndex:number = page.blocksId.indexOf(block.id) ;
   const nextBlockIndex :number= blockIndex +1; 
   const className =`${block.type} block`;
   const blockRef =useRef<HTMLDivElement>(null);
@@ -66,11 +66,11 @@ const BlockComponent=({block ,page ,editBlock ,addBlock ,deleteBlock, makeSubBlo
   const toggleStyle:CSSProperties={
     transform: toggle? "rotate(90deg)" : "rotate(0deg)" 
   }
-  const mainBlockX:number|undefined = mainBlockRef.current?.offsetLeft ;
+  // const mainBlockX:number|undefined = mainBlockRef.current?.offsetLeft ;
 
-  const subBlockStyle:CSSProperties ={
-    marginLeft: mainBlockX !==undefined? mainBlockX+16+"px" : "96PX"
-  };
+  // // const subBlockStyle:CSSProperties ={
+  // //   marginLeft: mainBlockX !==undefined? mainBlockX-96+16+"px" : "96PX"
+  // // };
   const [html ,setHtml] =useState<string>(block.contents);
   const [targetBlock, setTargetBlock]=useState<Block>(block); // 새로운 블록 만들때 
   const  editTime = JSON.stringify(Date.now());
@@ -87,29 +87,33 @@ const BlockComponent=({block ,page ,editBlock ,addBlock ,deleteBlock, makeSubBlo
 
   const changeSubBlock =(contents:string)=>{
     if(block.parents!==null){
+      //1. parentBlocks 만들기 
       let parentId:string =block.parents[0];
 
       const  firstParentBlock:Block =
-      page.blocks[page.blockIdes.indexOf(parentId)];
+      page.blocks[page.blocksId.indexOf(parentId)];
 
       let parentBlock:Block =firstParentBlock;
       let parentBlocks:Block[] =[firstParentBlock];
 
       for (let i = 1; i < block.parents.length; i++) {
         const index = block.parents[i];
-        const elementIndex:number = parentBlock.subBlocks.blockIdes?.indexOf(index) as number;
+        const elementIndex:number = parentBlock.subBlocks.blocksId?.indexOf(index) as number;
         const element:Block = parentBlock.subBlocks.blocks?.splice(elementIndex,1)[0] as Block;
         console.log("element", element);
         parentBlocks.push(element);
         parentBlock =element;
       }
-  
+      
       console.log( block.id,"parentBlocks," , parentBlocks);
+
+      //2. 수정된 블록 업데이트 
+      
     }   
   }; 
 
   useEffect(()=>{
-    if(block.id =="sub2_1"){
+    if(block.id ==="sub2_1"){
       changeSubBlock("");
     }
   },[block])
@@ -139,7 +143,7 @@ const BlockComponent=({block ,page ,editBlock ,addBlock ,deleteBlock, makeSubBlo
       editTime :editTime ,
       subBlocks:{
         blocks:parentBlock.subBlocks.blocks!==null? [newSubBlock ,...parentBlock.subBlocks.blocks ]  : [newSubBlock] ,
-        blockIdes: parentBlock.subBlocks.blockIdes !==null? [newSubBlock.id,...parentBlock.subBlocks.blockIdes  ] : [newSubBlock.id] ,
+        blocksId: parentBlock.subBlocks.blocksId !==null? [newSubBlock.id,...parentBlock.subBlocks.blocksId  ] : [newSubBlock.id] ,
       },
     };
     makeSubBlock(page.id, newMainBlock,newSubBlock );
@@ -156,7 +160,7 @@ const BlockComponent=({block ,page ,editBlock ,addBlock ,deleteBlock, makeSubBlo
           contents:"",
           subBlocks:{
             blocks:null,
-            blockIdes:null
+            blocksId:null
           },
           icon:null,
           parents:[]
@@ -265,11 +269,10 @@ const BlockComponent=({block ,page ,editBlock ,addBlock ,deleteBlock, makeSubBlo
 
         <div 
           className='subBlocks'
-          style ={subBlockStyle}
         >
           {block.subBlocks.blocks?.map((subBlock :Block)=> 
           <BlockComponent
-            key={block.subBlocks.blockIdes?.indexOf(subBlock.id)}
+            key={block.subBlocks.blocksId?.indexOf(subBlock.id)}
             block={subBlock}
             page={page}
             editBlock={editBlock} 
