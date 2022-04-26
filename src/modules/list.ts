@@ -1,7 +1,7 @@
 
 export type Item ={
   id:string,
-  title:string,
+  title:string|null,
   icon:string |null
 };
 
