@@ -13,7 +13,7 @@ const NotionRouter =()=>{
   const firstPage = notion.pages[0];
   const [targetPage, setTargetPage]= useState<Page>(firstPage);
 
-  const [pagePath, setPagePath]= useState<string []|null>(targetPage.parentssId);
+  const [pagePath, setPagePath]= useState<string []|null>(targetPage.parentsId);
 
   const side =useSelector((state:RootState)=> state.side);
   
