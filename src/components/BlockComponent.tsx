@@ -49,17 +49,15 @@ const BlockFn =({block}:BlockFnProp)=>{
 }
 type BlockProp ={
   block:Block,
-  page:Page,
 };
 
 
-const BlockComponent=({page, block}:BlockProp)=>{
+const BlockComponent=({block}:BlockProp)=>{
 
   const className =`${block.type} block`;
   const blockRef =useRef<HTMLDivElement>(null);
   const innerRef= useRef<HTMLElement>(null);
   const mainBlockRef =useRef<HTMLDivElement>(null);
-  const [subBlocks, setSubBlocks]=useState<Block[]|null>(null);
   const [toggle, setToggle] =useState<boolean>(false);
   const toggleStyle:CSSProperties={
     transform: toggle? "rotate(90deg)" : "rotate(0deg)" 
@@ -75,20 +73,6 @@ const BlockComponent=({page, block}:BlockProp)=>{
   const onBlockFocus =()=>{
     innerRef.current?.focus();
   };
-  // useEffect(()=>{
-  //   console.log("page blocks", page.blocks)
-  // },[page.blocks]);
-  // useEffect(()=>{
-  //   const subBlocksId = block.subBlocksId;
-  //   if(subBlocksId!==null){
-  //     const subBlockArray:Block[] = subBlocksId.map((id:string)=>{
-  //       const index:number = page.blocksId.indexOf(id);
-  //       const subBlock:Block = page.blocks[index];
-  //       return subBlock;
-  //     });
-  //     setSubBlocks(subBlockArray);
-  //   }
-  // },[block.subBlocksId]);
 
   return(
     <div 
