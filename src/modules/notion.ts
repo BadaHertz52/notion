@@ -12,10 +12,10 @@ export type BlockType= "text"|"toggle"|"todo" |"todo done"|"h1"|"h2"|"h3" |"page
 
 export type Block ={
   id:string,
-  contents:string, //html를 string 으로
+  contents:string, 
   firstBlock:boolean,
-  subBlocksId : string[]|null //toggle 을 위한 
-  parentBlocksId: string[]|null // 수정 삭제 시 사용 순서대로 최상위 
+  subBlocksId : string[]|null ,
+  parentBlocksId: string[]|null,
   type: BlockType ,
   icon: string | null ,
   editTime: string 
@@ -39,11 +39,11 @@ export type Page ={
     cover: ImageData |null,
     comment: string| null,
   }
-  firstBlocksId :string[] | null// 첫 메인 블록 아이디 모음
-  blocks : Block[] , // 모든 블럭들 순사척으로 
-  blocksId : string[]  //block  수정시 위치 파악용, 
+  firstBlocksId :string[] | null,
+  blocks : Block[] ,  
+  blocksId : string[] , 
   subPagesId:string[] | null,
-  parentssId: string[] | null 
+  parentsId: string[] | null 
 };
 export const  pageSample:Page ={
   id:"", 
@@ -53,11 +53,11 @@ export const  pageSample:Page ={
     cover: null,
     comment:  null,
   },
-  firstBlocksId :null,// 첫 메인 블록 아이디 모음
-  blocks :  [blockSample], // 모든 블럭들 순사척으로 
-  blocksId :  [blockSample.id], //block  수정시 위치 파악용
+  firstBlocksId :null,
+  blocks :  [blockSample], 
+  blocksId :  [blockSample.id], 
   subPagesId: null,
-  parentssId:  null 
+  parentsId:  null 
 };
 export type Notion={ 
   pagesId :string []|null,
@@ -240,7 +240,7 @@ const initialState :Notion ={
     ],
     blocksId:["text", 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page', 'page2' , 'sub1_1' ,'sub1_2', 'sub2_1'],
     subPagesId:[],
-    parentssId: null,
+    parentsId: null,
   },
   {
     id: '1234',
@@ -254,7 +254,7 @@ const initialState :Notion ={
     blocks:[],
     blocksId:[],
     subPagesId:[],
-    parentssId: null
+    parentsId: null
   },
   {
     id: '123',
@@ -268,7 +268,7 @@ const initialState :Notion ={
     blocks:[],
     blocksId:[],
     subPagesId:[],
-    parentssId:null
+    parentsId:null
   }
 ]
 };
@@ -330,7 +330,6 @@ export default function notion (state:Notion =initialState , action :NotionActio
         };
         state.pages.concat(newPage);
       }
-
       return state; 
 
     case EDIT_BLOCK:
