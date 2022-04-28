@@ -1,6 +1,6 @@
-import React, { CSSProperties, useEffect, useState } from 'react';
-
-import { Block,  Page } from '../modules/notion';
+import React, { CSSProperties, useEffect, useRef, useState } from 'react';
+import ReactDOMServer from 'react-dom/server';
+import { Block,  blockSample,  Page } from '../modules/notion';
 import BlockComponent from './BlockComponent';
 //icon
 import { AiOutlineClockCircle, AiOutlineMenu,  AiOutlineStar } from 'react-icons/ai';
@@ -10,6 +10,8 @@ import {GrDocumentText ,GrDocument} from 'react-icons/gr';
 import { FiChevronsLeft } from 'react-icons/fi';
 import { Side } from '../modules/side';
 import { MdInsertPhoto } from 'react-icons/md';
+import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
+import EditableBlock from './EditableBlock';
 
 type EditorProps ={
   userName : string,
@@ -132,8 +134,9 @@ const Editor =({ userName, page, pagePath, editBlock ,addBlock ,deleteBlock, cha
     )
   }
   const Frame =()=>{
+    const [blocks,setBlocks]= useState<Block[]>(page.blocks);
+    const [change, setChange] =useState<string>("");
     const [decoOpen ,setdecoOpen] =useState<boolean>(true);
-    
     const headerStyle: CSSProperties ={
       marginTop: page.header.cover !==null? "10px": "30px" 
     };
@@ -141,7 +144,6 @@ const Editor =({ userName, page, pagePath, editBlock ,addBlock ,deleteBlock, cha
     const headerBottomStyle :CSSProperties ={
       marginTop: page.header.cover !==null ? "-39px" :"0"
     };
-
     return(
       <div className='frame'>
         {side.newPage ?
@@ -260,17 +262,16 @@ const Editor =({ userName, page, pagePath, editBlock ,addBlock ,deleteBlock, cha
             </div>
             <div className="pageContent">
               <div className='pageContent_inner'>
-                {page.blocks.map((block:Block)=>
-                <BlockComponent 
-                  key={block.id}
-                  page ={page}
+                {blocks.map((block:Block)=>
+                <EditableBlock
+                  page={page}
                   block={block}
+                  setBlocks={setBlocks}
                   editBlock={editBlock}
-                  addBlock ={addBlock}
-                  deleteBlock={deleteBlock}
+                  addBlock={addBlock}
                   changeToSub={changeToSub}
-                  raiseBlock={raiseBlock}
-                />)}
+                />
+                )}
               </div>
             </div>
           </div>
