@@ -1,3 +1,4 @@
+
 //TYPE 
 const text= "text" as const ;
 const toggle ="toggle" as const  ;
@@ -60,8 +61,8 @@ export const  pageSample:Page ={
   parentsId:  null 
 };
 export type Notion={ 
-  pagesId :string []|null,
-  firstPagesId: string[]|null
+  pagesId :string [],
+  firstPagesId: string[]
   pages: Page[],
 };
 
@@ -274,9 +275,13 @@ const initialState :Notion ={
 };
 
 export default function notion (state:Notion =initialState , action :NotionAction) :Notion{
-  const pageIndex:number = state.pagesId?.indexOf(action.pageId) as number;
-  const targetPage:Page =state.pages[pageIndex] ;
-  const  blockIndex:number = state.pages[pageIndex]?.blocksId?.indexOf(action.block.id) as number;
+  const pagesId = [...state.pagesId];
+  const firstPagesId=[...state.firstPagesId];
+  const pages =[...state.pages];
+
+  const pageIndex:number = pagesId.indexOf(action.pageId) as number;
+  const targetPage:Page =pages[pageIndex] ;
+  const  blockIndex:number = pages[pageIndex]?.blocksId.indexOf(action.block.id) as number;
 
   const editBlockData =()=>{
     targetPage.blocks.splice(blockIndex,1,action.block);
@@ -328,9 +333,13 @@ export default function notion (state:Notion =initialState , action :NotionActio
             comment:  null,
           }
         };
-        state.pages.concat(newPage);
-      }
-      return state; 
+        pages.concat(newPage);
+      };
+      return {
+        pages:pages,
+        firstPagesId:firstPagesId,
+        pagesId:pagesId
+      }; 
 
     case EDIT_BLOCK:
       editBlockData();
@@ -352,7 +361,11 @@ export default function notion (state:Notion =initialState , action :NotionActio
       };
 
       console.log("CHANGE subBlock", targetPage.blocks);
-      return state;
+      return {
+        pages:pages,
+        firstPagesId:firstPagesId,
+        pagesId:pagesId
+      }; 
 
     case RAISE_BLOCK :
          // action.block은 EDIT_BLOCK에서 수정 
@@ -392,7 +405,11 @@ export default function notion (state:Notion =initialState , action :NotionActio
         console.log("can't find parentBlocks of this block")
       }
     
-      return state;
+      return {
+        pages:pages,
+        firstPagesId:firstPagesId,
+        pagesId:pagesId
+      }; ;
 
     case DELETE_BLOCK:
       targetPage.blocks?.splice(blockIndex,1);
@@ -408,7 +425,11 @@ export default function notion (state:Notion =initialState , action :NotionActio
       const pageContent_inner = document.getElementsByClassName("pageContent_inner")[0] as Node;
       pageContent_inner.removeChild(targetBlock);
 
-      return state;
+      return {
+        pages:pages,
+        firstPagesId:firstPagesId,
+        pagesId:pagesId
+      }; ;
     default:
       return state;
   }
