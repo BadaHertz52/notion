@@ -134,8 +134,6 @@ const Editor =({ userName, page, pagePath, editBlock ,addBlock ,deleteBlock, cha
     )
   }
   const Frame =()=>{
-    const [blocks,setBlocks]= useState<Block[]>(page.blocks);
-    const [change, setChange] =useState<string>("");
     const [decoOpen ,setdecoOpen] =useState<boolean>(true);
     const headerStyle: CSSProperties ={
       marginTop: page.header.cover !==null? "10px": "30px" 
@@ -261,12 +259,15 @@ const Editor =({ userName, page, pagePath, editBlock ,addBlock ,deleteBlock, cha
               </div>
             </div>
             <div className="pageContent">
-              <div className='pageContent_inner'>
-                {blocks.map((block:Block)=>
+              <div 
+                className='pageContent_inner'
+                id="pageContent_inner"
+                >
+                {page.blocks.map((block:Block)=>
                 <EditableBlock
+                  key={block.id}
                   page={page}
                   block={block}
-                  setBlocks={setBlocks}
                   editBlock={editBlock}
                   addBlock={addBlock}
                   changeToSub={changeToSub}
