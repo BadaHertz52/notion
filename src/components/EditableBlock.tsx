@@ -42,7 +42,7 @@ const EditableBlock =({page, block   ,editBlock ,addBlock, changeToSub}:Editable
     const value = event.target.value;
     const doc = new DOMParser().parseFromString(value,"text/html" );
     const textNode = doc.getElementsByClassName("blockContents")[0].firstChild as Node; 
-    const textContenet =textNode.textContent as string; 
+    const textContenet =textNode?.textContent as string; 
       editContents(textContenet ,targetBlock);      
   };
 
@@ -103,7 +103,13 @@ const EditableBlock =({page, block   ,editBlock ,addBlock, changeToSub}:Editable
       changeToSub(page.id, editedBlock);
     };
   };
+  useEffect(()=>{
+    const contents= innerRef.current?.getElementsByClassName("blockContents")[0].firstChild;
 
+    if(contents ==null){
+      innerRef.current?.focus();
+    }
+  },[]);
   return(
     <ContentEditable
       id={block.id}
