@@ -52,7 +52,10 @@
     outline: none;
   }
 }
-
+.blockContents:empty::after{
+  content: attr(placeholder);
+  color: $mud;
+}
 .h1.block{
   margin-top: 32px;
   font : {

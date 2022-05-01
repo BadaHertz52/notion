@@ -53,7 +53,6 @@ type BlockProp ={
 
 
 const BlockComponent=({block}:BlockProp)=>{
-
   const className =`${block.type} block`;
   const blockRef =useRef<HTMLDivElement>(null);
   const innerRef= useRef<HTMLElement>(null);
@@ -61,9 +60,7 @@ const BlockComponent=({block}:BlockProp)=>{
   const [toggle, setToggle] =useState<boolean>(false);
   const toggleStyle:CSSProperties={
     transform: toggle? "rotate(90deg)" : "rotate(0deg)" 
-  }
-
-  
+  };
   const [blockFn , setBlockFn ] =useState<boolean>(false);
 
   const onClickToggleBtn =()=>{
@@ -119,14 +116,9 @@ const BlockComponent=({block}:BlockProp)=>{
           }
           </div>
         }
-      <div className='blockContents'>
-        <div>
-          {block.icon}
-        </div>
-        <div>
+        <div className='blockContents' placeholder="type '/' for commmands">
           {block.contents}
         </div>
-      </div>
       </div>
       {/* {
       ((block.type==="toggle" && toggle)

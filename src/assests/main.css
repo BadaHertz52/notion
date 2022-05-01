@@ -93,6 +93,11 @@ a:link, a:active, a:visited {
   outline: none;
 }
 
+.blockContents:empty::after {
+  content: attr(placeholder);
+  color: #B9B8B6;
+}
+
 .h1.block {
   margin-top: 32px;
   font-size: 40px;

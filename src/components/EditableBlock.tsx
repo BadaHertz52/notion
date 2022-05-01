@@ -19,13 +19,7 @@ const EditableBlock =({page, block   ,editBlock ,addBlock, changeToSub}:Editable
   const  editTime = JSON.stringify(Date.now());
   const innerRef  =useRef<HTMLDivElement>(null) ;
   const [targetBlock, setTargetBlock]=useState<Block>(block); 
-  const [newBlock, setNewBlock]=useState<boolean>(false);
-  const [newBlockDoc, setNewBlockDoc]=useState<HTMLElement| null>(null);
  
-  useEffect(()=>{
-    newBlockDoc?.focus();
-  },[newBlockDoc , newBlock]);
-
   function callBlockNode(block:Block):string{
     const blockNode = ReactDOMServer.renderToString(<BlockComponent block={block}/>);
     return blockNode
@@ -42,22 +36,14 @@ const EditableBlock =({page, block   ,editBlock ,addBlock, changeToSub}:Editable
 
   function addNewBlock( newBlock:Block, newBlockIndex:number){
     addBlock(page.id,newBlock,newBlockIndex);
-    setNewBlockDoc(document.getElementById(newBlock.id));
   };
 
   function onChange(event:ContentEditableEvent){   
     const value = event.target.value;
-      
-      if(!value.includes("<div>")){
-        editContents(value ,targetBlock);      
-      }else{
-        //when user press eneter 
-      const start = value.indexOf("<div>");
-      const last =value.indexOf("</div>");
-      const text =value.substring(start+5, last);
-      const newContents = text=== "<br>" ? "": text;
-      editContents(newContents, targetBlock );
-      };
+    const doc = new DOMParser().parseFromString(value,"text/html" );
+    const textNode = doc.getElementsByClassName("blockContents")[0].firstChild as Node; 
+    const textContenet =textNode.textContent as string; 
+      editContents(textContenet ,targetBlock);      
   };
 
   function make_subBlock(parentBlock:Block, subBlock:Block){
