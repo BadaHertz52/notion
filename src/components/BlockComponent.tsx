@@ -1,4 +1,4 @@
-import React, { CSSProperties, useRef, useState} from 'react';
+import React, { CSSProperties, useEffect, useRef, useState} from 'react';
 
 import { AiOutlinePlus } from 'react-icons/ai';
 import { CgMenuGridO } from 'react-icons/cg';
@@ -54,9 +54,6 @@ type BlockProp ={
 
 const BlockComponent=({block}:BlockProp)=>{
   const className =`${block.type} block`;
-  const blockRef =useRef<HTMLDivElement>(null);
-  const innerRef= useRef<HTMLElement>(null);
-  const mainBlockRef =useRef<HTMLDivElement>(null);
   const [toggle, setToggle] =useState<boolean>(false);
   const toggleStyle:CSSProperties={
     transform: toggle? "rotate(90deg)" : "rotate(0deg)" 
@@ -67,17 +64,11 @@ const BlockComponent=({block}:BlockProp)=>{
     setToggle(!toggle)
   };
   
-  const onBlockFocus =()=>{
-    innerRef.current?.focus();
-  };
-
   return(
     <div 
       className={className} 
       onMouseEnter ={()=>setBlockFn(true)}
       onMouseLeave={()=>setBlockFn(false)}
-      onClick={onBlockFocus}
-      ref={blockRef}
     > 
       {blockFn &&
         <BlockFn  
@@ -86,7 +77,6 @@ const BlockComponent=({block}:BlockProp)=>{
       }
       <div 
         className='mainBlock'
-        ref={mainBlockRef}
       >
         {block.type ==="todo" &&
           <button className='checkbox left'>
@@ -116,7 +106,9 @@ const BlockComponent=({block}:BlockProp)=>{
           }
           </div>
         }
-        <div className='blockContents' placeholder="type '/' for commmands">
+        <div 
+          className='blockContents' 
+          placeholder="type '/' for commmands">
           {block.contents}
         </div>
       </div>
