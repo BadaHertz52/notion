@@ -21,7 +21,7 @@ type EditorProps ={
   addBlock : (pageId:string , block:Block ,nextBlockIndex:number)=> void,
   deleteBlock : (pageId:string , block:Block)=> void,
   side: Side , 
-  changeToSub : (pageId:string ,block:Block)=> void,
+  changeToSub : (pageId:string ,block:Block ,first:boolean)=> void,
   raiseBlock: (pageId:string, block:Block)=>void,
   lockSideBar  : ()=> void ,
   leftSideBar  : ()=> void ,
@@ -142,6 +142,7 @@ const Editor =({ userName, page, pagePath, editBlock ,addBlock ,deleteBlock, cha
     const headerBottomStyle :CSSProperties ={
       marginTop: page.header.cover !==null ? "-39px" :"0"
     };
+
     return(
       <div className='frame'>
         {side.newPage ?
@@ -263,8 +264,10 @@ const Editor =({ userName, page, pagePath, editBlock ,addBlock ,deleteBlock, cha
                 className='pageContent_inner'
                 id="pageContent_inner"
                 >
-                {page.blocks.map((block:Block)=>
-                <EditableBlock
+                {page.blocks.map((block:Block)=>{
+                  if(block.firstBlock){
+                    return (
+                      <EditableBlock
                   key={block.id}
                   page={page}
                   block={block}
@@ -274,6 +277,8 @@ const Editor =({ userName, page, pagePath, editBlock ,addBlock ,deleteBlock, cha
                   changeToSub={changeToSub}
                   
                 />
+                    )
+                  }}
                 )}
               </div>
             </div>
