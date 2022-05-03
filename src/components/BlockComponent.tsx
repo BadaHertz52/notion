@@ -6,6 +6,7 @@ import { GrCheckbox, GrCheckboxSelected, GrDocumentText } from 'react-icons/gr';
 import { MdPlayArrow } from 'react-icons/md';
 //icon
 import { Block,Page } from '../modules/notion';
+import EditableBlock from './EditableBlock';
 
 
 import Menu from './Menu';
@@ -49,10 +50,16 @@ const BlockFn =({block}:BlockFnProp)=>{
 }
 type BlockProp ={
   block:Block,
+  subBlocks :Block[]|null,
+  page:Page,
+  editBlock :(pageId:string, block:Block)=>void,
+  deleteBlock :(pageId:string, block:Block)=>void,
+  addBlock :(pageId:string, block:Block , nextBlockIndex:number)=>void,
+  changeToSub :(pageId:string, block:Block ,first:boolean)=>void,
 };
 
 
-const BlockComponent=({block}:BlockProp)=>{
+const BlockComponent=({block,subBlocks, page ,editBlock, deleteBlock,addBlock,changeToSub}:BlockProp)=>{
   const className =`${block.type} block`;
   const [toggle, setToggle] =useState<boolean>(false);
   const toggleStyle:CSSProperties={
@@ -63,7 +70,7 @@ const BlockComponent=({block}:BlockProp)=>{
   const onClickToggleBtn =()=>{
     setToggle(!toggle)
   };
-  
+
   return(
     <div 
       className={className} 
@@ -112,24 +119,26 @@ const BlockComponent=({block}:BlockProp)=>{
           {block.contents}
         </div>
       </div>
-      {/* {
+      {
       ((block.type==="toggle" && toggle)
         ||block.type !=="toggle"
         ) && 
-
         <div 
           className='subBlocks'
         >
           {subBlocks?.map((subBlock :Block)=> 
-            <EditableBlock 
+            <EditableBlock  
               page={page}
               block={subBlock}
-              setBlocks={setSubBlocks}
+              addBlock={addBlock}
+              deleteBlock={deleteBlock}
+              editBlock={editBlock}
+              changeToSub={changeToSub}
             />
           )
           }
         </div>
-      } */}
+      }
     </div>
 
   )
