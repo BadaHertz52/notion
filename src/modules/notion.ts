@@ -91,10 +91,11 @@ export const deleteBlock =(pageId:string, block:Block)=> ({
   block:block
 });
 
-export const changeToSub =(pageId:string, block:Block)=> ({
+export const changeToSub =(pageId:string, block:Block ,first:boolean)=> ({
   type:CHANGE_TO_SUB_BLOCK ,
   pageId:pageId,
-  block:block
+  block:block,
+  first:first
 });
 
 export const raiseBlock =(pageId:string, block:Block)=>({
@@ -289,7 +290,9 @@ export default function notion (state:Notion =initialState , action :NotionActio
   const updateParentBlock =(subBlock:Block)=>{
     if(subBlock.parentBlocksId!==null){
       //find parentBlock
-        const parentBlockId = subBlock.parentBlocksId[-1]  ;
+        const parentBlocksId:string[] =subBlock.parentBlocksId;
+        const last:number =parentBlocksId.length-1;
+        const parentBlockId =parentBlocksId[last]  ;
         const parentBlockIndex:number = targetPage.blocksId.indexOf(parentBlockId);
         const parentBlock:Block = targetPage.blocks[parentBlockIndex];
       //edit parentBlock 
@@ -335,6 +338,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
         };
         pages.concat(newPage);
       };
+      console.log(targetPage.blocks)
       return {
         pages:pages,
         firstPagesId:firstPagesId,
@@ -343,18 +347,19 @@ export default function notion (state:Notion =initialState , action :NotionActio
 
     case EDIT_BLOCK:
       editBlockData();
-      console.log("edit", targetPage.blocks)
+      //console.log("edit", targetPage.blocks)
       return state;
     
     case CHANGE_TO_SUB_BLOCK:
       
       //1. change  subBlocksId of parentBlock which is action.block's new parentBlock
-      updateParentBlock(action.block);
+        updateParentBlock(action.block);
+      
       //2. change actoin.block to subBlopck : edit parentsId of action.block 
       editBlockData();
 
       // first-> sub 인 경우  
-      if(action.block.firstBlock){
+      if(action.first){
         // delte  id from firstBlocksId
         const index:number = targetPage.firstBlocksId?.indexOf(action.block.id) as number;
         targetPage.firstBlocksId?.splice(index,1);
@@ -421,9 +426,8 @@ export default function notion (state:Notion =initialState , action :NotionActio
         );
       };
 
-      const targetBlock =document.getElementById(action.block.id) as Node;
-      const pageContent_inner = document.getElementsByClassName("pageContent_inner")[0] as Node;
-      pageContent_inner.removeChild(targetBlock);
+
+      console.log("delete", {pages:pages[pageIndex]});
 
       return {
         pages:pages,
