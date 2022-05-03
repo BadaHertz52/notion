@@ -269,8 +269,10 @@ const Editor =({ userName, page, pagePath, editBlock ,addBlock ,deleteBlock, cha
                   page={page}
                   block={block}
                   editBlock={editBlock}
+                  deleteBlock={deleteBlock}
                   addBlock={addBlock}
                   changeToSub={changeToSub}
+                  
                 />
                 )}
               </div>

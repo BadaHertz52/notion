@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
-import { Block, Page } from '../modules/notion';
+import { Block, deleteBlock, Page } from '../modules/notion';
 import BlockComponent from './BlockComponent';
 
 type EditableBlockProps ={
@@ -9,11 +9,12 @@ type EditableBlockProps ={
   //element: JSX.Element,
   block:Block,
   editBlock :(pageId:string, block:Block)=>void,
+  deleteBlock :(pageId:string, block:Block)=>void,
   addBlock :(pageId:string, block:Block , nextBlockIndex:number)=>void,
   changeToSub :(pageId:string, block:Block)=>void,
   // raiseBlock: (pageId:string, block:Block)=>void,
 }
-const EditableBlock =({page, block   ,editBlock ,addBlock, changeToSub}:EditableBlockProps)=>{  
+const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToSub}:EditableBlockProps)=>{  
   const blockIndex:number = page.blocksId.indexOf(block.id) ;
   const nextBlockIndex :number= blockIndex +1; 
   const  editTime = JSON.stringify(Date.now());
@@ -41,9 +42,11 @@ const EditableBlock =({page, block   ,editBlock ,addBlock, changeToSub}:Editable
   function onChange(event:ContentEditableEvent){   
     const value = event.target.value;
     const doc = new DOMParser().parseFromString(value,"text/html" );
-    const textNode = doc.getElementsByClassName("blockContents")[0].firstChild as Node; 
-    const textContenet =textNode?.textContent as string; 
-      editContents(textContenet ,targetBlock);      
+    if(doc.getElementsByClassName("blockContents")[0]!== undefined){
+      const textNode = doc.getElementsByClassName("blockContents")[0].firstChild as Node; 
+      const textContenet =textNode?.textContent as string; 
+        editContents(textContenet ,targetBlock);  
+    }
   };
 
   function make_subBlock(parentBlock:Block, subBlock:Block){
@@ -63,6 +66,7 @@ const EditableBlock =({page, block   ,editBlock ,addBlock, changeToSub}:Editable
       };
   
   function onKeydown (event: React.KeyboardEvent<HTMLDivElement>){
+    console.log(event.code)
     if(event.code === "Enter"){
       // 새로운 블록 만들기 
         const newBlock:Block ={
@@ -102,7 +106,17 @@ const EditableBlock =({page, block   ,editBlock ,addBlock, changeToSub}:Editable
       };
       changeToSub(page.id, editedBlock);
     };
+    if(event.code ==="Backspace"){
+      const target =event.target as Node ;
+      const textNode = target.firstChild?.firstChild?.firstChild?.firstChild;
+      const textContent :string = textNode?.textContent as string
+      if(textContent ===""){
+        deleteBlock(page.id, targetBlock);
+
+      }
+      console.log(textContent=="")
   };
+};
   useEffect(()=>{
     const contents= innerRef.current?.getElementsByClassName("blockContents")[0].firstChild;
 
