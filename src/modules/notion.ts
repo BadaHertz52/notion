@@ -74,11 +74,12 @@ const CHANGE_TO_SUB_BLOCK="notion/CHANGE_TO_SUB_BLOCK" as const;
 const RAISE_BLOCK="notion/RAISE_BLOCK" as const;
 
 
-export const addBlock =(pageId:string, block:Block ,nextBlockIndex:number)=> ({
+export const addBlock =(pageId:string, block:Block ,nextBlockIndex:number ,previousBlockId:string)=> ({
   type:ADD_BLOCK ,
   pageId:pageId,
   block:block,
-  nextBlockIndex :nextBlockIndex
+  nextBlockIndex :nextBlockIndex,
+  previousBlockId:previousBlockId
 });
 export const editBlock =(pageId:string, block:Block)=> ({
   type:EDIT_BLOCK ,
@@ -91,11 +92,12 @@ export const deleteBlock =(pageId:string, block:Block)=> ({
   block:block
 });
 
-export const changeToSub =(pageId:string, block:Block ,first:boolean)=> ({
+export const changeToSub =(pageId:string, block:Block ,first:boolean ,previousBlockId:string)=> ({
   type:CHANGE_TO_SUB_BLOCK ,
   pageId:pageId,
   block:block,
-  first:first
+  first:first,
+  previousBlockId:previousBlockId
 });
 
 export const raiseBlock =(pageId:string, block:Block)=>({
@@ -284,10 +286,10 @@ export default function notion (state:Notion =initialState , action :NotionActio
   const targetPage:Page =pages[pageIndex] ;
   const  blockIndex:number = pages[pageIndex]?.blocksId.indexOf(action.block.id) as number;
 
-  const editBlockData =()=>{
-    targetPage.blocks.splice(blockIndex,1,action.block);
+  const editBlockData =(index:number ,block:Block)=>{
+    targetPage.blocks.splice(index,1,block);
   };
-  const updateParentBlock =(subBlock:Block)=>{
+  const updateParentBlock =(subBlock:Block , previousBlockId:string)=>{
     if(subBlock.parentBlocksId!==null){
       //find parentBlock
         const parentBlocksId:string[] =subBlock.parentBlocksId;
@@ -295,11 +297,13 @@ export default function notion (state:Notion =initialState , action :NotionActio
         const parentBlockId =parentBlocksId[last]  ;
         const parentBlockIndex:number = targetPage.blocksId.indexOf(parentBlockId);
         const parentBlock:Block = targetPage.blocks[parentBlockIndex];
+        const subBlocksId = parentBlock.subBlocksId;
+        const previousBlockIndex  =subBlocksId?.indexOf(previousBlockId) as number;
+        subBlocksId?.splice(previousBlockIndex+1,0,subBlock.id);
       //edit parentBlock 
         const editedParentBlock :Block={
           ...parentBlock,
-          subBlocksId:parentBlock.subBlocksId?
-          [subBlock.id, ...parentBlock.subBlocksId] :[subBlock.id]
+          subBlocksId:subBlocksId
         };
         //update parentBlock
         targetPage.blocks.splice(parentBlockIndex,1,editedParentBlock);
@@ -319,7 +323,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
 
       //subBlock 으로 만들어 졌을 때 
       if(action.block.parentBlocksId!==null){
-        updateParentBlock(action.block);
+        updateParentBlock(action.block , action.previousBlockId);
       }
 
       // type 이 page로 생성된 블록 
@@ -346,17 +350,17 @@ export default function notion (state:Notion =initialState , action :NotionActio
       }; 
 
     case EDIT_BLOCK:
-      editBlockData();
+      editBlockData(blockIndex, action.block);
       //console.log("edit", targetPage.blocks)
       return state;
     
     case CHANGE_TO_SUB_BLOCK:
       
       //1. change  subBlocksId of parentBlock which is action.block's new parentBlock
-        updateParentBlock(action.block);
+        updateParentBlock(action.block , action.previousBlockId);
       
       //2. change actoin.block to subBlopck : edit parentsId of action.block 
-      editBlockData();
+      editBlockData(blockIndex, action.block);
 
       // first-> sub 인 경우  
       if(action.first){
@@ -417,6 +421,21 @@ export default function notion (state:Notion =initialState , action :NotionActio
       }; ;
 
     case DELETE_BLOCK:
+      if(action.block.subBlocksId !==null){
+        // action.block.suBlocksId를 이전 block의 subBlocks로 옮기기
+        const blockDoc = document.getElementById(action.block.id) as HTMLElement; 
+        const previousBlockId = blockDoc.previousElementSibling?.id as string ;
+        const previousBlockIndex =targetPage.blocksId.indexOf(previousBlockId) as number;
+        const previousBlock = targetPage.blocks[previousBlockIndex] as Block ;
+        console.log(previousBlock , action.block)
+        const editedPreviousBlock :Block ={
+          ...previousBlock,
+          editTime: JSON.stringify(Date.now()),
+          subBlocksId:[...action.block.subBlocksId]
+        };
+        editBlockData(previousBlockIndex, editedPreviousBlock);
+      };
+
       targetPage.blocks?.splice(blockIndex,1);
       targetPage.blocksId?.splice(blockIndex,1);
 
@@ -425,8 +444,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
         targetPage.firstBlocksId?.splice( index,1
         );
       };
-
-
+      
       console.log("delete", {pages:pages[pageIndex]});
 
       return {

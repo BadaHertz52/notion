@@ -10,10 +10,11 @@ type EditableBlockProps ={
   block:Block,
   editBlock :(pageId:string, block:Block)=>void,
   deleteBlock :(pageId:string, block:Block)=>void,
-  addBlock :(pageId:string, block:Block , nextBlockIndex:number)=>void,
-  changeToSub :(pageId:string, block:Block ,first:boolean)=>void,
+  addBlock :(pageId:string, block:Block , nextBlockIndex:number ,previousBlockId:string)=>void,
+  changeToSub :(pageId:string, block:Block ,first:boolean ,previousBlockId:string)=>void,
   // raiseBlock: (pageId:string, block:Block)=>void,
-}
+};
+
 const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToSub}:EditableBlockProps)=>{  
   const blockIndex:number = page.blocksId.indexOf(block.id) ;
   const nextBlockIndex :number= blockIndex +1; 
@@ -56,7 +57,7 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
   };
 
   function addNewBlock( newBlock:Block, newBlockIndex:number){
-    addBlock(page.id,newBlock,newBlockIndex);
+    addBlock(page.id,newBlock,newBlockIndex , block.id);
   };
 
   function onChange(event:ContentEditableEvent){   
@@ -94,10 +95,20 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
           type:"text",
           contents:"",
           firstBlock:true,
-          subBlocksId:null,
-          parentBlocksId:null,
+          subBlocksId:block.subBlocksId,
+          parentBlocksId:block.parentBlocksId,
           icon:null,
         };
+        //밀려졌을때
+        if(block.subBlocksId !==null){
+          const editedBlock :Block ={
+            ...block,
+            editTime:editTime,
+            subBlocksId:null,
+          };
+          editBlock(page.id, editedBlock);
+        };
+        
     
       if(block.type.includes("toggle")){
         //subBtn 
@@ -111,12 +122,14 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
       }else{
         //새로운 버튼 
         addNewBlock(newBlock, nextBlockIndex);
+
       }
     } ;
     if(event.code ==="Tab" && blockIndex>0){
       //  이전 블록의 sub 으로 변경 
       const cursorPosition = window.getSelection();
       const targetBlock:Block =page.blocks[blockIndex];
+
       if(cursorPosition?.anchorOffset=== 0){
         innerRef.current?.focus();
       const newParentBlock:Block = page.blocks[blockIndex-1];
@@ -126,7 +139,7 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
         parentBlocksId: newParentBlock.parentBlocksId? newParentBlock.parentBlocksId.concat(newParentBlock.id) : [newParentBlock.id],
         editTime:editTime
       };
-      changeToSub(page.id, editedBlock ,targetBlock.firstBlock);
+      changeToSub(page.id, editedBlock ,targetBlock.firstBlock , block.id);
       }
       
     };
@@ -135,11 +148,14 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
       const textNode = target.firstChild?.firstChild?.firstChild?.firstChild;
       const textContent :string = textNode?.textContent as string
       if(textContent ===""){
+        if(block.subBlocksId !==null){
+          // 이전 block의 subBlocks로 옮기기
         deleteBlock(page.id, block);
-
       };
   };
-};
+  
+    };
+  };
   useEffect(()=>{
     const contents= innerRef.current?.getElementsByClassName("blockContents")[0].firstChild;
 
