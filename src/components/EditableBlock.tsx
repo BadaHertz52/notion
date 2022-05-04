@@ -10,14 +10,13 @@ type EditableBlockProps ={
   block:Block,
   editBlock :(pageId:string, block:Block)=>void,
   deleteBlock :(pageId:string, block:Block)=>void,
-  addBlock :(pageId:string, block:Block , nextBlockIndex:number ,previousBlockId:string)=>void,
-  changeToSub :(pageId:string, block:Block ,first:boolean ,previousBlockId:string)=>void,
+  addBlock :(pageId:string, block:Block , nextBlockIndex:number ,previousBlockId:string |null)=>void,
+  changeToSub :(pageId:string, block:Block ,first:boolean ,previousBlockId:string | null)=>void,
   // raiseBlock: (pageId:string, block:Block)=>void,
 };
 
 const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToSub}:EditableBlockProps)=>{  
-  const blockIndex:number = page.blocksId.indexOf(block.id) ;
-  const nextBlockIndex :number= blockIndex +1; 
+
   const  editTime = JSON.stringify(Date.now());
   const innerRef  =useRef<HTMLDivElement>(null) ;
   const [subBlocks, setSubBlocks]= useState<Block[]|null>(null);

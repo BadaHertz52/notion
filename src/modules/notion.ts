@@ -74,7 +74,7 @@ const CHANGE_TO_SUB_BLOCK="notion/CHANGE_TO_SUB_BLOCK" as const;
 const RAISE_BLOCK="notion/RAISE_BLOCK" as const;
 
 
-export const addBlock =(pageId:string, block:Block ,nextBlockIndex:number ,previousBlockId:string)=> ({
+export const addBlock =(pageId:string, block:Block ,nextBlockIndex:number ,previousBlockId:string|null)=> ({
   type:ADD_BLOCK ,
   pageId:pageId,
   block:block,
@@ -92,7 +92,7 @@ export const deleteBlock =(pageId:string, block:Block)=> ({
   block:block
 });
 
-export const changeToSub =(pageId:string, block:Block ,first:boolean ,previousBlockId:string)=> ({
+export const changeToSub =(pageId:string, block:Block ,first:boolean ,previousBlockId:string | null)=> ({
   type:CHANGE_TO_SUB_BLOCK ,
   pageId:pageId,
   block:block,
@@ -289,7 +289,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
   const editBlockData =(index:number ,block:Block)=>{
     targetPage.blocks.splice(index,1,block);
   };
-  const updateParentBlock =(subBlock:Block , previousBlockId:string)=>{
+  const updateParentBlock =(subBlock:Block , previousBlockId:string|null)=>{
     if(subBlock.parentBlocksId!==null){
       //find parentBlock
         const parentBlocksId:string[] =subBlock.parentBlocksId;
@@ -298,7 +298,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
         const parentBlockIndex:number = targetPage.blocksId.indexOf(parentBlockId);
         const parentBlock:Block = targetPage.blocks[parentBlockIndex];
         const subBlocksId = parentBlock.subBlocksId;
-        const previousBlockIndex  =subBlocksId?.indexOf(previousBlockId) as number;
+        const previousBlockIndex = previousBlockId=== null? -1 : subBlocksId?.indexOf(previousBlockId) as number;
         subBlocksId?.splice(previousBlockIndex+1,0,subBlock.id);
       //edit parentBlock 
         const editedParentBlock :Block={

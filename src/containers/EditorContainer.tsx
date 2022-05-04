@@ -22,11 +22,11 @@ const EditorContainer =({page , pagePath ,side, lockSideBar, leftSideBar,closeSi
 
   const editBlock_action = (pageId:string, block:Block)=> {dispatch(editBlock(pageId, block ))};
 
-  const addBlock_action =(pageId:string , block:Block , nextBlockIndex:number ,previousBlockId:string)=>{dispatch(addBlock(pageId,block ,nextBlockIndex ,previousBlockId))};
+  const addBlock_action =(pageId:string , block:Block , nextBlockIndex:number ,previousBlockId:string|null)=>{dispatch(addBlock(pageId,block ,nextBlockIndex ,previousBlockId))};
 
   const deleteBlock_action =(pageId:string,block:Block)=>{dispatch(deleteBlock(pageId,block))};
 
-  const changeToSub_action =(pageId:string, block:Block , first:boolean ,previousBlockId:string)=>{dispatch(changeToSub(pageId,block,first ,previousBlockId));
+  const changeToSub_action =(pageId:string, block:Block , first:boolean ,previousBlockId:string|null)=>{dispatch(changeToSub(pageId,block,first ,previousBlockId));
   };
 
   const raiseBlock_action =(pageId:string, block:Block)=>{dispatch(raiseBlock(pageId,block))};

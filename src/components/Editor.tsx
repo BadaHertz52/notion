@@ -17,10 +17,10 @@ type EditorProps ={
   page:Page,
   pagePath: string []| null
   editBlock : (pageId:string , block:Block )=> void,
-  addBlock : (pageId:string , block:Block ,nextBlockIndex:number ,previousBlockId:string)=> void,
+  addBlock : (pageId:string , block:Block ,nextBlockIndex:number ,previousBlockId:string|null)=> void,
   deleteBlock : (pageId:string , block:Block)=> void,
   side: Side , 
-  changeToSub : (pageId:string ,block:Block ,first:boolean ,previousBlockId:string)=> void,
+  changeToSub : (pageId:string ,block:Block ,first:boolean ,previousBlockId:string|null)=> void,
   raiseBlock: (pageId:string, block:Block)=>void,
   lockSideBar  : ()=> void ,
   leftSideBar  : ()=> void ,
