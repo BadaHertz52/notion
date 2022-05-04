@@ -1,7 +1,7 @@
-import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
-import { Block, deleteBlock, Page } from '../modules/notion';
+import { Block, Page } from '../modules/notion';
 import BlockComponent from './BlockComponent';
 
 type EditableBlockProps ={
@@ -137,8 +137,7 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
       if(textContent ===""){
         deleteBlock(page.id, block);
 
-      }
-      console.log(textContent=="")
+      };
   };
 };
   useEffect(()=>{

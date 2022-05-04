@@ -1,7 +1,6 @@
-import React, { CSSProperties, useEffect, useRef, useState } from 'react';
-import ReactDOMServer from 'react-dom/server';
-import { Block,  blockSample,  Page } from '../modules/notion';
-import BlockComponent from './BlockComponent';
+import React, { CSSProperties, useEffect, useState } from 'react';
+
+import { Block, Page } from '../modules/notion';
 //icon
 import { AiOutlineClockCircle, AiOutlineMenu,  AiOutlineStar } from 'react-icons/ai';
 import { BiMessageDetail } from 'react-icons/bi';
@@ -10,7 +9,7 @@ import {GrDocumentText ,GrDocument} from 'react-icons/gr';
 import { FiChevronsLeft } from 'react-icons/fi';
 import { Side } from '../modules/side';
 import { MdInsertPhoto } from 'react-icons/md';
-import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
+
 import EditableBlock from './EditableBlock';
 
 type EditorProps ={
@@ -43,7 +42,8 @@ const Editor =({ userName, page, pagePath, editBlock ,addBlock ,deleteBlock, cha
       if(side.sideState ==="left"){
         setTitle("Lock sideBar open")
       }
-    },[side.sideState])
+    },[]);
+
     return(
       <div className="topbar">
         <button 
@@ -142,6 +142,7 @@ const Editor =({ userName, page, pagePath, editBlock ,addBlock ,deleteBlock, cha
     const headerBottomStyle :CSSProperties ={
       marginTop: page.header.cover !==null ? "-39px" :"0"
     };
+    const firstBlocks:Block[] =page.blocks.filter((block:Block)=> block.firstBlock);
 
     return(
       <div className='frame'>
@@ -264,21 +265,19 @@ const Editor =({ userName, page, pagePath, editBlock ,addBlock ,deleteBlock, cha
                 className='pageContent_inner'
                 id="pageContent_inner"
                 >
-                {page.blocks.map((block:Block)=>{
-                  if(block.firstBlock){
+                {firstBlocks.map((block:Block)=>{
                     return (
                       <EditableBlock
-                  key={block.id}
-                  page={page}
-                  block={block}
-                  editBlock={editBlock}
-                  deleteBlock={deleteBlock}
-                  addBlock={addBlock}
-                  changeToSub={changeToSub}
-                  
-                />
+                        key={block.id}
+                        page={page}
+                        block={block}
+                        editBlock={editBlock}
+                        deleteBlock={deleteBlock}
+                        addBlock={addBlock}
+                        changeToSub={changeToSub}
+                      />
                     )
-                  }}
+                  }
                 )}
               </div>
             </div>

@@ -1,4 +1,4 @@
-import React, { CSSProperties, useEffect, useRef, useState} from 'react';
+import React, { CSSProperties,useState} from 'react';
 
 import { AiOutlinePlus } from 'react-icons/ai';
 import { CgMenuGridO } from 'react-icons/cg';
@@ -127,7 +127,8 @@ const BlockComponent=({block,subBlocks, page ,editBlock, deleteBlock,addBlock,ch
           className='subBlocks'
         >
           {subBlocks?.map((subBlock :Block)=> 
-            <EditableBlock  
+            <EditableBlock
+              key ={block.id}  
               page={page}
               block={subBlock}
               addBlock={addBlock}

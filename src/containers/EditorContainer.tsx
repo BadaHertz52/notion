@@ -2,8 +2,8 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Editor from '../components/Editor';
 import { RootState } from '../modules';
-import { addBlock, Block, deleteBlock, editBlock, changeToSub, Notion, Page, raiseBlock } from '../modules/notion';
-import side, { Side } from '../modules/side';
+import { addBlock, Block, deleteBlock, editBlock, changeToSub, Page, raiseBlock } from '../modules/notion';
+import { Side } from '../modules/side';
 
 type EditorContainerProps ={
   page: Page,

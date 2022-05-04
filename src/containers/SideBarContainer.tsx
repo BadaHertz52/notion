@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import SideBar from '../components/SideBar';
 import { RootState } from '../modules';
