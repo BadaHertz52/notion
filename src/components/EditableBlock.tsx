@@ -55,10 +55,6 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
   editBlock(page.id,newBlock);
   };
 
-  function addNewBlock( newBlock:Block, newBlockIndex:number){
-    addBlock(page.id,newBlock,newBlockIndex , block.id);
-  };
-
   function onChange(event:ContentEditableEvent){   
     const value = event.target.value;
     const doc = new DOMParser().parseFromString(value,"text/html" );
@@ -69,23 +65,25 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
     }
   };
   
-  function make_subBlock(parentBlock:Block, subBlock:Block){
-      const newMainBlock:Block ={
-        ...parentBlock, 
-        editTime :editTime ,
-        subBlocksId: parentBlock.subBlocksId? [ subBlock.id ,...parentBlock.subBlocksId]: [subBlock.id],
-      };
+  function make_subBlock(parentBlock:Block, subBlock:Block, newBlockIndex:number  ){
+      const previousBlockId =null  ;
       const newSubBlock:Block ={
         ...subBlock,
         parentBlocksId:parentBlock.parentBlocksId?  [...parentBlock.parentBlocksId, parentBlock.id] : [
           parentBlock.id
         ]
       };
-      addNewBlock(newSubBlock,nextBlockIndex);
-      editBlock(page.id, newMainBlock);
+
+      addBlock(page.id,newSubBlock, newBlockIndex ,previousBlockId);
       };
   
   function onKeydown (event: React.KeyboardEvent<HTMLDivElement>){
+    // find  target block of cursor
+    const cursor =document.getSelection();
+    const blockId:string = cursor?.anchorNode?.parentElement?.parentElement?.parentElement?.parentElement?.id  as string;
+    const targetBlockIndex :number =page.blocksId.indexOf(blockId) as number;
+    const targetBlock :Block =page.blocks[targetBlockIndex];
+    console.log(targetBlock);
     if(event.code === "Enter"){
       // 새로운 블록 만들기 
         const newBlock:Block ={
@@ -93,15 +91,15 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
           editTime:editTime,
           type:"text",
           contents:"",
-          firstBlock:true,
-          subBlocksId:block.subBlocksId,
-          parentBlocksId:block.parentBlocksId,
+          firstBlock:targetBlock.firstBlock,
+          subBlocksId:targetBlock.subBlocksId,
+          parentBlocksId:targetBlock.parentBlocksId,
           icon:null,
         };
-        //밀려졌을때
-        if(block.subBlocksId !==null){
+        //밀려졌을때 기존의 block 수정 
+        if(targetBlock.subBlocksId !==null){
           const editedBlock :Block ={
-            ...block,
+            ...targetBlock,
             editTime:editTime,
             subBlocksId:null,
           };
@@ -109,29 +107,26 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
         };
         
     
-      if(block.type.includes("toggle")){
+      if(targetBlock.type.includes("toggle")){
         //subBtn 
         const newSubBlock:Block ={
           ...newBlock,
           firstBlock:false,
           parentBlocksId:[block.id]
         }
-        make_subBlock(block, newSubBlock);
+        make_subBlock(targetBlock, newSubBlock ,targetBlockIndex+1, );
         
       }else{
         //새로운 버튼 
-        addNewBlock(newBlock, nextBlockIndex);
+        addBlock(page.id, newBlock, targetBlockIndex+1 ,targetBlock.id)
 
       }
     } ;
-    if(event.code ==="Tab" && blockIndex>0){
+    if(event.code ==="Tab" && targetBlockIndex>0){
       //  이전 블록의 sub 으로 변경 
-      const cursorPosition = window.getSelection();
-      const targetBlock:Block =page.blocks[blockIndex];
-
-      if(cursorPosition?.anchorOffset=== 0){
+      if(cursor?.anchorOffset=== 0){
         innerRef.current?.focus();
-      const newParentBlock:Block = page.blocks[blockIndex-1];
+      const newParentBlock:Block = page.blocks[targetBlockIndex-1];
       const editedBlock:Block ={
         ...targetBlock,
         firstBlock: false,
@@ -162,6 +157,7 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
       innerRef.current?.focus();
     }
   },[]);
+
   return(
     <ContentEditable
       id={block.id}
@@ -170,6 +166,7 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
       innerRef={innerRef}
       onChange={onChange}
       onKeyDown={onKeydown}
+
     />
   )
 };
