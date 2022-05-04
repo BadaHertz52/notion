@@ -144,15 +144,15 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
       
     };
     if(event.code ==="Backspace"){
-      const target =event.target as Node ;
+      const target =event.target as HTMLDivElement ;
       const textNode = target.firstChild?.firstChild?.firstChild?.firstChild;
-      const textContent :string = textNode?.textContent as string
+      const textContent :string = textNode?.textContent as string;
+      const deltedBlockId :string = target.getAttribute("id") as string;
+      const deletedBlockIndex :number= page.blocksId.indexOf(deltedBlockId) as number;
+      const deletedBlock :Block =page.blocks[deletedBlockIndex] ;
       if(textContent ===""){
-        if(block.subBlocksId !==null){
-          // 이전 block의 subBlocks로 옮기기
-        deleteBlock(page.id, block);
-      };
-  };
+        deleteBlock(page.id, deletedBlock);
+        };
   
     };
   };
