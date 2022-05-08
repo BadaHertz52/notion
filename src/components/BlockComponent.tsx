@@ -76,6 +76,7 @@ const BlockComponent=({block,subBlocks, page ,editBlock, deleteBlock,addBlock,ch
       {subBlocks?.map((block:Block)=>
         <li 
         key={`${block.type}_${block.contents}`}
+        id ={block.id}
         >
           {block.contents}
         </li>

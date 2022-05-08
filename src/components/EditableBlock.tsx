@@ -4,6 +4,12 @@ import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import { Block, Page } from '../modules/notion';
 import BlockComponent from './BlockComponent';
 
+import { IoDocumentTextOutline, IoTextOutline } from 'react-icons/io5';
+import {FcTodoList} from 'react-icons/fc';
+import {RiPlayList2Fill} from 'react-icons/ri';
+import { IoIosList } from 'react-icons/io';
+import {VscListOrdered} from 'react-icons/vsc';
+
 type EditableBlockProps ={
   page:Page,
   //element: JSX.Element,
@@ -20,8 +26,15 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
   const  editTime = JSON.stringify(Date.now());
   const innerRef  =useRef<HTMLDivElement>(null) ;
   const [subBlocks, setSubBlocks]= useState<Block[]|null>(null);
+  const [command, setCommand] =useState<boolean>(false);
 
   useEffect(()=>{
+    const contents= innerRef.current?.getElementsByClassName("blockContents")[0]?.firstChild;
+
+    if(contents ==null){
+      innerRef.current?.focus();
+    };
+
     if(block.subBlocksId!==null){
       const array =block.subBlocksId.map((id:string)=>{
         const subBlockIndex: number=page.blocksId.indexOf(id);
@@ -29,8 +42,9 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
         return subBlock
       });
       setSubBlocks(array);
+
     };
-  },[block.subBlocksId]);
+  },[]);
 
   function callBlockNode(block:Block):string{
     const blockNode = ReactDOMServer.renderToString
@@ -80,10 +94,14 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
   function onKeydown (event: React.KeyboardEvent<HTMLDivElement>){
     // find  target block of cursor
     const cursor =document.getSelection();
-    const blockId:string = cursor?.anchorNode?.parentElement?.parentElement?.parentElement?.parentElement?.id  as string;
+    const cursorParent = cursor?.anchorNode?.parentElement;
+    const cursorParentTag = cursorParent?.tagName ;
+    const targetElement = cursorParentTag ==="LI" ? cursorParent : cursorParent?.parentElement?.parentElement?.parentElement; 
+    const textContent = targetElement?.textContent;
+    const blockId:string = targetElement?.id  as string;
     const targetBlockIndex :number =page.blocksId.indexOf(blockId) as number;
     const targetBlock :Block =page.blocks[targetBlockIndex];
-    console.log(targetBlock);
+
     if(event.code === "Enter"){
       // 새로운 블록 만들기 
         const newBlock:Block ={
@@ -138,27 +156,17 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
       
     };
     if(event.code ==="Backspace"){
-      const target =event.target as HTMLDivElement ;
-      const textNode = target.firstChild?.firstChild?.firstChild?.firstChild;
-      const textContent :string = textNode?.textContent as string;
-      const deltedBlockId :string = target.getAttribute("id") as string;
-      const deletedBlockIndex :number= page.blocksId.indexOf(deltedBlockId) as number;
-      const deletedBlock :Block =page.blocks[deletedBlockIndex] ;
-      if(textContent ===""){
-        deleteBlock(page.id, deletedBlock);
+      console.log(targetElement,textContent?.length)
+      if(textContent?.length==1){
+        deleteBlock(page.id, targetBlock);
         };
   
     };
   };
-  useEffect(()=>{
-    const contents= innerRef.current?.getElementsByClassName("blockContents")[0].firstChild;
 
-    if(contents ==null){
-      innerRef.current?.focus();
-    }
-  },[]);
 
   return(
+  <>
     <ContentEditable
       id={block.id}
       className="editableBlock"
@@ -166,8 +174,121 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
       innerRef={innerRef}
       onChange={onChange}
       onKeyDown={onKeydown}
-
     />
+    {command &&
+      <div className='blockCommand'>
+        <div className='blockCommand_inner'>
+          <div className='basic_blocks'>
+            <header className='command_header'>
+              BASIC BLOCKS
+            </header>
+            <div className='blockType'>
+              <button>
+                <div className='types_left'>
+                  <IoTextOutline/>
+                </div>
+                <div className='types_right'>
+                  <header>Text</header>
+                  <div className='typeExplannation'>
+                    Just start writing with plain text.
+                  </div>
+                </div>
+              </button>
+              <button>
+                <div className='types_left'>
+                  <IoDocumentTextOutline/>
+                </div>
+                <div className='types_right'>
+                  <header>Page</header>
+                  <div className='typeExplannation'>
+                    Embed a sub-page inside this page.
+                  </div>
+                </div>
+              </button>
+              <button>
+                <div className='types_left'>
+                  <FcTodoList/>
+                </div>
+                <div className='types_right'>
+                  <header>To-do list</header>
+                  <div className='typeExplannation'>
+                    Track tasks width a to-do list.
+                  </div>
+                </div>
+              </button>
+              <button>
+                <div className='types_left'>
+                  H1
+                </div>
+                <div className='types_right'>
+                  <header>Heading 1</header>
+                  <div className='typeExplannation'>
+                    Big section heading.
+                  </div>
+                </div>
+              </button>
+              <button>
+                <div className='types_left'>
+                  H2
+                </div>
+                <div className='types_right'>
+                  <header>Heading 2</header>
+                  <div className='typeExplannation'>
+                    Medium section heading 
+                  </div>
+                </div>
+              </button>
+              <button>
+                <div className='types_left'>
+                  H3
+                </div>
+                <div className='types_right'>
+                  <header>Heading 3</header>
+                  <div className='typeExplannation'>
+                    Small section heading.
+                  </div>
+                </div>
+              </button>
+              <button>
+                <div className='types_left'>
+                  <IoIosList/>
+                </div>
+                <div className='types_right'>
+                  <header>Bullet list</header>
+                  <div className='typeExplannation'>
+                    Create a simple buttled list.
+                  </div>
+                </div>
+              </button>
+              <button>
+                <div className='types_left'>
+                  <VscListOrdered/>
+                </div>
+                <div className='types_right'>
+                  <header>Numbered list</header>
+                  <div className='typeExplannation'>
+                    Create a lisdt with numbering.
+                  </div>
+                </div>
+              </button>
+              <button>
+                <div className='types_left'>
+                  <RiPlayList2Fill/>
+                </div>
+                <div className='types_right'>
+                  <header>Toggle list</header>
+                  <div className='typeExplannation'>
+                    Toggles can hide and show content inside
+                  </div>
+                </div>
+              </button>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      }
+  </>
   )
 };
 

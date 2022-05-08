@@ -494,7 +494,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
       }; ;
 
     case DELETE_BLOCK:
-      const deleteData =(block :Block)=>{
+      const deleteData =(block :Block ,targetIndex:number)=>{
         if(block.subBlocksId !==null ){
         // block.suBlocksId를 이전 block의 subBlocks로 옮기기
         const blockDoc = document.getElementById(block.id) as HTMLElement; 
@@ -509,27 +509,35 @@ export default function notion (state:Notion =initialState , action :NotionActio
         };
         editBlockData(previousBlockIndex, editedPreviousBlock);
       };
-        targetPage.blocks?.splice(blockIndex,1);
-      targetPage.blocksId?.splice(blockIndex,1);
-
+        targetPage.blocks?.splice(targetIndex,1);
+        targetPage.blocksId?.splice(targetIndex,1);
+        console.log("deletedata", block)
       if(block.firstBlock){
         const index:number= targetPage.firstBlocksId?.indexOf(block.id) as number;
         targetPage.firstBlocksId?.splice( index,1
         );
+       
       };
-      }
-      console.log(action.block)
+      };
+
       if(action.block.type === "bulletList" || action.block.type ==="numberList"){
         const parentBlocksId = action.block?.parentBlocksId as string[];
-        const parentBlockId :string = parentBlocksId[-1] ;
-        const parentBlock = targetPage.blocks[targetPage.blocksId.indexOf(parentBlockId)] ;
-        const blockIndex = parentBlock.subBlocksId?.indexOf(action.block.id) as number;
-        console.log(parentBlock , blockIndex)
-        if(blockIndex=== 0){
-          deleteData(parentBlock);
+        const parentBlockId :string = parentBlocksId[parentBlocksId.length-1] ;
+        const parentBlockIndex = targetPage.blocksId.indexOf(parentBlockId);
+        const parentBlock = targetPage.blocks[parentBlockIndex];
+        const newSubBlocksId  = parentBlock.subBlocksId?.filter((id:string)=> id !== action.block.id) as string[] ;
+        console.log(newSubBlocksId,newSubBlocksId[0]);
+        if(newSubBlocksId[0] !== undefined){
+          editBlockData( parentBlockIndex, {
+            ...parentBlock,
+            subBlocksId: newSubBlocksId
+          })
+        }else{
+          deleteData(parentBlock , parentBlockIndex);
         }
       };
-      deleteData(action.block);
+      deleteData(action.block , blockIndex);
+      
       console.log("delete", {pages:pages[pageIndex]});
 
       return {
