@@ -511,16 +511,16 @@ export default function notion (state:Notion =initialState , action :NotionActio
       };
         targetPage.blocks?.splice(targetIndex,1);
         targetPage.blocksId?.splice(targetIndex,1);
-        console.log("deletedata", block)
+        console.log("deletedata", block);
+
       if(block.firstBlock){
         const index:number= targetPage.firstBlocksId?.indexOf(block.id) as number;
         targetPage.firstBlocksId?.splice( index,1
         );
-       
       };
       };
 
-      if(action.block.type === "bulletList" || action.block.type ==="numberList"){
+      if(action.block.parentBlocksId !== null){
         const parentBlocksId = action.block?.parentBlocksId as string[];
         const parentBlockId :string = parentBlocksId[parentBlocksId.length-1] ;
         const parentBlockIndex = targetPage.blocksId.indexOf(parentBlockId);
@@ -533,18 +533,27 @@ export default function notion (state:Notion =initialState , action :NotionActio
             subBlocksId: newSubBlocksId
           })
         }else{
-          deleteData(parentBlock , parentBlockIndex);
+
+          if(action.block.type === "bulletList" || action.block.type ==="numberList"){
+            deleteData(parentBlock , parentBlockIndex);
+          }else {
+            editBlockData(parentBlockIndex, {
+              ...parentBlock,
+              subBlocksId:null
+            })
+          }
+          
         }
       };
       deleteData(action.block , blockIndex);
-      
-      console.log("delete", {pages:pages[pageIndex]});
 
+      console.log("delete", {pages:pages[pageIndex]});
       return {
         pages:pages,
         firstPagesId:firstPagesId,
         pagesId:pagesId
-      }; ;
+      };
+
     default:
       return state;
   }
