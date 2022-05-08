@@ -13,13 +13,16 @@ button {
   padding: 0;
 }
 
-ul {
+ul,
+ol {
   margin: 0;
   padding: 0;
+  padding-left: 1rem;
 }
 
-li {
-  list-style: none;
+ul li,
+ol li {
+  padding-left: 10px;
 }
 
 a:link, a:active, a:visited {
@@ -27,7 +30,7 @@ a:link, a:active, a:visited {
   color: inherit;
 }
 
-.block {
+.editableBlock {
   position: relative;
   width: 100%;
   height: -webkit-min-content;
@@ -54,11 +57,12 @@ a:link, a:active, a:visited {
           align-items: center;
 }
 
-.subBlocks {
+.subBlocks .editableBlock {
   margin-left: 20px;
+  padding: 0;
 }
 
-.block,
+.editabelBlock,
 .blockFn button {
   font-size: 1rem;
   line-height: 24px;
@@ -160,13 +164,16 @@ button {
   padding: 0;
 }
 
-ul {
+ul,
+ol {
   margin: 0;
   padding: 0;
+  padding-left: 1rem;
 }
 
-li {
-  list-style: none;
+ul li,
+ol li {
+  padding-left: 10px;
 }
 
 a:link, a:active, a:visited {
@@ -424,13 +431,16 @@ button {
   padding: 0;
 }
 
-ul {
+ul,
+ol {
   margin: 0;
   padding: 0;
+  padding-left: 1rem;
 }
 
-li {
-  list-style: none;
+ul li,
+ol li {
+  padding-left: 10px;
 }
 
 a:link, a:active, a:visited {

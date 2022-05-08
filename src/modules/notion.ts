@@ -8,8 +8,10 @@ const h1 ="h1" as const ;
 const h2 ="h2" as const ;
 const h3 ="h3" as const ;
 const page ="page" as const ;
+const numberList ="numberList" as const;
+const bulletList ="bulletList" as const ;
 
-export type BlockType= "text"|"toggle"|"todo" |"todo done"|"h1"|"h2"|"h3" |"page" ;
+export type BlockType= "text"|"toggle"|"todo" |"todo done"|"h1"|"h2"|"h3" |"page" |"numberList" |"bulletList" ;
 
 export type Block ={
   id:string,
@@ -240,9 +242,80 @@ const initialState :Notion ={
     type: text,
     icon:  null ,
     editTime: JSON.stringify(Date.now),
-  }
+  },
+  {
+    id:"numlist",
+    contents:"", 
+    firstBlock:true,
+    subBlocksId:["num1", "num2", "num3"],
+    parentBlocksId: null,
+    type: numberList,
+    icon:  null ,
+    editTime: JSON.stringify(Date.now),
+  },
+  {
+    id:"num1",
+    contents:"n1", 
+    firstBlock:false,
+    subBlocksId:null,
+    parentBlocksId: [numberList],
+    type: numberList,
+    icon:  null ,
+    editTime: JSON.stringify(Date.now),
+  },
+  {
+    id:"num2",
+    contents:"n2", 
+    firstBlock:false,
+    subBlocksId:null,
+    parentBlocksId: [numberList],
+    type: numberList,
+    icon:  null ,
+    editTime: JSON.stringify(Date.now),
+  },
+  {
+    id:"num3",
+    contents:"n3", 
+    firstBlock:false,
+    subBlocksId:null,
+    parentBlocksId: [numberList],
+    type: numberList,
+    icon:  null ,
+    editTime: JSON.stringify(Date.now),
+  },
+  {
+    id:"bulletList",
+    contents:"", 
+    firstBlock:true,
+    subBlocksId:["b1", "b2"],
+    parentBlocksId:null,
+    type: bulletList,
+    icon:  null ,
+    editTime: JSON.stringify(Date.now),
+  },
+  {
+    id:"b1",
+    contents:"b1", 
+    firstBlock:false,
+    subBlocksId:null,
+    parentBlocksId:[bulletList],
+    type: bulletList,
+    icon:  null ,
+    editTime: JSON.stringify(Date.now),
+  },
+  {
+    id:"b2",
+    contents:"b2", 
+    firstBlock:false,
+    subBlocksId:null,
+    parentBlocksId:[bulletList],
+    type: bulletList,
+    icon:  null ,
+    editTime: JSON.stringify(Date.now),
+  },
+
     ],
-    blocksId:["text", 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page', 'page2' , 'sub1_1' ,'sub1_2', 'sub2_1'],
+    blocksId:["text", 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page', 'page2' , 'sub1_1' ,'sub1_2', 'sub2_1' ,"numberList" , "num1", "num2", "num3" , "bulletList", "b1", "b2"],
     subPagesId:[],
     parentsId: null,
   },
@@ -421,30 +494,42 @@ export default function notion (state:Notion =initialState , action :NotionActio
       }; ;
 
     case DELETE_BLOCK:
-      if(action.block.subBlocksId !==null){
-        // action.block.suBlocksId를 이전 block의 subBlocks로 옮기기
-        const blockDoc = document.getElementById(action.block.id) as HTMLElement; 
+      const deleteData =(block :Block)=>{
+        if(block.subBlocksId !==null ){
+        // block.suBlocksId를 이전 block의 subBlocks로 옮기기
+        const blockDoc = document.getElementById(block.id) as HTMLElement; 
         const previousBlockId = blockDoc.previousElementSibling?.id as string ;
         const previousBlockIndex =targetPage.blocksId.indexOf(previousBlockId) as number;
         const previousBlock = targetPage.blocks[previousBlockIndex] as Block ;
-        console.log(previousBlock , action.block)
+        console.log(previousBlock , block)
         const editedPreviousBlock :Block ={
           ...previousBlock,
           editTime: JSON.stringify(Date.now()),
-          subBlocksId:[...action.block.subBlocksId]
+          subBlocksId:[...block.subBlocksId]
         };
         editBlockData(previousBlockIndex, editedPreviousBlock);
       };
-
-      targetPage.blocks?.splice(blockIndex,1);
+        targetPage.blocks?.splice(blockIndex,1);
       targetPage.blocksId?.splice(blockIndex,1);
 
-      if(action.block.firstBlock){
-        const index:number= targetPage.firstBlocksId?.indexOf(action.block.id) as number;
+      if(block.firstBlock){
+        const index:number= targetPage.firstBlocksId?.indexOf(block.id) as number;
         targetPage.firstBlocksId?.splice( index,1
         );
       };
-      
+      }
+      console.log(action.block)
+      if(action.block.type === "bulletList" || action.block.type ==="numberList"){
+        const parentBlocksId = action.block?.parentBlocksId as string[];
+        const parentBlockId :string = parentBlocksId[-1] ;
+        const parentBlock = targetPage.blocks[targetPage.blocksId.indexOf(parentBlockId)] ;
+        const blockIndex = parentBlock.subBlocksId?.indexOf(action.block.id) as number;
+        console.log(parentBlock , blockIndex)
+        if(blockIndex=== 0){
+          deleteData(parentBlock);
+        }
+      };
+      deleteData(action.block);
       console.log("delete", {pages:pages[pageIndex]});
 
       return {

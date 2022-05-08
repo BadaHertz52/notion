@@ -1,4 +1,4 @@
-import React, { CSSProperties,useState} from 'react';
+import React, { CSSProperties,useEffect,useState} from 'react';
 
 import { AiOutlinePlus } from 'react-icons/ai';
 import { CgMenuGridO } from 'react-icons/cg';
@@ -70,7 +70,19 @@ const BlockComponent=({block,subBlocks, page ,editBlock, deleteBlock,addBlock,ch
   const onClickToggleBtn =()=>{
     setToggle(!toggle)
   };
-
+  const ListSub = ()=>{
+    return(
+      <>
+      {subBlocks?.map((block:Block)=>
+        <li 
+        key={`${block.type}_${block.contents}`}
+        >
+          {block.contents}
+        </li>
+      )}
+      </>
+    )
+  }
   return(
     <div 
       className={className} 
@@ -82,6 +94,20 @@ const BlockComponent=({block,subBlocks, page ,editBlock, deleteBlock,addBlock,ch
           block={block}
         />
       }
+      {(block.type ==="numberList" || block.type=== "bulletList" ) ?
+      <div className='mainBlock'>
+        {block.type==="numberList" ? 
+          <ol className="list">
+            <ListSub/>
+          </ol>
+        :
+          <ul className="list">
+            <ListSub/>
+          </ul>
+        }
+      </div>
+      :
+      <>
       <div 
         className='mainBlock'
       >
@@ -119,8 +145,7 @@ const BlockComponent=({block,subBlocks, page ,editBlock, deleteBlock,addBlock,ch
           {block.contents}
         </div>
       </div>
-      {
-      ((block.type==="toggle" && toggle)
+      {((block.type==="toggle" && toggle)
         ||block.type !=="toggle"
         ) && 
         <div 
@@ -140,8 +165,9 @@ const BlockComponent=({block,subBlocks, page ,editBlock, deleteBlock,addBlock,ch
           }
         </div>
       }
+      </>
+      }
     </div>
-
   )
 };
 
