@@ -95,6 +95,7 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
   function onKeydown (event: React.KeyboardEvent<HTMLDivElement>){
     // find  target block of cursor
     const cursor =document.getSelection();
+    const focusOffset =cursor?.focusOffset as number;
     const cursorParent = cursor?.anchorNode?.parentElement;
     const cursorParentTag = cursorParent?.tagName ;
     const targetElement = cursorParentTag ==="LI" ? cursorParent : cursorParent?.parentElement?.parentElement?.parentElement; 
@@ -102,20 +103,32 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
     const blockId:string = targetElement?.id  as string;
     const targetBlockIndex :number =page.blocksId.indexOf(blockId) as number;
     const targetBlock :Block =page.blocks[targetBlockIndex];
-
+    const newContents = textContent?.slice(focusOffset) ;
     if(event.code === "Enter"){
       // 새로운 블록 만들기 
         const newBlock:Block ={
           id:editTime,
           editTime:editTime,
           type:"text",
-          contents:"",
+          contents: newContents=== undefined ? "" : newContents,
           firstBlock:targetBlock.firstBlock,
           subBlocksId:targetBlock.subBlocksId,
           parentBlocksId:targetBlock.parentBlocksId,
           icon:null,
         };
-        //밀려졌을때 기존의 block 수정 
+        // targetBlock 수정 
+        if( focusOffset>0){
+          const newContents = targetBlock.contents.slice(0, focusOffset);
+          const editedBlock:Block ={
+            ...targetBlock,
+            subBlocksId : null ,
+            contents:newContents,
+            editTime:editTime
+          };
+          console.log(focusOffset, editedBlock)
+          editBlock (page.id, editedBlock);
+        }else {
+          //밀려졌을때 기존의 block 수정 
         if(targetBlock.subBlocksId !==null){
           const editedBlock :Block ={
             ...targetBlock,
@@ -125,7 +138,7 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
           editBlock(page.id, editedBlock);
         };
         
-    
+        }
       if(targetBlock.type.includes("toggle")){
         //subBtn 
         const newSubBlock:Block ={
@@ -138,7 +151,6 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
       }else{
         //새로운 버튼 
         addBlock(page.id, newBlock, targetBlockIndex+1 ,targetBlock.id)
-
       }
     } ;
     if(event.code ==="Tab" && targetBlockIndex>0){
@@ -157,7 +169,9 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
       
     };
     if(event.code ==="Backspace"){
-      console.log(targetElement,textContent?.length)
+      if(focusOffset ===0){
+        raiseBlock(page.id, targetBlock);
+      };
       if(textContent?.length===1){
         deleteBlock(page.id, targetBlock);
         };
