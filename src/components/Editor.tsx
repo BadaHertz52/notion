@@ -275,6 +275,7 @@ const Editor =({ userName, page, pagePath, editBlock ,addBlock ,deleteBlock, cha
                         deleteBlock={deleteBlock}
                         addBlock={addBlock}
                         changeToSub={changeToSub}
+                        raiseBlock={raiseBlock}
                       />
                     )
                   }

@@ -56,10 +56,11 @@ type BlockProp ={
   deleteBlock :(pageId:string, block:Block)=>void,
   addBlock :(pageId:string, block:Block , nextBlockIndex:number ,previousBlockId:string | null)=>void,
   changeToSub :(pageId:string, block:Block ,first:boolean ,previousBlockId:string | null )=>void,
+  raiseBlock : (pageId:string, block:Block)=>void,
 };
 
 
-const BlockComponent=({block,subBlocks, page ,editBlock, deleteBlock,addBlock,changeToSub}:BlockProp)=>{
+const BlockComponent=({block,subBlocks, page ,editBlock, deleteBlock,addBlock,changeToSub , raiseBlock}:BlockProp)=>{
   const className =`${block.type} block`;
   const [toggle, setToggle] =useState<boolean>(false);
   const toggleStyle:CSSProperties={
@@ -161,6 +162,7 @@ const BlockComponent=({block,subBlocks, page ,editBlock, deleteBlock,addBlock,ch
               deleteBlock={deleteBlock}
               editBlock={editBlock}
               changeToSub={changeToSub}
+              raiseBlock={raiseBlock}
             />
           )
           }

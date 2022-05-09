@@ -18,10 +18,10 @@ type EditableBlockProps ={
   deleteBlock :(pageId:string, block:Block)=>void,
   addBlock :(pageId:string, block:Block , nextBlockIndex:number ,previousBlockId:string |null)=>void,
   changeToSub :(pageId:string, block:Block ,first:boolean ,previousBlockId:string | null)=>void,
-  // raiseBlock: (pageId:string, block:Block)=>void,
+  raiseBlock: (pageId:string, block:Block)=>void,
 };
 
-const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToSub}:EditableBlockProps)=>{  
+const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToSub  ,raiseBlock}:EditableBlockProps)=>{  
 
   const  editTime = JSON.stringify(Date.now());
   const innerRef  =useRef<HTMLDivElement>(null) ;
@@ -56,6 +56,7 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
       deleteBlock={deleteBlock}
       addBlock ={addBlock}
       changeToSub ={changeToSub}
+      raiseBlock ={raiseBlock}
       />);
     return blockNode
   };
@@ -157,7 +158,7 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
     };
     if(event.code ==="Backspace"){
       console.log(targetElement,textContent?.length)
-      if(textContent?.length==1){
+      if(textContent?.length===1){
         deleteBlock(page.id, targetBlock);
         };
   
