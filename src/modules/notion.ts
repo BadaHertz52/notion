@@ -381,6 +381,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
 
   const editBlockData =(index:number ,block:Block)=>{
     targetPage.blocks.splice(index,1,block);
+    console.log(block, targetPage);
   };
   //subBlock 추가 시 parentBlock update
   const updateParentBlock =(subBlock:Block , previousBlockId:string|null)=>{
@@ -467,8 +468,12 @@ export default function notion (state:Notion =initialState , action :NotionActio
 
     case EDIT_BLOCK:
       editBlockData(blockIndex, action.block);
-      //console.log("edit", targetPage.blocks)
-      return state;
+      console.log("edit",action.block  ,targetPage.blocks )
+      return {
+        pages:pages,
+        firstPagesId:firstPagesId,
+        pagesId:pagesId
+      };
     
     case CHANGE_TO_SUB_BLOCK:
       
@@ -493,6 +498,8 @@ export default function notion (state:Notion =initialState , action :NotionActio
       }; 
 
     case RAISE_BLOCK :
+      // cursor.focusOffset== 0 일때 backspace 를 누르면 해당 block data는 삭제되고 해당 block 의 contents가 이전 block 을 붇여지는 것 
+
         // dom 상 이전 block 찾기 
         const {parentBlockIndex, parentBlock} =findParentBlock(targetPage, action.block);
 
@@ -517,15 +524,19 @@ export default function notion (state:Notion =initialState , action :NotionActio
           };
           editBlockData(parentBlockIndex, newParentBlock);
 
-          const previousSubBlockId = subBlocksId?.[subBlockIndex +1] as string ;
+          const previousSubBlockId = subBlocksId?.[subBlockIndex -1] as string ;
           const {index, BLOCK} = findBlock(targetPage, previousSubBlockId);
           const newPrevisousBlock:Block ={
             ...BLOCK,
             contents : `${BLOCK.contents}${action.block.contents}`,
             editTime: JSON.stringify(Date.now())
           };
+          
           editBlockData(index, newPrevisousBlock);
-        }
+        };
+        // action.block data 지우기 
+        deleteData(action.block, blockIndex);
+        console.log("raiseBlock",targetPage.blocks );
       return {
         pages:pages,
         firstPagesId:firstPagesId,
