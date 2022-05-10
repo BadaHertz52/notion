@@ -1,6 +1,6 @@
 @import './common';
 
-.block {
+.editableBlock {
   position: relative;
   width: 100%;
   height: min-content;
@@ -16,10 +16,14 @@
   display: flex;
   align-items: center;
 }
-.subBlocks {
+.subBlocks .editableBlock{
   margin-left: 20px;
+  padding: 0;
 }
-.block , 
+[contenteditable] {
+  outline: 0px solid transparent;
+}
+.editabelBlock , 
 .blockFn button {
   font-size: 1rem;
   line-height: 24px;

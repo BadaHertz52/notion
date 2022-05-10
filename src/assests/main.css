@@ -62,6 +62,10 @@ a:link, a:active, a:visited {
   padding: 0;
 }
 
+[contenteditable] {
+  outline: 0px solid transparent;
+}
+
 .editabelBlock,
 .blockFn button {
   font-size: 1rem;
