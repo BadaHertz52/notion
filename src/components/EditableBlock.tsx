@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
-import { Block, Page } from '../modules/notion';
+import { Block, findBlock, Page } from '../modules/notion';
 import BlockComponent from './BlockComponent';
 
 import { IoDocumentTextOutline, IoTextOutline } from 'react-icons/io5';
@@ -27,6 +27,40 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
   const innerRef  =useRef<HTMLDivElement>(null) ;
   const [subBlocks, setSubBlocks]= useState<Block[]|null>(null);
   const [command, setCommand] =useState<boolean>(false);
+  type findTargetBlockReturn ={
+    cursor: Selection |null ,
+    focusOffset: number,
+    targetElement: HTMLElement|undefined|null,
+    targetBlock:Block,
+    targetBlockIndex:number,
+    textContents:string,
+    newContents:string
+  };
+  const findTargetBlock =():findTargetBlockReturn=>{
+    const cursor =document.getSelection();
+    const focusOffset =cursor?.focusOffset as number;
+    const cursorParent = cursor?.anchorNode?.parentElement;
+    const cursorParentTag = cursorParent?.tagName ;
+    const targetElement =  cursorParentTag ==="LI" ? cursorParent : cursorParent?.parentElement?.parentElement?.parentElement; 
+    const textContents = cursorParentTag ==="LI" ?   targetElement?.textContent as string :  targetElement?.getElementsByClassName("mainBlock")[0]?.firstElementChild?.textContent as string; 
+
+    const blockId:string = targetElement?.id  as string;
+    const targetBlockIndex :number =page.blocksId.indexOf(blockId) as number;
+    
+    const targetBlock :Block =page.blocks[targetBlockIndex];
+    
+    const newContents = textContents?.slice(focusOffset) as string ;
+
+    return {
+      cursor: cursor ,
+      focusOffset: focusOffset,
+      targetElement:targetElement,
+      targetBlock:targetBlock ,
+      targetBlockIndex:targetBlockIndex,
+      textContents: textContents,
+      newContents:newContents
+    }
+  };
 
   useEffect(()=>{
     const contents= innerRef.current?.getElementsByClassName("blockContents")[0]?.firstChild;
@@ -35,17 +69,15 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
       innerRef.current?.focus();
     };
 
-    if(block.subBlocksId!==null){
-      const array =block.subBlocksId.map((id:string)=>{
-        const subBlockIndex: number=page.blocksId.indexOf(id);
-        const subBlock = page.blocks[subBlockIndex]
-        return subBlock
+    if(block.subBlocksId !==null){
+      const sub_blocks:Block[] = block.subBlocksId.map((id:string)=> {
+        const {BLOCK} =findBlock(page, id);
+        return BLOCK;
       });
-      setSubBlocks(array);
-
+      setSubBlocks(sub_blocks);
     };
   },[]);
-
+  
   function callBlockNode(block:Block):string{
     const blockNode = ReactDOMServer.renderToString
     (<BlockComponent 
@@ -70,14 +102,10 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
   editBlock(page.id,newBlock);
   };
 
-  function onChange(event:ContentEditableEvent){   
-    const value = event.target.value;
-    const doc = new DOMParser().parseFromString(value,"text/html" );
-    if(doc.getElementsByClassName("blockContents")[0]!== undefined){
-      const textNode = doc.getElementsByClassName("blockContents")[0].firstChild as Node; 
-      const textContenet =textNode?.textContent as string; 
-        editContents(textContenet ,block);  
-    }
+  function onChange(){ 
+    const {targetBlock , textContents}= findTargetBlock();  
+
+      editContents(textContents ,targetBlock);  
   };
   
   function make_subBlock(parentBlock:Block, subBlock:Block, newBlockIndex:number  ){
@@ -94,16 +122,8 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
   
   function onKeydown (event: React.KeyboardEvent<HTMLDivElement>){
     // find  target block of cursor
-    const cursor =document.getSelection();
-    const focusOffset =cursor?.focusOffset as number;
-    const cursorParent = cursor?.anchorNode?.parentElement;
-    const cursorParentTag = cursorParent?.tagName ;
-    const targetElement = cursorParentTag ==="LI" ? cursorParent : cursorParent?.parentElement?.parentElement?.parentElement; 
-    const textContent = targetElement?.textContent;
-    const blockId:string = targetElement?.id  as string;
-    const targetBlockIndex :number =page.blocksId.indexOf(blockId) as number;
-    const targetBlock :Block =page.blocks[targetBlockIndex];
-    const newContents = textContent?.slice(focusOffset) ;
+    const {cursor, focusOffset, targetBlock, targetBlockIndex,textContents, newContents}= findTargetBlock();
+
     if(event.code === "Enter"){
       // 새로운 블록 만들기 
         const newBlock:Block ={
@@ -125,7 +145,6 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
             contents:newContents,
             editTime:editTime
           };
-          console.log(focusOffset, editedBlock)
           editBlock (page.id, editedBlock);
         }else {
           //밀려졌을때 기존의 block 수정 
@@ -172,7 +191,8 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
       if(focusOffset ===0){
         raiseBlock(page.id, targetBlock);
       };
-      if(textContent?.length===1){
+      
+      if(textContents?.length===1){
         deleteBlock(page.id, targetBlock);
         };
   
