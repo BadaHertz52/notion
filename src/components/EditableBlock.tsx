@@ -69,20 +69,18 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
       innerRef.current?.focus();
     };
 
-    if(block.subBlocksId !==null){
-      const sub_blocks:Block[] = block.subBlocksId.map((id:string)=> {
-        const {BLOCK} =findBlock(page, id);
-        return BLOCK;
-      });
-      setSubBlocks(sub_blocks);
-    };
   },[]);
   
   function callBlockNode(block:Block):string{
+    const sub_blocks:Block[]|null = block.subBlocksId? block.subBlocksId.map((id:string)=> {
+      const {BLOCK} =findBlock(page, id);
+      return BLOCK;
+    }): null ;
+
     const blockNode = ReactDOMServer.renderToString
     (<BlockComponent 
       block={block} 
-      subBlocks ={subBlocks}
+      subBlocks ={sub_blocks}
       page={page}
       editBlock ={editBlock}
       deleteBlock={deleteBlock}
@@ -191,7 +189,7 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
       if(focusOffset ===0){
         raiseBlock(page.id, targetBlock);
       };
-      
+    
       if(textContents?.length===1){
         deleteBlock(page.id, targetBlock);
         };
