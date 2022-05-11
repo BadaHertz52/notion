@@ -381,7 +381,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
 
   const editBlockData =(index:number ,block:Block)=>{
     targetPage.blocks.splice(index,1,block);
-    console.log(block, targetPage);
+    console.log("editBlockData", block, targetPage);
   };
   //subBlock 추가 시 parentBlock update
   const updateParentBlock =(subBlock:Block , previousBlockId:string|null)=>{
