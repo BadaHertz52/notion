@@ -289,19 +289,15 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
     return blockNode
   };
 
-  function editContents(contents :string , block:Block ){
-  const newBlock :Block ={
-    ...block,
-    contents: contents,
-    editTime: editTime
-  } ;
-  editBlock(page.id,newBlock);
-  };
-
   function onChange(){ 
     const {targetBlock , textContents}= findTargetBlock();  
     if(targetBlock !== undefined){
-      editContents(textContents ,targetBlock);
+      const newBlock :Block ={
+        ...targetBlock,
+        contents: textContents,
+        editTime: editTime
+      } ;
+      editBlock(page.id,newBlock);
     }
   };
   
