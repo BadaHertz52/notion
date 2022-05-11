@@ -1,4 +1,4 @@
-import React, { CSSProperties, useEffect, useRef } from 'react';
+import React, { CSSProperties, useEffect, useRef, useState } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import ContentEditable from 'react-contenteditable';
 import { Block, findBlock, Page } from '../modules/notion';
@@ -11,17 +11,29 @@ import { FcTodoList } from 'react-icons/fc';
 import { IoDocumentTextOutline, IoTextOutline } from 'react-icons/io5';
 
 
-type BlockCommandProp ={
+type CommandBlockProp ={
   block:Block
 };
 
-const CommandBlock =({block}:BlockCommandProp)=>{
+const CommandBlock =({block}:CommandBlockProp)=>{
  
   const blockElement = document.getElementById(block.id) as HTMLElement;
   const commandStyle :CSSProperties={
     position: 'absolute',
     top: blockElement.clientHeight,
   };
+
+  useEffect(()=>{
+    const command = block.contents.slice(1);
+    const commandBtns = document.querySelectorAll(".command_btn");
+    console.log("command", command, "btns", commandBtns)
+    commandBtns.forEach((btn:Element)=>{
+      btn.getAttribute("name")?.includes(command)?
+      btn.setAttribute("style" ,"display:block"):
+      btn.setAttribute("style", "display:none");
+    })
+  },[block.contents])
+
 
   return(
       <div 
@@ -34,7 +46,8 @@ const CommandBlock =({block}:BlockCommandProp)=>{
               BASIC BLOCKS
             </header>
             <div className='command_btns type'>
-              <button>
+              <button 
+              className='command_btn' name='text'>
                 <div className='command_btn_inner'>
                   <div className='command_btn_left'>
                     <IoTextOutline/>
@@ -47,7 +60,10 @@ const CommandBlock =({block}:BlockCommandProp)=>{
                   </div>
                 </div>
               </button>
-              <button>
+              <button  
+              className='command_btn' 
+              name='page'
+              >
                 <div className='command_btn_inner'>
                   <div className='command_btn_left'>
                     <IoDocumentTextOutline/>
@@ -60,7 +76,10 @@ const CommandBlock =({block}:BlockCommandProp)=>{
                   </div>
                 </div>
               </button>
-              <button>
+              <button   
+              className='command_btn' 
+              name='to-do list'
+              >
                 <div className='command_btn_inner'>
                   <div className='command_btn_left'>
                     <FcTodoList/>
@@ -73,7 +92,11 @@ const CommandBlock =({block}:BlockCommandProp)=>{
                   </div>
                 </div>
               </button>
-              <button>
+              <button 
+              className='command_btn'
+              name='h1'
+
+              >
               <div className='command_btn_inner'>
                 <div className='command_btn_left headerType' >
                   <span>H</span>
@@ -87,7 +110,10 @@ const CommandBlock =({block}:BlockCommandProp)=>{
                 </div>
               </div>
               </button>
-              <button>
+              <button 
+                className='command_btn'
+                name='h2'
+              >
                 <div className='command_btn_inner'>
                   <div className='command_btn_left headerType'>
                     <span>H</span>
@@ -101,7 +127,10 @@ const CommandBlock =({block}:BlockCommandProp)=>{
                   </div>
                 </div>
               </button>
-              <button>
+              <button 
+                className='command_btn'
+                name="h3"
+              >
                 <div className='command_btn_inner'>
                   <div className='command_btn_left headerType'>
                     <span>H</span>
@@ -115,7 +144,10 @@ const CommandBlock =({block}:BlockCommandProp)=>{
                   </div>
                 </div>
               </button>
-              <button>
+              <button 
+                className='command_btn'
+                name='bullet list'
+              >
                 <div className='command_btn_inner'>
                   <div className='command_btn_left'>
                   <IoIosList/>
@@ -128,7 +160,10 @@ const CommandBlock =({block}:BlockCommandProp)=>{
                   </div>
                 </div>
               </button>
-              <button>
+              <button 
+                className='command_btn'
+                name="number list"
+              >
                 <div className='command_btn_inner'>
                   <div className='command_btn_left'>
                     <VscListOrdered/>
@@ -141,7 +176,10 @@ const CommandBlock =({block}:BlockCommandProp)=>{
                   </div>
                 </div>
               </button>
-              <button>
+              <button
+                className='command_btn'
+                name="toggle list"
+              >
               <div className='command_btn_inner'>
                   <div className='command_btn_left'>
                   <RiPlayList2Fill/>
