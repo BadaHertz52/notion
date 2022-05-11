@@ -124,7 +124,6 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
           icon:null,
         };
         // targetBlock 수정 
-        if( focusOffset>0){
         if(textContents.length > focusOffset){
           const newContents = targetBlock.contents.slice(0, focusOffset);
           const editedBlock:Block ={
