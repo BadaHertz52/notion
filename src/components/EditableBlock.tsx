@@ -104,7 +104,9 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
   function onChange(){ 
     const {targetBlock , textContents}= findTargetBlock();  
 
-      editContents(textContents ,targetBlock);  
+    if(targetBlock !== undefined){
+      editContents(textContents ,targetBlock);
+    }
   };
   
   function onKeydown (event: React.KeyboardEvent<HTMLDivElement>){
