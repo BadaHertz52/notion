@@ -156,19 +156,8 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
         };
         
         }
-      if(targetBlock.type.includes("toggle")){
-        //subBtn 
-        const newSubBlock:Block ={
-          ...newBlock,
-          firstBlock:false,
-          parentBlocksId:[block.id]
-        }
-        make_subBlock(targetBlock, newSubBlock ,targetBlockIndex+1, );
-        
-      }else{
         //새로운 버튼 
         addBlock(page.id, newBlock, targetBlockIndex+1 ,targetBlock.id)
-      }
     } ;
     if(event.code ==="Tab" && targetBlockIndex>0){
       //  이전 블록의 sub 으로 변경 
