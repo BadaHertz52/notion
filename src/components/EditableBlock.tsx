@@ -26,12 +26,22 @@ const CommandBlock =({block}:CommandBlockProp)=>{
   useEffect(()=>{
     const command = block.contents.slice(1);
     const commandBtns = document.querySelectorAll(".command_btn");
-    console.log("command", command, "btns", commandBtns)
+    let filterBtns:Element[]=[];
     commandBtns.forEach((btn:Element)=>{
-      btn.getAttribute("name")?.includes(command)?
-      btn.setAttribute("style" ,"display:block"):
-      btn.setAttribute("style", "display:none");
-    })
+      btn.setAttribute("style" , "backgroud-color:initial");
+      if(btn.getAttribute("name")?.includes(command))
+      {
+        btn.setAttribute("style" ,"display:block");
+        
+        filterBtns.length >1 ?
+        filterBtns[0].setAttribute("style", "background-color:rgba(55, 53, 47, 0.08)"):
+        filterBtns.push(btn);
+      }else{
+        btn.setAttribute("style", "display:none");
+      }
+      
+    });
+
   },[block.contents])
 
 
