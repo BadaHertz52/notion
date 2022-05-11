@@ -106,18 +106,6 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
       editContents(textContents ,targetBlock);  
   };
   
-  function make_subBlock(parentBlock:Block, subBlock:Block, newBlockIndex:number  ){
-      const previousBlockId =null  ;
-      const newSubBlock:Block ={
-        ...subBlock,
-        parentBlocksId:parentBlock.parentBlocksId?  [...parentBlock.parentBlocksId, parentBlock.id] : [
-          parentBlock.id
-        ]
-      };
-
-      addBlock(page.id,newSubBlock, newBlockIndex ,previousBlockId);
-      };
-  
   function onKeydown (event: React.KeyboardEvent<HTMLDivElement>){
     // find  target block of cursor
     const {cursor, focusOffset, targetBlock, targetBlockIndex,textContents, newContents}= findTargetBlock();
