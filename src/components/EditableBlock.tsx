@@ -1,14 +1,165 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { CSSProperties, useEffect, useRef } from 'react';
 import ReactDOMServer from 'react-dom/server';
-import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
+import ContentEditable from 'react-contenteditable';
 import { Block, findBlock, Page } from '../modules/notion';
 import BlockComponent from './BlockComponent';
 
-import { IoDocumentTextOutline, IoTextOutline } from 'react-icons/io5';
-import {FcTodoList} from 'react-icons/fc';
-import {RiPlayList2Fill} from 'react-icons/ri';
+import { RiPlayList2Fill } from 'react-icons/ri';
+import { VscListOrdered } from 'react-icons/vsc';
 import { IoIosList } from 'react-icons/io';
-import {VscListOrdered} from 'react-icons/vsc';
+import { FcTodoList } from 'react-icons/fc';
+import { IoDocumentTextOutline, IoTextOutline } from 'react-icons/io5';
+
+
+type BlockCommandProp ={
+  block:Block
+};
+
+const CommandBlock =({block}:BlockCommandProp)=>{
+ 
+  const blockElement = document.getElementById(block.id) as HTMLElement;
+  const commandStyle :CSSProperties={
+    position: 'absolute',
+    top: blockElement.clientHeight,
+  };
+
+  return(
+      <div 
+        className='commandBlock'
+        style={commandStyle}
+      >
+        <div className='commandBlock_inner'>
+          <div className='command basic_blocks'>
+            <header className='command_header'>
+              BASIC BLOCKS
+            </header>
+            <div className='command_btns type'>
+              <button>
+                <div className='command_btn_inner'>
+                  <div className='command_btn_left'>
+                    <IoTextOutline/>
+                  </div>
+                  <div className='command_btn_right'>
+                    <header>Text</header>
+                    <div className='command_explanation'>
+                      Just start writing with plain text.
+                    </div>
+                  </div>
+                </div>
+              </button>
+              <button>
+                <div className='command_btn_inner'>
+                  <div className='command_btn_left'>
+                    <IoDocumentTextOutline/>
+                  </div>
+                  <div className='command_btn_right'>
+                    <header>Page</header>
+                    <div className='command_explanation'>
+                      Embed a sub-page inside this page.
+                    </div>
+                  </div>
+                </div>
+              </button>
+              <button>
+                <div className='command_btn_inner'>
+                  <div className='command_btn_left'>
+                    <FcTodoList/>
+                  </div>
+                  <div className='command_btn_right'>
+                    <header>To-do list</header>
+                    <div className='command_explanation'>
+                      Track tasks width a to-do list.
+                    </div>
+                  </div>
+                </div>
+              </button>
+              <button>
+              <div className='command_btn_inner'>
+                <div className='command_btn_left headerType' >
+                  <span>H</span>
+                  <span>1</span>
+                </div>
+                <div className='command_btn_right'>
+                  <header>Heading 1</header>
+                  <div className='command_explanation'>
+                    Big section heading.
+                  </div>
+                </div>
+              </div>
+              </button>
+              <button>
+                <div className='command_btn_inner'>
+                  <div className='command_btn_left headerType'>
+                    <span>H</span>
+                    <span>2</span>
+                  </div>
+                  <div className='command_btn_right '>
+                    <header>Heading 2</header>
+                    <div className='command_explanation'>
+                      Medium section heading 
+                    </div>
+                  </div>
+                </div>
+              </button>
+              <button>
+                <div className='command_btn_inner'>
+                  <div className='command_btn_left headerType'>
+                    <span>H</span>
+                    <span>3</span>
+                  </div>
+                  <div className='command_btn_right'>
+                    <header>Heading 3</header>
+                    <div className='command_explanation'>
+                      Small section heading.
+                    </div>
+                  </div>
+                </div>
+              </button>
+              <button>
+                <div className='command_btn_inner'>
+                  <div className='command_btn_left'>
+                  <IoIosList/>
+                  </div>
+                  <div className='command_btn_right'>
+                    <header>Bullet list</header>
+                    <div className='command_explanation'>
+                      Create a simple buttled list.
+                    </div>
+                  </div>
+                </div>
+              </button>
+              <button>
+                <div className='command_btn_inner'>
+                  <div className='command_btn_left'>
+                    <VscListOrdered/>
+                  </div>
+                  <div className='command_btn_right'>
+                    <header>Numbered list</header>
+                    <div className='command_explanation'>
+                      Create a lisdt with numbering.
+                    </div>
+                  </div>
+                </div>
+              </button>
+              <button>
+              <div className='command_btn_inner'>
+                  <div className='command_btn_left'>
+                  <RiPlayList2Fill/>
+                </div>
+                <div className='command_btn_right'>
+                  <header>Toggle list</header>
+                  <div className='command_explanation'>
+                    Toggles can hide and show content inside
+                  </div>
+                </div>
+              </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+  )
+};
 
 type EditableBlockProps ={
   page:Page,
@@ -25,8 +176,7 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
 
   const  editTime = JSON.stringify(Date.now());
   const innerRef  =useRef<HTMLDivElement>(null) ;
-  const [subBlocks, setSubBlocks]= useState<Block[]|null>(null);
-  const [command, setCommand] =useState<boolean>(false);
+
   type findTargetBlockReturn ={
     cursor: Selection |null ,
     focusOffset: number,
@@ -102,7 +252,6 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
 
   function onChange(){ 
     const {targetBlock , textContents}= findTargetBlock();  
-
     if(targetBlock !== undefined){
       editContents(textContents ,targetBlock);
     }
@@ -178,129 +327,21 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
 
 
   return(
-  <>
-    <ContentEditable
-      id={block.id}
-      className="editableBlock"
-      html={callBlockNode(block)}
-      innerRef={innerRef}
-      onChange={onChange}
-      onKeyDown={onKeydown}
-    />
-    {command &&
-      <div className='blockCommand'>
-        <div className='blockCommand_inner'>
-          <div className='basic_blocks'>
-            <header className='command_header'>
-              BASIC BLOCKS
-            </header>
-            <div className='blockType'>
-              <button>
-                <div className='types_left'>
-                  <IoTextOutline/>
-                </div>
-                <div className='types_right'>
-                  <header>Text</header>
-                  <div className='typeExplannation'>
-                    Just start writing with plain text.
-                  </div>
-                </div>
-              </button>
-              <button>
-                <div className='types_left'>
-                  <IoDocumentTextOutline/>
-                </div>
-                <div className='types_right'>
-                  <header>Page</header>
-                  <div className='typeExplannation'>
-                    Embed a sub-page inside this page.
-                  </div>
-                </div>
-              </button>
-              <button>
-                <div className='types_left'>
-                  <FcTodoList/>
-                </div>
-                <div className='types_right'>
-                  <header>To-do list</header>
-                  <div className='typeExplannation'>
-                    Track tasks width a to-do list.
-                  </div>
-                </div>
-              </button>
-              <button>
-                <div className='types_left'>
-                  H1
-                </div>
-                <div className='types_right'>
-                  <header>Heading 1</header>
-                  <div className='typeExplannation'>
-                    Big section heading.
-                  </div>
-                </div>
-              </button>
-              <button>
-                <div className='types_left'>
-                  H2
-                </div>
-                <div className='types_right'>
-                  <header>Heading 2</header>
-                  <div className='typeExplannation'>
-                    Medium section heading 
-                  </div>
-                </div>
-              </button>
-              <button>
-                <div className='types_left'>
-                  H3
-                </div>
-                <div className='types_right'>
-                  <header>Heading 3</header>
-                  <div className='typeExplannation'>
-                    Small section heading.
-                  </div>
-                </div>
-              </button>
-              <button>
-                <div className='types_left'>
-                  <IoIosList/>
-                </div>
-                <div className='types_right'>
-                  <header>Bullet list</header>
-                  <div className='typeExplannation'>
-                    Create a simple buttled list.
-                  </div>
-                </div>
-              </button>
-              <button>
-                <div className='types_left'>
-                  <VscListOrdered/>
-                </div>
-                <div className='types_right'>
-                  <header>Numbered list</header>
-                  <div className='typeExplannation'>
-                    Create a lisdt with numbering.
-                  </div>
-                </div>
-              </button>
-              <button>
-                <div className='types_left'>
-                  <RiPlayList2Fill/>
-                </div>
-                <div className='types_right'>
-                  <header>Toggle list</header>
-                  <div className='typeExplannation'>
-                    Toggles can hide and show content inside
-                  </div>
-                </div>
-              </button>
-
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="editableBlock">
+      <ContentEditable
+        id={block.id}
+        html={callBlockNode(block)}
+        innerRef={innerRef}
+        onChange={onChange}
+        onKeyDown={onKeydown}
+      />
+      {block.contents.startsWith("/")&&
+        <CommandBlock 
+        key={`${block.id}_command`}
+        block={block}
+        />
       }
-  </>
+    </div>
   )
 };
 
