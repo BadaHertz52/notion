@@ -42,7 +42,6 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
     const cursorParent = cursor?.anchorNode?.parentElement;
     const cursorParentTag = cursorParent?.tagName ;
     const targetElement =  cursorParentTag ==="LI" ? cursorParent : cursorParent?.parentElement?.parentElement?.parentElement; 
-    const textContents = cursorParentTag ==="LI" ?   targetElement?.textContent as string :  targetElement?.getElementsByClassName("mainBlock")[0]?.firstElementChild?.textContent as string; 
     const textContents = cursorParentTag ==="LI" ?   targetElement?.textContent as string :  targetElement?.getElementsByClassName("mainBlock")[0]?.getElementsByClassName("blockContents")[0]?.textContent as string; 
 
     const blockId:string = targetElement?.id  as string;
