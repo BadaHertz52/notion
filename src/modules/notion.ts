@@ -459,7 +459,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
         };
         pages.concat(newPage);
       };
-      console.log(targetPage.blocks)
+      console.log( "addBlock", targetPage.blocks)
       return {
         pages:pages,
         firstPagesId:firstPagesId,
