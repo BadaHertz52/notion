@@ -123,6 +123,8 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
           parentBlocksId:targetBlock.parentBlocksId,
           icon:null,
         };
+          //새로운 버튼 
+          addBlock(page.id, newBlock, targetBlockIndex+1 ,targetBlock.id)
         // targetBlock 수정 
         if(textContents.length > focusOffset){
           const newContents = targetBlock.contents.slice(0, focusOffset);
@@ -145,8 +147,6 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
         };
         
         }
-        //새로운 버튼 
-        addBlock(page.id, newBlock, targetBlockIndex+1 ,targetBlock.id)
     } ;
     if(event.code ==="Tab" && targetBlockIndex>0){
       //  이전 블록의 sub 으로 변경 
