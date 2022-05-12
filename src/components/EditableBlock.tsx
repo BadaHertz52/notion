@@ -224,7 +224,7 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
 
   const  editTime = JSON.stringify(Date.now());
   const innerRef  =useRef<HTMLDivElement>(null) ;
-
+  const storageItem =sessionStorage.getItem("editedBlock");
   type findTargetBlockReturn ={
     cursor: Selection |null ,
     focusOffset: number,
@@ -266,7 +266,8 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
     if(contents ==null){
       innerRef.current?.focus();
     };
-
+    updateEditedBlock();
+    sessionStorage.removeItem("editedBlock");
   },[]);
   
   function callBlockNode(block:Block):string{
@@ -297,10 +298,21 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
         contents: textContents,
         editTime: editTime
       } ;
-      editBlock(page.id,newBlock);
+      const editedBlock :{pageId:string, editedBlock:Block} ={
+        pageId: page.id,
+        editedBlock: newBlock
+      };
+      sessionStorage.setItem("editedBlock", JSON.stringify(editedBlock));
+      
     }
   };
-  
+  function updateEditedBlock (){
+    if(storageItem !== null){
+      const {pageId, editedBlock} = JSON.parse(storageItem) as {pageId: string, editedBlock:Block};
+      editBlock(pageId, editedBlock);
+    };
+  };
+
   function onKeydown (event: React.KeyboardEvent<HTMLDivElement>){
     // find  target block of cursor
     const {cursor, focusOffset, targetBlock, targetBlockIndex,textContents, newContents}= findTargetBlock();
@@ -343,6 +355,7 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
         }
     } ;
     if(event.code ==="Tab" && targetBlockIndex>0){
+      
       //  이전 블록의 sub 으로 변경 
       if(cursor?.anchorOffset=== 0){
         innerRef.current?.focus();
@@ -362,7 +375,7 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
         raiseBlock(page.id, targetBlock);
       };
     
-      if(textContents?.length===1){
+      if(textContents?.length<1){
         deleteBlock(page.id, targetBlock);
         };
   
