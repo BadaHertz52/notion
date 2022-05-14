@@ -56,8 +56,7 @@ const CommandBlock =({block}:CommandBlockProp)=>{
     position: 'absolute',
     top: blockElement.clientHeight,
   };
-  const textContent =blockElement.textContent ;
-
+  const textContent =blockElement.textContent?.toLowerCase() as string ;
   const commandBtns = document.querySelectorAll(".command_btn");
   if(textContent !==null){
     const command = textContent.slice(1);
@@ -294,7 +293,7 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
     return blockNode
   };
 
-  function onChange(){ 
+  function onChange(event:ContentEditableEvent){ 
     const {targetBlock , textContents}= findTargetBlock(page);  
     if(targetBlock !== undefined){
       const newBlock :Block ={
@@ -309,10 +308,8 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
       sessionStorage.setItem("editedBlock", JSON.stringify(editedBlock));
       if(textContents.startsWith("/")){
         setCommand({boolean:true, command:textContents});
-      }else{
-        setCommand({boolean:false, command:null});
-      }
-    }
+      };
+    };
   };
   function updateEditedBlock (){
     if(storageItem !== null){
@@ -322,7 +319,7 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
   };
 
   function onKeydown (event: React.KeyboardEvent<HTMLDivElement>){
-    // find  target block of cursor
+    // find  target block of cursor    
     const {cursor, focusOffset, targetBlock, targetBlockIndex,textContents, newContents}= findTargetBlock(page);
 
     if(event.code === "Enter"){
