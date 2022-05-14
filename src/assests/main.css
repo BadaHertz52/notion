@@ -184,7 +184,7 @@ a:link, a:active, a:visited {
   background: #EDECE9;
 }
 
-.blockCommand_inner {
+.commandBlock_inner {
   padding: 5px;
 }
 
@@ -203,13 +203,18 @@ a:link, a:active, a:visited {
   text-transform: uppercase;
 }
 
-.commandBlock .command_btns button {
+.commandBlock .command_btn {
+  display: none;
+}
+
+.commandBlock .command_btn.on {
+  display: block;
   width: 100%;
   padding: 2% 0;
   border-radius: 3px;
 }
 
-.commandBlock .command_btns button:hover {
+.commandBlock .command_btn.on:hover {
   background-color: rgba(55, 53, 47, 0.08);
 }
 

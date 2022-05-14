@@ -1,6 +1,6 @@
 import React, { CSSProperties, useEffect, useRef, useState } from 'react';
 import ReactDOMServer from 'react-dom/server';
-import ContentEditable from 'react-contenteditable';
+import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import { Block, findBlock, Page } from '../modules/notion';
 import BlockComponent from './BlockComponent';
 
@@ -10,39 +10,70 @@ import { IoIosList } from 'react-icons/io';
 import { FcTodoList } from 'react-icons/fc';
 import { IoDocumentTextOutline, IoTextOutline } from 'react-icons/io5';
 
+type findTargetBlockReturn ={
+  cursor: Selection |null ,
+  focusOffset: number,
+  targetElement: HTMLElement|undefined|null,
+  targetBlock:Block,
+  targetBlockIndex:number,
+  textContents:string,
+  newContents:string
+};
+const findTargetBlock =(page:Page):findTargetBlockReturn=>{
+  const cursor =document.getSelection();
+  const focusOffset =cursor?.focusOffset as number;
+  const cursorParent = cursor?.anchorNode?.parentElement;
+  const cursorParentTag = cursorParent?.tagName ;
+  const targetElement =  cursorParentTag ==="LI" ? cursorParent : cursorParent?.parentElement?.parentElement?.parentElement; 
+  const textContents = cursorParentTag ==="LI" ?   targetElement?.textContent as string :  targetElement?.getElementsByClassName("mainBlock")[0]?.getElementsByClassName("blockContents")[0]?.textContent as string; 
+
+  const blockId:string = targetElement?.id  as string;
+  const targetBlockIndex :number =page.blocksId.indexOf(blockId) as number;
+  
+  const targetBlock :Block =page.blocks[targetBlockIndex];
+  
+  const newContents = textContents?.slice(focusOffset) as string ;
+
+  return {
+    cursor: cursor ,
+    focusOffset: focusOffset,
+    targetElement:targetElement,
+    targetBlock:targetBlock ,
+    targetBlockIndex:targetBlockIndex,
+    textContents: textContents,
+    newContents:newContents
+  }
+};
 
 type CommandBlockProp ={
-  block:Block
+  block:Block,
 };
 
 const CommandBlock =({block}:CommandBlockProp)=>{
- 
+  
   const blockElement = document.getElementById(block.id) as HTMLElement;
   const commandStyle :CSSProperties={
     position: 'absolute',
     top: blockElement.clientHeight,
   };
+  const textContent =blockElement.textContent ;
 
-  useEffect(()=>{
-    const command = block.contents.slice(1);
-    const commandBtns = document.querySelectorAll(".command_btn");
-    let filterBtns:Element[]=[];
+  const commandBtns = document.querySelectorAll(".command_btn");
+  if(textContent !==null){
+    const command = textContent.slice(1);
     commandBtns.forEach((btn:Element)=>{
-      btn.setAttribute("style" , "backgroud-color:initial");
-      if(btn.getAttribute("name")?.includes(command))
-      {
-        btn.setAttribute("style" ,"display:block");
-        
-        filterBtns.length >1 ?
-        filterBtns[0].setAttribute("style", "background-color:rgba(55, 53, 47, 0.08)"):
-        filterBtns.push(btn);
+      if(command !== null &&btn.getAttribute("name")?.includes(command)){
+        !btn.classList.contains("on")&&
+        btn.classList.add("on");
       }else{
-        btn.setAttribute("style", "display:none");
-      }
-      
-    });
+        btn.classList.contains("on")&&
+        btn.classList.remove("on");
+      };
+    const firstBtn = document.querySelector('.command_btn.on');
+    firstBtn?.setAttribute("style", "background-color:rgba(55, 53, 47, 0.08)");
+      });
+  }
 
-  },[block.contents])
 
 
   return(
@@ -57,7 +88,7 @@ const CommandBlock =({block}:CommandBlockProp)=>{
             </header>
             <div className='command_btns type'>
               <button 
-              className='command_btn' name='text'>
+              className='command_btn on' name='text'>
                 <div className='command_btn_inner'>
                   <div className='command_btn_left'>
                     <IoTextOutline/>
@@ -71,7 +102,7 @@ const CommandBlock =({block}:CommandBlockProp)=>{
                 </div>
               </button>
               <button  
-              className='command_btn' 
+              className='command_btn on' 
               name='page'
               >
                 <div className='command_btn_inner'>
@@ -87,7 +118,7 @@ const CommandBlock =({block}:CommandBlockProp)=>{
                 </div>
               </button>
               <button   
-              className='command_btn' 
+              className='command_btn on' 
               name='to-do list'
               >
                 <div className='command_btn_inner'>
@@ -103,7 +134,7 @@ const CommandBlock =({block}:CommandBlockProp)=>{
                 </div>
               </button>
               <button 
-              className='command_btn'
+              className='command_btn on'
               name='h1'
 
               >
@@ -121,7 +152,7 @@ const CommandBlock =({block}:CommandBlockProp)=>{
               </div>
               </button>
               <button 
-                className='command_btn'
+                className='command_btn on'
                 name='h2'
               >
                 <div className='command_btn_inner'>
@@ -138,7 +169,7 @@ const CommandBlock =({block}:CommandBlockProp)=>{
                 </div>
               </button>
               <button 
-                className='command_btn'
+                className='command_btn on'
                 name="h3"
               >
                 <div className='command_btn_inner'>
@@ -155,7 +186,7 @@ const CommandBlock =({block}:CommandBlockProp)=>{
                 </div>
               </button>
               <button 
-                className='command_btn'
+                className='command_btn on'
                 name='bullet list'
               >
                 <div className='command_btn_inner'>
@@ -171,7 +202,7 @@ const CommandBlock =({block}:CommandBlockProp)=>{
                 </div>
               </button>
               <button 
-                className='command_btn'
+                className='command_btn on'
                 name="number list"
               >
                 <div className='command_btn_inner'>
@@ -187,7 +218,7 @@ const CommandBlock =({block}:CommandBlockProp)=>{
                 </div>
               </button>
               <button
-                className='command_btn'
+                className='command_btn on'
                 name="toggle list"
               >
               <div className='command_btn_inner'>
@@ -225,41 +256,14 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
   const  editTime = JSON.stringify(Date.now());
   const innerRef  =useRef<HTMLDivElement>(null) ;
   const storageItem =sessionStorage.getItem("editedBlock");
-  type findTargetBlockReturn ={
-    cursor: Selection |null ,
-    focusOffset: number,
-    targetElement: HTMLElement|undefined|null,
-    targetBlock:Block,
-    targetBlockIndex:number,
-    textContents:string,
-    newContents:string
-  };
-  const findTargetBlock =():findTargetBlockReturn=>{
-    const cursor =document.getSelection();
-    const focusOffset =cursor?.focusOffset as number;
-    const cursorParent = cursor?.anchorNode?.parentElement;
-    const cursorParentTag = cursorParent?.tagName ;
-    const targetElement =  cursorParentTag ==="LI" ? cursorParent : cursorParent?.parentElement?.parentElement?.parentElement; 
-    const textContents = cursorParentTag ==="LI" ?   targetElement?.textContent as string :  targetElement?.getElementsByClassName("mainBlock")[0]?.getElementsByClassName("blockContents")[0]?.textContent as string; 
-
-    const blockId:string = targetElement?.id  as string;
-    const targetBlockIndex :number =page.blocksId.indexOf(blockId) as number;
-    
-    const targetBlock :Block =page.blocks[targetBlockIndex];
-    
-    const newContents = textContents?.slice(focusOffset) as string ;
-
-    return {
-      cursor: cursor ,
-      focusOffset: focusOffset,
-      targetElement:targetElement,
-      targetBlock:targetBlock ,
-      targetBlockIndex:targetBlockIndex,
-      textContents: textContents,
-      newContents:newContents
-    }
-  };
-
+  type Command ={
+    boolean:boolean,
+    command:string | null
+  }
+  const [command, setCommand] =useState<Command>({
+    boolean:false,
+    command:null
+  }); 
   useEffect(()=>{
     const contents= innerRef.current?.getElementsByClassName("blockContents")[0]?.firstChild;
 
@@ -291,7 +295,7 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
   };
 
   function onChange(){ 
-    const {targetBlock , textContents}= findTargetBlock();  
+    const {targetBlock , textContents}= findTargetBlock(page);  
     if(targetBlock !== undefined){
       const newBlock :Block ={
         ...targetBlock,
@@ -303,7 +307,11 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
         editedBlock: newBlock
       };
       sessionStorage.setItem("editedBlock", JSON.stringify(editedBlock));
-      
+      if(textContents.startsWith("/")){
+        setCommand({boolean:true, command:textContents});
+      }else{
+        setCommand({boolean:false, command:null});
+      }
     }
   };
   function updateEditedBlock (){
@@ -315,10 +323,11 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
 
   function onKeydown (event: React.KeyboardEvent<HTMLDivElement>){
     // find  target block of cursor
-    const {cursor, focusOffset, targetBlock, targetBlockIndex,textContents, newContents}= findTargetBlock();
+    const {cursor, focusOffset, targetBlock, targetBlockIndex,textContents, newContents}= findTargetBlock(page);
 
     if(event.code === "Enter"){
-      // 새로운 블록 만들기 
+      if( !textContents.startsWith("/")){
+        // 새로운 블록 만들기 
         const newBlock:Block ={
           id:editTime,
           editTime:editTime,
@@ -330,27 +339,29 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
           icon:null,
         };
           //새로운 버튼 
-          addBlock(page.id, newBlock, targetBlockIndex+1 ,targetBlock.id)
-        // targetBlock 수정 
-        if(textContents.length > focusOffset){
-          const newContents = targetBlock.contents.slice(0, focusOffset);
-          const editedBlock:Block ={
-            ...targetBlock,
-            subBlocksId : null ,
-            contents:newContents,
-            editTime:editTime
-          };
-          editBlock (page.id, editedBlock);
-        }else {
-          //밀려졌을때 기존의 block 수정 
-        if(targetBlock.subBlocksId !==null){
-          const editedBlock :Block ={
-            ...targetBlock,
-            editTime:editTime,
-            subBlocksId:null,
-          };
-          editBlock(page.id, editedBlock);
+        addBlock(page.id, newBlock, targetBlockIndex+1 ,targetBlock.id)
+      };
+
+      // targetBlock 수정 
+      if(textContents.length > focusOffset){
+        const newContents = targetBlock.contents.slice(0, focusOffset);
+        const editedBlock:Block ={
+          ...targetBlock,
+          subBlocksId : null ,
+          contents:newContents,
+          editTime:editTime
         };
+        editBlock (page.id, editedBlock);
+      }else {
+        //밀려졌을때 기존의 block 수정 
+      if(targetBlock.subBlocksId !==null){
+        const editedBlock :Block ={
+          ...targetBlock,
+          editTime:editTime,
+          subBlocksId:null,
+        };
+        editBlock(page.id, editedBlock);
+      };
         
         }
     } ;
@@ -382,21 +393,46 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
     };
   };
 
+  function commandChange (event:ContentEditableEvent){
+    const value = event.target.value;
+    const trueOrFale = value.startsWith("/");
+    if(trueOrFale){
+      setCommand({
+        boolean: true , 
+        command: value
+      });
+    }else {
+      setCommand({
+        boolean:false,
+        command:null
+      })
+    }
+
+  }
 
   return(
     <div className="editableBlock">
-      <ContentEditable
+      {!command.boolean?
+        <ContentEditable
         id={block.id}
         html={callBlockNode(block)}
         innerRef={innerRef}
         onChange={onChange}
         onKeyDown={onKeydown}
-      />
-      {block.contents.startsWith("/")&&
+        />
+      :
+        <>
+        <ContentEditable
+          id={block.id}
+          html={command.command !==null? command.command : ""}
+          onChange={commandChange}
+        />
         <CommandBlock 
         key={`${block.id}_command`}
         block={block}
+        
         />
+        </>
       }
     </div>
   )

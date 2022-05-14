@@ -146,16 +146,17 @@
     text-transform: uppercase;
   }
 
-  .command_btns {
-    button {
-      width: 100%;
-      padding: 2% 0; 
-      border-radius: 3px;
+  .command_btn {
+    display: none;
+  }
+  .command_btn.on {
+    display: block;
+    width: 100%;
+    padding: 2% 0; 
+    border-radius: 3px;
      // transition: background 20ms ease-in 0s;
-
-      &:hover{
-        background-color: rgba(55, 53, 47, 0.08);
-      }
+    &:hover{
+      background-color: rgba(55, 53, 47, 0.08);
     }
   }
   .command_btn_inner{
