@@ -50,7 +50,6 @@ type CommandBlockProp ={
 };
 
 const CommandBlock =({block}:CommandBlockProp)=>{
-  
   const blockElement = document.getElementById(block.id) as HTMLElement;
   const commandStyle :CSSProperties={
     position: 'absolute',
@@ -58,6 +57,8 @@ const CommandBlock =({block}:CommandBlockProp)=>{
   };
   const textContent =blockElement.textContent?.toLowerCase() as string ;
   const commandBtns = document.querySelectorAll(".command_btn");
+  const no_result =document.getElementById("no_result");
+  const commandBlock_inner = document.querySelector("#commandBlock_inner");
   if(textContent !==null){
     const command = textContent.slice(1);
     commandBtns.forEach((btn:Element)=>{
@@ -68,19 +69,24 @@ const CommandBlock =({block}:CommandBlockProp)=>{
         btn.classList.contains("on")&&
         btn.classList.remove("on");
       };
-    const firstBtn = document.querySelector('.command_btn.on');
-    firstBtn?.setAttribute("style", "background-color:rgba(55, 53, 47, 0.08)");
-      });
-  }
-
-
-
+    });
+    const onBtns = document.querySelectorAll('.command_btn.on');
+    if(onBtns[0]!== undefined){
+      onBtns[0].setAttribute("style", "background-color:rgba(55, 53, 47, 0.08)");
+      no_result?.setAttribute("style", "display:none")
+    }else{
+      no_result?.setAttribute("style", "display:block");
+      commandBlock_inner?.setAttribute("style", "display:none");
+    }
+    
+  };
+  
   return(
       <div 
-        className='commandBlock'
+        id='commandBlock'
         style={commandStyle}
       >
-        <div className='commandBlock_inner'>
+        <div id='commandBlock_inner'>
           <div className='command basic_blocks'>
             <header className='command_header'>
               BASIC BLOCKS
@@ -235,6 +241,9 @@ const CommandBlock =({block}:CommandBlockProp)=>{
             </div>
           </div>
         </div>
+        <div id='no_result'>
+          No results
+        </div>
       </div>
   )
 };
@@ -314,7 +323,12 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
   function updateEditedBlock (){
     if(storageItem !== null){
       const {pageId, editedBlock} = JSON.parse(storageItem) as {pageId: string, editedBlock:Block};
-      editBlock(pageId, editedBlock);
+      const {BLOCK}= findBlock(page, editedBlock.id);
+      
+      if((BLOCK !== undefined && editBlock !==undefined) && (BLOCK.contents !== editedBlock.contents)){
+        editBlock(pageId, editedBlock);
+      }
+      
     };
   };
 

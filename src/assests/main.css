@@ -153,7 +153,8 @@ a:link, a:active, a:visited {
   color: #a3a3a2;
 }
 
-.commandBlock {
+#commandBlock {
+  width: 320px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -162,8 +163,6 @@ a:link, a:active, a:visited {
       -ms-flex-direction: column;
           flex-direction: column;
   background-color: #ffff;
-  width: 320px;
-  height: 300px;
   margin: 0;
   overflow-x: hidden;
   overflow-y: auto;
@@ -176,19 +175,20 @@ a:link, a:active, a:visited {
   box-shadow: 0px 0px 23px -5px #ababab;
 }
 
-.commandBlock::-webkit-scrollbar-thumb {
+#commandBlock::-webkit-scrollbar-thumb {
   background: #D3D1CB;
 }
 
-.commandBlock::-webkit-scrollbar-track {
+#commandBlock::-webkit-scrollbar-track {
   background: #EDECE9;
 }
 
-.commandBlock_inner {
+#commandBlock_inner {
   padding: 5px;
+  height: 300px;
 }
 
-.commandBlock .command > header {
+#commandBlock .command > header {
   padding: 0 14px;
   margin-top: 6px;
   margin-bottom: 8px;
@@ -203,29 +203,29 @@ a:link, a:active, a:visited {
   text-transform: uppercase;
 }
 
-.commandBlock .command_btn {
+#commandBlock .command_btn {
   display: none;
 }
 
-.commandBlock .command_btn.on {
+#commandBlock .command_btn.on {
   display: block;
   width: 100%;
   padding: 2% 0;
   border-radius: 3px;
 }
 
-.commandBlock .command_btn.on:hover {
+#commandBlock .command_btn.on:hover {
   background-color: rgba(55, 53, 47, 0.08);
 }
 
-.commandBlock .command_btn_inner {
+#commandBlock .command_btn_inner {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   margin: 0 1%;
 }
 
-.commandBlock .command_btn_left {
+#commandBlock .command_btn_left {
   width: 38px;
   height: 38px;
   padding: 7px;
@@ -239,23 +239,23 @@ a:link, a:active, a:visited {
   border-radius: 3px;
 }
 
-.commandBlock .headerType {
+#commandBlock .headerType {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
 }
 
-.commandBlock .headerType span:first-child {
+#commandBlock .headerType span:first-child {
   font-size: 20px;
 }
 
-.commandBlock .headerType span:last-child {
+#commandBlock .headerType span:last-child {
   font-size: 14px;
   font-weight: 600;
   padding-top: 30%;
 }
 
-.commandBlock .command_btn_right {
+#commandBlock .command_btn_right {
   -webkit-box-flex: 1;
       -ms-flex-positive: 1;
           flex-grow: 1;
@@ -264,18 +264,26 @@ a:link, a:active, a:visited {
   margin-left: 10px;
 }
 
-.commandBlock .command_btn_right header, .commandBlock .command_btn_right .command_explanation {
+#commandBlock .command_btn_right header, #commandBlock .command_btn_right .command_explanation {
   text-align: left;
 }
 
-.commandBlock .command_btn_right header {
+#commandBlock .command_btn_right header {
   font-size: 14px;
 }
 
-.commandBlock .command_btn_right .command_explanation {
+#commandBlock .command_btn_right .command_explanation {
   padding-top: 3px;
   font-size: 12px;
   color: rgba(55, 53, 47, 0.65);
+}
+
+#commandBlock #no_result {
+  color: rgba(55, 53, 47, 0.65);
+  padding: 2% 10%;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
 }
 
 div {

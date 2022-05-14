@@ -104,12 +104,11 @@
     color:$itemSvg ;
   }
 }
-.commandBlock{
+#commandBlock{
+  width:320px ;
   display: flex;
   flex-direction: column;
   background-color: #ffff;
-  width:320px ;
-  height: 300px;
   margin: 0;
   overflow-x: hidden;
   overflow-y: auto;
@@ -128,7 +127,7 @@
 
   &_inner {
     padding: 5px;
-
+    height: 300px;
   }
   .command > header{
     padding:0 14px;
@@ -199,5 +198,10 @@
       font-size: 12px;
       color:rgba(55, 53, 47, 0.65);
     }
+  }
+  #no_result {
+    color: rgba(55, 53, 47, 0.65);
+    padding: 2% 10%;
+    height: fit-content;
   }
 }
