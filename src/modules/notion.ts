@@ -1,15 +1,16 @@
 
 //TYPE 
-const text= "text" as const ;
-const toggle ="toggle" as const  ;
-const todo = "todo" as const ;
-const todo_done ="todo done" as const;
-const h1 ="h1" as const ;
-const h2 ="h2" as const ;
-const h3 ="h3" as const ;
-const page ="page" as const ;
-const numberList ="numberList" as const;
-const bulletList ="bulletList" as const ;
+export const text= "text" as const ;
+export const toggle ="toggle" as const  ;
+export const todo = "todo" as const ;
+export const todo_done ="todo done" as const;
+export const h1 ="h1" as const ;
+export const h2 ="h2" as const ;
+export const h3 ="h3" as const ;
+export const page ="page" as const ;
+export const numberList ="numberList" as const;
+export const bulletList ="bulletList" as const ;
+export const blockTypes =[text, toggle, todo, todo_done, h1, h2, page, numberList, bulletList];
 
 export type BlockType= "text"|"toggle"|"todo" |"todo done"|"h1"|"h2"|"h3" |"page" |"numberList" |"bulletList" ;
 
