@@ -1,7 +1,7 @@
 import React, { CSSProperties, useEffect, useRef, useState } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
-import { Block, findBlock, Page } from '../modules/notion';
+import { Block, BlockType, blockTypes, findBlock, Page } from '../modules/notion';
 import BlockComponent from './BlockComponent';
 
 import { RiPlayList2Fill } from 'react-icons/ri';
@@ -62,6 +62,8 @@ const CommandBlock =({block}:CommandBlockProp)=>{
   if(textContent !==null){
     const command = textContent.slice(1);
     commandBtns.forEach((btn:Element)=>{
+      btn.classList.contains("first") && btn.classList.remove("first");
+
       if(command !== null &&btn.getAttribute("name")?.includes(command)){
         !btn.classList.contains("on")&&
         btn.classList.add("on");
@@ -71,8 +73,8 @@ const CommandBlock =({block}:CommandBlockProp)=>{
       };
     });
     const onBtns = document.querySelectorAll('.command_btn.on');
+
     if(onBtns[0]!== undefined){
-      onBtns[0].setAttribute("style", "background-color:rgba(55, 53, 47, 0.08)");
       onBtns[0].classList.add("first");
       no_result?.setAttribute("style", "display:none")
     }else{
@@ -125,7 +127,7 @@ const CommandBlock =({block}:CommandBlockProp)=>{
               </button>
               <button   
               className='command_btn on' 
-              name='to-do list'
+              name='todo list'
               >
                 <div className='command_btn_inner'>
                   <div className='command_btn_left'>
@@ -315,10 +317,12 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
         pageId: page.id,
         editedBlock: newBlock
       };
-      sessionStorage.setItem("editedBlock", JSON.stringify(editedBlock));
+
       if(textContents.startsWith("/")){
         setCommand({boolean:true, command:textContents});
-      };
+      }else{
+        sessionStorage.setItem("editedBlock", JSON.stringify(editedBlock));
+      }
     };
   };
   function updateEditedBlock (){
@@ -338,7 +342,6 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
     const {cursor, focusOffset, targetBlock, targetBlockIndex,textContents, newContents}= findTargetBlock(page);
 
     if(event.code === "Enter"){
-      if( !textContents.startsWith("/")){
         // 새로운 블록 만들기 
         const newBlock:Block ={
           id:editTime,
@@ -352,7 +355,6 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
         };
           //새로운 버튼 
         addBlock(page.id, newBlock, targetBlockIndex+1 ,targetBlock.id)
-      };
 
       // targetBlock 수정 
       if(textContents.length > focusOffset){
@@ -408,6 +410,7 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
   function commandChange (event:ContentEditableEvent){
     const value = event.target.value;
     const trueOrFale = value.startsWith("/");
+
     if(trueOrFale){
       setCommand({
         boolean: true , 
@@ -418,10 +421,28 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
         boolean:false,
         command:null
       })
-    }
+    };
 
   }
+  function commandKeyUp(event:React.KeyboardEvent<HTMLDivElement>){
+    const code= event.code;
+    const firstOn =document.querySelector(".command_btn.on.first");
+    console.log(event)
+    if(code ==="Enter"  ){
+      const name = firstOn?.getAttribute("name") as string ;
+      
+      const blockType:BlockType = blockTypes.filter((type)=> name.includes(type))[0];
 
+      const newBlock:Block={
+        ...block,
+        type: blockType,
+        editTime:editTime
+      };
+      console.log("type keyup");
+      editBlock(page.id, newBlock);
+      setCommand({boolean:false, command:null})
+    }
+  };
   return(
     <div className="editableBlock">
       {!command.boolean?
@@ -438,6 +459,7 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
           id={block.id}
           html={command.command !==null? command.command : ""}
           onChange={commandChange}
+          onKeyUp={commandKeyUp}
         />
         <CommandBlock 
         key={`${block.id}_command`}
