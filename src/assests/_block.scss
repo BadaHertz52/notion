@@ -158,6 +158,10 @@
       background-color: rgba(55, 53, 47, 0.08);
     }
   }
+  .command_btn.on.first{
+    background-color:rgba(55, 53, 47, 0.08);
+  };
+  
   .command_btn_inner{
     display: flex;
     margin:0 1% ;

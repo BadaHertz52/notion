@@ -73,6 +73,7 @@ const CommandBlock =({block}:CommandBlockProp)=>{
     const onBtns = document.querySelectorAll('.command_btn.on');
     if(onBtns[0]!== undefined){
       onBtns[0].setAttribute("style", "background-color:rgba(55, 53, 47, 0.08)");
+      onBtns[0].classList.add("first");
       no_result?.setAttribute("style", "display:none")
     }else{
       no_result?.setAttribute("style", "display:block");
