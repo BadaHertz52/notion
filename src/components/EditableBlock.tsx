@@ -1,7 +1,7 @@
 import React, { CSSProperties, useEffect, useRef, useState } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
-import { Block, BlockType, blockTypes, findBlock, Page } from '../modules/notion';
+import { Block, BlockType, blockTypes, editBlock, findBlock, Page } from '../modules/notion';
 import BlockComponent from './BlockComponent';
 
 import { RiPlayList2Fill } from 'react-icons/ri';
@@ -46,10 +46,13 @@ const findTargetBlock =(page:Page):findTargetBlockReturn=>{
 };
 
 type CommandBlockProp ={
+  page:Page,
   block:Block,
+  editTime:string,
+  editBlock :(pageId:string, block:Block)=>void,
 };
 
-const CommandBlock =({block}:CommandBlockProp)=>{
+const CommandBlock =({ page ,block , editTime , editBlock}:CommandBlockProp)=>{
   const blockElement = document.getElementById(block.id) as HTMLElement;
   const commandStyle :CSSProperties={
     position: 'absolute',
@@ -83,7 +86,18 @@ const CommandBlock =({block}:CommandBlockProp)=>{
     }
     
   };
-  
+  const changeType=(type:string)=>{
+    
+    const blockType:BlockType = blockTypes.filter((block_type)=> block_type === type)[0];
+    const newBlock:Block ={
+      ...block,
+      editTime:editTime,
+      type:blockType
+    };
+    console.log("changeType", type, newBlock);
+    editBlock(page.id, newBlock);
+
+  };
   return(
       <div 
         id='commandBlock'
@@ -95,8 +109,11 @@ const CommandBlock =({block}:CommandBlockProp)=>{
               BASIC BLOCKS
             </header>
             <div className='command_btns type'>
-              <button 
-              className='command_btn on' name='text'>
+              <button
+                onClick={()=>changeType("text")} 
+                className='command_btn on' 
+                name='text'
+              >
                 <div className='command_btn_inner'>
                   <div className='command_btn_left'>
                     <IoTextOutline/>
@@ -110,8 +127,9 @@ const CommandBlock =({block}:CommandBlockProp)=>{
                 </div>
               </button>
               <button  
-              className='command_btn on' 
-              name='page'
+                onClick={()=>changeType("page")}
+                className='command_btn on' 
+                name='page'
               >
                 <div className='command_btn_inner'>
                   <div className='command_btn_left'>
@@ -126,8 +144,9 @@ const CommandBlock =({block}:CommandBlockProp)=>{
                 </div>
               </button>
               <button   
-              className='command_btn on' 
-              name='todo list'
+                onClick={()=>changeType("todo")}
+                className='command_btn on' 
+                name='todo list'
               >
                 <div className='command_btn_inner'>
                   <div className='command_btn_left'>
@@ -142,9 +161,9 @@ const CommandBlock =({block}:CommandBlockProp)=>{
                 </div>
               </button>
               <button 
-              className='command_btn on'
-              name='h1'
-
+                onClick={()=>changeType("h1")}
+                className='command_btn on'
+                name='h1'
               >
               <div className='command_btn_inner'>
                 <div className='command_btn_left headerType' >
@@ -160,6 +179,7 @@ const CommandBlock =({block}:CommandBlockProp)=>{
               </div>
               </button>
               <button 
+                onClick={()=>changeType("h2")}
                 className='command_btn on'
                 name='h2'
               >
@@ -177,6 +197,7 @@ const CommandBlock =({block}:CommandBlockProp)=>{
                 </div>
               </button>
               <button 
+                onClick={()=>changeType("h3")}
                 className='command_btn on'
                 name="h3"
               >
@@ -194,6 +215,7 @@ const CommandBlock =({block}:CommandBlockProp)=>{
                 </div>
               </button>
               <button 
+                onClick={()=>changeType("bullet")}
                 className='command_btn on'
                 name='bullet list'
               >
@@ -210,6 +232,7 @@ const CommandBlock =({block}:CommandBlockProp)=>{
                 </div>
               </button>
               <button 
+                onClick={()=>changeType("number")}
                 className='command_btn on'
                 name="number list"
               >
@@ -226,6 +249,7 @@ const CommandBlock =({block}:CommandBlockProp)=>{
                 </div>
               </button>
               <button
+                onClick={()=>changeType("toggle")}
                 className='command_btn on'
                 name="toggle list"
               >
@@ -427,7 +451,6 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
   function commandKeyUp(event:React.KeyboardEvent<HTMLDivElement>){
     const code= event.code;
     const firstOn =document.querySelector(".command_btn.on.first");
-    console.log(event)
     if(code ==="Enter"  ){
       const name = firstOn?.getAttribute("name") as string ;
       
@@ -463,8 +486,10 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
         />
         <CommandBlock 
         key={`${block.id}_command`}
+        page={page}
         block={block}
-        
+        editTime={editTime}
+        editBlock={editBlock}
         />
         </>
       }
