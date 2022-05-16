@@ -1,11 +1,8 @@
-import React, { CSSProperties,Dispatch,SetStateAction,useState} from 'react';
-import { ContentEditableEvent } from 'react-contenteditable';
-
+import React, { CSSProperties,useState} from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { CgMenuGridO } from 'react-icons/cg';
 import { GrCheckbox, GrCheckboxSelected, GrDocumentText } from 'react-icons/gr';
 import { MdPlayArrow } from 'react-icons/md';
-import { Command } from '../containers/EditorContainer';
 //icon
 import { Block,Page } from '../modules/notion';
 import EditableBlock from './EditableBlock';
@@ -54,22 +51,15 @@ type BlockProp ={
   block:Block,
   subBlocks :Block[]|null,
   page:Page,
-  command : Command,
-  innerRef: React.RefObject<HTMLDivElement> ,
-  editTime: string,
-  targetId: string | null,
-  setTargetId: Dispatch<SetStateAction<string|null>>,
-  editBlock :(pageId: string, block: Block) => void
-  callBlockNode: (block:Block)=> string,
-  onBlockChange : ()=> void,
-  updateEditedBlock : ()=> void,
-  onBlockKeyDown :(event: React.KeyboardEvent<HTMLDivElement>)=> void,
-  commandChange :(event: ContentEditableEvent)=> void,
-  commandKeyUp :(event: React.KeyboardEvent<HTMLDivElement>, block: Block)=> void,
+  editBlock :(pageId: string, block: Block) => void,
+  addBlock: (pageId: string, block: Block, nextBlockIndex: number, previousBlockId: string | null) => void,
+  changeToSub: (pageId: string, block: Block, first: boolean, newParentBlock: Block) => void
+  raiseBlock: (pageId: string, block: Block) => void,
+  deleteBlock: (pageId: string, block: Block) => void
 };
 
 
-const BlockComponent=({block,subBlocks, page ,innerRef,command, editTime,targetId,setTargetId, editBlock,callBlockNode,onBlockChange,updateEditedBlock,onBlockKeyDown,commandChange,commandKeyUp }:BlockProp)=>{
+const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock}:BlockProp)=>{
   const className =`${block.type} block`;
   const [toggle, setToggle] =useState<boolean>(false);
   const toggleStyle:CSSProperties={
@@ -162,18 +152,11 @@ const BlockComponent=({block,subBlocks, page ,innerRef,command, editTime,targetI
               key ={block.id}  
               page={page}
               block={subBlock}
-              innerRef={innerRef}
-      callBlockNode={callBlockNode}
-      onBlockChange={onBlockChange}
-      updateEditedBlock={updateEditedBlock}
-      onBlockKeyDown={onBlockKeyDown}
-      commandChange ={commandChange}
-      commandKeyUp ={commandKeyUp}
-      editBlock={editBlock}
-      command ={command}
-      editTime={editTime}
-      targetId={targetId}
-      setTargetId={setTargetId}
+              addBlock={addBlock}
+              editBlock={editBlock}
+              changeToSub={changeToSub}
+              raiseBlock={raiseBlock}
+              deleteBlock={deleteBlock}
             />
           )
           }

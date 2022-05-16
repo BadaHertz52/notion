@@ -1,4 +1,4 @@
-import React, { CSSProperties, Dispatch, SetStateAction, useState } from 'react';
+import React, { CSSProperties, useState } from 'react';
 
 import { Block, Page } from '../modules/notion';
 //icon
@@ -9,30 +9,20 @@ import { Side } from '../modules/side';
 import { MdInsertPhoto } from 'react-icons/md';
 
 import EditableBlock from './EditableBlock';
-import { Command } from '../containers/EditorContainer';
-import { ContentEditableEvent } from 'react-contenteditable';
 
 type FrameProps ={
   userName : string,
   page:Page,
   side:Side,
-  innerRef:React.RefObject<HTMLDivElement>,
-  command : Command, 
-  editTime: string,
-  targetId: string | null,
-  setTargetId: Dispatch<SetStateAction<string|null>>,
-  callBlockNode: (block:Block)=> string,
-  onBlockChange : ()=> void,
-  updateEditedBlock : ()=> void,
-  onBlockKeyDown :(event: React.KeyboardEvent<HTMLDivElement>)=> void,
-  commandChange :(event: ContentEditableEvent)=> void,
-  commandKeyUp :(event: React.KeyboardEvent<HTMLDivElement>, block: Block)=> void,
   editBlock :(pageId: string, block: Block) => void,
-
+  addBlock: (pageId: string, block: Block, nextBlockIndex: number, previousBlockId: string | null) => void,
+  changeToSub: (pageId: string, block: Block, first: boolean, newParentBlock: Block) => void
+  raiseBlock: (pageId: string, block: Block) => void,
+  deleteBlock: (pageId: string, block: Block) => void
 };
 
 
-const Frame =({ userName, page,side, innerRef,command, editTime,targetId,setTargetId,callBlockNode,onBlockChange,updateEditedBlock,onBlockKeyDown, editBlock,commandChange,commandKeyUp }:FrameProps)=>{
+const Frame =({ userName, page,side,  editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock }:FrameProps)=>{
   type CommentProp ={
     comment :string | null
   };
@@ -195,18 +185,11 @@ const Frame =({ userName, page,side, innerRef,command, editTime,targetId,setTarg
                       key={block.id}
                       page={page}
                       block={block}
-                      innerRef={innerRef}
-                      callBlockNode={callBlockNode}
-                      onBlockChange={onBlockChange}
-                      updateEditedBlock={updateEditedBlock}
-                      onBlockKeyDown={onBlockKeyDown}
-                      commandChange ={commandChange}
-                      commandKeyUp ={commandKeyUp}
+                      addBlock={addBlock}
                       editBlock={editBlock}
-                      command ={command}
-                      editTime={editTime}
-                      targetId={targetId}
-                      setTargetId={setTargetId}
+                      changeToSub={changeToSub}
+                      raiseBlock={raiseBlock}
+                      deleteBlock={deleteBlock}
                     />
                   )
                 }
