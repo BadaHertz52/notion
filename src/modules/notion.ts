@@ -77,25 +77,25 @@ const CHANGE_TO_SUB_BLOCK="notion/CHANGE_TO_SUB_BLOCK" as const;
 const RAISE_BLOCK="notion/RAISE_BLOCK" as const; //cancle tab
 
 
-export const addBlock =(pageId:string, block:Block ,nextBlockIndex:number ,previousBlockId:string|null)=> ({
+export const add_block =(pageId:string, block:Block ,nextBlockIndex:number ,previousBlockId:string|null)=> ({
   type:ADD_BLOCK ,
   pageId:pageId,
   block:block,
   nextBlockIndex :nextBlockIndex,
   previousBlockId:previousBlockId
 });
-export const editBlock =(pageId:string, block:Block)=> ({
+export const edit_block =(pageId:string, block:Block)=> ({
   type:EDIT_BLOCK ,
   pageId:pageId,
   block:block,
 });
-export const deleteBlock =(pageId:string, block:Block)=> ({
+export const delete_block =(pageId:string, block:Block)=> ({
   type:DELETE_BLOCK ,
   pageId:pageId,
   block:block
 });
 
-export const changeToSub =(pageId:string, block:Block ,first:boolean ,newParentBlock:Block)=> ({
+export const change_to_sub =(pageId:string, block:Block ,first:boolean ,newParentBlock:Block)=> ({
   type:CHANGE_TO_SUB_BLOCK ,
   pageId:pageId,
   block:block,
@@ -103,18 +103,18 @@ export const changeToSub =(pageId:string, block:Block ,first:boolean ,newParentB
   newParentBlock:newParentBlock
 });
 
-export const raiseBlock =(pageId:string, block:Block)=>({
+export const raise_block =(pageId:string, block:Block)=>({
   type:RAISE_BLOCK,
   pageId:pageId,
   block:block
 });
 
 type NotionAction = 
-ReturnType<typeof addBlock> | 
-ReturnType<typeof editBlock> | 
-ReturnType <typeof deleteBlock>|
-ReturnType <typeof changeToSub>|
-ReturnType < typeof raiseBlock>
+ReturnType<typeof add_block> | 
+ReturnType<typeof edit_block> | 
+ReturnType <typeof delete_block>|
+ReturnType <typeof change_to_sub>|
+ReturnType < typeof raise_block>
 ;
 
 //reducer
