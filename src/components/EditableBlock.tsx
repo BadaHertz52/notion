@@ -417,16 +417,20 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
       };
       changeToSub(page.id, editedBlock ,targetBlock.firstBlock , block.id);
       }
-      
+
     };
     if(event.code ==="Backspace"){
-      if(focusOffset ===0){
-        raiseBlock(page.id, targetBlock);
-      };
-    
-      if(textContents?.length<1){
-        deleteBlock(page.id, targetBlock);
-        };
+      console.log("focusoff", focusOffset, "length", textContents.length);
+      if(textContents.length === 0){
+        const deleteTargetBlockDiv = targetElement?.getElementsByTagName("div")[0]  as HTMLDivElement;
+        const blockId = deleteTargetBlockDiv.getAttribute("id") as string;
+        const {BLOCK} =findBlock(page, blockId);
+        deleteBlock(page.id, BLOCK);
+        }else{
+          if(focusOffset ===0){
+            raiseBlock(page.id, targetBlock);
+          };
+        }
   
     };
   };
