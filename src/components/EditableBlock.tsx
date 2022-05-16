@@ -290,7 +290,9 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
 
   const  editTime = JSON.stringify(Date.now());
   const innerRef  =useRef<HTMLDivElement>(null) ;
-  const storageItem =sessionStorage.getItem("editedBlock");
+  const storageItem =sessionStorage.getItem("editedBlock") ;
+  const [targetId, setTargetId]=useState<string|null>(null);
+
   type Command ={
     boolean:boolean,
     command:string | null
@@ -299,16 +301,19 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
     boolean:false,
     command:null
   }); 
-  useEffect(()=>{
-    const contents= innerRef.current?.getElementsByClassName("blockContents")[0]?.firstChild;
 
-    if(contents ==null){
-      innerRef.current?.focus();
-    };
-    updateEditedBlock();
-    sessionStorage.removeItem("editedBlock");
+  useEffect(()=>{
+    if(storageItem !== null){
+      const {editedBlock} = JSON.parse(storageItem) as {pageId: string, editedBlock:Block};
+      setTargetId(editedBlock.id);
+    }
   },[]);
-  
+
+  useEffect(()=>{
+    updateEditedBlock();
+    console.log("useeffect")
+  },[targetId]);
+
   function callBlockNode(block:Block):string{
     const sub_blocks:Block[]|null = block.subBlocksId? block.subBlocksId.map((id:string)=> {
       const {BLOCK} =findBlock(page, id);
@@ -332,6 +337,11 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
   function onChange(event:ContentEditableEvent){ 
     const {targetBlock , textContents}= findTargetBlock(page);  
     if(targetBlock !== undefined){
+      if(targetBlock.id !== targetId){
+        console.log("chage target block", targetBlock.id, targetId)
+        setTargetId(targetBlock.id);
+      };
+
       const newBlock :Block ={
         ...targetBlock,
         contents: textContents,
@@ -341,7 +351,6 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
         pageId: page.id,
         editedBlock: newBlock
       };
-
       if(textContents.startsWith("/")){
         setCommand({boolean:true, command:textContents});
       }else{
@@ -357,14 +366,13 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
       if((BLOCK !== undefined && editBlock !==undefined) && (BLOCK.contents !== editedBlock.contents)){
         editBlock(pageId, editedBlock);
       }
-      
     };
+    sessionStorage.removeItem("editedBlock");
   };
 
   function onKeydown (event: React.KeyboardEvent<HTMLDivElement>){
     // find  target block of cursor    
-    const {cursor, focusOffset, targetBlock, targetBlockIndex,textContents, newContents}= findTargetBlock(page);
-
+    const {cursor, focusOffset, targetBlock, targetElement ,targetBlockIndex,textContents, newContents}= findTargetBlock(page);
     if(event.code === "Enter"){
         // 새로운 블록 만들기 
         const newBlock:Block ={
@@ -403,10 +411,9 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
         
         }
     } ;
-    if(event.code ==="Tab" && targetBlockIndex>0){
-      
+    if(event.code ==="Tab"){
       //  이전 블록의 sub 으로 변경 
-      if(cursor?.anchorOffset=== 0){
+      if(cursor?.anchorOffset=== 0 &&targetBlockIndex>0){
         innerRef.current?.focus();
       const newParentBlock:Block = page.blocks[targetBlockIndex-1];
       const editedBlock:Block ={
