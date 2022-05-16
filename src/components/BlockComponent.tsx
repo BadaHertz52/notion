@@ -55,7 +55,7 @@ type BlockProp ={
   editBlock :(pageId:string, block:Block)=>void,
   deleteBlock :(pageId:string, block:Block)=>void,
   addBlock :(pageId:string, block:Block , nextBlockIndex:number ,previousBlockId:string | null)=>void,
-  changeToSub :(pageId:string, block:Block ,first:boolean ,previousBlockId:string | null )=>void,
+  changeToSub :(pageId:string, block:Block ,first:boolean ,newParentBlock:Block )=>void,
   raiseBlock : (pageId:string, block:Block)=>void,
 };
 

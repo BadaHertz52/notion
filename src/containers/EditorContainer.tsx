@@ -26,7 +26,7 @@ const EditorContainer =({page , pagePath ,side, lockSideBar, leftSideBar,closeSi
 
   const deleteBlock_action =(pageId:string,block:Block)=>{dispatch(deleteBlock(pageId,block))};
 
-  const changeToSub_action =(pageId:string, block:Block , first:boolean ,previousBlockId:string|null)=>{dispatch(changeToSub(pageId,block,first ,previousBlockId));
+  const changeToSub_action =(pageId:string, block:Block , first:boolean ,newParentBlock:Block)=>{dispatch(changeToSub(pageId,block,first,newParentBlock));
   };
 
   const raiseBlock_action =(pageId:string, block:Block)=>{dispatch(raiseBlock(pageId,block))};

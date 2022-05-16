@@ -95,12 +95,12 @@ export const deleteBlock =(pageId:string, block:Block)=> ({
   block:block
 });
 
-export const changeToSub =(pageId:string, block:Block ,first:boolean ,previousBlockId:string | null)=> ({
+export const changeToSub =(pageId:string, block:Block ,first:boolean ,newParentBlock:Block)=> ({
   type:CHANGE_TO_SUB_BLOCK ,
   pageId:pageId,
   block:block,
   first:first,
-  previousBlockId:previousBlockId
+  newParentBlock:newParentBlock
 });
 
 export const raiseBlock =(pageId:string, block:Block)=>({
@@ -477,9 +477,9 @@ export default function notion (state:Notion =initialState , action :NotionActio
       };
     
     case CHANGE_TO_SUB_BLOCK:
-      
       //1. change  subBlocksId of parentBlock which is action.block's new parentBlock
-        updateParentBlock(action.block , action.previousBlockId);
+        const parentIndex= targetPage.blocksId.indexOf(action.newParentBlock.id);
+        editBlockData(parentIndex, action.newParentBlock);
       
       //2. change actoin.block to subBlopck : edit parentsId of action.block 
       editBlockData(blockIndex, action.block);

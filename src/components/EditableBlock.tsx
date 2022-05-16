@@ -1,7 +1,7 @@
 import React, { CSSProperties, useEffect, useRef, useState } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
-import { Block, BlockType, blockTypes, editBlock, findBlock, Page } from '../modules/notion';
+import { Block, BlockType, blockTypes, editBlock, findBlock, Page, text } from '../modules/notion';
 import BlockComponent from './BlockComponent';
 
 import { RiPlayList2Fill } from 'react-icons/ri';
@@ -282,7 +282,7 @@ type EditableBlockProps ={
   editBlock :(pageId:string, block:Block)=>void,
   deleteBlock :(pageId:string, block:Block)=>void,
   addBlock :(pageId:string, block:Block , nextBlockIndex:number ,previousBlockId:string |null)=>void,
-  changeToSub :(pageId:string, block:Block ,first:boolean ,previousBlockId:string | null)=>void,
+  changeToSub :(pageId:string, block:Block ,first:boolean ,newParentBlock:Block)=>void,
   raiseBlock: (pageId:string, block:Block)=>void,
 };
 
@@ -311,7 +311,6 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
 
   useEffect(()=>{
     updateEditedBlock();
-    console.log("useeffect")
   },[targetId]);
 
   function callBlockNode(block:Block):string{
@@ -411,18 +410,26 @@ const EditableBlock =({page, block   ,editBlock ,deleteBlock,addBlock, changeToS
         
         }
     } ;
-    if(event.code ==="Tab"){
+    if(event.code ==="Tab" &&targetBlockIndex>0){
       //  이전 블록의 sub 으로 변경 
-      if(cursor?.anchorOffset=== 0 &&targetBlockIndex>0){
+      if(cursor?.anchorOffset=== 0 ){
+        console.log("tab, 0")
         innerRef.current?.focus();
-      const newParentBlock:Block = page.blocks[targetBlockIndex-1];
+      const previousBlock:Block = page.blocks[targetBlockIndex-1];
+      const newParentBlock:Block = {
+        ...previousBlock,
+        editTime:editTime,
+        subBlocksId: previousBlock.subBlocksId !== null? previousBlock.subBlocksId.concat(targetBlock.id) : [targetBlock.id]
+      };
+
       const editedBlock:Block ={
         ...targetBlock,
         firstBlock: false,
-        parentBlocksId: newParentBlock.parentBlocksId? newParentBlock.parentBlocksId.concat(newParentBlock.id) : [newParentBlock.id],
+        parentBlocksId: previousBlock.parentBlocksId? previousBlock.parentBlocksId.concat(previousBlock.id) : [previousBlock.id],
         editTime:editTime
       };
-      changeToSub(page.id, editedBlock ,targetBlock.firstBlock , block.id);
+      console.log("tab", editedBlock, previousBlock);
+      changeToSub(page.id, editedBlock ,targetBlock.firstBlock ,newParentBlock);
       }
 
     };
