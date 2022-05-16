@@ -1,4 +1,4 @@
-import React, { CSSProperties,useEffect,useState} from 'react';
+import React, { CSSProperties,useState} from 'react';
 
 import { AiOutlinePlus } from 'react-icons/ai';
 import { CgMenuGridO } from 'react-icons/cg';

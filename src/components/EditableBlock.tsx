@@ -1,7 +1,7 @@
 import React, { CSSProperties, useEffect, useRef, useState } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
-import { Block, BlockType, blockTypes, editBlock, findBlock, Page, text } from '../modules/notion';
+import { Block, BlockType, blockTypes,findBlock, Page } from '../modules/notion';
 import BlockComponent from './BlockComponent';
 
 import { RiPlayList2Fill } from 'react-icons/ri';
