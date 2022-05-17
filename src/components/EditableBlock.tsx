@@ -158,15 +158,8 @@ const EditableBlock =({page, block , editBlock, addBlock,changeToSub ,raiseBlock
             parentBlocksId:targetBlock.parentBlocksId !==null? targetBlock.parentBlocksId.concat(targetBlock.id) : [targetBlock.id],
             icon:null,
           };
-          const toggleBlock = targetElement?.firstElementChild ;
-          const blockToggleBtn = targetElement?.getElementsByClassName("blockToggleBtn")[0];
+          
           addBlock(page.id, newSubBlock, targetBlockIndex+1, targetBlock.id);
-          if(!toggleBlock?.classList.contains("on")){
-            toggleBlock?.classList.add("on");
-            blockToggleBtn?.classList.add("on");
-            console.log(targetElement,toggleBlock, blockToggleBtn);
-          }
-        
         }
       // targetBlock 수정
       if(textContents.length > focusOffset+1){
@@ -243,7 +236,6 @@ const EditableBlock =({page, block , editBlock, addBlock,changeToSub ,raiseBlock
     const target =event.target as HTMLElement;
     const targetClassName = target.getAttribute("class");
     const targetParentElement = target.parentElement as HTMLElement; 
-    console.log("target",targetClassName, "tp", targetParentElement, target.tagName)
     switch (target.tagName) {
       case "svg":
         if(targetClassName ==="blockBtnSvg"){
