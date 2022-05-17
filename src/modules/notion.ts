@@ -391,15 +391,22 @@ export default function notion (state:Notion =initialState , action :NotionActio
         const {parentBlockIndex, parentBlock} =findParentBlock(targetPage, subBlock);
         
         const subBlocksId = parentBlock.subBlocksId;
-        const previousBlockIndex = previousBlockId=== null? -1 : subBlocksId?.indexOf(previousBlockId) as number;
-        subBlocksId?.splice(previousBlockIndex+1,0,subBlock.id);
-      //edit parentBlock 
+        if(subBlocksId!==null){
+          const previousBlockIndex = previousBlockId=== null? -1 : subBlocksId.indexOf(previousBlockId) as number;
+          
+          subBlocksId.splice(previousBlockIndex+1,0,subBlock.id);
+        };
+
+        //edit parentBlock 
         const editedParentBlock :Block={
           ...parentBlock,
-          subBlocksId:subBlocksId
+          subBlocksId:subBlocksId !==null ? subBlocksId : [subBlock.id]
         };
         //update parentBlock
         targetPage.blocks.splice(parentBlockIndex,1,editedParentBlock);
+        console.log("updateparent", parentBlock, editedParentBlock);
+        
+        
     }else{
       console.log("can't find parentBlocks of this block")
     }
