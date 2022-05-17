@@ -60,11 +60,10 @@ type BlockProp ={
 
 
 const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock,}:BlockProp)=>{
-  const className =`${block.type} block`;
-  const [toggle, setToggle] =useState<boolean>(false);
-  const toggleStyle:CSSProperties={
-    transform: toggle? "rotate(90deg)" : "rotate(0deg)" 
-  };
+  const className = block.type !== "toggle" ?
+                    `${block.type} block` :
+                    `${block.type} block ${block.subBlocksId!==null?'on' : ""}`
+  ;
   const [blockFn , setBlockFn ] =useState<boolean>(false);
   const ListSub = ()=>{
     return(
@@ -130,7 +129,10 @@ const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,rai
         {block.type ==="toggle" &&
           <button 
             name={block.id}
-            className='blockToggleBtn left blockBtn' 
+            className={block.subBlocksId!==null ? 
+              'blockToggleBtn on left blockBtn' :
+              'blockToggleBtn left blockBtn' 
+            }
           >
             <MdPlayArrow 
               className='blockBtnSvg'
