@@ -103,6 +103,24 @@
     align-items: center;
     color:$itemSvg ;
   }
+  .subBlocks{
+    display: none;
+  }
+}
+.toggle.on.block{
+  .subBlocks{
+    display: block;
+  }
+}
+.blockToggleBtn {
+  svg{
+    transform: rotate(0deg);
+  }
+}
+.blockToggleBtn.on{
+  svg{
+    transform: rotate(90deg);
+  }
 }
 #commandBlock{
   width:320px ;
@@ -208,4 +226,5 @@
     padding: 2% 10%;
     height: fit-content;
   }
+
 }

@@ -153,6 +153,24 @@ a:link, a:active, a:visited {
   color: #a3a3a2;
 }
 
+.toggle.block .subBlocks {
+  display: none;
+}
+
+.toggle.on.block .subBlocks {
+  display: block;
+}
+
+.blockToggleBtn svg {
+  -webkit-transform: rotate(0deg);
+          transform: rotate(0deg);
+}
+
+.blockToggleBtn.on svg {
+  -webkit-transform: rotate(90deg);
+          transform: rotate(90deg);
+}
+
 #commandBlock {
   width: 320px;
   display: -webkit-box;
@@ -215,6 +233,10 @@ a:link, a:active, a:visited {
 }
 
 #commandBlock .command_btn.on:hover {
+  background-color: rgba(55, 53, 47, 0.08);
+}
+
+#commandBlock .command_btn.on.first {
   background-color: rgba(55, 53, 47, 0.08);
 }
 

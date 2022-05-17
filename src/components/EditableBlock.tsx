@@ -1,5 +1,5 @@
 
-import React, { Dispatch, SetStateAction, useEffect, useRef, useState, } from 'react';
+import React, { useEffect, useRef, useState, } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import { Block, BlockType, blockTypes, findBlock, Page } from '../modules/notion';
@@ -79,6 +79,7 @@ const EditableBlock =({page, block , editBlock, addBlock,changeToSub ,raiseBlock
       const {BLOCK} =findBlock(page, id);
       return BLOCK;
     }): null ;
+
     const blockNode = ReactDOMServer.renderToString
     (<BlockComponent 
       block={block} 
@@ -208,6 +209,40 @@ const EditableBlock =({page, block , editBlock, addBlock,changeToSub ,raiseBlock
     };
   };
 
+  const toggleOn =(btn:HTMLElement)=>{
+    btn.classList.toggle("on");
+    const blockId =btn.getAttribute("name") as string;
+    const toggleBlock = document.getElementById(blockId)?.firstElementChild  as Element;
+    toggleBlock.classList.toggle("on");
+    console.log("btn", btn,"toggleBlock", toggleBlock)
+  };
+
+  function addEvent(event:React.MouseEvent){
+    const target =event.target as HTMLElement;
+    const targetClassName = target.getAttribute("class");
+    const targetParentElement = target.parentElement as HTMLElement; 
+    console.log("target",targetClassName, "tp", targetParentElement, target.tagName)
+    switch (target.tagName) {
+      case "svg":
+        if(targetClassName ==="blockBtnSvg"){
+          toggleOn(targetParentElement);
+        };
+        break;
+      case "path":
+        if(targetParentElement.getAttribute("class")==="blockBtnSvg"){
+          const btnElement =targetParentElement.parentElement as HTMLElement;
+          toggleOn(btnElement);
+        };
+        break;
+      case "button":
+        if(targetClassName?.includes("blockBtn")){
+          toggleOn(target);
+        };
+        break;
+      default:
+        break;
+    }
+  };
   function commandChange (event:ContentEditableEvent){
     const value = event.target.value;
     const trueOrFale = value.startsWith("/");
@@ -253,6 +288,7 @@ const EditableBlock =({page, block , editBlock, addBlock,changeToSub ,raiseBlock
         innerRef={innerRef}
         onChange={onBlockChange}
         onKeyDown={onBlockKeyDown}
+        onClick={addEvent}
         />
       :
         <>

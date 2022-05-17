@@ -1,4 +1,4 @@
-import React, { CSSProperties,useState} from 'react';
+import React, { CSSProperties,useEffect,useState} from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { CgMenuGridO } from 'react-icons/cg';
 import { GrCheckbox, GrCheckboxSelected, GrDocumentText } from 'react-icons/gr';
@@ -55,18 +55,17 @@ type BlockProp ={
   addBlock: (pageId: string, block: Block, nextBlockIndex: number, previousBlockId: string | null) => void,
   changeToSub: (pageId: string, block: Block, first: boolean, newParentBlock: Block) => void
   raiseBlock: (pageId: string, block: Block) => void,
-  deleteBlock: (pageId: string, block: Block) => void
+  deleteBlock: (pageId: string, block: Block) => void,
 };
 
 
-const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock}:BlockProp)=>{
+const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock,}:BlockProp)=>{
   const className =`${block.type} block`;
   const [toggle, setToggle] =useState<boolean>(false);
   const toggleStyle:CSSProperties={
     transform: toggle? "rotate(90deg)" : "rotate(0deg)" 
   };
   const [blockFn , setBlockFn ] =useState<boolean>(false);
-
   const ListSub = ()=>{
     return(
       <>
@@ -110,24 +109,38 @@ const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,rai
         className='mainBlock'
       >
         {block.type ==="todo" &&
-          <button className='checkbox left'>
-            <GrCheckbox />
+          <button 
+            className='checkbox left blockBtn'
+            name={block.id}
+            >
+            <GrCheckbox 
+              className='blockBtnSvg' 
+            />
           </button>
         }
         {block.type ==="todo done" &&
-          <button className='checkbox left'>
-            <GrCheckboxSelected />
+          <button 
+            className='checkbox left blockBtn'
+            name={block.id}
+          >
+            <GrCheckboxSelected   className='blockBtnSvg '
+            />
           </button>
         }
         {block.type ==="toggle" &&
           <button 
-            className='blockToggleBtn left' 
+            name={block.id}
+            className='blockToggleBtn left blockBtn' 
           >
-            <MdPlayArrow/>
+            <MdPlayArrow 
+              className='blockBtnSvg'
+            />
           </button>
         }
         {block.type ==="page" &&
-          <div className='pageIcon left'>
+          <div 
+            className='pageIcon left'
+          >
           {block.icon == null?
             < GrDocumentText/>
           :
@@ -141,27 +154,23 @@ const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,rai
           {block.contents}
         </div>
       </div>
-      {((block.type==="toggle" && toggle)
-        ||block.type !=="toggle"
-        ) && 
-        <div 
-          className='subBlocks'
-        >
-          {subBlocks?.map((subBlock :Block)=> 
-            <EditableBlock
-              key ={block.id}  
-              page={page}
-              block={subBlock}
-              addBlock={addBlock}
-              editBlock={editBlock}
-              changeToSub={changeToSub}
-              raiseBlock={raiseBlock}
-              deleteBlock={deleteBlock}
-            />
-          )
-          }
-        </div>
-      }
+      <div 
+        className='subBlocks'
+      >
+        {subBlocks?.map((subBlock :Block)=> 
+          <EditableBlock
+            key ={block.id}  
+            page={page}
+            block={subBlock}
+            addBlock={addBlock}
+            editBlock={editBlock}
+            changeToSub={changeToSub}
+            raiseBlock={raiseBlock}
+            deleteBlock={deleteBlock}
+          />
+        )
+        }
+      </div>
       </>
       }
     </div>
