@@ -134,21 +134,43 @@ const EditableBlock =({page, block , editBlock, addBlock,changeToSub ,raiseBlock
     const {cursor, focusOffset, targetBlock, targetElement ,targetBlockIndex,textContents, newContents}= findTargetBlock(page);
     if(event.code === "Enter"){
         // 새로운 블록 만들기 
-        const newBlock:Block ={
-          id:editTime,
-          editTime:editTime,
-          type:"text",
-          contents: newContents=== undefined ? "" : newContents,
-          firstBlock:targetBlock.firstBlock,
-          subBlocksId:targetBlock.subBlocksId,
-          parentBlocksId:targetBlock.parentBlocksId,
-          icon:null,
-        };
-          //새로운 버튼 
-        addBlock(page.id, newBlock, targetBlockIndex+1 ,targetBlock.id)
-
-      // targetBlock 수정 
-      if(textContents.length > focusOffset){
+        if(targetBlock.type !=="toggle"){
+          const newBlock:Block ={
+            id:editTime,
+            editTime:editTime,
+            type:"text",
+            contents: newContents=== undefined ? "" : newContents,
+            firstBlock:targetBlock.firstBlock,
+            subBlocksId:targetBlock.subBlocksId,
+            parentBlocksId:targetBlock.parentBlocksId,
+            icon:null,
+          };
+            //새로운 버튼 
+          addBlock(page.id, newBlock, targetBlockIndex+1 ,targetBlock.id)
+        }else{
+          const newSubBlock:Block ={
+            id:editTime,
+            editTime:editTime,
+            type:"text",
+            contents: "" ,
+            firstBlock:false,
+            subBlocksId:null,
+            parentBlocksId:targetBlock.parentBlocksId !==null? targetBlock.parentBlocksId.concat(targetBlock.id) : [targetBlock.id],
+            icon:null,
+          };
+          const toggleBlock = targetElement?.firstElementChild ;
+          const blockToggleBtn = targetElement?.getElementsByClassName("blockToggleBtn")[0];
+          addBlock(page.id, newSubBlock, targetBlockIndex+1, targetBlock.id);
+          if(!toggleBlock?.classList.contains("on")){
+            toggleBlock?.classList.add("on");
+            blockToggleBtn?.classList.add("on");
+            console.log(targetElement,toggleBlock, blockToggleBtn);
+          }
+        
+        }
+      // targetBlock 수정
+      if(textContents.length > focusOffset+1){
+        // targetBlock 의 contents 일부가 다음 블록으로 이동되었을 경우
         const newContents = targetBlock.contents.slice(0, focusOffset);
         const editedBlock:Block ={
           ...targetBlock,
@@ -158,8 +180,8 @@ const EditableBlock =({page, block , editBlock, addBlock,changeToSub ,raiseBlock
         };
         editBlock (page.id, editedBlock);
       }else {
-        //밀려졌을때 기존의 block 수정 
-      if(targetBlock.subBlocksId !==null){
+        //targetBlock 의 subBlock들이 밀려졌을때 
+      if(targetBlock.subBlocksId !==null && targetBlock.type !== 'toggle'){
         const editedBlock :Block ={
           ...targetBlock,
           editTime:editTime,
