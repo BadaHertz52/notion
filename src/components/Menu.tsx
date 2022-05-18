@@ -1,6 +1,4 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../modules';
 import { Block} from '../modules/notion';
 //icon
 import {BiCommentDetail} from 'react-icons/bi';
