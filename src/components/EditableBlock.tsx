@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef, useState, } from 'react';
+import React, {CSSProperties, Dispatch, SetStateAction, useEffect, useRef, useState, } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import { Block, BlockType, blockTypes, findBlock, Page } from '../modules/notion';
@@ -50,9 +50,10 @@ type EditableBlockProps ={
   changeToSub: (pageId: string, block: Block, first: boolean, newParentBlock: Block) => void
   raiseBlock: (pageId: string, block: Block) => void,
   deleteBlock: (pageId: string, block: Block) => void,
+  setBlockFnBlock :Dispatch<SetStateAction<Block>>
 };
 
-const EditableBlock =({page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock}:EditableBlockProps)=>{  
+const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,setBlockFnBlock}:EditableBlockProps)=>{  
   const  editTime = JSON.stringify(Date.now());
   const innerRef  =useRef<HTMLDivElement>(null) ;
   const storageItem =sessionStorage.getItem("editedBlock") ;
@@ -73,7 +74,7 @@ const EditableBlock =({page, block , editBlock, addBlock,changeToSub ,raiseBlock
   useEffect(()=>{
     updateEditedBlock();
   },[targetId]);
-
+  //block
   function callBlockNode(block:Block):string{
     const sub_blocks:Block[]|null = block.subBlocksId? block.subBlocksId.map((id:string)=> {
       const {BLOCK} =findBlock(page, id);
@@ -90,10 +91,10 @@ const EditableBlock =({page, block , editBlock, addBlock,changeToSub ,raiseBlock
       changeToSub={changeToSub}
       raiseBlock={raiseBlock}
       deleteBlock={deleteBlock}
+      setBlockFnBlock={setBlockFnBlock}
       />);
     return blockNode
   };
-
   function onBlockChange(){ 
     const {targetBlock , textContents}= findTargetBlock(page);  
     if(targetBlock !== undefined){
@@ -257,6 +258,34 @@ const EditableBlock =({page, block , editBlock, addBlock,changeToSub ,raiseBlock
         break;
     }
   };
+  function showBlockFn (event:React.MouseEvent){
+    const target= event.target as HTMLElement;
+    const targetPosition = target.getBoundingClientRect();
+    const targetHeight = targetPosition.height;
+    const targetY = targetPosition.top;
+    const targetClassName = target.getAttribute("class");
+    const blockFn = document.getElementById("blockFn");
+
+    if(targetClassName==="blockContents" && innerRef.current !==null){
+      setBlockFnBlock(block);
+      const editableBlockPosition = innerRef.current.getBoundingClientRect();
+      const positionX =editableBlockPosition.left;
+      const left = positionX - 45 ;
+      blockFn?.classList.toggle("on");
+
+      if(block.type ==="h1" ){
+        const h1Top = targetY + (targetHeight * 0.4);
+        blockFn?.setAttribute("style", `top:${h1Top}px; left:${left}px;`);
+
+      }else if(block.type ==="h2"){
+        const h2Top = targetY + (targetHeight *0.25);
+        blockFn?.setAttribute("style", `top:${h2Top}px; left:${left}px;`);
+
+      }else{
+        blockFn?.setAttribute("style", `top:${targetY}px;left:${left}px;`);
+      };
+    }
+  };
   function commandChange (event:ContentEditableEvent){
     const value = event.target.value;
     const trueOrFale = value.startsWith("/");
@@ -294,34 +323,39 @@ const EditableBlock =({page, block , editBlock, addBlock,changeToSub ,raiseBlock
     }
   };
   return(
-    <div className="editableBlock">
-      {!command.boolean?
-        <ContentEditable
-        id={block.id}
-        html={callBlockNode(block)}
-        innerRef={innerRef}
-        onChange={onBlockChange}
-        onKeyDown={onBlockKeyDown}
-        onClick={addEvent}
-        />
-      :
-        <>
-        <ContentEditable
+      <div 
+        className="editableBlock"
+      >
+        <div>
+        {!command.boolean?
+          <ContentEditable
           id={block.id}
-          html={command.command !==null? command.command : ""}
-          onChange={commandChange}
-          onKeyUp={(event)=>commandKeyUp(event,block)}
-        />
-        <CommandBlock 
-          key={`${block.id}_command`}
-          page={page}
-          block={block}
-          editTime={editTime}
-          editBlock={editBlock}
-        />
-        </>
-      }
-    </div>
+          html={callBlockNode(block)}
+          innerRef={innerRef}
+          onChange={onBlockChange}
+          onKeyDown={onBlockKeyDown}
+          onClick={addEvent}
+          onMouseOver ={showBlockFn}
+          />
+        :
+          <>
+          <ContentEditable
+            id={block.id}
+            html={command.command !==null? command.command : ""}
+            onChange={commandChange}
+            onKeyUp={(event)=>commandKeyUp(event,block)}
+          />
+          <CommandBlock 
+            key={`${block.id}_command`}
+            page={page}
+            block={block}
+            editTime={editTime}
+            editBlock={editBlock}
+          />
+          </>
+        }
+        </div>
+      </div>
   )
 };
 

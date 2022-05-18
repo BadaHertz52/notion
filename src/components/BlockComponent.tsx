@@ -1,52 +1,9 @@
-import React, { CSSProperties,useEffect,useState} from 'react';
-import { AiOutlinePlus } from 'react-icons/ai';
-import { CgMenuGridO } from 'react-icons/cg';
+import React, { Dispatch, SetStateAction } from 'react';
 import { GrCheckbox, GrCheckboxSelected, GrDocumentText } from 'react-icons/gr';
 import { MdPlayArrow } from 'react-icons/md';
-//icon
 import { Block,Page } from '../modules/notion';
 import EditableBlock from './EditableBlock';
 
-
-import Menu from './Menu';
-type BlockFnProp ={
-  block:Block
-};
-
-const BlockFn =({block}:BlockFnProp)=>{
-  
-  const showMenu =()=>{
-
-  };
-  
-  const makeNewBlock =()=>{
-
-  };
-
-  return (
-    <div 
-    className='blockFn'
-    >
-      <button 
-        className='addBlock'
-        onClick={makeNewBlock}
-        title="Click  to add a block below"
-      >
-        <AiOutlinePlus/>
-      </button>
-      <button 
-        className='menuBtn'
-        onClick={showMenu}
-        title ="Click to open menu"
-      >
-        <CgMenuGridO/>
-        <Menu 
-        block={block} 
-        />
-      </button>
-  </div>
-  )
-}
 type BlockProp ={
   block:Block,
   subBlocks :Block[]|null,
@@ -56,15 +13,15 @@ type BlockProp ={
   changeToSub: (pageId: string, block: Block, first: boolean, newParentBlock: Block) => void
   raiseBlock: (pageId: string, block: Block) => void,
   deleteBlock: (pageId: string, block: Block) => void,
+  setBlockFnBlock :Dispatch<SetStateAction<Block>>
 };
 
 
-const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock,}:BlockProp)=>{
+const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock,setBlockFnBlock}:BlockProp)=>{
   const className = block.type !== "toggle" ?
                     `${block.type} block` :
-                    `${block.type} block ${block.subBlocksId!==null?'on' : ""}`
-  ;
-  const [blockFn , setBlockFn ] =useState<boolean>(false);
+                    `${block.type} block ${block.subBlocksId!==null?'on' : ""}`;
+
   const ListSub = ()=>{
     return(
       <>
@@ -72,6 +29,7 @@ const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,rai
         <li 
         key={`${block.type}_${block.contents}`}
         id ={block.id}
+        className= "blockContents"
         >
           {block.contents}
         </li>
@@ -82,14 +40,8 @@ const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,rai
   return(
     <div 
       className={className} 
-      onMouseEnter ={()=>setBlockFn(true)}
-      onMouseLeave={()=>setBlockFn(false)}
     > 
-      {blockFn &&
-        <BlockFn  
-          block={block}
-        />
-      }
+
       {(block.type ==="numberList" || block.type=== "bulletList" ) ?
       <div className='mainBlock'>
         {block.type==="numberList" ? 
@@ -169,6 +121,7 @@ const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,rai
             changeToSub={changeToSub}
             raiseBlock={raiseBlock}
             deleteBlock={deleteBlock}
+            setBlockFnBlock={setBlockFnBlock}
           />
         )
         }

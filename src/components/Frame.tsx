@@ -1,14 +1,16 @@
 import React, { CSSProperties, useState } from 'react';
+import { Block, blockSample, Page } from '../modules/notion';
+import EditableBlock from './EditableBlock';
+import Menu from './Menu';
 
-import { Block, Page } from '../modules/notion';
 //icon
 import { BiMessageDetail } from 'react-icons/bi';
 import { BsFillEmojiSmileFill} from 'react-icons/bs';
 import {GrDocumentText ,GrDocument} from 'react-icons/gr';
 import { Side } from '../modules/side';
 import { MdInsertPhoto } from 'react-icons/md';
-
-import EditableBlock from './EditableBlock';
+import { AiOutlinePlus } from 'react-icons/ai';
+import { CgMenuGridO } from 'react-icons/cg';
 
 type FrameProps ={
   userName : string,
@@ -50,7 +52,39 @@ const Frame =({ userName, page,side,  editBlock, addBlock,changeToSub ,raiseBloc
       </div>
     )
   };
+  type BlockFnProp ={
+    block:Block
+  };
+  
+  const BlockFn =({block}:BlockFnProp)=>{
+    return (
+      <div 
+        id="blockFn"
+        className='blockFn'
+      >
+        <button 
+          className='addBlock'
+          title="Click  to add a block below"
+        >
+          <AiOutlinePlus/>
+        </button>
+        <button 
+          className='menuBtn'
+          title ="Click to open menu"
+        >
+          <CgMenuGridO/>
+          <Menu 
+            block={block} 
+            userName={userName}
+          />
+        </button>
+    </div>
+    )
+  };
+  const [blockFnBlock, setBlockFnBlock]=useState<Block>(blockSample);
+
   const [decoOpen ,setdecoOpen] =useState<boolean>(true);
+
   const headerStyle: CSSProperties ={
     marginTop: page.header.cover !==null? "10px": "30px" 
   };
@@ -58,6 +92,7 @@ const Frame =({ userName, page,side,  editBlock, addBlock,changeToSub ,raiseBloc
     marginTop: page.header.cover !==null ? "-39px" :"0"
   };
   const firstBlocks:Block[] =page.blocks.filter((block:Block)=> block.firstBlock);
+
   return(
     <div className='frame'>
       {side.newPage ?
@@ -183,6 +218,7 @@ const Frame =({ userName, page,side,  editBlock, addBlock,changeToSub ,raiseBloc
                   return (
                     <EditableBlock
                       key={block.id}
+                      setBlockFnBlock={setBlockFnBlock}
                       page={page}
                       block={block}
                       addBlock={addBlock}
@@ -194,6 +230,9 @@ const Frame =({ userName, page,side,  editBlock, addBlock,changeToSub ,raiseBloc
                   )
                 }
               )}
+              <BlockFn
+                block={blockFnBlock}
+              />
             </div>
           </div>
         </div>

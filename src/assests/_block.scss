@@ -28,11 +28,13 @@
   font-size: 1rem;
   line-height: 24px;
 }
+
 .blockFn {
+  display: none;
+}
+.blockFn.on {
   display: flex;
   position: absolute;
-  top:2px;
-  left: 48px;
   padding-right:3rem;
   button{
     color:$itemSvg;
@@ -42,6 +44,7 @@
     }
   }
 }
+
 .blockFn button,
 .toggle.block .left {
   &:hover{

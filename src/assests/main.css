@@ -73,16 +73,18 @@ a:link, a:active, a:visited {
 }
 
 .blockFn {
+  display: none;
+}
+
+.blockFn.on {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   position: absolute;
-  top: 2px;
-  left: 48px;
   padding-right: 3rem;
 }
 
-.blockFn button {
+.blockFn.on button {
   color: #a3a3a2;
   font-size: 1.2rem;
   font-weight: bolder;

@@ -1,4 +1,4 @@
-import React, { Dispatch } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../modules';
 import { Block} from '../modules/notion';
@@ -11,7 +11,8 @@ import {IoArrowRedoOutline} from 'react-icons/io5';
 import { HiOutlineMenuAlt1 } from 'react-icons/hi';
 
 type MenuProps ={
-  block:Block,
+  block:Block ,
+  userName: string,
 };
 
 const SwitchBtn =()=>{
@@ -23,9 +24,8 @@ const SwitchBtn =()=>{
       </label>
     </div>
   )
-}
-const Menu=({block }:MenuProps)=>{
-  const userName =useSelector((state:RootState)=> state.user.userName);
+};
+const Menu=({block , userName}:MenuProps)=>{
   const today = new Date().getDate();
   const editTime = new Date(block.editTime);
   const year = editTime?.getFullYear();
