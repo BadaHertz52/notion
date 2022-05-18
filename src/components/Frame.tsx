@@ -52,8 +52,6 @@ const Frame =({ userName, page,side,  editBlock, addBlock,changeToSub ,raiseBloc
     )
   };
 
-  const [blockFnBlock, setBlockFnBlock]=useState<Block>(blockSample);
-
   const [decoOpen ,setdecoOpen] =useState<boolean>(true);
 
   const headerStyle: CSSProperties ={
@@ -189,7 +187,6 @@ const Frame =({ userName, page,side,  editBlock, addBlock,changeToSub ,raiseBloc
                   return (
                     <EditableBlock
                       key={block.id}
-                      setBlockFnBlock={setBlockFnBlock}
                       page={page}
                       block={block}
                       addBlock={addBlock}
@@ -202,8 +199,10 @@ const Frame =({ userName, page,side,  editBlock, addBlock,changeToSub ,raiseBloc
                 }
               )}
               <BlockFn
-                block={blockFnBlock}
+                page={page}
                 userName={userName}
+                addBlock={addBlock}
+                editBlock={editBlock}
               />
             </div>
           </div>

@@ -13,11 +13,10 @@ type BlockProp ={
   changeToSub: (pageId: string, block: Block, first: boolean, newParentBlock: Block) => void
   raiseBlock: (pageId: string, block: Block) => void,
   deleteBlock: (pageId: string, block: Block) => void,
-  setBlockFnBlock :Dispatch<SetStateAction<Block>>
 };
 
 
-const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock,setBlockFnBlock}:BlockProp)=>{
+const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock}:BlockProp)=>{
   const className = block.type !== "toggle" ?
                     `${block.type} block` :
                     `${block.type} block ${block.subBlocksId!==null?'on' : ""}`;
