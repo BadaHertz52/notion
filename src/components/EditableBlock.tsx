@@ -273,20 +273,27 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
     const blockFn = document.getElementById("blockFn");
 
     if(targetClassName==="blockContents" && innerRef.current !==null){
-      setBlockFnBlock(block);
+      
       const editableBlockPosition = innerRef.current.getBoundingClientRect();
       const positionX =editableBlockPosition.left;
       const left = positionX - 45 ;
       blockFn?.classList.toggle("on");
+      const tag = target.tagName;
+      const id= tag==="LI"?  target.id : target.parentElement?.parentElement?.parentElement?.getAttribute("id") as string;
+      const {BLOCK} =findBlock(page, id);
+
+      if(blockFn?.classList.contains("on")){
+          sessionStorage.setItem("blockFnTargetBlock", JSON.stringify(BLOCK));
+      }else{
+        sessionStorage.removeItem("blockFnTargetBlock");
+      }
 
       if(block.type ==="h1" ){
         const h1Top = targetY + (targetHeight * 0.4);
         blockFn?.setAttribute("style", `top:${h1Top}px; left:${left}px;`);
-
       }else if(block.type ==="h2"){
         const h2Top = targetY + (targetHeight *0.25);
         blockFn?.setAttribute("style", `top:${h2Top}px; left:${left}px;`);
-
       }else{
         blockFn?.setAttribute("style", `top:${targetY}px;left:${left}px;`);
       };
