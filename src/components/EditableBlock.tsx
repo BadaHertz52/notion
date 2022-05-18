@@ -41,6 +41,45 @@ const findTargetBlock =(page:Page):findTargetBlockReturn=>{
     newContents:newContents
   }
 };
+export const makeNewBlock=(page:Page, editTime:string,addBlock:(pageId: string, block: Block, nextBlockIndex: number, previousBlockId: string | null) =>void ,editBlock :(pageId: string, block: Block) => void, targetBlock:Block, targetBlockIndex:number, newContents:string  )=>{
+  if(targetBlock.type !=="toggle"){
+    const newBlock:Block ={
+      id:editTime,
+      editTime:editTime,
+      type:"text",
+      contents: newContents=== undefined ? "" : newContents,
+      firstBlock:targetBlock.firstBlock,
+      subBlocksId:targetBlock.subBlocksId,
+      parentBlocksId:targetBlock.parentBlocksId,
+      icon:null,
+    };
+      //새로운 버튼 
+    addBlock(page.id, newBlock, targetBlockIndex+1 ,targetBlock.id)
+  }else{
+    const newSubBlock:Block ={
+      id:editTime,
+      editTime:editTime,
+      type:"text",
+      contents: "" ,
+      firstBlock:false,
+      subBlocksId:null,
+      parentBlocksId:targetBlock.parentBlocksId !==null? targetBlock.parentBlocksId.concat(targetBlock.id) : [targetBlock.id],
+      icon:null,
+    };
+    
+    addBlock(page.id, newSubBlock, targetBlockIndex+1, targetBlock.id);
+  }
+// targetBlock 수정
+  //targetBlock 의 subBlock들이 밀려졌을때 
+  if(targetBlock.subBlocksId !==null && targetBlock.type !== 'toggle'){
+    const editedBlock :Block ={
+      ...targetBlock,
+      editTime:editTime,
+      subBlocksId:null,
+    };
+    editBlock(page.id, editedBlock);
+  };
+};
 
 type EditableBlockProps ={
   page:Page,
@@ -132,60 +171,27 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
 
   function onBlockKeyDown (event: React.KeyboardEvent<HTMLDivElement>){
     // find  target block of cursor    
-    const {cursor, focusOffset, targetBlock, targetElement ,targetBlockIndex,textContents, newContents}= findTargetBlock(page);
+    const {cursor, focusOffset, targetBlock, targetElement ,targetBlockIndex,textContents , newContents}= findTargetBlock(page);
+
     if(event.code === "Enter"){
         // 새로운 블록 만들기 
-        if(targetBlock.type !=="toggle"){
-          const newBlock:Block ={
-            id:editTime,
-            editTime:editTime,
-            type:"text",
-            contents: newContents=== undefined ? "" : newContents,
-            firstBlock:targetBlock.firstBlock,
-            subBlocksId:targetBlock.subBlocksId,
-            parentBlocksId:targetBlock.parentBlocksId,
-            icon:null,
-          };
-            //새로운 버튼 
-          addBlock(page.id, newBlock, targetBlockIndex+1 ,targetBlock.id)
-        }else{
-          const newSubBlock:Block ={
-            id:editTime,
-            editTime:editTime,
-            type:"text",
-            contents: "" ,
-            firstBlock:false,
-            subBlocksId:null,
-            parentBlocksId:targetBlock.parentBlocksId !==null? targetBlock.parentBlocksId.concat(targetBlock.id) : [targetBlock.id],
-            icon:null,
-          };
-          
-          addBlock(page.id, newSubBlock, targetBlockIndex+1, targetBlock.id);
-        }
-      // targetBlock 수정
-      if(textContents.length > focusOffset+1){
+        makeNewBlock(page, editTime, addBlock, editBlock,targetBlock, targetBlockIndex, newContents);
         // targetBlock 의 contents 일부가 다음 블록으로 이동되었을 경우
-        const newContents = targetBlock.contents.slice(0, focusOffset);
-        const editedBlock:Block ={
-          ...targetBlock,
-          subBlocksId : null ,
-          contents:newContents,
-          editTime:editTime
-        };
-        editBlock (page.id, editedBlock);
-      }else {
-        //targetBlock 의 subBlock들이 밀려졌을때 
-      if(targetBlock.subBlocksId !==null && targetBlock.type !== 'toggle'){
-        const editedBlock :Block ={
-          ...targetBlock,
-          editTime:editTime,
-          subBlocksId:null,
-        };
-        editBlock(page.id, editedBlock);
-      };
-        
+        if(textContents.length > focusOffset+1){
+          
+          const newContents = targetBlock.contents.slice(0, focusOffset);
+          const editedBlock:Block ={
+            ...targetBlock,
+            subBlocksId : null ,
+            contents:newContents,
+            editTime:editTime
+          };
+          editBlock (page.id, editedBlock);
         }
+    }else{
+      
     } ;
+
     if(event.code ==="Tab" &&targetBlockIndex>0){
       //  이전 블록의 sub 으로 변경 
       if(cursor?.anchorOffset=== 0 ){
