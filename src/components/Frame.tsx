@@ -1,7 +1,6 @@
 import React, { CSSProperties, useState } from 'react';
 import { Block, blockSample, Page } from '../modules/notion';
 import EditableBlock from './EditableBlock';
-import Menu from './Menu';
 
 //icon
 import { BiMessageDetail } from 'react-icons/bi';
@@ -9,8 +8,8 @@ import { BsFillEmojiSmileFill} from 'react-icons/bs';
 import {GrDocumentText ,GrDocument} from 'react-icons/gr';
 import { Side } from '../modules/side';
 import { MdInsertPhoto } from 'react-icons/md';
-import { AiOutlinePlus } from 'react-icons/ai';
-import { CgMenuGridO } from 'react-icons/cg';
+import BlockFn from './BlockFn';
+
 
 type FrameProps ={
   userName : string,
@@ -52,35 +51,7 @@ const Frame =({ userName, page,side,  editBlock, addBlock,changeToSub ,raiseBloc
       </div>
     )
   };
-  type BlockFnProp ={
-    block:Block
-  };
-  
-  const BlockFn =({block}:BlockFnProp)=>{
-    return (
-      <div 
-        id="blockFn"
-        className='blockFn'
-      >
-        <button 
-          className='addBlock'
-          title="Click  to add a block below"
-        >
-          <AiOutlinePlus/>
-        </button>
-        <button 
-          className='menuBtn'
-          title ="Click to open menu"
-        >
-          <CgMenuGridO/>
-          <Menu 
-            block={block} 
-            userName={userName}
-          />
-        </button>
-    </div>
-    )
-  };
+
   const [blockFnBlock, setBlockFnBlock]=useState<Block>(blockSample);
 
   const [decoOpen ,setdecoOpen] =useState<boolean>(true);
@@ -232,6 +203,7 @@ const Frame =({ userName, page,side,  editBlock, addBlock,changeToSub ,raiseBloc
               )}
               <BlockFn
                 block={blockFnBlock}
+                userName={userName}
               />
             </div>
           </div>
