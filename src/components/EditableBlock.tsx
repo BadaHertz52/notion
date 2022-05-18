@@ -355,6 +355,8 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
             html={command.command !==null? command.command : ""}
             onChange={commandChange}
             onKeyUp={(event)=>commandKeyUp(event,block)}
+            onClick={addEvent}
+            onMouseOver ={showBlockFn}
           />
           <CommandBlock 
             key={`${block.id}_command`}
