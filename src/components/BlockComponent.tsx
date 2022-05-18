@@ -120,7 +120,6 @@ const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,rai
             changeToSub={changeToSub}
             raiseBlock={raiseBlock}
             deleteBlock={deleteBlock}
-            setBlockFnBlock={setBlockFnBlock}
           />
         )
         }
