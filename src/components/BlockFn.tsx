@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Menu from './Menu';
 import {Block, blockSample, Page} from '../modules/notion';
 

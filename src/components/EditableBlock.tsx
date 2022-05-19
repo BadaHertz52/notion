@@ -1,5 +1,5 @@
 
-import React, {CSSProperties, Dispatch, SetStateAction, useEffect, useRef, useState, } from 'react';
+import React, { useEffect, useRef, useState, } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import { Block, BlockType, blockTypes, findBlock, Page } from '../modules/notion';
@@ -101,7 +101,6 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
     boolean:false,
     command:null
   }); 
-
   useEffect(()=>{
     if(storageItem !== null){
       const {editedBlock} = JSON.parse(storageItem) as {pageId: string, editedBlock:Block};
