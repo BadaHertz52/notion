@@ -14,7 +14,7 @@ type BlockFnProp ={
 };
 
 const BlockFn =({page,userName, addBlock, editBlock}:BlockFnProp)=>{
-  const editTime = JSON.stringify(Date.now);
+  const editTime = JSON.stringify(Date.now());
   const newContents:string ="";
   const [block, setBlock]=useState<Block>(blockSample);
 

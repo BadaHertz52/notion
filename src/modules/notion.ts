@@ -26,7 +26,7 @@ export type Block ={
 } ;
 
 export  const blockSample:Block ={
-  id:`blockSample_${JSON.stringify(Date.now)}`,
+  id:`blockSample_${JSON.stringify(Date.now())}`,
   contents:"",
   firstBlock:true,
   subBlocksId:null ,
@@ -139,7 +139,7 @@ const initialState :Notion ={
       parentBlocksId: null,
       type: text,
       icon:  null ,
-      editTime: JSON.stringify(Date.now),
+      editTime: JSON.stringify(Date.now()),
     },
     {
       id:"toggle",
@@ -149,7 +149,7 @@ const initialState :Notion ={
       parentBlocksId: null,
       type: toggle,
       icon:  null ,
-      editTime: JSON.stringify(Date.now),
+      editTime: JSON.stringify(Date.now()),
     },{
       id:"todo",
       contents:"todo", 
@@ -158,7 +158,7 @@ const initialState :Notion ={
       parentBlocksId: null,
       type: todo,
       icon:  null ,
-      editTime: JSON.stringify(Date.now),
+      editTime: JSON.stringify(Date.now()),
     },{
       id:"todo done",
       contents:"todo done",
@@ -167,7 +167,7 @@ const initialState :Notion ={
       parentBlocksId: null,
       type: todo_done,
       icon:  null ,
-      editTime: JSON.stringify(Date.now),
+      editTime: JSON.stringify(Date.now()),
     },{
       id:"h1",
       contents:"header1", 
@@ -176,7 +176,7 @@ const initialState :Notion ={
       parentBlocksId: null,
       type: h1,
       icon:  null ,
-      editTime: JSON.stringify(Date.now),
+      editTime: JSON.stringify(Date.now()),
     },{
       id:"h2",
       contents:"header2",
@@ -185,7 +185,7 @@ const initialState :Notion ={
       parentBlocksId: null,
       type: h2,
       icon:  null ,
-      editTime: JSON.stringify(Date.now),
+      editTime: JSON.stringify(Date.now()),
     },{
       id:"h3",
       contents:"header3", 
@@ -194,7 +194,7 @@ const initialState :Notion ={
       parentBlocksId: null,
       type: h3,
       icon:  null ,
-      editTime: JSON.stringify(Date.now),
+      editTime: JSON.stringify(Date.now()),
     },{
       id:"page1",
       contents:"page page page",
@@ -203,7 +203,7 @@ const initialState :Notion ={
       parentBlocksId: null,
       type: page,
       icon:  null ,
-      editTime: JSON.stringify(Date.now),
+      editTime: JSON.stringify(Date.now()),
     },
     {
       id:"page2",
@@ -213,7 +213,7 @@ const initialState :Notion ={
       parentBlocksId: null,
       type: page,
       icon: "🌈" ,
-      editTime: JSON.stringify(Date.now),
+      editTime: JSON.stringify(Date.now()),
     },
     {id:"sub1_1",
     contents:"sub1_1", 
@@ -222,7 +222,7 @@ const initialState :Notion ={
     parentBlocksId: ["text"],
     type: text,
     icon:  null ,
-    editTime: JSON.stringify(Date.now),
+    editTime: JSON.stringify(Date.now()),
   },
   {
     id:"sub1_2",
@@ -232,7 +232,7 @@ const initialState :Notion ={
     parentBlocksId: ["text"],
     type: text,
     icon:  null ,
-    editTime: JSON.stringify(Date.now),
+    editTime: JSON.stringify(Date.now()),
   },
   {
     id:"sub2_1",
@@ -242,7 +242,7 @@ const initialState :Notion ={
     parentBlocksId: ["text", "sub1_1"],
     type: text,
     icon:  null ,
-    editTime: JSON.stringify(Date.now),
+    editTime: JSON.stringify(Date.now()),
   },
   {
     id:"numlist",
@@ -252,7 +252,7 @@ const initialState :Notion ={
     parentBlocksId: null,
     type: numberList,
     icon:  null ,
-    editTime: JSON.stringify(Date.now),
+    editTime: JSON.stringify(Date.now()),
   },
   {
     id:"num1",
@@ -262,7 +262,7 @@ const initialState :Notion ={
     parentBlocksId: [numberList],
     type: numberList,
     icon:  null ,
-    editTime: JSON.stringify(Date.now),
+    editTime: JSON.stringify(Date.now()),
   },
   {
     id:"num2",
@@ -272,7 +272,7 @@ const initialState :Notion ={
     parentBlocksId: [numberList],
     type: numberList,
     icon:  null ,
-    editTime: JSON.stringify(Date.now),
+    editTime: JSON.stringify(Date.now()),
   },
   {
     id:"num3",
@@ -282,7 +282,7 @@ const initialState :Notion ={
     parentBlocksId: [numberList],
     type: numberList,
     icon:  null ,
-    editTime: JSON.stringify(Date.now),
+    editTime: JSON.stringify(Date.now()),
   },
   {
     id:"bulletList",
@@ -292,7 +292,7 @@ const initialState :Notion ={
     parentBlocksId:null,
     type: bulletList,
     icon:  null ,
-    editTime: JSON.stringify(Date.now),
+    editTime: JSON.stringify(Date.now()),
   },
   {
     id:"b1",
@@ -302,7 +302,7 @@ const initialState :Notion ={
     parentBlocksId:[bulletList],
     type: bulletList,
     icon:  null ,
-    editTime: JSON.stringify(Date.now),
+    editTime: JSON.stringify(Date.now()),
   },
   {
     id:"b2",
@@ -312,7 +312,7 @@ const initialState :Notion ={
     parentBlocksId:[bulletList],
     type: bulletList,
     icon:  null ,
-    editTime: JSON.stringify(Date.now),
+    editTime: JSON.stringify(Date.now()),
   },
 
     ],
