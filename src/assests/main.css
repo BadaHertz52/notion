@@ -84,7 +84,7 @@ a:link, a:active, a:visited {
   padding-right: 3rem;
 }
 
-.blockFn.on button {
+.blockFn.on .blockFnIcon {
   color: #a3a3a2;
   font-size: 1.2rem;
   font-weight: bolder;
@@ -342,8 +342,128 @@ a:link, a:active, a:visited {
   color: inherit;
 }
 
-.menu {
-  display: none;
+div {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.pageLink:hover {
+  background-color: rgba(49, 45, 33, 0.11);
+}
+
+button {
+  border: none;
+  background-color: transparent;
+  padding: 0;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  padding-left: 1rem;
+}
+
+ul li,
+ol li {
+  padding-left: 10px;
+}
+
+a:link, a:active, a:visited {
+  text-decoration: none;
+  color: inherit;
+}
+
+#menu {
+  width: 320px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  background-color: #ffff;
+  margin: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  pointer-events: auto;
+  -webkit-transform: matrix(1, 0, 0, 1, 0, 0);
+          transform: matrix(1, 0, 0, 1, 0, 0);
+  z-index: 1;
+  border-radius: 10px;
+  -webkit-box-shadow: 0px 0px 23px -5px #ababab;
+  box-shadow: 0px 0px 23px -5px #ababab;
+  position: absolute;
+  top: 0;
+  left: 3rem;
+  width: 240px;
+  font-weight: initial;
+}
+
+#menu::-webkit-scrollbar-thumb {
+  background: #D3D1CB;
+}
+
+#menu::-webkit-scrollbar-track {
+  background: #EDECE9;
+}
+
+#menu .menu_inner {
+  padding: 5% 0;
+}
+
+#menu .editFn {
+  border-bottom: 1px solid #B9B8B6;
+}
+
+#menu .editFn button,
+#menu .menu_edit_inform {
+  width: 90%;
+  margin: 3% 5%;
+}
+
+#menu .editFn button {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  font-size: 1rem;
+}
+
+#menu .editFn button span {
+  font-size: 14px;
+}
+
+#menu .editFn button svg:first-child {
+  margin: 0 5px;
+}
+
+#menu .editFn button span:nth-child(3) {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: #B9B8B6;
+}
+
+#menu .editFn button span:nth-child(3) svg {
+  font-size: 18px;
+}
+
+#menu .editFn button .arrowDown {
+  -webkit-transform: rotate(-90deg);
+          transform: rotate(-90deg);
+}
+
+#menu .menu_edit_inform {
+  font-size: 14px;
+  text-align: left;
+  color: #B9B8B6;
+  margin-bottom: 0;
+}
+
+#menu .menu_edit_inform p {
+  margin: 2px 0;
 }
 
 .editor {
