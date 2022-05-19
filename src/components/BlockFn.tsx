@@ -16,14 +16,17 @@ type BlockFnProp ={
 const BlockFn =({page,userName, addBlock, editBlock}:BlockFnProp)=>{
   const editTime = JSON.stringify(Date.now());
   const newContents:string ="";
-  const [block, setBlock]=useState<Block>(blockSample);
+  const [menuOpen, setMenuOpen]= useState<boolean>(false);
+  const sessionItem = sessionStorage.getItem("blockFnTargetBlock") as string;
 
   const makeBlock =()=>{
-    const sessionItem = sessionStorage.getItem("blockFnTargetBlock") as string;
     const targetBlock= JSON.parse(sessionItem);
-    setBlock(targetBlock);
     const targetBlockIndex= page.blocksId.indexOf(targetBlock.id);
     makeNewBlock(page, editTime,addBlock, editBlock, targetBlock, targetBlockIndex, newContents);
+  };
+
+  const openMenu=()=>{
+    setMenuOpen(!menuOpen);
   };
 
   return (
@@ -32,22 +35,26 @@ const BlockFn =({page,userName, addBlock, editBlock}:BlockFnProp)=>{
       className='blockFn'
     >
       <button 
-        className='addBlock'
+        className='blockFnIcon'
         title="Click  to add a block below"
         onClick={makeBlock}
       >
         <AiOutlinePlus/>
       </button>
       <button 
-        className='menuBtn'
+        className='blockFnIcon'
         title ="Click to open menu"
+        onClick={openMenu}
       >
         <CgMenuGridO/>
-        <Menu 
-          block={block} 
-          userName={userName}
-        />
+        {menuOpen &&
+          <Menu
+            userName={userName}
+            setMenuOpen={setMenuOpen}
+          />
+        }
       </button>
+
   </div>
   )
 };
