@@ -11,6 +11,7 @@ import {TiArrowSortedDown} from 'react-icons/ti';
 import {IoArrowRedoOutline} from 'react-icons/io5';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { AiOutlineFormatPainter } from 'react-icons/ai';
+import { CSSProperties } from 'styled-components';
 
 
 type MenuProps ={
@@ -39,54 +40,81 @@ const Menu=({page, userName, setMenuOpen, editBlock}:MenuProps)=>{
       hour: editTime?.getHours(),
       min: editTime?.getMinutes(),
     };
-  const menu = document.getElementById("menu");
-  const menuArea = menu?.getClientRects()[0];
+  const mainMenu =document.getElementById("mainMenu");
+  const mainMenuArea =mainMenu?.getClientRects()[0] ;
   const inner =document.getElementById("inner");
-  
+
   const [turnInto, setTurnInto]= useState<boolean>(false);
-  const [color, setColor]= useState<boolean>(true);
+  const [color, setColor]= useState<boolean>(false);
+  
+  const mainMenuWidth =mainMenuArea?.width as number;
+
+  const sideMenuStyle :CSSProperties= {
+    display:"block" ,
+    position:"absolute" ,
+    top: '-5px',
+    left: mainMenuWidth *0.8 ,
+    zIndex:2
+  };
+
+  type Position ={
+    top:number,
+    bottom:number,
+    left:number,
+    right:number
+  };
+
+  const findPosition =(eventTarget:Element ,elementArea:DOMRect ):{
+    targetElement_position :Position,
+    eventTarget_position : Position
+  }=>{
+    const eventTargetArea = eventTarget?.getClientRects()[0] ;
+    const targetElement_position:Position = {
+      top: elementArea?.top as number,
+      bottom: elementArea?.bottom  as number,
+      left: elementArea?.left as number,
+      right: elementArea?.right as number,
+    };
+    const eventTarget_position:Position = {
+      top: eventTargetArea?.top as number,
+      bottom: eventTargetArea?.bottom  as number,
+      left: eventTargetArea?.left as number,
+      right: eventTargetArea?.right as number,
+    };
+
+    return {
+      targetElement_position : targetElement_position,
+      eventTarget_position : eventTarget_position
+    }
+  };
+  
+  const detectRange =(event:MouseEvent , targetArea:DOMRect|undefined):boolean=>{
+    const target =event.target as Element; 
+    const target_area= targetArea as DOMRect;
+    const {targetElement_position ,eventTarget_position} =findPosition(target, target_area);
+    const inner_x:boolean = (eventTarget_position.left >= targetElement_position.left)&&(eventTarget_position.right <= targetElement_position.right);
+    const inner_y:boolean = (eventTarget_position.top>= targetElement_position.top) && (eventTarget_position.top <= targetElement_position.bottom);
+
+    return !inner_x && !inner_y;
+  };
 
   const closeMenu =(event:MouseEvent)=>{
-    const target =event.target as Element | null;
-    const targetArea = target?.getClientRects()[0] ;
-    type Position ={
-      top:number,
-      bottom:number,
-      left:number,
-      right:number
-    };
-    const menu_position:Position = {
-      top: menuArea?.top as number,
-      bottom: menuArea?.bottom  as number,
-      left: menuArea?.left as number,
-      right: menuArea?.right as number,
-    };
-    const target_position:Position = {
-      top: targetArea?.top as number,
-      bottom: targetArea?.bottom  as number,
-      left: targetArea?.left as number,
-      right: targetArea?.right as number,
-    };
-
-    const inner_x:boolean = (target_position.left >= menu_position.left)&&(target_position.right <= menu_position.right);
-    const inner_y:boolean = (target_position.top>= menu_position.top) && (target_position.top <= menu_position.bottom);
-
-    if(!inner_x && !inner_y){
-      setMenuOpen(false);
-      console.log("close menu");
-    };
+    const isOut = detectRange(event, mainMenuArea);
+    isOut && setMenuOpen(false);
   };
   inner?.addEventListener("click", (event:MouseEvent)=>closeMenu(event));
 
   const showTurnInto =()=>{
     setTurnInto(!turnInto);
+    setColor(false);
   };
   const showColorMenu =()=>{
     setColor(!color);
+    setTurnInto(false);
   };
-
   return(
-    <div id='menu' >
+  <div className="menu">
+    <div id='mainMenu' >
       <div className="menu_inner">
         <div className='blockMenu'> 
           <div className='menu_search'></div>
@@ -98,25 +126,23 @@ const Menu=({page, userName, setMenuOpen, editBlock}:MenuProps)=>{
                   <span>Delete</span>
                   <span>Del</span>
                 </button>
-                <button>
+                <button
+                  onMouseOver={showTurnInto}
+                >
                   <BsArrowClockwise/>
                   <span>Turn into</span>
-                  <button 
-                    className='arrowDown'
-                    onMouseOver={showTurnInto}
-                  >
+                  <span className='arrowDown'>
                       <TiArrowSortedDown/>
-                  </button>
+                  </span>
                 </button>
                 <button>
                   <MdOutlineRestorePage/>
                   <span>Turn into Page in</span>
-                  <button 
-                    className="arrowDown"
-                    onMouseOver={showColorMenu}
+                  <span 
+                    className="arrowDown" 
                   >
                   <TiArrowSortedDown/>
-                  </button>
+                  </span>
                 </button>
                 <button>
                   <BsLink45Deg/>
@@ -136,9 +162,14 @@ const Menu=({page, userName, setMenuOpen, editBlock}:MenuProps)=>{
                   <span>Comment</span>
                   <span>Ctrl+Shift+M</span>
                 </button>
-                <button>
+                <button onMouseOver={showColorMenu}>
                   <AiOutlineFormatPainter/>
                   <span>Color</span>
+                  <span
+                    className="arrowDown"
+                  >
+                  <TiArrowSortedDown/>
+                  </span>
                 </button>
               </div>
             </div>
@@ -158,20 +189,24 @@ const Menu=({page, userName, setMenuOpen, editBlock}:MenuProps)=>{
         <div className='blockSubMenu'>
         </div>
       </div>
+    </div>
+    <div 
+      id="sideMenu"
+      style={sideMenuStyle}
+    >
       {turnInto &&
-        <div id="menu_turnInto" className="sideMenu">
           <CommandBlock
             page={page}
             block={block}
             editTime={JSON.stringify(Date.now())}
             editBlock={editBlock}
           />
-        </div>
       }
       {color &&
-        <div id="menu_color" className="sideMenu">
-          <div className="menu_inner">
-            <div className="color_colors">
+        <div  className="menu_color"  >
+          <section className="color_colors">
+            <header>COLOR</header>
+            <div>
               <ColorInform
                 colorName='Default'
                 color={"black"}
@@ -179,12 +214,12 @@ const Menu=({page, userName, setMenuOpen, editBlock}:MenuProps)=>{
               />
               <ColorInform
                 colorName='Orange'
-                color={"#f8ba0e"}
+                color={"#ffa726"}
                 background ={undefined}
               />
               <ColorInform
                 colorName='Green'
-                color={"#009723"}
+                color={"#00701a"}
                 background ={undefined}
               />
               <ColorInform
@@ -198,11 +233,14 @@ const Menu=({page, userName, setMenuOpen, editBlock}:MenuProps)=>{
                 background={undefined}
               />
             </div>
-            <div className="color_background">
+          </section>
+          <section className="color_background">
+            <header>BACKGROUNDCOLOR</header>
+            <div>
               <ColorInform
                 colorName='Default'
                 color={undefined}
-                background={"#e0e0e0"}
+                background={"#d0d0d0"}
               />
               <ColorInform
                 colorName='Orange'
@@ -223,12 +261,13 @@ const Menu=({page, userName, setMenuOpen, editBlock}:MenuProps)=>{
                 colorName='Red'
                 color={undefined}
                 background={"#ffcdd2"}
-            />
+              />
             </div>
-          </div>
+          </section>
         </div>
       }
     </div>
+  </div>
   )
 };
 

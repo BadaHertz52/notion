@@ -205,7 +205,7 @@ a:link, a:active, a:visited {
 
 #commandBlock_inner {
   padding: 5px;
-  height: 300px;
+  height: 350px;
 }
 
 #commandBlock .command > header {
@@ -374,7 +374,14 @@ a:link, a:active, a:visited {
   color: inherit;
 }
 
-#menu {
+.menu {
+  position: absolute;
+  top: 0;
+  left: 3rem;
+  font-weight: initial;
+}
+
+#mainMenu {
   width: 320px;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -394,36 +401,32 @@ a:link, a:active, a:visited {
   border-radius: 10px;
   -webkit-box-shadow: 0px 0px 23px -5px #ababab;
   box-shadow: 0px 0px 23px -5px #ababab;
-  position: absolute;
-  top: 0;
-  left: 3rem;
   width: 240px;
-  font-weight: initial;
 }
 
-#menu::-webkit-scrollbar-thumb {
+#mainMenu::-webkit-scrollbar-thumb {
   background: #D3D1CB;
 }
 
-#menu::-webkit-scrollbar-track {
+#mainMenu::-webkit-scrollbar-track {
   background: #EDECE9;
 }
 
-#menu .menu_inner {
+#mainMenu .menu_inner {
   padding: 5% 0;
 }
 
-#menu .editFn {
+#mainMenu .editFn {
   border-bottom: 1px solid #B9B8B6;
 }
 
-#menu .editFn > button,
-#menu .menu_edit_inform {
+#mainMenu .editFn > button,
+#mainMenu .menu_edit_inform {
   width: 90%;
   margin: 3% 5%;
 }
 
-#menu .editFn > button {
+#mainMenu .editFn > button {
   position: relative;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -431,41 +434,118 @@ a:link, a:active, a:visited {
   font-size: 1rem;
 }
 
-#menu .editFn > button span {
+#mainMenu .editFn > button span {
   font-size: 14px;
 }
 
-#menu .editFn > button svg:first-child {
+#mainMenu .editFn > button svg:first-child {
   margin: 0 5px;
 }
 
-#menu .editFn > button span:nth-child(3),
-#menu .editFn > button button:nth-child(3) {
+#mainMenu .editFn > button span:nth-child(3) {
   position: absolute;
   top: 0;
   right: 0;
   color: #B9B8B6;
 }
 
-#menu .editFn > button span:nth-child(3) svg,
-#menu .editFn > button button:nth-child(3) svg {
+#mainMenu .editFn > button span:nth-child(3) svg {
   font-size: 18px;
 }
 
-#menu .editFn > button .arrowDown {
+#mainMenu .editFn > button .arrowDown svg {
   -webkit-transform: rotate(-90deg);
           transform: rotate(-90deg);
 }
 
-#menu .menu_edit_inform {
+#mainMenu .menu_edit_inform {
   font-size: 14px;
   text-align: left;
   color: #B9B8B6;
   margin-bottom: 0;
 }
 
-#menu .menu_edit_inform p {
+#mainMenu .menu_edit_inform p {
   margin: 2px 0;
+}
+
+.menu_color {
+  width: 320px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  background-color: #ffff;
+  margin: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  pointer-events: auto;
+  -webkit-transform: matrix(1, 0, 0, 1, 0, 0);
+          transform: matrix(1, 0, 0, 1, 0, 0);
+  z-index: 1;
+  border-radius: 10px;
+  -webkit-box-shadow: 0px 0px 23px -5px #ababab;
+  box-shadow: 0px 0px 23px -5px #ababab;
+  overflow-y: scroll;
+  width: 200px;
+  height: 350px;
+  color: initial;
+  font-weight: initial;
+}
+
+.menu_color::-webkit-scrollbar-thumb {
+  background: #D3D1CB;
+}
+
+.menu_color::-webkit-scrollbar-track {
+  background: #EDECE9;
+}
+
+.menu_color section > header {
+  font-size: 12px;
+  font-weight: 600;
+  text-align: left;
+  color: #B9B8B6;
+}
+
+.menu_color section {
+  padding: 3%;
+}
+
+.menu_color section > header,
+.menu_color .colorIcon {
+  margin: 0 5px;
+}
+
+.menu_color .colorInform {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  font-size: 14px;
+  padding: 5px 0;
+}
+
+.menu_color .colorInform span {
+  height: 22px;
+}
+
+.menu_color .colorIcon {
+  border: 1px solid #d6d6d6;
+}
+
+.menu_color .colorName {
+  margin-left: 5px;
+}
+
+#sideMenu #commandBlock {
+  width: 250px;
+}
+
+#sideMenu #no_result {
+  display: none;
 }
 
 .editor {

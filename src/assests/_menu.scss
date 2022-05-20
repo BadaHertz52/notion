@@ -1,11 +1,13 @@
 @import './common';
-#menu {
-  @include popUpMenu;
+.menu {
   position: absolute;
   top:0;
   left: 3rem;
-  width:240px;
   font-weight: initial;
+}
+#mainMenu {
+  @include popUpMenu;
+  width:240px;
   .menu_inner {
     padding: 5% 0;
   }
@@ -27,8 +29,7 @@
     svg:first-child {
       margin: 0 5px
     }
-    span:nth-child(3),
-    button:nth-child(3){
+    span:nth-child(3){
       position: absolute;
       top:0;
       right: 0;
@@ -38,7 +39,7 @@
         font-size: 18px;
       }
     }
-    .arrowDown {
+    .arrowDown  svg {
       transform: rotate(-90deg);
     }
   }
@@ -50,5 +51,50 @@
     p {
       margin: 2px 0;
     }
+  }
+}
+.menu_color{
+  @include popUpMenu;
+  overflow-y: scroll;
+  width: 200px;
+  height: 350px;
+  color: initial;
+  font-weight: initial;
+  section > header {
+    font : {
+      size: 12px;
+      weight: 600
+    };
+    text-align: left;
+    color: $mud;
+  }
+  section {
+    padding: 3%;
+  }
+  section > header,
+  .colorIcon {
+    margin: 0 5px;
+  }
+  .colorInform {
+    display: flex;
+    font-size: 14px;
+    padding: 5px 0;
+    span{
+      height: 22px;
+    }
+  }
+  .colorIcon {
+    border :1px solid $lightMud ;
+  }
+  .colorName {
+    margin-left: 5px;
+  }
+
+}
+#sideMenu  {
+  #commandBlock {
+    width: 250px ;
+  } #no_result{
+    display: none;
   }
 }
