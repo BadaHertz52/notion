@@ -16,9 +16,12 @@ type CommandBlockProp ={
 
 const CommandBlock =({ page ,block , editTime , editBlock}:CommandBlockProp)=>{
   const blockElement = document.getElementById(block.id) as HTMLElement;
+  const blockElementParent =blockElement?.parentElement ;
+
   const commandStyle :CSSProperties={
     position: 'absolute',
-    top: blockElement.clientHeight,
+    top: blockElementParent? (blockElementParent.getAttribute("id") !== "sideMenu"? 0: blockElement.clientHeight) :blockElement.clientHeight,
+
   };
   const textContent =blockElement.textContent?.toLowerCase() as string ;
   const commandBtns = document.querySelectorAll(".command_btn");
