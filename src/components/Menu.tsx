@@ -85,16 +85,22 @@ const Menu=({ userName, setMenuOpen}:MenuProps)=>{
                 <button>
                   <BsArrowClockwise/>
                   <span>Turn into</span>
-                  <span className='arrowDown'>
-                    <TiArrowSortedDown/>
-                  </span>
+                  <button 
+                    className='arrowDown'
+                    onMouseOver={showTurnInto}
+                  >
+                      <TiArrowSortedDown/>
+                  </button>
                 </button>
                 <button>
                   <MdOutlineRestorePage/>
                   <span>Turn into Page in</span>
-                  <span className="arrowDown">
+                  <button 
+                    className="arrowDown"
+                    onMouseOver={showColorMenu}
+                  >
                   <TiArrowSortedDown/>
-                  </span>
+                  </button>
                 </button>
                 <button>
                   <BsLink45Deg/>
