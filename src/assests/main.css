@@ -417,13 +417,13 @@ a:link, a:active, a:visited {
   border-bottom: 1px solid #B9B8B6;
 }
 
-#menu .editFn button,
+#menu .editFn > button,
 #menu .menu_edit_inform {
   width: 90%;
   margin: 3% 5%;
 }
 
-#menu .editFn button {
+#menu .editFn > button {
   position: relative;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -431,26 +431,28 @@ a:link, a:active, a:visited {
   font-size: 1rem;
 }
 
-#menu .editFn button span {
+#menu .editFn > button span {
   font-size: 14px;
 }
 
-#menu .editFn button svg:first-child {
+#menu .editFn > button svg:first-child {
   margin: 0 5px;
 }
 
-#menu .editFn button span:nth-child(3) {
+#menu .editFn > button span:nth-child(3),
+#menu .editFn > button button:nth-child(3) {
   position: absolute;
   top: 0;
   right: 0;
   color: #B9B8B6;
 }
 
-#menu .editFn button span:nth-child(3) svg {
+#menu .editFn > button span:nth-child(3) svg,
+#menu .editFn > button button:nth-child(3) svg {
   font-size: 18px;
 }
 
-#menu .editFn button .arrowDown {
+#menu .editFn > button .arrowDown {
   -webkit-transform: rotate(-90deg);
           transform: rotate(-90deg);
 }
