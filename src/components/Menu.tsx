@@ -1,5 +1,7 @@
 import React, { Dispatch, SetStateAction, useState} from 'react';
 import { Block, Page } from '../modules/notion';
+import ColorInform from './ColorInform';
+
 //icon
 import {BiCommentDetail} from 'react-icons/bi';
 import { BsArrowClockwise, BsLink45Deg } from 'react-icons/bs';
@@ -155,6 +157,66 @@ const Menu=({page, userName, setMenuOpen, editBlock}:MenuProps)=>{
         <div className='blockSubMenu'>
         </div>
       </div>
+      {color &&
+        <div id="menu_color" className="sideMenu">
+          <div className="menu_inner">
+            <div className="color_colors">
+              <ColorInform
+                colorName='Default'
+                color={"black"}
+                background ={undefined}
+              />
+              <ColorInform
+                colorName='Orange'
+                color={"#f8ba0e"}
+                background ={undefined}
+              />
+              <ColorInform
+                colorName='Green'
+                color={"#009723"}
+                background ={undefined}
+              />
+              <ColorInform
+                colorName='Blue'
+                color={"#1565c0"}
+                background={undefined}
+              />
+              <ColorInform
+                colorName='Red'
+                color={"#d32f2f"}
+                background={undefined}
+              />
+            </div>
+            <div className="color_background">
+              <ColorInform
+                colorName='Default'
+                color={undefined}
+                background={"#e0e0e0"}
+              />
+              <ColorInform
+                colorName='Orange'
+                color={undefined}
+                background={"#ffecd0"}
+                />
+              <ColorInform
+                colorName='Green'
+                color={undefined}
+                background={"#dcedc8"}
+              />
+              <ColorInform
+                colorName='Blue'
+                color={undefined}
+                background={"#e3f2fd"}
+              />
+              <ColorInform
+                colorName='Red'
+                color={undefined}
+                background={"#ffcdd2"}
+            />
+            </div>
+          </div>
+        </div>
+      }
     </div>
   )
 };
