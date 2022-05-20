@@ -1,4 +1,5 @@
-import React, { Dispatch, SetStateAction} from 'react';
+import React, { Dispatch, SetStateAction, useState} from 'react';
+import { Block, Page } from '../modules/notion';
 //icon
 import {BiCommentDetail} from 'react-icons/bi';
 import { BsArrowClockwise, BsLink45Deg } from 'react-icons/bs';
@@ -7,14 +8,16 @@ import {TiArrowSortedDown} from 'react-icons/ti';
 import {IoArrowRedoOutline} from 'react-icons/io5';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { AiOutlineFormatPainter } from 'react-icons/ai';
-import { Block } from '../modules/notion';
+
 
 type MenuProps ={
+  page:Page,
   userName: string,
   setMenuOpen : Dispatch<SetStateAction<boolean>>,
+  editBlock : (pageId: string, block: Block) => void,
 };
 
-const Menu=({ userName, setMenuOpen}:MenuProps)=>{
+const Menu=({page, userName, setMenuOpen, editBlock}:MenuProps)=>{
   const today = new Date().getDate();
   type TimeInform ={
     year:number,
@@ -36,6 +39,9 @@ const Menu=({ userName, setMenuOpen}:MenuProps)=>{
   const menu = document.getElementById("menu");
   const menuArea = menu?.getClientRects()[0];
   const inner =document.getElementById("inner");
+  
+  const [turnInto, setTurnInto]= useState<boolean>(false);
+  const [color, setColor]= useState<boolean>(true);
 
   const closeMenu =(event:MouseEvent)=>{
     const target =event.target as Element | null;
@@ -68,6 +74,13 @@ const Menu=({ userName, setMenuOpen}:MenuProps)=>{
     };
   };
   inner?.addEventListener("click", (event:MouseEvent)=>closeMenu(event));
+
+  const showTurnInto =()=>{
+    setTurnInto(!turnInto);
+  };
+  const showColorMenu =()=>{
+    setColor(!color);
+  };
 
   return(
     <div id='menu' >

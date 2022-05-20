@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Menu from './Menu';
-import {Block, blockSample, Page} from '../modules/notion';
+import {Block, Page} from '../modules/notion';
 
 import { AiOutlinePlus } from 'react-icons/ai';
 import { CgMenuGridO } from 'react-icons/cg';
@@ -49,8 +49,10 @@ const BlockFn =({page,userName, addBlock, editBlock}:BlockFnProp)=>{
         <CgMenuGridO/>
         {menuOpen &&
           <Menu
+            page={page}
             userName={userName}
             setMenuOpen={setMenuOpen}
+            editBlock={editBlock}
           />
         }
       </button>
