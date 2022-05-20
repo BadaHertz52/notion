@@ -1,5 +1,6 @@
 import React, { Dispatch, SetStateAction, useState} from 'react';
 import { Block, Page } from '../modules/notion';
+import CommandBlock from './CommandBlock';
 import ColorInform from './ColorInform';
 
 //icon
@@ -157,6 +158,16 @@ const Menu=({page, userName, setMenuOpen, editBlock}:MenuProps)=>{
         <div className='blockSubMenu'>
         </div>
       </div>
+      {turnInto &&
+        <div id="menu_turnInto" className="sideMenu">
+          <CommandBlock
+            page={page}
+            block={block}
+            editTime={JSON.stringify(Date.now())}
+            editBlock={editBlock}
+          />
+        </div>
+      }
       {color &&
         <div id="menu_color" className="sideMenu">
           <div className="menu_inner">
