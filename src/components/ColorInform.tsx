@@ -14,20 +14,24 @@ const StyleColorInform =styled.span`
   color:${(props:StyleColorInformProps) =>props.color !== undefined? props.color: "initial"};
 
   background:${(props:StyleColorInformProps)=>props.background !==undefined? props.background: "initial" };
-  border :1px solid black;
+  font-weight: 500;
+  font-size: 16px;
+  width: 22px;
+  text-align: center;
+  border-radius: 20%;
 `; 
 
 const ColorInform=({color ,background, colorName}:ColorInformProps)=>{
   return(
-    <div className='color_color'>
+    <div className='colorInform'>
       <StyleColorInform
-        className={"color_left"}
+        className={"colorIcon"}
         color={color} 
         background={background}
         >
         A
       </StyleColorInform>
-      <span className='color_inform'>
+      <span className='colorName'>
         {color !== undefined ?
           colorName
         :
