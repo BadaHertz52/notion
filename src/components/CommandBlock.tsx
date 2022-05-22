@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { CSSProperties } from "react";
 import { FcTodoList } from 'react-icons/fc';
 import { IoIosList } from 'react-icons/io';
 import { IoDocumentTextOutline, IoTextOutline } from 'react-icons/io5';
 import { RiPlayList2Fill } from 'react-icons/ri';
 import { VscListOrdered } from 'react-icons/vsc';
+import { Command } from '../containers/EditorContainer';
 import { Block, BlockType, blockTypes, Page } from "../modules/notion";
 
 type CommandBlockProp ={
@@ -12,15 +13,17 @@ type CommandBlockProp ={
   block:Block,
   editTime:string,
   editBlock :(pageId:string, block:Block)=>void,
+  setCommand: Dispatch<SetStateAction<Command>> ,
 };
 
-const CommandBlock =({ page ,block , editTime , editBlock}:CommandBlockProp)=>{
+const CommandBlock =({ page ,block , editTime , editBlock ,setCommand}:CommandBlockProp)=>{
   const blockElement = document.getElementById(block.id) as HTMLElement;
   const blockElementParent =blockElement?.parentElement ;
 
   const commandStyle :CSSProperties={
     position: 'absolute',
-    top: blockElementParent? (blockElementParent.getAttribute("id") == "sideMenu"? 0: blockElement.clientHeight) :blockElement.clientHeight,
+    top: blockElementParent? (blockElementParent.getAttribute("id") === "sideMenu"? 0: blockElement.clientHeight) :blockElement.clientHeight,
+    zIndex:10,
 
   };
   const textContent =blockElement.textContent?.toLowerCase() as string ;
@@ -51,8 +54,7 @@ const CommandBlock =({ page ,block , editTime , editBlock}:CommandBlockProp)=>{
     }
     
   };
-  const changeType=(type:string)=>{
-    
+  const changeType=( type:string)=>{
     const blockType:BlockType = blockTypes.filter((block_type)=> block_type === type)[0];
     const newBlock:Block ={
       ...block,
@@ -61,7 +63,7 @@ const CommandBlock =({ page ,block , editTime , editBlock}:CommandBlockProp)=>{
     };
     console.log("changeType", type, newBlock);
     editBlock(page.id, newBlock);
-
+    setCommand({boolean:false, command:null})
   };
   return(
       <div 

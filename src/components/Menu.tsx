@@ -12,6 +12,7 @@ import {IoArrowRedoOutline} from 'react-icons/io5';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { AiOutlineFormatPainter } from 'react-icons/ai';
 import { CSSProperties } from 'styled-components';
+import { Command } from '../containers/EditorContainer';
 
 
 type MenuProps ={
@@ -47,6 +48,7 @@ const Menu=({page, userName, setMenuOpen, editBlock}:MenuProps)=>{
   const [turnInto, setTurnInto]= useState<boolean>(false);
   const [color, setColor]= useState<boolean>(false);
   
+  const [command, setCommand]= useState<Command>({boolean:false, command:null});
 
   const sideMenuStyle :CSSProperties= {
     display:"block" ,
@@ -199,6 +201,7 @@ const Menu=({page, userName, setMenuOpen, editBlock}:MenuProps)=>{
             block={block}
             editTime={JSON.stringify(Date.now())}
             editBlock={editBlock}
+            setCommand={setCommand}
           />
       }
       {color &&

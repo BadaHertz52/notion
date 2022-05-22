@@ -363,6 +363,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
             block={block}
             editTime={editTime}
             editBlock={editBlock}
+            setCommand={setCommand}
           />
           </>
         }
