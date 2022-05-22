@@ -42,7 +42,9 @@ const Menu=({page, userName, setMenuOpen, editBlock}:MenuProps)=>{
       min: editTime?.getMinutes(),
     };
   const mainMenu =document.getElementById("mainMenu");
+  const sideMenu =document.getElementById("sideMenu");
   const mainMenuArea =mainMenu?.getClientRects()[0] ;
+  const sideMenuArea =sideMenu?.getClientRects()[0] ;
   const inner =document.getElementById("inner");
 
   const [turnInto, setTurnInto]= useState<boolean>(false);
@@ -62,7 +64,7 @@ const Menu=({page, userName, setMenuOpen, editBlock}:MenuProps)=>{
     top:number,
     bottom:number,
     left:number,
-    right:number
+    right:number,
   };
 
   const findPosition =(eventTarget:Element ,elementArea:DOMRect ):{
@@ -82,26 +84,26 @@ const Menu=({page, userName, setMenuOpen, editBlock}:MenuProps)=>{
       left: eventTargetArea?.left as number,
       right: eventTargetArea?.right as number,
     };
-
+    
     return {
       targetElement_position : targetElement_position,
       eventTarget_position : eventTarget_position
     }
   };
   
-  const detectRange =(event:MouseEvent , targetArea:DOMRect|undefined):boolean=>{
+  const detectRange =(event:MouseEvent , targetArea:DOMRect|undefined , targetElement:string):boolean=>{
     const target =event.target as Element; 
     const target_area= targetArea as DOMRect;
     const {targetElement_position ,eventTarget_position} =findPosition(target, target_area);
     const inner_x:boolean = (eventTarget_position.left >= targetElement_position.left)&&(eventTarget_position.right <= targetElement_position.right);
-    const inner_y:boolean = (eventTarget_position.top>= targetElement_position.top) && (eventTarget_position.top <= targetElement_position.bottom);
-
-    return !inner_x && !inner_y;
+    const inner_y:boolean = (eventTarget_position.top>= targetElement_position.top) && (eventTarget_position.bottom <= targetElement_position.bottom);
+    return (inner_x && inner_y);
   };
 
   const closeMenu =(event:MouseEvent)=>{
-    const isOut = detectRange(event, mainMenuArea);
-    isOut && setMenuOpen(false);
+    const isInnerrMain = detectRange(event, mainMenuArea , "main");
+    const isInnerSide =detectRange(event, sideMenuArea , "sideMenu");
+    (isInnerrMain || isInnerSide) ? setMenuOpen(false) :setMenuOpen(true);
   };
   inner?.addEventListener("click", (event:MouseEvent)=>closeMenu(event));
 
