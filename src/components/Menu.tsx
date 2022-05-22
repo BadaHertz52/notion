@@ -47,13 +47,12 @@ const Menu=({page, userName, setMenuOpen, editBlock}:MenuProps)=>{
   const [turnInto, setTurnInto]= useState<boolean>(false);
   const [color, setColor]= useState<boolean>(false);
   
-  const mainMenuWidth =mainMenuArea?.width as number;
 
   const sideMenuStyle :CSSProperties= {
     display:"block" ,
     position:"absolute" ,
     top: '-5px',
-    left: mainMenuWidth *0.8 ,
+    left: 240 *0.8 ,
     zIndex:2
   };
 
