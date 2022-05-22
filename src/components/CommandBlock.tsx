@@ -20,7 +20,7 @@ const CommandBlock =({ page ,block , editTime , editBlock}:CommandBlockProp)=>{
 
   const commandStyle :CSSProperties={
     position: 'absolute',
-    top: blockElementParent? (blockElementParent.getAttribute("id") !== "sideMenu"? 0: blockElement.clientHeight) :blockElement.clientHeight,
+    top: blockElementParent? (blockElementParent.getAttribute("id") == "sideMenu"? 0: blockElement.clientHeight) :blockElement.clientHeight,
 
   };
   const textContent =blockElement.textContent?.toLowerCase() as string ;
