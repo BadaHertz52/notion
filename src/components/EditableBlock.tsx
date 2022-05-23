@@ -19,22 +19,22 @@ type findTargetBlockReturn ={
 const findTargetBlock =(page:Page):findTargetBlockReturn=>{
   const cursor =document.getSelection();
   const focusOffset =cursor?.focusOffset as number;
-  const cursorParent = cursor?.anchorNode?.parentElement;
-  const cursorParentTag = cursorParent?.tagName ;
-  const targetElement =  cursorParentTag ==="LI" ? cursorParent : cursorParent?.parentElement?.parentElement?.parentElement; 
-  const textContents = cursorParentTag ==="LI" ?   targetElement?.textContent as string :  targetElement?.getElementsByClassName("mainBlock")[0]?.getElementsByClassName("blockContents")[0]?.textContent as string; 
-
-  const blockId:string = targetElement?.id  as string;
+  const cursorAnchorNode = cursor?.anchorNode as Node;
+  const nodeType = cursorAnchorNode.nodeType as number ;
+  const blockContentsElement = nodeType === 3 ? cursorAnchorNode.parentElement as Element : cursorAnchorNode as Element ; 
+  const title =blockContentsElement?.getAttribute("title") as string ; 
+  const end = title?.indexOf("_contents");
+  const blockId :string = title?.slice(0,end ); 
+  const textContents = blockContentsElement?.textContent as string; 
   const targetBlockIndex :number =page.blocksId.indexOf(blockId) as number;
   
   const targetBlock :Block =page.blocks[targetBlockIndex];
-  
   const newContents = textContents?.slice(focusOffset) as string ;
 
   return {
     cursor: cursor ,
     focusOffset: focusOffset,
-    targetElement:targetElement,
+    targetElement:blockContentsElement as HTMLElement,
     targetBlock:targetBlock ,
     targetBlockIndex:targetBlockIndex,
     textContents: textContents,
