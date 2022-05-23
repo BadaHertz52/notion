@@ -526,6 +526,7 @@ a:link, a:active, a:visited {
   display: flex;
   font-size: 14px;
   padding: 5px 0;
+  width: 100%;
 }
 
 .menu_color .colorInform span {
