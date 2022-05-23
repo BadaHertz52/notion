@@ -54,7 +54,7 @@ const Menu=({page, userName, setMenuOpen, editBlock, deleteBlock}:MenuProps)=>{
     display:"block" ,
     position:"absolute" ,
     top: '-5px',
-    left: 240 *0.8 ,
+    left: 240 *0.88 ,
     zIndex:2
   };
 
