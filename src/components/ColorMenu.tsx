@@ -24,10 +24,37 @@ const StyleColorInform =styled.span`
   border-radius: 20%;
 `; 
 
-const ColorInform=({color ,background, colorName}:ColorInformProps)=>{
 const ColorInform=({color ,background, colorName ,page, block ,editBlock}:ColorInformProps)=>{
+  const changeColor =()=>{
+    if(color ===undefined && background !== undefined ){
+      ///change backgournd color
+      const newBlock :Block ={
+        ...block,
+        style :{
+          ...block.style,
+          bgColor: background,
+        }
+      };
+      editBlock(page.id, newBlock)
+    }
+    if(color !== undefined && background === undefined){
+      ///change color
+      const newBlock :Block ={
+        ...block,
+        style: {
+          ...block.style,
+          color: color
+        }
+      };
+      editBlock(page.id, newBlock)
+    }
+  };
+
   return(
-    <div className='colorInform'>
+    <button 
+      className='colorInform'
+      onClick ={changeColor}
+    >
       <StyleColorInform
         className={"colorIcon"}
         color={color} 
@@ -42,11 +69,12 @@ const ColorInform=({color ,background, colorName ,page, block ,editBlock}:ColorI
         `${colorName} background`
           }
       </span>
-    </div>
+    </button>
 
   )
 };
 type ColorMenuProps = {
+  page :Page,
   block:Block,
   editBlock : (pageId: string, block: Block) => void,
 };
