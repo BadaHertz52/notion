@@ -10,10 +10,11 @@ type BlockFnProp ={
   page:Page,
   userName:string,
   addBlock: (pageId: string, block: Block, nextBlockIndex: number, previousBlockId: string | null) => void, 
-  editBlock: (pageId: string, block: Block) => void
+  editBlock: (pageId: string, block: Block) => void,
+  deleteBlock :(pageId: string, block: Block) => void,
 };
 
-const BlockFn =({page,userName, addBlock, editBlock}:BlockFnProp)=>{
+const BlockFn =({page,userName, addBlock, editBlock, deleteBlock}:BlockFnProp)=>{
   const editTime = JSON.stringify(Date.now());
   const newContents:string ="";
   const [menuOpen, setMenuOpen]= useState<boolean>(false);
@@ -53,6 +54,7 @@ const BlockFn =({page,userName, addBlock, editBlock}:BlockFnProp)=>{
             userName={userName}
             setMenuOpen={setMenuOpen}
             editBlock={editBlock}
+            deleteBlock={deleteBlock}
           />
         }
       </button>

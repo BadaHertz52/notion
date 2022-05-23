@@ -203,6 +203,7 @@ const Frame =({ userName, page,side,  editBlock, addBlock,changeToSub ,raiseBloc
                 userName={userName}
                 addBlock={addBlock}
                 editBlock={editBlock}
+                deleteBlock={deleteBlock}
               />
             </div>
           </div>

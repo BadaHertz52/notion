@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction, useState} from 'react';
 import { Block, Page } from '../modules/notion';
 import CommandBlock from './CommandBlock';
-import ColorInform from './ColorInform';
+import ColorInform from './ColorMenu';
 
 //icon
 import {BiCommentDetail} from 'react-icons/bi';
@@ -13,6 +13,7 @@ import { RiDeleteBin6Line } from 'react-icons/ri';
 import { AiOutlineFormatPainter } from 'react-icons/ai';
 import { CSSProperties } from 'styled-components';
 import { Command } from '../containers/EditorContainer';
+import ColorMenu from './ColorMenu';
 
 
 type MenuProps ={
@@ -20,9 +21,10 @@ type MenuProps ={
   userName: string,
   setMenuOpen : Dispatch<SetStateAction<boolean>>,
   editBlock : (pageId: string, block: Block) => void,
+  deleteBlock :(pageId: string, block: Block) => void,
 };
 
-const Menu=({page, userName, setMenuOpen, editBlock}:MenuProps)=>{
+const Menu=({page, userName, setMenuOpen, editBlock, deleteBlock}:MenuProps)=>{
   const today = new Date().getDate();
   type TimeInform ={
     year:number,
@@ -91,7 +93,7 @@ const Menu=({page, userName, setMenuOpen, editBlock}:MenuProps)=>{
     }
   };
   
-  const detectRange =(event:MouseEvent , targetArea:DOMRect|undefined , targetElement:string):boolean=>{
+  const detectRange =(event:MouseEvent , targetArea:DOMRect|undefined ):boolean=>{
     const target =event.target as Element; 
     const target_area= targetArea as DOMRect;
     const {targetElement_position ,eventTarget_position} =findPosition(target, target_area);
@@ -101,8 +103,8 @@ const Menu=({page, userName, setMenuOpen, editBlock}:MenuProps)=>{
   };
 
   const closeMenu =(event:MouseEvent)=>{
-    const isInnerrMain = detectRange(event, mainMenuArea , "main");
-    const isInnerSide =detectRange(event, sideMenuArea , "sideMenu");
+    const isInnerrMain = detectRange(event, mainMenuArea);
+    const isInnerSide =detectRange(event, sideMenuArea );
     (isInnerrMain || isInnerSide) ? setMenuOpen(false) :setMenuOpen(true);
   };
   inner?.addEventListener("click", (event:MouseEvent)=>closeMenu(event));
@@ -115,6 +117,10 @@ const Menu=({page, userName, setMenuOpen, editBlock}:MenuProps)=>{
     setColor(!color);
     setTurnInto(false);
   };
+  const removeBlock =()=>{
+    deleteBlock(page.id, block);
+  };
+
   return(
   <div className="menu">
     <div id='mainMenu' >
@@ -124,7 +130,9 @@ const Menu=({page, userName, setMenuOpen, editBlock}:MenuProps)=>{
           <div className="menu_edit">
             <div className="memu_editFns">
               <div className="editFn" id="editFn1">
-                <button>
+                <button
+                  onClick ={removeBlock}
+                >
                   <RiDeleteBin6Line/>
                   <span>Delete</span>
                   <span>Del</span>
@@ -207,68 +215,10 @@ const Menu=({page, userName, setMenuOpen, editBlock}:MenuProps)=>{
           />
       }
       {color &&
-        <div  className="menu_color"  >
-          <section className="color_colors">
-            <header>COLOR</header>
-            <div>
-              <ColorInform
-                colorName='Default'
-                color={"black"}
-                background ={undefined}
-              />
-              <ColorInform
-                colorName='Orange'
-                color={"#ffa726"}
-                background ={undefined}
-              />
-              <ColorInform
-                colorName='Green'
-                color={"#00701a"}
-                background ={undefined}
-              />
-              <ColorInform
-                colorName='Blue'
-                color={"#1565c0"}
-                background={undefined}
-              />
-              <ColorInform
-                colorName='Red'
-                color={"#d32f2f"}
-                background={undefined}
-              />
-            </div>
-          </section>
-          <section className="color_background">
-            <header>BACKGROUNDCOLOR</header>
-            <div>
-              <ColorInform
-                colorName='Default'
-                color={undefined}
-                background={"#d0d0d0"}
-              />
-              <ColorInform
-                colorName='Orange'
-                color={undefined}
-                background={"#ffecd0"}
-                />
-              <ColorInform
-                colorName='Green'
-                color={undefined}
-                background={"#dcedc8"}
-              />
-              <ColorInform
-                colorName='Blue'
-                color={undefined}
-                background={"#e3f2fd"}
-              />
-              <ColorInform
-                colorName='Red'
-                color={undefined}
-                background={"#ffcdd2"}
-              />
-            </div>
-          </section>
-        </div>
+        <ColorMenu
+          block={block}
+          editBlock={editBlock}
+        />
       }
     </div>
   </div>
