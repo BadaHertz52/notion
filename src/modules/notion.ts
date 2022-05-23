@@ -14,6 +14,21 @@ export const blockTypes =[text, toggle, todo, todo_done, h1, h2, page, numberLis
 
 export type BlockType= "text"|"toggle"|"todo" |"todo done"|"h1"|"h2"|"h3" |"page" |"numberList" |"bulletList" ;
 
+export const orange ="orange" as const;
+export const green ="green" as const;
+export const blue ="blue" as const;
+export const red ="red" as const;
+export const defaultColor ="defaultColor" as const;
+
+export const bg_orange ="bg_orange" as const;
+export const bg_green ="bg_green" as const;
+export const bg_blue ="bg_blue" as const;
+export const bg_red ="bg_red" as const;
+export const bg_defaultColor ="bg_defaultColor" as const;
+
+export type ColorType = "defaultColor"|"orange"| "green"| "blue"| "red" ;
+export type BgColorType = "bg_defaultColor"|"bg_orange"| "bg_green"| "bg_blue"| "bg_red" ;
+
 export type Block ={
   id:string,
   contents:string, 
@@ -22,7 +37,15 @@ export type Block ={
   parentBlocksId: string[]|null,
   type: BlockType ,
   icon: string | null ,
-  editTime: string 
+  editTime: string ,
+  style :{
+    color: ColorType,
+    bgColor: BgColorType,
+    bolder: boolean,
+    italicize: boolean,
+    underLine:boolean,
+    strike_through :boolean,
+  }
 } ;
 
 export  const blockSample:Block ={
@@ -33,7 +56,15 @@ export  const blockSample:Block ={
   parentBlocksId: null,
   type:text,
   icon:null,
-  editTime:""
+  editTime:"",
+  style :{
+    color: defaultColor,
+    bgColor: bg_defaultColor,
+    bolder: false,
+    italicize: false,
+    underLine:false,
+    strike_through :false,
+  }
 }
 export type Page ={
   id:string , 
@@ -140,6 +171,14 @@ const initialState :Notion ={
       type: text,
       icon:  null ,
       editTime: JSON.stringify(Date.now()),
+      style :{
+        color: defaultColor,
+        bgColor: bg_defaultColor,
+        bolder: false,
+        italicize: false,
+        underLine:false,
+        strike_through :false,
+      }
     },
     {
       id:"toggle",
@@ -150,6 +189,14 @@ const initialState :Notion ={
       type: toggle,
       icon:  null ,
       editTime: JSON.stringify(Date.now()),
+      style :{
+        color: defaultColor,
+        bgColor: bg_defaultColor,
+        bolder: false,
+        italicize: false,
+        underLine:false,
+        strike_through :false,
+      }
     },{
       id:"todo",
       contents:"todo", 
@@ -159,6 +206,14 @@ const initialState :Notion ={
       type: todo,
       icon:  null ,
       editTime: JSON.stringify(Date.now()),
+      style :{
+        color: defaultColor,
+        bgColor: bg_defaultColor,
+        bolder: false,
+        italicize: false,
+        underLine:false,
+        strike_through :false,
+      }
     },{
       id:"todo done",
       contents:"todo done",
@@ -168,6 +223,14 @@ const initialState :Notion ={
       type: todo_done,
       icon:  null ,
       editTime: JSON.stringify(Date.now()),
+      style :{
+        color: defaultColor,
+        bgColor: bg_defaultColor,
+        bolder: false,
+        italicize: false,
+        underLine:false,
+        strike_through :false,
+      }
     },{
       id:"h1",
       contents:"header1", 
@@ -177,6 +240,14 @@ const initialState :Notion ={
       type: h1,
       icon:  null ,
       editTime: JSON.stringify(Date.now()),
+      style :{
+        color: defaultColor,
+        bgColor: bg_defaultColor,
+        bolder: false,
+        italicize: false,
+        underLine:false,
+        strike_through :false,
+      }
     },{
       id:"h2",
       contents:"header2",
@@ -186,6 +257,14 @@ const initialState :Notion ={
       type: h2,
       icon:  null ,
       editTime: JSON.stringify(Date.now()),
+      style :{
+        color: defaultColor,
+        bgColor: bg_defaultColor,
+        bolder: false,
+        italicize: false,
+        underLine:false,
+        strike_through :false,
+      }
     },{
       id:"h3",
       contents:"header3", 
@@ -194,7 +273,15 @@ const initialState :Notion ={
       parentBlocksId: null,
       type: h3,
       icon:  null ,
-      editTime: JSON.stringify(Date.now()),
+      editTime: JSON.stringify(Date.now()),  
+      style :{
+        color: defaultColor,
+        bgColor: bg_defaultColor,
+        bolder: false,
+        italicize: false,
+        underLine:false,
+        strike_through :false,
+      }
     },{
       id:"page1",
       contents:"page page page",
@@ -204,6 +291,14 @@ const initialState :Notion ={
       type: page,
       icon:  null ,
       editTime: JSON.stringify(Date.now()),
+      style :{
+        color: defaultColor,
+        bgColor: bg_defaultColor,
+        bolder: false,
+        italicize: false,
+        underLine:false,
+        strike_through :false,
+      }
     },
     {
       id:"page2",
@@ -214,6 +309,14 @@ const initialState :Notion ={
       type: page,
       icon: "🌈" ,
       editTime: JSON.stringify(Date.now()),
+      style :{
+        color: defaultColor,
+        bgColor: bg_defaultColor,
+        bolder: false,
+        italicize: false,
+        underLine:false,
+        strike_through :false,
+      }
     },
     {id:"sub1_1",
     contents:"sub1_1", 
@@ -223,6 +326,14 @@ const initialState :Notion ={
     type: text,
     icon:  null ,
     editTime: JSON.stringify(Date.now()),
+    style :{
+      color: defaultColor,
+      bgColor: bg_defaultColor,
+      bolder: false,
+      italicize: false,
+      underLine:false,
+      strike_through :false,
+    }
   },
   {
     id:"sub1_2",
@@ -233,6 +344,14 @@ const initialState :Notion ={
     type: text,
     icon:  null ,
     editTime: JSON.stringify(Date.now()),
+    style :{
+      color: defaultColor,
+      bgColor: bg_defaultColor,
+      bolder: false,
+      italicize: false,
+      underLine:false,
+      strike_through :false,
+    }
   },
   {
     id:"sub2_1",
@@ -243,6 +362,14 @@ const initialState :Notion ={
     type: text,
     icon:  null ,
     editTime: JSON.stringify(Date.now()),
+    style :{
+      color: defaultColor,
+      bgColor: bg_defaultColor,
+      bolder: false,
+      italicize: false,
+      underLine:false,
+      strike_through :false,
+    }
   },
   {
     id:"numlist",
@@ -253,6 +380,14 @@ const initialState :Notion ={
     type: numberList,
     icon:  null ,
     editTime: JSON.stringify(Date.now()),
+    style :{
+      color: defaultColor,
+      bgColor: bg_defaultColor,
+      bolder: false,
+      italicize: false,
+      underLine:false,
+      strike_through :false,
+    }
   },
   {
     id:"num1",
@@ -263,6 +398,14 @@ const initialState :Notion ={
     type: numberList,
     icon:  null ,
     editTime: JSON.stringify(Date.now()),
+    style :{
+      color: defaultColor,
+      bgColor: bg_defaultColor,
+      bolder: false,
+      italicize: false,
+      underLine:false,
+      strike_through :false,
+    }
   },
   {
     id:"num2",
@@ -273,6 +416,14 @@ const initialState :Notion ={
     type: numberList,
     icon:  null ,
     editTime: JSON.stringify(Date.now()),
+    style :{
+      color: defaultColor,
+      bgColor: bg_defaultColor,
+      bolder: false,
+      italicize: false,
+      underLine:false,
+      strike_through :false,
+    }
   },
   {
     id:"num3",
@@ -283,6 +434,14 @@ const initialState :Notion ={
     type: numberList,
     icon:  null ,
     editTime: JSON.stringify(Date.now()),
+    style :{
+      color: defaultColor,
+      bgColor: bg_defaultColor,
+      bolder: false,
+      italicize: false,
+      underLine:false,
+      strike_through :false,
+    }
   },
   {
     id:"bulletList",
@@ -293,6 +452,14 @@ const initialState :Notion ={
     type: bulletList,
     icon:  null ,
     editTime: JSON.stringify(Date.now()),
+    style :{
+      color: defaultColor,
+      bgColor: bg_defaultColor,
+      bolder: false,
+      italicize: false,
+      underLine:false,
+      strike_through :false,
+    }
   },
   {
     id:"b1",
@@ -303,6 +470,14 @@ const initialState :Notion ={
     type: bulletList,
     icon:  null ,
     editTime: JSON.stringify(Date.now()),
+    style :{
+      color: defaultColor,
+      bgColor: bg_defaultColor,
+      bolder: false,
+      italicize: false,
+      underLine:false,
+      strike_through :false,
+    }
   },
   {
     id:"b2",
@@ -313,6 +488,14 @@ const initialState :Notion ={
     type: bulletList,
     icon:  null ,
     editTime: JSON.stringify(Date.now()),
+    style :{
+      color: defaultColor,
+      bgColor: bg_defaultColor,
+      bolder: false,
+      italicize: false,
+      underLine:false,
+      strike_through :false,
+    }
   },
 
     ],

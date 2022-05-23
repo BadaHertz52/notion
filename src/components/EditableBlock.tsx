@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState, } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
-import { Block, BlockType, blockTypes, findBlock, Page } from '../modules/notion';
+import { bg_defaultColor, Block, BlockType, blockTypes, defaultColor, findBlock, Page } from '../modules/notion';
 import CommandBlock from './CommandBlock';
 import { Command } from '../containers/EditorContainer';
 import BlockComponent from './BlockComponent';
@@ -52,6 +52,14 @@ export const makeNewBlock=(page:Page, editTime:string,addBlock:(pageId: string, 
       subBlocksId:targetBlock.subBlocksId,
       parentBlocksId:targetBlock.parentBlocksId,
       icon:null,
+      style :{
+        color:defaultColor,
+        bgColor:bg_defaultColor,
+        bolder:false,
+        italicize:false,
+        underLine:false,
+        strike_through:false
+      }
     };
       //새로운 버튼 
     addBlock(page.id, newBlock, targetBlockIndex+1 ,targetBlock.id)
@@ -65,6 +73,14 @@ export const makeNewBlock=(page:Page, editTime:string,addBlock:(pageId: string, 
       subBlocksId:null,
       parentBlocksId:targetBlock.parentBlocksId !==null? targetBlock.parentBlocksId.concat(targetBlock.id) : [targetBlock.id],
       icon:null,
+      style :{
+        color:defaultColor,
+        bgColor:bg_defaultColor,
+        bolder:false,
+        italicize:false,
+        underLine:false,
+        strike_through:false
+      }
     };
     
     addBlock(page.id, newSubBlock, targetBlockIndex+1, targetBlock.id);
