@@ -56,6 +56,7 @@
 .menu_color{
   @include popUpMenu;
   overflow-y: scroll;
+  z-index: 10;
   width: 200px;
   height: 350px;
   color: initial;
@@ -93,6 +94,7 @@
 
 }
 #sideMenu  {
+
   #commandBlock {
     width: 250px ;
   } #no_result{
