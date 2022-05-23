@@ -55,10 +55,9 @@ export const makeNewBlock=(page:Page, editTime:string,addBlock:(pageId: string, 
       style :{
         color:defaultColor,
         bgColor:bg_default,
-        bolder:false,
-        italicize:false,
-        underLine:false,
-        strike_through:false
+                fontWeight:"initial",
+        fontStyle:"initial",
+        textDeco:"none"
       }
     };
       //새로운 버튼 
@@ -76,10 +75,9 @@ export const makeNewBlock=(page:Page, editTime:string,addBlock:(pageId: string, 
       style :{
         color:defaultColor,
         bgColor:bg_default,
-        bolder:false,
-        italicize:false,
-        underLine:false,
-        strike_through:false
+        fontWeight:"initial",
+        fontStyle:"initial",
+        textDeco:"none"
       }
     };
     

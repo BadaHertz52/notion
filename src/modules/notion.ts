@@ -28,10 +28,16 @@ export const bg_blue :string ="#e3f2fd" as const;
 export const bg_pink : string ="#fce4ec" as const;
 
 
-
 export type ColorType = typeof defaultColor|typeof grey|typeof orange| typeof green| typeof blue| typeof red ;
 export type BgColorType = typeof bg_default| typeof bg_grey|typeof bg_yellow| typeof bg_green| typeof bg_blue| typeof bg_pink ;
 
+export type BlockStyle ={
+  color: ColorType,
+  bgColor: BgColorType,
+  fontWeight: "bold"|"initial",
+  fontStyle: "italic" | "initial",
+  textDeco : "underline"|"overline" | "none"
+};
 export type Block ={
   id:string,
   contents:string, 
@@ -41,14 +47,7 @@ export type Block ={
   type: BlockType ,
   icon: string | null ,
   editTime: string ,
-  style :{
-    color: ColorType,
-    bgColor: BgColorType,
-    bolder: boolean,
-    italicize: boolean,
-    underLine:boolean,
-    strike_through :boolean,
-  }
+  style :BlockStyle
 } ;
 
 export  const blockSample:Block ={
@@ -63,10 +62,9 @@ export  const blockSample:Block ={
   style :{
     color: defaultColor,
     bgColor: bg_default,
-    bolder: false,
-    italicize: false,
-    underLine:false,
-    strike_through :false,
+    fontWeight:"initial",
+    fontStyle:"initial",
+    textDeco:"none"
   }
 }
 export type Page ={
@@ -175,12 +173,11 @@ const initialState :Notion ={
       icon:  null ,
       editTime: JSON.stringify(Date.now()),
       style :{
-        color: defaultColor,
+        color: blue,
         bgColor: bg_default,
-        bolder: false,
-        italicize: false,
-        underLine:false,
-        strike_through :false,
+        fontWeight:"bold",
+        fontStyle:"initial",
+        textDeco:"none"
       }
     },
     {
@@ -195,10 +192,9 @@ const initialState :Notion ={
       style :{
         color: defaultColor,
         bgColor: bg_default,
-        bolder: false,
-        italicize: false,
-        underLine:false,
-        strike_through :false,
+        fontWeight:"initial",
+        fontStyle:"initial",
+        textDeco:"none"
       }
     },{
       id:"todo",
@@ -211,11 +207,10 @@ const initialState :Notion ={
       editTime: JSON.stringify(Date.now()),
       style :{
         color: defaultColor,
-        bgColor: bg_default,
-        bolder: false,
-        italicize: false,
-        underLine:false,
-        strike_through :false,
+        bgColor: bg_yellow,
+        fontWeight:"initial",
+        fontStyle:"initial",
+        textDeco:"underline"
       }
     },{
       id:"todo done",
@@ -229,10 +224,9 @@ const initialState :Notion ={
       style :{
         color: defaultColor,
         bgColor: bg_default,
-        bolder: false,
-        italicize: false,
-        underLine:false,
-        strike_through :false,
+        fontWeight:"initial",
+        fontStyle:"initial",
+        textDeco:"none"
       }
     },{
       id:"h1",
@@ -246,10 +240,9 @@ const initialState :Notion ={
       style :{
         color: defaultColor,
         bgColor: bg_default,
-        bolder: false,
-        italicize: false,
-        underLine:false,
-        strike_through :false,
+        fontWeight:"initial",
+        fontStyle:"initial",
+        textDeco:"none"
       }
     },{
       id:"h2",
@@ -263,10 +256,9 @@ const initialState :Notion ={
       style :{
         color: defaultColor,
         bgColor: bg_default,
-        bolder: false,
-        italicize: false,
-        underLine:false,
-        strike_through :false,
+        fontWeight:"initial",
+        fontStyle:"initial",
+        textDeco:"none"
       }
     },{
       id:"h3",
@@ -280,10 +272,9 @@ const initialState :Notion ={
       style :{
         color: defaultColor,
         bgColor: bg_default,
-        bolder: false,
-        italicize: false,
-        underLine:false,
-        strike_through :false,
+        fontWeight:"initial",
+        fontStyle:"initial",
+        textDeco:"none"
       }
     },{
       id:"page1",
@@ -297,10 +288,9 @@ const initialState :Notion ={
       style :{
         color: defaultColor,
         bgColor: bg_default,
-        bolder: false,
-        italicize: false,
-        underLine:false,
-        strike_through :false,
+        fontWeight:"initial",
+        fontStyle:"initial",
+        textDeco:"none"
       }
     },
     {
@@ -315,10 +305,9 @@ const initialState :Notion ={
       style :{
         color: defaultColor,
         bgColor: bg_default,
-        bolder: false,
-        italicize: false,
-        underLine:false,
-        strike_through :false,
+        fontWeight:"initial",
+        fontStyle:"initial",
+        textDeco:"none"
       }
     },
     {id:"sub1_1",
@@ -332,10 +321,9 @@ const initialState :Notion ={
     style :{
       color: defaultColor,
       bgColor: bg_default,
-      bolder: false,
-      italicize: false,
-      underLine:false,
-      strike_through :false,
+      fontWeight:"initial",
+      fontStyle:"initial",
+      textDeco:"none"
     }
   },
   {
@@ -350,10 +338,9 @@ const initialState :Notion ={
     style :{
       color: defaultColor,
       bgColor: bg_default,
-      bolder: false,
-      italicize: false,
-      underLine:false,
-      strike_through :false,
+      fontWeight:"initial",
+      fontStyle:"initial",
+      textDeco:"none"
     }
   },
   {
@@ -368,10 +355,9 @@ const initialState :Notion ={
     style :{
       color: defaultColor,
       bgColor: bg_default,
-      bolder: false,
-      italicize: false,
-      underLine:false,
-      strike_through :false,
+      fontWeight:"initial",
+      fontStyle:"initial",
+      textDeco:"none"
     }
   },
   {
@@ -386,10 +372,9 @@ const initialState :Notion ={
     style :{
       color: defaultColor,
       bgColor: bg_default,
-      bolder: false,
-      italicize: false,
-      underLine:false,
-      strike_through :false,
+      fontWeight:"initial",
+      fontStyle:"initial",
+      textDeco:"none"
     }
   },
   {
@@ -403,11 +388,10 @@ const initialState :Notion ={
     editTime: JSON.stringify(Date.now()),
     style :{
       color: defaultColor,
-      bgColor: bg_default,
-      bolder: false,
-      italicize: false,
-      underLine:false,
-      strike_through :false,
+      bgColor: bg_green,
+      fontWeight:"initial",
+      fontStyle:"initial",
+      textDeco:"underline"
     }
   },
   {
@@ -422,10 +406,9 @@ const initialState :Notion ={
     style :{
       color: defaultColor,
       bgColor: bg_default,
-      bolder: false,
-      italicize: false,
-      underLine:false,
-      strike_through :false,
+      fontWeight:"initial",
+      fontStyle:"initial",
+      textDeco:"none"
     }
   },
   {
@@ -440,10 +423,9 @@ const initialState :Notion ={
     style :{
       color: defaultColor,
       bgColor: bg_default,
-      bolder: false,
-      italicize: false,
-      underLine:false,
-      strike_through :false,
+      fontWeight:"initial",
+      fontStyle:"initial",
+      textDeco:"none"
     }
   },
   {
@@ -458,10 +440,9 @@ const initialState :Notion ={
     style :{
       color: defaultColor,
       bgColor: bg_default,
-      bolder: false,
-      italicize: false,
-      underLine:false,
-      strike_through :false,
+      fontWeight:"initial",
+      fontStyle:"initial",
+      textDeco:"none"
     }
   },
   {
@@ -476,10 +457,9 @@ const initialState :Notion ={
     style :{
       color: defaultColor,
       bgColor: bg_default,
-      bolder: false,
-      italicize: false,
-      underLine:false,
-      strike_through :false,
+      fontWeight:"initial",
+      fontStyle:"initial",
+      textDeco:"none"
     }
   },
   {
@@ -494,10 +474,9 @@ const initialState :Notion ={
     style :{
       color: defaultColor,
       bgColor: bg_default,
-      bolder: false,
-      italicize: false,
-      underLine:false,
-      strike_through :false,
+      fontWeight:"initial",
+      fontStyle:"initial",
+      textDeco:"none"
     }
   },
 
