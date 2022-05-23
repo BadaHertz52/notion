@@ -42,10 +42,7 @@ const Menu=({page, userName, setMenuOpen, editBlock, deleteBlock}:MenuProps)=>{
       hour: editTime?.getHours(),
       min: editTime?.getMinutes(),
     };
-  const mainMenu =document.getElementById("mainMenu");
-  const sideMenu =document.getElementById("sideMenu");
-  const mainMenuArea =mainMenu?.getClientRects()[0] ;
-  const sideMenuArea =sideMenu?.getClientRects()[0] ;
+
   const inner =document.getElementById("inner");
 
   const [turnInto, setTurnInto]= useState<boolean>(false);
@@ -102,11 +99,22 @@ const Menu=({page, userName, setMenuOpen, editBlock, deleteBlock}:MenuProps)=>{
   };
 
   const closeMenu =(event:MouseEvent)=>{
+    const mainMenu =document.getElementById("mainMenu");
+    const sideMenu =document.getElementById("sideMenu")?.firstElementChild;
+    const mainMenuArea =mainMenu?.getClientRects()[0] ;
+    const sideMenuArea =sideMenu?.getClientRects()[0] ;
+
     const isInnerrMain = detectRange(event, mainMenuArea);
     const isInnerSide =detectRange(event, sideMenuArea );
-    (isInnerrMain || isInnerSide) ? setMenuOpen(true) :setMenuOpen(false);
+
+    if(sideMenuArea !==undefined){
+      (isInnerrMain || isInnerSide) ? setMenuOpen(true) :setMenuOpen(false);
+    }else{
+      isInnerrMain ? setMenuOpen(true) : setMenuOpen(false);
+    }
+  
   };
-  inner?.addEventListener("click", (event:MouseEvent)=>closeMenu(event));
+  inner?.addEventListener("click", (event:MouseEvent)=> closeMenu(event));
 
   const showTurnInto =()=>{
     setTurnInto(!turnInto);
