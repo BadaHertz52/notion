@@ -1,7 +1,8 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { GrCheckbox, GrCheckboxSelected, GrDocumentText } from 'react-icons/gr';
 import { MdPlayArrow } from 'react-icons/md';
-import { Block,Page } from '../modules/notion';
+import styled, { css, CSSProperties, StyledComponent } from 'styled-components';
+import { Block,BlockStyle,Page } from '../modules/notion';
 import EditableBlock from './EditableBlock';
 
 type BlockProp ={
@@ -18,17 +19,29 @@ type BlockProp ={
 
 const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock}:BlockProp)=>{
   const className = block.type !== "toggle" ?
-                    `${block.type} block` :
+                    `${block.type} block ` :
                     `${block.type} block ${block.subBlocksId!==null?'on' : ""}`;
+
+  const blockContentsStyle =(block:Block):CSSProperties =>{
+    return ({
+      color: block.style.color,
+      backgroundColor :block.style.bgColor,
+      fontWeight: block.style.fontWeight ,
+      fontStyle: block.style.fontStyle,
+      textDecoration: block.style.textDeco,
+    })
+  };
 
   const ListSub = ()=>{
     return(
       <>
       {subBlocks?.map((block:Block)=>
-        <li 
-        key={`${block.type}_${block.contents}`}
-        id ={block.id}
-        className= "blockContents"
+        <li
+          key={`${block.type}_${block.contents}`}
+          id ={block.id}
+          className= "blockContents"
+          title={`${block.id}_contents`}
+          style={blockContentsStyle(block)}
         >
           {block.contents}
         </li>
@@ -103,7 +116,10 @@ const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,rai
         }
         <div 
           className='blockContents' 
-          placeholder="type '/' for commmands">
+          placeholder="type '/' for commmands"
+          title={`${block.id}_contents`}
+          style={blockContentsStyle(block)}
+        >
           {block.contents}
         </div>
       </div>
