@@ -104,7 +104,7 @@ const Menu=({page, userName, setMenuOpen, editBlock, deleteBlock}:MenuProps)=>{
   const closeMenu =(event:MouseEvent)=>{
     const isInnerrMain = detectRange(event, mainMenuArea);
     const isInnerSide =detectRange(event, sideMenuArea );
-    (isInnerrMain || isInnerSide) ? setMenuOpen(false) :setMenuOpen(true);
+    (isInnerrMain || isInnerSide) ? setMenuOpen(true) :setMenuOpen(false);
   };
   inner?.addEventListener("click", (event:MouseEvent)=>closeMenu(event));
 
@@ -195,8 +195,6 @@ const Menu=({page, userName, setMenuOpen, editBlock, deleteBlock}:MenuProps)=>{
               </p>
             </div>
           </div>
-        </div>
-        <div className='blockSubMenu'>
         </div>
       </div>
     </div>
