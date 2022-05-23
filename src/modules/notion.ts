@@ -14,22 +14,23 @@ export const blockTypes =[text, toggle, todo, todo_done, h1, h2, page, numberLis
 
 export type BlockType= typeof text|typeof toggle|typeof todo |typeof todo_done|typeof h1|typeof h2|typeof h3 |typeof page |typeof numberList |typeof bulletList ;
 
-export const defaultColor :string ="black" as const ;
+export const defaultColor :string ="initial" as const ;
+export const grey :string="#bdbdbd" as const ;
 export const orange:string ="#ffa726" as const;
 export const green:string ="#00701a" as const;
 export const blue :string ="#1565c0" as const;
 export const red : string ="#d32f2f" as const;
-
-export const bg_default:string = "#e0e0e0" as const;
-export const bg_orange:string ="#ffecd0" as const;
-export const bg_green:string ="#dcedc8" as const;
+export const bg_default :string ="initial" as const ;
+export const bg_grey:string = "#e0e0e0" as const;
+export const bg_yellow:string ="#fff9c4" as const;
+export const bg_green:string ="#ebffd7" as const;
 export const bg_blue :string ="#e3f2fd" as const;
-export const bg_red : string ="#ffcdd2" as const;
+export const bg_pink : string ="#fce4ec" as const;
 
 
 
-export type ColorType = typeof defaultColor|typeof orange| typeof green| typeof blue| typeof red ;
-export type BgColorType = typeof bg_default|typeof bg_orange| typeof bg_green| typeof bg_blue| typeof bg_red ;
+export type ColorType = typeof defaultColor|typeof grey|typeof orange| typeof green| typeof blue| typeof red ;
+export type BgColorType = typeof bg_default| typeof bg_grey|typeof bg_yellow| typeof bg_green| typeof bg_blue| typeof bg_pink ;
 
 export type Block ={
   id:string,

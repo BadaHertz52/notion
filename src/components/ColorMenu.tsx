@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { BgColorType, bg_blue, bg_default, bg_green, bg_orange, bg_red, Block, blue, ColorType, defaultColor, green, orange, Page, red } from '../modules/notion';
+import { BgColorType, bg_blue, bg_default, bg_green, bg_grey, bg_yellow, bg_pink, Block, blue, ColorType, defaultColor, green, grey, orange, Page, red } from '../modules/notion';
 
 type StyleColorInformProps ={
   color:ColorType | undefined,
@@ -94,6 +94,14 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
                 editBlock={editBlock}
               />
               <ColorInform
+                colorName='Grey'
+                color={grey}
+                background ={undefined}
+                page={page}
+                block={block}
+                editBlock={editBlock}
+              />
+              <ColorInform
                 colorName='Orange'
                 color={orange}
                 page={page}
@@ -139,10 +147,18 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
                 editBlock={editBlock}
               />
               <ColorInform
-                colorName='Orange'
+                colorName='Grey'
                 color={undefined}
                 page={page}
-                background={bg_orange}
+                background={bg_grey}
+                block={block}
+                editBlock={editBlock}
+              />
+              <ColorInform
+                colorName='Yellow'
+                color={undefined}
+                page={page}
+                background={bg_yellow}
                 block={block}
                 editBlock={editBlock}
                 />
@@ -163,10 +179,10 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
                 editBlock={editBlock}
               />
               <ColorInform
-                colorName='Red'
+                colorName='Pink'
                 color={undefined}
                 page={page}
-                background={bg_red}
+                background={bg_pink}
                 block={block}
                 editBlock={editBlock}
               />
