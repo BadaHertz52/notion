@@ -12,22 +12,24 @@ export const numberList ="numberList" as const;
 export const bulletList ="bulletList" as const ;
 export const blockTypes =[text, toggle, todo, todo_done, h1, h2, page, numberList, bulletList];
 
-export type BlockType= "text"|"toggle"|"todo" |"todo done"|"h1"|"h2"|"h3" |"page" |"numberList" |"bulletList" ;
+export type BlockType= typeof text|typeof toggle|typeof todo |typeof todo_done|typeof h1|typeof h2|typeof h3 |typeof page |typeof numberList |typeof bulletList ;
 
-export const orange ="orange" as const;
-export const green ="green" as const;
-export const blue ="blue" as const;
-export const red ="red" as const;
-export const defaultColor ="defaultColor" as const;
+export const defaultColor :string ="black" as const ;
+export const orange:string ="#ffa726" as const;
+export const green:string ="#00701a" as const;
+export const blue :string ="#1565c0" as const;
+export const red : string ="#d32f2f" as const;
 
-export const bg_orange ="bg_orange" as const;
-export const bg_green ="bg_green" as const;
-export const bg_blue ="bg_blue" as const;
-export const bg_red ="bg_red" as const;
-export const bg_defaultColor ="bg_defaultColor" as const;
+export const bg_default:string = "#e0e0e0" as const;
+export const bg_orange:string ="#ffecd0" as const;
+export const bg_green:string ="#dcedc8" as const;
+export const bg_blue :string ="#e3f2fd" as const;
+export const bg_red : string ="#ffcdd2" as const;
 
-export type ColorType = "defaultColor"|"orange"| "green"| "blue"| "red" ;
-export type BgColorType = "bg_defaultColor"|"bg_orange"| "bg_green"| "bg_blue"| "bg_red" ;
+
+
+export type ColorType = typeof defaultColor|typeof orange| typeof green| typeof blue| typeof red ;
+export type BgColorType = typeof bg_default|typeof bg_orange| typeof bg_green| typeof bg_blue| typeof bg_red ;
 
 export type Block ={
   id:string,
@@ -59,7 +61,7 @@ export  const blockSample:Block ={
   editTime:"",
   style :{
     color: defaultColor,
-    bgColor: bg_defaultColor,
+    bgColor: bg_default,
     bolder: false,
     italicize: false,
     underLine:false,
@@ -173,7 +175,7 @@ const initialState :Notion ={
       editTime: JSON.stringify(Date.now()),
       style :{
         color: defaultColor,
-        bgColor: bg_defaultColor,
+        bgColor: bg_default,
         bolder: false,
         italicize: false,
         underLine:false,
@@ -191,7 +193,7 @@ const initialState :Notion ={
       editTime: JSON.stringify(Date.now()),
       style :{
         color: defaultColor,
-        bgColor: bg_defaultColor,
+        bgColor: bg_default,
         bolder: false,
         italicize: false,
         underLine:false,
@@ -208,7 +210,7 @@ const initialState :Notion ={
       editTime: JSON.stringify(Date.now()),
       style :{
         color: defaultColor,
-        bgColor: bg_defaultColor,
+        bgColor: bg_default,
         bolder: false,
         italicize: false,
         underLine:false,
@@ -225,7 +227,7 @@ const initialState :Notion ={
       editTime: JSON.stringify(Date.now()),
       style :{
         color: defaultColor,
-        bgColor: bg_defaultColor,
+        bgColor: bg_default,
         bolder: false,
         italicize: false,
         underLine:false,
@@ -242,7 +244,7 @@ const initialState :Notion ={
       editTime: JSON.stringify(Date.now()),
       style :{
         color: defaultColor,
-        bgColor: bg_defaultColor,
+        bgColor: bg_default,
         bolder: false,
         italicize: false,
         underLine:false,
@@ -259,7 +261,7 @@ const initialState :Notion ={
       editTime: JSON.stringify(Date.now()),
       style :{
         color: defaultColor,
-        bgColor: bg_defaultColor,
+        bgColor: bg_default,
         bolder: false,
         italicize: false,
         underLine:false,
@@ -276,7 +278,7 @@ const initialState :Notion ={
       editTime: JSON.stringify(Date.now()),  
       style :{
         color: defaultColor,
-        bgColor: bg_defaultColor,
+        bgColor: bg_default,
         bolder: false,
         italicize: false,
         underLine:false,
@@ -293,7 +295,7 @@ const initialState :Notion ={
       editTime: JSON.stringify(Date.now()),
       style :{
         color: defaultColor,
-        bgColor: bg_defaultColor,
+        bgColor: bg_default,
         bolder: false,
         italicize: false,
         underLine:false,
@@ -311,7 +313,7 @@ const initialState :Notion ={
       editTime: JSON.stringify(Date.now()),
       style :{
         color: defaultColor,
-        bgColor: bg_defaultColor,
+        bgColor: bg_default,
         bolder: false,
         italicize: false,
         underLine:false,
@@ -328,7 +330,7 @@ const initialState :Notion ={
     editTime: JSON.stringify(Date.now()),
     style :{
       color: defaultColor,
-      bgColor: bg_defaultColor,
+      bgColor: bg_default,
       bolder: false,
       italicize: false,
       underLine:false,
@@ -346,7 +348,7 @@ const initialState :Notion ={
     editTime: JSON.stringify(Date.now()),
     style :{
       color: defaultColor,
-      bgColor: bg_defaultColor,
+      bgColor: bg_default,
       bolder: false,
       italicize: false,
       underLine:false,
@@ -364,7 +366,7 @@ const initialState :Notion ={
     editTime: JSON.stringify(Date.now()),
     style :{
       color: defaultColor,
-      bgColor: bg_defaultColor,
+      bgColor: bg_default,
       bolder: false,
       italicize: false,
       underLine:false,
@@ -382,7 +384,7 @@ const initialState :Notion ={
     editTime: JSON.stringify(Date.now()),
     style :{
       color: defaultColor,
-      bgColor: bg_defaultColor,
+      bgColor: bg_default,
       bolder: false,
       italicize: false,
       underLine:false,
@@ -400,7 +402,7 @@ const initialState :Notion ={
     editTime: JSON.stringify(Date.now()),
     style :{
       color: defaultColor,
-      bgColor: bg_defaultColor,
+      bgColor: bg_default,
       bolder: false,
       italicize: false,
       underLine:false,
@@ -418,7 +420,7 @@ const initialState :Notion ={
     editTime: JSON.stringify(Date.now()),
     style :{
       color: defaultColor,
-      bgColor: bg_defaultColor,
+      bgColor: bg_default,
       bolder: false,
       italicize: false,
       underLine:false,
@@ -436,7 +438,7 @@ const initialState :Notion ={
     editTime: JSON.stringify(Date.now()),
     style :{
       color: defaultColor,
-      bgColor: bg_defaultColor,
+      bgColor: bg_default,
       bolder: false,
       italicize: false,
       underLine:false,
@@ -454,7 +456,7 @@ const initialState :Notion ={
     editTime: JSON.stringify(Date.now()),
     style :{
       color: defaultColor,
-      bgColor: bg_defaultColor,
+      bgColor: bg_default,
       bolder: false,
       italicize: false,
       underLine:false,
@@ -472,7 +474,7 @@ const initialState :Notion ={
     editTime: JSON.stringify(Date.now()),
     style :{
       color: defaultColor,
-      bgColor: bg_defaultColor,
+      bgColor: bg_default,
       bolder: false,
       italicize: false,
       underLine:false,
@@ -490,7 +492,7 @@ const initialState :Notion ={
     editTime: JSON.stringify(Date.now()),
     style :{
       color: defaultColor,
-      bgColor: bg_defaultColor,
+      bgColor: bg_default,
       bolder: false,
       italicize: false,
       underLine:false,

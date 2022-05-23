@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState, } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
-import { bg_defaultColor, Block, BlockType, blockTypes, defaultColor, findBlock, Page } from '../modules/notion';
+import { bg_default, Block, BlockType, blockTypes, defaultColor, findBlock, Page } from '../modules/notion';
 import CommandBlock from './CommandBlock';
 import { Command } from '../containers/EditorContainer';
 import BlockComponent from './BlockComponent';
@@ -54,7 +54,7 @@ export const makeNewBlock=(page:Page, editTime:string,addBlock:(pageId: string, 
       icon:null,
       style :{
         color:defaultColor,
-        bgColor:bg_defaultColor,
+        bgColor:bg_default,
         bolder:false,
         italicize:false,
         underLine:false,
@@ -75,7 +75,7 @@ export const makeNewBlock=(page:Page, editTime:string,addBlock:(pageId: string, 
       icon:null,
       style :{
         color:defaultColor,
-        bgColor:bg_defaultColor,
+        bgColor:bg_default,
         bolder:false,
         italicize:false,
         underLine:false,
