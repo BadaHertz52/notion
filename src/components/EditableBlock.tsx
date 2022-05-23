@@ -161,11 +161,15 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
         pageId: page.id,
         editedBlock: newBlock
       };
-      if(textContents.startsWith("/")){
-        setCommand({boolean:true, command:textContents});
-      }else{
-        sessionStorage.setItem("editedBlock", JSON.stringify(editedBlock));
+      if(textContents !==""){
+        if(textContents.startsWith("/")){
+          setCommand({boolean:true, command:textContents});
+        }else{
+          targetBlock.contents !== textContents &&
+          sessionStorage.setItem("editedBlock", JSON.stringify(editedBlock));
+        }
       }
+      
     };
   };
   function updateEditedBlock (){
