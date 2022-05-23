@@ -1,7 +1,6 @@
 import React, { Dispatch, SetStateAction, useState} from 'react';
 import { Block, Page } from '../modules/notion';
 import CommandBlock from './CommandBlock';
-import ColorInform from './ColorMenu';
 
 //icon
 import {BiCommentDetail} from 'react-icons/bi';
@@ -216,6 +215,7 @@ const Menu=({page, userName, setMenuOpen, editBlock, deleteBlock}:MenuProps)=>{
       }
       {color &&
         <ColorMenu
+          page={page}
           block={block}
           editBlock={editBlock}
         />

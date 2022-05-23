@@ -25,6 +25,7 @@ const StyleColorInform =styled.span`
 `; 
 
 const ColorInform=({color ,background, colorName}:ColorInformProps)=>{
+const ColorInform=({color ,background, colorName ,page, block ,editBlock}:ColorInformProps)=>{
   return(
     <div className='colorInform'>
       <StyleColorInform
@@ -60,26 +61,41 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
                 colorName='Default'
                 color={defaultColor}
                 background ={undefined}
+                page={page}
+                block={block}
+                editBlock={editBlock}
               />
               <ColorInform
                 colorName='Orange'
                 color={orange}
+                page={page}
                 background ={undefined}
+                block={block}
+                editBlock={editBlock}
               />
               <ColorInform
                 colorName='Green'
                 color={green}
+                page={page}
                 background ={undefined}
+                block={block}
+                editBlock={editBlock}
               />
               <ColorInform
                 colorName='Blue'
                 color={blue}
+                page={page}
                 background={undefined}
+                block={block}
+                editBlock={editBlock}
               /> 
               <ColorInform
                 colorName='Red'
                 color={red}
+                page={page}
                 background={undefined}
+                block={block}
+                editBlock={editBlock}
               />
             </div>
           </section>
@@ -89,27 +105,42 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
               <ColorInform
                 colorName='Default'
                 color={undefined}
+                page={page}
                 background={bg_default}
+                block={block}
+                editBlock={editBlock}
               />
               <ColorInform
                 colorName='Orange'
                 color={undefined}
+                page={page}
                 background={bg_orange}
+                block={block}
+                editBlock={editBlock}
                 />
               <ColorInform
                 colorName='Green'
                 color={undefined}
+                page={page}
                 background={bg_green}
+                block={block}
+                editBlock={editBlock}
               />
               <ColorInform
                 colorName='Blue'
                 color={undefined}
+                page={page}
                 background={bg_blue}
+                block={block}
+                editBlock={editBlock}
               />
               <ColorInform
                 colorName='Red'
                 color={undefined}
+                page={page}
                 background={bg_red}
+                block={block}
+                editBlock={editBlock}
               />
             </div>
           </section>
