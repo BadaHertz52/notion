@@ -18,11 +18,10 @@ type CommandBlockProp ={
 
 const CommandBlock =({ page ,block , editTime , editBlock ,setCommand}:CommandBlockProp)=>{
   const blockElement = document.getElementById(block.id) as HTMLElement;
-  const blockElementParent =blockElement?.parentElement ;
-
+  const mainMenu =document.getElementById("mainMenu");
   const commandStyle :CSSProperties={
     position: 'absolute',
-    top: blockElementParent? (blockElementParent.getAttribute("id") === "sideMenu"? 0: blockElement.clientHeight) :blockElement.clientHeight,
+    top: mainMenu !== null? 0: blockElement.clientHeight ,
     zIndex:10,
 
   };
