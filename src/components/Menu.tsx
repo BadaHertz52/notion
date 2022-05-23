@@ -53,7 +53,7 @@ const Menu=({page, userName, setMenuOpen, editBlock, deleteBlock}:MenuProps)=>{
   const sideMenuStyle :CSSProperties= {
     display:"block" ,
     position:"absolute" ,
-    top: '-5px',
+    top: '-10px',
     left: 240 *0.88 ,
     zIndex:2
   };
@@ -132,28 +132,37 @@ const Menu=({page, userName, setMenuOpen, editBlock, deleteBlock}:MenuProps)=>{
   <div className="menu">
     <div id='mainMenu' >
       <div className="menu_inner">
+        <div className='menu_search'>
+        </div>
         <div className='blockMenu'> 
-          <div className='menu_search'></div>
           <div className="menu_edit">
-            <div className="memu_editFns">
-              <div className="editFn" id="editFn1">
-                <button
-                  onClick ={removeBlock}
-                >
+            <div className="menu_editBtns">
+              <button
+                onClick ={removeBlock}
+                name="delete"
+              >
+                <div>
                   <RiDeleteBin6Line/>
                   <span>Delete</span>
                   <span>Del</span>
-                </button>
-                <button
-                  onMouseOver={showTurnInto}
-                >
+                </div>
+              </button>
+              <button
+                onMouseOver={showTurnInto}
+                name="turn into"
+              >
+                <div>
                   <BsArrowClockwise/>
                   <span>Turn into</span>
                   <span className='arrowDown'>
                       <TiArrowSortedDown/>
                   </span>
-                </button>
-                <button>
+                </div>
+              </button>
+              <button
+                name ="turn into page in"
+              >
+                <div>
                   <MdOutlineRestorePage/>
                   <span>Turn into Page in</span>
                   <span 
@@ -161,26 +170,43 @@ const Menu=({page, userName, setMenuOpen, editBlock, deleteBlock}:MenuProps)=>{
                   >
                   <TiArrowSortedDown/>
                   </span>
-                </button>
-                <button>
+                </div>
+              </button>
+              <button
+                className='underline'
+                name="copy link to block"
+              >
+                <div>                
                   <BsLink45Deg/>
                   <span>Copy link to block</span>
-                </button>
-              </div>
-              <div className="editFn"  id="editFun2">
-                <button>
+                </div>
+              </button>
+              <button
+                className='underline'
+                name="move to"
+              >
+                <div>
                   <IoArrowRedoOutline/>
                   <span>Move to</span>
                   <span>Ctrl+Shift+P</span>
-                </button>
-              </div>
-              <div  className="editFn" id="editFun3">
-                <button>
+                </div>
+              </button>
+              <button
+                className='underline'
+                name="comment"
+              >
+                <div>
                   <BiCommentDetail/>
                   <span>Comment</span>
                   <span>Ctrl+Shift+M</span>
-                </button>
-                <button onMouseOver={showColorMenu}>
+                </div>
+              </button>
+              <button 
+                name='color'
+                className='underline'
+                onMouseOver={showColorMenu}
+              >
+                <div>
                   <AiOutlineFormatPainter/>
                   <span>Color</span>
                   <span
@@ -188,8 +214,8 @@ const Menu=({page, userName, setMenuOpen, editBlock, deleteBlock}:MenuProps)=>{
                   >
                   <TiArrowSortedDown/>
                   </span>
-                </button>
-              </div>
+                </div>
+              </button>
             </div>
             <div className='menu_edit_inform'>
               <p>Last edited by {userName} </p>

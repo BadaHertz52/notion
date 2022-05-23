@@ -37,7 +37,10 @@
   position: absolute;
   padding-right:3rem;
   .blockFnIcon{
-    color:$itemSvg;
+    svg{
+      color:$itemSvg;
+    }
+    
     font : {
       size: 1.2rem;
       weight:bolder;

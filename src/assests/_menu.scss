@@ -11,30 +11,39 @@
   .menu_inner {
     padding: 5% 0;
   }
-  .editFn {
-    border-bottom:  1px solid $mud;
+  .menu_editBtns >button{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
   }
-  .editFn > button ,
+  .menu_editBtns > button >div ,
   .menu_edit_inform{
     width: 90%;
     margin: 3% 5%;
   }
-  .editFn > button {
+  .menu_editBtns> button {
     position: relative;
-    display: flex;
+    & >div{
+      display: flex;
+      justify-items: center;
+      align-items: center;
+    }
     font-size: 1rem;
     span{
       font-size: 14px;
+      text-align: center;
     }
     svg:first-child {
-      margin: 0 5px
+      font-size: 1rem;
+      margin: {
+        left: 5px;
+        right: 8px
+      }
     }
     span:nth-child(3){
       position: absolute;
-      top:0;
-      right: 0;
+      right: 1rem;
       color: $mud;
-
       svg{
         font-size: 18px;
       }
@@ -42,6 +51,9 @@
     .arrowDown  svg {
       transform: rotate(-90deg);
     }
+  }
+  .underline{
+    border-bottom:  1px solid $mud;
   }
   .menu_edit_inform{
     font-size: 14px;
@@ -57,8 +69,8 @@
   @include popUpMenu;
   overflow-y: scroll;
   z-index: 10;
-  width: 200px;
-  height: 350px;
+  width: 250px;
+  height: 380px;
   color: initial;
   font-weight: initial;
   section > header {
@@ -94,9 +106,7 @@
 
 }
 #sideMenu  {
-
   #commandBlock {
-    width: 250px ;
   } #no_result{
     display: none;
   }

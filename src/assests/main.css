@@ -85,9 +85,12 @@ a:link, a:active, a:visited {
 }
 
 .blockFn.on .blockFnIcon {
-  color: #a3a3a2;
   font-size: 1.2rem;
   font-weight: bolder;
+}
+
+.blockFn.on .blockFnIcon svg {
+  color: #a3a3a2;
 }
 
 .blockFn button:hover,
@@ -416,46 +419,66 @@ a:link, a:active, a:visited {
   padding: 5% 0;
 }
 
-#mainMenu .editFn {
-  border-bottom: 1px solid #B9B8B6;
+#mainMenu .menu_editBtns > button {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 100%;
 }
 
-#mainMenu .editFn > button,
+#mainMenu .menu_editBtns > button > div,
 #mainMenu .menu_edit_inform {
   width: 90%;
   margin: 3% 5%;
 }
 
-#mainMenu .editFn > button {
+#mainMenu .menu_editBtns > button {
   position: relative;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
   font-size: 1rem;
 }
 
-#mainMenu .editFn > button span {
+#mainMenu .menu_editBtns > button > div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  justify-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+#mainMenu .menu_editBtns > button span {
   font-size: 14px;
+  text-align: center;
 }
 
-#mainMenu .editFn > button svg:first-child {
-  margin: 0 5px;
+#mainMenu .menu_editBtns > button svg:first-child {
+  font-size: 1rem;
+  margin-left: 5px;
+  margin-right: 8px;
 }
 
-#mainMenu .editFn > button span:nth-child(3) {
+#mainMenu .menu_editBtns > button span:nth-child(3) {
   position: absolute;
-  top: 0;
-  right: 0;
+  right: 1rem;
   color: #B9B8B6;
 }
 
-#mainMenu .editFn > button span:nth-child(3) svg {
+#mainMenu .menu_editBtns > button span:nth-child(3) svg {
   font-size: 18px;
 }
 
-#mainMenu .editFn > button .arrowDown svg {
+#mainMenu .menu_editBtns > button .arrowDown svg {
   -webkit-transform: rotate(-90deg);
           transform: rotate(-90deg);
+}
+
+#mainMenu .underline {
+  border-bottom: 1px solid #B9B8B6;
 }
 
 #mainMenu .menu_edit_inform {
@@ -491,8 +514,8 @@ a:link, a:active, a:visited {
   box-shadow: 0px 0px 23px -5px #ababab;
   overflow-y: scroll;
   z-index: 10;
-  width: 200px;
-  height: 350px;
+  width: 250px;
+  height: 380px;
   color: initial;
   font-weight: initial;
 }
@@ -540,10 +563,6 @@ a:link, a:active, a:visited {
 
 .menu_color .colorName {
   margin-left: 5px;
-}
-
-#sideMenu #commandBlock {
-  width: 250px;
 }
 
 #sideMenu #no_result {
