@@ -30,24 +30,27 @@ const BlockFn =({page,userName, addBlock, editBlock, deleteBlock}:BlockFnProp)=>
     setMenuOpen(!menuOpen);
   };
 
+  
   return (
     <div 
       id="blockFn"
       className='blockFn'
     >
-      <button 
-        className='blockFnIcon'
-        title="Click  to add a block below"
+      <div className='blockFnIcon'>
+        <button
         onClick={makeBlock}
-      >
-        <AiOutlinePlus/>
-      </button>
-      <button 
-        className='blockFnIcon'
-        title ="Click to open menu"
-        onClick={openMenu}
-      >
-        <CgMenuGridO/>
+        title="Click  to add a block below"
+        >
+          <AiOutlinePlus/>
+        </button>
+      </div>
+      <div className='blockFnIcon'> 
+        <button
+          onClick={openMenu}
+          title ="Click to open menu"
+        >
+          <CgMenuGridO/>
+        </button>
         {menuOpen &&
           <Menu
             page={page}
@@ -57,7 +60,7 @@ const BlockFn =({page,userName, addBlock, editBlock, deleteBlock}:BlockFnProp)=>
             deleteBlock={deleteBlock}
           />
         }
-      </button>
+      </div>
 
   </div>
   )
