@@ -1,6 +1,5 @@
 import React, { CSSProperties, useState } from 'react';
-import { Item, List } from '../modules/list';
-import { Notion, Page } from '../modules/notion';
+import { listItem, Page } from '../modules/notion';
 
 //react-icon
 import {FiCode ,FiChevronsLeft} from 'react-icons/fi';
@@ -18,8 +17,8 @@ type SideBarProps ={
     favorites:string[],
     trash:string[],
   },
-  list: List,
-  notion:Notion,
+  pages:Page[],
+  firstPages:Page[],
   lockSideBar  : ()=> void ,
   leftSideBar  : ()=> void ,
   closeSideBar  : ()=> void ,
@@ -28,8 +27,8 @@ type SideBarProps ={
 };
 
 type ItemTemplageProp ={
-  item:Item
-}
+  item: listItem
+};
 const ItemTemplate =({item}:ItemTemplageProp)=>{
   const [toggle, setToggle] =useState<boolean>(false);
   const toggleStyle:CSSProperties={
@@ -77,13 +76,13 @@ const ItemTemplate =({item}:ItemTemplageProp)=>{
   )
 };
 type ListTemplateProp ={
-  targetList: List
+  targetList: listItem[]
 };
 
 const ListTemplate =({targetList }:ListTemplateProp)=>{
   return(
     <ul>
-    {targetList.map((item:Item)=> 
+    {targetList.map((item:listItem)=> 
       <li key={item.id}>
         <div className='first page'>
           <ItemTemplate item={item}/>
@@ -96,15 +95,19 @@ const ListTemplate =({targetList }:ListTemplateProp)=>{
   )
 };
 
-const SideBar =({user ,notion, list ,lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage
+const SideBar =({user ,pages,firstPages ,lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage
 }:SideBarProps)=>{
   const recordIcon =user.userName.substring(0,1);
-  const favorites:List = notion.pages.filter((page:Page)=> user.favorites.includes(page.id)).map((page:Page)=> ({
+  const favorites:listItem[] = pages.filter((page:Page)=> user.favorites.includes(page.id)).map((page:Page)=> ({
     id:page.id,
     title:page.header.title,
     icon:page.header.icon
   }));
-
+  const list:listItem[] = firstPages.map((page:Page)=> ({
+    id:page.id,
+    icon:page.header.icon,
+    title: page.header.title
+  })) ;
 
   return(
     <>
