@@ -66,7 +66,12 @@ export  const blockSample:Block ={
     fontStyle:"initial",
     textDeco:"none"
   }
-}
+};
+export type listItem = {
+  id: string;
+  title: string | null;
+  icon: string | null;
+};
 export type Page ={
   id:string , 
   header : {
@@ -108,6 +113,10 @@ const DELETE_BLOCK ="notion/DELETE_BLOCK" as const;
 const CHANGE_TO_SUB_BLOCK="notion/CHANGE_TO_SUB_BLOCK" as const;
 const RAISE_BLOCK="notion/RAISE_BLOCK" as const; //cancle tab
 
+const ADD_PAGE ="notion/ADD_PAGE" as const;
+const EDIT_PAGE ="notion/EDIT_PAGE" as const;
+const DELETE_PAGE ="notion/DELETE_PAGE" as const;
+
 
 export const add_block =(pageId:string, block:Block ,nextBlockIndex:number ,previousBlockId:string|null)=> ({
   type:ADD_BLOCK ,
@@ -141,20 +150,41 @@ export const raise_block =(pageId:string, block:Block)=>({
   block:block
 });
 
+export const add_page =(pageId:string, newPage:Page , block:null)=>({
+  type: ADD_PAGE,
+  pageId: pageId,
+  newPage: newPage,
+  block:block
+});
+export const edit_page =(pageId:string, newPage:Page ,block:null)=>({
+  type: EDIT_PAGE,
+  pageId: pageId,
+  newPage: newPage,
+  block:null
+});
+export const delete_page =(pageId:string, block:null)=>(
+{
+  type:DELETE_PAGE,
+  pageId: pageId,
+  block:null
+});
+
 type NotionAction = 
 ReturnType<typeof add_block> | 
 ReturnType<typeof edit_block> | 
 ReturnType <typeof delete_block>|
 ReturnType <typeof change_to_sub>|
-ReturnType < typeof raise_block>
+ReturnType < typeof raise_block>|
+ReturnType<typeof add_page> | 
+ReturnType<typeof edit_page> | 
+ReturnType <typeof delete_page>
 ;
 
 //reducer
 const initialState :Notion ={
   pagesId:['12345' ,'1234', '123' ],
   firstPagesId :['12345' ,'1234', '123'],
-  pages:[
-  {
+  pages:[{
     id: '12345',
     header : {
       title:"welcome notion",
@@ -515,6 +545,7 @@ const initialState :Notion ={
   }
 ]
 };
+
 export function findBlock( page:Page,blockId: string):{index: number ,BLOCK:Block} {
   const index = page.blocksId.indexOf(blockId) as number;
   const block:Block = page.blocks[index];
@@ -535,15 +566,20 @@ export function findParentBlock ( page:Page, subBlock:Block) : { parentBlockInde
     parentBlock :BLOCK
   };
 };
-
+export const findPage =(pagesId: string[] ,pages:Page[] ,pageId:string):Page=>{
+  const index :number =pagesId.indexOf(pageId);
+  const PAGE :Page = pages[index];
+  return PAGE
+};
 export default function notion (state:Notion =initialState , action :NotionAction) :Notion{
+  
   const pagesId = [...state.pagesId];
   const firstPagesId=[...state.firstPagesId];
   const pages =[...state.pages];
 
   const pageIndex:number = pagesId.indexOf(action.pageId) as number;
   const targetPage:Page =pages[pageIndex] ;
-  const  blockIndex:number = pages[pageIndex]?.blocksId.indexOf(action.block.id) as number;
+  const  blockIndex:number = action.block !==null ?( pages[pageIndex]?.blocksId.indexOf(action.block.id) ): 0 as number;
 
   const editBlockData =(index:number ,block:Block)=>{
     targetPage.blocks.splice(index,1,block);
@@ -576,7 +612,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
       console.log("can't find parentBlocks of this block")
     }
   };
-  const deleteData =(block :Block ,targetIndex:number)=>{
+  const deleteBlockData =(block :Block ,targetIndex:number)=>{
     if(block.subBlocksId !==null ){
     // block.suBlocksId를 이전 block의 subBlocks로 옮기기
     const blockDoc = document.getElementById(block.id) as HTMLElement; 
@@ -602,6 +638,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
     );
   };
   };
+
   switch (action.type) {
     case ADD_BLOCK:
       targetPage.blocks?.splice(action.nextBlockIndex,0, action.block);
@@ -688,7 +725,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
             editTime: JSON.stringify(Date.now())
           };
           editBlockData(parentBlockIndex, newParentBlock);
-          deleteData(action.block, blockIndex );
+          deleteBlockData(action.block, blockIndex );
 
         }else {
           const newParentBlock :Block ={
@@ -708,7 +745,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
           editBlockData(index, newPrevisousBlock);
         };
         // action.block data 지우기 
-        deleteData(action.block, blockIndex);
+        deleteBlockData(action.block, blockIndex);
         console.log("raiseBlock",targetPage.blocks );
       return {
         pages:pages,
@@ -717,8 +754,6 @@ export default function notion (state:Notion =initialState , action :NotionActio
       }; ;
 
     case DELETE_BLOCK:
-
-
       if(action.block.parentBlocksId !== null){
         const parentBlocksId = action.block?.parentBlocksId as string[];
         const parentBlockId :string = parentBlocksId[parentBlocksId.length-1] ;
@@ -734,7 +769,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
         }else{
 
           if(action.block.type === "bulletList" || action.block.type ==="numberList"){
-            deleteData(parentBlock , parentBlockIndex);
+            deleteBlockData(parentBlock , parentBlockIndex);
           }else {
             editBlockData(parentBlockIndex, {
               ...parentBlock,
@@ -744,7 +779,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
           
         }
       };
-      deleteData(action.block , blockIndex);
+      deleteBlockData(action.block , blockIndex);
 
       console.log("delete", {pages:pages[pageIndex]});
       return {
@@ -752,7 +787,54 @@ export default function notion (state:Notion =initialState , action :NotionActio
         firstPagesId:firstPagesId,
         pagesId:pagesId
       };
+    case ADD_PAGE :
+      pagesId.push(action.newPage.id);
+      pages.push(action.newPage);
+      if(action.newPage.parentsId==null){
+        //firstPage 일경우
+          firstPagesId.push(action.newPage.id);
+      };
+      return {
+        pages:pages,
+        firstPagesId:firstPagesId,
+        pagesId:pagesId
+      };
+    case EDIT_PAGE :
+      pages.splice(pageIndex,1,action.newPage);
+      return{
+        pages:pages,
+        firstPagesId:firstPagesId,
+        pagesId:pagesId
+      };
+    case DELETE_PAGE:
+      pages.splice(pageIndex, 1);
+      pagesId.splice(pageIndex, 1);
 
+      if(targetPage.parentsId !==null){
+        const parentPages : Page[]= targetPage.parentsId.map((id:string)=> findPage(pagesId, pages,id));
+
+        parentPages.forEach((page:Page)=>{
+          const subIndex = page.subPagesId?.indexOf(targetPage.id) as number;
+          page.subPagesId?.splice(subIndex, 1);
+        });
+      }else{
+        //firstPage 일 경우
+        const index= firstPagesId.indexOf(targetPage.id);
+        firstPagesId.splice(index,1);
+      };
+
+      if(targetPage.subPagesId !==null){
+        targetPage.subPagesId.forEach((id:string)=>{
+          const index= pagesId.indexOf(id);
+          pages.splice(index,1);
+          pagesId.splice(index,1);
+        })
+      };
+      return{
+        pages:pages,
+        firstPagesId:firstPagesId,
+        pagesId:pagesId
+      }
     default:
       return state;
   }
