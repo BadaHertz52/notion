@@ -5,6 +5,26 @@
   left: 3rem;
   font-weight: initial;
 }
+@mixin searchInput {
+    width:90%;
+    height: 1.5rem;
+    font-size: 15px;
+    padding-left: 6px;
+    color: $itemText;
+    &::placeholder{
+      color: $mud;
+    }
+    &:focus{
+      box-sizing: border-box;
+      outline: 3.5px solid rgb(169, 226, 245);
+      border:none;
+    }
+    margin:0 5%;
+    border-radius: 5px;
+    background-color: $brightMud;
+    border:  1px solid $mud;
+    box-shadow:rgba(15, 15, 15, 0.162)0px 0px 1px inset ;
+};
 
 #mainMenu {
   @include popUpMenu;
@@ -15,24 +35,7 @@
   .menu_search {
     width: 100%;
     input{
-      width:90%;
-      height: 1.5rem;
-      font-size: 15px;
-      padding-left: 6px;
-      color: $itemText;
-      &::placeholder{
-        color: $mud;
-      }
-      &:focus{
-        box-sizing: border-box;
-        outline: 3.5px solid rgb(169, 226, 245);
-        border:none;
-      }
-      margin:0 5%;
-      border-radius: 5px;
-      background-color: $brightMud;
-      border:  1px solid $mud;
-      box-shadow:rgba(15, 15, 15, 0.162)0px 0px 1px inset ;
+      @include searchInput
     }
   }
   #menu_editBtns > button >div ,
@@ -91,11 +94,18 @@
     }
   }
 }
+#sideMenu  {
+  &>div{
+    width: 250px;
+  }
+  .no_result{
+    display: none;
+  }
+}
 .menu_color{
   @include popUpMenu;
   overflow-y: scroll;
   z-index: 10;
-  width: 250px;
   height: 380px;
   color: initial;
   font-weight: initial;
@@ -131,8 +141,56 @@
   }
 
 }
-#sideMenu  {
-  .no_result{
+#pageMenu {
+  @include popUpMenu;
+  .inner{
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 0;
+  }
+  .search{
+    input{
+      @include searchInput;
+    }
+  }
+  .pages{
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    width: 90%;
+    margin: 5%;
+    header{
+      color:$itemText;
+      font : {
+        size: 12px;
+        weight: 500;
+      };
+      margin-bottom: 10px;
+    }
+  }
+  #new_sub_page{
+    border-top: 1px solid $lightMud;
+    padding : 5px 0; 
+    padding-left: 5%;
+    
+    svg{
+      font-weight: bolder;
+      margin-right: 5px;
+    }
+    span{
+      color: $itemText;
+      font-size: 14px;
+      font-weight: 400;
+    }
+  }
+  .page{
+    &_inner{
+      display: flex;
+    }
+  }
+}
+#moveTo_pageMenu{
+  #pageSugested, #new_sub_page {
     display: none;
   }
 }

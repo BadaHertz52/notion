@@ -14,7 +14,7 @@ import { CSSProperties } from 'styled-components';
 import { Command } from '../containers/EditorContainer';
 import ColorMenu from './ColorMenu';
 import { HiOutlineDuplicate } from 'react-icons/hi';
-import MoveToPageMenu from './MoveToPageMenu';
+import PageMenu from './PageMenu';
 
 
 type MenuProps ={
@@ -56,6 +56,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
   const [turnInto, setTurnInto]= useState<boolean>(false);
   const [color, setColor]= useState<boolean>(false);
   const [moveToPage ,setMoveToPage] = useState<boolean>(false);
+  const [turnInToPage ,setTurnIntoPage] = useState<boolean>(false);
   const [command, setCommand]= useState<Command>({boolean:false, command:null});
 
   const sideMenuStyle :CSSProperties= {
@@ -127,11 +128,22 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
   const showTurnInto =()=>{
     setTurnInto(!turnInto);
     setColor(false);
+    setTurnIntoPage(false);
   };
   const showColorMenu =()=>{
     setColor(!color);
     setTurnInto(false);
+    setTurnIntoPage(false);
   };
+  const showPageMenu =()=>{
+    setTurnIntoPage(!turnInToPage);
+    setColor(false);
+    setTurnInto(false);
+  };
+  const onClickMoveTo=()=>{
+    setMoveToPage(true);
+  };
+
   const removeBlock =()=>{
     deleteBlock(page.id, block);
     setMenuOpen(false);
@@ -142,10 +154,6 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
     const previousBlockId = page.blocksId[blockIndex-1]; 
     addBlock(page.id , block,  blockIndex+1, block.parentBlocksId ===null? null : previousBlockId);
     setMenuOpen(false);
-  };
-  
-  const openMoveToPage =()=>{
-    setMoveToPage(false);
   };
   const onSetEditBtns=()=>{
     setEditBtns([...document.getElementsByClassName("menu_editBtn")]);
@@ -164,160 +172,173 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
 
   return(
   <div className="menu">
-    <div id='mainMenu' >
-      <div className="menu_inner">
-        <div className='menu_search'>
-          <input
-            type="search"
-            id="menu_search_input"
-            name='search'
-            placeholder='Search actions'
-            onClick={onSetEditBtns}
-            onChange={onSearch}
-          />
-        </div>
-          <div className="menu_edit">
-            <div id="menu_editBtns">
-              <button
-                className='menu_editBtn'
-                onClick ={removeBlock}
-                name="delete"
-              >
-                <div>
-                  <RiDeleteBin6Line/>
-                  <span>Delete</span>
-                  <span>Del</span>
-                </div>
-              </button>
-              <button
-                className='menu_editBtn'
-                onClick ={duplicateBlock}
-                name="duplicate"
-              >
-                <div>
-                  <HiOutlineDuplicate/>
-                  <span>Duplicate</span>
-                  <span>Ctrl+D</span>
-                </div>
-              </button>
-              <button
-                className='menu_editBtn'
-                onMouseOver={showTurnInto}
-                name="turn into"
-              >
-                <div>
-                  <BsArrowClockwise/>
-                  <span>Turn into</span>
-                  <span className='arrowDown'>
-                      <TiArrowSortedDown/>
-                  </span>
-                </div>
-              </button>
-              <button
-                className='menu_editBtn'
-                name ="turn into page in"
-                onClick={openMoveToPage}
-              >
-                <div>
-                  <MdOutlineRestorePage/>
-                  <span>Turn into Page in</span>
-                  <span 
-                    className="arrowDown" 
-                  >
-                  <TiArrowSortedDown/>
-                  </span>
-                </div>
-              </button>
-              <button
-                className='underline menu_editBtn'
-                name="copy link to block"
-              >
-                <div>                
-                  <BsLink45Deg/>
-                  <span>Copy link to block</span>
-                </div>
-              </button>
-              <button
-                className='underline menu_editBtn'
-                name="move to"
-                onClick={openMoveToPage}
-              >
-                <div>
-                  <IoArrowRedoOutline/>
-                  <span>Move to</span>
-                  <span>Ctrl+Shift+P</span>
-                </div>
-              </button>
-              <button
-                className='underline menu_editBtn'
-                name="comment"
-              >
-                <div>
-                  <BiCommentDetail/>
-                  <span>Comment</span>
-                  <span>Ctrl+Shift+M</span>
-                </div>
-              </button>
-              <button 
-                name='color'
-                className='underline menu_editBtn'
-                onMouseOver={showColorMenu}
-              >
-                <div>
-                  <AiOutlineFormatPainter/>
-                  <span>Color</span>
-                  <span
-                    className="arrowDown"
-                  >
-                  <TiArrowSortedDown/>
-                  </span>
-                </div>
-              </button>
-            </div>
-            <div className='menu_edit_inform'>
-              <p>Last edited by {userName} </p>
-              <p> 
-                {timeInform !==null &&
-                                (today === timeInform.date ? 
-                                  `Today at ${timeInform.hour}:${timeInform.min}` 
-                                  : 
-                                  `${timeInform.month}/${timeInform.date}/${timeInform.year}`)
-                }
-              </p>
-            </div>
+    {!moveToPage? 
+    <>
+      <div id='mainMenu' >
+        <div className="menu_inner">
+          <div className='menu_search'>
+            <input
+              type="search"
+              id="menu_search_input"
+              name='search'
+              placeholder='Search actions'
+              onClick={onSetEditBtns}
+              onChange={onSearch}
+            />
           </div>
-      
+            <div className="menu_edit">
+              <div id="menu_editBtns">
+                <button
+                  className='menu_editBtn'
+                  onClick ={removeBlock}
+                  name="delete"
+                >
+                  <div>
+                    <RiDeleteBin6Line/>
+                    <span>Delete</span>
+                    <span>Del</span>
+                  </div>
+                </button>
+                <button
+                  className='menu_editBtn'
+                  onClick ={duplicateBlock}
+                  name="duplicate"
+                >
+                  <div>
+                    <HiOutlineDuplicate/>
+                    <span>Duplicate</span>
+                    <span>Ctrl+D</span>
+                  </div>
+                </button>
+                <button
+                  className='menu_editBtn'
+                  onMouseOver={showTurnInto}
+                  name="turn into"
+                >
+                  <div>
+                    <BsArrowClockwise/>
+                    <span>Turn into</span>
+                    <span className='arrowDown'>
+                        <TiArrowSortedDown/>
+                    </span>
+                  </div>
+                </button>
+                <button
+                  className='menu_editBtn'
+                  name ="turn into page in"
+                  onClick={showPageMenu}
+                >
+                  <div>
+                    <MdOutlineRestorePage/>
+                    <span>Turn into Page in</span>
+                    <span 
+                      className="arrowDown" 
+                    >
+                    <TiArrowSortedDown/>
+                    </span>
+                  </div>
+                </button>
+                <button
+                  className='underline menu_editBtn'
+                  name="copy link to block"
+                >
+                  <div>                
+                    <BsLink45Deg/>
+                    <span>Copy link to block</span>
+                  </div>
+                </button>
+                <button
+                  className='underline menu_editBtn'
+                  name="move to"
+                  onClick={onClickMoveTo}
+                >
+                  <div>
+                    <IoArrowRedoOutline/>
+                    <span>Move to</span>
+                    <span>Ctrl+Shift+P</span>
+                  </div>
+                </button>
+                <button
+                  className='underline menu_editBtn'
+                  name="comment"
+                >
+                  <div>
+                    <BiCommentDetail/>
+                    <span>Comment</span>
+                    <span>Ctrl+Shift+M</span>
+                  </div>
+                </button>
+                <button 
+                  name='color'
+                  className='underline menu_editBtn'
+                  onMouseOver={showColorMenu}
+                >
+                  <div>
+                    <AiOutlineFormatPainter/>
+                    <span>Color</span>
+                    <span
+                      className="arrowDown"
+                    >
+                    <TiArrowSortedDown/>
+                    </span>
+                  </div>
+                </button>
+              </div>
+              <div className='menu_edit_inform'>
+                <p>Last edited by {userName} </p>
+                <p> 
+                  {timeInform !==null &&
+                                  (today === timeInform.date ? 
+                                    `Today at ${timeInform.hour}:${timeInform.min}` 
+                                    : 
+                                    `${timeInform.month}/${timeInform.date}/${timeInform.year}`)
+                  }
+                </p>
+              </div>
+            </div>
+                
+        </div>
       </div>
-    </div>
-    <div 
-      id="sideMenu"
-      style={sideMenuStyle}
-    >
-      {turnInto &&
-          <CommandBlock
+      <div 
+        id="sideMenu"
+        style={sideMenuStyle}
+      >
+        {turnInto &&
+            <CommandBlock
+              page={page}
+              block={block}
+              editTime={JSON.stringify(Date.now())}
+              editBlock={editBlock}
+              setCommand={setCommand}
+            />
+        }
+        {color &&
+          <ColorMenu
             page={page}
             block={block}
-            editTime={JSON.stringify(Date.now())}
             editBlock={editBlock}
-            setCommand={setCommand}
           />
-      }
-      {color &&
-        <ColorMenu
-          page={page}
-          block={block}
-          editBlock={editBlock}
-        />
-      }
-      {moveToPage &&
-        <MoveToPageMenu
-          pages={pages}
-          firstlist={firstlist}
-          existingPage={page}
-          block={block}
-        />
-      }
+        }
+        {turnInToPage &&
+          <PageMenu
+            pages={pages}
+            firstlist={firstlist}
+            existingPage={page}
+            block={block}
+          />
+        }
+      </div>
+    </>
+    : 
+    <div id="moveTo_pageMenu">
+      <PageMenu
+        pages={pages}
+        firstlist={firstlist}
+        existingPage={page}
+        block={block}
+      /> 
     </div>
+    }
   </div>
   )
 };
