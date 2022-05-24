@@ -1,5 +1,5 @@
 import React, { CSSProperties, useState } from 'react';
-import { Block, blockSample, Page } from '../modules/notion';
+import { Block, listItem, Page } from '../modules/notion';
 import EditableBlock from './EditableBlock';
 
 //icon
@@ -12,6 +12,8 @@ import BlockFn from './BlockFn';
 
 
 type FrameProps ={
+  pages:Page[],
+  firstlist:listItem[],
   userName : string,
   page:Page,
   side:Side,
@@ -19,11 +21,15 @@ type FrameProps ={
   addBlock: (pageId: string, block: Block, nextBlockIndex: number, previousBlockId: string | null) => void,
   changeToSub: (pageId: string, block: Block, first: boolean, newParentBlock: Block) => void
   raiseBlock: (pageId: string, block: Block) => void,
-  deleteBlock: (pageId: string, block: Block) => void
+  deleteBlock: (pageId: string, block: Block) => void,
+  addPage :(pageId:string,newPage:Page ,block:null)=>void;
+  editPage :(pageId:string,newPage:Page ,block:null)=>void;
+  deletePage :(pageId:string,block:null)=>void;
+
 };
 
 
-const Frame =({ userName, page,side,  editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock }:FrameProps)=>{
+const Frame =({ pages, firstlist,userName, page,side,  editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage,editPage, deletePage }:FrameProps)=>{
   type CommentProp ={
     comment :string | null
   };
@@ -194,16 +200,24 @@ const Frame =({ userName, page,side,  editBlock, addBlock,changeToSub ,raiseBloc
                       changeToSub={changeToSub}
                       raiseBlock={raiseBlock}
                       deleteBlock={deleteBlock}
+                      addPage={addPage}
+                      editPage={editPage}
+                      deletePage={deletePage}
                     />
                   )
                 }
               )}
               <BlockFn
                 page={page}
+                pages={pages}
+                firstlist={firstlist}
                 userName={userName}
                 addBlock={addBlock}
                 editBlock={editBlock}
                 deleteBlock={deleteBlock}
+                addPage={addPage}
+                editPage={editPage}
+                deletePage={deletePage}
               />
             </div>
           </div>

@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useState} from 'react';
-import { Block, Page } from '../modules/notion';
+import { Block, listItem, Page } from '../modules/notion';
 import CommandBlock from './CommandBlock';
 
 //icon
@@ -13,17 +13,25 @@ import { AiOutlineFormatPainter } from 'react-icons/ai';
 import { CSSProperties } from 'styled-components';
 import { Command } from '../containers/EditorContainer';
 import ColorMenu from './ColorMenu';
+import { HiOutlineDuplicate } from 'react-icons/hi';
+import MoveToPageMenu from './MoveToPageMenu';
 
 
 type MenuProps ={
+  pages:Page[],
+  firstlist:listItem[],
   page:Page,
   userName: string,
   setMenuOpen : Dispatch<SetStateAction<boolean>>,
+  addBlock:(pageId: string, block: Block, nextBlockIndex: number, previousBlockId: string | null) => void,
   editBlock : (pageId: string, block: Block) => void,
   deleteBlock :(pageId: string, block: Block) => void,
+  addPage : (pageId:string , newPage:Page, block:null)=>void,
+  editPage : (pageId:string , newPage:Page, block:null)=>void,
+  deletePage : (pageId:string , block:null)=>void,
 };
 
-const Menu=({page, userName, setMenuOpen, editBlock, deleteBlock}:MenuProps)=>{
+const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, deleteBlock}:MenuProps)=>{
   const today = new Date().getDate();
   type TimeInform ={
     year:number,
@@ -250,6 +258,14 @@ const Menu=({page, userName, setMenuOpen, editBlock, deleteBlock}:MenuProps)=>{
           page={page}
           block={block}
           editBlock={editBlock}
+        />
+      }
+      {moveToPage &&
+        <MoveToPageMenu
+          pages={pages}
+          firstlist={firstlist}
+          existingPage={page}
+          block={block}
         />
       }
     </div>

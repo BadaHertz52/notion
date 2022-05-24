@@ -1,20 +1,25 @@
 import React, { useState } from 'react';
 import Menu from './Menu';
-import {Block, Page} from '../modules/notion';
+import {Block, listItem, Page} from '../modules/notion';
 
 import { AiOutlinePlus } from 'react-icons/ai';
 import { CgMenuGridO } from 'react-icons/cg';
 import { makeNewBlock } from './EditableBlock';
 
 type BlockFnProp ={
+  pages:Page[],
+  firstlist:listItem[],
   page:Page,
   userName:string,
   addBlock: (pageId: string, block: Block, nextBlockIndex: number, previousBlockId: string | null) => void, 
   editBlock: (pageId: string, block: Block) => void,
   deleteBlock :(pageId: string, block: Block) => void,
+  addPage : (pageId:string , newPage:Page, block:null)=>void,
+  editPage : (pageId:string , newPage:Page, block:null)=>void,
+  deletePage : (pageId:string , block:null)=>void,
 };
 
-const BlockFn =({page,userName, addBlock, editBlock, deleteBlock}:BlockFnProp)=>{
+const BlockFn =({pages,firstlist, page,userName, addBlock, editBlock, deleteBlock ,addPage, editPage, deletePage}:BlockFnProp)=>{
   const editTime = JSON.stringify(Date.now());
   const newContents:string ="";
   const [menuOpen, setMenuOpen]= useState<boolean>(false);
@@ -53,11 +58,17 @@ const BlockFn =({page,userName, addBlock, editBlock, deleteBlock}:BlockFnProp)=>
         </button>
         {menuOpen &&
           <Menu
+            pages={pages}
+            firstlist={firstlist}
             page={page}
             userName={userName}
             setMenuOpen={setMenuOpen}
+            addBlock={addBlock}
             editBlock={editBlock}
             deleteBlock={deleteBlock}
+            addPage={addPage}
+            editPage={editPage}
+            deletePage={deletePage}
           />
         }
       </div>

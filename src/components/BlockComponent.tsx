@@ -14,10 +14,13 @@ type BlockProp ={
   changeToSub: (pageId: string, block: Block, first: boolean, newParentBlock: Block) => void
   raiseBlock: (pageId: string, block: Block) => void,
   deleteBlock: (pageId: string, block: Block) => void,
+  addPage : (pageId:string , newPage:Page, block:null)=>void,
+  editPage : (pageId:string , newPage:Page, block:null)=>void,
+  deletePage : (pageId:string , block:null)=>void,
 };
 
 
-const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock}:BlockProp)=>{
+const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,addPage, editPage, deletePage}:BlockProp)=>{
   const className = block.type !== "toggle" ?
                     `${block.type} block ` :
                     `${block.type} block ${block.subBlocksId!==null?'on' : ""}`;
@@ -136,6 +139,9 @@ const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,rai
             changeToSub={changeToSub}
             raiseBlock={raiseBlock}
             deleteBlock={deleteBlock}
+            addPage={addPage}
+            editPage={editPage}
+            deletePage={deletePage}
           />
         )
         }

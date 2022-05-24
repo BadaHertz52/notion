@@ -103,9 +103,12 @@ type EditableBlockProps ={
   changeToSub: (pageId: string, block: Block, first: boolean, newParentBlock: Block) => void
   raiseBlock: (pageId: string, block: Block) => void,
   deleteBlock: (pageId: string, block: Block) => void,
+  addPage : (pageId:string , newPage:Page, block:null)=>void,
+  editPage : (pageId:string , newPage:Page, block:null)=>void,
+  deletePage : (pageId:string , block:null)=>void,
 };
 
-const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock }:EditableBlockProps)=>{  
+const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock , addPage, editPage, deletePage }:EditableBlockProps)=>{  
   const  editTime = JSON.stringify(Date.now());
   const innerRef  =useRef<HTMLDivElement>(null) ;
   const storageItem =sessionStorage.getItem("editedBlock") ;
@@ -142,6 +145,9 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
       changeToSub={changeToSub}
       raiseBlock={raiseBlock}
       deleteBlock={deleteBlock}
+      addPage={addPage}
+      editPage={editPage}
+      deletePage={deletePage}
       />);
     return blockNode
   };

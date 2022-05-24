@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Frame from '../components/Frame';
 import TopBar from '../components/TopBar';
 import { RootState } from '../modules';
-import {  Block, Page, edit_block, add_block, delete_block, change_to_sub, raise_block } from '../modules/notion';
+import {  Block, Page, edit_block, add_block, delete_block, change_to_sub, raise_block, Notion, add_page, delete_page, edit_page, findPage, listItem } from '../modules/notion';
 import { Side } from '../modules/side';
 
 type EditorContainerProps ={
@@ -22,22 +22,30 @@ export type Command ={
   command:string | null
 };
 const EditorContainer =({page , pagePath ,side, lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage }:EditorContainerProps)=>{
-
-  const userName =useSelector((state:RootState)=> state.user.userName) ;
-
+  
+  const notion :Notion = useSelector((state:RootState)=> state.notion);
+  const pages:Page[] =notion.pages;
+  const firstlist:listItem[] = notion.firstPagesId.map((id:string)=> {
+    const PAGE:Page = findPage(notion.pagesId, pages,id);
+    return {
+      id:PAGE.id,
+      title:PAGE.header.title,
+      icon :PAGE.header.icon
+    }
+  });
+  const userName :string  =useSelector((state:RootState)=> state.user.userName) ;
   const dispatch =useDispatch();
 
   const editBlock = (pageId:string, block:Block)=> {dispatch(edit_block(pageId, block ))};
-
   const addBlock =(pageId:string , block:Block , nextBlockIndex:number ,previousBlockId:string|null)=>{dispatch(add_block(pageId,block ,nextBlockIndex ,previousBlockId))};
-
   const deleteBlock=(pageId:string,block:Block)=>{dispatch(delete_block(pageId,block))};
-
   const changeToSub =(pageId:string, block:Block , first:boolean ,newParentBlock:Block)=>{dispatch(change_to_sub(pageId,block,first,newParentBlock));
   };
-
   const raiseBlock=(pageId:string, block:Block)=>{dispatch(raise_block(pageId,block))};
 
+  const addPage=(pageId:string,newPage:Page ,block:null)=>{dispatch(add_page(pageId, newPage, block))};
+  const editPage=(pageId:string,newPage:Page ,block:null)=>{dispatch(edit_page(pageId, newPage, block))};
+  const deletePage=(pageId:string,block:null)=>{dispatch(delete_page(pageId, block))};
 
   return(
     <div className='editor'>
@@ -52,6 +60,8 @@ const EditorContainer =({page , pagePath ,side, lockSideBar, leftSideBar,closeSi
       closeNewPage={closeNewPage}
       />
       <Frame
+        pages={pages}
+        firstlist={firstlist}
         userName ={userName}
         page={page}
         side={side}
@@ -60,6 +70,9 @@ const EditorContainer =({page , pagePath ,side, lockSideBar, leftSideBar,closeSi
         changeToSub={changeToSub}
         raiseBlock={raiseBlock}
         deleteBlock={deleteBlock}
+        addPage={addPage}
+        editPage={editPage}
+        deletePage={deletePage}
       />
     </div>
   )
