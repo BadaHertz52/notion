@@ -169,6 +169,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
                 </div>
               </button>
               <button
+                className='menu_editBtn'
                 onClick ={duplicateBlock}
                 name="duplicate"
               >
@@ -179,6 +180,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
                 </div>
               </button>
               <button
+                className='menu_editBtn'
                 onMouseOver={showTurnInto}
                 name="turn into"
               >
@@ -191,6 +193,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
                 </div>
               </button>
               <button
+                className='menu_editBtn'
                 name ="turn into page in"
                 onClick={openMoveToPage}
               >
@@ -205,7 +208,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
                 </div>
               </button>
               <button
-                className='underline'
+                className='underline menu_editBtn'
                 name="copy link to block"
               >
                 <div>                
@@ -214,7 +217,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
                 </div>
               </button>
               <button
-                className='underline'
+                className='underline menu_editBtn'
                 name="move to"
                 onClick={openMoveToPage}
               >
@@ -225,7 +228,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
                 </div>
               </button>
               <button
-                className='underline'
+                className='underline menu_editBtn'
                 name="comment"
               >
                 <div>
@@ -236,7 +239,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
               </button>
               <button 
                 name='color'
-                className='underline'
+                className='underline menu_editBtn'
                 onMouseOver={showColorMenu}
               >
                 <div>
@@ -262,7 +265,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
               </p>
             </div>
           </div>
-        </div>
+      
       </div>
     </div>
     <div 
