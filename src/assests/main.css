@@ -95,7 +95,7 @@ a:link, a:active, a:visited {
 
 .blockFn button:hover,
 .toggle.block .left:hover {
-  background-color: #d6d6d6;
+  background-color: #ebe9e9;
 }
 
 .contentEditable {
@@ -262,7 +262,7 @@ a:link, a:active, a:visited {
           flex-grow: 0;
   -ms-flex-negative: 0;
       flex-shrink: 0;
-  border: 1px solid #d6d6d6;
+  border: 1px solid #ebe9e9;
   border-radius: 3px;
 }
 
@@ -305,7 +305,7 @@ a:link, a:active, a:visited {
   color: rgba(55, 53, 47, 0.65);
 }
 
-#commandBlock #no_result {
+#commandBlock .no_result {
   color: rgba(55, 53, 47, 0.65);
   padding: 2% 10%;
   height: -webkit-fit-content;
@@ -419,7 +419,55 @@ a:link, a:active, a:visited {
   padding: 5% 0;
 }
 
-#mainMenu .menu_editBtns > button {
+#mainMenu .menu_search {
+  width: 100%;
+}
+
+#mainMenu .menu_search input {
+  width: 90%;
+  height: 1.5rem;
+  font-size: 15px;
+  padding-left: 6px;
+  color: rgba(55, 53, 47, 0.65);
+  margin: 0 5%;
+  border-radius: 5px;
+  background-color: rgba(242, 241, 238, 0.6);
+  border: 1px solid #B9B8B6;
+  -webkit-box-shadow: rgba(15, 15, 15, 0.162) 0px 0px 1px inset;
+          box-shadow: rgba(15, 15, 15, 0.162) 0px 0px 1px inset;
+}
+
+#mainMenu .menu_search input::-webkit-input-placeholder {
+  color: #B9B8B6;
+}
+
+#mainMenu .menu_search input:-ms-input-placeholder {
+  color: #B9B8B6;
+}
+
+#mainMenu .menu_search input::-ms-input-placeholder {
+  color: #B9B8B6;
+}
+
+#mainMenu .menu_search input::placeholder {
+  color: #B9B8B6;
+}
+
+#mainMenu .menu_search input:focus {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  outline: 3.5px solid #a9e2f5;
+  border: none;
+}
+
+#mainMenu #menu_editBtns > button > div,
+#mainMenu .menu_edit_inform {
+  width: 90%;
+  margin: 3% 5%;
+}
+
+#mainMenu #menu_editBtns .menu_editBtn {
+  position: relative;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -428,20 +476,14 @@ a:link, a:active, a:visited {
       -ms-flex-direction: column;
           flex-direction: column;
   width: 100%;
-}
-
-#mainMenu .menu_editBtns > button > div,
-#mainMenu .menu_edit_inform {
-  width: 90%;
-  margin: 3% 5%;
-}
-
-#mainMenu .menu_editBtns > button {
-  position: relative;
   font-size: 1rem;
 }
 
-#mainMenu .menu_editBtns > button > div {
+#mainMenu #menu_editBtns .menu_editBtn.off {
+  display: none;
+}
+
+#mainMenu #menu_editBtns .menu_editBtn > div {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -451,28 +493,28 @@ a:link, a:active, a:visited {
           align-items: center;
 }
 
-#mainMenu .menu_editBtns > button span {
+#mainMenu #menu_editBtns .menu_editBtn span {
   font-size: 14px;
   text-align: center;
 }
 
-#mainMenu .menu_editBtns > button svg:first-child {
+#mainMenu #menu_editBtns .menu_editBtn svg:first-child {
   font-size: 1rem;
   margin-left: 5px;
   margin-right: 8px;
 }
 
-#mainMenu .menu_editBtns > button span:nth-child(3) {
+#mainMenu #menu_editBtns .menu_editBtn span:nth-child(3) {
   position: absolute;
   right: 1rem;
   color: #B9B8B6;
 }
 
-#mainMenu .menu_editBtns > button span:nth-child(3) svg {
+#mainMenu #menu_editBtns .menu_editBtn span:nth-child(3) svg {
   font-size: 18px;
 }
 
-#mainMenu .menu_editBtns > button .arrowDown svg {
+#mainMenu #menu_editBtns .menu_editBtn .arrowDown svg {
   -webkit-transform: rotate(-90deg);
           transform: rotate(-90deg);
 }
@@ -558,14 +600,14 @@ a:link, a:active, a:visited {
 }
 
 .menu_color .colorIcon {
-  border: 1px solid #d6d6d6;
+  border: 1px solid #ebe9e9;
 }
 
 .menu_color .colorName {
   margin-left: 5px;
 }
 
-#sideMenu #no_result {
+#sideMenu .no_result {
   display: none;
 }
 
@@ -758,7 +800,7 @@ a:link, a:active, a:visited {
   display: flex;
   margin: 8px 0;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #d6d6d6;
+  border-bottom: 1px solid #ebe9e9;
   width: 100%;
 }
 
@@ -857,7 +899,7 @@ a:link, a:active, a:visited {
 }
 
 #sideBar_inner > div {
-  border-top: 1px solid #d6d6d6;
+  border-top: 1px solid #ebe9e9;
 }
 
 #sideBar .itemInner {
