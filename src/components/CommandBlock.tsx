@@ -234,7 +234,7 @@ const CommandBlock =({ page ,block , editTime , editBlock ,setCommand}:CommandBl
             </div>
           </div>
         </div>
-        <div id='no_result'>
+        <div className='no_result'>
           No results
         </div>
       </div>
