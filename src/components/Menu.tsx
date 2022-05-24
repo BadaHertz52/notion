@@ -55,7 +55,8 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
 
   const [turnInto, setTurnInto]= useState<boolean>(false);
   const [color, setColor]= useState<boolean>(false);
-  
+  const [moveToPage ,setMoveToPage] = useState<boolean>(false);
+
   const [command, setCommand]= useState<Command>({boolean:false, command:null});
 
   const sideMenuStyle :CSSProperties= {
@@ -134,6 +135,18 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
   };
   const removeBlock =()=>{
     deleteBlock(page.id, block);
+    setMenuOpen(false);
+  };
+
+  const duplicateBlock=()=>{
+    const blockIndex= page.blocksId.indexOf(block.id);
+    const previousBlockId = page.blocksId[blockIndex-1]; 
+    addBlock(page.id , block,  blockIndex+1, block.parentBlocksId ===null? null : previousBlockId);
+    setMenuOpen(false);
+  };
+  
+  const openMoveToPage =()=>{
+    setMoveToPage(false);
   };
 
   return(
@@ -156,6 +169,16 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
                 </div>
               </button>
               <button
+                onClick ={duplicateBlock}
+                name="duplicate"
+              >
+                <div>
+                  <HiOutlineDuplicate/>
+                  <span>Duplicate</span>
+                  <span>Ctrl+D</span>
+                </div>
+              </button>
+              <button
                 onMouseOver={showTurnInto}
                 name="turn into"
               >
@@ -169,6 +192,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
               </button>
               <button
                 name ="turn into page in"
+                onClick={openMoveToPage}
               >
                 <div>
                   <MdOutlineRestorePage/>
@@ -192,6 +216,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
               <button
                 className='underline'
                 name="move to"
+                onClick={openMoveToPage}
               >
                 <div>
                   <IoArrowRedoOutline/>
