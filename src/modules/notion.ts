@@ -184,7 +184,8 @@ ReturnType <typeof delete_page>
 const initialState :Notion ={
   pagesId:['12345' ,'1234', '123' ],
   firstPagesId :['12345' ,'1234', '123'],
-  pages:[{
+  pages:[
+    {
     id: '12345',
     header : {
       title:"welcome notion",
@@ -518,7 +519,7 @@ const initialState :Notion ={
   {
     id: '1234',
     header : {
-      title:"welcome notion",
+      title:"notion2",
       icon:'👋' ,
       cover: null,
       comment:  null,
@@ -532,7 +533,7 @@ const initialState :Notion ={
   {
     id: '123',
     header : {
-      title:"welcome notion",
+      title:"notino3",
       icon:'👋' ,
       cover: null,
       comment:  null,
