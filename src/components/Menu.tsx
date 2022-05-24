@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState} from 'react';
+import React, { ChangeEvent, Dispatch, SetStateAction, useState} from 'react';
 import { Block, listItem, Page } from '../modules/notion';
 import CommandBlock from './CommandBlock';
 
@@ -8,7 +8,7 @@ import { BsArrowClockwise, BsLink45Deg } from 'react-icons/bs';
 import {MdOutlineRestorePage} from 'react-icons/md';
 import {TiArrowSortedDown} from 'react-icons/ti';
 import {IoArrowRedoOutline} from 'react-icons/io5';
-import { RiDeleteBin6Line } from 'react-icons/ri';
+import { RiContactsBookLine, RiDeleteBin6Line } from 'react-icons/ri';
 import { AiOutlineFormatPainter } from 'react-icons/ai';
 import { CSSProperties } from 'styled-components';
 import { Command } from '../containers/EditorContainer';
@@ -52,11 +52,10 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
     };
 
   const inner =document.getElementById("inner");
-
+  const [editBtns, setEditBtns]= useState<Element[]|null>(null);
   const [turnInto, setTurnInto]= useState<boolean>(false);
   const [color, setColor]= useState<boolean>(false);
   const [moveToPage ,setMoveToPage] = useState<boolean>(false);
-
   const [command, setCommand]= useState<Command>({boolean:false, command:null});
 
   const sideMenuStyle :CSSProperties= {
@@ -148,17 +147,39 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
   const openMoveToPage =()=>{
     setMoveToPage(false);
   };
+  const onSetEditBtns=()=>{
+    setEditBtns([...document.getElementsByClassName("menu_editBtn")]);
+  };
+  const onSearch =(event:ChangeEvent<HTMLInputElement>)=>{
+    const value =event.target.value ; 
+    editBtns?.forEach((btn:Element)=>{
+      const name =btn.getAttribute("name") as string;
+      if(name.includes(value)){
+        btn.classList.remove("off");
+      }else{
+        btn.classList.add ("off");
+      };
+    })
+  };
 
   return(
   <div className="menu">
     <div id='mainMenu' >
       <div className="menu_inner">
         <div className='menu_search'>
+          <input
+            type="search"
+            id="menu_search_input"
+            name='search'
+            placeholder='Search actions'
+            onClick={onSetEditBtns}
+            onChange={onSearch}
+          />
         </div>
-        <div className='blockMenu'> 
           <div className="menu_edit">
-            <div className="menu_editBtns">
+            <div id="menu_editBtns">
               <button
+                className='menu_editBtn'
                 onClick ={removeBlock}
                 name="delete"
               >
