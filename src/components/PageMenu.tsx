@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { GrDocumentText } from 'react-icons/gr';
 import { Block, listItem, Page } from '../modules/notion';
@@ -8,23 +8,35 @@ type PageMenuProps ={
   firstlist:listItem[],
   existingPage: Page,
   block:Block,
+  deleteBlock: (pageId: string, block: Block) => void,
+  addBlock: (pageId: string, block: Block, nextBlockIndex: number, previousBlockId: string | null) => void,
+  setMenuOpen:Dispatch<SetStateAction<boolean>>,
+  recoverMenuState:()=>void,
 }
-const PageMenu =({pages, firstlist, existingPage, block}:PageMenuProps)=>{
+const PageMenu =({pages, firstlist, existingPage, block , deleteBlock, addBlock ,setMenuOpen, recoverMenuState}:PageMenuProps)=>{
 
   type PageButtonProps={
     item: listItem
   };
-
   const [search , setSearch]= useState<boolean>(false);
   const [result, setResult]= useState<listItem[]|null>(null);
 
-  const page =(id:string)=>{
+
+  const moveBlockToPage =(pageId:string)=>{
+    // 기존 페이지에서 블록 삭제
+    deleteBlock(existingPage.id, block);
+    // 블록을 다른 페이지로 이동
+    addBlock(pageId, block, 0 , null);
+    // close Menu and recovery Menu state
+    setMenuOpen(false);
+    recoverMenuState();
   };
+  
   const PageButton =({item}:PageButtonProps)=>{
     return(
       <button
         className="page"
-        onClick={()=>page(item.id)}
+        onClick={()=>moveBlockToPage(item.id)}
       >
         <div className='page_inner'>
           <span>

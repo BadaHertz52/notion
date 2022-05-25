@@ -125,20 +125,23 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
   };
   inner?.addEventListener("click", (event:MouseEvent)=> closeMenu(event));
 
-  const showTurnInto =()=>{
-    setTurnInto(!turnInto);
-    setColor(false);
+  const recoveryMenuState=()=>{
+    setTurnInto(false);
     setTurnIntoPage(false);
+    setColor(false);
+    setMoveToPage(false);
+  };
+  const showTurnInto =()=>{
+    recoveryMenuState();
+    setTurnInto(true);
   };
   const showColorMenu =()=>{
-    setColor(!color);
-    setTurnInto(false);
-    setTurnIntoPage(false);
+    recoveryMenuState();
+    setColor(true);
   };
   const showPageMenu =()=>{
-    setTurnIntoPage(!turnInToPage);
-    setColor(false);
-    setTurnInto(false);
+    recoveryMenuState();
+    setTurnIntoPage(true);
   };
   const onClickMoveTo=()=>{
     setMoveToPage(true);
@@ -226,7 +229,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
                 <button
                   className='menu_editBtn'
                   name ="turn into page in"
-                  onClick={showPageMenu}
+                  onMouseOver={showPageMenu}
                 >
                   <div>
                     <MdOutlineRestorePage/>
@@ -325,6 +328,10 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
             firstlist={firstlist}
             existingPage={page}
             block={block}
+            addBlock={addBlock}
+            deleteBlock={deleteBlock}
+            setMenuOpen={setMenuOpen}
+            recoverMenuState={recoveryMenuState}
           />
         }
       </div>
@@ -336,6 +343,10 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
         firstlist={firstlist}
         existingPage={page}
         block={block}
+        deleteBlock={deleteBlock}
+        addBlock={addBlock}
+        setMenuOpen={setMenuOpen}
+        recoverMenuState={recoveryMenuState}
       /> 
     </div>
     }
