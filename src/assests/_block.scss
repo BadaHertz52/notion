@@ -1,6 +1,7 @@
 @import './common';
 
 .editableBlock {
+  box-sizing: border-box;
   position: relative;
   width: 100%;
   height: min-content;
@@ -14,10 +15,11 @@
 }
 .mainBlock{
   display: flex;
-  align-items: center;
+  position: relative;
+  width: 100%;
 }
 .subBlocks .editableBlock{
-  margin-left: 20px;
+  padding-left: 20px;
   padding: 0;
 }
 [contenteditable] {
@@ -61,10 +63,6 @@
   &:focus-visible{
     outline: none;
   }
-}
-.blockContents:empty::after{
-  content: attr(placeholder);
-  color: $mud;
 }
 .h1.block{
   margin-top: 32px;
@@ -126,6 +124,29 @@
 .blockToggleBtn.on{
   svg{
     transform: rotate(90deg);
+  }
+}
+.blockContents{
+  width: 100%;
+  text-align: left;
+  .contents:empty::after{
+    content: attr(placeholder);
+    color: $mud;
+  }
+}
+.blockContents.commentBtn::target-text{
+  width: fit-content;
+  background-color: #fff9c4;
+  &:hover{
+    background-color: #ffdf3e;
+  }
+}
+.commentBtn.btnIcon{
+  position: absolute;
+  top:0;
+  right: 0;
+  svg,span{
+    color: $itemSvg;
   }
 }
 #commandBlock{

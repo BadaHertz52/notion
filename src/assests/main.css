@@ -31,6 +31,8 @@ a:link, a:active, a:visited {
 }
 
 .editableBlock {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
   position: relative;
   width: 100%;
   height: -webkit-min-content;
@@ -52,13 +54,12 @@ a:link, a:active, a:visited {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  position: relative;
+  width: 100%;
 }
 
 .subBlocks .editableBlock {
-  margin-left: 20px;
+  padding-left: 20px;
   padding: 0;
 }
 
@@ -104,11 +105,6 @@ a:link, a:active, a:visited {
 
 .contentEditable:focus-visible {
   outline: none;
-}
-
-.blockContents:empty::after {
-  content: attr(placeholder);
-  color: #B9B8B6;
 }
 
 .h1.block {
@@ -174,6 +170,37 @@ a:link, a:active, a:visited {
 .blockToggleBtn.on svg {
   -webkit-transform: rotate(90deg);
           transform: rotate(90deg);
+}
+
+.blockContents {
+  width: 100%;
+  text-align: left;
+}
+
+.blockContents .contents:empty::after {
+  content: attr(placeholder);
+  color: #B9B8B6;
+}
+
+.blockContents.commentBtn::target-text {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  background-color: #fff9c4;
+}
+
+.blockContents.commentBtn::target-text:hover {
+  background-color: #ffdf3e;
+}
+
+.commentBtn.btnIcon {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.commentBtn.btnIcon svg, .commentBtn.btnIcon span {
+  color: #a3a3a2;
 }
 
 #commandBlock {

@@ -29,7 +29,7 @@ const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,rai
   const blockContentsStyle =(block:Block):CSSProperties =>{
     return ({
       color: block.style.color,
-      backgroundColor :block.comment==null ? block.style.bgColor : '#fff9c4',
+      backgroundColor :block.style.bgColor,
       fontWeight: block.style.fontWeight ,
       fontStyle: block.style.fontStyle,
       textDecoration: block.style.textDeco,
@@ -121,22 +121,30 @@ const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,rai
         {block.comment ==null ?
           <div 
             className='blockContents' 
-            placeholder="type '/' for commmands"
             title={`${block.id}_contents`}
             style={blockContentsStyle(block)}
           >
-            {block.contents}
+            <div 
+              className='contents'
+              placeholder="type '/' for commmands"
+            >
+              {block.contents}
+            </div>
           </div>
         :
         <>
           <>
             <button 
               className='blockContents commentBtn' 
-              placeholder="type '/' for commmands"
               title={`${block.id}_contents`}
               style={blockContentsStyle(block)}
             >
-              {block.contents}
+              <div 
+                className='contents'
+                placeholder="type '/' for commmands"
+              >
+                {block.contents}
+              </div>
             </button>
             <button className='commentBtn btnIcon'>
               <IoChatboxOutline/>
