@@ -47,7 +47,7 @@ const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,rai
       })
     }
     return(
-      <div className='list'>
+      <div className='list mainBlock_block'>
         {subBlocks?.map((block:Block)=>(
           <div 
             id ={block.id}
@@ -104,7 +104,7 @@ const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,rai
       <div 
         className='mainBlock'
       >
-        <div>
+        <div className='mainBlock_block'>
         {block.type ==="todo" &&
           <button 
             className='checkbox left blockBtn'
