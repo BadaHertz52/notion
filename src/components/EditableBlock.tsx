@@ -121,6 +121,8 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
     boolean:false,
     command:null
   }); 
+  const [commentOpen, setCommentOpen]=useState<boolean>(false);
+
   useEffect(()=>{
     if(storageItem !== null){
       const {editedBlock} = JSON.parse(storageItem) as {pageId: string, editedBlock:Block};
@@ -151,6 +153,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
       addPage={addPage}
       editPage={editPage}
       deletePage={deletePage}
+      commentOpen={commentOpen}
       />);
     return blockNode
   };

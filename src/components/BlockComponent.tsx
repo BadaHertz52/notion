@@ -6,6 +6,7 @@ import { MdPlayArrow } from 'react-icons/md';
 import {  CSSProperties} from 'styled-components';
 import { Block,Page } from '../modules/notion';
 import EditableBlock from './EditableBlock';
+import Comments from './Comments';
 
 type BlockProp ={
   block:Block,
@@ -19,10 +20,11 @@ type BlockProp ={
   addPage : (pageId:string , newPage:Page, block:null)=>void,
   editPage : (pageId:string , newPage:Page, block:null)=>void,
   deletePage : (pageId:string , block:null)=>void,
+  commentOpen: boolean,
 };
 
 
-const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,addPage, editPage, deletePage}:BlockProp)=>{
+const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,addPage, editPage, deletePage, commentOpen}:BlockProp)=>{
   const className = block.type !== "toggle" ?
                     `${block.type} block ` :
                     `${block.type} block ${block.subBlocksId!==null?'on' : ""}`;
@@ -50,13 +52,14 @@ const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,rai
       <div className='list mainBlock_block'>
         {subBlocks?.map((block:Block)=>(
           <div 
+            key={`listItem_${subBlocks.indexOf(block)}`}
             id ={block.id}
             className= "blockContents"
             title={`${block.id}_contents`}
             style={listStyle(block)}
             >
 
-            {block.comment==null? 
+            {block.comments==null? 
             <>
               <div 
                 className='list_marker'
@@ -153,7 +156,7 @@ const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,rai
           title={`${block.id}_contents`}
           style={blockContentsStyle(block)}
         >
-          {block.comment==null? 
+          {block.comments==null? 
             <div 
               className="contents"
               placeholder="type '/' for commmands"
@@ -171,14 +174,28 @@ const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,rai
 
         </div>
         </div>
-
-        {block.comment !==null &&
-          <button className='commentBtn btnIcon'>
-            <IoChatboxOutline/>
-            <span className="commentLength">{block.comment.length}</span>
-          </button>
+        {block.comments !==null &&
+          <>
+          {commentOpen ?
+              <Comments
+                comments={block.comments}
+              />
+            :
+            <button className='commentBtn btnIcon'>
+              <IoChatboxOutline/>
+              <span className="commentLength">
+                {block.comments.length}
+              </span>
+            </button>
+            }
+          </>
         }
+
       </div>
+      </>
+      }
+      
+      {/* subblock */}
       <div 
         className='subBlocks'
       >
@@ -199,8 +216,7 @@ const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,rai
         )
         }
       </div>
-      </>
-      }
+
     </div>
   )
 };
