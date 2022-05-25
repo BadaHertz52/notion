@@ -60,7 +60,7 @@ export const makeNewBlock=(page:Page, editTime:string,addBlock:(pageId: string, 
         fontStyle:"initial",
         textDeco:"none"
       },
-      comment:null
+      comments:null
     };
       //새로운 버튼 
     addBlock(page.id, newBlock, targetBlockIndex+1 ,targetBlock.id)
@@ -81,7 +81,7 @@ export const makeNewBlock=(page:Page, editTime:string,addBlock:(pageId: string, 
         fontStyle:"initial",
         textDeco:"none"
       },
-      comment:null
+      comments:null
     };
     
     addBlock(page.id, newSubBlock, targetBlockIndex+1, targetBlock.id);
