@@ -978,7 +978,7 @@ a:link, a:active, a:visited {
   font-size: 48px;
 }
 
-.editor .pageHeader .comment {
+.editor .pageHeader .comments{
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -988,11 +988,11 @@ a:link, a:active, a:visited {
   width: 100%;
 }
 
-.editor .pageHeader .comment > div {
+.editor .pageHeader .comments> div {
   font-size: 14px;
 }
 
-.editor .pageHeader .comment .firstLetter {
+.editor .pageHeader .comments.firstLetter {
   width: 24px;
   height: 24px;
   -webkit-box-sizing: border-box;
@@ -1003,7 +1003,7 @@ a:link, a:active, a:visited {
   margin-right: 5px;
 }
 
-.editor .pageHeader .comment .firstLetter span {
+.editor .pageHeader .comments.firstLetter span {
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;

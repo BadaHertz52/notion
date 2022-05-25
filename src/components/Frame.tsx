@@ -1,5 +1,5 @@
 import React, { CSSProperties, useState } from 'react';
-import { Block, listItem, Page } from '../modules/notion';
+import { Block, CommentType, listItem, Page } from '../modules/notion';
 import EditableBlock from './EditableBlock';
 
 //icon
@@ -31,19 +31,21 @@ type FrameProps ={
 
 const Frame =({ pages, firstlist,userName, page,side,  editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage,editPage, deletePage }:FrameProps)=>{
   type CommentProp ={
-    comment :string | null
+    comment:CommentType
   };
 
   const Comment =({comment}:CommentProp) =>{
-    const firstLetter = userName.substring(0,1).toUpperCase();
+    const firstLetter = comment.userName.substring(0,1).toUpperCase();
     return (
       <div className='comment'>
         <div className='firstLetter'>
           <span>{firstLetter}</span>
         </div>
         <div className='commentContent'>
-          {comment !==null ?
-            <span>{comment}</span>
+          {comment!==null ?
+            <span>
+              {comment.comment}
+            </span>
           :
             <input
             type="text"
@@ -92,7 +94,7 @@ const Frame =({ pages, firstlist,userName, page,side,  editBlock, addBlock,chang
                     <span>Add Cover</span>
                   </button>
                 }
-                {page.header.comment ==null &&
+                {page.header.comments==null &&
                 <button className='decoComment'>
                   <BiMessageDetail/>
                   <span>Add Commnet</span>
@@ -162,7 +164,7 @@ const Frame =({ pages, firstlist,userName, page,side,  editBlock, addBlock,chang
                       <span>Add Cover</span>
                     </button>
                   }
-                  {page.header.comment ==null &&
+                  {page.header.comments==null &&
                   <button className='decoComment'>
                     <BiMessageDetail/>
                     <span>Add Commnet</span>
@@ -176,10 +178,14 @@ const Frame =({ pages, firstlist,userName, page,side,  editBlock, addBlock,chang
                 {page.header.title}
               </div>
             
-              {page.header.comment !==null &&
+              {page.header.comments!==null &&
               <div className='pageComment'>
-                <Comment comment ={page.header.comment} />
-                
+                {page.header.comments.map((comment:CommentType)=>
+                <Comment 
+                  key={`pageComment_${page.header.comments?.indexOf(comment)}`}
+                  comment={comment} 
+                  />
+                )}
               </div>
               }
             </div>

@@ -55,7 +55,7 @@ export type Block ={
   icon: string | null ,
   editTime: string ,
   style :BlockStyle,
-  comment :CommentType[] |null
+  comments :CommentType[] |null
 } ;
 
 export  const blockSample:Block ={
@@ -74,7 +74,7 @@ export  const blockSample:Block ={
     fontStyle:"initial",
     textDeco:"none"
   },
-  comment:null
+  comments:null
 };
 export type listItem = {
   id: string;
@@ -87,7 +87,7 @@ export type Page ={
     title: string | null,
     icon: string |null,
     cover: ImageData |null,
-    comment: string| null,
+    comments: CommentType[]| null,
   }
   firstBlocksId :string[] | null,
   blocks : Block[] ,  
@@ -101,7 +101,7 @@ export const  pageSample:Page ={
     title: null,
     icon: null,
     cover: null,
-    comment:  null,
+    comments:  null,
   },
   firstBlocksId :null,
   blocks :  [blockSample], 
@@ -200,7 +200,11 @@ const initialState :Notion ={
       title:"welcome notion",
       icon:'👋' ,
       cover: null,
-      comment:  "comment test",
+      comments:[{
+        userName:userName,
+        comment:"this is comment",
+        editTime: JSON.stringify(Date.now()),
+      }],
     },
     firstBlocksId :["text", 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page', 'page2'],
     blocks:[{
@@ -219,7 +223,7 @@ const initialState :Notion ={
         fontStyle:"initial",
         textDeco:"none"
       },
-      comment:[{
+      comments:[{
         userName:userName,
         comment:"hi! ☺️", 
         editTime:JSON.stringify(Date.now())
@@ -241,7 +245,7 @@ const initialState :Notion ={
         fontStyle:"initial",
         textDeco:"none"
       },
-      comment: null
+      comments: null
     },{
       id:"todo",
       contents:"todo", 
@@ -258,9 +262,9 @@ const initialState :Notion ={
         fontStyle:"initial",
         textDeco:"underline"
       },
-      comment:[{
+      comments:[{
         userName:userName,
-        comment:"todo comment", 
+        comment:"todo comments", 
         editTime:JSON.stringify(Date.now())
       },]
     },{
@@ -279,7 +283,7 @@ const initialState :Notion ={
         fontStyle:"initial",
         textDeco:"none"
       },
-      comment:null
+      comments:null
     },{
       id:"h1",
       contents:"header1", 
@@ -296,7 +300,7 @@ const initialState :Notion ={
         fontStyle:"initial",
         textDeco:"none"
       },
-      comment:null
+      comments:null
     },{
       id:"h2",
       contents:"header2",
@@ -313,7 +317,7 @@ const initialState :Notion ={
         fontStyle:"initial",
         textDeco:"none"
       },
-      comment:null
+      comments:null
     },{
       id:"h3",
       contents:"header3", 
@@ -330,7 +334,7 @@ const initialState :Notion ={
         fontStyle:"initial",
         textDeco:"none"
       },
-      comment:null
+      comments:null
     },{
       id:"page1",
       contents:"page page page",
@@ -347,7 +351,7 @@ const initialState :Notion ={
         fontStyle:"initial",
         textDeco:"none"
       },
-      comment:null
+      comments:null
     },
     {
       id:"page2",
@@ -365,7 +369,7 @@ const initialState :Notion ={
         fontStyle:"initial",
         textDeco:"none"
       },
-      comment:null
+      comments:null
     },
     {id:"sub1_1",
     contents:"sub1_1", 
@@ -382,7 +386,7 @@ const initialState :Notion ={
       fontStyle:"initial",
       textDeco:"none"
     },
-    comment:null
+    comments:null
   },
   {
     id:"sub1_2",
@@ -400,9 +404,9 @@ const initialState :Notion ={
       fontStyle:"initial",
       textDeco:"none"
     },
-    comment:[{
+    comments:[{
       userName:userName,
-      comment:"subBlock comment", 
+      comment:"subBlock comments", 
       editTime:JSON.stringify(Date.now())
     },]
   },
@@ -422,7 +426,7 @@ const initialState :Notion ={
       fontStyle:"initial",
       textDeco:"none"
     },
-    comment:null
+    comments:null
   },
   {
     id:"numlist",
@@ -440,7 +444,7 @@ const initialState :Notion ={
       fontStyle:"initial",
       textDeco:"none"
     },
-    comment:null
+    comments:null
   },
   {
     id:"num1",
@@ -458,7 +462,7 @@ const initialState :Notion ={
       fontStyle:"initial",
       textDeco:"underline"
     },
-    comment:null
+    comments:null
   },
   {
     id:"num2",
@@ -476,7 +480,7 @@ const initialState :Notion ={
       fontStyle:"initial",
       textDeco:"none"
     },
-    comment:null
+    comments:null
   },
   {
     id:"num3",
@@ -494,7 +498,7 @@ const initialState :Notion ={
       fontStyle:"initial",
       textDeco:"none"
     },
-    comment:null
+    comments:null
   },
   {
     id:"bulletList",
@@ -512,7 +516,7 @@ const initialState :Notion ={
       fontStyle:"initial",
       textDeco:"none"
     },
-    comment:null
+    comments:null
   },
   {
     id:"b1",
@@ -530,7 +534,7 @@ const initialState :Notion ={
       fontStyle:"initial",
       textDeco:"none"
     },
-    comment:null
+    comments:null
   },
   {
     id:"b2",
@@ -548,7 +552,7 @@ const initialState :Notion ={
       fontStyle:"initial",
       textDeco:"none"
     },
-    comment:null
+    comments:null
   },
 
     ],
@@ -562,7 +566,7 @@ const initialState :Notion ={
       title:"notion2",
       icon:'👋' ,
       cover: null,
-      comment:  null,
+      comments:  null,
     },
     firstBlocksId:null,
     blocks:[],
@@ -576,7 +580,7 @@ const initialState :Notion ={
       title:"notino3",
       icon:'👋' ,
       cover: null,
-      comment:  null,
+      comments:  null,
     },
     firstBlocksId:null,
     blocks:[],
@@ -705,7 +709,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
             title: action.block.contents,
             icon: action.block.icon,
             cover: null,
-            comment:  null,
+            comments:  null,
           }
         };
         pages.concat(newPage);
