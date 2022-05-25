@@ -22,10 +22,6 @@
     position: relative;
   }
   width: 100%;
-  .list{
-    width: 80%;
-    padding:0;
-  }
 }
 .subBlocks .editableBlock{
   padding:0;
@@ -123,6 +119,16 @@
 .toggle.on.block{
   .subBlocks{
     display: block;
+  }
+}
+.list {
+  display: flex;
+  flex-direction: column;
+  .list_marker{
+    padding-right: 8px;
+    svg{
+      font-size: 11px;
+    }
   }
 }
 .blockToggleBtn {

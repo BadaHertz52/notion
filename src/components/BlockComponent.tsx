@@ -1,4 +1,5 @@
 import React from 'react';
+import { GoPrimitiveDot } from 'react-icons/go';
 import { GrCheckbox, GrCheckboxSelected, GrDocumentText } from 'react-icons/gr';
 import { IoChatboxOutline } from 'react-icons/io5';
 import { MdPlayArrow } from 'react-icons/md';
@@ -36,39 +37,59 @@ const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,rai
     })
   };
   const ListSub = ()=>{
+    const listStyle =(block:Block):CSSProperties=>{
+      return({
+        textDecoration:"none",
+        fontStyle:"normal",
+        fontWeight: "normal",
+        backgroundColor:block.style.bgColor,
+        color:block.style.color
+      })
+    }
     return(
-      <>
-      {subBlocks?.map((block:Block)=>
-        <li
-          key={`${block.type}_${block.contents}`}
-        >
+      <div className='list'>
+        {subBlocks?.map((block:Block)=>(
           <div 
             id ={block.id}
             className= "blockContents"
             title={`${block.id}_contents`}
-            style={blockContentsStyle(block)}>
-              {block.comment==null? 
-            <div 
-              className="contents"
+            style={listStyle(block)}
+            >
+
+            {block.comment==null? 
+            <>
+              <div 
+                className='list_marker'
+              >
+                {className.includes("number")? 
+                `${subBlocks.indexOf(block)+1}.`
+                :
+                <GoPrimitiveDot/> 
+                }
+              </div>
+              <div 
+                className="contents"
+                placeholder="type '/' for commmands"
+                style={blockContentsStyle(block)}
+              >
+                {block.contents}
+              </div>
+            </>
+            :
+            <button 
+              className="contents commentBtn"
               placeholder="type '/' for commmands"
             >
               {block.contents}
-            </div>
-          :
-          <button 
-            className="contents commentBtn"
-            placeholder="type '/' for commmands"
-          >
-            {block.contents}
-          </button>
+            </button>
           }
+
           </div>
-          
-        </li>
-      )}
-      </>
+        ))}
+      </div>
     )
   }
+
   return(
     <div 
       className={className} 
@@ -76,15 +97,7 @@ const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,rai
 
       {(block.type ==="numberList" || block.type=== "bulletList" ) ?
       <div className='mainBlock'>
-        {block.type==="numberList" ? 
-          <ol className="list">
-            <ListSub/>
-          </ol>
-        :
-          <ul className="list">
-            <ListSub/>
-          </ul>
-        }
+        <ListSub/>
       </div>
       :
       <>

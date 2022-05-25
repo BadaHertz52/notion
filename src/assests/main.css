@@ -68,11 +68,6 @@ a:link, a:active, a:visited {
   position: relative;
 }
 
-.mainBlock .list {
-  width: 80%;
-  padding: 0;
-}
-
 .subBlocks .editableBlock {
   padding: 0;
   padding-left: 20px;
@@ -175,6 +170,24 @@ a:link, a:active, a:visited {
 
 .toggle.on.block .subBlocks {
   display: block;
+}
+
+.list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.list .list_marker {
+  padding-right: 8px;
+}
+
+.list .list_marker svg {
+  font-size: 11px;
 }
 
 .blockToggleBtn svg {
