@@ -15,12 +15,21 @@
 }
 .mainBlock{
   display: flex;
-  position: relative;
+  justify-content: space-between;
+  &>div{
+    display: flex;
+    width: 100%;
+    position: relative;
+  }
   width: 100%;
+  .list{
+    width: 80%;
+    padding:0;
+  }
 }
 .subBlocks .editableBlock{
+  padding:0;
   padding-left: 20px;
-  padding: 0;
 }
 [contenteditable] {
   outline: 0px solid transparent;
@@ -128,23 +137,30 @@
 }
 .blockContents{
   width: 100%;
+  height: fit-content;
+  padding:1% 0;
   text-align: left;
+  display: flex;
+  align-items: flex-end;
+  .contents.commentBtn {
+    color:inherit;
+    text-decoration: inherit;
+    font : {
+      size: inherit;
+      weight: inherit
+    }
+    background-color: #fff9c4;
+    &:hover{
+      background-color: #ffdf3e;
+    }
+  }
   .contents:empty::after{
     content: attr(placeholder);
     color: $mud;
   }
 }
-.blockContents.commentBtn::target-text{
-  width: fit-content;
-  background-color: #fff9c4;
-  &:hover{
-    background-color: #ffdf3e;
-  }
-}
+
 .commentBtn.btnIcon{
-  position: absolute;
-  top:0;
-  right: 0;
   svg,span{
     color: $itemSvg;
   }
