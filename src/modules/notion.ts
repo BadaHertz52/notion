@@ -38,6 +38,13 @@ export type BlockStyle ={
   fontStyle: "italic" | "initial",
   textDeco : "underline"|"overline" | "none"
 };
+const userName= "amet";
+
+export type CommentType ={
+  userName:string,
+  comment: string,
+  editTime: string
+}
 export type Block ={
   id:string,
   contents:string, 
@@ -47,7 +54,8 @@ export type Block ={
   type: BlockType ,
   icon: string | null ,
   editTime: string ,
-  style :BlockStyle
+  style :BlockStyle,
+  comment :CommentType[] |null
 } ;
 
 export  const blockSample:Block ={
@@ -65,7 +73,8 @@ export  const blockSample:Block ={
     fontWeight:"initial",
     fontStyle:"initial",
     textDeco:"none"
-  }
+  },
+  comment:null
 };
 export type listItem = {
   id: string;
@@ -209,13 +218,18 @@ const initialState :Notion ={
         fontWeight:"bold",
         fontStyle:"initial",
         textDeco:"none"
-      }
+      },
+      comment:[{
+        userName:userName,
+        comment:"hi! ☺️", 
+        editTime:JSON.stringify(Date.now())
+      },]
     },
     {
       id:"toggle",
       contents:"toggle toggle ",
       firstBlock:true,
-      subBlocksId:null , 
+      subBlocksId:null, 
       parentBlocksId: null,
       type: toggle,
       icon:  null ,
@@ -226,7 +240,8 @@ const initialState :Notion ={
         fontWeight:"initial",
         fontStyle:"initial",
         textDeco:"none"
-      }
+      },
+      comment: null
     },{
       id:"todo",
       contents:"todo", 
@@ -242,7 +257,12 @@ const initialState :Notion ={
         fontWeight:"initial",
         fontStyle:"initial",
         textDeco:"underline"
-      }
+      },
+      comment:[{
+        userName:userName,
+        comment:"todo comment", 
+        editTime:JSON.stringify(Date.now())
+      },]
     },{
       id:"todo done",
       contents:"todo done",
@@ -258,7 +278,8 @@ const initialState :Notion ={
         fontWeight:"initial",
         fontStyle:"initial",
         textDeco:"none"
-      }
+      },
+      comment:null
     },{
       id:"h1",
       contents:"header1", 
@@ -274,7 +295,8 @@ const initialState :Notion ={
         fontWeight:"initial",
         fontStyle:"initial",
         textDeco:"none"
-      }
+      },
+      comment:null
     },{
       id:"h2",
       contents:"header2",
@@ -290,7 +312,8 @@ const initialState :Notion ={
         fontWeight:"initial",
         fontStyle:"initial",
         textDeco:"none"
-      }
+      },
+      comment:null
     },{
       id:"h3",
       contents:"header3", 
@@ -306,7 +329,8 @@ const initialState :Notion ={
         fontWeight:"initial",
         fontStyle:"initial",
         textDeco:"none"
-      }
+      },
+      comment:null
     },{
       id:"page1",
       contents:"page page page",
@@ -322,7 +346,8 @@ const initialState :Notion ={
         fontWeight:"initial",
         fontStyle:"initial",
         textDeco:"none"
-      }
+      },
+      comment:null
     },
     {
       id:"page2",
@@ -339,7 +364,8 @@ const initialState :Notion ={
         fontWeight:"initial",
         fontStyle:"initial",
         textDeco:"none"
-      }
+      },
+      comment:null
     },
     {id:"sub1_1",
     contents:"sub1_1", 
@@ -355,7 +381,8 @@ const initialState :Notion ={
       fontWeight:"initial",
       fontStyle:"initial",
       textDeco:"none"
-    }
+    },
+    comment:null
   },
   {
     id:"sub1_2",
@@ -372,7 +399,12 @@ const initialState :Notion ={
       fontWeight:"initial",
       fontStyle:"initial",
       textDeco:"none"
-    }
+    },
+    comment:[{
+      userName:userName,
+      comment:"subBlock comment", 
+      editTime:JSON.stringify(Date.now())
+    },]
   },
   {
     id:"sub2_1",
@@ -389,7 +421,8 @@ const initialState :Notion ={
       fontWeight:"initial",
       fontStyle:"initial",
       textDeco:"none"
-    }
+    },
+    comment:null
   },
   {
     id:"numlist",
@@ -406,7 +439,8 @@ const initialState :Notion ={
       fontWeight:"initial",
       fontStyle:"initial",
       textDeco:"none"
-    }
+    },
+    comment:null
   },
   {
     id:"num1",
@@ -423,7 +457,8 @@ const initialState :Notion ={
       fontWeight:"initial",
       fontStyle:"initial",
       textDeco:"underline"
-    }
+    },
+    comment:null
   },
   {
     id:"num2",
@@ -440,7 +475,8 @@ const initialState :Notion ={
       fontWeight:"initial",
       fontStyle:"initial",
       textDeco:"none"
-    }
+    },
+    comment:null
   },
   {
     id:"num3",
@@ -457,7 +493,8 @@ const initialState :Notion ={
       fontWeight:"initial",
       fontStyle:"initial",
       textDeco:"none"
-    }
+    },
+    comment:null
   },
   {
     id:"bulletList",
@@ -474,7 +511,8 @@ const initialState :Notion ={
       fontWeight:"initial",
       fontStyle:"initial",
       textDeco:"none"
-    }
+    },
+    comment:null
   },
   {
     id:"b1",
@@ -491,7 +529,8 @@ const initialState :Notion ={
       fontWeight:"initial",
       fontStyle:"initial",
       textDeco:"none"
-    }
+    },
+    comment:null
   },
   {
     id:"b2",
@@ -508,12 +547,13 @@ const initialState :Notion ={
       fontWeight:"initial",
       fontStyle:"initial",
       textDeco:"none"
-    }
+    },
+    comment:null
   },
 
     ],
     blocksId:["text", 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page', 'page2' , 'sub1_1' ,'sub1_2', 'sub2_1' ,"numberList" , "num1", "num2", "num3" , "bulletList", "b1", "b2"],
-    subPagesId:[],
+    subPagesId:['1234'],
     parentsId: null,
   },
   {
@@ -528,7 +568,7 @@ const initialState :Notion ={
     blocks:[],
     blocksId:[],
     subPagesId:[],
-    parentsId: null
+    parentsId: ['12345']
   },
   {
     id: '123',
@@ -802,6 +842,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
       };
     case EDIT_PAGE :
       pages.splice(pageIndex,1,action.newPage);
+      console.log("edit page",pages);
       return{
         pages:pages,
         firstPagesId:firstPagesId,
