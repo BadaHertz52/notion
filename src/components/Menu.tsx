@@ -8,7 +8,7 @@ import { BsArrowClockwise, BsLink45Deg } from 'react-icons/bs';
 import {MdOutlineRestorePage} from 'react-icons/md';
 import {TiArrowSortedDown} from 'react-icons/ti';
 import {IoArrowRedoOutline} from 'react-icons/io5';
-import { RiContactsBookLine, RiDeleteBin6Line } from 'react-icons/ri';
+import {RiDeleteBin6Line } from 'react-icons/ri';
 import { AiOutlineFormatPainter } from 'react-icons/ai';
 import { CSSProperties } from 'styled-components';
 import { Command } from '../containers/EditorContainer';
