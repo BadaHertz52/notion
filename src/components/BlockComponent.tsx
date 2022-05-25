@@ -1,8 +1,9 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { GrCheckbox, GrCheckboxSelected, GrDocumentText } from 'react-icons/gr';
+import { IoChatboxOutline } from 'react-icons/io5';
 import { MdPlayArrow } from 'react-icons/md';
-import styled, { css, CSSProperties, StyledComponent } from 'styled-components';
-import { Block,BlockStyle,Page } from '../modules/notion';
+import {  CSSProperties} from 'styled-components';
+import { Block,Page } from '../modules/notion';
 import EditableBlock from './EditableBlock';
 
 type BlockProp ={
@@ -28,7 +29,7 @@ const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,rai
   const blockContentsStyle =(block:Block):CSSProperties =>{
     return ({
       color: block.style.color,
-      backgroundColor :block.style.bgColor,
+      backgroundColor :block.comment==null ? block.style.bgColor : '#fff9c4',
       fontWeight: block.style.fontWeight ,
       fontStyle: block.style.fontStyle,
       textDecoration: block.style.textDeco,
@@ -117,14 +118,33 @@ const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,rai
           }
           </div>
         }
-        <div 
-          className='blockContents' 
-          placeholder="type '/' for commmands"
-          title={`${block.id}_contents`}
-          style={blockContentsStyle(block)}
-        >
-          {block.contents}
-        </div>
+        {block.comment ==null ?
+          <div 
+            className='blockContents' 
+            placeholder="type '/' for commmands"
+            title={`${block.id}_contents`}
+            style={blockContentsStyle(block)}
+          >
+            {block.contents}
+          </div>
+        :
+        <>
+          <>
+            <button 
+              className='blockContents commentBtn' 
+              placeholder="type '/' for commmands"
+              title={`${block.id}_contents`}
+              style={blockContentsStyle(block)}
+            >
+              {block.contents}
+            </button>
+            <button className='commentBtn btnIcon'>
+              <IoChatboxOutline/>
+              <span className="commentLength">{block.comment.length}</span>
+            </button>
+          </>
+        </>
+        }
       </div>
       <div 
         className='subBlocks'
