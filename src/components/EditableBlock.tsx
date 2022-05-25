@@ -21,11 +21,12 @@ const findTargetBlock =(page:Page):findTargetBlockReturn=>{
   const focusOffset =cursor?.focusOffset as number;
   const cursorAnchorNode = cursor?.anchorNode as Node;
   const nodeType = cursorAnchorNode.nodeType as number ;
-  const blockContentsElement = nodeType === 3 ? cursorAnchorNode.parentElement as Element : cursorAnchorNode as Element ; 
+  const contentsDiv= nodeType=== 3? cursorAnchorNode.parentElement as Element: cursorAnchorNode as Element;
+  const blockContentsElement = contentsDiv.parentElement ; 
   const title =blockContentsElement?.getAttribute("title") as string ; 
   const end = title?.indexOf("_contents");
   const blockId :string = title?.slice(0,end ); 
-  const textContents = blockContentsElement?.textContent as string; 
+  const textContents = contentsDiv?.textContent as string; 
   const targetBlockIndex :number =page.blocksId.indexOf(blockId) as number;
   
   const targetBlock :Block =page.blocks[targetBlockIndex];
