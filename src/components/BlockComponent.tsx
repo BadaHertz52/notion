@@ -35,19 +35,35 @@ const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,rai
       textDecoration: block.style.textDeco,
     })
   };
-
   const ListSub = ()=>{
     return(
       <>
       {subBlocks?.map((block:Block)=>
         <li
           key={`${block.type}_${block.contents}`}
-          id ={block.id}
-          className= "blockContents"
-          title={`${block.id}_contents`}
-          style={blockContentsStyle(block)}
         >
-          {block.contents}
+          <div 
+            id ={block.id}
+            className= "blockContents"
+            title={`${block.id}_contents`}
+            style={blockContentsStyle(block)}>
+              {block.comment==null? 
+            <div 
+              className="contents"
+              placeholder="type '/' for commmands"
+            >
+              {block.contents}
+            </div>
+          :
+          <button 
+            className="contents commentBtn"
+            placeholder="type '/' for commmands"
+          >
+            {block.contents}
+          </button>
+          }
+          </div>
+          
         </li>
       )}
       </>
@@ -75,6 +91,7 @@ const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,rai
       <div 
         className='mainBlock'
       >
+        <div>
         {block.type ==="todo" &&
           <button 
             className='checkbox left blockBtn'
@@ -118,40 +135,35 @@ const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,rai
           }
           </div>
         }
-        {block.comment ==null ?
-          <div 
-            className='blockContents' 
-            title={`${block.id}_contents`}
-            style={blockContentsStyle(block)}
-          >
+        <div 
+          className='blockContents' 
+          title={`${block.id}_contents`}
+          style={blockContentsStyle(block)}
+        >
+          {block.comment==null? 
             <div 
-              className='contents'
+              className="contents"
               placeholder="type '/' for commmands"
             >
-              {block.contents}
+            {block.contents}
             </div>
-          </div>
-        :
-        <>
-          <>
-            <button 
-              className='blockContents commentBtn' 
-              title={`${block.id}_contents`}
-              style={blockContentsStyle(block)}
-            >
-              <div 
-                className='contents'
-                placeholder="type '/' for commmands"
-              >
-                {block.contents}
-              </div>
-            </button>
-            <button className='commentBtn btnIcon'>
-              <IoChatboxOutline/>
-              <span className="commentLength">{block.comment.length}</span>
-            </button>
-          </>
-        </>
+          :
+          <button 
+            className="contents commentBtn"
+            placeholder="type '/' for commmands"
+          >
+            {block.contents}
+          </button>
+          }
+
+        </div>
+        </div>
+
+        {block.comment !==null &&
+          <button className='commentBtn btnIcon'>
+            <IoChatboxOutline/>
+            <span className="commentLength">{block.comment.length}</span>
+          </button>
         }
       </div>
       <div 
