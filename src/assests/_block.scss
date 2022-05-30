@@ -173,7 +173,7 @@
 }
 #commandBlock{
 
-  @include popUpMenu;
+  @include popupMenu;
   &_inner {
     padding: 5px;
     height: 350px;

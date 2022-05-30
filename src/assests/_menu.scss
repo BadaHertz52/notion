@@ -27,7 +27,7 @@
 };
 
 #mainMenu {
-  @include popUpMenu;
+  @include popupMenu;
   width:240px;
   .menu_inner {
     padding: 5% 0;
@@ -103,7 +103,7 @@
   }
 }
 .menu_color{
-  @include popUpMenu;
+  @include popupMenu;
   overflow-y: scroll;
   z-index: 10;
   height: 380px;
@@ -142,7 +142,7 @@
 
 }
 #pageMenu {
-  @include popUpMenu;
+  @include popupMenu;
   .inner{
     width: 100%;
     box-sizing: border-box;
