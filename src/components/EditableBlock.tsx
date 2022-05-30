@@ -305,8 +305,9 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
       const positionX =editableBlockPosition.left;
       const left = positionX - 45 ;
       blockFn?.classList.toggle("on");
-      const tag = target.tagName;
-      const id= tag==="LI"?  target.id : target.parentElement?.parentElement?.parentElement?.getAttribute("id") as string;
+      const title= target.getAttribute('title') as string;
+      const start = title.indexOf("_contents");
+      const id= title.substring(0, start);
       const {BLOCK} =findBlock(page, id);
 
       if(blockFn?.classList.contains("on")){
