@@ -9,6 +9,7 @@ import EditableBlock from './EditableBlock';
 import Comments from './Comments';
 
 type BlockProp ={
+  userName:string,
   block:Block,
   subBlocks :Block[]|null,
   page:Page,
@@ -24,7 +25,7 @@ type BlockProp ={
 };
 
 
-const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,addPage, editPage, deletePage, commentOpen}:BlockProp)=>{
+const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,addPage, editPage, deletePage, commentOpen}:BlockProp)=>{
   const className = block.type !== "toggle" ?
                     `${block.type} block ` :
                     `${block.type} block ${block.subBlocksId!==null?'on' : ""}`;
@@ -178,7 +179,10 @@ const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,rai
           <>
           {commentOpen ?
               <Comments
-                comments={block.comments}
+                userName={userName}
+                block={block}
+                pageId={page.id}
+                editBlock={editBlock}
               />
             :
             <button className='commentBtn btnIcon'>
@@ -194,14 +198,13 @@ const BlockComponent=({block,subBlocks, page ,addBlock,editBlock,changeToSub,rai
       </div>
       </>
       }
-      
-      {/* subblock */}
       <div 
         className='subBlocks'
       >
         {subBlocks?.map((subBlock :Block)=> 
           <EditableBlock
-            key ={block.id}  
+            key ={block.id} 
+            userName={userName} 
             page={page}
             block={subBlock}
             addBlock={addBlock}

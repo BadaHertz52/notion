@@ -99,6 +99,7 @@ export const makeNewBlock=(page:Page, editTime:string,addBlock:(pageId: string, 
 };
 
 type EditableBlockProps ={
+  userName:string,
   page:Page,
   block:Block,
   editBlock :(pageId: string, block: Block) => void,
@@ -111,7 +112,7 @@ type EditableBlockProps ={
   deletePage : (pageId:string , block:null)=>void,
 };
 
-const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock , addPage, editPage, deletePage }:EditableBlockProps)=>{  
+const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock , addPage, editPage, deletePage }:EditableBlockProps)=>{  
   const  editTime = JSON.stringify(Date.now());
   const innerRef  =useRef<HTMLDivElement>(null) ;
   const storageItem =sessionStorage.getItem("editedBlock") ;
@@ -141,7 +142,8 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
     }): null ;
 
     const blockNode = ReactDOMServer.renderToString
-    (<BlockComponent 
+    (<BlockComponent
+      userName={userName} 
       block={block} 
       subBlocks ={sub_blocks}
       page={page}

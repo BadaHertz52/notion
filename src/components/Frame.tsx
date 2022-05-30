@@ -30,35 +30,35 @@ type FrameProps ={
 
 
 const Frame =({ pages, firstlist,userName, page,side,  editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage,editPage, deletePage }:FrameProps)=>{
-  type CommentProp ={
-    comment:CommentType
-  };
+  // type CommentProp ={
+  //   comment:CommentType
+  // };
 
-  const Comment =({comment}:CommentProp) =>{
-    const firstLetter = comment.userName.substring(0,1).toUpperCase();
-    return (
-      <div className='comment'>
-        <div className='firstLetter'>
-          <span>{firstLetter}</span>
-        </div>
-        <div className='commentContent'>
-          {comment!==null ?
-            <span>
-              {comment.comment}
-            </span>
-          :
-            <input
-            type="text"
-            id="text"
-            name ="text"
-            placeholder='Add a comment'
-          />
-          }
+  // const Comment =({comment}:CommentProp) =>{
+  //   const firstLetter = comment.userName.substring(0,1).toUpperCase();
+  //   return (
+  //     <div className='comment'>
+  //       <div className='firstLetter'>
+  //         <span>{firstLetter}</span>
+  //       </div>
+  //       <div className='commentContent'>
+  //         {comment!==null ?
+  //           <span>
+  //             {comment.comment}
+  //           </span>
+  //         :
+  //           <input
+  //           type="text"
+  //           id="text"
+  //           name ="text"
+  //           placeholder='Add a comment'
+  //         />
+  //         }
           
-        </div>
-      </div>
-    )
-  };
+  //       </div>
+  //     </div>
+  //   )
+  // };
 
   const [decoOpen ,setdecoOpen] =useState<boolean>(true);
 
@@ -180,12 +180,12 @@ const Frame =({ pages, firstlist,userName, page,side,  editBlock, addBlock,chang
             
               {page.header.comments!==null &&
               <div className='pageComment'>
-                {page.header.comments.map((comment:CommentType)=>
+                {/* {page.header.comments.map((comment:CommentType)=>
                 <Comment 
                   key={`pageComment_${page.header.comments?.indexOf(comment)}`}
                   comment={comment} 
                   />
-                )}
+                )} */}
               </div>
               }
             </div>
@@ -199,6 +199,7 @@ const Frame =({ pages, firstlist,userName, page,side,  editBlock, addBlock,chang
                   return (
                     <EditableBlock
                       key={block.id}
+                      userName={userName}
                       page={page}
                       block={block}
                       addBlock={addBlock}
