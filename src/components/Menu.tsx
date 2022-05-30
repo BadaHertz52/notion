@@ -15,6 +15,7 @@ import { Command } from '../containers/EditorContainer';
 import ColorMenu from './ColorMenu';
 import { HiOutlineDuplicate } from 'react-icons/hi';
 import PageMenu from './PageMenu';
+import { CommentInput } from './Comments';
 
 
 type MenuProps ={
@@ -55,7 +56,17 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
   const [editBtns, setEditBtns]= useState<Element[]|null>(null);
   const [turnInto, setTurnInto]= useState<boolean>(false);
   const [color, setColor]= useState<boolean>(false);
-  const [moveToPage ,setMoveToPage] = useState<boolean>(false);
+  const popupMoveToPage= "popupMoveToPage" ;
+  const popupComment ="popupComment" ;
+  type PopupType ={
+    popup: boolean,
+    what: typeof popupMoveToPage | typeof popupComment | null,
+  };
+  const [popup, setPopup]=useState<PopupType>({
+    popup:false,
+    what:null
+  });
+
   const [turnInToPage ,setTurnIntoPage] = useState<boolean>(false);
   const [command, setCommand]= useState<Command>({boolean:false, command:null});
 
@@ -129,7 +140,10 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
     setTurnInto(false);
     setTurnIntoPage(false);
     setColor(false);
-    setMoveToPage(false);
+    setPopup({
+      popup:false,
+      what: null
+    })
   };
   const showTurnInto =()=>{
     recoveryMenuState();
@@ -144,9 +158,17 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
     setTurnIntoPage(true);
   };
   const onClickMoveTo=()=>{
-    setMoveToPage(true);
+    setPopup({
+      popup:true,
+      what: popupMoveToPage
+    })
   };
-
+  const onOpenCommentInput=()=>{
+    setPopup({
+      popup:true,
+      what:popupComment
+    })
+  };
   const removeBlock =()=>{
     deleteBlock(page.id, block);
     setMenuOpen(false);
@@ -175,7 +197,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
 
   return(
   <div className="menu">
-    {!moveToPage? 
+    {!popup.popup &&
     <>
       <div id='mainMenu' >
         <div className="menu_inner">
@@ -264,6 +286,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
                 <button
                   className='underline menu_editBtn'
                   name="comment"
+                  onClick={onOpenCommentInput}
                 >
                   <div>
                     <BiCommentDetail/>
@@ -336,7 +359,8 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
         }
       </div>
     </>
-    : 
+    }
+    {popup.what === popupMoveToPage &&
     <div id="moveTo_pageMenu">
       <PageMenu
         pages={pages}
@@ -348,6 +372,16 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
         setMenuOpen={setMenuOpen}
         recoverMenuState={recoveryMenuState}
       /> 
+    </div>
+    }
+    {popup.what === popupComment &&
+    <div id="popup_comment">
+      <CommentInput
+        pageId={page.id}
+        block={block}
+        userName={userName}
+        editBlock={editBlock}
+      />
     </div>
     }
   </div>
