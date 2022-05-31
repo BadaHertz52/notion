@@ -5,6 +5,8 @@ import {Block, listItem, Page} from '../modules/notion';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { CgMenuGridO } from 'react-icons/cg';
 import { makeNewBlock } from './EditableBlock';
+import PageMenu from './PageMenu';
+import { CommentInput } from './Comments';
 
 type BlockFnProp ={
   pages:Page[],
@@ -18,11 +20,21 @@ type BlockFnProp ={
   editPage : (pageId:string , newPage:Page, block:null)=>void,
   deletePage : (pageId:string , block:null)=>void,
 };
-
+export const popupMoveToPage= "popupMoveToPage" ;
+export const popupComment ="popupComment" ;
+export type PopupType ={
+  popup: boolean,
+  what: typeof popupMoveToPage | typeof popupComment | null,
+};
 const BlockFn =({pages,firstlist, page,userName, addBlock, editBlock, deleteBlock ,addPage, editPage, deletePage}:BlockFnProp)=>{
   const editTime = JSON.stringify(Date.now());
   const newContents:string ="";
   const [menuOpen, setMenuOpen]= useState<boolean>(false);
+  const [popup, setPopup]=useState<PopupType>({
+    popup:false,
+    what:null
+  });
+
   const sessionItem = sessionStorage.getItem("blockFnTargetBlock") as string;
 
   const makeBlock =()=>{
@@ -69,8 +81,32 @@ const BlockFn =({pages,firstlist, page,userName, addBlock, editBlock, deleteBloc
             addPage={addPage}
             editPage={editPage}
             deletePage={deletePage}
+            setPopup={setPopup}
           />
         }
+      {popup.popup && (
+            popup.what === popupMoveToPage ?
+              <div id="popupMenu">
+                <PageMenu
+                  pages={pages}
+                  firstlist={firstlist}
+                  existingPage={page}
+                  deleteBlock={deleteBlock}
+                  addBlock={addBlock}
+                  setMenuOpen={setMenuOpen}
+                  //recoveryMenuState={recoveryMenuState}
+                /> 
+              </div>
+              :
+              <div id="popupMenu">
+                <CommentInput
+                  pageId={page.id}
+                  userName={userName}
+                  editBlock={editBlock}
+                />
+              </div>
+          )
+          }
       </div>
 
   </div>

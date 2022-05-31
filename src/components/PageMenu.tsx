@@ -7,20 +7,20 @@ type PageMenuProps ={
   pages:Page[],
   firstlist:listItem[],
   existingPage: Page,
-  block:Block,
   deleteBlock: (pageId: string, block: Block) => void,
   addBlock: (pageId: string, block: Block, nextBlockIndex: number, previousBlockId: string | null) => void,
   setMenuOpen:Dispatch<SetStateAction<boolean>>,
-  recoveryMenuState:()=>void,
+  //recoveryMenuState:()=>void,
 }
-const PageMenu =({pages, firstlist, existingPage, block , deleteBlock, addBlock ,setMenuOpen, recoveryMenuState}:PageMenuProps)=>{
+const PageMenu =({pages, firstlist, existingPage,deleteBlock, addBlock ,setMenuOpen}:PageMenuProps)=>{
 
   type PageButtonProps={
     item: listItem
   };
   const [search , setSearch]= useState<boolean>(false);
   const [result, setResult]= useState<listItem[]|null>(null);
-
+  const sessionItem = sessionStorage.getItem("blockFnTargetBlock") as string;
+  const block:Block= JSON.parse(sessionItem);
 
   const moveBlockToPage =(pageId:string)=>{
     // 기존 페이지에서 블록 삭제
@@ -29,7 +29,7 @@ const PageMenu =({pages, firstlist, existingPage, block , deleteBlock, addBlock 
     addBlock(pageId, block, 0 , null);
     // close Menu and recovery Menu state
     setMenuOpen(false);
-    recoveryMenuState();
+   // recoveryMenuState();
   };
   
   const PageButton =({item}:PageButtonProps)=>{
