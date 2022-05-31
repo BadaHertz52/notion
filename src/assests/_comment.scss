@@ -2,6 +2,7 @@
 
 #popupMenu .comments {
   @include popupMenu;
+  z-index: 10;
   padding: 3%;
   width: calc(100vw - (96*2)px - 6%);
   .firstLetter{

@@ -437,7 +437,7 @@ a:link, a:active, a:visited {
   color: inherit;
 }
 
-#popup_comment {
+#popupMenu .comments {
   width: 320px;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -457,19 +457,20 @@ a:link, a:active, a:visited {
   border-radius: 10px;
   -webkit-box-shadow: 0px 0px 23px -5px #ababab;
   box-shadow: 0px 0px 23px -5px #ababab;
+  z-index: 10;
   padding: 3%;
   width: calc(100vw - (96*2)px - 6%);
 }
 
-#popup_comment::-webkit-scrollbar-thumb {
+#popupMenu .comments::-webkit-scrollbar-thumb {
   background: #D3D1CB;
 }
 
-#popup_comment::-webkit-scrollbar-track {
+#popupMenu .comments::-webkit-scrollbar-track {
   background: #EDECE9;
 }
 
-#popup_comment .firstLetter {
+#popupMenu .comments .firstLetter {
   border-radius: 50%;
   border: 1px solid rgba(55, 53, 47, 0.65);
   color: rgba(55, 53, 47, 0.65);
