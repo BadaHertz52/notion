@@ -201,7 +201,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
     className="menu"
     style={menuStyle}
   >
-    {!popup.popup &&
+    {!popup.popup? 
     <>
       <div id='mainMenu' >
         <div className="menu_inner">
@@ -366,30 +366,31 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
         }
       </div>
     </>
-    }
-    {popup.what === popupMoveToPage &&
-    <div id="moveTo_pageMenu">
-      <PageMenu
-        pages={pages}
-        firstlist={firstlist}
-        existingPage={page}
-        block={block}
-        deleteBlock={deleteBlock}
-        addBlock={addBlock}
-        setMenuOpen={setMenuOpen}
-        recoveryMenuState={recoveryMenuState}
-      /> 
-    </div>
-    }
-    {popup.what === popupComment &&
-    <div id="popup_comment">
-      <CommentInput
-        pageId={page.id}
-        block={block}
-        userName={userName}
-        editBlock={editBlock}
-      />
-    </div>
+    :
+    (
+      popup.what === popupMoveToPage ?
+        <div id="moveTo_pageMenu">
+          <PageMenu
+            pages={pages}
+            firstlist={firstlist}
+            existingPage={page}
+            block={block}
+            deleteBlock={deleteBlock}
+            addBlock={addBlock}
+            setMenuOpen={setMenuOpen}
+            recoveryMenuState={recoveryMenuState}
+          /> 
+        </div>
+        :
+        <div id="popup_comment">
+          <CommentInput
+            pageId={page.id}
+            block={block}
+            userName={userName}
+            editBlock={editBlock}
+          />
+        </div>
+    )
     }
   </div>
   )
