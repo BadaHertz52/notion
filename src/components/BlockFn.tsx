@@ -27,6 +27,7 @@ export type PopupType ={
   what: typeof popupMoveToPage | typeof popupComment | null,
 };
 const BlockFn =({pages,firstlist, page,userName, addBlock, editBlock, deleteBlock ,addPage, editPage, deletePage}:BlockFnProp)=>{
+  const inner =document.getElementById("inner");
   const editTime = JSON.stringify(Date.now());
   const newContents:string ="";
   const [menuOpen, setMenuOpen]= useState<boolean>(false);
@@ -45,9 +46,81 @@ const BlockFn =({pages,firstlist, page,userName, addBlock, editBlock, deleteBloc
 
   const openMenu=()=>{
     setMenuOpen(!menuOpen);
+    setPopup({
+      popup:false,
+      what:null
+    })
   };
 
+  type Position ={
+    top:number,
+    bottom:number,
+    left:number,
+    right:number,
+  };
+  const findPosition =(eventTarget:Element ,elementArea:DOMRect ):{
+    targetElement_position :Position,
+    eventTarget_position : Position
+  }=>{
+    const eventTargetArea = eventTarget?.getClientRects()[0] ;
+    const targetElement_position:Position = {
+      top: elementArea?.top as number,
+      bottom: elementArea?.bottom  as number,
+      left: elementArea?.left as number,
+      right: elementArea?.right as number,
+    };
+    const eventTarget_position:Position = {
+      top: eventTargetArea?.top as number,
+      bottom: eventTargetArea?.bottom  as number,
+      left: eventTargetArea?.left as number,
+      right: eventTargetArea?.right as number,
+    };
+    
+    return {
+      targetElement_position : targetElement_position,
+      eventTarget_position : eventTarget_position
+    }
+  };
   
+  const detectRange =(event:MouseEvent , targetArea:DOMRect|undefined ):boolean=>{
+    const target =event.target as Element; 
+    const target_area= targetArea as DOMRect;
+    const {targetElement_position ,eventTarget_position} =findPosition(target, target_area);
+    const inner_x:boolean = (eventTarget_position.left >= targetElement_position.left)&&(eventTarget_position.right <= targetElement_position.right);
+    const inner_y:boolean = (eventTarget_position.top>= targetElement_position.top) && (eventTarget_position.bottom <= targetElement_position.bottom);
+    return (inner_x && inner_y);
+  };
+
+  const closeMenu =(event:MouseEvent)=>{
+    const mainMenu =document.getElementById("mainMenu");
+    const sideMenu =document.getElementById("sideMenu")?.firstElementChild;
+    const mainMenuArea =mainMenu?.getClientRects()[0] ;
+    const sideMenuArea =sideMenu?.getClientRects()[0] ;
+
+    const isInnerrMain = detectRange(event, mainMenuArea);
+    const isInnerSide =detectRange(event, sideMenuArea );
+
+    if(sideMenuArea !==undefined){
+      (isInnerrMain || isInnerSide) ? setMenuOpen(true) :setMenuOpen(false);
+    }else{
+      isInnerrMain ? setMenuOpen(true) : setMenuOpen(false);
+    }
+  };
+  const closePopup =(event:MouseEvent)=>{
+    const popupMenu =document.getElementById("popupMenu");
+    const popupMenuArea =popupMenu?.getClientRects()[0];
+    const isInnerPopupMenu =detectRange(event, popupMenuArea);
+    !isInnerPopupMenu && setPopup({
+      popup:false,
+      what: null
+    });
+  };
+
+  inner?.addEventListener("click", (event:MouseEvent)=>{
+      menuOpen &&closeMenu(event);
+      popup.popup && closePopup(event);
+    });
+
   return (
     <div 
       id="blockFn"
