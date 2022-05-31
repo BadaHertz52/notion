@@ -1,5 +1,6 @@
 import React, { FormEvent, FormEventHandler, useState } from 'react';
 import { BsFillArrowUpCircleFill } from 'react-icons/bs';
+import { CSSProperties } from 'styled-components';
 import { Block, CommentType, page } from '../modules/notion';
 type CommentComponentProps={
   pageId: string,
@@ -19,12 +20,20 @@ type CommentInputProps={
 export const CommentInput =({userName, pageId, block ,editBlock}:CommentInputProps)=>{
   const userNameFirstLetter =userName.substring(0,1).toUpperCase();
   const inputSubmit = document.getElementById("commentInputSubmit") as HTMLInputElement;
+  const [submitStyle,setSubmitStyle] =useState<CSSProperties>({
+    backgroundColor:"grey",
+    border:"none"
+  });
   const [text, setText]=useState<string>("");
 
   const onInputText=(event:FormEvent)=>{
     const target =event?.target as Node; 
     const value =target.textContent;
+    value !==null && setSubmitStyle({
+      backgroundColor: " rgb(46, 170, 220)",
+    })
   };
+
   const addComment =()=>{
     const value = inputSubmit.value; 
     const newComment :CommentType ={
@@ -44,26 +53,35 @@ export const CommentInput =({userName, pageId, block ,editBlock}:CommentInputPro
       <div className='firstLetter'>
         {userNameFirstLetter}
       </div>
-      <div className='commentInput_form'>
-        <form
-          onSubmit={addComment}
-        >
+      <form
+        onSubmit={addComment}
+        
+      >
+        <div>
           <input
             type="text"
             placeholder='Add a comment'
+            className="commentText"
             name="comment"
             value={text}
             onInput={onInputText}
           />
+          <div>
+            <label >
+              <BsFillArrowUpCircleFill
+                style={submitStyle}
+              />
+              <input 
+              type="submit"
+              className="commentInPutSubmit"
+              />
+            </label>
 
-          <input 
-            type="submit"
-            id="commentInPutSubmit"
-            value="submit"
-          >
-          </input>
-        </form>
-      </div>
+          </div>
+
+        </div>
+      </form>
+
     </div>
   )
 };
