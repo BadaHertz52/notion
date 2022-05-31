@@ -43,6 +43,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
   };
   const sessionItem = sessionStorage.getItem("blockFnTargetBlock") as string;
   const block:Block= JSON.parse(sessionItem);
+  const blockFnElement = document.getElementById("blockFn") ;
   const editTime =  new Date(Number(block.editTime));
   const timeInform :TimeInform ={
       year :editTime?.getFullYear(),
@@ -69,7 +70,11 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
 
   const [turnInToPage ,setTurnIntoPage] = useState<boolean>(false);
   const [command, setCommand]= useState<Command>({boolean:false, command:null});
-
+  const menuStyle:CSSProperties ={
+    position:"absolute" ,
+    top: blockFnElement?.offsetHeight,
+    left:'3rem',
+  }
   const sideMenuStyle :CSSProperties= {
     display:"block" ,
     position:"absolute" ,
@@ -77,7 +82,6 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
     left: 240 *0.88 ,
     zIndex:2
   };
-
   type Position ={
     top:number,
     bottom:number,
@@ -193,7 +197,10 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
   };
 
   return(
-  <div className="menu">
+  <div 
+    className="menu"
+    style={menuStyle}
+  >
     {!popup.popup &&
     <>
       <div id='mainMenu' >

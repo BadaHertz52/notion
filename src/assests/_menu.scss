@@ -1,8 +1,5 @@
 @import './common';
 .menu {
-  position: absolute;
-  top:0;
-  left: 3rem;
   font-weight: initial;
 }
 @mixin searchInput {

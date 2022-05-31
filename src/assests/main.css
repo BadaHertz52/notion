@@ -500,9 +500,6 @@ a:link, a:active, a:visited {
 }
 
 .menu {
-  position: absolute;
-  top: 0;
-  left: 3rem;
   font-weight: initial;
 }
 
