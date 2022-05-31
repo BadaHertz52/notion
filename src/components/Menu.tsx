@@ -146,15 +146,12 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
     })
   };
   const showTurnInto =()=>{
-    recoveryMenuState();
     setTurnInto(true);
   };
   const showColorMenu =()=>{
-    recoveryMenuState();
     setColor(true);
   };
   const showPageMenu =()=>{
-    recoveryMenuState();
     setTurnIntoPage(true);
   };
   const onClickMoveTo=()=>{
@@ -238,6 +235,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
                 <button
                   className='menu_editBtn'
                   onMouseOver={showTurnInto}
+                  onMouseOut={recoveryMenuState}
                   name="turn into"
                 >
                   <div>
@@ -252,6 +250,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
                   className='menu_editBtn'
                   name ="turn into page in"
                   onMouseOver={showPageMenu}
+                  onMouseOut={recoveryMenuState}
                 >
                   <div>
                     <MdOutlineRestorePage/>
@@ -298,6 +297,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
                   name='color'
                   className='underline menu_editBtn'
                   onMouseOver={showColorMenu}
+                  onMouseOut={recoveryMenuState}
                 >
                   <div>
                     <AiOutlineFormatPainter/>
@@ -354,7 +354,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
             addBlock={addBlock}
             deleteBlock={deleteBlock}
             setMenuOpen={setMenuOpen}
-            recoverMenuState={recoveryMenuState}
+            recoveryMenuState={recoveryMenuState}
           />
         }
       </div>
@@ -370,7 +370,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
         deleteBlock={deleteBlock}
         addBlock={addBlock}
         setMenuOpen={setMenuOpen}
-        recoverMenuState={recoveryMenuState}
+        recoveryMenuState={recoveryMenuState}
       /> 
     </div>
     }
