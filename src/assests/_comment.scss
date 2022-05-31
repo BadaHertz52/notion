@@ -1,6 +1,6 @@
 @import './common';
 
-#popup_comment {
+#popupMenu .comments {
   @include popupMenu;
   padding: 3%;
   width: calc(100vw - (96*2)px - 6%);
