@@ -1,10 +1,12 @@
-import React, { FormEvent, FormEventHandler, useState } from 'react';
+
+import React, { FormEvent, useState } from 'react';
 import { BsFillArrowUpCircleFill } from 'react-icons/bs';
 import { CSSProperties } from 'styled-components';
-import { Block, CommentType, page } from '../modules/notion';
+import { Block, CommentType, } from '../modules/notion';
+
 type CommentComponentProps={
-  pageId: string,
   block:Block,
+  pageId: string,
   userName:string,
   editBlock :(pageId: string, block: Block) => void,
 };
@@ -14,10 +16,9 @@ type CommentProps ={
 type CommentInputProps={
   userName: string,
   pageId: string,
-  block:Block,
   editBlock :(pageId: string, block: Block) => void,
 }
-export const CommentInput =({userName, pageId, block ,editBlock}:CommentInputProps)=>{
+export const CommentInput =({userName, pageId ,editBlock}:CommentInputProps)=>{
   const userNameFirstLetter =userName.substring(0,1).toUpperCase();
   const inputSubmit = document.getElementById("commentInputSubmit") as HTMLInputElement;
   const [submitStyle,setSubmitStyle] =useState<CSSProperties>({
@@ -25,6 +26,9 @@ export const CommentInput =({userName, pageId, block ,editBlock}:CommentInputPro
     border:"none"
   });
   const [text, setText]=useState<string>("");
+  
+  const sessionItem = sessionStorage.getItem("blockFnTargetBlock") as string;
+  const block:Block= JSON.parse(sessionItem);
 
   const onInputText=(event:FormEvent)=>{
     const target =event?.target as Node; 
@@ -110,7 +114,6 @@ const Comments =({pageId,block, userName ,editBlock}:CommentComponentProps)=>{
       )}
       <CommentInput
         userName={userName}
-        block={block}
         pageId={pageId}
         editBlock={editBlock}
       />

@@ -15,7 +15,7 @@ import { Command } from '../containers/EditorContainer';
 import ColorMenu from './ColorMenu';
 import { HiOutlineDuplicate } from 'react-icons/hi';
 import PageMenu from './PageMenu';
-import { CommentInput } from './Comments';
+import { popupComment, popupMoveToPage, PopupType } from './BlockFn';
 
 
 type MenuProps ={
@@ -30,9 +30,10 @@ type MenuProps ={
   addPage : (pageId:string , newPage:Page, block:null)=>void,
   editPage : (pageId:string , newPage:Page, block:null)=>void,
   deletePage : (pageId:string , block:null)=>void,
+  setPopup :Dispatch<SetStateAction<PopupType>> ,
 };
 
-const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, deleteBlock}:MenuProps)=>{
+const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, deleteBlock ,setPopup}:MenuProps)=>{
   const today = new Date().getDate();
   type TimeInform ={
     year:number,
@@ -57,16 +58,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
   const [editBtns, setEditBtns]= useState<Element[]|null>(null);
   const [turnInto, setTurnInto]= useState<boolean>(false);
   const [color, setColor]= useState<boolean>(false);
-  const popupMoveToPage= "popupMoveToPage" ;
-  const popupComment ="popupComment" ;
-  type PopupType ={
-    popup: boolean,
-    what: typeof popupMoveToPage | typeof popupComment | null,
-  };
-  const [popup, setPopup]=useState<PopupType>({
-    popup:false,
-    what:null
-  });
+
 
   const [turnInToPage ,setTurnIntoPage] = useState<boolean>(false);
   const [command, setCommand]= useState<Command>({boolean:false, command:null});
@@ -159,12 +151,14 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
     setTurnIntoPage(true);
   };
   const onClickMoveTo=()=>{
+    setMenuOpen(false);
     setPopup({
       popup:true,
       what: popupMoveToPage
     })
   };
   const onOpenCommentInput=()=>{
+    setMenuOpen(false);
     setPopup({
       popup:true,
       what:popupComment
@@ -201,8 +195,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
     className="menu"
     style={menuStyle}
   >
-    {!popup.popup? 
-    <>
+
       <div id='mainMenu' >
         <div className="menu_inner">
           <div className='menu_search'>
@@ -357,41 +350,12 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
             pages={pages}
             firstlist={firstlist}
             existingPage={page}
-            block={block}
             addBlock={addBlock}
             deleteBlock={deleteBlock}
             setMenuOpen={setMenuOpen}
-            recoveryMenuState={recoveryMenuState}
           />
         }
       </div>
-    </>
-    :
-    (
-      popup.what === popupMoveToPage ?
-        <div id="moveTo_pageMenu">
-          <PageMenu
-            pages={pages}
-            firstlist={firstlist}
-            existingPage={page}
-            block={block}
-            deleteBlock={deleteBlock}
-            addBlock={addBlock}
-            setMenuOpen={setMenuOpen}
-            recoveryMenuState={recoveryMenuState}
-          /> 
-        </div>
-        :
-        <div id="popup_comment">
-          <CommentInput
-            pageId={page.id}
-            block={block}
-            userName={userName}
-            editBlock={editBlock}
-          />
-        </div>
-    )
-    }
   </div>
   )
 };
