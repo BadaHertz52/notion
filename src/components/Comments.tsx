@@ -22,7 +22,7 @@ export const CommentInput =({userName, pageId ,editBlock}:CommentInputProps)=>{
   const userNameFirstLetter =userName.substring(0,1).toUpperCase();
   const inputSubmit = document.getElementById("commentInputSubmit") as HTMLInputElement;
   const [submitStyle,setSubmitStyle] =useState<CSSProperties>({
-    backgroundColor:"grey",
+    fill:"grey",
     border:"none"
   });
   const [text, setText]=useState<string>("");
@@ -30,11 +30,12 @@ export const CommentInput =({userName, pageId ,editBlock}:CommentInputProps)=>{
   const sessionItem = sessionStorage.getItem("blockFnTargetBlock") as string;
   const block:Block= JSON.parse(sessionItem);
 
-  const onInputText=(event:FormEvent)=>{
-    const target =event?.target as Node; 
-    const value =target.textContent;
+  const onInputText=(event:FormEvent<HTMLInputElement>)=>{
+    const target =event?.currentTarget ; 
+    const value =target.value;
+    console.log("event", value)
     value !==null && setSubmitStyle({
-      backgroundColor: " rgb(46, 170, 220)",
+      fill: " rgb(46, 170, 220)",
     })
   };
 
@@ -67,7 +68,6 @@ export const CommentInput =({userName, pageId ,editBlock}:CommentInputProps)=>{
             placeholder='Add a comment'
             className="commentText"
             name="comment"
-            value={text}
             onInput={onInputText}
           />
           <div>
