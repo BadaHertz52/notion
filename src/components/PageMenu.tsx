@@ -11,9 +11,9 @@ type PageMenuProps ={
   deleteBlock: (pageId: string, block: Block) => void,
   addBlock: (pageId: string, block: Block, nextBlockIndex: number, previousBlockId: string | null) => void,
   setMenuOpen:Dispatch<SetStateAction<boolean>>,
-  recoverMenuState:()=>void,
+  recoveryMenuState:()=>void,
 }
-const PageMenu =({pages, firstlist, existingPage, block , deleteBlock, addBlock ,setMenuOpen, recoverMenuState}:PageMenuProps)=>{
+const PageMenu =({pages, firstlist, existingPage, block , deleteBlock, addBlock ,setMenuOpen, recoveryMenuState}:PageMenuProps)=>{
 
   type PageButtonProps={
     item: listItem
@@ -29,7 +29,7 @@ const PageMenu =({pages, firstlist, existingPage, block , deleteBlock, addBlock 
     addBlock(pageId, block, 0 , null);
     // close Menu and recovery Menu state
     setMenuOpen(false);
-    recoverMenuState();
+    recoveryMenuState();
   };
   
   const PageButton =({item}:PageButtonProps)=>{
