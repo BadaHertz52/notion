@@ -1,10 +1,11 @@
 @import './common';
 
-#popupMenu .comments {
+#popupMenu {
+  .comments {
   @include popupMenu;
   z-index: 10;
   padding: 3%;
-  width: calc(100vw - (96*2)px - 6%);
+  width: 100%;
   .firstLetter{
     border-radius: 50%;
     border :1px solid $itemText;
@@ -16,6 +17,7 @@
     flex-grow: 0;
     flex-shrink: 0;
   }
+}
 }
 .commentInput {
   display: flex;
