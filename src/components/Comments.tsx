@@ -3,6 +3,7 @@ import React, { FormEvent, useState } from 'react';
 import { BsFillArrowUpCircleFill } from 'react-icons/bs';
 import { CSSProperties } from 'styled-components';
 import { Block, CommentType, } from '../modules/notion';
+import Time from './Time';
 
 type CommentComponentProps={
   block:Block,

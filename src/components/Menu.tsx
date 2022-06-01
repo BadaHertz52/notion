@@ -16,7 +16,7 @@ import ColorMenu from './ColorMenu';
 import { HiOutlineDuplicate } from 'react-icons/hi';
 import PageMenu from './PageMenu';
 import { popupComment, popupMoveToPage, PopupType } from './BlockFn';
-
+import Time from './Time';
 
 type MenuProps ={
   pages:Page[],
@@ -34,32 +34,12 @@ type MenuProps ={
 };
 
 const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, deleteBlock ,setPopup}:MenuProps)=>{
-  const today = new Date().getDate();
-  type TimeInform ={
-    year:number,
-    month:number,
-    date:number,
-    hour:number,
-    min:number
-  };
   const sessionItem = sessionStorage.getItem("blockFnTargetBlock") as string;
   const block:Block= JSON.parse(sessionItem);
   const blockFnElement = document.getElementById("blockFn") ;
-  const editTime =  new Date(Number(block.editTime));
-  const timeInform :TimeInform ={
-      year :editTime?.getFullYear(),
-      month :editTime?.getMonth()+1,
-      date: editTime?.getDate() ,
-      hour: editTime?.getHours(),
-      min: editTime?.getMinutes(),
-    };
-
-
   const [editBtns, setEditBtns]= useState<Element[]|null>(null);
   const [turnInto, setTurnInto]= useState<boolean>(false);
   const [color, setColor]= useState<boolean>(false);
-
-
   const [turnInToPage ,setTurnIntoPage] = useState<boolean>(false);
   const [command, setCommand]= useState<Command>({boolean:false, command:null});
   const menuStyle:CSSProperties ={
@@ -255,14 +235,9 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
               </div>
               <div className='menu_edit_inform'>
                 <p>Last edited by {userName} </p>
-                <p> 
-                  {timeInform !==null &&
-                                  (today === timeInform.date ? 
-                                    `Today at ${timeInform.hour}:${timeInform.min}` 
-                                    : 
-                                    `${timeInform.month}/${timeInform.date}/${timeInform.year}`)
-                  }
-                </p>
+                  <Time 
+                    editTime={block.editTime}
+                  />
               </div>
             </div>
                 
