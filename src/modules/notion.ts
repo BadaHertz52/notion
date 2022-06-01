@@ -203,7 +203,7 @@ const initialState :Notion ={
       comments:[{
         userName:userName,
         comment:"this is comment",
-        editTime: JSON.stringify(Date.now()),
+        editTime: JSON.stringify(Date.parse("2021-05-20-12")),
       }],
     },
     firstBlocksId :["text", 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page', 'page2'],
@@ -215,7 +215,8 @@ const initialState :Notion ={
       parentBlocksId: null,
       type: text,
       icon:  null ,
-      editTime: JSON.stringify(Date.now()),
+      editTime: JSON.stringify(Date.parse("2021-5-18-15:00"))
+      ,
       style :{
         color: blue,
         bgColor: bg_default,
@@ -226,7 +227,7 @@ const initialState :Notion ={
       comments:[{
         userName:userName,
         comment:"hi! ☺️", 
-        editTime:JSON.stringify(Date.now())
+        editTime:JSON.stringify(1654086822451)
       },]
     },
     {
@@ -237,7 +238,8 @@ const initialState :Notion ={
       parentBlocksId: null,
       type: toggle,
       icon:  null ,
-      editTime: JSON.stringify(Date.now()),
+      editTime: JSON.stringify(Date.parse("2021-5-18-16:00"))
+      ,
       style :{
         color: defaultColor,
         bgColor: bg_default,
@@ -254,7 +256,7 @@ const initialState :Notion ={
       parentBlocksId: null,
       type: todo,
       icon:  null ,
-      editTime: JSON.stringify(Date.now()),
+      editTime: JSON.stringify(Date.parse("2021-5-18-16:01:00")),
       style :{
         color: defaultColor,
         bgColor: bg_yellow,
@@ -265,7 +267,7 @@ const initialState :Notion ={
       comments:[{
         userName:userName,
         comment:"todo comments", 
-        editTime:JSON.stringify(Date.now())
+        editTime:JSON.stringify(Date.parse("2021-5-18-16:01:30"))
       },]
     },{
       id:"todo done",
@@ -275,7 +277,8 @@ const initialState :Notion ={
       parentBlocksId: null,
       type: todo_done,
       icon:  null ,
-      editTime: JSON.stringify(Date.now()),
+      editTime: JSON.stringify(Date.parse("2021-5-19-11:30"))
+      ,
       style :{
         color: defaultColor,
         bgColor: bg_default,
@@ -292,7 +295,8 @@ const initialState :Notion ={
       parentBlocksId: null,
       type: h1,
       icon:  null ,
-      editTime: JSON.stringify(Date.now()),
+      editTime: JSON.stringify(Date.parse("2021-5-19-12:00"))
+      ,
       style :{
         color: defaultColor,
         bgColor: bg_default,
@@ -309,7 +313,8 @@ const initialState :Notion ={
       parentBlocksId: null,
       type: h2,
       icon:  null ,
-      editTime: JSON.stringify(Date.now()),
+      editTime: JSON.stringify(Date.parse("2021-5-18-20:00"))
+      ,
       style :{
         color: defaultColor,
         bgColor: bg_default,
@@ -326,7 +331,8 @@ const initialState :Notion ={
       parentBlocksId: null,
       type: h3,
       icon:  null ,
-      editTime: JSON.stringify(Date.now()),  
+      editTime: JSON.stringify(Date.parse("2021-5-19-19:20"))
+      ,  
       style :{
         color: defaultColor,
         bgColor: bg_default,
@@ -343,7 +349,8 @@ const initialState :Notion ={
       parentBlocksId: null,
       type: page,
       icon:  null ,
-      editTime: JSON.stringify(Date.now()),
+      editTime: JSON.stringify(Date.parse("2021-5-20-21:00"))
+      ,
       style :{
         color: defaultColor,
         bgColor: bg_default,
@@ -361,7 +368,8 @@ const initialState :Notion ={
       parentBlocksId: null,
       type: page,
       icon: "🌈" ,
-      editTime: JSON.stringify(Date.now()),
+      editTime: JSON.stringify(Date.parse("2021-5-20-9:00")),
+
       style :{
         color: defaultColor,
         bgColor: bg_default,
@@ -378,7 +386,8 @@ const initialState :Notion ={
     parentBlocksId: ["text"],
     type: text,
     icon:  null ,
-    editTime: JSON.stringify(Date.now()),
+    editTime: JSON.stringify(Date.parse("2021-6-1-1:00")),
+
     style :{
       color: defaultColor,
       bgColor: bg_default,
@@ -396,7 +405,8 @@ const initialState :Notion ={
     parentBlocksId: ["text"],
     type: text,
     icon:  null ,
-    editTime: JSON.stringify(Date.now()),
+    editTime: JSON.stringify(Date.parse("2021-5-12-09:00"))
+    ,
     style :{
       color: defaultColor,
       bgColor: bg_default,
@@ -407,7 +417,8 @@ const initialState :Notion ={
     comments:[{
       userName:userName,
       comment:"subBlock comments", 
-      editTime:JSON.stringify(Date.now())
+      editTime:JSON.stringify(Date.parse("2021-5-18-8:00")
+      )
     },]
   },
   {
@@ -418,7 +429,7 @@ const initialState :Notion ={
     parentBlocksId: ["text", "sub1_1"],
     type: text,
     icon:  null ,
-    editTime: JSON.stringify(Date.now()),
+    editTime: JSON.stringify(Date.parse("2021-5-27-7:00")),
     style :{
       color: defaultColor,
       bgColor: bg_default,
@@ -436,7 +447,7 @@ const initialState :Notion ={
     parentBlocksId: null,
     type: numberList,
     icon:  null ,
-    editTime: JSON.stringify(Date.now()),
+    editTime: JSON.stringify(Date.parse("2021-6-1-18:45")),
     style :{
       color: defaultColor,
       bgColor: bg_default,
@@ -454,7 +465,7 @@ const initialState :Notion ={
     parentBlocksId: [numberList],
     type: numberList,
     icon:  null ,
-    editTime: JSON.stringify(Date.now()),
+    editTime: JSON.stringify(Date.parse("2021-6-1-19:03")),
     style :{
       color: defaultColor,
       bgColor: bg_green,
@@ -472,7 +483,7 @@ const initialState :Notion ={
     parentBlocksId: [numberList],
     type: numberList,
     icon:  null ,
-    editTime: JSON.stringify(Date.now()),
+    editTime: JSON.stringify(Date.parse("2021-6-1-19:03:50")),
     style :{
       color: defaultColor,
       bgColor: bg_default,
@@ -490,7 +501,7 @@ const initialState :Notion ={
     parentBlocksId: [numberList],
     type: numberList,
     icon:  null ,
-    editTime: JSON.stringify(Date.now()),
+    editTime: JSON.stringify(Date.parse("2021-6-1-19:12:13")),
     style :{
       color: defaultColor,
       bgColor: bg_default,
@@ -508,7 +519,7 @@ const initialState :Notion ={
     parentBlocksId:null,
     type: bulletList,
     icon:  null ,
-    editTime: JSON.stringify(Date.now()),
+    editTime: JSON.stringify(Date.parse("2021-6-1-19:13:45")),
     style :{
       color: defaultColor,
       bgColor: bg_default,
@@ -526,7 +537,7 @@ const initialState :Notion ={
     parentBlocksId:[bulletList],
     type: bulletList,
     icon:  null ,
-    editTime: JSON.stringify(Date.now()),
+    editTime: JSON.stringify(Date.parse("2021-6-1-19:23")),
     style :{
       color: defaultColor,
       bgColor: bg_default,
@@ -544,7 +555,7 @@ const initialState :Notion ={
     parentBlocksId:[bulletList],
     type: bulletList,
     icon:  null ,
-    editTime: JSON.stringify(Date.now()),
+    editTime: JSON.stringify(Date.parse("2021-6-1-20:12" )),
     style :{
       color: defaultColor,
       bgColor: bg_default,
