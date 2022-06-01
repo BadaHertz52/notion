@@ -20,7 +20,9 @@ type CommentInputProps={
 }
 export const CommentInput =({userName, pageId ,editBlock}:CommentInputProps)=>{
   const userNameFirstLetter =userName.substring(0,1).toUpperCase();
-  const inputSubmit =document.getElementById("commentInputSubmit")
+  const editabelBlock = document.getElementsByClassName("editableBlock")[0] as HTMLDivElement;
+  const width =editabelBlock.offsetWidth - 192 ;
+
   const [submitStyle,setSubmitStyle] =useState<CSSProperties>({
     fill:"grey",
     border:"none"
@@ -62,7 +64,10 @@ export const CommentInput =({userName, pageId ,editBlock}:CommentInputProps)=>{
   };
 
   return(
-    <div className="commentInput">
+    <div 
+      className="commentInput"
+      style ={{width: width}}
+    >
       <div className='firstLetter'>
         {userNameFirstLetter}
       </div>
