@@ -20,7 +20,7 @@ type CommentInputProps={
 }
 export const CommentInput =({userName, pageId ,editBlock}:CommentInputProps)=>{
   const userNameFirstLetter =userName.substring(0,1).toUpperCase();
-  const inputSubmit = document.getElementById("commentInputSubmit") as HTMLInputElement;
+  const inputSubmit =document.getElementById("commentInputSubmit")
   const [submitStyle,setSubmitStyle] =useState<CSSProperties>({
     fill:"grey",
     border:"none"
@@ -33,24 +33,36 @@ export const CommentInput =({userName, pageId ,editBlock}:CommentInputProps)=>{
   const onInputText=(event:FormEvent<HTMLInputElement>)=>{
     const target =event?.currentTarget ; 
     const value =target.value;
-    console.log("event", value)
-    value !==null && setSubmitStyle({
-      fill: " rgb(46, 170, 220)",
-    })
+    setText(value);
+    if(value ==null  || value===""){
+      inputSubmit?.setAttribute("disabled", "disabled");
+      setSubmitStyle({
+        fill:"grey",
+        border:"none"
+      });
+
+    }else{
+      inputSubmit?.setAttribute("disabled", "enabled");
+      setSubmitStyle({
+        fill: " rgb(46, 170, 220)",
+      }) ;
+    }
   };
 
-  const addComment =()=>{
-    const value = inputSubmit.value; 
+  const addComment =(event:FormEvent<HTMLFormElement>)=>{
+    event.preventDefault(); 
     const newComment :CommentType ={
       userName:userName,
-      comment:value,
+      comment:text,
       editTime:JSON.stringify(Date.now())
     };
-    const newBlock ={
-      ...block,
-      comment:block.comments === null? [newComment]:block.comments.concat(newComment)
-    };
-    editBlock(pageId ,newBlock );
+    if(text !==null && text !==""){
+      const newBlock ={
+        ...block,
+        comment:block.comments === null? [newComment]:block.comments.concat(newComment)
+      };
+      editBlock(pageId ,newBlock );
+    }
   };
 
   return(
@@ -60,9 +72,7 @@ export const CommentInput =({userName, pageId ,editBlock}:CommentInputProps)=>{
       </div>
       <form
         onSubmit={addComment}
-        
       >
-        <div>
           <input
             type="text"
             placeholder='Add a comment'
@@ -70,20 +80,18 @@ export const CommentInput =({userName, pageId ,editBlock}:CommentInputProps)=>{
             name="comment"
             onInput={onInputText}
           />
-          <div>
-            <label >
-              <BsFillArrowUpCircleFill
-                style={submitStyle}
-              />
-              <input 
-              type="submit"
-              className="commentInPutSubmit"
-              />
-            </label>
-
-          </div>
-
-        </div>
+          <label
+          htmlFor="commentInputSubmit"
+          >
+            <BsFillArrowUpCircleFill
+              style={submitStyle}
+            />
+          </label>
+            <input 
+            type="submit"
+            id="commentInputSubmit"
+            name="commentInputSubmit"
+            />
       </form>
 
     </div>

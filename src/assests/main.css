@@ -504,26 +504,31 @@ a:link, a:active, a:visited {
   position: relative;
 }
 
-.commentInput form > div {
-  width: 100%;
-  height: inherit;
-  margin-left: 5px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+.commentInput input[type="text"] {
+  padding: 0;
+  height: 100%;
   position: absolute;
   top: 0;
+  width: 80%;
+  margin-left: 5px;
 }
 
-.commentInput form > div label input {
-  display: none;
+.commentInput label {
+  position: absolute;
+  top: 0;
+  left: 80%;
 }
 
-.commentInput form > div .commentText {
+.commentInput .commentText {
   border: none;
+}
+
+.commentInput .commentText:focus {
+  outline: none;
+}
+
+.commentInput #commentInputSubmit {
+  display: none;
 }
 
 div {

@@ -27,23 +27,27 @@
     height: inherit;
     width: calc( 100% - 24px);
     position: relative;
-    & >div{
-      width: 100%;
-      height: inherit;
-      margin-left: 5px;
-      display: flex;
-      justify-content:space-between ;
+    }
+    input[type="text"]{
+      padding: 0;
+      height: 100%;
       position: absolute;
       top:0;
-      label input{
-        display: none;
-      }
-      .commentText{
-        border: none;
-      }
-      .commentInPutSubmit{
-        
+      width: 80%;
+      margin-left:5px;
+    }
+    label{
+      position: absolute;
+      top:0;
+      left: 80%
+    }
+    .commentText{
+      border: none;
+      &:focus{
+        outline:  none;
       }
     }
+    #commentInputSubmit{
+      display: none;
+    }
   }
-}
