@@ -1,8 +1,11 @@
 
 import React, { FormEvent, useState } from 'react';
-import { BsFillArrowUpCircleFill } from 'react-icons/bs';
 import { CSSProperties } from 'styled-components';
 import { Block, CommentType, } from '../modules/notion';
+import { BsFillArrowUpCircleFill, BsLink45Deg } from 'react-icons/bs';
+import { HiOutlinePencil } from 'react-icons/hi';
+import { IoTrashOutline } from 'react-icons/io5';
+import { AiOutlineQuestionCircle } from 'react-icons/ai';
 import Time from './Time';
 
 type CommentComponentProps={
@@ -12,7 +15,10 @@ type CommentComponentProps={
   editBlock :(pageId: string, block: Block) => void,
 };
 type CommentProps ={
-  comment:CommentType
+  comment:CommentType,
+  pageId:string,
+  block:Block,
+  editBlock :(pageId: string, block: Block) => void,
 };
 type CommentInputProps={
   userName: string,
@@ -100,24 +106,75 @@ export const CommentInput =({userName, pageId ,editBlock}:CommentInputProps)=>{
 const Comments =({pageId,block, userName ,editBlock}:CommentComponentProps)=>{
   const comments=block.comments ;
 
-  const Comment =({comment}:CommentProps)=>{
+  const Comment =({comment, block, pageId, editBlock}:CommentProps)=>{
     const firstLetter = comment.userName.substring(0,1).toUpperCase();
+    
     return(
       <div 
           className='comment'
         >
-          <div className="firstLetter">
-            {firstLetter}
-          </div>
+          <section className='comment_header'>
+            <div className="information">
+              <div className="firstLetter">
+                {firstLetter}
+              </div>
+              <div className='userName'>
+                {userName}
+              </div>
+              <div className="time">
+                <Time
+                  editTime={comment.editTime}
+                />
+              </div>
+            </div>
+            <div className="tool">
+              <button>
+                Resolve
+              </button>
+              <button>...</button>
+              <div className='tool-more'>
+                <button>
+                  <HiOutlinePencil/>
+                  <span>
+                    Edit comment
+                  </span>
+                </button>
+                <button>
+                  <IoTrashOutline/>
+                  <span>
+                    Delete comment
+                  </span>
+                </button>
+                <button>
+                  <BsLink45Deg/>
+                  <span>
+                    Copy link to comment
+                  </span>
+                </button>
+                <button className='aboutComments'>
+                  <AiOutlineQuestionCircle/>
+                  <span>Learn about comments</span>
+                </button>
+              </div>
+            </div>
+          </section>
+          <section className='comment_content'>
+            <div></div>
+          </section>
         </div>
     )
   }
   return(
-    <div className='comments'>
+    <div 
+      className='comments'
+    >
       {comments?.map((comment:CommentType)=>
         <Comment 
           key={`comment_${comments.indexOf(comment)}`}
           comment={comment} 
+          block={block}
+          pageId={pageId}
+          editBlock={editBlock}
         />
       )}
       <CommentInput
