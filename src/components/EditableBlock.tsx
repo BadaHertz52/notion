@@ -117,7 +117,6 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
   const innerRef  =useRef<HTMLDivElement>(null) ;
   const storageItem =sessionStorage.getItem("editedBlock") ;
   const [targetId, setTargetId]=useState<string|null>(null);
-
   const [command, setCommand] =useState<Command>({
     boolean:false,
     command:null
@@ -269,6 +268,7 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
 
   function addEvent(event:React.MouseEvent){
     const target =event.target as HTMLElement;
+    //toggle btn 
     const targetClassName = target.getAttribute("class");
     const targetParentElement = target.parentElement as HTMLElement; 
     switch (target.tagName) {
@@ -276,16 +276,33 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
         if(targetClassName ==="blockBtnSvg"){
           toggleOn(targetParentElement);
         };
+        if(targetParentElement.className?.includes("commentBtn")){
+          setCommentOpen(!commentOpen)
+        };
         break;
       case "path":
         if(targetParentElement.getAttribute("class")==="blockBtnSvg"){
           const btnElement =targetParentElement.parentElement as HTMLElement;
           toggleOn(btnElement);
         };
+        if(targetParentElement.parentElement?.className.includes("commentBtn")){
+          console.log("target commentbtn", target);
+          setCommentOpen(!commentOpen);
+        };
+        break;
+      case "span":
+        if(targetParentElement.className?.includes("commentBtn")){
+          console.log("target commentbtn", target);
+          setCommentOpen(!commentOpen)
+        };
         break;
       case "button":
         if(targetClassName?.includes("blockBtn")){
           toggleOn(target);
+        };
+        if(targetClassName?.includes("commentBtn")){
+          console.log("target commentbtn", target);
+          setCommentOpen(!commentOpen);
         };
         break;
       default:
