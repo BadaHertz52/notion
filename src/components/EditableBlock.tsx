@@ -265,7 +265,6 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
     const blockId =btn.getAttribute("name") as string;
     const toggleBlock = document.getElementById(blockId)?.firstElementChild  as Element;
     toggleBlock.classList.toggle("on");
-    console.log("btn", btn,"toggleBlock", toggleBlock)
   };
 
   function addEvent(event:React.MouseEvent){
