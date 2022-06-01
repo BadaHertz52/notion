@@ -106,7 +106,7 @@ const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,chang
       :
       <>
       <div 
-        className='mainBlock'
+        className={commentOpen? "mainBlock commentOpen" : "mainBlock"}
       >
         <div className='mainBlock_block'>
         {block.type ==="todo" &&
