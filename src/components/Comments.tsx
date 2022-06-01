@@ -71,27 +71,25 @@ export const CommentInput =({userName, pageId ,editBlock}:CommentInputProps)=>{
         {userNameFirstLetter}
       </div>
       <form
-        onSubmit={addComment}
       >
-          <input
-            type="text"
-            placeholder='Add a comment'
-            className="commentText"
-            name="comment"
-            onInput={onInputText}
+        <input
+          type="text"
+          placeholder='Add a comment'
+          className="commentText"
+          name="comment"
+          onInput={onInputText}
+        />
+        <button 
+          type="button"
+          onClick={addComment}
+          id="commentInputSubmit"
+          name="commentInputSubmit"
+          disabled ={text ==null || text ===""}
+        >
+        <BsFillArrowUpCircleFill
+          style={submitStyle}
           />
-          <label
-          htmlFor="commentInputSubmit"
-          >
-            <BsFillArrowUpCircleFill
-              style={submitStyle}
-            />
-          </label>
-            <input 
-            type="submit"
-            id="commentInputSubmit"
-            name="commentInputSubmit"
-            />
+        </button>
       </form>
 
     </div>
