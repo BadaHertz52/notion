@@ -36,7 +36,7 @@
       width: 80%;
       margin-left:5px;
     }
-    label{
+    #commentInputSubmit{
       position: absolute;
       top:0;
       left: 80%
@@ -47,7 +47,5 @@
         outline:  none;
       }
     }
-    #commentInputSubmit{
-      display: none;
-    }
+
   }

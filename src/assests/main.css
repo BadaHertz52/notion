@@ -513,7 +513,7 @@ a:link, a:active, a:visited {
   margin-left: 5px;
 }
 
-.commentInput label {
+.commentInput #commentInputSubmit {
   position: absolute;
   top: 0;
   left: 80%;
@@ -525,10 +525,6 @@ a:link, a:active, a:visited {
 
 .commentInput .commentText:focus {
   outline: none;
-}
-
-.commentInput #commentInputSubmit {
-  display: none;
 }
 
 div {
