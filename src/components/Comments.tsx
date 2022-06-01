@@ -34,35 +34,31 @@ export const CommentInput =({userName, pageId ,editBlock}:CommentInputProps)=>{
     const target =event?.currentTarget ; 
     const value =target.value;
     setText(value);
+    
     if(value ==null  || value===""){
-      inputSubmit?.setAttribute("disabled", "disabled");
       setSubmitStyle({
         fill:"grey",
         border:"none"
       });
 
     }else{
-      inputSubmit?.setAttribute("disabled", "enabled");
       setSubmitStyle({
         fill: " rgb(46, 170, 220)",
       }) ;
     }
   };
 
-  const addComment =(event:FormEvent<HTMLFormElement>)=>{
-    event.preventDefault(); 
+  const addComment =(event:React.MouseEvent<HTMLButtonElement>)=>{; 
     const newComment :CommentType ={
       userName:userName,
       comment:text,
       editTime:JSON.stringify(Date.now())
     };
-    if(text !==null && text !==""){
-      const newBlock ={
+      const newBlock :Block={
         ...block,
-        comment:block.comments === null? [newComment]:block.comments.concat(newComment)
+        comments:block.comments === null? [newComment]:block.comments.concat(newComment)
       };
       editBlock(pageId ,newBlock );
-    }
   };
 
   return(
