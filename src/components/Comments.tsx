@@ -166,8 +166,8 @@ const CommentTool =({mainComment}:CommentToolProps)=>{
           Resolve
         </button>
       }
-      <button className='moreToll'>
-        <BiDotsHorizontalRounded/>
+      <button className='moreTool'>
+        <BsThreeDots/>
       </button>
     {moreOpen &&
             <div className='tool-more'>
