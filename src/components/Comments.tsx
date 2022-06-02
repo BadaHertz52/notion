@@ -71,17 +71,55 @@ export const CommentInput =({userName, pageId ,comment,editBlock}:CommentInputPr
     }
   };
 
-  const addComment =(event:React.MouseEvent<HTMLButtonElement>)=>{; 
-    const newComment :CommentType ={
-      userName:userName,
-      comment:text,
-      editTime:JSON.stringify(Date.now())
-    };
-      const newBlock :Block={
-        ...block,
-        comments:block.comments === null? [newComment]:block.comments.concat(newComment)
+  const addComment =(event:React.MouseEvent<HTMLButtonElement>)=>{
+    const editTime =JSON.stringify(Date.now());
+    const newId = `comment_${editTime}`;
+    if(comment !==null && block.comments !== null){
+      // block.comments 중 특정 comment에 comment를 다는 
+      const commentsArry =[...block.comments];
+      const ids: string[] = block.comments.map((comment:BlockCommentType)=> comment.id);
+      const commentIndex = ids.indexOf(comment.id);
+
+      const comment_newComment:CommentType ={
+        id:newId,
+        userName: userName,
+        editTime:editTime,
+        content: text ,
       };
-      editBlock(pageId ,newBlock );
+      const updatedComment:BlockCommentType ={
+        ...comment,
+        comments:comment.comments !==null? 
+                comment.comments.concat(comment_newComment) :
+                [comment_newComment],
+        commentsId: comment.commentsId !==null ?
+        comment.commentsId.concat(comment_newComment.id):
+        [comment_newComment.id],
+      };
+      commentsArry.splice(commentIndex,1, updatedComment);
+
+      const newBlock:Block ={
+        ...block,
+        comments:commentsArry
+      }
+      editBlock(pageId, newBlock );
+
+    }else{
+      const newComment :BlockCommentType ={
+        id:newId,
+        userName:userName,
+        content:text,
+        type:"open",
+        editTime:editTime,
+        comments:null,
+        commentsId:null,
+      };
+        const newBlock :Block={
+          ...block,
+          comments:block.comments === null? [newComment]:block.comments.concat(newComment)
+        };
+        editBlock(pageId ,newBlock );
+    }
+
   };
 
   return(
