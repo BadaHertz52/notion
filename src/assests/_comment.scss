@@ -1,9 +1,18 @@
 @import './common';
 
-.editableBlock {
+.blockId_comments{
+  .comments{
+    display: none;
+  }
+}
+.blockId_comments.open {
   .comments{
   display: flex;
   flex-direction: column;
+
+  }
+  .commentBtn.btnIcon{
+    display: none
   }
 }
 .comments {

@@ -68,13 +68,6 @@ a:link, a:active, a:visited {
   position: relative;
 }
 
-.mainBlock.commentOpen {
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-}
-
 .subBlocks .editableBlock {
   padding: 0;
   padding-left: 20px;
@@ -445,7 +438,11 @@ a:link, a:active, a:visited {
   color: inherit;
 }
 
-.editableBlock .comments {
+.blockId_comments .comments {
+  display: none;
+}
+
+.blockId_comments.open .comments {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -453,6 +450,10 @@ a:link, a:active, a:visited {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+}
+
+.blockId_comments.open .commentBtn.btnIcon {
+  display: none;
 }
 
 .comments {
