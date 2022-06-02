@@ -1,23 +1,100 @@
 @import './common';
 
-#popupMenu {
-  .comments {
-  @include popupMenu;
-  z-index: 10;
-  padding: 3%;
-  width: 100%;
-  .firstLetter{
-    border-radius: 50%;
-    border :1px solid $itemText;
-    color: $itemText;
-    height: 24px;
-    width: 24px;
-    font-size: 1rem;
-    text-align: center;
-    flex-grow: 0;
-    flex-shrink: 0;
+.editableBlock {
+  .comments{
+  display: flex;
+  flex-direction: column;
   }
 }
+.comments {
+@include popupMenu;
+z-index: 10;
+padding: 3%;
+width: 100%;
+.firstLetter{
+  border-radius: 50%;
+  border :1px solid black;
+  color: black;
+  aspect-ratio: 1;
+  text-align: center;
+  flex-grow: 0;
+  flex-shrink: 0;
+  font : {
+    size:1rem ;
+    weight: initial;
+  }
+  width:24px;
+  height: 24px;
+  }
+}
+.commentBlock{
+  section {
+    margin-bottom: 10px;
+  }
+  .comment_header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 24px;
+    .information {
+      display:flex ;
+      flex-direction: row;
+      font-size: 1rem;
+    }
+    .userName{
+      margin: 0 10px;
+      font-weight: bold;
+    }
+    .time{
+      margin:0;
+      color: $itemSvg;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+    }
+    .tool{
+      display: flex;
+      align-content: center;
+      border: 1px solid $itemSvg;
+      border-radius: 2px;
+      button{
+        color:$itemSvg;
+        height:24px ;
+        padding: 3px;
+        box-sizing: border-box;
+        display: flex;
+        align-content: center;
+        svg{
+          font : {
+            size: 1.1rem;
+            weight: bolder;
+          }
+        }
+      }
+      .resolveTool {
+        border-right: 1px solid $itemSvg;
+      }
+    }
+  }
+  .comment_block, .comment_content{
+    margin-left: 34px;
+  }
+  .comment_block{
+    height: fit-content;
+    display: flex;
+    color: $itemText
+  }
+  .comment_block_line{
+    width: 3px;
+    border-radius: 3px;
+    margin : {
+      left: 2px;
+      right: 8px;
+    };
+    flex-shrink: 0;
+    padding-bottom: 2px;
+    background: rgba(255, 212, 0, 0.8);
+  } 
 }
 .commentInput {
   display: flex;
@@ -49,5 +126,4 @@
         outline:  none;
       }
     }
-
   }
