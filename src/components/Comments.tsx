@@ -8,7 +8,7 @@ import { IoTrashOutline } from 'react-icons/io5';
 import { AiOutlineQuestionCircle } from 'react-icons/ai';
 import Time from './Time';
 
-type CommentComponentProps={
+type CommentsProps={
   block:Block,
   pageId: string,
   userName:string,
