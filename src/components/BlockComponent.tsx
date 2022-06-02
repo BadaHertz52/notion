@@ -5,7 +5,7 @@ import { IoChatboxOutline } from 'react-icons/io5';
 import { MdPlayArrow } from 'react-icons/md';
 import {  CSSProperties} from 'styled-components';
 import { Block,Page } from '../modules/notion';
-import EditableBlock from './EditableBlock';
+import EditableBlock, { CommentOpenType } from './EditableBlock';
 import Comments from './Comments';
 
 type BlockProp ={
@@ -21,12 +21,10 @@ type BlockProp ={
   addPage : (pageId:string , newPage:Page, block:null)=>void,
   editPage : (pageId:string , newPage:Page, block:null)=>void,
   deletePage : (pageId:string , block:null)=>void,
-  commentOpen: boolean,
-  setCommentOpen: Dispatch<SetStateAction<boolean>>,
 };
 
 
-const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,addPage, editPage, deletePage, commentOpen ,setCommentOpen}:BlockProp)=>{
+const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,addPage, editPage, deletePage,}:BlockProp)=>{
   const className = block.type !== "toggle" ?
                     `${block.type} block ` :
                     `${block.type} block ${block.subBlocksId!==null?'on' : ""}`;
@@ -101,13 +99,13 @@ const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,chang
     > 
 
       {(block.type ==="numberList" || block.type=== "bulletList" ) ?
-      <div className='mainBlock'>
+      <div className="mainBlock">
         <ListSub/>
       </div>
       :
       <>
       <div 
-        className={commentOpen? "mainBlock commentOpen" : "mainBlock"}
+        className="mainBlock"
       >
         <div className='mainBlock_block'>
         {block.type ==="todo" &&
@@ -168,6 +166,7 @@ const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,chang
           :
           <button 
             className="contents commentBtn"
+            name={block.id}
             placeholder="type '/' for commmands"
           >
             {block.contents}
@@ -177,24 +176,26 @@ const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,chang
         </div>
         </div>
         {block.comments !==null &&
-          <>
-          {commentOpen ?
+          <div 
+            id={`${block.id}_comments`}
+            className="blockId_comments"
+            >
               <Comments
                 userName={userName}
                 block={block}
                 pageId={page.id}
                 editBlock={editBlock}
-                setCommentOpen={setCommentOpen}
               />
-            :
-            <button className='commentBtn btnIcon'>
+            <button 
+              className='commentBtn btnIcon'
+              name={block.id}
+            >
               <IoChatboxOutline/>
               <span className="commentLength">
                 {block.comments.length}
               </span>
             </button>
-            }
-          </>
+          </div>
         }
 
       </div>
@@ -205,7 +206,7 @@ const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,chang
       >
         {subBlocks?.map((subBlock :Block)=> 
           <EditableBlock
-            key ={block.id} 
+            key ={subBlock.id} 
             userName={userName} 
             page={page}
             block={subBlock}

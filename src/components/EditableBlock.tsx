@@ -6,6 +6,7 @@ import { bg_default, Block, BlockType, blockTypes, defaultColor, findBlock, Page
 import CommandBlock from './CommandBlock';
 import { Command } from '../containers/EditorContainer';
 import BlockComponent from './BlockComponent';
+import { detectRange } from './BlockFn';
 
 type findTargetBlockReturn ={
   cursor: Selection |null ,
@@ -111,7 +112,10 @@ type EditableBlockProps ={
   editPage : (pageId:string , newPage:Page, block:null)=>void,
   deletePage : (pageId:string , block:null)=>void,
 };
-
+export   type CommentOpenType ={
+  open:boolean,
+  targetId: string | null,
+};
 const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock , addPage, editPage, deletePage }:EditableBlockProps)=>{  
   const  editTime = JSON.stringify(Date.now());
   const innerRef  =useRef<HTMLDivElement>(null) ;
@@ -122,6 +126,7 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
     command:null
   }); 
   const [commentOpen, setCommentOpen]=useState<boolean>(false);
+  const [commentTargetId, setCommentTargetId]=useState<string|null>(null);
 
   useEffect(()=>{
     if(storageItem !== null){
@@ -154,8 +159,6 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
       addPage={addPage}
       editPage={editPage}
       deletePage={deletePage}
-      commentOpen={commentOpen}
-      setCommentOpen={setCommentOpen}
       />);
     return blockNode
   };
@@ -272,13 +275,23 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
     //toggle btn 
     const targetClassName = target.getAttribute("class");
     const targetParentElement = target.parentElement as HTMLElement; 
+    const openComment =(element:HTMLElement)=>{
+      const targetElement = element as HTMLButtonElement
+      const id = targetElement.name;
+      const blockId_comments = document.getElementById(`${id}_comments`);
+      setCommentTargetId(id);
+      blockId_comments?.classList.add("open");
+      blockId_comments?.classList.contains("open")&&
+      setCommentOpen(true);
+    };
+
     switch (target.tagName) {
       case "svg":
         if(targetClassName ==="blockBtnSvg"){
           toggleOn(targetParentElement);
         };
         if(targetParentElement.className?.includes("commentBtn")){
-          setCommentOpen(!commentOpen)
+          openComment(targetParentElement);
         };
         break;
       case "path":
@@ -288,13 +301,13 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
         };
         if(targetParentElement.parentElement?.className.includes("commentBtn")){
           console.log("target commentbtn", target);
-          setCommentOpen(!commentOpen);
+          openComment(targetParentElement.parentElement)
         };
         break;
       case "span":
         if(targetParentElement.className?.includes("commentBtn")){
           console.log("target commentbtn", target);
-          setCommentOpen(!commentOpen)
+          openComment(targetParentElement)
         };
         break;
       case "button":
@@ -303,7 +316,7 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
         };
         if(targetClassName?.includes("commentBtn")){
           console.log("target commentbtn", target);
-          setCommentOpen(!commentOpen);
+          openComment(target);
         };
         break;
       default:
@@ -382,6 +395,23 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
       setCommand({boolean:false, command:null})
     }
   };
+
+  const inner =document.getElementById("inner");
+  const closeComments =(event:MouseEvent)=>{
+
+    if(commentTargetId !==null){
+      const commentElement = document.getElementById(commentTargetId);
+      if(commentElement !==null && commentElement?.classList.contains("open")){
+        const commentsDocArea =commentElement?.getClientRects()[0];
+        const isInnerCommentsDoc =detectRange(event, commentsDocArea);
+        !isInnerCommentsDoc && commentElement.classList.remove("open");
+        setCommentOpen(false);
+      }
+    }
+  };
+  inner?.addEventListener("click", (event:MouseEvent)=>{
+    closeComments(event);
+    });
   return(
       <div 
         className="editableBlock"

@@ -8,13 +8,13 @@ import { IoTrashOutline } from 'react-icons/io5';
 import { AiOutlineQuestionCircle } from 'react-icons/ai';
 import Time from './Time';
 import { detectRange } from './BlockFn';
+import { CommentOpenType } from './EditableBlock';
 
 type CommentsProps={
   block:Block,
   pageId: string,
   userName:string,
   editBlock :(pageId: string, block: Block) => void,
-  setCommentOpen :Dispatch<SetStateAction<boolean>>,
 };
 type CommentProps ={
   userName: string,
@@ -41,9 +41,9 @@ type CommentToolProps ={
 
 export const CommentInput =({userName, pageId ,comment,editBlock}:CommentInputProps)=>{
   const userNameFirstLetter =userName.substring(0,1).toUpperCase();
-  const editabelBlock = document.getElementsByClassName("editableBlock")[0] as HTMLDivElement;
-  const width =editabelBlock.offsetWidth - 192 ;
-
+  const editableBlock = document.getElementsByClassName("editableBlock")[0] as HTMLElement | undefined ;
+  const width = editableBlock !== undefined ? editableBlock.offsetWidth - 192 : '100%' ;
+  
   const [submitStyle,setSubmitStyle] =useState<CSSProperties>({
     fill:"grey",
     border:"none"
@@ -269,9 +269,9 @@ const Comment =({userName,comment, block, pageId, editBlock}:CommentProps)=>{
     </div>
   )
 };
-const Comments =({pageId,block, userName ,editBlock ,setCommentOpen}:CommentsProps)=>{
+const Comments =({pageId,block, userName ,editBlock}:CommentsProps)=>{
   const comments=block.comments ;
-  const commentsRef =useRef<HTMLDivElement>(null);
+
   const resolveComments :BlockCommentType[]| null =comments !==null ? 
   comments?.filter((comment:BlockCommentType)=> comment.type ==="resolve") :
   null;
@@ -279,24 +279,10 @@ const Comments =({pageId,block, userName ,editBlock ,setCommentOpen}:CommentsPro
   comments?.filter((comment:BlockCommentType)=> comment.type ==="open"):
     null;
   const [targetComments, setTargetComment]= useState<BlockCommentType[]| null>(comments);
-  const inner =document.getElementById("inner");
-
-  const closeComments =(event:MouseEvent)=>{
-    const commentElement = document.getElementsByClassName("comments")[0] as HTMLDivElement;
-    const commentsDocArea =commentElement?.getClientRects()[0];
-    const isInnerCommentsDoc =detectRange(event, commentsDocArea);
-    !isInnerCommentsDoc &&
-    setCommentOpen(false);
-  };
-  inner?.addEventListener("click", (event:MouseEvent)=>{
-    closeComments(event)
-    });
-
+  
   return(
     <div 
-      id={`${block.id}_comments`}
       className='comments'
-      ref={commentsRef}
     >
       {resolveComments !==null && resolveComments[0]!== undefined &&
         <section className="commentType">
