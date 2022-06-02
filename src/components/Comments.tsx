@@ -162,7 +162,7 @@ const CommentTool =({mainComment}:CommentToolProps)=>{
   return(
     <div className="tool">
       {mainComment &&
-          <button className='resovleTool'>
+          <button className='resolveTool'>
           Resolve
         </button>
       }
