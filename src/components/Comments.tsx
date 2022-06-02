@@ -1,13 +1,12 @@
 
-import React, { Dispatch, FormEvent, SetStateAction, useRef, useState } from 'react';
+import React, { Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from 'react';
 import { CSSProperties } from 'styled-components';
-import { Block, BlockCommentType, CommentType, page, } from '../modules/notion';
-import { BsFillArrowUpCircleFill, BsLink45Deg } from 'react-icons/bs';
+import { Block, BlockCommentType, CommentType } from '../modules/notion';
+import { BsFillArrowUpCircleFill, BsLink45Deg, BsThreeDots } from 'react-icons/bs';
 import { HiOutlinePencil } from 'react-icons/hi';
 import { IoTrashOutline } from 'react-icons/io5';
 import { AiOutlineQuestionCircle } from 'react-icons/ai';
 import Time from './Time';
-import { BiDotsHorizontalRounded } from 'react-icons/bi';
 import { detectRange } from './BlockFn';
 
 type CommentsProps={
@@ -32,7 +31,8 @@ type CommentInputProps={
 }
 type CommentBlockProps ={
   comment: CommentType,
-  mainComment:boolean
+  mainComment:boolean,
+  block :Block,
 };
 
 type CommentToolProps ={
@@ -198,9 +198,9 @@ const CommentTool =({mainComment}:CommentToolProps)=>{
 
   </div>
   )
-}
+};
 
-const CommentBlock =({comment ,mainComment}:CommentBlockProps)=>{
+const CommentBlock =({comment ,mainComment ,block}:CommentBlockProps)=>{
   const firstLetter = comment.userName.substring(0,1).toUpperCase();
   return (
     <div 
@@ -224,6 +224,16 @@ const CommentBlock =({comment ,mainComment}:CommentBlockProps)=>{
         mainComment={mainComment }
       />
     </section>
+    {mainComment &&
+    <section className='comment_block'>
+      <div className='comment_block_line'>
+
+      </div>
+      <div className='comment_block_content'>
+        {block.contents}
+      </div>
+    </section>
+    }
     <section className='comment_content'>
       <div>{comment.content}</div>
     </section>
@@ -238,6 +248,7 @@ const Comment =({userName,comment, block, pageId, editBlock}:CommentProps)=>{
         <CommentBlock 
           comment={comment}
           mainComment={true}
+          block={block}
         />
       </div>
       <div className='comment_comment'>
@@ -245,6 +256,7 @@ const Comment =({userName,comment, block, pageId, editBlock}:CommentProps)=>{
         <CommentBlock 
           comment={comment}
           mainComment={false}
+          block={block}
         />)
         }
       </div>
@@ -258,7 +270,6 @@ const Comment =({userName,comment, block, pageId, editBlock}:CommentProps)=>{
   )
 };
 const Comments =({pageId,block, userName ,editBlock ,setCommentOpen}:CommentsProps)=>{
-
   const comments=block.comments ;
   const commentsRef =useRef<HTMLDivElement>(null);
   const resolveComments :BlockCommentType[]| null =comments !==null ? 
@@ -271,17 +282,19 @@ const Comments =({pageId,block, userName ,editBlock ,setCommentOpen}:CommentsPro
   const inner =document.getElementById("inner");
 
   const closeComments =(event:MouseEvent)=>{
-    const commentsDoc = commentsRef.current;
-    const commentsDocArea =commentsDoc?.getClientRects()[0];
+    const commentElement = document.getElementsByClassName("comments")[0] as HTMLDivElement;
+    const commentsDocArea =commentElement?.getClientRects()[0];
     const isInnerCommentsDoc =detectRange(event, commentsDocArea);
     !isInnerCommentsDoc &&
     setCommentOpen(false);
   };
   inner?.addEventListener("click", (event:MouseEvent)=>{
-      closeComments(event)
+    closeComments(event)
     });
+
   return(
     <div 
+      id={`${block.id}_comments`}
       className='comments'
       ref={commentsRef}
     >
