@@ -1,21 +1,25 @@
 
-import React, { FormEvent, useState } from 'react';
+import React, { Dispatch, FormEvent, SetStateAction, useRef, useState } from 'react';
 import { CSSProperties } from 'styled-components';
-import { Block, CommentType, } from '../modules/notion';
+import { Block, BlockCommentType, CommentType, page, } from '../modules/notion';
 import { BsFillArrowUpCircleFill, BsLink45Deg } from 'react-icons/bs';
 import { HiOutlinePencil } from 'react-icons/hi';
 import { IoTrashOutline } from 'react-icons/io5';
 import { AiOutlineQuestionCircle } from 'react-icons/ai';
 import Time from './Time';
+import { BiDotsHorizontalRounded } from 'react-icons/bi';
+import { detectRange } from './BlockFn';
 
 type CommentsProps={
   block:Block,
   pageId: string,
   userName:string,
   editBlock :(pageId: string, block: Block) => void,
+  setCommentOpen :Dispatch<SetStateAction<boolean>>,
 };
 type CommentProps ={
-  comment:CommentType,
+  userName: string,
+  comment:BlockCommentType,
   pageId:string,
   block:Block,
   editBlock :(pageId: string, block: Block) => void,
@@ -23,9 +27,19 @@ type CommentProps ={
 type CommentInputProps={
   userName: string,
   pageId: string,
+  comment:BlockCommentType | null,
   editBlock :(pageId: string, block: Block) => void,
 }
-export const CommentInput =({userName, pageId ,editBlock}:CommentInputProps)=>{
+type CommentBlockProps ={
+  comment: CommentType,
+  mainComment:boolean
+};
+
+type CommentToolProps ={
+  mainComment:boolean
+};
+
+export const CommentInput =({userName, pageId ,comment,editBlock}:CommentInputProps)=>{
   const userNameFirstLetter =userName.substring(0,1).toUpperCase();
   const editabelBlock = document.getElementsByClassName("editableBlock")[0] as HTMLDivElement;
   const width =editabelBlock.offsetWidth - 192 ;
@@ -103,85 +117,163 @@ export const CommentInput =({userName, pageId ,editBlock}:CommentInputProps)=>{
     </div>
   )
 };
-const Comments =({pageId,block, userName ,editBlock}:CommentComponentProps)=>{
-  const comments=block.comments ;
 
-  const Comment =({comment, block, pageId, editBlock}:CommentProps)=>{
-    const firstLetter = comment.userName.substring(0,1).toUpperCase();
-    
-    return(
-      <div 
-          className='comment'
-        >
-          <section className='comment_header'>
-            <div className="information">
-              <div className="firstLetter">
-                {firstLetter}
-              </div>
-              <div className='userName'>
-                {userName}
-              </div>
-              <div className="time">
-                <Time
-                  editTime={comment.editTime}
-                />
-              </div>
-            </div>
-            <div className="tool">
-              <button>
-                Resolve
-              </button>
-              <button>...</button>
-              <div className='tool-more'>
-                <button>
-                  <HiOutlinePencil/>
-                  <span>
-                    Edit comment
-                  </span>
-                </button>
-                <button>
-                  <IoTrashOutline/>
-                  <span>
-                    Delete comment
-                  </span>
-                </button>
-                <button>
-                  <BsLink45Deg/>
-                  <span>
-                    Copy link to comment
-                  </span>
-                </button>
-                <button className='aboutComments'>
-                  <AiOutlineQuestionCircle/>
-                  <span>Learn about comments</span>
-                </button>
-              </div>
-            </div>
-          </section>
-          <section className='comment_content'>
-            <div></div>
-          </section>
-        </div>
-    )
-  }
+const CommentTool =({mainComment}:CommentToolProps)=>{
+  const [moreOpen, setMoreOpen]= useState<boolean>(false);
+
   return(
+    <div className="tool">
+      {mainComment &&
+          <button className='resovleTool'>
+          Resolve
+        </button>
+      }
+      <button className='moreToll'>
+        <BiDotsHorizontalRounded/>
+      </button>
+    {moreOpen &&
+            <div className='tool-more'>
+            <button>
+              <HiOutlinePencil/>
+              <span>
+                Edit comment
+              </span>
+            </button>
+            <button>
+              <IoTrashOutline/>
+              <span>
+                Delete comment
+              </span>
+            </button>
+            <button>
+              <BsLink45Deg/>
+              <span>
+                Copy link to comment
+              </span>
+            </button>
+            <button className='aboutComments'>
+              <AiOutlineQuestionCircle/>
+              <span>Learn about comments</span>
+            </button>
+          </div>
+    }
+
+  </div>
+  )
+}
+
+const CommentBlock =({comment ,mainComment}:CommentBlockProps)=>{
+  const firstLetter = comment.userName.substring(0,1).toUpperCase();
+  return (
     <div 
-      className='comments'
-    >
-      {comments?.map((comment:CommentType)=>
-        <Comment 
-          key={`comment_${comments.indexOf(comment)}`}
-          comment={comment} 
-          block={block}
-          pageId={pageId}
-          editBlock={editBlock}
+    className='commentBlock'
+  >
+    <section className='comment_header'>
+      <div className="information">
+        <div className="firstLetter">
+          {firstLetter}
+        </div>
+        <div className='userName'>
+          {comment.userName}
+        </div>
+        <div className="time">
+          <Time
+            editTime={comment.editTime}
+          />
+        </div>
+      </div>
+      <CommentTool
+        mainComment={mainComment }
+      />
+    </section>
+    <section className='comment_content'>
+      <div>{comment.content}</div>
+    </section>
+    </div>
+  )
+}
+const Comment =({userName,comment, block, pageId, editBlock}:CommentProps)=>{
+
+  return(
+    <div className='comment'>
+      <div className="main_comment">
+        <CommentBlock 
+          comment={comment}
+          mainComment={true}
         />
-      )}
+      </div>
+      <div className='comment_comment'>
+        {comment.comments?.map((comment:CommentType)=>
+        <CommentBlock 
+          comment={comment}
+          mainComment={false}
+        />)
+        }
+      </div>
       <CommentInput
         userName={userName}
         pageId={pageId}
         editBlock={editBlock}
+        comment={comment}
       />
+    </div>
+  )
+};
+const Comments =({pageId,block, userName ,editBlock ,setCommentOpen}:CommentsProps)=>{
+
+  const comments=block.comments ;
+  const commentsRef =useRef<HTMLDivElement>(null);
+  const resolveComments :BlockCommentType[]| null =comments !==null ? 
+  comments?.filter((comment:BlockCommentType)=> comment.type ==="resolve") :
+  null;
+  const opendComments :BlockCommentType[]| null = comments !== null ?
+  comments?.filter((comment:BlockCommentType)=> comment.type ==="open"):
+    null;
+  const [targetComments, setTargetComment]= useState<BlockCommentType[]| null>(comments);
+  const inner =document.getElementById("inner");
+
+  const closeComments =(event:MouseEvent)=>{
+    const commentsDoc = commentsRef.current;
+    const commentsDocArea =commentsDoc?.getClientRects()[0];
+    const isInnerCommentsDoc =detectRange(event, commentsDocArea);
+    !isInnerCommentsDoc &&
+    setCommentOpen(false);
+  };
+  inner?.addEventListener("click", (event:MouseEvent)=>{
+      closeComments(event)
+    });
+  return(
+    <div 
+      className='comments'
+      ref={commentsRef}
+    >
+      {resolveComments !==null && resolveComments[0]!== undefined &&
+        <section className="commentType">
+          <button >
+            <span>Open</span>
+            <span>{opendComments?.length}</span>
+          </button>
+          <button className="commentType">
+            <span>Resolve</span>
+            <span>{resolveComments?.length}</span>
+          </button>
+        </section>
+      }
+      {targetComments !==null &&
+        <section className='comments_comments'>
+          {targetComments.map((comment:BlockCommentType)=>
+            <Comment 
+              key={`comment_${comment.id}`}
+              userName={userName}
+              comment={comment}
+              block={block}
+              pageId={pageId}
+              editBlock={editBlock}
+            />
+          )
+          }
+        </section>
+      }
     </div>
   )
 };
