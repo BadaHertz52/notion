@@ -41,10 +41,16 @@ export type BlockStyle ={
 const userName= "amet";
 
 export type CommentType ={
+  id: string,
   userName:string,
-  comment: string,
-  editTime: string
+  content: string,
+  editTime: string,
 }
+export type BlockCommentType = CommentType &{
+  type:"open"|"resolve",
+  comments:CommentType[]|null,
+  commentsId : string[] |null,
+};
 export type Block ={
   id:string,
   contents:string, 
@@ -55,7 +61,7 @@ export type Block ={
   icon: string | null ,
   editTime: string ,
   style :BlockStyle,
-  comments :CommentType[] |null
+  comments :BlockCommentType[] |null
 } ;
 
 export  const blockSample:Block ={
@@ -82,12 +88,12 @@ export type listItem = {
   icon: string | null;
 };
 export type Page ={
-  id:string , 
+  id:string ,  // 형식 : comment_현재 시간 
   header : {
     title: string | null,
     icon: string |null,
     cover: ImageData |null,
-    comments: CommentType[]| null,
+    comments: BlockCommentType[]| null,
   }
   firstBlocksId :string[] | null,
   blocks : Block[] ,  
@@ -201,9 +207,14 @@ const initialState :Notion ={
       icon:'👋' ,
       cover: null,
       comments:[{
+        id:"comment_1",
         userName:userName,
-        comment:"this is comment",
-        editTime: JSON.stringify(Date.parse("2021-05-20-12")),
+        type:"open",
+        content:"this is content",
+        editTime: JSON.stringify(Date.parse("2021-05-20-12")
+        ),
+        comments:null,
+        commentsId:null,
       }],
     },
     firstBlocksId :["text", 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page', 'page2'],
@@ -225,9 +236,13 @@ const initialState :Notion ={
         textDeco:"none"
       },
       comments:[{
+        id:"comment_text1",
         userName:userName,
-        comment:"hi! ☺️", 
-        editTime:JSON.stringify(1654086822451)
+        type:"open",
+        content:"hi! ☺️", 
+        editTime:JSON.stringify(1654086822451),
+        comments:null,
+        commentsId:null,
       },]
     },
     {
@@ -265,9 +280,13 @@ const initialState :Notion ={
         textDeco:"underline"
       },
       comments:[{
+        id:"comment_todo1",
         userName:userName,
-        comment:"todo comments", 
-        editTime:JSON.stringify(Date.parse("2021-5-18-16:01:30"))
+        type:"open",
+        content:"todo comments", 
+        editTime:JSON.stringify(Date.parse("2021-5-18-16:01:30")),
+        comments:null,
+        commentsId:null,
       },]
     },{
       id:"todo done",
@@ -415,10 +434,13 @@ const initialState :Notion ={
       textDeco:"none"
     },
     comments:[{
+      id:"comment_sub1_2_1",
       userName:userName,
-      comment:"subBlock comments", 
-      editTime:JSON.stringify(Date.parse("2021-5-18-8:00")
-      )
+      type:"open",
+      content:"subBlock comments", 
+      editTime:JSON.stringify(Date.parse("2021-5-18-8:00")),
+      comments:null,
+      commentsId:null,
     },]
   },
   {
