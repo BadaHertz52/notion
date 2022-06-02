@@ -155,6 +155,7 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
       editPage={editPage}
       deletePage={deletePage}
       commentOpen={commentOpen}
+      setCommentOpen={setCommentOpen}
       />);
     return blockNode
   };

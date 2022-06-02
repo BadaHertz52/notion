@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { GoPrimitiveDot } from 'react-icons/go';
 import { GrCheckbox, GrCheckboxSelected, GrDocumentText } from 'react-icons/gr';
 import { IoChatboxOutline } from 'react-icons/io5';
@@ -22,10 +22,11 @@ type BlockProp ={
   editPage : (pageId:string , newPage:Page, block:null)=>void,
   deletePage : (pageId:string , block:null)=>void,
   commentOpen: boolean,
+  setCommentOpen: Dispatch<SetStateAction<boolean>>,
 };
 
 
-const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,addPage, editPage, deletePage, commentOpen}:BlockProp)=>{
+const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,addPage, editPage, deletePage, commentOpen ,setCommentOpen}:BlockProp)=>{
   const className = block.type !== "toggle" ?
                     `${block.type} block ` :
                     `${block.type} block ${block.subBlocksId!==null?'on' : ""}`;
@@ -183,6 +184,7 @@ const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,chang
                 block={block}
                 pageId={page.id}
                 editBlock={editBlock}
+                setCommentOpen={setCommentOpen}
               />
             :
             <button className='commentBtn btnIcon'>
