@@ -158,9 +158,10 @@
       size: inherit;
       weight: inherit
     }
-    background-color: #fff9c4;
+    background-color: $comment;
+    border-bottom: 2px solid $commentHover;
     &:hover{
-      background-color: #ffdf3e;
+      background-color: $commentHover;
     }
   }
   .contents:empty::after{

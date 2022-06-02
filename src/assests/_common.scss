@@ -11,6 +11,8 @@ $brightMud:rgba(242, 241, 238, 0.6);;
 $itemSvg:#a3a3a2;
 $itemText: rgba(55, 53, 47, 0.65);
 $itemHover:rgba(49, 45, 33, 0.11);
+$commentHover: rgba(255, 212, 0, 0.8);
+$comment:rgba(255,212,0,0.14);
 
 @mixin webkitScroll {
   &::-webkit-scrollbar {
