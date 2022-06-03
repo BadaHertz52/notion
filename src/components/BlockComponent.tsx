@@ -22,8 +22,59 @@ type BlockProp ={
   editPage : (pageId:string , newPage:Page, block:null)=>void,
   deletePage : (pageId:string , block:null)=>void,
 };
+type BlockCommentProps ={
+  block:Block,
+  userName:string,
+  pageId:string,
+  editBlock: (pageId: string, block: Block) => void,
+}
+const BlockComment =({block, pageId, userName, editBlock,}:BlockCommentProps)=>{
+  return (
+      <div 
+        id={`${block.id}_comments`}
+        className="blockId_comments"
+        >
+          <Comments
+            userName={userName}
+            block={block}
+            pageId={pageId}
+            editBlock={editBlock}
+          />
+        <button 
+          className='commentBtn btnIcon'
+          name={block.id}
+        >
+          <IoChatboxOutline/>
+          <span className="commentLength">
+            {block.comments?.length}
+          </span>
+        </button>
+      </div>
 
-
+  )
+};
+const BlockContent =({block}:{block:Block})=>{
+  return(
+    <>
+    {block.comments ==null ?
+    <div 
+      className="contents"
+      placeholder="type '/' for commmands"
+    >
+      {block.contents}
+    </div>
+    :
+    <button 
+      className="contents commentBtn"
+      name={block.id}
+      placeholder="type '/' for commmands"
+    >
+      {block.contents}
+    </button>
+    }
+  </>
+  )
+}
 const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,addPage, editPage, deletePage,}:BlockProp)=>{
   const className = block.type !== "toggle" ?
                     `${block.type} block ` :
@@ -49,18 +100,19 @@ const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,chang
       })
     }
     return(
-      <div className='list mainBlock_block'>
+      <>
         {subBlocks?.map((block:Block)=>(
           <div 
+            className='list mainBlock'
             key={`listItem_${subBlocks.indexOf(block)}`}
-            id ={block.id}
-            className= "blockContents"
-            title={`${block.id}_contents`}
-            style={listStyle(block)}
-            >
-
-            {block.comments==null? 
-            <>
+          >
+            <div className='mainBlock_block'>
+            <div 
+              id ={block.id}
+              className= "blockContents"
+              title={`${block.id}_contents`}
+              style={listStyle(block)}
+              >
               <div 
                 className='list_marker'
               >
@@ -70,26 +122,23 @@ const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,chang
                 <GoPrimitiveDot/> 
                 }
               </div>
-              <div 
-                className="contents"
-                placeholder="type '/' for commmands"
-                style={blockContentsStyle(block)}
-              >
-                {block.contents}
-              </div>
-            </>
-            :
-            <button 
-              className="contents commentBtn"
-              placeholder="type '/' for commmands"
-            >
-              {block.contents}
-            </button>
+              <BlockContent 
+                block={block}
+              />
+            </div>
+            </div>
+          {block.comments !==null &&
+            <BlockComment
+            block={block}
+            pageId={page.id}
+            userName={userName}
+            editBlock={editBlock}
+            />
           }
-
           </div>
-        ))}
-      </div>
+        ))
+        }
+      </>
     )
   }
 
@@ -99,9 +148,7 @@ const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,chang
     > 
 
       {(block.type ==="numberList" || block.type=== "bulletList" ) ?
-      <div className="mainBlock">
         <ListSub/>
-      </div>
       :
       <>
       <div 
@@ -156,48 +203,19 @@ const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,chang
           title={`${block.id}_contents`}
           style={blockContentsStyle(block)}
         >
-          {block.comments==null? 
-            <div 
-              className="contents"
-              placeholder="type '/' for commmands"
-            >
-            {block.contents}
-            </div>
-          :
-          <button 
-            className="contents commentBtn"
-            name={block.id}
-            placeholder="type '/' for commmands"
-          >
-            {block.contents}
-          </button>
-          }
-
+        <BlockContent
+          block={block}
+        />
         </div>
         </div>
         {block.comments !==null &&
-          <div 
-            id={`${block.id}_comments`}
-            className="blockId_comments"
-            >
-              <Comments
-                userName={userName}
-                block={block}
-                pageId={page.id}
-                editBlock={editBlock}
-              />
-            <button 
-              className='commentBtn btnIcon'
-              name={block.id}
-            >
-              <IoChatboxOutline/>
-              <span className="commentLength">
-                {block.comments.length}
-              </span>
-            </button>
-          </div>
+        <BlockComment
+          block={block}
+          pageId={page.id}
+          userName={userName}
+          editBlock={editBlock}
+        />
         }
-
       </div>
       </>
       }
