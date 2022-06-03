@@ -125,7 +125,7 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
     boolean:false,
     command:null
   }); 
-  const [commentTarget, setCommentTarget]=useState<HTMLElement|null>(null);
+  const [commentTargetId, setCommentTargetId]=useState<string|null>(null);
 
   useEffect(()=>{
     if(storageItem !== null){
@@ -269,20 +269,37 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
     toggleBlock.classList.toggle("on");
   };
 
-  function addEvent(event:MouseEvent){
+  function addEvent(event:React.MouseEvent){
     const target =event.target as HTMLElement;
     //toggle btn 
+
     const targetClassName = target.getAttribute("class");
     const targetParentElement = target.parentElement as HTMLElement; 
+
     const openComment =(element:HTMLElement)=>{
       const targetElement = element as HTMLButtonElement
       const id = targetElement.name;
+      setCommentTargetId(id);
       const blockId_comments = document.getElementById(`${id}_comments`) ;
       const mainBlockElement = blockId_comments?.parentElement ;
       mainBlockElement?.setAttribute("style"," flex-direction: column");
-      setCommentTarget(blockId_comments);
       blockId_comments?.classList.add("open");
-
+      
+      console.log("blockId" ,blockId_comments)
+    };
+    const closeComments =(event:React.MouseEvent, commentTarget:HTMLElement)=>{
+        const mainBlockElement =commentTarget?.parentElement;
+        mainBlockElement?.setAttribute("style", " flex-direction: row;")
+        const commentsDocArea =commentTarget?.getClientRects()[0];
+        const isInnerCommentsDoc =detectRange(event, commentsDocArea);
+        console.log("inner", isInnerCommentsDoc, commentTarget)
+        !isInnerCommentsDoc && commentTarget?.classList.remove("open");
+        setCommentTargetId(null);
+    };
+    if(commentTargetId!==null){
+      const commentTarget =document.getElementById(`${commentTargetId}_comments`) ;
+      commentTarget?.classList.contains("open") &&
+      closeComments(event, commentTarget);
     };
 
     switch (target.tagName) {
@@ -395,24 +412,10 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
     }
   };
 
-  const inner =document.getElementById("inner");
-
-  const closeComments =(event:MouseEvent)=>{
-    const mainBlockElement =commentTarget?.parentElement;
-    mainBlockElement?.setAttribute("style", " flex-direction: row;")
-    const commentsDocArea =commentTarget?.getClientRects()[0];
-    const isInnerCommentsDoc =detectRange(event, commentsDocArea);
-    console.log("inner", isInnerCommentsDoc)
-    !isInnerCommentsDoc && commentTarget?.classList.remove("open");
-  };
-
-  inner?.addEventListener("click", (event:MouseEvent)=>{
-    addEvent(event);
-    commentTarget !== null && commentTarget?.classList.contains("open") && closeComments(event);
-    });
   return(
       <div 
         className="editableBlock"
+        onClick={addEvent}
       >
         <div>
         {!command.boolean?
