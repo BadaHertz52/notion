@@ -279,22 +279,25 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
     const openComment =(element:HTMLElement)=>{
       const targetElement = element as HTMLButtonElement
       const id = targetElement.name;
-      setCommentTargetId(id);
       const blockId_comments = document.getElementById(`${id}_comments`) ;
       const mainBlockElement = blockId_comments?.parentElement ;
       mainBlockElement?.setAttribute("style"," flex-direction: column");
-      blockId_comments?.classList.add("open");
-      
-      console.log("blockId" ,blockId_comments)
+      if(!blockId_comments?.classList.contains("open") ){
+        blockId_comments?.classList.add("open");
+        setCommentTargetId(id);
+      }
+    
     };
     const closeComments =(event:React.MouseEvent, commentTarget:HTMLElement)=>{
         const mainBlockElement =commentTarget?.parentElement;
-        mainBlockElement?.setAttribute("style", " flex-direction: row;")
+
         const commentsDocArea =commentTarget?.getClientRects()[0];
         const isInnerCommentsDoc =detectRange(event, commentsDocArea);
-        console.log("inner", isInnerCommentsDoc, commentTarget)
-        !isInnerCommentsDoc && commentTarget?.classList.remove("open");
-        setCommentTargetId(null);
+        if(!isInnerCommentsDoc){
+          commentTarget?.classList.remove("open");
+          mainBlockElement?.setAttribute("style", " flex-direction: row;")
+          setCommentTargetId(null);
+        }
     };
     if(commentTargetId!==null){
       const commentTarget =document.getElementById(`${commentTargetId}_comments`) ;
@@ -406,7 +409,6 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
         type: blockType,
         editTime:editTime
       };
-      console.log("type keyup");
       editBlock(page.id, newBlock);
       setCommand({boolean:false, command:null})
     }
