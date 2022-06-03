@@ -60,7 +60,7 @@ a:link, a:active, a:visited {
   width: 100%;
 }
 
-.mainBlock > div {
+.mainBlock .mainBlock_block {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -440,6 +440,10 @@ a:link, a:active, a:visited {
 
 .blockId_comments .comments {
   display: none;
+}
+
+.blockId_comments.open {
+  z-index: 5;
 }
 
 .blockId_comments.open .comments {

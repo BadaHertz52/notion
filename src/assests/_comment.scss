@@ -6,6 +6,8 @@
   }
 }
 .blockId_comments.open {
+  z-index: 5;
+
   .comments{
   display: flex;
   flex-direction: column;

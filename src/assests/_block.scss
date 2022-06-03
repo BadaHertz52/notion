@@ -16,7 +16,7 @@
 .mainBlock{
   display: flex;
   justify-content: space-between;
-  &>div{
+  .mainBlock_block{
     display: flex;
     width: 100%;
     position: relative;
