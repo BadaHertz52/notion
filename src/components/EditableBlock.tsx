@@ -125,8 +125,7 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
     boolean:false,
     command:null
   }); 
-  const [commentOpen, setCommentOpen]=useState<boolean>(false);
-  const [commentTargetId, setCommentTargetId]=useState<string|null>(null);
+  const [commentTarget, setCommentTarget]=useState<HTMLElement|null>(null);
 
   useEffect(()=>{
     if(storageItem !== null){
@@ -270,7 +269,7 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
     toggleBlock.classList.toggle("on");
   };
 
-  function addEvent(event:React.MouseEvent){
+  function addEvent(event:MouseEvent){
     const target =event.target as HTMLElement;
     //toggle btn 
     const targetClassName = target.getAttribute("class");
@@ -278,11 +277,12 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
     const openComment =(element:HTMLElement)=>{
       const targetElement = element as HTMLButtonElement
       const id = targetElement.name;
-      const blockId_comments = document.getElementById(`${id}_comments`);
-      setCommentTargetId(id);
+      const blockId_comments = document.getElementById(`${id}_comments`) ;
+      const mainBlockElement = blockId_comments?.parentElement ;
+      mainBlockElement?.setAttribute("style"," flex-direction: column");
+      setCommentTarget(blockId_comments);
       blockId_comments?.classList.add("open");
-      blockId_comments?.classList.contains("open")&&
-      setCommentOpen(true);
+
     };
 
     switch (target.tagName) {
@@ -300,7 +300,6 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
           toggleOn(btnElement);
         };
         if(targetParentElement.parentElement?.className.includes("commentBtn")){
-          console.log("target commentbtn", target);
           openComment(targetParentElement.parentElement)
         };
         break;
@@ -397,20 +396,19 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
   };
 
   const inner =document.getElementById("inner");
-  const closeComments =(event:MouseEvent)=>{
 
-    if(commentTargetId !==null){
-      const commentElement = document.getElementById(commentTargetId);
-      if(commentElement !==null && commentElement?.classList.contains("open")){
-        const commentsDocArea =commentElement?.getClientRects()[0];
-        const isInnerCommentsDoc =detectRange(event, commentsDocArea);
-        !isInnerCommentsDoc && commentElement.classList.remove("open");
-        setCommentOpen(false);
-      }
-    }
+  const closeComments =(event:MouseEvent)=>{
+    const mainBlockElement =commentTarget?.parentElement;
+    mainBlockElement?.setAttribute("style", " flex-direction: row;")
+    const commentsDocArea =commentTarget?.getClientRects()[0];
+    const isInnerCommentsDoc =detectRange(event, commentsDocArea);
+    console.log("inner", isInnerCommentsDoc)
+    !isInnerCommentsDoc && commentTarget?.classList.remove("open");
   };
+
   inner?.addEventListener("click", (event:MouseEvent)=>{
-    closeComments(event);
+    addEvent(event);
+    commentTarget !== null && commentTarget?.classList.contains("open") && closeComments(event);
     });
   return(
       <div 
@@ -424,7 +422,6 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
           innerRef={innerRef}
           onChange={onBlockChange}
           onKeyDown={onBlockKeyDown}
-          onClick={addEvent}
           onMouseOver ={showBlockFn}
           />
         :
@@ -434,7 +431,6 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
             html={command.command !==null? command.command : ""}
             onChange={commandChange}
             onKeyUp={(event)=>commandKeyUp(event,block)}
-            onClick={addEvent}
             onMouseOver ={showBlockFn}
           />
           <CommandBlock 
