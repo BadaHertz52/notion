@@ -56,7 +56,7 @@ export const findPosition =(eventTarget:Element ,elementArea:DOMRect ):{
   }
 };
 
-export const detectRange =(event:MouseEvent , targetArea:DOMRect|undefined ):boolean=>{
+export const detectRange =(event:MouseEvent| React.MouseEvent , targetArea:DOMRect|undefined ):boolean=>{
   const target =event.target as Element; 
   const target_area= targetArea as DOMRect;
   const {targetElement_position ,eventTarget_position} =findPosition(target, target_area);
