@@ -513,7 +513,15 @@ const initialState :Notion ={
       fontStyle:"initial",
       textDeco:"none"
     },
-    comments:null
+    comments:[{
+      id:"comment_n2",
+      userName:userName,
+      type:"open",
+      content:"comment n2", 
+      editTime:JSON.stringify(1654086822451),
+      comments:null,
+      commentsId:null,
+    },]
   },
   {
     id:"num3",
