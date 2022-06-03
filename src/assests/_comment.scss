@@ -17,11 +17,11 @@
     display: none
   }
 }
-.comments {
+#comments {
+  position: absolute;
 @include popupMenu;
 z-index: 10;
-padding: 3%;
-width: 100%;
+padding: 2%;
 .firstLetter{
   border-radius: 50%;
   border :1px solid black;

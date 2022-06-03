@@ -1,5 +1,5 @@
 
-import React, { Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from 'react';
+import React, {  FormEvent,useState } from 'react';
 import { CSSProperties } from 'styled-components';
 import { Block, BlockCommentType, CommentType } from '../modules/notion';
 import { BsFillArrowUpCircleFill, BsLink45Deg, BsThreeDots } from 'react-icons/bs';
@@ -7,8 +7,6 @@ import { HiOutlinePencil } from 'react-icons/hi';
 import { IoTrashOutline } from 'react-icons/io5';
 import { AiOutlineQuestionCircle } from 'react-icons/ai';
 import Time from './Time';
-import { detectRange } from './BlockFn';
-import { CommentOpenType } from './EditableBlock';
 
 type CommentsProps={
   block:Block,
@@ -282,7 +280,7 @@ const Comments =({pageId,block, userName ,editBlock}:CommentsProps)=>{
   
   return(
     <div 
-      className='comments'
+      id='comments'
     >
       {resolveComments !==null && resolveComments[0]!== undefined &&
         <section className="commentType">

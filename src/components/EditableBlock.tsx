@@ -1,11 +1,11 @@
 
-import React, { useEffect, useRef, useState, } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useRef, useState, } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import { bg_default, Block, BlockType, blockTypes, defaultColor, findBlock, Page } from '../modules/notion';
 import CommandBlock from './CommandBlock';
 import { Command } from '../containers/EditorContainer';
-import BlockComponent from './BlockComponent';
+import BlockComponent, { BlockComment } from './BlockComponent';
 import { detectRange } from './BlockFn';
 
 type findTargetBlockReturn ={
@@ -111,12 +111,14 @@ type EditableBlockProps ={
   addPage : (pageId:string , newPage:Page, block:null)=>void,
   editPage : (pageId:string , newPage:Page, block:null)=>void,
   deletePage : (pageId:string , block:null)=>void,
+  setCommentBlock : Dispatch<SetStateAction<Block|null>>,
+  commentBlock :Block |null,
 };
 export   type CommentOpenType ={
   open:boolean,
   targetId: string | null,
 };
-const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock , addPage, editPage, deletePage }:EditableBlockProps)=>{  
+const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock , addPage, editPage, deletePage ,setCommentBlock ,commentBlock}:EditableBlockProps)=>{  
   const  editTime = JSON.stringify(Date.now());
   const innerRef  =useRef<HTMLDivElement>(null) ;
   const storageItem =sessionStorage.getItem("editedBlock") ;
@@ -158,6 +160,8 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
       addPage={addPage}
       editPage={editPage}
       deletePage={deletePage}
+      setCommentBlock={setCommentBlock}
+      commentBlock={commentBlock}
       />);
     return blockNode
   };
@@ -272,38 +276,43 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
   function addEvent(event:React.MouseEvent){
     const target =event.target as HTMLElement;
     //toggle btn 
-
+    console.log("target", target);
     const targetClassName = target.getAttribute("class");
     const targetParentElement = target.parentElement as HTMLElement; 
+    const editor =document.getElementsByClassName("editor"
+    )[0];
+    const comments =document.getElementById("comments");
 
     const openComment =(element:HTMLElement)=>{
-      const targetElement = element as HTMLButtonElement
+      const targetElement = element as HTMLButtonElement;
       const id = targetElement.name;
       const blockId_comments = document.getElementById(`${id}_comments`) ;
       const mainBlockElement = blockId_comments?.parentElement ;
-      mainBlockElement?.setAttribute("style"," flex-direction: column");
       if(!blockId_comments?.classList.contains("open") ){
-        blockId_comments?.classList.add("open");
+        const width =mainBlockElement?.offsetWidth ; 
+        const position_mainBlock = mainBlockElement?.getClientRects()[0]; 
+        const positionX = position_mainBlock?.x;
+        const positionBottom = position_mainBlock?.bottom;
+        comments?.setAttribute("style", `left:${positionX}px; top:${positionBottom}px ; width:${width}px`);
+        editor?.setAttribute("style", "overflow:hidden");
         setCommentTargetId(id);
+        const {BLOCK} =findBlock(page, id)
+        setCommentBlock(BLOCK);
       }
-    
     };
-    const closeComments =(event:React.MouseEvent, commentTarget:HTMLElement)=>{
-        const mainBlockElement =commentTarget?.parentElement;
+    const closeComments =(event:React.MouseEvent)=>{
+      const commentsDocArea =comments?.getClientRects()[0];
+      const isInnerCommentsDoc =detectRange(event, commentsDocArea);
+      if(!isInnerCommentsDoc){
+        setCommentTargetId(null);
+        setCommentBlock(null);
+        editor?.setAttribute("style", "overflow-y:scroll");
+      }
+    };
 
-        const commentsDocArea =commentTarget?.getClientRects()[0];
-        const isInnerCommentsDoc =detectRange(event, commentsDocArea);
-        if(!isInnerCommentsDoc){
-          commentTarget?.classList.remove("open");
-          mainBlockElement?.setAttribute("style", " flex-direction: row;")
-          setCommentTargetId(null);
-        }
-    };
-    if(commentTargetId!==null){
-      const commentTarget =document.getElementById(`${commentTargetId}_comments`) ;
-      commentTarget?.classList.contains("open") &&
-      closeComments(event, commentTarget);
-    };
+    commentBlock !==null &&
+    closeComments(event)
+
 
     switch (target.tagName) {
       case "svg":
@@ -325,7 +334,7 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
         break;
       case "span":
         if(targetParentElement.className?.includes("commentBtn")){
-          console.log("target commentbtn", target);
+
           openComment(targetParentElement)
         };
         break;
@@ -334,7 +343,6 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
           toggleOn(target);
         };
         if(targetClassName?.includes("commentBtn")){
-          console.log("target commentbtn", target);
           openComment(target);
         };
         break;
@@ -421,6 +429,7 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
       >
         <div>
         {!command.boolean?
+        <>
           <ContentEditable
           id={block.id}
           html={callBlockNode(block)}
@@ -429,6 +438,7 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
           onKeyDown={onBlockKeyDown}
           onMouseOver ={showBlockFn}
           />
+        </>
         :
           <>
           <ContentEditable

@@ -5,8 +5,7 @@ import { IoChatboxOutline } from 'react-icons/io5';
 import { MdPlayArrow } from 'react-icons/md';
 import {  CSSProperties} from 'styled-components';
 import { Block,Page } from '../modules/notion';
-import EditableBlock, { CommentOpenType } from './EditableBlock';
-import Comments from './Comments';
+import EditableBlock  from './EditableBlock';
 
 type BlockProp ={
   userName:string,
@@ -21,25 +20,18 @@ type BlockProp ={
   addPage : (pageId:string , newPage:Page, block:null)=>void,
   editPage : (pageId:string , newPage:Page, block:null)=>void,
   deletePage : (pageId:string , block:null)=>void,
+  setCommentBlock : Dispatch<SetStateAction<Block|null>>,
+  commentBlock:Block|null
 };
 type BlockCommentProps ={
   block:Block,
-  userName:string,
-  pageId:string,
-  editBlock: (pageId: string, block: Block) => void,
 }
-const BlockComment =({block, pageId, userName, editBlock,}:BlockCommentProps)=>{
+export const BlockComment =({block}:BlockCommentProps)=>{
   return (
       <div 
         id={`${block.id}_comments`}
         className="blockId_comments"
         >
-          <Comments
-            userName={userName}
-            block={block}
-            pageId={pageId}
-            editBlock={editBlock}
-          />
         <button 
           className='commentBtn btnIcon'
           name={block.id}
@@ -75,7 +67,7 @@ const BlockContent =({block}:{block:Block})=>{
   </>
   )
 }
-const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,addPage, editPage, deletePage,}:BlockProp)=>{
+const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,addPage, editPage, deletePage,setCommentBlock ,commentBlock}:BlockProp)=>{
   const className = block.type !== "toggle" ?
                     `${block.type} block ` :
                     `${block.type} block ${block.subBlocksId!==null?'on' : ""}`;
@@ -130,9 +122,6 @@ const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,chang
           {block.comments !==null &&
             <BlockComment
             block={block}
-            pageId={page.id}
-            userName={userName}
-            editBlock={editBlock}
             />
           }
           </div>
@@ -211,9 +200,6 @@ const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,chang
         {block.comments !==null &&
         <BlockComment
           block={block}
-          pageId={page.id}
-          userName={userName}
-          editBlock={editBlock}
         />
         }
       </div>
@@ -236,6 +222,8 @@ const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,chang
             addPage={addPage}
             editPage={editPage}
             deletePage={deletePage}
+            setCommentBlock={setCommentBlock}
+            commentBlock={commentBlock}
           />
         )
         }

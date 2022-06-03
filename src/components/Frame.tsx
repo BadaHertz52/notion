@@ -9,6 +9,7 @@ import {GrDocumentText ,GrDocument} from 'react-icons/gr';
 import { Side } from '../modules/side';
 import { MdInsertPhoto } from 'react-icons/md';
 import BlockFn from './BlockFn';
+import Comments from './Comments';
 
 
 type FrameProps ={
@@ -31,7 +32,7 @@ type FrameProps ={
 
 const Frame =({ pages, firstlist,userName, page,side,  editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage,editPage, deletePage }:FrameProps)=>{
   const [decoOpen ,setdecoOpen] =useState<boolean>(true);
-
+  const [commentBlock, setCommentBlock]=useState<Block|null>(null);
   const headerStyle: CSSProperties ={
     marginTop: page.header.cover !==null? "10px": "30px" 
   };
@@ -180,6 +181,8 @@ const Frame =({ pages, firstlist,userName, page,side,  editBlock, addBlock,chang
                       addPage={addPage}
                       editPage={editPage}
                       deletePage={deletePage}
+                      commentBlock={commentBlock}
+                      setCommentBlock={setCommentBlock}
                     />
                   )
                 }
@@ -196,6 +199,14 @@ const Frame =({ pages, firstlist,userName, page,side,  editBlock, addBlock,chang
                 editPage={editPage}
                 deletePage={deletePage}
               />
+              {commentBlock !==null &&
+                  <Comments
+                    userName={userName}
+                    block={commentBlock}
+                    pageId={page.id}
+                    editBlock={editBlock}
+                />              
+              }
             </div>
           </div>
         </div>

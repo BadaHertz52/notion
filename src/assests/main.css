@@ -456,7 +456,8 @@ a:link, a:active, a:visited {
   display: none;
 }
 
-.comments {
+#comments {
+  position: absolute;
   width: 320px;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -477,19 +478,18 @@ a:link, a:active, a:visited {
   -webkit-box-shadow: 0px 0px 23px -5px #ababab;
   box-shadow: 0px 0px 23px -5px #ababab;
   z-index: 10;
-  padding: 3%;
-  width: 100%;
+  padding: 2%;
 }
 
-.comments::-webkit-scrollbar-thumb {
+#comments::-webkit-scrollbar-thumb {
   background: #D3D1CB;
 }
 
-.comments::-webkit-scrollbar-track {
+#comments::-webkit-scrollbar-track {
   background: #EDECE9;
 }
 
-.comments .firstLetter {
+#comments .firstLetter {
   border-radius: 50%;
   border: 1px solid black;
   color: black;
