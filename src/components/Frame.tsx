@@ -9,7 +9,7 @@ import {GrDocumentText ,GrDocument} from 'react-icons/gr';
 import { Side } from '../modules/side';
 import { MdInsertPhoto } from 'react-icons/md';
 import BlockFn from './BlockFn';
-import Comments from './Comments';
+import Comments, { ToolMore } from './Comments';
 
 
 type FrameProps ={
@@ -33,6 +33,7 @@ type FrameProps ={
 const Frame =({ pages, firstlist,userName, page,side,  editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage,editPage, deletePage }:FrameProps)=>{
   const [decoOpen ,setdecoOpen] =useState<boolean>(true);
   const [commentBlock, setCommentBlock]=useState<Block|null>(null);
+  const [moreOpen, setMoreOpen]= useState<boolean>(false);
   const headerStyle: CSSProperties ={
     marginTop: page.header.cover !==null? "10px": "30px" 
   };
@@ -208,7 +209,16 @@ const Frame =({ pages, firstlist,userName, page,side,  editBlock, addBlock,chang
                     pageId={page.id}
                     editBlock={editBlock}
                     setCommentBlock={setCommentBlock}
+                    setMoreOpen={setMoreOpen}
                 />              
+              }
+              {moreOpen &&
+              <ToolMore
+                pageId={page.id}
+                block={commentBlock}
+                editBlock={editBlock}
+                setCommentBlock={setCommentBlock}
+              />
               }
             </div>
           </div>

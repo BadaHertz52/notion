@@ -7,6 +7,7 @@ import { HiOutlinePencil } from 'react-icons/hi';
 import { IoTrashOutline } from 'react-icons/io5';
 import { AiOutlineQuestionCircle } from 'react-icons/ai';
 import Time from './Time';
+import { detectRange } from './BlockFn';
 
 type CommentsProps={
   block:Block,
@@ -14,6 +15,7 @@ type CommentsProps={
   userName:string,
   editBlock :(pageId: string, block: Block) => void,
   setCommentBlock: Dispatch<SetStateAction<Block|null>>,
+  setMoreOpen:Dispatch<React.SetStateAction<boolean>>,
 };
 type CommentProps ={
   userName: string,
@@ -22,6 +24,7 @@ type CommentProps ={
   block:Block,
   editBlock :(pageId: string, block: Block) => void,
   setCommentBlock: Dispatch<SetStateAction<Block|null>>,
+  setMoreOpen:Dispatch<React.SetStateAction<boolean>>,
 };
 type CommentInputProps={
   userName: string,
@@ -32,13 +35,23 @@ type CommentInputProps={
   setCommentBlock: Dispatch<SetStateAction<Block|null>>,
 }
 type CommentBlockProps ={
-  comment: CommentType,
+  comment: CommentType | BlockCommentType,
   mainComment:boolean,
   block :Block,
+  pageId: string,
+  editBlock:(pageId: string, block: Block) => void,
+  setCommentBlock: Dispatch<SetStateAction<Block|null>>,
+  setMoreOpen:Dispatch<React.SetStateAction<boolean>>,
 };
 
 type CommentToolProps ={
-  mainComment:boolean
+  mainComment:boolean,
+  comment: CommentType | BlockCommentType,
+  block:Block,
+  pageId: string,
+  editBlock: (pageId: string, block: Block) => void,
+  setCommentBlock: Dispatch<SetStateAction<Block|null>>,
+  setMoreOpen:Dispatch<React.SetStateAction<boolean>>,
 };
 
 export const CommentInput =({userName, pageId ,comment,editBlock, commentBlock, setCommentBlock}:CommentInputProps)=>{
@@ -170,10 +183,145 @@ export const CommentInput =({userName, pageId ,comment,editBlock, commentBlock, 
     </div>
   )
 };
+type ToolMoreProps ={
+  pageId:string,
+  block:Block | null,
+  editBlock:(pageId: string, block: Block) => void,
+  setCommentBlock: Dispatch<SetStateAction<Block|null>>
+};
+export const ToolMore =({pageId, block, editBlock, setCommentBlock}:ToolMoreProps)=>{
+  const toolMoreItem = sessionStorage.getItem("toolMoreItem");
 
-const CommentTool =({mainComment}:CommentToolProps)=>{
-  const [moreOpen, setMoreOpen]= useState<boolean>(false);
+  const [comment, setComment] =useState<BlockCommentType | CommentType | null >(null);
+  const [style, setStyle]= useState<CSSProperties>();
 
+  useEffect(()=>{
+    if(toolMoreItem !==null){
+      const item :ToolMoreItem = JSON.parse(toolMoreItem);
+      setComment(item.comment);
+      setStyle(item.style);
+    }
+  },[toolMoreItem]); 
+  
+  return(
+    <div 
+      id='tool_more'
+      style={style}
+    >
+      <button>
+        <HiOutlinePencil/>
+        <span>
+          Edit comment
+        </span>
+      </button>
+      <button>
+        <IoTrashOutline/>
+        <span>
+          Delete comment
+        </span>
+      </button>
+      <button>
+        <BsLink45Deg/>
+        <span>
+          Copy link to comment
+        </span>
+      </button>
+      <button className='aboutComments'>
+        <AiOutlineQuestionCircle/>
+        <span>Learn about comments</span>
+      </button>
+    </div>
+  )
+}
+type ToolMoreItem ={
+  comment: BlockCommentType |CommentType, 
+  style:CSSProperties
+}
+const CommentTool =({mainComment , comment,block ,pageId ,editBlock ,setCommentBlock ,setMoreOpen}:CommentToolProps)=>{
+
+  const ResolveBtn =({comment, block, editBlock, pageId}:ResolveBtnProps)=>{
+    const changeToResolve =()=>{
+      const newComment:BlockCommentType ={
+        ...comment,
+          type:"resolve",
+      }; 
+      const comments = block.comments !==null ?[...block.comments] :[];
+      const commentIdes :string[] = comments?.map((comment:BlockCommentType)=> comment.id) as string[];
+      const index  = commentIdes.indexOf(comment.id);
+      comments.splice(index, 1, newComment);
+      const newBlock :Block={
+        ...block,
+        comments: comments
+      }
+      editBlock(pageId, newBlock);
+      setCommentBlock(newBlock);
+    };
+
+    return (
+      <button 
+        className='resolveTool'
+        onClick={changeToResolve}
+      >
+        Resolve
+      </button>
+    )
+  };
+  const openToolMore =(event: React.MouseEvent<HTMLButtonElement>)=>{
+    setMoreOpen(true);
+    const target = event.target as HTMLElement;
+    const targetParent = target.parentElement as HTMLElement ;
+    const setItem =(element:HTMLElement)=>{
+      const position = element.parentElement?.getClientRects()[0] as DOMRect;
+      const style:CSSProperties ={
+        position:"absolute" ,
+        top: position.top,
+        left:position.right -position.width -200
+      };
+      const item:ToolMoreItem ={
+        comment:comment,
+        style:style
+      };
+      sessionStorage.setItem("toolMoreItem", JSON.stringify(item));
+    }
+    switch (target.tagName) {
+      case "svg":
+        if(targetParent.className ==="moreTool"){
+          setItem(targetParent);
+        }
+        break;
+      case "path":
+        if(targetParent.parentElement?.className ==="moreTool"){
+          setItem(targetParent.parentElement);
+        }
+        break;
+      case "button":
+        if(target.className ==="moreTool"){
+          setItem(target);
+        }
+      break;
+      default:
+        break;
+    };
+  };
+  const inner =document.getElementById("inner");
+  const closeToolMore=(event:MouseEvent , toolMore:HTMLElement)=>{
+    const tooleMoreArea = toolMore.getClientRects()[0];
+    const isInnerToolMore = detectRange(event, tooleMoreArea);
+    if(!isInnerToolMore){
+      setMoreOpen(false);
+      sessionStorage.removeItem("tool_more");
+    }
+  };
+  inner?.addEventListener("click",  (event)=>{
+    const item =sessionStorage.getItem("toolMoreItem");
+    const toolMore =document.getElementById("tool_more");
+    if(item !==null && toolMore!==null){
+      closeToolMore(event, toolMore)
+    };
+  }
+    
+  );
+  
   return(
     <div className="tool">
       {mainComment &&
@@ -184,38 +332,12 @@ const CommentTool =({mainComment}:CommentToolProps)=>{
       <button className='moreTool'>
         <BsThreeDots/>
       </button>
-    {moreOpen &&
-            <div className='tool-more'>
-            <button>
-              <HiOutlinePencil/>
-              <span>
-                Edit comment
-              </span>
-            </button>
-            <button>
-              <IoTrashOutline/>
-              <span>
-                Delete comment
-              </span>
-            </button>
-            <button>
-              <BsLink45Deg/>
-              <span>
-                Copy link to comment
-              </span>
-            </button>
-            <button className='aboutComments'>
-              <AiOutlineQuestionCircle/>
-              <span>Learn about comments</span>
-            </button>
-          </div>
-    }
 
   </div>
   )
 };
 
-const CommentBlock =({comment ,mainComment ,block}:CommentBlockProps)=>{
+const CommentBlock =({comment ,mainComment ,block ,pageId,editBlock ,setCommentBlock ,setMoreOpen}:CommentBlockProps)=>{
   const firstLetter = comment.userName.substring(0,1).toUpperCase();
   return (
     <div 
@@ -237,6 +359,12 @@ const CommentBlock =({comment ,mainComment ,block}:CommentBlockProps)=>{
       </div>
       <CommentTool
         mainComment={mainComment }
+        comment={comment}
+        block={block}
+        pageId={pageId}
+        editBlock={editBlock}
+        setCommentBlock={setCommentBlock}
+        setMoreOpen={setMoreOpen}
       />
     </section>
     {mainComment &&
@@ -255,7 +383,7 @@ const CommentBlock =({comment ,mainComment ,block}:CommentBlockProps)=>{
     </div>
   )
 }
-const Comment =({userName,comment, block, pageId, editBlock ,setCommentBlock}:CommentProps)=>{
+const Comment =({userName,comment, block, pageId, editBlock ,setCommentBlock ,setMoreOpen}:CommentProps)=>{
 
   return(
     <div className='comment'>
@@ -264,6 +392,10 @@ const Comment =({userName,comment, block, pageId, editBlock ,setCommentBlock}:Co
           comment={comment}
           mainComment={true}
           block={block}
+          pageId={pageId}
+          editBlock={editBlock}
+          setCommentBlock={setCommentBlock}
+          setMoreOpen={setMoreOpen}
         />
       </div>
       <div className='comment_comment'>
@@ -272,7 +404,11 @@ const Comment =({userName,comment, block, pageId, editBlock ,setCommentBlock}:Co
           key={`commentBlock_${comment.id}`} 
           comment={comment}
           mainComment={false}
+          pageId={pageId}
           block={block}
+          editBlock={editBlock}
+          setCommentBlock={setCommentBlock}
+          setMoreOpen={setMoreOpen}
         />)
         }
       </div>
@@ -287,8 +423,7 @@ const Comment =({userName,comment, block, pageId, editBlock ,setCommentBlock}:Co
     </div>
   )
 };
-const Comments =({pageId,block, userName ,editBlock ,setCommentBlock}:CommentsProps)=>{
-  
+const Comments =({pageId,block, userName ,editBlock ,setCommentBlock ,setMoreOpen}:CommentsProps)=>{
   const [targetComments, setTargetComment]= useState<BlockCommentType[]| null>(null);
   const [resolveComments, setResolveComments]= useState<BlockCommentType[]| null>(null);
   const [openComments, setOpenComments]= useState<BlockCommentType[]| null>(null);
@@ -328,6 +463,7 @@ const Comments =({pageId,block, userName ,editBlock ,setCommentBlock}:CommentsPr
               pageId={pageId}
               editBlock={editBlock}
               setCommentBlock={setCommentBlock}
+              setMoreOpen={setMoreOpen}
             />
           )
           }
