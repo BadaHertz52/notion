@@ -3,6 +3,11 @@
   font-weight: initial;
 }
 
+#mainMenu,
+#sideMenu,
+#popupMenu{
+  @include popupMenu
+}
 #mainMenu {
   @include popupMenu;
   width:240px;
@@ -118,8 +123,8 @@
   }
 
 }
+
 #pageMenu {
-  @include popupMenu;
   .inner{
     width: 100%;
     box-sizing: border-box;
