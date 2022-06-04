@@ -505,9 +505,22 @@ a:link, a:active, a:visited {
   background: #EDECE9;
 }
 
+.commentType {
+  border-bottom: 1px solid #d6d6d6;
+  padding: 0 5%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.commentType button {
+  height: 100%;
+  margin: 10px 5px;
+}
+
 .comment {
-  border-top: 1px solid #d6d6d6;
   padding: 5%;
+  border-top: 1px solid #d6d6d6;
 }
 
 .comment .commentInput {
@@ -617,6 +630,15 @@ a:link, a:active, a:visited {
       flex-shrink: 0;
   padding-bottom: 2px;
   background: rgba(255, 212, 0, 0.8);
+}
+
+.commentBlock .tool button:hover {
+  background-color: rgba(49, 45, 33, 0.11);
+  color: black;
+}
+
+.commentBlock .moreTool {
+  position: relative;
 }
 
 #popupMenu {
@@ -730,6 +752,74 @@ a:link, a:active, a:visited {
 
 .commentInput .commentText:focus {
   outline: none;
+}
+
+#tool_more {
+  width: 320px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  background-color: #ffff;
+  margin: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  pointer-events: auto;
+  -webkit-transform: matrix(1, 0, 0, 1, 0, 0);
+          transform: matrix(1, 0, 0, 1, 0, 0);
+  z-index: 1;
+  border-radius: 10px;
+  -webkit-box-shadow: 0px 0px 23px -5px #ababab;
+  box-shadow: 0px 0px 23px -5px #ababab;
+  width: 200px;
+  z-index: 15;
+}
+
+#tool_more::-webkit-scrollbar-thumb {
+  background: #D3D1CB;
+}
+
+#tool_more::-webkit-scrollbar-track {
+  background: #EDECE9;
+}
+
+#tool_more button {
+  width: 100%;
+  padding: 10px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-size: 14px;
+  line-height: 16.8px;
+  min-height: 28px;
+}
+
+#tool_more button:hover {
+  background-color: rgba(49, 45, 33, 0.11);
+}
+
+#tool_more button svg {
+  width: 18px;
+  height: inherit;
+  font-weight: lighter;
+}
+
+#tool_more button span {
+  margin-left: 6px;
+}
+
+#tool_more .aboutComments {
+  color: rgba(55, 53, 47, 0.65);
+  font-size: 13px;
+  border-top: 1px solid #d6d6d6;
 }
 
 div {

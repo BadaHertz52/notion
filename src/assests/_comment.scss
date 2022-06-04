@@ -39,9 +39,18 @@
   @include popupMenu;
   z-index: 10;
 }
+.commentType{
+  border-bottom: 1px solid $lightMud;
+  padding: 0 5%; 
+  display: flex;
+  button{
+    height: 100%;
+    margin: 10px 5px; 
+  }
+}
 .comment {
-  border-top: 1px solid $lightMud;
   padding: 5%;
+  border-top: 1px solid $lightMud;
   .commentInput{
     padding: 0;
     width: 100%;
@@ -118,6 +127,18 @@
     padding-bottom: 2px;
     background: rgba(255, 212, 0, 0.8);
   } 
+  .tool {
+    button{
+
+      &:hover{
+        background-color: $itemHover;
+        color:black
+      }
+    }
+  }
+  .moreTool{
+    position: relative;
+  }
 }
 #popupMenu{
   padding: 2%;
@@ -155,3 +176,36 @@
       }
     }
   }
+#tool_more{
+  @include popupMenu;
+  width: 200px;
+  z-index: 15;
+  button{
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    line-height: 16.8px;
+    min-height: 28px;
+    &:hover{
+      background-color: $itemHover;
+    }
+    svg{
+      width: 18px;
+      height: inherit;
+      font-weight: lighter;
+    }
+    span{
+      margin: {
+        left: 6px;
+      };
+    }
+  }
+  .aboutComments{
+    color: $itemText;
+    font-size: 13px;
+    border-top: 1px solid $lightMud;
+  }
+}
