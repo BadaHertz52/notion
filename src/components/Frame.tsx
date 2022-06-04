@@ -198,6 +198,8 @@ const Frame =({ pages, firstlist,userName, page,side,  editBlock, addBlock,chang
                 addPage={addPage}
                 editPage={editPage}
                 deletePage={deletePage}
+                commentBlock={commentBlock}
+                setCommentBlock={setCommentBlock}
               />
               {commentBlock !==null &&
                   <Comments
@@ -205,6 +207,7 @@ const Frame =({ pages, firstlist,userName, page,side,  editBlock, addBlock,chang
                     block={commentBlock}
                     pageId={page.id}
                     editBlock={editBlock}
+                    setCommentBlock={setCommentBlock}
                 />              
               }
             </div>

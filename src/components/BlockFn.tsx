@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import Menu from './Menu';
 import {Block, listItem, Page} from '../modules/notion';
 
@@ -19,6 +19,8 @@ type BlockFnProp ={
   addPage : (pageId:string , newPage:Page, block:null)=>void,
   editPage : (pageId:string , newPage:Page, block:null)=>void,
   deletePage : (pageId:string , block:null)=>void,
+  commentBlock: Block|null
+  setCommentBlock: Dispatch<SetStateAction<Block|null>>,
 };
 export const popupMoveToPage= "popupMoveToPage" ;
 export const popupComment ="popupComment" ;
@@ -65,7 +67,7 @@ export const detectRange =(event:MouseEvent| React.MouseEvent , targetArea:DOMRe
   return (inner_x && inner_y);
 };
 
-const BlockFn =({pages,firstlist, page,userName, addBlock, editBlock, deleteBlock ,addPage, editPage, deletePage}:BlockFnProp)=>{
+const BlockFn =({pages,firstlist, page,userName, addBlock, editBlock, deleteBlock ,addPage, editPage, deletePage ,commentBlock,setCommentBlock}:BlockFnProp)=>{
   const inner =document.getElementById("inner");
   const editTime = JSON.stringify(Date.now());
   const newContents:string ="";
@@ -177,6 +179,8 @@ const BlockFn =({pages,firstlist, page,userName, addBlock, editBlock, deleteBloc
                     userName={userName}
                     editBlock={editBlock}
                     comment={null}
+                    commentBlock={commentBlock}
+                    setCommentBlock={setCommentBlock}
                   />
                 </div>
               </div>

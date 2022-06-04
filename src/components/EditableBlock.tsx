@@ -5,7 +5,7 @@ import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import { bg_default, Block, BlockType, blockTypes, defaultColor, findBlock, Page } from '../modules/notion';
 import CommandBlock from './CommandBlock';
 import { Command } from '../containers/EditorContainer';
-import BlockComponent, { BlockComment } from './BlockComponent';
+import BlockComponent from './BlockComponent';
 import { detectRange } from './BlockFn';
 
 type findTargetBlockReturn ={
@@ -127,7 +127,6 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
     boolean:false,
     command:null
   }); 
-  const [commentTargetId, setCommentTargetId]=useState<string|null>(null);
 
   useEffect(()=>{
     if(storageItem !== null){
@@ -295,7 +294,6 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
         const positionBottom = position_mainBlock?.bottom;
         comments?.setAttribute("style", `left:${positionX}px; top:${positionBottom}px ; width:${width}px`);
         editor?.setAttribute("style", "overflow:hidden");
-        setCommentTargetId(id);
         const {BLOCK} =findBlock(page, id)
         setCommentBlock(BLOCK);
       }
@@ -304,7 +302,6 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
       const commentsDocArea =comments?.getClientRects()[0];
       const isInnerCommentsDoc =detectRange(event, commentsDocArea);
       if(!isInnerCommentsDoc){
-        setCommentTargetId(null);
         setCommentBlock(null);
         editor?.setAttribute("style", "overflow-y:scroll");
       }

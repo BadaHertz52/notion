@@ -1,5 +1,5 @@
 
-import React, {  FormEvent,useState } from 'react';
+import React, {  Dispatch, FormEvent,SetStateAction,useEffect,useState } from 'react';
 import { CSSProperties } from 'styled-components';
 import { Block, BlockCommentType, CommentType } from '../modules/notion';
 import { BsFillArrowUpCircleFill, BsLink45Deg, BsThreeDots } from 'react-icons/bs';
@@ -13,6 +13,7 @@ type CommentsProps={
   pageId: string,
   userName:string,
   editBlock :(pageId: string, block: Block) => void,
+  setCommentBlock: Dispatch<SetStateAction<Block|null>>,
 };
 type CommentProps ={
   userName: string,
@@ -20,12 +21,15 @@ type CommentProps ={
   pageId:string,
   block:Block,
   editBlock :(pageId: string, block: Block) => void,
+  setCommentBlock: Dispatch<SetStateAction<Block|null>>,
 };
 type CommentInputProps={
   userName: string,
   pageId: string,
   comment:BlockCommentType | null,
   editBlock :(pageId: string, block: Block) => void,
+  commentBlock: Block|null,
+  setCommentBlock: Dispatch<SetStateAction<Block|null>>,
 }
 type CommentBlockProps ={
   comment: CommentType,
@@ -37,7 +41,7 @@ type CommentToolProps ={
   mainComment:boolean
 };
 
-export const CommentInput =({userName, pageId ,comment,editBlock}:CommentInputProps)=>{
+export const CommentInput =({userName, pageId ,comment,editBlock, commentBlock, setCommentBlock}:CommentInputProps)=>{
   const userNameFirstLetter =userName.substring(0,1).toUpperCase();
   const editableBlock = document.getElementsByClassName("editableBlock")[0] as HTMLElement | undefined ;
   const width = editableBlock !== undefined ? editableBlock.offsetWidth - 192 : '100%' ;
@@ -47,9 +51,7 @@ export const CommentInput =({userName, pageId ,comment,editBlock}:CommentInputPr
     border:"none"
   });
   const [text, setText]=useState<string>("");
-  
-  const sessionItem = sessionStorage.getItem("blockFnTargetBlock") as string;
-  const block:Block= JSON.parse(sessionItem);
+
 
   const onInputText=(event:FormEvent<HTMLInputElement>)=>{
     const target =event?.currentTarget ; 
@@ -69,55 +71,73 @@ export const CommentInput =({userName, pageId ,comment,editBlock}:CommentInputPr
     }
   };
 
-  const addComment =(event:React.MouseEvent<HTMLButtonElement>)=>{
+  const onClick =(event:React.MouseEvent<HTMLButtonElement>)=>{
     const editTime =JSON.stringify(Date.now());
     const newId = `comment_${editTime}`;
-    if(comment !==null && block.comments !== null){
-      // block.comments 중 특정 comment에 comment를 다는 
-      const commentsArry =[...block.comments];
-      const ids: string[] = block.comments.map((comment:BlockCommentType)=> comment.id);
-      const commentIndex = ids.indexOf(comment.id);
-
-      const comment_newComment:CommentType ={
-        id:newId,
-        userName: userName,
-        editTime:editTime,
-        content: text ,
-      };
-      const updatedComment:BlockCommentType ={
-        ...comment,
-        comments:comment.comments !==null? 
-                comment.comments.concat(comment_newComment) :
-                [comment_newComment],
-        commentsId: comment.commentsId !==null ?
-        comment.commentsId.concat(comment_newComment.id):
-        [comment_newComment.id],
-      };
-      commentsArry.splice(commentIndex,1, updatedComment);
-
-      const newBlock:Block ={
-        ...block,
-        comments:commentsArry
-      }
+    const updateBlock =(newBlock:Block)=>{
       editBlock(pageId, newBlock );
-
-    }else{
-      const newComment :BlockCommentType ={
-        id:newId,
-        userName:userName,
-        content:text,
-        type:"open",
-        editTime:editTime,
-        comments:null,
-        commentsId:null,
-      };
-        const newBlock :Block={
-          ...block,
-          comments:block.comments === null? [newComment]:block.comments.concat(newComment)
+      setCommentBlock(newBlock);
+    };
+    const addComment =(block:Block , blockComments:BlockCommentType[])=>{
+      if(comment !==null ){
+        // commentBlock.comments 중 특정 comment에 comment를 다는 
+        const commentsArry =[...blockComments];
+        const ids: string[] = blockComments?.map((comment:BlockCommentType)=> comment.id) as string[];
+        const commentIndex = ids.indexOf(comment.id);
+        const comment_newComment:CommentType ={
+          id:newId,
+          userName: userName,
+          editTime:editTime,
+          content: text ,
         };
-        editBlock(pageId ,newBlock );
-    }
+        const updatedComment:BlockCommentType ={
+          ...comment,
+          comments:comment.comments !==null? 
+                  comment.comments.concat(comment_newComment) :
+                  [comment_newComment],
+          commentsId: comment.commentsId !==null ?
+          comment.commentsId.concat(comment_newComment.id):
+          [comment_newComment.id],
+        };
+        commentsArry.splice(commentIndex,1, updatedComment);
 
+        const newBlock:Block ={
+          ...block,
+          comments:commentsArry
+        }
+        updateBlock(newBlock)
+      }else{
+        const newComment :BlockCommentType ={
+          id:newId,
+          userName:userName,
+          content:text,
+          type:"open",
+          editTime:editTime,
+          comments:null,
+          commentsId:null,
+        };
+          const newBlock :Block={
+            ...block,
+            comments:blockComments === null? [newComment]:blockComments.concat(newComment)
+          };
+          updateBlock(newBlock);
+      }
+    };
+    if(commentBlock ==null){
+      const sessionItem = sessionStorage.getItem("blockFnTargetBlock") as string;
+      const block:Block= JSON.parse(sessionItem);
+      if(block.comments !==null){
+        addComment(block, block.comments);
+      }else{
+        console.log("Erro: comments of this block is not ")
+      };
+    }else{  
+      if(commentBlock.comments !==null){
+        addComment(commentBlock, commentBlock.comments);
+      }else{
+        console.log("Erro: comments of this block is not ")
+      };
+    }
   };
 
   return(
@@ -139,7 +159,7 @@ export const CommentInput =({userName, pageId ,comment,editBlock}:CommentInputPr
         />
         <button 
           type="button"
-          onClick={addComment}
+          onClick={onClick}
           id="commentInputSubmit"
           name="commentInputSubmit"
           disabled ={text ==null || text ===""}
@@ -238,7 +258,7 @@ const CommentBlock =({comment ,mainComment ,block}:CommentBlockProps)=>{
     </div>
   )
 }
-const Comment =({userName,comment, block, pageId, editBlock}:CommentProps)=>{
+const Comment =({userName,comment, block, pageId, editBlock ,setCommentBlock}:CommentProps)=>{
 
   return(
     <div className='comment'>
@@ -251,7 +271,8 @@ const Comment =({userName,comment, block, pageId, editBlock}:CommentProps)=>{
       </div>
       <div className='comment_comment'>
         {comment.comments?.map((comment:CommentType)=>
-        <CommentBlock 
+        <CommentBlock
+          key={`commentBlock_${comment.id}`} 
           comment={comment}
           mainComment={false}
           block={block}
@@ -263,30 +284,35 @@ const Comment =({userName,comment, block, pageId, editBlock}:CommentProps)=>{
         pageId={pageId}
         editBlock={editBlock}
         comment={comment}
+        commentBlock={block}
+        setCommentBlock={setCommentBlock}
       />
     </div>
   )
 };
-const Comments =({pageId,block, userName ,editBlock}:CommentsProps)=>{
-  const comments=block.comments ;
-
-  const resolveComments :BlockCommentType[]| null =comments !==null ? 
-  comments?.filter((comment:BlockCommentType)=> comment.type ==="resolve") :
-  null;
-  const opendComments :BlockCommentType[]| null = comments !== null ?
-  comments?.filter((comment:BlockCommentType)=> comment.type ==="open"):
-    null;
-  const [targetComments, setTargetComment]= useState<BlockCommentType[]| null>(comments);
+const Comments =({pageId,block, userName ,editBlock ,setCommentBlock}:CommentsProps)=>{
   
+  const [targetComments, setTargetComment]= useState<BlockCommentType[]| null>(null);
+  const [resolveComments, setResolveComments]= useState<BlockCommentType[]| null>(null);
+  const [openComments, setOpenComments]= useState<BlockCommentType[]| null>(null);
+
+  useEffect(()=>{
+    setTargetComment(block.comments);
+    if(block.comments !==null){
+      setResolveComments(block.comments?.filter((comment:BlockCommentType)=> comment.type ==="resolve") );
+
+      setOpenComments( block.comments?.filter((comment:BlockCommentType)=> comment.type ==="open"))
+    }
+  },[block]);
   return(
     <div 
       id='comments'
     >
-      {resolveComments !==null && resolveComments[0]!== undefined &&
+      {resolveComments !==null && openComments !==null &&
         <section className="commentType">
           <button >
             <span>Open</span>
-            <span>{opendComments?.length}</span>
+            <span>{openComments?.length}</span>
           </button>
           <button className="commentType">
             <span>Resolve</span>
@@ -304,6 +330,7 @@ const Comments =({pageId,block, userName ,editBlock}:CommentsProps)=>{
               block={block}
               pageId={pageId}
               editBlock={editBlock}
+              setCommentBlock={setCommentBlock}
             />
           )
           }
