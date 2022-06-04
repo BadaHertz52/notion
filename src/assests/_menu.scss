@@ -2,26 +2,6 @@
 .menu {
   font-weight: initial;
 }
-@mixin searchInput {
-    width:90%;
-    height: 1.5rem;
-    font-size: 15px;
-    padding-left: 6px;
-    color: $itemText;
-    &::placeholder{
-      color: $mud;
-    }
-    &:focus{
-      box-sizing: border-box;
-      outline: 3.5px solid rgb(169, 226, 245);
-      border:none;
-    }
-    margin:0 5%;
-    border-radius: 5px;
-    background-color: $brightMud;
-    border:  1px solid $mud;
-    box-shadow:rgba(15, 15, 15, 0.162)0px 0px 1px inset ;
-};
 
 #mainMenu {
   @include popupMenu;
