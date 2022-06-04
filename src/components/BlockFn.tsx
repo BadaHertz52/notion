@@ -173,7 +173,6 @@ const BlockFn =({pages,firstlist, page,userName, addBlock, editBlock, deleteBloc
               </div>
               :
               <div id="popupMenu">
-                <div className='comments'>
                   <CommentInput
                     pageId={page.id}
                     userName={userName}
@@ -182,7 +181,6 @@ const BlockFn =({pages,firstlist, page,userName, addBlock, editBlock, deleteBloc
                     commentBlock={commentBlock}
                     setCommentBlock={setCommentBlock}
                   />
-                </div>
               </div>
           )
           }
