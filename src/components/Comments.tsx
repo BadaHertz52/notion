@@ -54,6 +54,13 @@ type CommentToolProps ={
   setMoreOpen:Dispatch<React.SetStateAction<boolean>>,
 };
 
+type ResolveBtnProps ={
+  comment:BlockCommentType,
+  block:Block,
+  pageId: string,
+  editBlock:(pageId: string, block: Block) => void,
+  setCommentBlock: Dispatch<SetStateAction<Block|null>>,
+};
 export const CommentInput =({userName, pageId ,comment,editBlock, commentBlock, setCommentBlock}:CommentInputProps)=>{
   const userNameFirstLetter =userName.substring(0,1).toUpperCase();
 
@@ -325,14 +332,21 @@ const CommentTool =({mainComment , comment,block ,pageId ,editBlock ,setCommentB
   return(
     <div className="tool">
       {mainComment &&
-          <button className='resolveTool'>
-          Resolve
-        </button>
+        <ResolveBtn
+          comment ={comment as BlockCommentType}
+          block={block}
+          pageId={pageId}
+          editBlock={editBlock}
+          setCommentBlock={setCommentBlock}
+        />
       }
-      <button className='moreTool'>
+      <button 
+        className='moreTool'
+        onClick={openToolMore}
+      >
         <BsThreeDots/>
-      </button>
 
+      </button>
   </div>
   )
 };
@@ -442,13 +456,17 @@ const Comments =({pageId,block, userName ,editBlock ,setCommentBlock ,setMoreOpe
     >
       {resolveComments !==null && resolveComments.length>0 &&
         <section className="commentType">
-          <button >
+          <button 
+            id="openTypeBtn"
+          >
             <span>Open</span>
-            <span>{openComments?.length}</span>
+            <span>{`(${openComments?.length})`}</span>
           </button>
-          <button className="commentType">
+          <button 
+            id="resolveTypeBtn"
+          >
             <span>Resolve</span>
-            <span>{resolveComments?.length}</span>
+            <span>{`(${resolveComments?.length})`}</span>
           </button>
         </section>
       }
