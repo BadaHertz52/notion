@@ -43,9 +43,7 @@ type CommentToolProps ={
 
 export const CommentInput =({userName, pageId ,comment,editBlock, commentBlock, setCommentBlock}:CommentInputProps)=>{
   const userNameFirstLetter =userName.substring(0,1).toUpperCase();
-  const editableBlock = document.getElementsByClassName("editableBlock")[0] as HTMLElement | undefined ;
-  const width = editableBlock !== undefined ? editableBlock.offsetWidth - 192 : '100%' ;
-  
+
   const [submitStyle,setSubmitStyle] =useState<CSSProperties>({
     fill:"grey",
     border:"none"
@@ -57,7 +55,7 @@ export const CommentInput =({userName, pageId ,comment,editBlock, commentBlock, 
     const target =event?.currentTarget ; 
     const value =target.value;
     setText(value);
-    
+    console.log("value", value, event)
     if(value ==null  || value===""){
       setSubmitStyle({
         fill:"grey",
@@ -143,7 +141,6 @@ export const CommentInput =({userName, pageId ,comment,editBlock, commentBlock, 
   return(
     <div 
       className="commentInput"
-      style ={{width: width}}
     >
       <div className='firstLetter'>
         {userNameFirstLetter}
