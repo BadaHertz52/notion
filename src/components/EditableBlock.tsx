@@ -275,7 +275,6 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
   function addEvent(event:React.MouseEvent){
     const target =event.target as HTMLElement;
     //toggle btn 
-    console.log("target", target);
     const targetClassName = target.getAttribute("class");
     const targetParentElement = target.parentElement as HTMLElement; 
     const editor =document.getElementsByClassName("editor"
