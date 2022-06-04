@@ -1,9 +1,3 @@
-@mixin initialBtn {
-  border:none;
-  background-color:transparent;
-  padding:0
-};
-
 $pistachioshell :#F7F6F3 ;
 $mud:#B9B8B6;
 $lightMud:#d6d6d6;
@@ -13,6 +7,13 @@ $itemText: rgba(55, 53, 47, 0.65);
 $itemHover:rgba(49, 45, 33, 0.11);
 $commentHover: rgba(255, 212, 0, 0.8);
 $comment:rgba(255,212,0,0.14);
+
+@mixin initialBtn {
+  border:none;
+  background-color:transparent;
+  padding:0
+};
+
 @mixin searchInput {
   width:90%;
   height: 1.5rem;
