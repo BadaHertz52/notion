@@ -308,7 +308,7 @@ const Comments =({pageId,block, userName ,editBlock ,setCommentBlock}:CommentsPr
     <div 
       id='comments'
     >
-      {resolveComments !==null && openComments !==null &&
+      {resolveComments !==null && resolveComments.length>0 &&
         <section className="commentType">
           <button >
             <span>Open</span>
