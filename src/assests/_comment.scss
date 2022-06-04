@@ -17,26 +17,38 @@
     display: none
   }
 }
+.commentBlock, .commentInput{
+  .firstLetter {
+    border-radius: 50%;
+    border :1px solid black;
+    color: black;
+    aspect-ratio: 1;
+    text-align: center;
+    flex-grow: 0;
+    flex-shrink: 0;
+    font : {
+      size:1rem ;
+      weight: initial;
+    }
+    width:24px;
+    height: 24px;
+  }
+}
 #comments {
   position: absolute;
-@include popupMenu;
-z-index: 10;
-padding: 2%;
-.firstLetter{
-  border-radius: 50%;
-  border :1px solid black;
-  color: black;
-  aspect-ratio: 1;
-  text-align: center;
-  flex-grow: 0;
-  flex-shrink: 0;
-  font : {
-    size:1rem ;
-    weight: initial;
+  @include popupMenu;
+  z-index: 10;
+}
+.comment {
+  border-top: 1px solid $lightMud;
+  padding: 5%;
+  .commentInput{
+    padding: 0;
+    width: 100%;
   }
-  width:24px;
-  height: 24px;
-  }
+}
+.comment:first-child{
+  border-top: none;
 }
 .commentBlock{
   section {
@@ -107,32 +119,37 @@ padding: 2%;
     background: rgba(255, 212, 0, 0.8);
   } 
 }
+#popupMenu{
+  padding: 2%;
+  @include popupMenu;
+  .commentInput{
+    flex-direction: row;
+  }
+}
 .commentInput {
   display: flex;
-  width: 94%;
+  flex-direction: row;
+  width: 100%;
   height: 24px;
   form{
+    display: flex;
     flex-grow: 1;
     flex-shrink: 1;
     height: inherit;
-    width: calc( 100% - 24px);
     position: relative;
+    width: calc( 100% - 24px);
+    box-sizing: border-box
     }
     input[type="text"]{
+      @include searchInput;
+      background-color: initial;
+      border: none;
       padding: 0;
       height: 100%;
-      position: absolute;
-      top:0;
-      width: 80%;
-      margin-left:5px;
-    }
-    #commentInputSubmit{
-      position: absolute;
-      top:0;
-      left: 80%
+      width: 90%;
+      margin: 0 2.5%;
     }
     .commentText{
-      border: none;
       &:focus{
         outline:  none;
       }

@@ -77,7 +77,7 @@ a:link, a:active, a:visited {
   outline: 0px solid transparent;
 }
 
-.editabelBlock,
+.editableBlock,
 .blockFn button {
   font-size: 1rem;
   line-height: 24px;
@@ -456,6 +456,23 @@ a:link, a:active, a:visited {
   display: none;
 }
 
+.commentBlock .firstLetter, .commentInput .firstLetter {
+  border-radius: 50%;
+  border: 1px solid black;
+  color: black;
+  aspect-ratio: 1;
+  text-align: center;
+  -webkit-box-flex: 0;
+      -ms-flex-positive: 0;
+          flex-grow: 0;
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+  font-size: 1rem;
+  font-weight: initial;
+  width: 24px;
+  height: 24px;
+}
+
 #comments {
   position: absolute;
   width: 320px;
@@ -478,7 +495,6 @@ a:link, a:active, a:visited {
   -webkit-box-shadow: 0px 0px 23px -5px #ababab;
   box-shadow: 0px 0px 23px -5px #ababab;
   z-index: 10;
-  padding: 2%;
 }
 
 #comments::-webkit-scrollbar-thumb {
@@ -489,21 +505,18 @@ a:link, a:active, a:visited {
   background: #EDECE9;
 }
 
-#comments .firstLetter {
-  border-radius: 50%;
-  border: 1px solid black;
-  color: black;
-  aspect-ratio: 1;
-  text-align: center;
-  -webkit-box-flex: 0;
-      -ms-flex-positive: 0;
-          flex-grow: 0;
-  -ms-flex-negative: 0;
-      flex-shrink: 0;
-  font-size: 1rem;
-  font-weight: initial;
-  width: 24px;
-  height: 24px;
+.comment {
+  border-top: 1px solid #d6d6d6;
+  padding: 5%;
+}
+
+.comment .commentInput {
+  padding: 0;
+  width: 100%;
+}
+
+.comment:first-child {
+  border-top: none;
 }
 
 .commentBlock section {
@@ -606,41 +619,112 @@ a:link, a:active, a:visited {
   background: rgba(255, 212, 0, 0.8);
 }
 
+#popupMenu {
+  padding: 2%;
+  width: 320px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  background-color: #ffff;
+  margin: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  pointer-events: auto;
+  -webkit-transform: matrix(1, 0, 0, 1, 0, 0);
+          transform: matrix(1, 0, 0, 1, 0, 0);
+  z-index: 1;
+  border-radius: 10px;
+  -webkit-box-shadow: 0px 0px 23px -5px #ababab;
+  box-shadow: 0px 0px 23px -5px #ababab;
+}
+
+#popupMenu::-webkit-scrollbar-thumb {
+  background: #D3D1CB;
+}
+
+#popupMenu::-webkit-scrollbar-track {
+  background: #EDECE9;
+}
+
+#popupMenu .commentInput {
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
 .commentInput {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  width: 94%;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  width: 100%;
   height: 24px;
 }
 
 .commentInput form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
   -webkit-box-flex: 1;
       -ms-flex-positive: 1;
           flex-grow: 1;
   -ms-flex-negative: 1;
       flex-shrink: 1;
   height: inherit;
-  width: calc( 100% - 24px);
   position: relative;
+  width: calc( 100% - 24px);
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 
 .commentInput input[type="text"] {
+  width: 90%;
+  height: 1.5rem;
+  font-size: 15px;
+  padding-left: 6px;
+  color: rgba(55, 53, 47, 0.65);
+  margin: 0 5%;
+  border-radius: 5px;
+  background-color: rgba(242, 241, 238, 0.6);
+  border: 1px solid #B9B8B6;
+  -webkit-box-shadow: rgba(15, 15, 15, 0.162) 0px 0px 1px inset;
+          box-shadow: rgba(15, 15, 15, 0.162) 0px 0px 1px inset;
+  background-color: initial;
+  border: none;
   padding: 0;
   height: 100%;
-  position: absolute;
-  top: 0;
-  width: 80%;
-  margin-left: 5px;
+  width: 90%;
+  margin: 0 2.5%;
 }
 
-.commentInput #commentInputSubmit {
-  position: absolute;
-  top: 0;
-  left: 80%;
+.commentInput input[type="text"]::-webkit-input-placeholder {
+  color: #B9B8B6;
 }
 
-.commentInput .commentText {
+.commentInput input[type="text"]:-ms-input-placeholder {
+  color: #B9B8B6;
+}
+
+.commentInput input[type="text"]::-ms-input-placeholder {
+  color: #B9B8B6;
+}
+
+.commentInput input[type="text"]::placeholder {
+  color: #B9B8B6;
+}
+
+.commentInput input[type="text"]:focus {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  outline: 3.5px solid #a9e2f5;
   border: none;
 }
 
@@ -682,6 +766,42 @@ a:link, a:active, a:visited {
 
 .menu {
   font-weight: initial;
+}
+
+#mainMenu,
+#sideMenu,
+#popupMenu {
+  width: 320px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  background-color: #ffff;
+  margin: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  pointer-events: auto;
+  -webkit-transform: matrix(1, 0, 0, 1, 0, 0);
+          transform: matrix(1, 0, 0, 1, 0, 0);
+  z-index: 1;
+  border-radius: 10px;
+  -webkit-box-shadow: 0px 0px 23px -5px #ababab;
+  box-shadow: 0px 0px 23px -5px #ababab;
+}
+
+#mainMenu::-webkit-scrollbar-thumb,
+#sideMenu::-webkit-scrollbar-thumb,
+#popupMenu::-webkit-scrollbar-thumb {
+  background: #D3D1CB;
+}
+
+#mainMenu::-webkit-scrollbar-track,
+#sideMenu::-webkit-scrollbar-track,
+#popupMenu::-webkit-scrollbar-track {
+  background: #EDECE9;
 }
 
 #mainMenu {
@@ -912,36 +1032,6 @@ a:link, a:active, a:visited {
 
 .menu_color .colorName {
   margin-left: 5px;
-}
-
-#pageMenu {
-  width: 320px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  background-color: #ffff;
-  margin: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
-  pointer-events: auto;
-  -webkit-transform: matrix(1, 0, 0, 1, 0, 0);
-          transform: matrix(1, 0, 0, 1, 0, 0);
-  z-index: 1;
-  border-radius: 10px;
-  -webkit-box-shadow: 0px 0px 23px -5px #ababab;
-  box-shadow: 0px 0px 23px -5px #ababab;
-}
-
-#pageMenu::-webkit-scrollbar-thumb {
-  background: #D3D1CB;
-}
-
-#pageMenu::-webkit-scrollbar-track {
-  background: #EDECE9;
 }
 
 #pageMenu .inner {
