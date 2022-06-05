@@ -200,12 +200,46 @@ export const CommentInput =({userName, pageId ,comment,editBlock, commentBlock, 
     </div>
   )
 };
+
+
 export const ToolMore =({pageId, block, editBlock, setCommentBlock}:ToolMoreProps)=>{
   const toolMoreItem = sessionStorage.getItem("toolMoreItem");
-
   const [comment, setComment] =useState<BlockCommentType | CommentType | null >(null);
   const [style, setStyle]= useState<CSSProperties>();
+  const editTime = JSON.stringify(Date.now());
 
+  const deleteComment =()=>{
+    if(comment !==null && block !==null && block.comments !==null){
+      const block_comments :BlockCommentType[] =[...block.comments];
+      const mainCommentIds = block.comments.map((comment:BlockCommentType)=> comment.id);
+      const updateBlock =()=>{
+        const newBlock ={
+          ...block,
+          editTime:editTime,
+          comments : block_comments
+        };
+        editBlock(pageId, newBlock);
+      };
+      if(mainCommentIds?.includes(comment.id)){
+          //BlockCommentType
+          const index = mainCommentIds.indexOf(comment.id);
+          block_comments.splice(index,1);
+      }else{
+        //CommentType
+        const mainComments :BlockCommentType = block.comments.filter((block_comment:BlockCommentType)=>
+          block_comment.commentsId?.includes(comment.id))[0];
+        const mainCommentsIndex= mainCommentIds.indexOf(mainComments.id);
+        const commentIndex = mainCommentIds.indexOf(comment.id);
+        mainComments.comments?.splice(commentIndex,1);
+        mainComments.commentsId?.splice(commentIndex,1);
+        const newMainComments :BlockCommentType ={
+          ...mainComments,
+        };
+      block_comments.splice(mainCommentsIndex, 1, newMainComments);
+      };
+      updateBlock();
+    }
+  };
   useEffect(()=>{
     if(toolMoreItem !==null){
       const item :ToolMoreItem = JSON.parse(toolMoreItem);
@@ -225,7 +259,9 @@ export const ToolMore =({pageId, block, editBlock, setCommentBlock}:ToolMoreProp
           Edit comment
         </span>
       </button>
-      <button>
+      <button
+        onClick={deleteComment}
+      >
         <IoTrashOutline/>
         <span>
           Delete comment
@@ -243,7 +279,8 @@ export const ToolMore =({pageId, block, editBlock, setCommentBlock}:ToolMoreProp
       </button>
     </div>
   )
-}
+};
+
 const CommentTool =({mainComment , comment,block ,pageId ,editBlock ,setCommentBlock ,setMoreOpen}:CommentToolProps)=>{
 
   const ResolveBtn =({comment, block, editBlock, pageId}:ResolveBtnProps)=>{
