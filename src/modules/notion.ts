@@ -562,6 +562,7 @@ const initialState :Notion ={
     blocksId:["text", 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page', 'page2' , 'sub1_1' ,'sub1_2', 'sub2_1' ,"numberList" , "num1", "num2", "num3" , "bulletList", "b1", "b2"],
     subPagesId:['1234'],
     parentsId: null,
+    editTime :JSON.stringify(Date.parse("2021-5-16-15:00"))
   },
   {
     id: '1234',
@@ -575,7 +576,8 @@ const initialState :Notion ={
     blocks:[],
     blocksId:[],
     subPagesId:[],
-    parentsId: ['12345']
+    parentsId: ['12345'],
+    editTime:JSON.stringify(Date.parse("2021-5-18-19:00"))
   },
   {
     id: '123',
@@ -589,7 +591,8 @@ const initialState :Notion ={
     blocks:[],
     blocksId:[],
     subPagesId:[],
-    parentsId:null
+    parentsId:null,
+    editTime:JSON.stringify(Date.parse("2021-5-13-15:00"))
   }
 ]
 };
@@ -671,7 +674,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
 
     const editedPreviousBlock :Block ={
       ...previousBlock,
-      editTime: JSON.stringify(Date.now()),
+      editTime: editTime,
       subBlocksId:[...block.subBlocksId]
     };
     editBlockData(previousBlockIndex, editedPreviousBlock);
@@ -770,7 +773,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
             ...parentBlock,
             contents: `${parentBlock.contents}${action.block.contents}`,
             subBlocksId : newSubBlocksId,
-            editTime: JSON.stringify(Date.now())
+            editTime: editTime
           };
           editBlockData(parentBlockIndex, newParentBlock);
           deleteBlockData(action.block, blockIndex );
@@ -787,7 +790,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
           const newPrevisousBlock:Block ={
             ...BLOCK,
             contents : `${BLOCK.contents}${action.block.contents}`,
-            editTime: JSON.stringify(Date.now())
+            editTime: editTime
           };
           
           editBlockData(index, newPrevisousBlock);
