@@ -692,13 +692,13 @@ export default function notion (state:Notion =initialState , action :NotionActio
 
   switch (action.type) {
     case ADD_BLOCK:
-      targetPage.blocks?.splice(action.nextBlockIndex,0, action.block);
-      targetPage.blocksId?.splice(action.nextBlockIndex,0, action.block.id);
+      const theNumber = action.nextBlockIndex===0? 1:0;
+      targetPage.blocks?.splice(action.nextBlockIndex, theNumber, action.block);
+      targetPage.blocksId?.splice(action.nextBlockIndex, theNumber, action.block.id);
 
       if(action.block.firstBlock){
-        targetPage.firstBlocksId?.splice(action.nextBlockIndex,0,action.block.id);
+        targetPage.firstBlocksId?.splice(action.nextBlockIndex, theNumber,action.block.id);
       };
-
       //subBlock 으로 만들어 졌을 때 
       if(action.block.parentBlocksId!==null){
         updateParentBlock(action.block , action.previousBlockId);
