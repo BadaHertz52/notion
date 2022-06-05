@@ -227,17 +227,28 @@ const updateComments =(pageId: string, block:Block, comment:CommentType | BlockC
         setEditItem(null);
       }
     };
+    const addOrEdit =(block:Block  ,blockComments:BlockCommentType[])=>{
+      if(item ==null){
+        addComment(block, blockComments);
+      }else{
+        !edit ?
+        addComment(block, blockComments):
+        editComment(block);
+      };
+      setText("");
+    };
     if(commentBlock ==null){
       const sessionItem = sessionStorage.getItem("blockFnTargetBlock") as string;
       const block:Block= JSON.parse(sessionItem);
       if(block.comments !==null){
-        addComment(block, block.comments);
+        addOrEdit(block, block.comments);
+
       }else{
         console.log("Erro: comments of this block is not ")
       };
     }else{  
       if(commentBlock.comments !==null){
-        addComment(commentBlock, commentBlock.comments);
+        addOrEdit(commentBlock, commentBlock.comments);
       }else{
         console.log("Erro: comments of this block is not ")
       };
