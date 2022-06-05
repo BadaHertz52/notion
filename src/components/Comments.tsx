@@ -2,10 +2,9 @@
 import React, {  Dispatch, FormEvent,SetStateAction,useEffect,useState } from 'react';
 import { CSSProperties } from 'styled-components';
 import { Block, BlockCommentType, CommentType } from '../modules/notion';
-import { BsFillArrowUpCircleFill, BsLink45Deg, BsThreeDots } from 'react-icons/bs';
+import { BsFillArrowUpCircleFill, BsThreeDots } from 'react-icons/bs';
 import { HiOutlinePencil } from 'react-icons/hi';
 import { IoTrashOutline } from 'react-icons/io5';
-import { AiOutlineQuestionCircle } from 'react-icons/ai';
 import Time from './Time';
 import { detectRange } from './BlockFn';
 type EditCommentItem = {
@@ -364,16 +363,6 @@ export const ToolMore =({pageId, block, editBlock, setCommentBlock ,setMoreOpen}
         <span>
           Delete comment
         </span>
-      </button>
-      <button>
-        <BsLink45Deg/>
-        <span>
-          Copy link to comment
-        </span>
-      </button>
-      <button className='aboutComments'>
-        <AiOutlineQuestionCircle/>
-        <span>Learn about comments</span>
       </button>
     </div>
   )
