@@ -33,7 +33,7 @@ type MenuProps ={
   setPopup :Dispatch<SetStateAction<PopupType>> ,
 };
 
-const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, deleteBlock ,setPopup}:MenuProps)=>{
+const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, deleteBlock ,addPage ,editPage,deletePage,setPopup}:MenuProps)=>{
   const sessionItem = sessionStorage.getItem("blockFnTargetBlock") as string;
   const block:Block= JSON.parse(sessionItem);
   const blockFnElement = document.getElementById("blockFn") ;
@@ -254,6 +254,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
               editTime={JSON.stringify(Date.now())}
               editBlock={editBlock}
               setCommand={setCommand}
+              addPage={addPage}
             />
         }
         {color &&
@@ -265,11 +266,14 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
         }
         {turnInToPage &&
           <PageMenu
+            currentPage={page}
             pages={pages}
             firstlist={firstlist}
             existingPage={page}
             addBlock={addBlock}
+            editBlock={editBlock}
             deleteBlock={deleteBlock}
+            addPage={addPage}
             setMenuOpen={setMenuOpen}
           />
         }

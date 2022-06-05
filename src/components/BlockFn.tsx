@@ -163,11 +163,14 @@ const BlockFn =({pages,firstlist, page,userName, addBlock, editBlock, deleteBloc
             popup.what === popupMoveToPage ?
               <div id="popupMenu">
                 <PageMenu
+                  currentPage={page}
                   pages={pages}
                   firstlist={firstlist}
                   existingPage={page}
                   deleteBlock={deleteBlock}
                   addBlock={addBlock}
+                  editBlock={editBlock}
+                  addPage={addPage}
                   setMenuOpen={setMenuOpen}
                 /> 
               </div>

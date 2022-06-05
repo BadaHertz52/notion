@@ -1,18 +1,55 @@
 import React, { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { GrDocumentText } from 'react-icons/gr';
-import { Block, listItem, Page } from '../modules/notion';
+import { basicBlockStyle, Block, blockSample, listItem, Page, pageSample } from '../modules/notion';
 
 type PageMenuProps ={
+  currentPage:Page,
   pages:Page[],
   firstlist:listItem[],
   existingPage: Page,
   deleteBlock: (pageId: string, block: Block) => void,
   addBlock: (pageId: string, block: Block, nextBlockIndex: number, previousBlockId: string | null) => void,
+  editBlock: (pageId: string, block: Block) => void,
   setMenuOpen:Dispatch<SetStateAction<boolean>>,
-  //recoveryMenuState:()=>void,
-}
-const PageMenu =({pages, firstlist, existingPage,deleteBlock, addBlock ,setMenuOpen}:PageMenuProps)=>{
+  addPage:( newPage: Page, block: null) => void,
+};
+export   const changeSubPage =(currentPage:Page, block:Block, editBlock: (pageId: string, block: Block) => void,addPage:( newPage: Page, block: null) => void, )=>{
+  const editTime =JSON.stringify(Date.now());
+     //다음 블럭으로 지정한다고 했을 경우 
+    const editedBlock :Block ={
+      ...block,
+      editTime:editTime,
+      type:"page"
+    };
+    editBlock(currentPage.id, editedBlock);
+
+    // page로 바뀐 거 page 에 업데이트 
+    if(block.subBlocksId !==null){
+      const subBlocks:Block[] = currentPage.blocks.filter((BLOCK:Block)=> block.subBlocksId?.includes(BLOCK.id));
+      const newPage :Page ={
+        ...pageSample,
+        header:{
+          ...pageSample.header,
+          title:block.contents
+        },
+        blocksId :block.subBlocksId,
+        blocks:subBlocks,
+        parentsId:[currentPage.id]
+      };
+      addPage(newPage, null);
+    }else{
+      const newPage :Page ={
+        ...pageSample,
+        header:{
+          ...pageSample.header,
+          title:block.contents
+        }
+      };
+      addPage(newPage, null);
+    }
+};
+const PageMenu =({ currentPage,pages, firstlist, existingPage,deleteBlock, addBlock, editBlock,addPage ,setMenuOpen}:PageMenuProps)=>{
 
   type PageButtonProps={
     item: listItem
@@ -24,12 +61,11 @@ const PageMenu =({pages, firstlist, existingPage,deleteBlock, addBlock ,setMenuO
 
   const moveBlockToPage =(pageId:string)=>{
     // 기존 페이지에서 블록 삭제
-    deleteBlock(existingPage.id, block);
-    // 블록을 다른 페이지로 이동
-    addBlock(pageId, block, 0 , null);
+      deleteBlock(existingPage.id, block);
+      // 블록을 다른 페이지로 이동
+      addBlock(pageId, block, 0 , null);
     // close Menu and recovery Menu state
     setMenuOpen(false);
-   // recoveryMenuState();
   };
   
   const PageButton =({item}:PageButtonProps)=>{
@@ -63,7 +99,7 @@ const PageMenu =({pages, firstlist, existingPage,deleteBlock, addBlock ,setMenuO
     })) ;
     setResult(RESULT);
   };
-
+  
   return(
     <div id="pageMenu">
       <div className="inner">
@@ -104,6 +140,7 @@ const PageMenu =({pages, firstlist, existingPage,deleteBlock, addBlock ,setMenuO
         </div>
         <button 
           id="new_sub_page"
+          onClick={()=>changeSubPage(currentPage, block, editBlock, addPage)}
         >
           <AiOutlinePlus/>
           <span>

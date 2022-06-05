@@ -7,6 +7,7 @@ import { RiPlayList2Fill } from 'react-icons/ri';
 import { VscListOrdered } from 'react-icons/vsc';
 import { Command } from '../containers/EditorContainer';
 import { Block, BlockType, blockTypes, Page } from "../modules/notion";
+import { changeSubPage } from './PageMenu';
 
 type CommandBlockProp ={
   page:Page,
@@ -14,9 +15,10 @@ type CommandBlockProp ={
   editTime:string,
   editBlock :(pageId:string, block:Block)=>void,
   setCommand: Dispatch<SetStateAction<Command>> ,
+  addPage:( newPage: Page, block: null) => void,
 };
 
-const CommandBlock =({ page ,block , editTime , editBlock ,setCommand}:CommandBlockProp)=>{
+const CommandBlock =({ page ,block , editTime , editBlock ,addPage ,setCommand}:CommandBlockProp)=>{
   const blockElement = document.getElementById(block.id) as HTMLElement;
   const mainMenu =document.getElementById("mainMenu");
   const commandStyle :CSSProperties={
@@ -55,13 +57,18 @@ const CommandBlock =({ page ,block , editTime , editBlock ,setCommand}:CommandBl
   };
   const changeType=( type:string)=>{
     const blockType:BlockType = blockTypes.filter((block_type)=> block_type === type)[0];
-    const newBlock:Block ={
-      ...block,
-      editTime:editTime,
-      type:blockType
+
+    if(blockType==="page"){
+      changeSubPage(page, block, editBlock, addPage);
+    }else{
+      const newBlock:Block ={
+        ...block,
+        editTime:editTime,
+        type:blockType
+      };
+      console.log("changeType", type, newBlock);
+      editBlock(page.id, newBlock);
     };
-    console.log("changeType", type, newBlock);
-    editBlock(page.id, newBlock);
     setCommand({boolean:false, command:null})
   };
   return(
