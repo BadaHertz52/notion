@@ -8,7 +8,10 @@ import { IoTrashOutline } from 'react-icons/io5';
 import { AiOutlineQuestionCircle } from 'react-icons/ai';
 import Time from './Time';
 import { detectRange } from './BlockFn';
-
+type EditCommentItem = {
+  edit:boolean,
+  comment:BlockCommentType | CommentType
+};
 type CommentsProps={
   block:Block,
   pageId: string,
@@ -148,8 +151,9 @@ const updateComments =(pageId: string, block:Block, comment:CommentType | BlockC
     border:"none"
   });
   const [text, setText]=useState<string>("");
-
-
+  const [edit, setEdit]=useState<boolean>(false);
+  const [editItem, setEditItem]=useState<EditCommentItem|null>(null);
+  const item= sessionStorage.getItem("editCommentItem");
   const onInputText=(event:FormEvent<HTMLInputElement>)=>{
     const target =event?.currentTarget ; 
     const value =target.value;
@@ -255,13 +259,27 @@ const updateComments =(pageId: string, block:Block, comment:CommentType | BlockC
     }
   };
 
+  useEffect(()=>{
+    if(item !==null){
+      const editCommentItem :EditCommentItem= JSON.parse(item);
+      if(editCommentItem?.edit){
+        setEditItem(editCommentItem);
+        setEdit(true) 
+      }else{
+        setEditItem(null);
+        setEdit(false) 
+      }
+    }
+  },[item])
   return(
     <div 
-      className="commentInput"
+      className={edit ? "commentInput editComment" : "commentInput" }
     >
+      {!edit &&
       <div className='firstLetter'>
         {userNameFirstLetter}
-      </div>
+      </div> 
+      }
       <form
       >
         <input
