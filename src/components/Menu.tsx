@@ -31,9 +31,10 @@ type MenuProps ={
   editPage : (pageId:string , newPage:Page, block:null)=>void,
   deletePage : (pageId:string , block:null)=>void,
   setPopup :Dispatch<SetStateAction<PopupType>> ,
+  popup:PopupType
 };
 
-const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, deleteBlock ,addPage ,editPage,deletePage,setPopup}:MenuProps)=>{
+const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, deleteBlock ,addPage ,editPage,deletePage,setPopup ,popup}:MenuProps)=>{
   const sessionItem = sessionStorage.getItem("blockFnTargetBlock") as string;
   const block:Block= JSON.parse(sessionItem);
   const blockFnElement = document.getElementById("blockFn") ;
@@ -56,22 +57,25 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
   };
 
   const recoveryMenuState=()=>{
-    setTurnInto(false);
-    setTurnIntoPage(false);
-    setColor(false);
-    setPopup({
+    turnInto &&setTurnInto(false);
+    turnInToPage && setTurnIntoPage(false);
+    color && setColor(false);
+    popup.popup && setPopup({
       popup:false,
       what: null
     })
   };
   const showTurnInto =()=>{
     setTurnInto(true);
+    console.log("turninto", turnInto);
   };
   const showColorMenu =()=>{
     setColor(true);
+    recoveryMenuState();
   };
   const showPageMenu =()=>{
     setTurnIntoPage(true);
+    recoveryMenuState();
   };
   const onClickMoveTo=()=>{
     setMenuOpen(false);
@@ -158,7 +162,6 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
                 <button
                   className='menu_editBtn'
                   onMouseOver={showTurnInto}
-                  onMouseOut={recoveryMenuState}
                   name="turn into"
                 >
                   <div>
@@ -173,7 +176,6 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
                   className='menu_editBtn'
                   name ="turn into page in"
                   onMouseOver={showPageMenu}
-                  onMouseOut={recoveryMenuState}
                 >
                   <div>
                     <MdOutlineRestorePage/>
@@ -220,7 +222,6 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
                   name='color'
                   className='underline menu_editBtn'
                   onMouseOver={showColorMenu}
-                  onMouseOut={recoveryMenuState}
                 >
                   <div>
                     <AiOutlineFormatPainter/>

@@ -156,6 +156,7 @@ const BlockFn =({pages,firstlist, page,userName, addBlock, editBlock, deleteBloc
             addPage={addPage}
             editPage={editPage}
             deletePage={deletePage}
+            popup={popup}
             setPopup={setPopup}
           />
         }
