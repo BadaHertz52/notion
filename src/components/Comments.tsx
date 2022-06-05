@@ -180,9 +180,10 @@ export const CommentInput =({userName, pageId ,comment,editBlock, commentBlock, 
       editBlock(pageId, newBlock );
       setCommentBlock(newBlock);
     };
+    
     const addComment =(block:Block , blockComments:BlockCommentType[])=>{
       if(comment !==null ){
-        // commentBlock.comments 중 특정 comment에 comment를 다는 
+        // commentBlock.comments 중 특정 comment에 comment를 다는 (Comment의 하위 요소로 존재할 경우) 
         const commentsArry =[...blockComments];
         const ids: string[] = blockComments?.map((comment:BlockCommentType)=> comment.id) as string[];
         const commentIndex = ids.indexOf(comment.id);
@@ -209,6 +210,7 @@ export const CommentInput =({userName, pageId ,comment,editBlock, commentBlock, 
         }
         updateBlock(newBlock)
       }else{
+        //blockFn 에서 새로운 mainComment를 만듦 
         const newComment :BlockCommentType ={
           id:newId,
           userName:userName,
