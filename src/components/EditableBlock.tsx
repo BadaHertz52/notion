@@ -138,7 +138,7 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
     boolean:false,
     command:null
   }); 
-
+  const [blockFnTarget, setBlockFnTarget]=useState<Block|null>(null);
   useEffect(()=>{
     if(storageItem !== null){
       const {editedBlock} = JSON.parse(storageItem) as {pageId: string, editedBlock:Block};
@@ -359,38 +359,69 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
   };
   function showBlockFn (event:React.MouseEvent){
     const target= event.target as HTMLElement;
-    const targetPosition = target.getBoundingClientRect();
-    const targetHeight = targetPosition.height;
-    const targetY = targetPosition.top;
     const targetClassName = target.getAttribute("class");
     const blockFn = document.getElementById("blockFn");
-
-    if(targetClassName==="blockContents" && innerRef.current !==null){
-      
+    if( innerRef.current !==null){
       const editableBlockPosition = innerRef.current.getBoundingClientRect();
       const positionX =editableBlockPosition.left;
       const left = positionX - 45 ;
       blockFn?.classList.toggle("on");
-      const title= target.getAttribute('title') as string;
-      const start = title.indexOf("_contents");
-      const id= title.substring(0, start);
-      const {BLOCK} =findBlock(page, id);
+      const getTitle =(element:Element)=>{
+        const title = element.getAttribute("title");
+        if(title !==null){
+          const start = title.indexOf("_contents");
+          const id= title.substring(0, start);
+          const {BLOCK} =findBlock(page, id);
+          console.log(element ,BLOCK)
+          const position = element.parentElement?.getBoundingClientRect() as DOMRect;
+          const targetHeight = position.height;
+          const targetY = position.top;
+          console.log(blockFn?.classList.contains("on"))
+          if(blockFn?.classList.contains("on")){
+            sessionStorage.setItem("blockFnTargetBlock", JSON.stringify(BLOCK));
+          }else{
+            sessionStorage.removeItem("blockFnTargetBlock");
+          };
 
-      if(blockFn?.classList.contains("on")){
-          sessionStorage.setItem("blockFnTargetBlock", JSON.stringify(BLOCK));
-      }else{
-        sessionStorage.removeItem("blockFnTargetBlock");
-      }
-
-      if(block.type ==="h1" ){
-        const h1Top = targetY + (targetHeight * 0.4);
-        blockFn?.setAttribute("style", `top:${h1Top}px; left:${left}px;`);
-      }else if(block.type ==="h2"){
-        const h2Top = targetY + (targetHeight *0.25);
-        blockFn?.setAttribute("style", `top:${h2Top}px; left:${left}px;`);
-      }else{
-        blockFn?.setAttribute("style", `top:${targetY}px;left:${left}px;`);
+        if(block.type ==="h1" ){
+          const h1Top = targetY + (targetHeight * 0.4);
+          blockFn?.setAttribute("style", `top:${h1Top}px; left:${left}px;`);
+        }else if(block.type ==="h2"){
+          const h2Top = targetY + (targetHeight *0.25);
+          blockFn?.setAttribute("style", `top:${h2Top}px; left:${left}px;`);
+        }else{
+          blockFn?.setAttribute("style", `top:${targetY}px;left:${left}px;`);
+        };
+        }else{
+          console.log("Cant' find title")
+        };
       };
+      switch (target.tagName) {
+        case "DIV":
+          if(targetClassName ==="blockContents"){
+            getTitle(target);
+          };
+          if(targetClassName?.includes("left")){
+            const element = target.nextElementSibling as Element;
+            getTitle(element); 
+          };
+          if(targetClassName ==="contents"){
+            const parentElement =target.parentElement as Element ;
+            getTitle(parentElement);
+          }
+          break;
+        case "SVG":
+          const blockComment = target.parentElement?.nextElementSibling as Element ;
+          getTitle(blockComment);
+          break;
+        case "PATH":
+          const block_comment = target.parentElement?.parentElement?.nextElementSibling as Element ;
+          getTitle(block_comment);
+          break;
+        
+        default:
+          break;
+      }
     }
   };
   function commandChange (event:ContentEditableEvent){

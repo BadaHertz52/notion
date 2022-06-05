@@ -77,20 +77,28 @@ const BlockFn =({pages,firstlist, page,userName, addBlock, editBlock, deleteBloc
     what:null
   });
 
-  const sessionItem = sessionStorage.getItem("blockFnTargetBlock") as string;
-
   const makeBlock =()=>{
-    const targetBlock= JSON.parse(sessionItem);
-    const targetBlockIndex= page.blocksId.indexOf(targetBlock.id);
-    makeNewBlock(page, editTime,addBlock, editBlock, addPage,targetBlock, targetBlockIndex, newContents);
+    const sessionItem = sessionStorage.getItem("blockFnTargetBlock") ;
+    if(sessionItem !==null){
+      const targetBlock= JSON.parse(sessionItem);
+      const targetBlockIndex= page.blocksId.indexOf(targetBlock.id);
+      makeNewBlock(page, editTime,addBlock, editBlock, addPage,targetBlock, targetBlockIndex, newContents);
+    }else{
+      console.log("BlockFn-makeBlock error: there is no session item")
+    }
   };
 
   const openMenu=()=>{
-    setMenuOpen(!menuOpen);
-    setPopup({
-      popup:false,
-      what:null
-    })
+    const sessionItem = sessionStorage.getItem("blockFnTargetBlock") ;
+    if(sessionItem !==null){
+      setMenuOpen(!menuOpen);
+      setPopup({
+        popup:false,
+        what:null
+      })
+    }else{
+      console.log("BlockFn-openMenu error: there is no session item")
+    } ;
   };
 
   const closeMenu =(event:MouseEvent)=>{
