@@ -345,7 +345,8 @@ export const ToolMore =({pageId, block, editBlock, setCommentBlock ,setMoreOpen}
       id='tool_more'
       style={style}
     >
-      <button>
+      <button
+        onClick={editComment}
       >
         <HiOutlinePencil/>
         <span>
