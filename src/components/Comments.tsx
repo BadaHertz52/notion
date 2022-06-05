@@ -230,8 +230,6 @@ export const CommentInput =({userName, pageId ,comment,editBlock, commentBlock, 
       if(editItem !==null){
         const comment =editItem.comment;
         updateComments(pageId, block, comment ,editTime, editBlock,setCommentBlock, "edit" ,text);
-        setEdit(false);
-        setEditItem(null);
       }
     };
     const addOrEdit =(block:Block  ,blockComments:BlockCommentType[])=>{
@@ -243,6 +241,8 @@ export const CommentInput =({userName, pageId ,comment,editBlock, commentBlock, 
         editComment(block);
       };
       setText("");
+      setEdit(false);
+      setEditItem(null);
     };
     if(commentBlock ==null){
       const sessionItem = sessionStorage.getItem("blockFnTargetBlock") as string;
