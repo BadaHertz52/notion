@@ -27,7 +27,7 @@ type MenuProps ={
   addBlock:(pageId: string, block: Block, nextBlockIndex: number, previousBlockId: string | null) => void,
   editBlock : (pageId: string, block: Block) => void,
   deleteBlock :(pageId: string, block: Block) => void,
-  addPage : (pageId:string , newPage:Page, block:null)=>void,
+  addPage : ( newPage:Page, block:null)=>void,
   editPage : (pageId:string , newPage:Page, block:null)=>void,
   deletePage : (pageId:string , block:null)=>void,
   setPopup :Dispatch<SetStateAction<PopupType>> ,

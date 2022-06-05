@@ -169,9 +169,9 @@ export const raise_block =(pageId:string, block:Block)=>({
   block:block
 });
 
-export const add_page =(pageId:string, newPage:Page , block:null)=>({
+export const add_page =( newPage:Page , block:null)=>({
   type: ADD_PAGE,
-  pageId: pageId,
+  pageId: "0", // 불필요하지만 다른 액션함수들에게 필요한 거라 일단 넣어줌 
   newPage: newPage,
   block:block
 });

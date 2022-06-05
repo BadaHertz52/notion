@@ -43,7 +43,7 @@ const EditorContainer =({page , pagePath ,side, lockSideBar, leftSideBar,closeSi
   };
   const raiseBlock=(pageId:string, block:Block)=>{dispatch(raise_block(pageId,block))};
 
-  const addPage=(pageId:string,newPage:Page ,block:null)=>{dispatch(add_page(pageId, newPage, block))};
+  const addPage=(newPage:Page ,block:null)=>{dispatch(add_page( newPage, block))};
   const editPage=(pageId:string,newPage:Page ,block:null)=>{dispatch(edit_page(pageId, newPage, block))};
   const deletePage=(pageId:string,block:null)=>{dispatch(delete_page(pageId, block))};
 
