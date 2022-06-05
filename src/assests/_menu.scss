@@ -6,7 +6,16 @@
 #mainMenu,
 #sideMenu,
 #popupMenu{
-  @include popupMenu
+  @include popupMenu;
+  width: fit-content
+}
+#blockFn #popupMenu{
+  margin: 5px 10px;
+  .commentInput{
+    width: 300px;
+    
+    box-sizing: border-box
+  }
 }
 #mainMenu {
   @include popupMenu;
@@ -125,6 +134,7 @@
 }
 
 #pageMenu {
+  width: fit-content;
   .inner{
     width: 100%;
     box-sizing: border-box;
@@ -151,6 +161,8 @@
     }
   }
   #new_sub_page{
+    width: 100%;
+    text-align: left;
     border-top: 1px solid $lightMud;
     padding : 5px 0; 
     padding-left: 5%;
