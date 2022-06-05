@@ -29,6 +29,7 @@ export   const changeSubPage =(currentPage:Page, block:Block, editBlock: (pageId
       const subBlocks:Block[] = currentPage.blocks.filter((BLOCK:Block)=> block.subBlocksId?.includes(BLOCK.id));
       const newPage :Page ={
         ...pageSample,
+        id:block.id,
         header:{
           ...pageSample.header,
           title:block.contents
@@ -41,6 +42,7 @@ export   const changeSubPage =(currentPage:Page, block:Block, editBlock: (pageId
     }else{
       const newPage :Page ={
         ...pageSample,
+        id:block.id,
         header:{
           ...pageSample.header,
           title:block.contents

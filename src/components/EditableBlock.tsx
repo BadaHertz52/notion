@@ -68,6 +68,7 @@ export const makeNewBlock=(page:Page, editTime:string,addBlock:(pageId: string, 
     if(newBlock.type ==="page"){
       const newPage:Page ={
         ...pageSample,
+        id:newBlock.id,
         header:{
                 ...pageSample.header,
                 title:newContents=== undefined ? null : newContents ,
