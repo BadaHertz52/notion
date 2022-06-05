@@ -61,6 +61,17 @@ type ResolveBtnProps ={
   editBlock:(pageId: string, block: Block) => void,
   setCommentBlock: Dispatch<SetStateAction<Block|null>>,
 };
+type ToolMoreProps ={
+  pageId:string,
+  block:Block | null,
+  editBlock:(pageId: string, block: Block) => void,
+  setCommentBlock: Dispatch<SetStateAction<Block|null>>
+};
+type ToolMoreItem ={
+  comment: BlockCommentType |CommentType, 
+  style:CSSProperties
+};
+
 export const CommentInput =({userName, pageId ,comment,editBlock, commentBlock, setCommentBlock}:CommentInputProps)=>{
   const userNameFirstLetter =userName.substring(0,1).toUpperCase();
 
@@ -190,12 +201,6 @@ export const CommentInput =({userName, pageId ,comment,editBlock, commentBlock, 
     </div>
   )
 };
-type ToolMoreProps ={
-  pageId:string,
-  block:Block | null,
-  editBlock:(pageId: string, block: Block) => void,
-  setCommentBlock: Dispatch<SetStateAction<Block|null>>
-};
 export const ToolMore =({pageId, block, editBlock, setCommentBlock}:ToolMoreProps)=>{
   const toolMoreItem = sessionStorage.getItem("toolMoreItem");
 
@@ -239,10 +244,6 @@ export const ToolMore =({pageId, block, editBlock, setCommentBlock}:ToolMoreProp
       </button>
     </div>
   )
-}
-type ToolMoreItem ={
-  comment: BlockCommentType |CommentType, 
-  style:CSSProperties
 }
 const CommentTool =({mainComment , comment,block ,pageId ,editBlock ,setCommentBlock ,setMoreOpen}:CommentToolProps)=>{
 
