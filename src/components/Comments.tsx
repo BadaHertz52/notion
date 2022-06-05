@@ -146,6 +146,8 @@ const updateComments =(pageId: string, block:Block, comment:CommentType | BlockC
   };
 };
 
+export const CommentInput =({userName, pageId ,comment,editBlock, commentBlock, setCommentBlock }:CommentInputProps)=>{
+  const userNameFirstLetter =userName.substring(0,1).toUpperCase();
   const [submitStyle,setSubmitStyle] =useState<CSSProperties>({
     fill:"grey",
     border:"none"
