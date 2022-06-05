@@ -93,6 +93,9 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
   };
   const removeBlock =()=>{
     deleteBlock(page.id, block);
+    if(block.type==="page"){
+      deletePage(block.id ,null);
+    };
     setMenuOpen(false);
   };
 
