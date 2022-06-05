@@ -72,9 +72,76 @@ type ToolMoreItem ={
   comment: BlockCommentType |CommentType, 
   style:CSSProperties
 };
+const updateComments =(pageId: string, block:Block, comment:CommentType | BlockCommentType | null , editTime:string, editBlock:(pageId: string, block: Block) => void ,setCommentBlock:Dispatch<SetStateAction<Block|null>>,fnType:"delete"|"edit", text:string|null)=>{
+  if(comment !==null && block.comments !==null){
+    const block_comments :BlockCommentType[] =[...block.comments];
+    const mainCommentIds = block.comments.map((comment:BlockCommentType)=> comment.id);
+    const updateBlock =()=>{
+      const newBlock ={
+        ...block,
+        editTime:editTime,
+        comments : block_comments[0]=== undefined ? null :block_comments
+      };
+      editBlock(pageId, newBlock);
+      setCommentBlock(newBlock);
+      sessionStorage.remove("editCommentItem");
+    };
+    if(mainCommentIds?.includes(comment.id)){
+        //BlockCommentType
+        const index = mainCommentIds.indexOf(comment.id);
+        switch (fnType) {
+          case "delete":
+            block_comments.splice(index,1);
+            break;
+          case  "edit":
+            if(text !==null ){
+              const mainComment:BlockCommentType = block_comments[index];
+              const newMainComment:BlockCommentType ={
+                ...mainComment,
+                editTime:editTime,
+                content:text 
+              }
+              block_comments.splice(index,1 , newMainComment);
+            };
+          break;
+          default:
+            break;
+        };
+        updateBlock();
+    }else{
+      //CommentType
+      const mainComments :BlockCommentType = block.comments.filter((block_comment:BlockCommentType)=>
+        block_comment.commentsId?.includes(comment.id))[0];
+      const mainCommentsIndex= mainCommentIds.indexOf(mainComments.id);
+      const commentIndex = mainCommentIds.indexOf(comment.id);
 
-export const CommentInput =({userName, pageId ,comment,editBlock, commentBlock, setCommentBlock}:CommentInputProps)=>{
-  const userNameFirstLetter =userName.substring(0,1).toUpperCase();
+      switch (fnType) {
+        case "delete":
+          mainComments.comments?.splice(commentIndex,1);
+          mainComments.commentsId?.splice(commentIndex,1);
+          break;
+        case "edit":
+          if(text !==null){
+            const newComment:CommentType ={
+              ...comment,
+              editTime:editTime,
+              content:text 
+            };
+            mainComments.comments?.splice(commentIndex,1 , newComment);
+          }
+        break;
+        default:
+          break;
+      };
+
+      const newMainComments :BlockCommentType ={
+        ...mainComments,
+      };
+      block_comments.splice(mainCommentsIndex, 1, newMainComments);
+      updateBlock();
+  }
+  };
+};
 
   const [submitStyle,setSubmitStyle] =useState<CSSProperties>({
     fill:"grey",
@@ -152,6 +219,14 @@ export const CommentInput =({userName, pageId ,comment,editBlock, commentBlock, 
           updateBlock(newBlock);
       }
     };
+    const editComment =(block:Block)=>{
+      if(editItem !==null){
+        const comment =editItem.comment;
+        updateComments(pageId, block, comment ,editTime, editBlock,setCommentBlock, "edit" ,text);
+        setEdit(false);
+        setEditItem(null);
+      }
+    };
     if(commentBlock ==null){
       const sessionItem = sessionStorage.getItem("blockFnTargetBlock") as string;
       const block:Block= JSON.parse(sessionItem);
@@ -210,36 +285,23 @@ export const ToolMore =({pageId, block, editBlock, setCommentBlock ,setMoreOpen}
   const editTime = JSON.stringify(Date.now());
 
   const deleteComment =()=>{
-    if(comment !==null && block !==null && block.comments !==null){
-      const block_comments :BlockCommentType[] =[...block.comments];
-      const mainCommentIds = block.comments.map((comment:BlockCommentType)=> comment.id);
-      const updateBlock =()=>{
-        const newBlock ={
-          ...block,
-          editTime:editTime,
-          comments : block_comments
-        };
-        editBlock(pageId, newBlock);
-      };
-      if(mainCommentIds?.includes(comment.id)){
-          //BlockCommentType
-          const index = mainCommentIds.indexOf(comment.id);
-          block_comments.splice(index,1);
-      }else{
-        //CommentType
-        const mainComments :BlockCommentType = block.comments.filter((block_comment:BlockCommentType)=>
-          block_comment.commentsId?.includes(comment.id))[0];
-        const mainCommentsIndex= mainCommentIds.indexOf(mainComments.id);
-        const commentIndex = mainCommentIds.indexOf(comment.id);
-        mainComments.comments?.splice(commentIndex,1);
-        mainComments.commentsId?.splice(commentIndex,1);
-        const newMainComments :BlockCommentType ={
-          ...mainComments,
-        };
-      block_comments.splice(mainCommentsIndex, 1, newMainComments);
-      };
-      updateBlock();
-    }
+    setMoreOpen(false);
+    sessionStorage.removeItem("toolMoreItem");
+    if(block !==null){
+      updateComments(pageId,block,comment,editTime,editBlock, setCommentBlock,"delete", null);
+    };
+
+  };
+
+  const editComment =()=>{
+    sessionStorage.removeItem("toolMoreItem");
+    setMoreOpen(false);
+    if(comment !== null){
+      const item:EditCommentItem ={
+        edit:true, 
+        comment :comment};
+        sessionStorage.setItem("editCommentItem", JSON.stringify(item));
+    };
   };
   useEffect(()=>{
     if(toolMoreItem !==null){
