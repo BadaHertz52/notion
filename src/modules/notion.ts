@@ -870,6 +870,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
           pagesId.splice(index,1);
         })
       };
+      console.log("delete page", pages)
       return{
         pages:pages,
         firstPagesId:firstPagesId,
