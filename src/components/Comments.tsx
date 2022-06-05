@@ -86,7 +86,6 @@ export const CommentInput =({userName, pageId ,comment,editBlock, commentBlock, 
     const target =event?.currentTarget ; 
     const value =target.value;
     setText(value);
-    console.log("value", value, event)
     if(value ==null  || value===""){
       setSubmitStyle({
         fill:"grey",
