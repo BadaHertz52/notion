@@ -66,6 +66,7 @@ type ToolMoreProps ={
   block:Block | null,
   editBlock:(pageId: string, block: Block) => void,
   setCommentBlock: Dispatch<SetStateAction<Block|null>>
+  setMoreOpen: Dispatch<SetStateAction<boolean>>
 };
 type ToolMoreItem ={
   comment: BlockCommentType |CommentType, 
@@ -202,7 +203,7 @@ export const CommentInput =({userName, pageId ,comment,editBlock, commentBlock, 
 };
 
 
-export const ToolMore =({pageId, block, editBlock, setCommentBlock}:ToolMoreProps)=>{
+export const ToolMore =({pageId, block, editBlock, setCommentBlock ,setMoreOpen}:ToolMoreProps)=>{
   const toolMoreItem = sessionStorage.getItem("toolMoreItem");
   const [comment, setComment] =useState<BlockCommentType | CommentType | null >(null);
   const [style, setStyle]= useState<CSSProperties>();

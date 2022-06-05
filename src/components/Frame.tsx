@@ -218,6 +218,7 @@ const Frame =({ pages, firstlist,userName, page,side,  editBlock, addBlock,chang
                 block={commentBlock}
                 editBlock={editBlock}
                 setCommentBlock={setCommentBlock}
+                setMoreOpen={setMoreOpen}
               />
               }
             </div>
