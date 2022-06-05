@@ -447,6 +447,7 @@ const CommentTool =({mainComment , comment,block ,pageId ,editBlock ,setCommentB
     if(!isInnerToolMore){
       setMoreOpen(false);
       sessionStorage.removeItem("tool_more");
+      sessionStorage.removeItem("toolMoreItem");
     }
   };
   inner?.addEventListener("click",  (event)=>{
