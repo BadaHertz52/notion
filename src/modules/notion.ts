@@ -38,7 +38,15 @@ export type BlockStyle ={
   fontStyle: "italic" | "initial",
   textDeco : "underline"|"overline" | "none"
 };
+export const basicBlockStyle:BlockStyle ={
+  color: defaultColor,
+  bgColor: bg_default,
+  fontWeight:"initial",
+  fontStyle:"initial",
+  textDeco:"none"
+};
 const userName= "amet";
+const editTime =JSON.stringify(Date.now());
 
 export type CommentType ={
   id: string,
@@ -65,21 +73,15 @@ export type Block ={
 } ;
 
 export  const blockSample:Block ={
-  id:`blockSample_${JSON.stringify(Date.now())}`,
+  id:`blockSample_${editTime}`,
   contents:"",
   firstBlock:true,
   subBlocksId:null ,
   parentBlocksId: null,
   type:text,
   icon:null,
-  editTime:"",
-  style :{
-    color: defaultColor,
-    bgColor: bg_default,
-    fontWeight:"initial",
-    fontStyle:"initial",
-    textDeco:"none"
-  },
+  editTime:editTime,
+  style :basicBlockStyle ,
   comments:null
 };
 export type listItem = {
@@ -96,13 +98,14 @@ export type Page ={
     comments: BlockCommentType[]| null,
   }
   firstBlocksId :string[] | null,
-  blocks : Block[] ,  
-  blocksId : string[] , 
+  blocks : Block[],  
+  blocksId : string[], 
   subPagesId:string[] | null,
-  parentsId: string[] | null 
+  parentsId: string[] | null ,
+  editTime: string,
 };
 export const  pageSample:Page ={
-  id:"", 
+  id:editTime, 
   header : {
     title: null,
     icon: null,
@@ -113,7 +116,8 @@ export const  pageSample:Page ={
   blocks :  [blockSample], 
   blocksId :  [blockSample.id], 
   subPagesId: null,
-  parentsId:  null 
+  parentsId:  null ,
+  editTime: editTime
 };
 export type Notion={ 
   pagesId :string [],
@@ -255,13 +259,7 @@ const initialState :Notion ={
       icon:  null ,
       editTime: JSON.stringify(Date.parse("2021-5-18-16:00"))
       ,
-      style :{
-        color: defaultColor,
-        bgColor: bg_default,
-        fontWeight:"initial",
-        fontStyle:"initial",
-        textDeco:"none"
-      },
+      style :basicBlockStyle,
       comments: null
     },{
       id:"todo",
@@ -298,13 +296,7 @@ const initialState :Notion ={
       icon:  null ,
       editTime: JSON.stringify(Date.parse("2021-5-19-11:30"))
       ,
-      style :{
-        color: defaultColor,
-        bgColor: bg_default,
-        fontWeight:"initial",
-        fontStyle:"initial",
-        textDeco:"none"
-      },
+      style :basicBlockStyle,
       comments:null
     },{
       id:"h1",
@@ -316,13 +308,7 @@ const initialState :Notion ={
       icon:  null ,
       editTime: JSON.stringify(Date.parse("2021-5-19-12:00"))
       ,
-      style :{
-        color: defaultColor,
-        bgColor: bg_default,
-        fontWeight:"initial",
-        fontStyle:"initial",
-        textDeco:"none"
-      },
+      style :basicBlockStyle,
       comments:null
     },{
       id:"h2",
@@ -334,13 +320,7 @@ const initialState :Notion ={
       icon:  null ,
       editTime: JSON.stringify(Date.parse("2021-5-18-20:00"))
       ,
-      style :{
-        color: defaultColor,
-        bgColor: bg_default,
-        fontWeight:"initial",
-        fontStyle:"initial",
-        textDeco:"none"
-      },
+      style :basicBlockStyle,
       comments:null
     },{
       id:"h3",
@@ -352,13 +332,7 @@ const initialState :Notion ={
       icon:  null ,
       editTime: JSON.stringify(Date.parse("2021-5-19-19:20"))
       ,  
-      style :{
-        color: defaultColor,
-        bgColor: bg_default,
-        fontWeight:"initial",
-        fontStyle:"initial",
-        textDeco:"none"
-      },
+      style :basicBlockStyle,
       comments:null
     },{
       id:"page1",
@@ -370,13 +344,7 @@ const initialState :Notion ={
       icon:  null ,
       editTime: JSON.stringify(Date.parse("2021-5-20-21:00"))
       ,
-      style :{
-        color: defaultColor,
-        bgColor: bg_default,
-        fontWeight:"initial",
-        fontStyle:"initial",
-        textDeco:"none"
-      },
+      style :basicBlockStyle,
       comments:null
     },
     {
@@ -389,13 +357,7 @@ const initialState :Notion ={
       icon: "🌈" ,
       editTime: JSON.stringify(Date.parse("2021-5-20-9:00")),
 
-      style :{
-        color: defaultColor,
-        bgColor: bg_default,
-        fontWeight:"initial",
-        fontStyle:"initial",
-        textDeco:"none"
-      },
+      style :basicBlockStyle,
       comments:null
     },
     {id:"sub1_1",
