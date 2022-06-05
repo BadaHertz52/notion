@@ -446,7 +446,6 @@ const CommentTool =({mainComment , comment,block ,pageId ,editBlock ,setCommentB
     const isInnerToolMore = detectRange(event, tooleMoreArea);
     if(!isInnerToolMore){
       setMoreOpen(false);
-      sessionStorage.removeItem("tool_more");
       sessionStorage.removeItem("toolMoreItem");
     }
   };
