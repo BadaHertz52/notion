@@ -82,7 +82,7 @@ const BlockFn =({pages,firstlist, page,userName, addBlock, editBlock, deleteBloc
   const makeBlock =()=>{
     const targetBlock= JSON.parse(sessionItem);
     const targetBlockIndex= page.blocksId.indexOf(targetBlock.id);
-    makeNewBlock(page, editTime,addBlock, editBlock, targetBlock, targetBlockIndex, newContents);
+    makeNewBlock(page, editTime,addBlock, editBlock, addPage,targetBlock, targetBlockIndex, newContents);
   };
 
   const openMenu=()=>{

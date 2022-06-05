@@ -703,23 +703,6 @@ export default function notion (state:Notion =initialState , action :NotionActio
       if(action.block.parentBlocksId!==null){
         updateParentBlock(action.block , action.previousBlockId);
       }
-
-      // type 이 page로 생성된 블록 
-      if(action.block.type ==="page"){
-        targetPage.subPagesId?.concat(action.block.id);
-        state.pagesId?.concat(action.block.id);
-        const newPage ={
-          ...pageSample,
-          id:action.block.id, 
-          header : {
-            title: action.block.contents,
-            icon: action.block.icon,
-            cover: null,
-            comments:  null,
-          }
-        };
-        pages.concat(newPage);
-      };
       console.log( "addBlock", targetPage.blocks)
       return {
         pages:pages,
@@ -839,12 +822,17 @@ export default function notion (state:Notion =initialState , action :NotionActio
         pagesId:pagesId
       };
     case ADD_PAGE :
+      if(action.newPage.blocksId.includes("blockSample")){
+        pagesId.splice(0,1);
+        pages.splice(0,1);
+      };
       pagesId.push(action.newPage.id);
       pages.push(action.newPage);
       if(action.newPage.parentsId==null){
         //firstPage 일경우
           firstPagesId.push(action.newPage.id);
       };
+      console.log("add new page", pages);
       return {
         pages:pages,
         firstPagesId:firstPagesId,

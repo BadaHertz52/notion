@@ -2,7 +2,7 @@
 import React, { Dispatch, SetStateAction, useEffect, useRef, useState, } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
-import { bg_default, Block, BlockType, blockTypes, defaultColor, findBlock, Page } from '../modules/notion';
+import { bg_default, Block, BlockType, blockTypes, defaultColor, findBlock, Page, pageSample } from '../modules/notion';
 import CommandBlock from './CommandBlock';
 import { Command } from '../containers/EditorContainer';
 import BlockComponent from './BlockComponent';
@@ -43,7 +43,7 @@ const findTargetBlock =(page:Page):findTargetBlockReturn=>{
     newContents:newContents
   }
 };
-export const makeNewBlock=(page:Page, editTime:string,addBlock:(pageId: string, block: Block, nextBlockIndex: number, previousBlockId: string | null) =>void ,editBlock :(pageId: string, block: Block) => void, targetBlock:Block, targetBlockIndex:number, newContents:string  )=>{
+export const makeNewBlock=(page:Page, editTime:string,addBlock:(pageId: string, block: Block, nextBlockIndex: number, previousBlockId: string | null) =>void ,editBlock :(pageId: string, block: Block) => void, addPage:( newPage: Page, block: null) => void ,targetBlock:Block, targetBlockIndex:number, newContents:string  )=>{
   if(targetBlock.type !=="toggle"){
     const newBlock:Block ={
       id:editTime,
@@ -65,6 +65,16 @@ export const makeNewBlock=(page:Page, editTime:string,addBlock:(pageId: string, 
     };
       //새로운 버튼 
     addBlock(page.id, newBlock, targetBlockIndex+1 ,targetBlock.id)
+    if(newBlock.type ==="page"){
+      const newPage:Page ={
+        ...pageSample,
+        header:{
+                ...pageSample.header,
+                title:newContents=== undefined ? null : newContents ,
+                },
+      };
+      addPage(newPage, null);
+    }
   }else{
     const newSubBlock:Block ={
       id:editTime,
@@ -108,7 +118,7 @@ type EditableBlockProps ={
   changeToSub: (pageId: string, block: Block, first: boolean, newParentBlock: Block) => void
   raiseBlock: (pageId: string, block: Block) => void,
   deleteBlock: (pageId: string, block: Block) => void,
-  addPage : (pageId:string , newPage:Page, block:null)=>void,
+  addPage : ( newPage:Page, block:null)=>void,
   editPage : (pageId:string , newPage:Page, block:null)=>void,
   deletePage : (pageId:string , block:null)=>void,
   setCommentBlock : Dispatch<SetStateAction<Block|null>>,
@@ -209,7 +219,7 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
 
     if(event.code === "Enter"){
         // 새로운 블록 만들기 
-        makeNewBlock(page, editTime, addBlock, editBlock,targetBlock, targetBlockIndex, newContents);
+        makeNewBlock(page, editTime, addBlock, editBlock,addPage,targetBlock, targetBlockIndex, newContents);
         // targetBlock 의 contents 일부가 다음 블록으로 이동되었을 경우
         if(textContents.length > focusOffset+1){
           
@@ -451,6 +461,7 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
             editTime={editTime}
             editBlock={editBlock}
             setCommand={setCommand}
+            addPage={addPage}
           />
           </>
         }
