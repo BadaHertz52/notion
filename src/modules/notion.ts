@@ -221,7 +221,7 @@ const initialState :Notion ={
         commentsId:null,
       }],
     },
-    firstBlocksId :["text", 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page', 'page2'],
+    firstBlocksId :["text", 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page1', 'page2'],
     blocks:[{
       id:"text",
       contents:"안녕", 
@@ -559,7 +559,7 @@ const initialState :Notion ={
   },
 
     ],
-    blocksId:["text", 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page', 'page2' , 'sub1_1' ,'sub1_2', 'sub2_1' ,"numberList" , "num1", "num2", "num3" , "bulletList", "b1", "b2"],
+    blocksId:["text", 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page1', 'page2' , 'sub1_1' ,'sub1_2', 'sub2_1' ,"numberList" , "num1", "num2", "num3" , "bulletList", "b1", "b2"],
     subPagesId:['1234'],
     parentsId: null,
     editTime :JSON.stringify(Date.parse("2021-5-16-15:00"))
