@@ -71,7 +71,7 @@ export const makeNewBlock=(page:Page, editTime:string,addBlock:(pageId: string, 
         id:newBlock.id,
         header:{
                 ...pageSample.header,
-                title:newContents=== undefined ? null : newContents ,
+                title:newContents,
                 },
       };
       addPage(newPage, null);

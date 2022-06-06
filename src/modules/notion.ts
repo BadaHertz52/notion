@@ -92,7 +92,7 @@ export type listItem = {
 export type Page ={
   id:string ,  // 형식 : comment_현재 시간 
   header : {
-    title: string | null,
+    title: string ,
     icon: string |null,
     cover: ImageData |null,
     comments: BlockCommentType[]| null,
@@ -107,7 +107,7 @@ export type Page ={
 export const  pageSample:Page ={
   id:editTime, 
   header : {
-    title: null,
+    title: "untitle",
     icon: null,
     cover: null,
     comments:  null,
