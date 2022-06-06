@@ -565,6 +565,31 @@ const initialState :Notion ={
     editTime :JSON.stringify(Date.parse("2021-5-16-15:00"))
   },
   {
+    ...pageSample,
+    id:"page1",
+    header:{
+      ...pageSample.header,
+      title:"page page page"
+    }
+    firstBlock:true,
+    subBlocksId:null ,
+    parentBlocksId: null,
+    type: page,
+    editTime: JSON.stringify(Date.parse("2021-5-20-21:00")),
+    parentsId:['12345']
+  },
+  {
+    ...pageSample,
+    id:"page2",
+    header:{
+      ...pageSample.header,
+      icon:"🌈",
+      title:"page2"
+    },
+    editTime: JSON.stringify(Date.parse("2021-5-20-9:00")),
+    parentsId:['12345']
+  },
+  {
     id: '1234',
     header : {
       title:"notion2",
