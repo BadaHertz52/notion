@@ -74,11 +74,11 @@ const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,chang
 
   const blockContentsStyle =(block:Block):CSSProperties =>{
     return ({
-      color: block.style.color,
+      color: block.type !=="todo done" ? block.style.color: "grey",
       backgroundColor :block.style.bgColor,
       fontWeight: block.style.fontWeight ,
-      fontStyle: block.style.fontStyle,
-      textDecoration: block.style.textDeco,
+      fontStyle: block.type !=="todo done"? block.style.fontStyle : "italic",
+      textDecoration: block.type !=="todo done"? block.style.textDeco :"line-through",
     })
   };
   const ListSub = ()=>{
