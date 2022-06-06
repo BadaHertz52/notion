@@ -5,10 +5,11 @@ import TopBar from '../components/TopBar';
 import { RootState } from '../modules';
 import {  Block, Page, edit_block, add_block, delete_block, change_to_sub, raise_block, Notion, add_page, delete_page, edit_page, findPage, listItem } from '../modules/notion';
 import { Side } from '../modules/side';
+import { pathType } from './NotionRouter';
 
 type EditorContainerProps ={
   page: Page,
-  pagePath : string [] | null,
+  pagePath : pathType[]|null,
   side : Side,
   lockSideBar  : ()=> void ,
   leftSideBar  : ()=> void ,
