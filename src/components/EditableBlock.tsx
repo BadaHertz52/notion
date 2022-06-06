@@ -263,6 +263,9 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
         const blockId = deleteTargetBlockDiv.getAttribute("id") as string;
         const {BLOCK} =findBlock(page, blockId);
         deleteBlock(page.id, BLOCK);
+        if(BLOCK.type ==="page"){
+          deletePage(BLOCK.id, null);
+        }
         }else{
           if(focusOffset ===0){
             raiseBlock(page.id, targetBlock);
