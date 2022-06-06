@@ -21,7 +21,7 @@ export const cleanTrash =(itemId: string)=>({
   itemId:itemId
 });
 
-type UserState = {
+export type UserState = {
   userName:string,
   userEmail:string,
   favorites:string[],
