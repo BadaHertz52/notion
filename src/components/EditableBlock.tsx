@@ -138,7 +138,6 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
     boolean:false,
     command:null
   }); 
-  const [blockFnTarget, setBlockFnTarget]=useState<Block|null>(null);
   useEffect(()=>{
     if(storageItem !== null){
       const {editedBlock} = JSON.parse(storageItem) as {pageId: string, editedBlock:Block};
@@ -240,7 +239,6 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
     if(event.code ==="Tab" &&targetBlockIndex>0){
       //  이전 블록의 sub 으로 변경 
       if(cursor?.anchorOffset=== 0 ){
-        console.log("tab, 0")
         innerRef.current?.focus();
       const previousBlock:Block = page.blocks[targetBlockIndex-1];
       const newParentBlock:Block = {
@@ -255,13 +253,11 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
         parentBlocksId: previousBlock.parentBlocksId? previousBlock.parentBlocksId.concat(previousBlock.id) : [previousBlock.id],
         editTime:editTime
       };
-      console.log("tab", editedBlock, previousBlock);
       changeToSub(page.id, editedBlock ,targetBlock.firstBlock ,newParentBlock);
       }
 
     };
     if(event.code ==="Backspace"){
-      console.log("focusoff", focusOffset, "length", textContents.length);
       if(textContents.length === 0){
         const deleteTargetBlockDiv = targetElement?.getElementsByTagName("div")[0]  as HTMLDivElement;
         const blockId = deleteTargetBlockDiv.getAttribute("id") as string;
@@ -372,11 +368,9 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
           const start = title.indexOf("_contents");
           const id= title.substring(0, start);
           const {BLOCK} =findBlock(page, id);
-          console.log(element ,BLOCK)
           const position = element.parentElement?.getBoundingClientRect() as DOMRect;
           const targetHeight = position.height;
           const targetY = position.top;
-          console.log(blockFn?.classList.contains("on"))
           if(blockFn?.classList.contains("on")){
             sessionStorage.setItem("blockFnTargetBlock", JSON.stringify(BLOCK));
           }else{
