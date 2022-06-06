@@ -1,5 +1,5 @@
-import React, { CSSProperties, useState } from 'react';
-import { listItem, Page } from '../modules/notion';
+import React, { CSSProperties, Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { listItem, Notion, Page } from '../modules/notion';
 
 //react-icon
 import {FiCode ,FiChevronsLeft} from 'react-icons/fi';
@@ -11,6 +11,7 @@ import {HiDownload, HiTemplate} from 'react-icons/hi';
 import { MdPlayArrow } from 'react-icons/md';
 
 type SideBarProps ={
+  notion : Notion,
   user:{
     userName:string,
     userEmail:string,
@@ -23,29 +24,43 @@ type SideBarProps ={
   leftSideBar  : ()=> void ,
   closeSideBar  : ()=> void ,
   openNewPage  : ()=> void ,
-  closeNewPage : ()=> void 
+  closeNewPage : ()=> void ,
+  setTargetPageId: React.Dispatch<React.SetStateAction<string|null>>,
 };
 
 type ItemTemplageProp ={
-  item: listItem
+  item: listItem,
+  setTargetPageId: React.Dispatch<React.SetStateAction<string|null>>,
 };
-const ItemTemplate =({item}:ItemTemplageProp)=>{
-  const [toggle, setToggle] =useState<boolean>(false);
+type ListTemplateProp ={
+  notion:Notion,
+  targetList: listItem[],
+  setTargetPageId: React.Dispatch<React.SetStateAction<string|null>>,
+};
+const ItemTemplate =({item ,setTargetPageId }:ItemTemplageProp)=>{
+  const [toggle, setToggle]=useState<boolean>(false);
+  const onToggleSubPage =()=>{
+    setToggle(!toggle);
+    const subPageElement = document.getElementById(`item_${item.id}`)?.children[1];
+    if(subPageElement !== undefined){
+      subPageElement.classList.toggle("on");
+    }else{
+      console.log("Can't find html element")
+    };
+  };
   const toggleStyle:CSSProperties={
     transform: toggle? "rotate(90deg)" : "rotate(0deg)" 
   };
-
-  const onClickToggle =()=>{
-    setToggle(!toggle)
-  };
-  
   return (
-  <div className='itemInner pageLink'>
+  <div 
+    className='itemInner pageLink'
+    onClick={()=>{setTargetPageId(item.id) }}
+  >
     <div className='pageContent'>
       <button 
         className='toggleBtn'
         style={toggleStyle}
-        onClick={onClickToggle}
+        onClick={onToggleSubPage}
       >
         <MdPlayArrow/>
       </button>
@@ -75,40 +90,77 @@ const ItemTemplate =({item}:ItemTemplageProp)=>{
   </div>
   )
 };
-type ListTemplateProp ={
-  targetList: listItem[]
-};
 
-const ListTemplate =({targetList }:ListTemplateProp)=>{
+const ListTemplate =({notion, targetList ,setTargetPageId}:ListTemplateProp)=>{
+  const findSubPage =(id:string):listItem=>{
+    const index =notion.pagesId.indexOf(id);
+    const subPage:Page =notion.pages[index];
+    return {
+      id: subPage.id,
+      title: subPage.header.title,
+      icon: subPage.header.icon,
+      subPagesId:subPage.subPagesId,
+      parentsId: subPage.parentsId,
+      editTime:subPage.editTime
+    };
+  };
+
   return(
     <ul>
     {targetList.map((item:listItem)=> 
-      <li key={item.id}>
-        <div className='first page'>
-          <ItemTemplate item={item}/>
+      <li       
+        id={`item_${item.id}`} 
+        key={item.id}
+      >
+        <div className='mainPage'>
+          <ItemTemplate 
+            item={item}
+            setTargetPageId={setTargetPageId}
+          />
         </div>
-        <div className="inside page">
+        {item.subPagesId !==null &&
+        <div className="subPage">
+          {item.subPagesId.map((id:string)=>{
+            const subPage :listItem=findSubPage(id);
+            return(
+              <ItemTemplate
+                key={`item_${item.subPagesId?.indexOf(id)}`}
+                item={subPage}
+                setTargetPageId={setTargetPageId}
+              />
+            )
+          }
+          )
+          }
         </div>
+        }
       </li> 
     )}
   </ul>
   )
 };
 
-const SideBar =({user ,pages,firstPages ,lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage
+const SideBar =({notion, user ,pages,firstPages ,lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage ,setTargetPageId 
 }:SideBarProps)=>{
   const recordIcon =user.userName.substring(0,1);
+  const editTime =JSON.stringify(Date.now());
   const favorites:listItem[] = pages.filter((page:Page)=> user.favorites.includes(page.id)).map((page:Page)=> ({
     id:page.id,
     title:page.header.title,
-    icon:page.header.icon
-  }));
-  const list:listItem[] = firstPages.map((page:Page)=> ({
-    id:page.id,
     icon:page.header.icon,
-    title: page.header.title
-  })) ;
-
+    subPagesId: page.subPagesId,
+    parentsId: page.parentsId,
+    editTime:editTime
+  }));
+  const list:listItem[] = firstPages.filter((page:Page)=> page.parentsId ==null)
+                                    .map((page:Page)=> (
+                                      { id:page.id,
+                                        icon:page.header.icon,
+                                        title: page.header.title,
+                                        subPagesId: page.subPagesId,
+                                        parentsId: page.parentsId,
+                                        editTime:editTime
+                                      })) ;                              
   return(
     <>
     <div  id="sideBar">
@@ -159,7 +211,11 @@ const SideBar =({user ,pages,firstPages ,lockSideBar, leftSideBar,closeSideBar, 
               <span>FAVORITES </span>
             </div>
             <div className="list">
-              <ListTemplate targetList={favorites}/>
+              <ListTemplate 
+                notion ={notion}
+                setTargetPageId={setTargetPageId}
+                targetList={favorites}
+              />
             </div>
           </div>
           <div className="private">
@@ -173,7 +229,11 @@ const SideBar =({user ,pages,firstPages ,lockSideBar, leftSideBar,closeSideBar, 
               </button>
             </div>
             <div className="list">
-              <ListTemplate targetList={list}/>
+              <ListTemplate 
+                notion={notion}
+                targetList={list}
+                setTargetPageId={setTargetPageId}
+              />
             </div>
           </div>
           <div className="fun2">
