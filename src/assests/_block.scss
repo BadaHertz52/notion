@@ -108,6 +108,11 @@
     font-size: inherit;
   }
 }
+.todo.done.block{
+  path{
+    stroke:grey
+  }
+}
 .toggle.block{
   button{
     display: flex;
