@@ -570,11 +570,7 @@ const initialState :Notion ={
     header:{
       ...pageSample.header,
       title:"page page page"
-    }
-    firstBlock:true,
-    subBlocksId:null ,
-    parentBlocksId: null,
-    type: page,
+    },
     editTime: JSON.stringify(Date.parse("2021-5-20-21:00")),
     parentsId:['12345']
   },
