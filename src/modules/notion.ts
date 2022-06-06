@@ -36,7 +36,7 @@ export type BlockStyle ={
   bgColor: BgColorType,
   fontWeight: "bold"|"initial",
   fontStyle: "italic" | "initial",
-  textDeco : "underline"|"overline" | "none"
+  textDeco : "underline"|"line-through" | "none"
 };
 export const basicBlockStyle:BlockStyle ={
   color: defaultColor,
