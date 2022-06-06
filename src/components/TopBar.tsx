@@ -18,7 +18,6 @@ type TopBarProps ={
 }
 const TopBar =({side,page,pagePath, lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage}:TopBarProps)=>{
   const [title, setTitle]= useState<string>("");
-
   useEffect(()=>{
     if(side.sideState ==="left"){
       setTitle("Lock sideBar open")
@@ -51,10 +50,15 @@ const TopBar =({side,page,pagePath, lockSideBar, leftSideBar,closeSideBar, openN
             </span>
           </div>
         :
-          pagePath.map((path:string )=>
+          pagePath.map((path:pathType )=>
           <div className="pagePath" key={pagePath.indexOf(path)}>
             <span>/</span> 
-            <span className='pageLink'><a href='path'>{path}</a></span>
+            <span className='pageLink'>
+              <a href='path'>
+                {path.icon && path.icon}
+                {path.title}
+              </a>
+              </span>
           </div>
           )
         }
