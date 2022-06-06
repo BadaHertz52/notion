@@ -156,7 +156,7 @@ const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,chang
         }
         {block.type ==="todo done" &&
           <button 
-            className='checkbox left blockBtn'
+            className='checkbox done left blockBtn'
             name={block.id}
           >
             <GrCheckboxSelected   className='blockBtnSvg '
