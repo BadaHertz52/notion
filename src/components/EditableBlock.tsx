@@ -138,6 +138,7 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
     boolean:false,
     command:null
   }); 
+
   useEffect(()=>{
     if(storageItem !== null){
       const {editedBlock} = JSON.parse(storageItem) as {pageId: string, editedBlock:Block};
@@ -290,7 +291,6 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
     const editor =document.getElementsByClassName("editor"
     )[0];
     const comments =document.getElementById("comments");
-
     const openComment =(element:HTMLElement)=>{
       const targetElement = element as HTMLButtonElement;
       const id = targetElement.name;
@@ -319,6 +319,17 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
     commentBlock !==null &&
     closeComments(event)
 
+    const changeTodoDone =(element:HTMLElement, done:boolean)=>{
+      const id = element.getAttribute("name");
+      if(id !==null){
+        const {BLOCK}= findBlock(page, id);
+        const newBlock:Block= {
+          ...BLOCK,
+          type: done ? "todo": "todo done"
+        };
+        editBlock(page.id, newBlock);
+      };
+    };
 
     switch (target.tagName) {
       case "svg":
@@ -328,6 +339,9 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
         if(targetParentElement.className?.includes("commentBtn")){
           openComment(targetParentElement);
         };
+        if(targetParentElement.className?.includes("checkbox") ){
+          changeTodoDone(targetParentElement, targetParentElement.className?.includes("done"))
+        }
         break;
       case "path":
         if(targetParentElement.getAttribute("class")==="blockBtnSvg"){
@@ -337,16 +351,22 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
         if(targetParentElement.parentElement?.className.includes("commentBtn")){
           openComment(targetParentElement.parentElement)
         };
+        if(targetParentElement.parentElement?.className.includes("checkbox")){
+          changeTodoDone(targetParentElement.parentElement,targetParentElement.parentElement.className?.includes("done"));
+        };
         break;
       case "span":
         if(targetParentElement.className?.includes("commentBtn")){
-
           openComment(targetParentElement)
         };
         break;
       case "button":
         if(targetClassName?.includes("blockBtn")){
-          toggleOn(target);
+          if(targetClassName?.includes("checkbox")){
+            changeTodoDone(target,targetClassName?.includes("done"));
+          }else{
+            toggleOn(target);
+          }
         };
         if(targetClassName?.includes("commentBtn")){
           openComment(target);
@@ -354,7 +374,7 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
         break;
       default:
         break;
-    }
+    };
   };
   function showBlockFn (event:React.MouseEvent){
     const target= event.target as HTMLElement;
