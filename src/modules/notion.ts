@@ -88,6 +88,9 @@ export type listItem = {
   id: string;
   title: string | null;
   icon: string | null;
+  subPagesId: string[]|null;
+  parentsId:string[]|null;
+  editTime:string
 };
 export type Page ={
   id:string ,  // 형식 : comment_현재 시간 
@@ -594,10 +597,10 @@ const initialState :Notion ={
       comments:  null,
     },
     firstBlocksId:null,
-    blocks:[],
-    blocksId:[],
-    subPagesId:[],
-    parentsId: ['12345'],
+    blocks:[blockSample],
+    blocksId:[blockSample.id],
+    subPagesId:null,
+    parentsId: null,
     editTime:JSON.stringify(Date.parse("2021-5-18-19:00"))
   },
   {
@@ -609,9 +612,9 @@ const initialState :Notion ={
       comments:  null,
     },
     firstBlocksId:null,
-    blocks:[],
-    blocksId:[],
-    subPagesId:[],
+    blocks:[blockSample],
+    blocksId:[blockSample.id],
+    subPagesId:null,
     parentsId:null,
     editTime:JSON.stringify(Date.parse("2021-5-13-15:00"))
   }

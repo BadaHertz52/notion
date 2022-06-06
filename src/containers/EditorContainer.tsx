@@ -30,7 +30,10 @@ const EditorContainer =({page , pagePath ,side, lockSideBar, leftSideBar,closeSi
     return {
       id:PAGE.id,
       title:PAGE.header.title,
-      icon :PAGE.header.icon
+      icon :PAGE.header.icon,
+      editTime:JSON.stringify(Date.now()),
+      subPagesId:PAGE.subPagesId,
+      parentsId:PAGE.parentsId
     }
   });
   const userName :string  =useSelector((state:RootState)=> state.user.userName) ;

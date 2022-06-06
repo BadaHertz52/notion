@@ -98,6 +98,9 @@ const PageMenu =({ currentPage,pages, firstlist, existingPage,deleteBlock, addBl
       id: page.id,
       title: page.header.title,
       icon: page.header.icon,
+      subPagesId:page.subPagesId,
+      parentsId:page.parentsId,
+      editTime:JSON.stringify(Date.now())
     })) ;
     setResult(RESULT);
   };
