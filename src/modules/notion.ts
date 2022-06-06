@@ -201,7 +201,7 @@ ReturnType <typeof delete_page>
 
 //reducer
 const initialState :Notion ={
-  pagesId:['12345' ,'1234', '123' ],
+  pagesId:['12345','page1','page2' ,'1234', '123' ],
   firstPagesId :['12345' ,'1234', '123'],
   pages:[
     {
