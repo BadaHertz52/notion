@@ -6,6 +6,11 @@ import { closeNewPage, closeSide, leftSide, lockSide, openNewPage } from '../mod
 import EditorContainer from './EditorContainer';
 import SideBarContainer from './SideBarContainer';
 
+export type pathType={
+  id:string,
+  title:string,
+  icon:string|null
+};
 const NotionRouter =()=>{
   const dispatch =useDispatch();
   const notion = useSelector((state:RootState)=> state.notion);

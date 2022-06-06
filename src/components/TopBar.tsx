@@ -3,12 +3,13 @@ import { AiOutlineClockCircle, AiOutlineMenu, AiOutlineStar } from 'react-icons/
 import { BiMessageDetail } from 'react-icons/bi';
 import { BsThreeDots } from 'react-icons/bs';
 import { FiChevronsLeft } from 'react-icons/fi';
+import { pathType } from '../containers/NotionRouter';
 import { Page } from '../modules/notion';
 import { Side } from '../modules/side';
 type TopBarProps ={
   side:Side,
   page:Page,
-  pagePath: string []| null,
+  pagePath: pathType[] |null ,
   lockSideBar  : ()=> void ,
   leftSideBar  : ()=> void ,
   closeSideBar  : ()=> void ,
