@@ -1,13 +1,10 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector  ,useDispatch} from 'react-redux';
 import SideBar from '../components/SideBar';
 import { RootState } from '../modules';
-import { findPage, Notion, Page } from '../modules/notion';
-import { UserState } from '../modules/user';
+import { findPage, Page } from '../modules/notion';
 
 type SideBarContainerProp ={
-  notion:Notion,
-  user:UserState,
   lockSideBar  : ()=> void ,
   leftSideBar  : ()=> void ,
   closeSideBar  : ()=> void ,
@@ -15,7 +12,9 @@ type SideBarContainerProp ={
   closeNewPage : ()=> void ,
   setTargetPageId: React.Dispatch<React.SetStateAction<string|null>>,
 };
-const SideBarContainer =({notion, user, lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage ,setTargetPageId }:SideBarContainerProp)=>{
+const SideBarContainer =({lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage ,setTargetPageId }:SideBarContainerProp)=>{
+  const notion =useSelector((state:RootState)=> state.notion);
+  const user = useSelector((state:RootState)=> state.user);
   const pages = notion.pages;
   const firstPages:Page[] = notion.firstPagesId.map((id:string)=>findPage(notion.pagesId, pages, id));
 

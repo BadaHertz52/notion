@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, Route, Routes, useNavigate, useParams } from 'react-router-dom';
+import {  Route, Routes, useNavigate, useParams, } from 'react-router-dom';
 import { RootState } from '../modules';
-import { Page } from '../modules/notion';
+import { findPage, Page } from '../modules/notion';
 import { closeNewPage, closeSide, leftSide, lockSide, openNewPage } from '../modules/side';
 import EditorContainer from './EditorContainer';
 import SideBarContainer from './SideBarContainer';
@@ -14,24 +14,18 @@ export type pathType={
 const NotionRouter =()=>{
   const dispatch =useDispatch();
   const notion = useSelector((state:RootState)=> state.notion);
+  const location =window.location;
+  const hash=location.hash;
   const pages=notion.pages;
-  const user = useSelector((state:RootState)=> state.user);
   const firstPage = notion.pages[0];
   const [targetPageId, setTargetPageId]= useState<string|null>(firstPage.id);
-  const side =useSelector((state:RootState)=> state.side);
-  
+  const [routePage, setRoutePage]=useState<Page>(firstPage);
   const lockSideBar =() => {dispatch(lockSide())} ;
   const leftSideBar =()=>{dispatch(leftSide())} ;
   const closeSideBar =()=>{dispatch(closeSide())} ;
   const open_newPage =()=>{dispatch(openNewPage())};
   const close_newPage =()=>{dispatch(closeNewPage())};
-  const param =useParams();
   const navigate= useNavigate();
-  const findPage=(id:string):Page=>{
-    const index =notion.pagesId.indexOf(id);
-    const page = pages[index];
-    return page
-  };
   const makePagePath=(page:Page):pathType[]|null=>{
     if(page.parentsId !==null){
       const parentPages:Page[] = page.parentsId.map((id:string)=>findPage(id));
@@ -75,25 +69,25 @@ const NotionRouter =()=>{
     return path;
 };
   useEffect(()=>{
-    if(targetPageId === firstPage.id){
-      navigate(`/${firstPage.id}`)
-    }
-  },[])
-
+        const path =makeRoutePath(routePage);
+        navigate(path);
+  },[routePage]);
 
   useEffect(()=>{
-    if(targetPageId!==null){
-      const page = findPage(targetPageId);
-      const path =makeRoutePath(page);
-      navigate(path);
-    }
-    
+    const lastSlash =hash.lastIndexOf("/");
+    const id = hash.slice(lastSlash+1);
+    const page =findPage(notion.pagesId, notion.pages, id);
+    setRoutePage(page); 
+  },[hash]);
+
+  useEffect(()=>{
+  const page = findPage(notion.pagesId, notion.pages,targetPageId);
+    setRoutePage(page);
   },[targetPageId]);
+  
   return(
     <div id="inner">
       <SideBarContainer 
-        notion={notion}
-        user={user}
         lockSideBar ={lockSideBar}
         leftSideBar ={leftSideBar}
         closeSideBar ={closeSideBar}
@@ -102,24 +96,20 @@ const NotionRouter =()=>{
         setTargetPageId={setTargetPageId}
       />
       <Routes>
-        {pages.map((page:Page)=>
-                  <Route
-                    path={makeRoutePath(page)} 
-                    element={<EditorContainer 
-                              pagePath ={makePagePath(page)}
-                              page={page}
-                              side={side}
-                              lockSideBar ={lockSideBar}
-                              leftSideBar ={leftSideBar}
-                              closeSideBar ={closeSideBar}
-                              openNewPage ={open_newPage}
-                              closeNewPage={close_newPage}
-                              />
-                            }
-                    />
-                  )
-        }
+        <Route
+          path={makeRoutePath(routePage)} 
+          element={<EditorContainer 
+                  pagePath ={makePagePath(routePage)}
+                  lockSideBar ={lockSideBar}
+                  leftSideBar ={leftSideBar}
+                  closeSideBar ={closeSideBar}
+                  openNewPage ={open_newPage}
+                  closeNewPage={close_newPage}
+                  />
+                }
+        />
       </Routes>
+
 
     </div>
   )
