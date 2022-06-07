@@ -25,17 +25,17 @@ type SideBarProps ={
   closeSideBar  : ()=> void ,
   openNewPage  : ()=> void ,
   closeNewPage : ()=> void ,
-  setTargetPageId: React.Dispatch<React.SetStateAction<string|null>>,
+  setTargetPageId: React.Dispatch<React.SetStateAction<string>>,
 };
 
 type ItemTemplageProp ={
   item: listItem,
-  setTargetPageId: React.Dispatch<React.SetStateAction<string|null>>,
+  setTargetPageId: React.Dispatch<React.SetStateAction<string>>,
 };
 type ListTemplateProp ={
   notion:Notion,
   targetList: listItem[],
-  setTargetPageId: React.Dispatch<React.SetStateAction<string|null>>,
+  setTargetPageId: React.Dispatch<React.SetStateAction<string>>,
 };
 const ItemTemplate =({item ,setTargetPageId }:ItemTemplageProp)=>{
   const [toggle, setToggle]=useState<boolean>(false);

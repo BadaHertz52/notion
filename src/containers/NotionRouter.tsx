@@ -18,7 +18,7 @@ const NotionRouter =()=>{
   const hash=location.hash;
   const pages=notion.pages;
   const firstPage = notion.pages[0];
-  const [targetPageId, setTargetPageId]= useState<string|null>(firstPage.id);
+  const [targetPageId, setTargetPageId]= useState<string>(firstPage.id);
   const [routePage, setRoutePage]=useState<Page>(firstPage);
   const lockSideBar =() => {dispatch(lockSide())} ;
   const leftSideBar =()=>{dispatch(leftSide())} ;
@@ -28,7 +28,7 @@ const NotionRouter =()=>{
   const navigate= useNavigate();
   const makePagePath=(page:Page):pathType[]|null=>{
     if(page.parentsId !==null){
-      const parentPages:Page[] = page.parentsId.map((id:string)=>findPage(id));
+      const parentPages:Page[] = page.parentsId.map((id:string)=>findPage(notion.pagesId, notion.pages,id));
       const pagePath:pathType[] =parentPages.concat(page).map((p:Page)=>({
         id:p.id,
         title:p.header.title,

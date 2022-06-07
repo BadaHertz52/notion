@@ -10,7 +10,7 @@ type SideBarContainerProp ={
   closeSideBar  : ()=> void ,
   openNewPage  : ()=> void ,
   closeNewPage : ()=> void ,
-  setTargetPageId: React.Dispatch<React.SetStateAction<string|null>>,
+  setTargetPageId: React.Dispatch<React.SetStateAction<string>>,
 };
 const SideBarContainer =({lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage ,setTargetPageId }:SideBarContainerProp)=>{
   const notion =useSelector((state:RootState)=> state.notion);
