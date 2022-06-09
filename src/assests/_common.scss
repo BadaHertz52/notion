@@ -59,7 +59,7 @@ $comment:rgba(255,212,0,0.14);
   pointer-events: auto;
   transform: matrix(1,0,0,1,0,0);
   z-index: 1;
-  border-radius: 10px;
+  border-radius: 8px;
   -webkit-box-shadow: 0px 0px 23px -5px #ababab; 
   box-shadow: 0px 0px 23px -5px #ababab;
   
@@ -68,6 +68,47 @@ $comment:rgba(255,212,0,0.14);
   }
   &::-webkit-scrollbar-track{
     background: #EDECE9;
+  }
+}
+@mixin editMenuBtns{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  & >div{
+    display: flex;
+    justify-items: center;
+    align-items: center;
+  }
+  font-size: 1rem;
+  span{
+    font-size: 14px;
+    text-align: center;
+  }
+  svg:first-child {
+    font-size: 1rem;
+    margin: {
+      left: 5px;
+      right: 8px
+    }
+  }
+  span:nth-child(3){
+    position: absolute;
+    right: 1rem;
+    color: $mud;
+    svg{
+      font-size: 18px;
+    }
+  }
+};
+.edit_inform{
+  border-top:  1px solid $mud;
+  font-size: 14px;
+  text-align: left;
+  color: $mud;
+  margin-bottom: 0;
+  p {
+    margin: 2px 0;
   }
 }
 div {

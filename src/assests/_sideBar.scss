@@ -52,7 +52,17 @@
   }
   #moreFn{
     @include popupMenu;
-
+    width: 230px;
+    button{
+      padding:  3%; 
+      @include editMenuBtns;
+    }
+    p {
+      margin: 0;
+      margin-left: 5px;
+      padding: 3%;
+      color: $itemText
+    }
   }
   #rename {
     @include popupMenu;

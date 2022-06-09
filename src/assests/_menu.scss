@@ -36,52 +36,15 @@
   }
 
   #menu_editBtns .menu_editBtn {
+    @include editMenuBtns ;
     &.off{
       display: none;
     }
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    & >div{
-      display: flex;
-      justify-items: center;
-      align-items: center;
-    }
-    font-size: 1rem;
-    span{
-      font-size: 14px;
-      text-align: center;
-    }
-    svg:first-child {
-      font-size: 1rem;
-      margin: {
-        left: 5px;
-        right: 8px
-      }
-    }
-    span:nth-child(3){
-      position: absolute;
-      right: 1rem;
-      color: $mud;
-      svg{
-        font-size: 18px;
-      }
+    .underline{
+      border-top:  1px solid $mud;
     }
     .arrowDown  svg {
       transform: rotate(-90deg);
-    }
-  }
-  .underline{
-    border-bottom:  1px solid $mud;
-  }
-  .menu_edit_inform{
-    font-size: 14px;
-    text-align: left;
-    color: $mud;
-    margin-bottom: 0;
-    p {
-      margin: 2px 0;
     }
   }
 }
