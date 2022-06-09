@@ -130,7 +130,6 @@ const BlockFn =({pages,firstlist, page,userName, addBlock, editBlock, deleteBloc
       menuOpen &&closeMenu(event);
       popup.popup && closePopup(event);
     });
-
   return (
     <div 
       id="blockFn"
@@ -172,10 +171,10 @@ const BlockFn =({pages,firstlist, page,userName, addBlock, editBlock, deleteBloc
             popup.what === popupMoveToPage ?
               <div id="popupMenu">
                 <PageMenu
+                  what="block"
                   currentPage={page}
                   pages={pages}
                   firstlist={firstlist}
-                  existingPage={page}
                   deleteBlock={deleteBlock}
                   addBlock={addBlock}
                   editBlock={editBlock}

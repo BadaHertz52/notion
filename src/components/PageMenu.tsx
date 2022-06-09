@@ -58,23 +58,34 @@ const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock, addBlock, edi
   };
   const [search , setSearch]= useState<boolean>(false);
   const [result, setResult]= useState<listItem[]|null>(null);
+  const [block, setBlock]=useState<Block|null>(null);
   const sessionItem = sessionStorage.getItem("blockFnTargetBlock") as string;
-  const block:Block= JSON.parse(sessionItem);
+  useEffect(()=>{
+    if(sessionItem !==null){
+      const block:Block= JSON.parse(sessionItem);
+      setBlock(block);
+    };
+  },[sessionItem]);
 
-  const moveBlockToPage =(pageId:string)=>{
+  const moveBlockToPage =(pageId:string ,block:Block)=>{
     // 기존 페이지에서 블록 삭제
       deleteBlock(currentPage.id, block);
       // 블록을 다른 페이지로 이동
       addBlock(pageId, block, 0 , null);
     // close Menu and recovery Menu state
-    setMenuOpen(false);
+    setMenuOpen !==null && setMenuOpen(false);
   };
-  
+  const onClickToMove =(id:string)=>{
+  block!==null &&  
+  what==="block" &&
+  moveBlockToPage(id ,block);
+
+  };
   const PageButton =({item}:PageButtonProps)=>{
     return(
       <button
         className="page"
-        onClick={()=>moveBlockToPage(item.id)}
+        onClick={()=>onClickToMove(item.id)}
       >
         <div className='page_inner'>
           <span>
@@ -145,7 +156,7 @@ const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock, addBlock, edi
         </div>
         <button 
           id="new_sub_page"
-          onClick={()=>changeSubPage(currentPage, block, editBlock, addPage)}
+          onClick={()=>block !==null &&changeSubPage(currentPage, block, editBlock, addPage)}
         >
           <AiOutlinePlus/>
           <span>
