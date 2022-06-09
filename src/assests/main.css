@@ -625,7 +625,7 @@ a:link, a:active, a:visited {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  color: rgba(55, 53, 47, 0.65);
+  color: #8d8d8d;
 }
 
 .commentBlock .comment_block_line {
@@ -719,7 +719,7 @@ a:link, a:active, a:visited {
   height: 1.5rem;
   font-size: 15px;
   padding-left: 6px;
-  color: rgba(55, 53, 47, 0.65);
+  color: #8d8d8d;
   margin: 0 5%;
   border-radius: 5px;
   background-color: rgba(242, 241, 238, 0.6);
@@ -824,7 +824,7 @@ a:link, a:active, a:visited {
 }
 
 #tool_more .aboutComments {
-  color: rgba(55, 53, 47, 0.65);
+  color: #8d8d8d;
   font-size: 13px;
   border-top: 1px solid #d6d6d6;
 }
@@ -958,7 +958,7 @@ a:link, a:active, a:visited {
   height: 1.5rem;
   font-size: 15px;
   padding-left: 6px;
-  color: rgba(55, 53, 47, 0.65);
+  color: #8d8d8d;
   margin: 0 5%;
   border-radius: 5px;
   background-color: rgba(242, 241, 238, 0.6);
@@ -1162,7 +1162,7 @@ a:link, a:active, a:visited {
   height: 1.5rem;
   font-size: 15px;
   padding-left: 6px;
-  color: rgba(55, 53, 47, 0.65);
+  color: #8d8d8d;
   margin: 0 5%;
   border-radius: 5px;
   background-color: rgba(242, 241, 238, 0.6);
@@ -1208,7 +1208,7 @@ a:link, a:active, a:visited {
 }
 
 #pageMenu .pages header {
-  color: rgba(55, 53, 47, 0.65);
+  color: #8d8d8d;
   font-size: 12px;
   font-weight: 500;
   margin-bottom: 10px;
@@ -1228,7 +1228,7 @@ a:link, a:active, a:visited {
 }
 
 #pageMenu #new_sub_page span {
-  color: rgba(55, 53, 47, 0.65);
+  color: #8d8d8d;
   font-size: 14px;
   font-weight: 400;
 }
@@ -1534,6 +1534,12 @@ a:link, a:active, a:visited {
   border-top: 1px solid #d6d6d6;
 }
 
+#sideBar .itemInner span,
+#sideBar .subPage.no span {
+  color: #8d8d8d;
+  font-weight: 500;
+}
+
 #sideBar .itemInner {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1541,11 +1547,6 @@ a:link, a:active, a:visited {
   padding: 5px 14px;
   font-size: 14px;
   text-align: center;
-}
-
-#sideBar .itemInner span {
-  color: rgba(55, 53, 47, 0.65);
-  font-weight: 500;
 }
 
 #sideBar .itemInner #record-icon, #sideBar .itemInner svg {
@@ -1676,6 +1677,12 @@ a:link, a:active, a:visited {
 }
 
 #sideBar .srcoller .subPage {
+  display: none;
+}
+
+#sideBar .srcoller .subPage.on {
+  display: block;
+  margin: 5px 0;
   margin-left: 18px;
 }
 
@@ -1699,8 +1706,20 @@ a:link, a:active, a:visited {
   margin-right: 0;
 }
 
+#sideBar .srcoller .pageName {
+  font-size: inherit;
+}
+
 #sideBar .srcoller .pageName span:first-child {
   margin-right: 5px;
+}
+
+#sideBar .srcoller .subPage.no {
+  margin-left: 36px;
+}
+
+#sideBar .srcoller .subPage.no span {
+  font-size: 13px;
 }
 
 #sideBar .srcoller .addPageBtn {
@@ -1742,7 +1761,7 @@ a:link, a:active, a:visited {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  color: rgba(55, 53, 47, 0.65);
+  color: #8d8d8d;
   font-weight: 500;
 }
 
@@ -1766,7 +1785,7 @@ a:link, a:active, a:visited {
 }
 
 #sideBar .addNewPage button {
-  color: rgba(55, 53, 47, 0.65);
+  color: #8d8d8d;
   font-size: 15px;
   font-weight: 600;
   width: 100%;

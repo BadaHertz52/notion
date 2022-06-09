@@ -17,15 +17,19 @@
       border-top:1px solid $lightMud ;
     }
   }
+  .itemInner ,
+  .subPage.no {
+    span{
+      color:$itemText;
+      font-weight: 500;
+    }
+  }
   .itemInner{
     display: flex;
     padding : 5px 14px;
     font-size: 14px;
     text-align: center;
-    span{
-      color:$itemText;
-      font-weight: 500;
-    }
+
     #record-icon, svg{
       margin-right: 8px;
     }
@@ -131,6 +135,11 @@
       width: 100%;
     }
     .subPage{
+      display: none;
+    }
+    .subPage.on{
+      display: block;
+      margin : 5px 0;
       margin-left: 18px;
     }
     .itemInner {
@@ -147,8 +156,15 @@
       }
     }
     .pageName {
+      font-size: inherit;
       span:first-child{
         margin-right: 5px;
+      }
+    }
+    .subPage.no {
+      margin-left: 36px;
+      span{
+        font-size: 13px;
       }
     }
     .addPageBtn{

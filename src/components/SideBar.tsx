@@ -25,31 +25,57 @@ type SideBarProps ={
   closeSideBar  : ()=> void ,
   openNewPage  : ()=> void ,
   closeNewPage : ()=> void ,
-  setTargetPageId: React.Dispatch<React.SetStateAction<string>>,
+  setTargetPageId: Dispatch<SetStateAction<string>>,
 };
 
 type ItemTemplageProp ={
   item: listItem,
-  setTargetPageId: React.Dispatch<React.SetStateAction<string>>,
+  setTargetPageId: Dispatch<SetStateAction<string>>,
 };
 type ListTemplateProp ={
   notion:Notion,
   targetList: listItem[],
-  setTargetPageId: React.Dispatch<React.SetStateAction<string>>,
+  setTargetPageId: Dispatch<SetStateAction<string>>,
 };
-const ItemTemplate =({item ,setTargetPageId }:ItemTemplageProp)=>{
-  const [toggle, setToggle]=useState<boolean>(false);
-  const onToggleSubPage =()=>{
-    setToggle(!toggle);
-    const subPageElement = document.getElementById(`item_${item.id}`)?.children[1];
-    if(subPageElement !== undefined){
-      subPageElement.classList.toggle("on");
-    }else{
-      console.log("Can't find html element")
+const ItemTemplate =({item ,setTargetPageId  }:ItemTemplageProp)=>{
+  const [toggleStyle ,setToggleStyle]=useState<CSSProperties>({
+    transform : "rotate(0deg)" 
+  });
+  const onToggleSubPage =(event:React.MouseEvent)=>{
+    const target =event.target as HTMLElement ;
+    const toggleSubPage=(subPageElement:null|undefined|Element)=>{
+      if(subPageElement !==null && subPageElement !== undefined){
+        subPageElement.classList.toggle("on");
+        console.log(subPageElement.classList)
+        subPageElement.classList.contains("on")?
+        setToggleStyle({
+          transform: "rotate(90deg)"
+        })
+        :
+        setToggleStyle({
+          transform: "rotate(0deg)"
+        })
+      }
+
     };
-  };
-  const toggleStyle:CSSProperties={
-    transform: toggle? "rotate(90deg)" : "rotate(0deg)" 
+    switch (target.tagName.toLocaleLowerCase()) {
+      case "path":
+        let subPageElement = target.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.nextElementSibling ;
+        toggleSubPage(subPageElement);
+        break;
+      case "svg":
+        subPageElement = target.parentElement?.parentElement?.parentElement?.parentElement?.nextElementSibling ;
+        toggleSubPage(subPageElement);
+        break;
+      case "button":
+        subPageElement = target.parentElement?.parentElement?.parentElement?.nextElementSibling ;
+        toggleSubPage(subPageElement);
+        break;
+    
+      default:
+        break;
+    }
+      
   };
   return (
   <div 
@@ -58,8 +84,8 @@ const ItemTemplate =({item ,setTargetPageId }:ItemTemplageProp)=>{
     <div className='pageContent'>
       <button 
         className='toggleBtn'
-        style={toggleStyle}
         onClick={onToggleSubPage}
+        style={toggleStyle}
       >
         <MdPlayArrow/>
       </button>
@@ -106,7 +132,10 @@ const ListTemplate =({notion, targetList ,setTargetPageId}:ListTemplateProp)=>{
       editTime:subPage.editTime
     };
   };
-
+  const makeTargetList =(ids:string[]):listItem[]=>{
+    const listItemArry:listItem[] = ids.map((id:string)=>findSubPage(id));
+    return listItemArry
+  };
   return(
     <ul>
     {targetList.map((item:listItem)=> 
@@ -120,20 +149,18 @@ const ListTemplate =({notion, targetList ,setTargetPageId}:ListTemplateProp)=>{
             setTargetPageId={setTargetPageId}
           />
         </div>
-        {item.subPagesId !==null &&
+        {
+        item.subPagesId !==null ?
         <div className="subPage">
-          {item.subPagesId.map((id:string)=>{
-            const subPage :listItem=findSubPage(id);
-            return(
-              <ItemTemplate
-                key={`item_${item.subPagesId?.indexOf(id)}`}
-                item={subPage}
-                setTargetPageId={setTargetPageId}
-              />
-            )
-          }
-          )
-          }
+          <ListTemplate
+            notion={notion}     
+            targetList={makeTargetList(item.subPagesId)}
+            setTargetPageId={setTargetPageId}     
+          />
+        </div>
+        :
+        <div className='subPage no'>
+          <span>No page inside</span>
         </div>
         }
       </li> 
