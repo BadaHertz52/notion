@@ -462,17 +462,25 @@ const [moreFnStyle, setMoreFnStyle] =useState<CSSProperties|undefined>(undefined
         style={moreFnStyle}
       >
         <button>
-          <RiDeleteBin6Line/>
-          <span>Delete</span>
+          <div>
+            <RiDeleteBin6Line/>
+            <span className=''>
+              Delete
+            </span>
+          </div>
         </button>
         <button>  
-          <AiOutlineStar/>
-          <span>Add to Favorites</span>
+          <div>
+            <AiOutlineStar/>
+            <span>Add to Favorites</span>
+          </div>
         </button>
         <button>
-          <HiOutlineDuplicate/>
-          <span>Duplicate</span>
-          <span></span>
+          <div>
+            <HiOutlineDuplicate/>
+            <span>Duplicate</span>
+            <span></span>
+          </div>
         </button>
         <button
           onClick={()=>{
@@ -481,16 +489,20 @@ const [moreFnStyle, setMoreFnStyle] =useState<CSSProperties|undefined>(undefined
             setRename(true);
           }}
         >
-          <BsPencilSquare/>
-          <span>Rename</span>
-          <span className="">
-            Ctrl+Shift+R
-          </span>
+          <div>
+            <BsPencilSquare/>
+            <span>Rename</span>
+            <span className="">
+              Ctrl+Shift+R
+            </span>
+          </div>
         </button>
-        <button>
-          <IoArrowRedoOutline/>
-          <span>Move to</span>
-          <span>Ctrl+Shift+P</span>
+        <button >
+          <div> 
+            <IoArrowRedoOutline/>
+            <span>Move to</span>
+            <span>Ctrl+Shift+P</span>
+          </div>
         </button>
         <div className='edit_inform'>
                 <p>Last edited by {user.userName} </p>
