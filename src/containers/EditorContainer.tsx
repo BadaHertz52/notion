@@ -1,13 +1,21 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector } from 'react-redux';
 import Frame from '../components/Frame';
 import TopBar from '../components/TopBar';
 import { RootState } from '../modules';
-import {  Block, Page, edit_block, add_block, delete_block, change_to_sub, raise_block, Notion, add_page, delete_page, edit_page, findPage, listItem } from '../modules/notion';
+import {  Block, Page,  findPage, listItem, Notion, change_to_sub, raise_block } from '../modules/notion';
 import { pathType } from './NotionRouter';
 
 type EditorContainerProps ={
   pagePath : pathType[]|null,
+  editBlock :(pageId: string, block: Block) => void,
+  addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
+  changeToSub: (pageId: string, block: Block, first: boolean, newParentBlock: Block) => void
+  raiseBlock: (pageId: string, block: Block) => void,
+  deleteBlock: (pageId: string, block: Block) => void,
+  addPage : ( newPage:Page, block:null)=>void,
+  editPage : (pageId:string , newPage:Page, block:null)=>void,
+  deletePage : (pageId:string , block:null)=>void,
   lockSideBar  : ()=> void ,
   leftSideBar  : ()=> void ,
   closeSideBar  : ()=> void ,
@@ -20,8 +28,11 @@ export type Command ={
   boolean:boolean,
   command:string | null
 };
-const EditorContainer =({ pagePath ,lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage ,setTargetPageId}:EditorContainerProps)=>{
+const EditorContainer =({ pagePath ,lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage ,addBlock,editBlock,deleteBlock,addPage,editPage,deletePage, setTargetPageId}:EditorContainerProps)=>{
   const notion :Notion = useSelector((state:RootState)=> state.notion);
+  const dispatch =useDispatch();
+  const changeToSub =(pageId: string, block: Block, first: boolean, newParentBlock: Block) => dispatch((change_to_sub(pageId, block, first ,newParentBlock)));
+  const raiseBlock =(pageId: string, block: Block) =>dispatch((raise_block(pageId, block)));
   const side =useSelector((state:RootState)=> state.side);
   const pages:Page[] =notion.pages;
   const pagesId :string[] =notion.pagesId;
@@ -38,18 +49,6 @@ const EditorContainer =({ pagePath ,lockSideBar, leftSideBar,closeSideBar, openN
     }
   });
   const userName :string  =useSelector((state:RootState)=> state.user.userName) ;
-  const dispatch =useDispatch();
-
-  const editBlock = (pageId:string, block:Block)=> {dispatch(edit_block(pageId, block ))};
-  const addBlock =(pageId:string , block:Block , nextBlockIndex:number ,previousBlockId:string|null)=>{dispatch(add_block(pageId,block ,nextBlockIndex ,previousBlockId))};
-  const deleteBlock=(pageId:string,block:Block)=>{dispatch(delete_block(pageId,block))};
-  const changeToSub =(pageId:string, block:Block , first:boolean ,newParentBlock:Block)=>{dispatch(change_to_sub(pageId,block,first,newParentBlock));
-  };
-  const raiseBlock=(pageId:string, block:Block)=>{dispatch(raise_block(pageId,block))};
-
-  const addPage=(newPage:Page ,block:null)=>{dispatch(add_page( newPage, block))};
-  const editPage=(pageId:string,newPage:Page ,block:null)=>{dispatch(edit_page(pageId, newPage, block))};
-  const deletePage=(pageId:string,block:null)=>{dispatch(delete_page(pageId, block))};
 
   useEffect(()=>{
     if(pagePath !== null){

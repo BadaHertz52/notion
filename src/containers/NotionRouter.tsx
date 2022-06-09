@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {  Route, Routes, useNavigate, useParams, } from 'react-router-dom';
 import { RootState } from '../modules';
-import { findPage, Page } from '../modules/notion';
+import { add_block, add_page, Block, change_to_sub, delete_block, delete_page, edit_block, edit_page, findPage, Page, raise_block } from '../modules/notion';
 import { closeNewPage, closeSide, leftSide, lockSide, openNewPage } from '../modules/side';
 import EditorContainer from './EditorContainer';
 import SideBarContainer from './SideBarContainer';
@@ -12,6 +12,7 @@ export type pathType={
   icon:string|null
 };
 const NotionRouter =()=>{
+  const navigate= useNavigate();
   const dispatch =useDispatch();
   const notion = useSelector((state:RootState)=> state.notion);
   const location =window.location;
@@ -20,12 +21,21 @@ const NotionRouter =()=>{
   const firstPage = notion.pages[0];
   const [targetPageId, setTargetPageId]= useState<string>(firstPage.id);
   const [routePage, setRoutePage]=useState<Page>(firstPage);
+  const editBlock = (pageId:string, block:Block)=> {dispatch(edit_block(pageId, block ))};
+  const addBlock =(pageId:string , block:Block , newBlockIndex:number ,previousBlockId:string|null)=>{dispatch(add_block(pageId,block ,newBlockIndex ,previousBlockId))};
+  const deleteBlock=(pageId:string,block:Block)=>{dispatch(delete_block(pageId,block))};
+  const changeToSub =(pageId:string, block:Block , first:boolean ,newParentBlock:Block)=>{dispatch(change_to_sub(pageId,block,first,newParentBlock));
+  };
+  const raiseBlock=(pageId:string, block:Block)=>{dispatch(raise_block(pageId,block))};
+  const addPage=(newPage:Page ,block:null)=>{dispatch(add_page( newPage, block))};
+  const editPage=(pageId:string,newPage:Page ,block:null)=>{dispatch(edit_page(pageId, newPage, block))};
+  const deletePage=(pageId:string,block:null)=>{dispatch(delete_page(pageId, block))};
   const lockSideBar =() => {dispatch(lockSide())} ;
   const leftSideBar =()=>{dispatch(leftSide())} ;
   const closeSideBar =()=>{dispatch(closeSide())} ;
   const open_newPage =()=>{dispatch(openNewPage())};
   const close_newPage =()=>{dispatch(closeNewPage())};
-  const navigate= useNavigate();
+
   const makePagePath=(page:Page):pathType[]|null=>{
     if(page.parentsId !==null){
       const parentPages:Page[] = page.parentsId.map((id:string)=>findPage(notion.pagesId, notion.pages,id));
@@ -96,6 +106,14 @@ const NotionRouter =()=>{
         openNewPage ={open_newPage}
         closeNewPage={close_newPage}
         setTargetPageId={setTargetPageId}
+        addBlock={addBlock}
+        editBlock={editBlock}
+        changeToSub={changeToSub}
+        raiseBlock={raiseBlock}
+        deleteBlock={deleteBlock}
+        addPage={addPage}
+        editPage={editPage}
+        deletePage={deletePage}
       />
       <Routes>
         <Route
@@ -108,6 +126,14 @@ const NotionRouter =()=>{
                   openNewPage ={open_newPage}
                   closeNewPage={close_newPage}
                   setTargetPageId={setTargetPageId}
+                  addBlock={addBlock}
+                  editBlock={editBlock}
+                  changeToSub={changeToSub}
+                  raiseBlock={raiseBlock}
+                  deleteBlock={deleteBlock}
+                  addPage={addPage}
+                  editPage={editPage}
+                  deletePage={deletePage}
                   />
                 } 
         />
