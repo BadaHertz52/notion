@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Frame from '../components/Frame';
 import TopBar from '../components/TopBar';
@@ -12,14 +12,15 @@ type EditorContainerProps ={
   leftSideBar  : ()=> void ,
   closeSideBar  : ()=> void ,
   openNewPage  : ()=> void ,
-  closeNewPage : ()=> void 
+  closeNewPage : ()=> void ,
+  setTargetPageId:Dispatch<SetStateAction<string>>
 };
 
 export type Command ={
   boolean:boolean,
   command:string | null
 };
-const EditorContainer =({ pagePath ,lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage }:EditorContainerProps)=>{
+const EditorContainer =({ pagePath ,lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage ,setTargetPageId}:EditorContainerProps)=>{
   const notion :Notion = useSelector((state:RootState)=> state.notion);
   const side =useSelector((state:RootState)=> state.side);
   const pages:Page[] =notion.pages;
@@ -70,6 +71,7 @@ const EditorContainer =({ pagePath ,lockSideBar, leftSideBar,closeSideBar, openN
       closeSideBar ={closeSideBar}
       openNewPage ={openNewPage}
       closeNewPage={closeNewPage}
+      setTargetPageId={setTargetPageId}
       />
       <Frame
         pages={pages}
@@ -85,6 +87,7 @@ const EditorContainer =({ pagePath ,lockSideBar, leftSideBar,closeSideBar, openN
         addPage={addPage}
         editPage={editPage}
         deletePage={deletePage}
+        setTargetPageId={setTargetPageId}
       />
       </>
       }

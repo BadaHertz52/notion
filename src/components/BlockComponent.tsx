@@ -21,7 +21,8 @@ type BlockProp ={
   editPage : (pageId:string , newPage:Page, block:null)=>void,
   deletePage : (pageId:string , block:null)=>void,
   setCommentBlock : Dispatch<SetStateAction<Block|null>>,
-  commentBlock:Block|null
+  commentBlock:Block|null,
+  setTargetPageId:Dispatch<SetStateAction<string>>
 };
 type BlockCommentProps ={
   block:Block,
@@ -49,12 +50,22 @@ const BlockContent =({block}:{block:Block})=>{
   return(
     <>
     {block.comments ==null ?
-    <div 
-      className="contents"
-      placeholder="type '/' for commmands"
-    >
-      {block.contents}
-    </div>
+    ( block.type==="page"?
+      <button 
+        className="contents pageTitle"
+        name={block.id}
+        placeholder="type '/' for commmands"
+      >
+        {block.contents}
+      </button>
+      :
+      <div 
+        className="contents"
+        placeholder="type '/' for commmands"
+      >
+        {block.contents}
+      </div>
+    )
     :
     <button 
       className="contents commentBtn"
@@ -67,7 +78,7 @@ const BlockContent =({block}:{block:Block})=>{
   </>
   )
 }
-const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,addPage, editPage, deletePage,setCommentBlock ,commentBlock}:BlockProp)=>{
+const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,addPage, editPage, deletePage,setCommentBlock ,commentBlock ,setTargetPageId}:BlockProp)=>{
   const className = block.type !== "toggle" ?
                     `${block.type} block ` :
                     `${block.type} block ${block.subBlocksId!==null?'on' : ""}`;
@@ -224,6 +235,7 @@ const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,chang
             deletePage={deletePage}
             setCommentBlock={setCommentBlock}
             commentBlock={commentBlock}
+            setTargetPageId={setTargetPageId}
           />
         )
         }

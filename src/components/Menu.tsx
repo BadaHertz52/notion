@@ -210,6 +210,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
                     <span>Ctrl+Shift+P</span>
                   </div>
                 </button>
+                {block.type !== "page" &&
                 <button
                   className='underline menu_editBtn'
                   name="comment"
@@ -221,6 +222,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
                     <span>Ctrl+Shift+M</span>
                   </div>
                 </button>
+                }
                 <button 
                   name='color'
                   className='underline menu_editBtn'

@@ -1,4 +1,4 @@
-import React, { CSSProperties, useState } from 'react';
+import React, { CSSProperties, Dispatch, SetStateAction, useState } from 'react';
 import { Block, CommentType, listItem, Page } from '../modules/notion';
 import EditableBlock from './EditableBlock';
 
@@ -26,11 +26,11 @@ type FrameProps ={
   addPage :(newPage:Page ,block:null)=>void;
   editPage :(pageId:string,newPage:Page ,block:null)=>void;
   deletePage :(pageId:string,block:null)=>void;
-
+  setTargetPageId:Dispatch<SetStateAction<string>>
 };
 
 
-const Frame =({ pages, firstlist,userName, page,side,  editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage,editPage, deletePage }:FrameProps)=>{
+const Frame =({ pages, firstlist,userName, page,side,  editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage,editPage, deletePage ,setTargetPageId}:FrameProps)=>{
   const [decoOpen ,setdecoOpen] =useState<boolean>(true);
   const [commentBlock, setCommentBlock]=useState<Block|null>(null);
   const [moreOpen, setMoreOpen]= useState<boolean>(false);
@@ -184,6 +184,7 @@ const Frame =({ pages, firstlist,userName, page,side,  editBlock, addBlock,chang
                       deletePage={deletePage}
                       commentBlock={commentBlock}
                       setCommentBlock={setCommentBlock}
+                      setTargetPageId={setTargetPageId}
                     />
                   )
                 }

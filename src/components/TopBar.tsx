@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { AiOutlineClockCircle, AiOutlineMenu, AiOutlineStar } from 'react-icons/ai';
 import { BiMessageDetail } from 'react-icons/bi';
 import { BsThreeDots } from 'react-icons/bs';
@@ -14,9 +14,10 @@ type TopBarProps ={
   leftSideBar  : ()=> void ,
   closeSideBar  : ()=> void ,
   openNewPage  : ()=> void ,
-  closeNewPage : ()=> void 
+  closeNewPage : ()=> void ,
+  setTargetPageId:Dispatch<SetStateAction<string>>
 }
-const TopBar =({side,page,pagePath, lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage}:TopBarProps)=>{
+const TopBar =({side,page,pagePath, lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage ,setTargetPageId}:TopBarProps)=>{
   const [title, setTitle]= useState<string>("");
   useEffect(()=>{
     if(side.sideState ==="left"){

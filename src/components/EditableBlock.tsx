@@ -1,4 +1,3 @@
-
 import React, { Dispatch, SetStateAction, useEffect, useRef, useState, } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
@@ -124,12 +123,13 @@ type EditableBlockProps ={
   deletePage : (pageId:string , block:null)=>void,
   setCommentBlock : Dispatch<SetStateAction<Block|null>>,
   commentBlock :Block |null,
+  setTargetPageId:Dispatch<SetStateAction<string>>
 };
 export   type CommentOpenType ={
   open:boolean,
   targetId: string | null,
 };
-const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock , addPage, editPage, deletePage ,setCommentBlock ,commentBlock}:EditableBlockProps)=>{  
+const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock , addPage, editPage, deletePage ,setCommentBlock ,commentBlock ,setTargetPageId}:EditableBlockProps)=>{  
   const  editTime = JSON.stringify(Date.now());
   const innerRef  =useRef<HTMLDivElement>(null) ;
   const storageItem =sessionStorage.getItem("editedBlock") ;
@@ -172,6 +172,7 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
       deletePage={deletePage}
       setCommentBlock={setCommentBlock}
       commentBlock={commentBlock}
+      setTargetPageId={setTargetPageId}
       />);
     return blockNode
   };
@@ -291,6 +292,7 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
     const editor =document.getElementsByClassName("editor"
     )[0];
     const comments =document.getElementById("comments");
+
     const openComment =(element:HTMLElement)=>{
       const targetElement = element as HTMLButtonElement;
       const id = targetElement.name;
@@ -331,7 +333,21 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
       };
     };
 
-    switch (target.tagName) {
+    const moveToPage =(element:HTMLElement, attribute:string)=>{
+      const name =element.getAttribute(attribute);
+      name !==null && setTargetPageId(name);
+    };
+    switch (target.tagName.toLocaleLowerCase()) {
+      case "div":
+        if(targetClassName?.includes("pageIcon")){
+          const pageTitle = target.nextElementSibling?.firstElementChild as HTMLElement;
+          moveToPage(pageTitle, "name");
+        };
+        if(target.previousElementSibling?.classList.contains("pageIcon")){
+          const pageTitle =target.firstElementChild as HTMLElement ;
+          moveToPage(pageTitle, "name");
+        };
+      break;
       case "svg":
         if(targetClassName ==="blockBtnSvg"){
           toggleOn(targetParentElement);
@@ -341,7 +357,7 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
         };
         if(targetParentElement.className?.includes("checkbox") ){
           changeTodoDone(targetParentElement, targetParentElement.className?.includes("done"))
-        }
+        };
         break;
       case "path":
         if(targetParentElement.getAttribute("class")==="blockBtnSvg"){
@@ -370,6 +386,9 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
         };
         if(targetClassName?.includes("commentBtn")){
           openComment(target);
+        };
+        if(targetClassName?.includes("pageTitle")){
+          moveToPage(target, "name");
         };
         break;
       default:
