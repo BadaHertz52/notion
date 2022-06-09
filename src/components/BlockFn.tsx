@@ -13,7 +13,7 @@ type BlockFnProp ={
   firstlist:listItem[],
   page:Page,
   userName:string,
-  addBlock: (pageId: string, block: Block, nextBlockIndex: number, previousBlockId: string | null) => void, 
+  addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void, 
   editBlock: (pageId: string, block: Block) => void,
   deleteBlock :(pageId: string, block: Block) => void,
   addPage : ( newPage:Page, block:null)=>void,

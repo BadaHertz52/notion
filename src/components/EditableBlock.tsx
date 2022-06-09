@@ -42,7 +42,7 @@ const findTargetBlock =(page:Page):findTargetBlockReturn=>{
     newContents:newContents
   }
 };
-export const makeNewBlock=(page:Page, editTime:string,addBlock:(pageId: string, block: Block, nextBlockIndex: number, previousBlockId: string | null) =>void ,editBlock :(pageId: string, block: Block) => void, addPage:( newPage: Page, block: null) => void ,targetBlock:Block, targetBlockIndex:number, newContents:string  )=>{
+export const makeNewBlock=(page:Page, editTime:string,addBlock:(pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) =>void ,editBlock :(pageId: string, block: Block) => void, addPage:( newPage: Page, block: null) => void ,targetBlock:Block, targetBlockIndex:number, newContents:string  )=>{
   if(targetBlock.type !=="toggle"){
     const newBlock:Block ={
       id:editTime,
@@ -114,7 +114,7 @@ type EditableBlockProps ={
   page:Page,
   block:Block,
   editBlock :(pageId: string, block: Block) => void,
-  addBlock: (pageId: string, block: Block, nextBlockIndex: number, previousBlockId: string | null) => void,
+  addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
   changeToSub: (pageId: string, block: Block, first: boolean, newParentBlock: Block) => void
   raiseBlock: (pageId: string, block: Block) => void,
   deleteBlock: (pageId: string, block: Block) => void,

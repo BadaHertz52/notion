@@ -24,7 +24,7 @@ type MenuProps ={
   page:Page,
   userName: string,
   setMenuOpen : Dispatch<SetStateAction<boolean>>,
-  addBlock:(pageId: string, block: Block, nextBlockIndex: number, previousBlockId: string | null) => void,
+  addBlock:(pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
   editBlock : (pageId: string, block: Block) => void,
   deleteBlock :(pageId: string, block: Block) => void,
   addPage : ( newPage:Page, block:null)=>void,

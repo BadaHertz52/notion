@@ -9,7 +9,7 @@ type PageMenuProps ={
   firstlist:listItem[],
   existingPage: Page,
   deleteBlock: (pageId: string, block: Block) => void,
-  addBlock: (pageId: string, block: Block, nextBlockIndex: number, previousBlockId: string | null) => void,
+  addBlock:(pageId: string, block: Block, nextBlockIndex: number, previousBlockId: string | null) => void,
   editBlock: (pageId: string, block: Block) => void,
   setMenuOpen:Dispatch<SetStateAction<boolean>>,
   addPage:( newPage: Page, block: null) => void,

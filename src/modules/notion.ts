@@ -86,7 +86,7 @@ export  const blockSample:Block ={
 };
 export type listItem = {
   id: string;
-  title: string | null;
+  title: string ;
   icon: string | null;
   subPagesId: string[]|null;
   parentsId:string[]|null;
@@ -140,11 +140,11 @@ const EDIT_PAGE ="notion/EDIT_PAGE" as const;
 const DELETE_PAGE ="notion/DELETE_PAGE" as const;
 
 
-export const add_block =(pageId:string, block:Block ,nextBlockIndex:number ,previousBlockId:string|null)=> ({
+export const add_block =(pageId:string, block:Block ,newBlockIndex:number ,previousBlockId:string|null)=> ({
   type:ADD_BLOCK ,
   pageId:pageId,
   block:block,
-  nextBlockIndex :nextBlockIndex,
+  newBlockIndex :newBlockIndex,
   previousBlockId:previousBlockId
 });
 export const edit_block =(pageId:string, block:Block)=> ({
@@ -716,12 +716,12 @@ export default function notion (state:Notion =initialState , action :NotionActio
 
   switch (action.type) {
     case ADD_BLOCK:
-      const theNumber = action.nextBlockIndex===0? 1:0;
-      targetPage.blocks?.splice(action.nextBlockIndex, theNumber, action.block);
-      targetPage.blocksId?.splice(action.nextBlockIndex, theNumber, action.block.id);
+      const theNumber = action.newBlockIndex===0? 1:0;
+      targetPage.blocks?.splice(action.newBlockIndex, theNumber, action.block);
+      targetPage.blocksId?.splice(action.newBlockIndex, theNumber, action.block.id);
 
       if(action.block.firstBlock){
-        targetPage.firstBlocksId?.splice(action.nextBlockIndex, theNumber,action.block.id);
+        targetPage.firstBlocksId?.splice(action.newBlockIndex, theNumber,action.block.id);
       };
       //subBlock 으로 만들어 졌을 때 
       if(action.block.parentBlocksId!==null){
