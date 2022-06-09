@@ -1,5 +1,5 @@
 import React, { CSSProperties, Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { listItem, Notion, Page } from '../modules/notion';
+import { findPage, listItem, Notion, Page } from '../modules/notion';
 
 //react-icon
 import {FiCode ,FiChevronsLeft} from 'react-icons/fi';
@@ -144,15 +144,20 @@ const SideBar =({notion, user ,pages,firstPages ,lockSideBar, leftSideBar,closeS
 }:SideBarProps)=>{
   const recordIcon =user.userName.substring(0,1);
   const editTime =JSON.stringify(Date.now());
-  const favorites:listItem[] = pages.filter((page:Page)=> user.favorites.includes(page.id)).map((page:Page)=> ({
+  const pagesId: string[] = pages.map((page:Page)=> (page.id));
+  const favorites:listItem[] = user.favorites.map((id: string)=> {
+    const page =findPage(pagesId,pages,id);
+    const listItem ={
     id:page.id,
     title:page.header.title,
     icon:page.header.icon,
     subPagesId: page.subPagesId,
     parentsId: page.parentsId,
-    editTime:editTime
-  }));
-  const list:listItem[] = firstPages.filter((page:Page)=> page.parentsId ==null)
+    editTime:editTime};
+    return listItem
+});
+  const list:listItem[] = firstPages
+                                    .filter((page:Page)=> page.parentsId ==null)
                                     .map((page:Page)=> (
                                       { id:page.id,
                                         icon:page.header.icon,
