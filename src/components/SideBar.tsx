@@ -492,13 +492,11 @@ const [moreFnStyle, setMoreFnStyle] =useState<CSSProperties|undefined>(undefined
           <span>Move to</span>
           <span>Ctrl+Shift+P</span>
         </button>
-        <div>
-          <p>
-            Last edited by {user.userName}
-          </p>
-          <Time 
-            editTime={targetItem.editTime}
-          />
+        <div className='edit_inform'>
+                <p>Last edited by {user.userName} </p>
+                  <Time 
+                    editTime={targetItem.editTime}
+                  />
         </div>
       </div>
     }

@@ -239,7 +239,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
                   </div>
                 </button>
               </div>
-              <div className='menu_edit_inform'>
+              <div className='edit_inform'>
                 <p>Last edited by {userName} </p>
                   <Time 
                     editTime={block.editTime}
