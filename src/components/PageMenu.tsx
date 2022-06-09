@@ -1,17 +1,17 @@
-import React, { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
+import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { GrDocumentText } from 'react-icons/gr';
-import { basicBlockStyle, Block, blockSample, listItem, Page, pageSample } from '../modules/notion';
+import {  Block,  listItem, Page, pageSample } from '../modules/notion';
 
 type PageMenuProps ={
+  what:"page"|"block",
   currentPage:Page,
   pages:Page[],
   firstlist:listItem[],
-  existingPage: Page,
   deleteBlock: (pageId: string, block: Block) => void,
   addBlock:(pageId: string, block: Block, nextBlockIndex: number, previousBlockId: string | null) => void,
   editBlock: (pageId: string, block: Block) => void,
-  setMenuOpen:Dispatch<SetStateAction<boolean>>,
+  setMenuOpen:Dispatch<SetStateAction<boolean>> |null,
   addPage:( newPage: Page, block: null) => void,
 };
 export   const changeSubPage =(currentPage:Page, block:Block, editBlock: (pageId: string, block: Block) => void,addPage:( newPage: Page, block: null) => void, )=>{
@@ -51,7 +51,7 @@ export   const changeSubPage =(currentPage:Page, block:Block, editBlock: (pageId
       addPage(newPage, null);
     }
 };
-const PageMenu =({ currentPage,pages, firstlist, existingPage,deleteBlock, addBlock, editBlock,addPage ,setMenuOpen}:PageMenuProps)=>{
+const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock, addBlock, editBlock,addPage ,setMenuOpen}:PageMenuProps)=>{
 
   type PageButtonProps={
     item: listItem
@@ -63,7 +63,7 @@ const PageMenu =({ currentPage,pages, firstlist, existingPage,deleteBlock, addBl
 
   const moveBlockToPage =(pageId:string)=>{
     // 기존 페이지에서 블록 삭제
-      deleteBlock(existingPage.id, block);
+      deleteBlock(currentPage.id, block);
       // 블록을 다른 페이지로 이동
       addBlock(pageId, block, 0 , null);
     // close Menu and recovery Menu state

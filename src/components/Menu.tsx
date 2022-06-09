@@ -272,10 +272,10 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
         }
         {turnInToPage &&
           <PageMenu
+            what="block"
             currentPage={page}
             pages={pages}
-            firstlist={firstlist}
-            existingPage={page}
+            firstlist={firstlist}   
             addBlock={addBlock}
             editBlock={editBlock}
             deleteBlock={deleteBlock}
