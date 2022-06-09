@@ -1,15 +1,24 @@
-import React, { CSSProperties, Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { findPage, listItem, Notion, Page } from '../modules/notion';
+import React, { ChangeEvent, CSSProperties, Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import { Block, blockSample, findPage, listItem, Notion, Page, pageSample } from '../modules/notion';
 
 //react-icon
 import {FiCode ,FiChevronsLeft} from 'react-icons/fi';
-import {AiOutlineClockCircle, AiOutlinePlus} from 'react-icons/ai';
+import {AiOutlineClockCircle, AiOutlinePlus, AiOutlineStar} from 'react-icons/ai';
 import {BiSearchAlt2} from 'react-icons/bi';
-import {BsFillTrash2Fill, BsThreeDots} from 'react-icons/bs';
+import {BsFillTrash2Fill, BsPencilSquare, BsThreeDots} from 'react-icons/bs';
 import {IoIosSettings} from 'react-icons/io';
-import {HiDownload, HiTemplate} from 'react-icons/hi';
+import {HiDownload, HiOutlineDuplicate, HiTemplate} from 'react-icons/hi';
 import { MdPlayArrow } from 'react-icons/md';
-
+import { GrDocumentText } from 'react-icons/gr';
+import Time from './Time';
+import PageMenu from './PageMenu';
+import { RiDeleteBin6Line } from 'react-icons/ri';
+import { IoArrowRedoOutline } from 'react-icons/io5';
+type hoverType={
+  hover:boolean, 
+  target:HTMLElement|null,
+  targetItem:listItem |null,
+};
 type SideBarProps ={
   notion : Notion,
   user:{
@@ -18,8 +27,12 @@ type SideBarProps ={
     favorites:string[],
     trash:string[],
   },
-  pages:Page[],
-  firstPages:Page[],
+  editBlock :(pageId: string, block: Block) => void,
+  addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
+  deleteBlock: (pageId: string, block: Block) => void,
+  addPage : ( newPage:Page, block:null)=>void,
+  editPage : (pageId:string , newPage:Page, block:null)=>void,
+  deletePage : (pageId:string , block:null)=>void,
   lockSideBar  : ()=> void ,
   leftSideBar  : ()=> void ,
   closeSideBar  : ()=> void ,
@@ -31,16 +44,22 @@ type SideBarProps ={
 type ItemTemplageProp ={
   item: listItem,
   setTargetPageId: Dispatch<SetStateAction<string>>,
+  hover:hoverType,
+  setHover: Dispatch<SetStateAction<hoverType>>,
 };
 type ListTemplateProp ={
   notion:Notion,
   targetList: listItem[],
   setTargetPageId: Dispatch<SetStateAction<string>>,
+  hover:hoverType,
+  setHover: Dispatch<SetStateAction<hoverType>>,
+
 };
-const ItemTemplate =({item ,setTargetPageId  }:ItemTemplageProp)=>{
+const ItemTemplate =({item,setTargetPageId ,setHover, hover }:ItemTemplageProp)=>{
   const [toggleStyle ,setToggleStyle]=useState<CSSProperties>({
     transform : "rotate(0deg)" 
   });
+  const itemInner =useRef<HTMLDivElement>(null);
   const onToggleSubPage =(event:React.MouseEvent)=>{
     const target =event.target as HTMLElement ;
     const toggleSubPage=(subPageElement:null|undefined|Element)=>{
@@ -75,11 +94,30 @@ const ItemTemplate =({item ,setTargetPageId  }:ItemTemplageProp)=>{
       default:
         break;
     }
-      
   };
+  const showPageFn=()=>{
+    
+    if(hover.hover){
+      setHover({
+        hover:false,
+        target:null,
+        targetItem:null,
+      })
+    }else{
+      itemInner.current !==null &&
+        setHover({
+          hover:true,
+          target:itemInner.current,
+          targetItem:item
+        })
+    }
+    
+  }
   return (
   <div 
     className='itemInner pageLink'
+    ref={itemInner}
+    onMouseOver={showPageFn}
   >
     <div className='pageContent'>
       <button 
@@ -101,25 +139,11 @@ const ItemTemplate =({item ,setTargetPageId  }:ItemTemplageProp)=>{
         <span>{item.title}</span>
       </button>
     </div>
-    <div className="pageFun">
-      <button  
-        className='dotBtn'
-        title='delete, duplicate, and more'
-      >
-        <BsThreeDots/>
-      </button>
-      <button 
-        className='addPageBtn'
-        title="Quickly add a page inside"
-      >
-        <AiOutlinePlus/>
-      </button>
-    </div>
   </div>
   )
 };
 
-const ListTemplate =({notion, targetList ,setTargetPageId}:ListTemplateProp)=>{
+const ListTemplate =({notion,targetList ,setTargetPageId ,hover ,setHover}:ListTemplateProp)=>{
   const findSubPage =(id:string):listItem=>{
     const index =notion.pagesId.indexOf(id);
     const subPage:Page =notion.pages[index];
@@ -147,6 +171,8 @@ const ListTemplate =({notion, targetList ,setTargetPageId}:ListTemplateProp)=>{
           <ItemTemplate 
             item={item}
             setTargetPageId={setTargetPageId}
+            hover={hover}
+            setHover={setHover}
           />
         </div>
         {
@@ -155,7 +181,9 @@ const ListTemplate =({notion, targetList ,setTargetPageId}:ListTemplateProp)=>{
           <ListTemplate
             notion={notion}     
             targetList={makeTargetList(item.subPagesId)}
-            setTargetPageId={setTargetPageId}     
+            setTargetPageId={setTargetPageId} 
+            hover={hover} 
+            setHover={setHover}
           />
         </div>
         :
@@ -169,11 +197,35 @@ const ListTemplate =({notion, targetList ,setTargetPageId}:ListTemplateProp)=>{
   )
 };
 
-const SideBar =({notion, user ,pages,firstPages ,lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage ,setTargetPageId 
+const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage,editPage,deletePage,lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage ,setTargetPageId 
 }:SideBarProps)=>{
+  const pages =notion.pages;
+  const pagesId =notion.pagesId;
+  const firstPages:Page[] = notion.firstPagesId.map((id:string)=>findPage(notion.pagesId, pages, id));
+  const firstlist:listItem[] = firstPages.map((page:Page)=>{
+    return {
+      id: page.id,
+      title: page.header.title,
+      icon: page.header.icon,
+      subPagesId: page.subPagesId,
+      parentsId: page.parentsId,
+      editTime: page.editTime,
+    }
+  });
+  const [hover ,setHover] =useState<hoverType>({
+    hover:false,
+    target:null,
+    targetItem:null,
+  });
+  const [openMoreBtn ,setOpenMoreBtn] =useState<boolean>(false);
+  const [moveTo ,setMoveTo] =useState<boolean>(false);
+  const [rename, setRename]=useState<boolean>(false);
+  const [renameStyle, setRenameStyle]=useState<CSSProperties>();
+  const [targetItem,setTargetItem]=useState<listItem|null>(null);
+  const [title, setTitle] =useState<string>(targetItem!==null? targetItem.title:"");
+  const [icon, setIcon] =useState<string |null>(targetItem!==null? targetItem.icon:"");
   const recordIcon =user.userName.substring(0,1);
   const editTime =JSON.stringify(Date.now());
-  const pagesId: string[] = pages.map((page:Page)=> (page.id));
   const favorites:listItem[] = user.favorites.map((id: string)=> {
     const page =findPage(pagesId,pages,id);
     const listItem ={
@@ -185,6 +237,8 @@ const SideBar =({notion, user ,pages,firstPages ,lockSideBar, leftSideBar,closeS
     editTime:editTime};
     return listItem
 });
+const [pageFnStyle, setPageFnStyle] =useState<CSSProperties|undefined>(undefined);
+const [moreFnStyle, setMoreFnStyle] =useState<CSSProperties|undefined>(undefined);
   const list:listItem[] = firstPages
                                     .filter((page:Page)=> page.parentsId ==null)
                                     .map((page:Page)=> (
@@ -194,7 +248,86 @@ const SideBar =({notion, user ,pages,firstPages ,lockSideBar, leftSideBar,closeS
                                         subPagesId: page.subPagesId,
                                         parentsId: page.parentsId,
                                         editTime:editTime
-                                      })) ;                              
+                                      })) ;  
+  const renamePage =(title:string|null, icon:string| null)=>{
+    if(targetItem !==null){
+      const page =findPage(pagesId,pages, targetItem.id);
+      const renamedPage:Page ={
+        ...page,
+        header:{
+          ...page.header,
+          title: title !==null ? title :page.header.title,
+          icon: icon !== null ? icon : page.header.icon,
+        },
+        editTime:editTime
+      };
+      editPage(renamedPage.id, renamedPage , null);
+    };
+  };
+  const changeIcon =(event:ChangeEvent<HTMLInputElement> )=>{
+    const value = event.target.value;
+    setIcon(value);
+    if(targetItem!==null){
+      value !== targetItem.icon &&
+      renamePage( null, value );
+    }
+
+  }
+  const changeTitle =(event:ChangeEvent<HTMLInputElement> )=>{
+    const value = event.target.value;
+    setTitle(value);
+    if(targetItem !==null){
+      value !== targetItem.title &&
+      renamePage(value, null );
+    };
+  };
+  const addNewSubPage =()=>{
+    if(targetItem!==null){
+      const targetPage = findPage(pagesId ,pages,targetItem.id);
+      const editedTargetPage:Page ={
+        ...targetPage,
+        subPagesId: targetPage.subPagesId ==null? [...pageSample.id] : targetPage.subPagesId.concat([pageSample.id]),
+        editTime:editTime
+      };
+      const newPageBlock :Block ={
+        ...blockSample,
+        type:"page",
+        parentBlocksId:null,
+      };
+      addPage(pageSample,null);
+      editPage(targetPage.id, editedTargetPage,null);
+      addBlock(targetPage.id,newPageBlock, targetPage.blocksId.length, targetPage.blocks==null? null: targetPage.blocksId[targetPage.blocksId.length-1]);
+    };
+  };
+  const onClickMoreBtn=()=>{
+    setOpenMoreBtn(true); 
+  };
+
+  useEffect(()=>{
+    if(hover.hover){
+      setTargetItem(hover.targetItem);
+      const sideBarPageFn =document.getElementById("sideBarPageFn");
+      const sideBarPageFnDomRect =sideBarPageFn?.getClientRects()[0];
+      const domRect =hover.target?.getClientRects()[0];
+      if(domRect !==undefined && sideBarPageFnDomRect !==undefined){
+        setPageFnStyle({
+          position:"absolute",
+          top: domRect.top ,
+          left: domRect.right - sideBarPageFnDomRect.width - 10,
+          height:domRect.height,
+        });
+      }
+    }
+  },[hover.hover]);
+  useEffect(()=>{
+    if(openMoreBtn && pageFnStyle !==undefined){
+      setMoreFnStyle({
+        position: "absolute",
+        top: pageFnStyle.top,
+        left: pageFnStyle.left,
+      })
+    }
+  },[openMoreBtn])
   return(
     <>
     <div  id="sideBar">
@@ -245,10 +378,12 @@ const SideBar =({notion, user ,pages,firstPages ,lockSideBar, leftSideBar,closeS
               <span>FAVORITES </span>
             </div>
             <div className="list">
-              <ListTemplate 
+              <ListTemplate  
                 notion ={notion}
-                setTargetPageId={setTargetPageId}
                 targetList={favorites}
+                setTargetPageId={setTargetPageId}
+                hover={hover}
+                setHover={setHover}
               />
             </div>
           </div>
@@ -267,6 +402,8 @@ const SideBar =({notion, user ,pages,firstPages ,lockSideBar, leftSideBar,closeS
                 notion={notion}
                 targetList={list}
                 setTargetPageId={setTargetPageId}
+                hover={hover}
+                setHover={setHover}
               />
             </div>
           </div>
@@ -298,6 +435,106 @@ const SideBar =({notion, user ,pages,firstPages ,lockSideBar, leftSideBar,closeS
           </button>
         </div>
       </div>
+      {hover.hover &&
+          <div 
+            id="sideBarPageFn"
+            style={pageFnStyle}
+          >
+          <button  
+            className='moreBtn'
+            title='delete, duplicate, and more'
+            onClick={onClickMoreBtn}
+          >
+            <BsThreeDots/>
+          </button>
+          <button 
+            className='addPageBtn'
+            title="Quickly add a page inside"
+            onClick={addNewSubPage}
+          >
+            <AiOutlinePlus/>
+          </button>
+          </div>
+    }
+    {openMoreBtn && targetItem !==null &&
+      <div 
+        id='moreFn'
+        style={moreFnStyle}
+      >
+        <button>
+          <RiDeleteBin6Line/>
+          <span>Delete</span>
+        </button>
+        <button>  
+          <AiOutlineStar/>
+          <span>Add to Favorites</span>
+        </button>
+        <button>
+          <HiOutlineDuplicate/>
+          <span>Duplicate</span>
+          <span></span>
+        </button>
+        <button
+          onClick={()=>{
+            setOpenMoreBtn
+            (false);
+            setRename(true);
+          }}
+        >
+          <BsPencilSquare/>
+          <span>Rename</span>
+          <span className="">
+            Ctrl+Shift+R
+          </span>
+        </button>
+        <button>
+          <IoArrowRedoOutline/>
+          <span>Move to</span>
+          <span>Ctrl+Shift+P</span>
+        </button>
+        <div>
+          <p>
+            Last edited by {user.userName}
+          </p>
+          <Time 
+            editTime={targetItem.editTime}
+          />
+        </div>
+      </div>
+    }
+    {moveTo && targetItem !==null &&
+    <PageMenu
+      what="page"
+      currentPage={findPage(pagesId, pages, targetItem.id)}
+      pages={pages}
+      firstlist={firstlist}
+      addBlock={addBlock}
+      deleteBlock={deleteBlock}
+      editBlock={editBlock}
+      addPage={addPage}
+      setMenuOpen={null}
+    />
+    }
+    {rename &&
+      <div 
+        id='rename'
+        style={renameStyle}
+      >
+          <input
+            className="rename_icon"
+            type="text"
+            onChange={changeIcon}
+            value={icon !== null? icon :""}
+          />
+          <input
+            className="rename_title"
+            onChange={changeTitle}
+            type="text"
+            value ={title}
+          />
+
+      </div>
+    }
     </div>
     </>
   )

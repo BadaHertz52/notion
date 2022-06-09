@@ -29,7 +29,7 @@
     padding : 5px 14px;
     font-size: 14px;
     text-align: center;
-
+    min-height: 27px;
     #record-icon, svg{
       margin-right: 8px;
     }
@@ -39,6 +39,39 @@
         weight:bolder;
       }
       color: $itemSvg;
+    }
+  }
+  #sideBarPageFun{
+    display: flex;
+    align-content: center;
+    padding-top: 5px;
+    button{
+      color:$itemSvg;
+      margin-right: 5px
+    }
+  }
+  #moreFn{
+    @include popupMenu;
+
+  }
+  #rename {
+    @include popupMenu;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content: center;
+    box-sizing: border-box;
+    padding: 5%;
+    input{
+      border: 1px solid $lightMud;
+      border-radius: 1px;
+      min-height: 27px;
+    }
+    &_icon {
+      width: 9%
+    }
+    &_title{
+      width: 81% ;
     }
   }
   //--sideBarBtn

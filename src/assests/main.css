@@ -1547,6 +1547,7 @@ a:link, a:active, a:visited {
   padding: 5px 14px;
   font-size: 14px;
   text-align: center;
+  min-height: 27px;
 }
 
 #sideBar .itemInner #record-icon, #sideBar .itemInner svg {
@@ -1557,6 +1558,105 @@ a:link, a:active, a:visited {
   font-size: 18px;
   font-weight: bolder;
   color: #a3a3a2;
+}
+
+#sideBar #sideBarPageFun {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-line-pack: center;
+      align-content: center;
+  padding-top: 5px;
+}
+
+#sideBar #sideBarPageFun button {
+  color: #a3a3a2;
+  margin-right: 5px;
+}
+
+#sideBar #moreFn {
+  width: 320px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  background-color: #ffff;
+  margin: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  pointer-events: auto;
+  -webkit-transform: matrix(1, 0, 0, 1, 0, 0);
+          transform: matrix(1, 0, 0, 1, 0, 0);
+  z-index: 1;
+  border-radius: 10px;
+  -webkit-box-shadow: 0px 0px 23px -5px #ababab;
+  box-shadow: 0px 0px 23px -5px #ababab;
+}
+
+#sideBar #moreFn::-webkit-scrollbar-thumb {
+  background: #D3D1CB;
+}
+
+#sideBar #moreFn::-webkit-scrollbar-track {
+  background: #EDECE9;
+}
+
+#sideBar #rename {
+  width: 320px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  background-color: #ffff;
+  margin: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  pointer-events: auto;
+  -webkit-transform: matrix(1, 0, 0, 1, 0, 0);
+          transform: matrix(1, 0, 0, 1, 0, 0);
+  z-index: 1;
+  border-radius: 10px;
+  -webkit-box-shadow: 0px 0px 23px -5px #ababab;
+  box-shadow: 0px 0px 23px -5px #ababab;
+  display: flex;
+  -ms-flex-direction: row;
+      flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -ms-flex-line-pack: center;
+      align-content: center;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 5%;
+}
+
+#sideBar #rename::-webkit-scrollbar-thumb {
+  background: #D3D1CB;
+}
+
+#sideBar #rename::-webkit-scrollbar-track {
+  background: #EDECE9;
+}
+
+#sideBar #rename input {
+  border: 1px solid #d6d6d6;
+  border-radius: 1px;
+  min-height: 27px;
+}
+
+#sideBar #rename_icon {
+  width: 9%;
+}
+
+#sideBar #rename_title {
+  width: 81%;
 }
 
 #sideBar .sideBarBtn {
