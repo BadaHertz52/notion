@@ -105,12 +105,21 @@
     overflow:hidden auto;
     //sroller//
     @include webkitScroll;
+    ul{
+      list-style: none;
+      padding:0;
+      width: 100%;
+    }
+    li{
+      padding: 0;
+    }
     .favorites , 
     .private{
       margin-bottom: 20px;
     }
     .header{
       padding : 0 14px;
+      margin-bottom: 10px;
       font : {
         size: 12px;
         weight :500;
@@ -120,6 +129,9 @@
     }
     .list .page {
       width: 100%;
+    }
+    .subPage{
+      margin-left: 18px;
     }
     .itemInner {
       text-align: left;
@@ -140,7 +152,6 @@
       }
     }
     .addPageBtn{
-      border: 1px solid $mud;
       width: 18px;
       height: 18px;
       svg{

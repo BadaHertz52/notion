@@ -1648,6 +1648,16 @@ a:link, a:active, a:visited {
   background-color: #edece9;
 }
 
+#sideBar .srcoller ul {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+}
+
+#sideBar .srcoller li {
+  padding: 0;
+}
+
 #sideBar .srcoller .favorites,
 #sideBar .srcoller .private {
   margin-bottom: 20px;
@@ -1655,6 +1665,7 @@ a:link, a:active, a:visited {
 
 #sideBar .srcoller .header {
   padding: 0 14px;
+  margin-bottom: 10px;
   font-size: 12px;
   font-weight: 500;
   color: #a3a3a2;
@@ -1662,6 +1673,10 @@ a:link, a:active, a:visited {
 
 #sideBar .srcoller .list .page {
   width: 100%;
+}
+
+#sideBar .srcoller .subPage {
+  margin-left: 18px;
 }
 
 #sideBar .srcoller .itemInner {
@@ -1689,7 +1704,6 @@ a:link, a:active, a:visited {
 }
 
 #sideBar .srcoller .addPageBtn {
-  border: 1px solid #B9B8B6;
   width: 18px;
   height: 18px;
 }
