@@ -54,7 +54,6 @@ const ItemTemplate =({item ,setTargetPageId }:ItemTemplageProp)=>{
   return (
   <div 
     className='itemInner pageLink'
-    onClick={()=>{setTargetPageId(item.id) }}
   >
     <div className='pageContent'>
       <button 
@@ -64,14 +63,17 @@ const ItemTemplate =({item ,setTargetPageId }:ItemTemplageProp)=>{
       >
         <MdPlayArrow/>
       </button>
-      <div className='pageName'>
+      <button 
+        className='pageName'
+            onClick={()=>{setTargetPageId(item.id) }}
+      >
         {item.icon !==null && 
           <span>
             {item.icon}
           </span>
           }
         <span>{item.title}</span>
-      </div>
+      </button>
     </div>
     <div className="pageFun">
       <button  
