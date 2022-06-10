@@ -322,12 +322,6 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
     moveTo && closePopup("pageMenu", setMoveTo, event);
     rename && closePopup("rename", setRename ,event);
   } );
-  const duplicatPage =()=>{
-    if(targetItem!==null){
-      const page = findPage(pagesId, pages, targetItem.id);
-      
-    }
-  };
   useEffect(()=>{
     if(hover.hover){
       setTargetItem(hover.targetItem);
@@ -350,7 +344,9 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
         position: "absolute",
         top: pageFnStyle.top,
         left: pageFnStyle.left,
-      })
+      });
+      const moreFn_fns = document.querySelectorAll('moreFn_fn') as NodeListOf<HTMLButtonElement>;
+      moreFn_fns.forEach((fn:HTMLButtonElement)=> fn.addEventListener("click", ()=> setOpenSideMoreMenu(false)));
     }
   },[openSideMoreMenu]);
 
@@ -466,7 +462,6 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
       {hover.hover &&
           <div 
             id="sideBarPageFn"
-
             style={pageFnStyle}
           >
           <button  
@@ -491,7 +486,10 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
         style={moreFnStyle}
       >
         <button
-          onClick={()=>targetItem!==null &&deletePage(targetItem.id, null)}
+          className='moreFn_fn'
+          onClick={()=>{
+            targetItem!==null &&deletePage(targetItem.id);
+          }}
         >
           <div>
             <RiDeleteBin6Line/>
@@ -501,9 +499,11 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
           </div>
         </button>
         <button
+          className='moreFn_fn'
           onClick={()=>{ 
             targetItem!==null && 
-            addFavorites(targetItem.id)}}
+            addFavorites(targetItem.id);
+          }}
         >  
           <div>
             <AiOutlineStar/>
@@ -511,7 +511,11 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
           </div>
         </button>
         <button
-          onClick={duplicatePage}
+          className='moreFn_fn'
+          onClick={()=>{
+            targetItem!==null &&
+            duplicatePage(targetItem.id);
+          }}
         >
           <div>
             <HiOutlineDuplicate/>
@@ -520,6 +524,7 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
           </div>
         </button>
         <button
+          className='moreFn_fn'
           onClick={()=>{
             setOpenSideMoreMenu
             (false);
@@ -534,7 +539,10 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
             </span>
           </div>
         </button>
-        <button >
+        <button 
+          className='moreFn_fn'
+          onClick={()=>setMoveTo(true)}
+        >
           <div> 
             <IoArrowRedoOutline/>
             <span>Move to</span>
@@ -559,7 +567,7 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
       deleteBlock={deleteBlock}
       editBlock={editBlock}
       addPage={addPage}
-      setMenuOpen={null}
+      setMenuOpen={setOpenSideMoreMenu}
     />
     }
     {rename &&
