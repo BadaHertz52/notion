@@ -14,6 +14,7 @@ type EditorContainerProps ={
   raiseBlock: (pageId: string, block: Block) => void,
   deleteBlock: (pageId: string, block: Block) => void,
   addPage : ( newPage:Page, block:null)=>void,
+  duplicatePage: (targetPageId: string, block: null) => void,
   editPage : (pageId:string , newPage:Page, block:null)=>void,
   deletePage : (pageId:string , block:null)=>void,
   lockSideBar  : ()=> void ,
@@ -28,7 +29,7 @@ export type Command ={
   boolean:boolean,
   command:string | null
 };
-const EditorContainer =({ pagePath ,lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage ,addBlock,editBlock,deleteBlock,addPage,editPage,deletePage, setTargetPageId}:EditorContainerProps)=>{
+const EditorContainer =({ pagePath ,lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage ,addBlock,duplicatePage,editBlock,deleteBlock,addPage,editPage,deletePage, setTargetPageId}:EditorContainerProps)=>{
   const notion :Notion = useSelector((state:RootState)=> state.notion);
   const dispatch =useDispatch();
   const changeToSub =(pageId: string, block: Block, first: boolean, newParentBlock: Block) => dispatch((change_to_sub(pageId, block, first ,newParentBlock)));
@@ -84,6 +85,7 @@ const EditorContainer =({ pagePath ,lockSideBar, leftSideBar,closeSideBar, openN
         raiseBlock={raiseBlock}
         deleteBlock={deleteBlock}
         addPage={addPage}
+        duplicatePage={duplicatePage}
         editPage={editPage}
         deletePage={deletePage}
         setTargetPageId={setTargetPageId}

@@ -17,6 +17,7 @@ type BlockFnProp ={
   editBlock: (pageId: string, block: Block) => void,
   deleteBlock :(pageId: string, block: Block) => void,
   addPage : ( newPage:Page, block:null)=>void,
+  duplicatePage: (targetPageId: string, block: null) => void,
   editPage : (pageId:string , newPage:Page, block:null)=>void,
   deletePage : (pageId:string , block:null)=>void,
   commentBlock: Block|null
@@ -67,7 +68,7 @@ export const detectRange =(event:MouseEvent| React.MouseEvent , targetArea:DOMRe
   return (inner_x && inner_y);
 };
 
-const BlockFn =({pages,firstlist, page,userName, addBlock, editBlock, deleteBlock ,addPage, editPage, deletePage ,commentBlock,setCommentBlock}:BlockFnProp)=>{
+const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlock, deleteBlock ,addPage, editPage, deletePage ,commentBlock,setCommentBlock}:BlockFnProp)=>{
   const inner =document.getElementById("inner");
   const editTime = JSON.stringify(Date.now());
   const newContents:string ="";
@@ -161,6 +162,7 @@ const BlockFn =({pages,firstlist, page,userName, addBlock, editBlock, deleteBloc
             editBlock={editBlock}
             deleteBlock={deleteBlock}
             addPage={addPage}
+            duplicatePage={duplicatePage}
             deletePage={deletePage}
             popup={popup}
             setPopup={setPopup}

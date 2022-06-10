@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {  Route, Routes, useNavigate, useParams, } from 'react-router-dom';
 import { RootState } from '../modules';
-import { add_block, add_page, Block, change_to_sub, delete_block, delete_page, edit_block, edit_page, findPage, Page, raise_block } from '../modules/notion';
+import { add_block, add_page, Block, change_to_sub, delete_block, delete_page, duplicate_page, edit_block, edit_page, findPage, Page, raise_block } from '../modules/notion';
 import { closeNewPage, closeSide, leftSide, lockSide, openNewPage } from '../modules/side';
 import EditorContainer from './EditorContainer';
 import SideBarContainer from './SideBarContainer';
@@ -17,7 +17,6 @@ const NotionRouter =()=>{
   const notion = useSelector((state:RootState)=> state.notion);
   const location =window.location;
   const hash=location.hash;
-  const pages=notion.pages;
   const firstPage = notion.pages[0];
   const [targetPageId, setTargetPageId]= useState<string>(firstPage.id);
   const [routePage, setRoutePage]=useState<Page>(firstPage);
@@ -28,6 +27,7 @@ const NotionRouter =()=>{
   };
   const raiseBlock=(pageId:string, block:Block)=>{dispatch(raise_block(pageId,block))};
   const addPage=(newPage:Page ,block:null)=>{dispatch(add_page( newPage, block))};
+  const duplicatePage =(targetPageId:string, block:null)=>{dispatch(duplicate_page(targetPageId, block))};
   const editPage=(pageId:string,newPage:Page ,block:null)=>{dispatch(edit_page(pageId, newPage, block))};
   const deletePage=(pageId:string,block:null)=>{dispatch(delete_page(pageId, block))};
   const lockSideBar =() => {dispatch(lockSide())} ;
@@ -107,6 +107,7 @@ const NotionRouter =()=>{
         closeNewPage={close_newPage}
         setTargetPageId={setTargetPageId}
         addBlock={addBlock}
+        duplicatePage={duplicatePage}
         editBlock={editBlock}
         changeToSub={changeToSub}
         raiseBlock={raiseBlock}
@@ -132,6 +133,7 @@ const NotionRouter =()=>{
                   raiseBlock={raiseBlock}
                   deleteBlock={deleteBlock}
                   addPage={addPage}
+                  duplicatePage={duplicatePage}
                   editPage={editPage}
                   deletePage={deletePage}
                   />

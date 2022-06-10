@@ -1,5 +1,5 @@
 import React, { ChangeEvent, Dispatch, SetStateAction, useState} from 'react';
-import { Block, listItem, Page } from '../modules/notion';
+import { Block, findPage, listItem, Page } from '../modules/notion';
 import CommandBlock from './CommandBlock';
 
 //icon
@@ -28,13 +28,13 @@ type MenuProps ={
   editBlock : (pageId: string, block: Block) => void,
   deleteBlock :(pageId: string, block: Block) => void,
   addPage : ( newPage:Page, block:null)=>void,
- 
+  duplicatePage: (targetPageId: string, block: null) => void,
   deletePage : (pageId:string , block:null)=>void,
   setPopup :Dispatch<SetStateAction<PopupType>> ,
   popup:PopupType
 };
 
-const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, deleteBlock ,addPage ,deletePage,setPopup ,popup}:MenuProps)=>{
+const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, deleteBlock ,addPage ,duplicatePage,deletePage,setPopup ,popup}:MenuProps)=>{
   const sessionItem = sessionStorage.getItem("blockFnTargetBlock") as string;
   const block:Block= JSON.parse(sessionItem);
   const blockFnElement = document.getElementById("blockFn") ;
@@ -101,8 +101,17 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
 
   const duplicateBlock=()=>{
     const blockIndex= page.blocksId.indexOf(block.id);
-    const previousBlockId = page.blocksId[blockIndex-1]; 
-    addBlock(page.id , block,  blockIndex+1, block.parentBlocksId ===null? null : previousBlockId);
+    const previousBlockId = page.blocksId[blockIndex-1];
+    const editTime =JSON.stringify(Date.now());
+    const newBlock:Block ={
+      ...block,
+      id:editTime,
+      editTime:editTime,
+    } ;
+    addBlock(page.id , newBlock,  blockIndex+1, block.parentBlocksId ===null? null : previousBlockId);
+    if(block.type==="page"){
+      duplicatePage(block.id, null);
+    };
     setMenuOpen(false);
   };
   const onSetEditBtns=()=>{
