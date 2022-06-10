@@ -14,6 +14,7 @@ import Time from './Time';
 import PageMenu from './PageMenu';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { IoArrowRedoOutline } from 'react-icons/io5';
+import { detectRange } from './BlockFn';
 type hoverType={
   hover:boolean, 
   target:HTMLElement|null,
@@ -199,6 +200,7 @@ const ListTemplate =({notion,targetList ,setTargetPageId ,hover ,setHover}:ListT
 
 const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage,editPage,deletePage,lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage ,setTargetPageId 
 }:SideBarProps)=>{
+  const inner =document.getElementById("inner");
   const pages =notion.pages;
   const pagesId =notion.pagesId;
   const firstPages:Page[] = notion.firstPagesId.map((id:string)=>findPage(notion.pagesId, pages, id));
@@ -217,7 +219,7 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage,editPage,d
     target:null,
     targetItem:null,
   });
-  const [openMoreBtn ,setOpenMoreBtn] =useState<boolean>(false);
+  const [openSideMoreMenu ,setOpenSideMoreMenu] =useState<boolean>(false);
   const [moveTo ,setMoveTo] =useState<boolean>(false);
   const [rename, setRename]=useState<boolean>(false);
   const [renameStyle, setRenameStyle]=useState<CSSProperties>();
@@ -236,19 +238,18 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage,editPage,d
     parentsId: page.parentsId,
     editTime:editTime};
     return listItem
-});
-const [pageFnStyle, setPageFnStyle] =useState<CSSProperties|undefined>(undefined);
-const [moreFnStyle, setMoreFnStyle] =useState<CSSProperties|undefined>(undefined);
-  const list:listItem[] = firstPages
-                                    .filter((page:Page)=> page.parentsId ==null)
-                                    .map((page:Page)=> (
-                                      { id:page.id,
-                                        icon:page.header.icon,
-                                        title: page.header.title,
-                                        subPagesId: page.subPagesId,
-                                        parentsId: page.parentsId,
-                                        editTime:editTime
-                                      })) ;  
+  });
+  const [pageFnStyle, setPageFnStyle] =useState<CSSProperties|undefined>(undefined);
+  const [moreFnStyle, setMoreFnStyle] =useState<CSSProperties|undefined>(undefined);
+  const list:listItem[] = firstPages.filter((page:Page)=> page.parentsId ==null)
+                                  .map((page:Page)=> (
+                                    { id:page.id,
+                                      icon:page.header.icon,
+                                      title: page.header.title,
+                                      subPagesId: page.subPagesId,
+                                      parentsId: page.parentsId,
+                                      editTime:editTime
+                                    })) ;  
   const renamePage =(title:string|null, icon:string| null)=>{
     if(targetItem !==null){
       const page =findPage(pagesId,pages, targetItem.id);
@@ -300,8 +301,21 @@ const [moreFnStyle, setMoreFnStyle] =useState<CSSProperties|undefined>(undefined
     };
   };
   const onClickMoreBtn=()=>{
-    setOpenMoreBtn(true); 
+    setOpenSideMoreMenu(true); 
   };
+
+  const closePopup =(elementId:string ,setState:Dispatch<SetStateAction<boolean>> , event:MouseEvent)=>{
+    const element = document.getElementById(elementId);
+    const elementDomRect = element?.getClientRects()[0];
+    const isInnerElement = detectRange(event, elementDomRect);
+    console.log("isInner", isInnerElement);
+    !isInnerElement && setState(false);
+  };
+  inner?.addEventListener("click", (event)=>{
+    openSideMoreMenu && closePopup("moreFn",setOpenSideMoreMenu, event );
+    moveTo && closePopup("pageMenu", setMoveTo, event);
+    rename && closePopup("rename", setRename ,event);
+  } );
 
   useEffect(()=>{
     if(hover.hover){
@@ -320,17 +334,18 @@ const [moreFnStyle, setMoreFnStyle] =useState<CSSProperties|undefined>(undefined
     }
   },[hover.hover]);
   useEffect(()=>{
-    if(openMoreBtn && pageFnStyle !==undefined){
+    if(openSideMoreMenu && pageFnStyle !==undefined){
       setMoreFnStyle({
         position: "absolute",
         top: pageFnStyle.top,
         left: pageFnStyle.left,
       })
     }
-  },[openMoreBtn])
+  },[openSideMoreMenu]);
+
   return(
     <>
-    <div  id="sideBar">
+    <div id="sideBar">
       <div id="sideBar_inner">
         <div className="switcher">
           <div className='itemInner'>
@@ -438,6 +453,7 @@ const [moreFnStyle, setMoreFnStyle] =useState<CSSProperties|undefined>(undefined
       {hover.hover &&
           <div 
             id="sideBarPageFn"
+
             style={pageFnStyle}
           >
           <button  
@@ -456,7 +472,7 @@ const [moreFnStyle, setMoreFnStyle] =useState<CSSProperties|undefined>(undefined
           </button>
           </div>
     }
-    {openMoreBtn && targetItem !==null &&
+    {openSideMoreMenu && targetItem !==null &&
       <div 
         id='moreFn'
         style={moreFnStyle}
@@ -484,7 +500,7 @@ const [moreFnStyle, setMoreFnStyle] =useState<CSSProperties|undefined>(undefined
         </button>
         <button
           onClick={()=>{
-            setOpenMoreBtn
+            setOpenSideMoreMenu
             (false);
             setRename(true);
           }}
