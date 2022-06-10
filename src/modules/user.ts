@@ -3,20 +3,20 @@ const DELETE_FAVORITES ="user/DELETE_FAVORITES" as const ;
 const ADD_TRASH ="user/ADD_TRASH" as const ;
 const CLEAN_TRASH ="user/CLEAN_TRASH" as const ;
 
-export const addFavorites =(itemId:string)=>({
+export const add_favorites =(itemId:string)=>({
   type:ADD_FAVORITES,
   itemId :itemId
 });
-export const deleteFavorites =(itemId:string)=>({
+export const delete_favorites =(itemId:string)=>({
   type:DELETE_FAVORITES,
   itemId:itemId
 });
 
-export const addTrash =(itemId:string)=>({
+export const add_trash =(itemId:string)=>({
   type: ADD_TRASH,
   itemId:itemId
 });
-export const cleanTrash =(itemId: string)=>({
+export const clean_trash =(itemId: string)=>({
   type: CLEAN_TRASH,
   itemId:itemId
 });
@@ -27,10 +27,10 @@ export type UserState = {
   favorites:string[],
   trash:string[]
 };
-type UserAction = ReturnType<typeof addFavorites >|
-ReturnType<typeof deleteFavorites>|
-ReturnType<typeof addTrash>|
-ReturnType<typeof cleanTrash>;
+type UserAction = ReturnType<typeof add_favorites >|
+ReturnType<typeof delete_favorites>|
+ReturnType<typeof add_trash>|
+ReturnType<typeof clean_trash>;
 
 const initialState ={
   userName:"amet",
