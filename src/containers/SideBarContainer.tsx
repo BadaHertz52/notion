@@ -1,8 +1,8 @@
 import React from 'react';
-import { useSelector  ,useDispatch} from 'react-redux';
+import { useSelector } from 'react-redux';
 import SideBar from '../components/SideBar';
 import { RootState } from '../modules';
-import { Block, findPage, Page } from '../modules/notion';
+import { Block, Page } from '../modules/notion';
 
 type SideBarContainerProp ={
   editBlock :(pageId: string, block: Block) => void,
