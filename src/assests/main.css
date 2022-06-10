@@ -1609,7 +1609,7 @@ a:link, a:active, a:visited {
   color: #a3a3a2;
 }
 
-#sideBar #sideBarPageFun {
+#sideBar #sideBarPageFn {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -1618,7 +1618,7 @@ a:link, a:active, a:visited {
   padding-top: 5px;
 }
 
-#sideBar #sideBarPageFun button {
+#sideBar #sideBarPageFn button {
   color: #a3a3a2;
   margin-right: 5px;
 }
