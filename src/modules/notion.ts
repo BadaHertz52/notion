@@ -136,6 +136,7 @@ const CHANGE_TO_SUB_BLOCK="notion/CHANGE_TO_SUB_BLOCK" as const;
 const RAISE_BLOCK="notion/RAISE_BLOCK" as const; //cancle tab
 
 const ADD_PAGE ="notion/ADD_PAGE" as const;
+const DUPLICATE_PAGE ="notion/DUPLICATE_PAGE" as const;
 const EDIT_PAGE ="notion/EDIT_PAGE" as const;
 const DELETE_PAGE ="notion/DELETE_PAGE" as const;
 
@@ -178,6 +179,11 @@ export const add_page =( newPage:Page , block:null)=>({
   newPage: newPage,
   block:block
 });
+export const duplicate_page=(targetPageId:string , block:null)=>({
+  type:DUPLICATE_PAGE,
+  pageId:targetPageId,
+  block:null,
+})
 export const edit_page =(pageId:string, newPage:Page ,block:null)=>({
   type: EDIT_PAGE,
   pageId: pageId,
@@ -198,6 +204,7 @@ ReturnType <typeof delete_block>|
 ReturnType <typeof change_to_sub>|
 ReturnType < typeof raise_block>|
 ReturnType<typeof add_page> | 
+ReturnType<typeof duplicate_page>|
 ReturnType<typeof edit_page> | 
 ReturnType <typeof delete_page>
 ;
@@ -726,6 +733,8 @@ export default function notion (state:Notion =initialState , action :NotionActio
       //subBlock 으로 만들어 졌을 때 
       if(action.block.parentBlocksId!==null){
         updateParentBlock(action.block , action.previousBlockId);
+      }else{
+
       }
       console.log( "addBlock", targetPage.blocks)
       return {
@@ -855,13 +864,61 @@ export default function notion (state:Notion =initialState , action :NotionActio
       if(action.newPage.parentsId==null){
         //firstPage 일경우
           firstPagesId.push(action.newPage.id);
-      };
+      }else{
+        const parentPage:Page = findPage(pagesId,pages,action.newPage.parentsId[action.newPage.parentsId.length-1]) ;
+        const parentPageIndex = pagesId.indexOf(parentPage.id);
+        const editedParentPage ={
+          ...parentPage,
+          subBlocksId: parentPage.subPagesId?.concat([action.newPage.id])
+        };
+        pages.splice(parentPageIndex,1, editedParentPage);
+      };  
       console.log("add new page", pages);
       return {
         pages:pages,
         firstPagesId:firstPagesId,
         pagesId:pagesId
       };
+    case DUPLICATE_PAGE :
+      const targetPageIndex = pagesId.indexOf(targetPage.id);
+      const duplicatePages = pages.filter((page:Page)=>page.header.title.includes(targetPage.header.title));
+      let number :string ="1";
+      if(duplicatePages.length >0){
+        const lastDuplicatePage = duplicatePages[duplicatePages.length-1];
+        const title = lastDuplicatePage.header.title;
+        const start = title.lastIndexOf("(");
+        const end = title.lastIndexOf(")");
+        number = title.substring(start+1, end);
+      };
+
+      const newPage:Page ={
+        ...targetPage,
+        id:editTime,
+        header:{
+          ...targetPage.header,
+          title: `${targetPage.header.title}(${number})`
+        },
+        editTime:editTime
+      };
+
+
+      if(targetPage.parentsId ==null){
+        const index= firstPagesId.indexOf(targetPage.id);
+        firstPagesId.splice(index+1,0, newPage.id);
+      }else{
+        const parentPage = {...findPage(pagesId,pages ,targetPage.parentsId[targetPage.parentsId.length-1])};
+        const parentPageIndex = pagesId.indexOf(parentPage.id);
+        const subPageIndex= parentPage.subPagesId?.indexOf(targetPage.id) as number;
+        parentPage.subPagesId?.splice(subPageIndex,0, newPage.id);
+        pages.splice(parentPageIndex,0, parentPage);
+      };
+      pages.splice(targetPageIndex+1, 0, newPage);
+      pagesId.splice(targetPageIndex+1,0, newPage.id);
+      return{
+        pages:pages,
+        firstPagesId:firstPagesId,
+        pagesId:pagesId
+      }
     case EDIT_PAGE :
       pages.splice(pageIndex,1,action.newPage);
       console.log("edit page",pages);
