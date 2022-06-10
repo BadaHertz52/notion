@@ -1,5 +1,5 @@
 import React, { ChangeEvent, CSSProperties, Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
-import { Block, blockSample, findPage, listItem, Notion, Page, pageSample } from '../modules/notion';
+import { Block, blockSample, findPage, listItem, Notion, page, Page, pageSample } from '../modules/notion';
 
 //react-icon
 import {FiCode ,FiChevronsLeft} from 'react-icons/fi';
@@ -9,7 +9,6 @@ import {BsFillTrash2Fill, BsPencilSquare, BsThreeDots} from 'react-icons/bs';
 import {IoIosSettings} from 'react-icons/io';
 import {HiDownload, HiOutlineDuplicate, HiTemplate} from 'react-icons/hi';
 import { MdPlayArrow } from 'react-icons/md';
-import { GrDocumentText } from 'react-icons/gr';
 import Time from './Time';
 import PageMenu from './PageMenu';
 import { RiDeleteBin6Line } from 'react-icons/ri';
@@ -32,6 +31,7 @@ type SideBarProps ={
   addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
   deleteBlock: (pageId: string, block: Block) => void,
   addPage : ( newPage:Page, block:null)=>void,
+  duplicatePage: (targetPageId: string, block: null) => void,
   editPage : (pageId:string , newPage:Page, block:null)=>void,
   deletePage : (pageId:string , block:null)=>void,
   lockSideBar  : ()=> void ,
@@ -39,6 +39,10 @@ type SideBarProps ={
   closeSideBar  : ()=> void ,
   openNewPage  : ()=> void ,
   closeNewPage : ()=> void ,
+  addFavorites: (itemId: string) => void,
+  deleteFavorites: (itemId: string) => void,
+  addTrash: (itemId: string) => void,
+  cleanTrash: (itemId: string) => void,
   setTargetPageId: Dispatch<SetStateAction<string>>,
 };
 
@@ -198,7 +202,7 @@ const ListTemplate =({notion,targetList ,setTargetPageId ,hover ,setHover}:ListT
   )
 };
 
-const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage,editPage,deletePage,lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage ,setTargetPageId 
+const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicatePage,editPage,deletePage,lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage, addFavorites, deleteFavorites, addTrash, cleanTrash ,setTargetPageId 
 }:SideBarProps)=>{
   const inner =document.getElementById("inner");
   const pages =notion.pages;
@@ -242,7 +246,7 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage,editPage,d
   const [pageFnStyle, setPageFnStyle] =useState<CSSProperties|undefined>(undefined);
   const [moreFnStyle, setMoreFnStyle] =useState<CSSProperties|undefined>(undefined);
   const list:listItem[] = firstPages.filter((page:Page)=> page.parentsId ==null)
-                                  .map((page:Page)=> (
+                                    .map((page:Page)=> (
                                     { id:page.id,
                                       icon:page.header.icon,
                                       title: page.header.title,
@@ -250,6 +254,8 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage,editPage,d
                                       parentsId: page.parentsId,
                                       editTime:editTime
                                     })) ;  
+  const addNewPage=()=>{
+  };
   const renamePage =(title:string|null, icon:string| null)=>{
     if(targetItem !==null){
       const page =findPage(pagesId,pages, targetItem.id);
@@ -316,7 +322,12 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage,editPage,d
     moveTo && closePopup("pageMenu", setMoveTo, event);
     rename && closePopup("rename", setRename ,event);
   } );
-
+  const duplicatPage =()=>{
+    if(targetItem!==null){
+      const page = findPage(pagesId, pages, targetItem.id);
+      
+    }
+  };
   useEffect(()=>{
     if(hover.hover){
       setTargetItem(hover.targetItem);
@@ -444,7 +455,9 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage,editPage,d
           </div>
         </div>
         <div className= "addNewPage">
-          <button>
+          <button
+            onClick={addNewPage}
+          >
             <AiOutlinePlus/>
             <span>New page</span>
           </button>
@@ -477,7 +490,9 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage,editPage,d
         id='moreFn'
         style={moreFnStyle}
       >
-        <button>
+        <button
+          onClick={()=>targetItem!==null &&deletePage(targetItem.id, null)}
+        >
           <div>
             <RiDeleteBin6Line/>
             <span className=''>
@@ -485,13 +500,19 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage,editPage,d
             </span>
           </div>
         </button>
-        <button>  
+        <button
+          onClick={()=>{ 
+            targetItem!==null && 
+            addFavorites(targetItem.id)}}
+        >  
           <div>
             <AiOutlineStar/>
             <span>Add to Favorites</span>
           </div>
         </button>
-        <button>
+        <button
+          onClick={duplicatePage}
+        >
           <div>
             <HiOutlineDuplicate/>
             <span>Duplicate</span>
