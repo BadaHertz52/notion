@@ -12,9 +12,9 @@ type PageMenuProps ={
   addBlock:(pageId: string, block: Block, nextBlockIndex: number, previousBlockId: string | null) => void,
   editBlock: (pageId: string, block: Block) => void,
   setMenuOpen:Dispatch<SetStateAction<boolean>> |null,
-  addPage:( newPage: Page, block: null) => void,
+  addPage:( newPage: Page) => void,
 };
-export   const changeSubPage =(currentPage:Page, block:Block, editBlock: (pageId: string, block: Block) => void,addPage:( newPage: Page, block: null) => void, )=>{
+export   const changeSubPage =(currentPage:Page, block:Block, editBlock: (pageId: string, block: Block) => void,addPage:( newPage: Page) => void, )=>{
   const editTime =JSON.stringify(Date.now());
      //다음 블럭으로 지정한다고 했을 경우 
     const editedBlock :Block ={
@@ -38,7 +38,7 @@ export   const changeSubPage =(currentPage:Page, block:Block, editBlock: (pageId
         blocks:subBlocks,
         parentsId:[currentPage.id]
       };
-      addPage(newPage, null);
+      addPage(newPage);
     }else{
       const newPage :Page ={
         ...pageSample,
@@ -48,7 +48,7 @@ export   const changeSubPage =(currentPage:Page, block:Block, editBlock: (pageId
           title:block.contents
         }
       };
-      addPage(newPage, null);
+      addPage(newPage);
     }
 };
 const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock, addBlock, editBlock,addPage ,setMenuOpen}:PageMenuProps)=>{

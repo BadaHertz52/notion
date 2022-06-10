@@ -42,7 +42,7 @@ const findTargetBlock =(page:Page):findTargetBlockReturn=>{
     newContents:newContents
   }
 };
-export const makeNewBlock=(page:Page, editTime:string,addBlock:(pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) =>void ,editBlock :(pageId: string, block: Block) => void, addPage:( newPage: Page, block: null) => void ,targetBlock:Block, targetBlockIndex:number, newContents:string  )=>{
+export const makeNewBlock=(page:Page, editTime:string,addBlock:(pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) =>void ,editBlock :(pageId: string, block: Block) => void, addPage:( newPage: Page) => void ,targetBlock:Block, targetBlockIndex:number, newContents:string  )=>{
   if(targetBlock.type !=="toggle"){
     const newBlock:Block ={
       id:editTime,
@@ -73,7 +73,7 @@ export const makeNewBlock=(page:Page, editTime:string,addBlock:(pageId: string, 
                 title:newContents,
                 },
       };
-      addPage(newPage, null);
+      addPage(newPage);
     }
   }else{
     const newSubBlock:Block ={
@@ -118,9 +118,9 @@ type EditableBlockProps ={
   changeToSub: (pageId: string, block: Block, first: boolean, newParentBlock: Block) => void
   raiseBlock: (pageId: string, block: Block) => void,
   deleteBlock: (pageId: string, block: Block) => void,
-  addPage : ( newPage:Page, block:null)=>void,
-  editPage : (pageId:string , newPage:Page, block:null)=>void,
-  deletePage : (pageId:string , block:null)=>void,
+  addPage : ( newPage:Page, )=>void,
+  editPage : (pageId:string , newPage:Page, )=>void,
+  deletePage : (pageId:string , )=>void,
   setCommentBlock : Dispatch<SetStateAction<Block|null>>,
   commentBlock :Block |null,
   setTargetPageId:Dispatch<SetStateAction<string>>
@@ -266,7 +266,7 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
         const {BLOCK} =findBlock(page, blockId);
         deleteBlock(page.id, BLOCK);
         if(BLOCK.type ==="page"){
-          deletePage(BLOCK.id, null);
+          deletePage(BLOCK.id);
         }
         }else{
           if(focusOffset ===0){

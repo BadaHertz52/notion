@@ -23,10 +23,10 @@ type FrameProps ={
   changeToSub: (pageId: string, block: Block, first: boolean, newParentBlock: Block) => void
   raiseBlock: (pageId: string, block: Block) => void,
   deleteBlock: (pageId: string, block: Block) => void,
-  addPage :(newPage:Page ,block:null)=>void,
-  duplicatePage: (targetPageId: string, block: null) => void,
-  editPage :(pageId:string,newPage:Page ,block:null)=>void;
-  deletePage :(pageId:string,block:null)=>void;
+  addPage :(newPage:Page ,)=>void,
+  duplicatePage: (targetPageId: string) => void,
+  editPage :(pageId:string,newPage:Page ,)=>void;
+  deletePage :(pageId:string,)=>void;
   setTargetPageId:Dispatch<SetStateAction<string>>
 };
 

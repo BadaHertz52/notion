@@ -15,7 +15,7 @@ type CommandBlockProp ={
   editTime:string,
   editBlock :(pageId:string, block:Block)=>void,
   setCommand: Dispatch<SetStateAction<Command>> ,
-  addPage:( newPage: Page, block: null) => void,
+  addPage:( newPage: Page) => void,
 };
 
 const CommandBlock =({ page ,block , editTime , editBlock ,addPage ,setCommand}:CommandBlockProp)=>{

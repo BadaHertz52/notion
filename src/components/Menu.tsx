@@ -27,9 +27,9 @@ type MenuProps ={
   addBlock:(pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
   editBlock : (pageId: string, block: Block) => void,
   deleteBlock :(pageId: string, block: Block) => void,
-  addPage : ( newPage:Page, block:null)=>void,
-  duplicatePage: (targetPageId: string, block: null) => void,
-  deletePage : (pageId:string , block:null)=>void,
+  addPage : ( newPage:Page, )=>void,
+  duplicatePage: (targetPageId: string) => void,
+  deletePage : (pageId:string , )=>void,
   setPopup :Dispatch<SetStateAction<PopupType>> ,
   popup:PopupType
 };
@@ -94,7 +94,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
   const removeBlock =()=>{
     deleteBlock(page.id, block);
     if(block.type==="page"){
-      deletePage(block.id ,null);
+      deletePage(block.id);
     };
     setMenuOpen(false);
   };
@@ -110,7 +110,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
     } ;
     addBlock(page.id , newBlock,  blockIndex+1, block.parentBlocksId ===null? null : previousBlockId);
     if(block.type==="page"){
-      duplicatePage(block.id, null);
+      duplicatePage(block.id);
     };
     setMenuOpen(false);
   };

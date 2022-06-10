@@ -26,10 +26,10 @@ const NotionRouter =()=>{
   const changeToSub =(pageId:string, block:Block , first:boolean ,newParentBlock:Block)=>{dispatch(change_to_sub(pageId,block,first,newParentBlock));
   };
   const raiseBlock=(pageId:string, block:Block)=>{dispatch(raise_block(pageId,block))};
-  const addPage=(newPage:Page ,block:null)=>{dispatch(add_page( newPage, block))};
-  const duplicatePage =(targetPageId:string, block:null)=>{dispatch(duplicate_page(targetPageId, block))};
-  const editPage=(pageId:string,newPage:Page ,block:null)=>{dispatch(edit_page(pageId, newPage, block))};
-  const deletePage=(pageId:string,block:null)=>{dispatch(delete_page(pageId, block))};
+  const addPage=(newPage:Page)=>{dispatch(add_page( newPage))};
+  const duplicatePage =(targetPageId:string)=>{dispatch(duplicate_page(targetPageId))};
+  const editPage=(pageId:string,newPage:Page )=>{dispatch(edit_page(pageId, newPage))};
+  const deletePage=(pageId:string,)=>{dispatch(delete_page(pageId))};
   const lockSideBar =() => {dispatch(lockSide())} ;
   const leftSideBar =()=>{dispatch(leftSide())} ;
   const closeSideBar =()=>{dispatch(closeSide())} ;

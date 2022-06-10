@@ -17,9 +17,9 @@ type BlockProp ={
   changeToSub: (pageId: string, block: Block, first: boolean, newParentBlock: Block) => void
   raiseBlock: (pageId: string, block: Block) => void,
   deleteBlock: (pageId: string, block: Block) => void,
-  addPage : (newPage:Page, block:null)=>void,
-  editPage : (pageId:string , newPage:Page, block:null)=>void,
-  deletePage : (pageId:string , block:null)=>void,
+  addPage : (newPage:Page, )=>void,
+  editPage : (pageId:string , newPage:Page, )=>void,
+  deletePage : (pageId:string , )=>void,
   setCommentBlock : Dispatch<SetStateAction<Block|null>>,
   commentBlock:Block|null,
   setTargetPageId:Dispatch<SetStateAction<string>>

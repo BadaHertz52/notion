@@ -30,10 +30,10 @@ type SideBarProps ={
   editBlock :(pageId: string, block: Block) => void,
   addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
   deleteBlock: (pageId: string, block: Block) => void,
-  addPage : ( newPage:Page, block:null)=>void,
-  duplicatePage: (targetPageId: string, block: null) => void,
-  editPage : (pageId:string , newPage:Page, block:null)=>void,
-  deletePage : (pageId:string , block:null)=>void,
+  addPage : ( newPage:Page, )=>void,
+  duplicatePage: (targetPageId: string) => void,
+  editPage : (pageId:string , newPage:Page, )=>void,
+  deletePage : (pageId:string , )=>void,
   lockSideBar  : ()=> void ,
   leftSideBar  : ()=> void ,
   closeSideBar  : ()=> void ,
@@ -268,7 +268,7 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
         },
         editTime:editTime
       };
-      editPage(renamedPage.id, renamedPage , null);
+      editPage(renamedPage.id, renamedPage );
     };
   };
   const changeIcon =(event:ChangeEvent<HTMLInputElement> )=>{
@@ -301,8 +301,8 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
         type:"page",
         parentBlocksId:null,
       };
-      addPage(pageSample,null);
-      editPage(targetPage.id, editedTargetPage,null);
+      addPage(pageSample);
+      editPage(targetPage.id, editedTargetPage);
       addBlock(targetPage.id,newPageBlock, targetPage.blocksId.length, targetPage.blocks==null? null: targetPage.blocksId[targetPage.blocksId.length-1]);
     };
   };
