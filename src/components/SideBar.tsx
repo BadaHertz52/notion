@@ -14,6 +14,8 @@ import PageMenu from './PageMenu';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { IoArrowRedoOutline } from 'react-icons/io5';
 import { detectRange } from './BlockFn';
+import { useNavigate } from 'react-router-dom';
+import { UserState } from '../modules/user';
 type hoverType={
   hover:boolean, 
   target:HTMLElement|null,
@@ -251,7 +253,8 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
                                       subPagesId: page.subPagesId,
                                       parentsId: page.parentsId,
                                       editTime:editTime
-                                    })) ;  
+                                    })) ;
+  const navigate =useNavigate();  
   const addNewPage=()=>{
   };
   const renamePage =(title:string|null, icon:string| null)=>{
@@ -320,6 +323,23 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
     moveTo && closePopup("pageMenu", setMoveTo, event);
     rename && closePopup("rename", setRename ,event);
   } );
+  const onClickToDelete=()=>{
+    if(targetItem!==null){
+      deletePage(targetItem.id);
+      const hash =window.location.hash;
+      const lastSlash =hash.lastIndexOf("/");
+      const currentPageId = hash.slice(lastSlash+1);
+      if(targetItem.id ===currentPageId){
+        if(user.favorites==null){
+          const firstPageId= pagesId[0];
+          setTargetPageId(firstPageId);
+        }else{
+          const favoritePageId = user.favorites[0];
+          setTargetPageId(favoritePageId);
+        }
+      };
+    }
+  };
   useEffect(()=>{
     if(hover.hover){
       setTargetItem(hover.targetItem);
@@ -397,15 +417,17 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
             <div className="header">
               <span>FAVORITES </span>
             </div>
+            {user.favorites!==null &&
             <div className="list">
               <ListTemplate  
                 notion ={notion}
-                targetList={favorites}
+                targetList={makeFavoriteList(user.favorites)}
                 setTargetPageId={setTargetPageId}
                 hover={hover}
                 setHover={setHover}
               />
             </div>
+            }
           </div>
           <div className="private">
             <div className="header">
@@ -485,9 +507,7 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
       >
         <button
           className='moreFn_fn'
-          onClick={()=>{
-            targetItem!==null &&deletePage(targetItem.id);
-          }}
+          onClick={onClickToDelete}
         >
           <div>
             <RiDeleteBin6Line/>
