@@ -24,8 +24,8 @@ export const clean_trash =(itemId: string)=>({
 export type UserState = {
   userName:string,
   userEmail:string,
-  favorites:string[],
-  trash:string[]
+  favorites:string[]|null,
+  trash:string[]|null
 };
 type UserAction = ReturnType<typeof add_favorites >|
 ReturnType<typeof delete_favorites>|
@@ -44,23 +44,29 @@ export default function user (state:UserState =initialState, action:UserAction):
     case ADD_FAVORITES :
       return {
         ...state,
-        favorites:
-        state.favorites.concat(action.itemId)}
+        favorites: state.favorites !==null? 
+        state.favorites.concat(action.itemId) : 
+        [...action.itemId]
+      }
         ;
     case DELETE_FAVORITES :
       return {
         ...state,
-        favorites:state.favorites.filter((id:string)=> id !== action.itemId)
+        favorites:state.favorites !==null?
+        state.favorites.filter((id:string)=> id !== action.itemId):
+        null
       } ;
     case ADD_TRASH :
       return {
         ...state,
-        trash:state.trash.concat(action.itemId)
+        trash:state.trash !==null?state.trash.concat(action.itemId) : [...action.itemId]
       } 
     case CLEAN_TRASH :
       return {
         ...state,
-        trash :state.trash.filter((id:string)=> id !== action.itemId)
+        trash :state.trash !==null?
+        state.trash.filter((id:string)=> id !== action.itemId):
+        null
       } 
     default:
       return state;

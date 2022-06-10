@@ -21,12 +21,7 @@ type hoverType={
 };
 type SideBarProps ={
   notion : Notion,
-  user:{
-    userName:string,
-    userEmail:string,
-    favorites:string[],
-    trash:string[],
-  },
+  user:UserState,
   editBlock :(pageId: string, block: Block) => void,
   addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
   deleteBlock: (pageId: string, block: Block) => void,
@@ -232,7 +227,8 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
   const [icon, setIcon] =useState<string |null>(targetItem!==null? targetItem.icon:"");
   const recordIcon =user.userName.substring(0,1);
   const editTime =JSON.stringify(Date.now());
-  const favorites:listItem[] = user.favorites.map((id: string)=> {
+  const makeFavoriteList =(favorites:string[]):listItem[]=>{
+    const list :listItem[] =favorites.map((id: string)=> {
     const page =findPage(pagesId,pages,id);
     const listItem ={
     id:page.id,
@@ -243,6 +239,8 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
     editTime:editTime};
     return listItem
   });
+  return list
+} ;
   const [pageFnStyle, setPageFnStyle] =useState<CSSProperties|undefined>(undefined);
   const [moreFnStyle, setMoreFnStyle] =useState<CSSProperties|undefined>(undefined);
   const list:listItem[] = firstPages.filter((page:Page)=> page.parentsId ==null)
