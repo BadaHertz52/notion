@@ -1,5 +1,5 @@
 import React, { ChangeEvent, CSSProperties, Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
-import { Block, blockSample, findPage, listItem, Notion, page, Page, pageSample } from '../modules/notion';
+import { Block, blockSample, findPage, listItem, Notion, Page, pageSample } from '../modules/notion';
 
 //react-icon
 import {FiCode ,FiChevronsLeft} from 'react-icons/fi';
@@ -327,22 +327,36 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
     rename && closePopup("rename", setRename ,event);
   } );
   const onClickToDelete=()=>{
+    const changePage =(pageId:string)=>{
+      setTargetPageId(pageId);
+      navigate(`/${pageId}`);
+      const hash = window.location.hash;
+      console.log("hash", hash)
+      targetItem!==null && 
+      deletePage(targetItem.id)
+    };
     if(targetItem!==null){
-      deletePage(targetItem.id);
       const hash =window.location.hash;
       const lastSlash =hash.lastIndexOf("/");
       const currentPageId = hash.slice(lastSlash+1);
       if(targetItem.id ===currentPageId){
-        if(user.favorites==null){
-          const firstPageId= pagesId[0];
-          setTargetPageId(firstPageId);
+        if((user.favorites==null)||
+        (user.favorites[0]===targetItem.id && user.favorites.length ===1)){
+          const firstPageId= firstlist[0].id;
+          (firstPageId ===targetItem.id )?
+          changePage(firstlist[1].id):
+          changePage(firstPageId);
         }else{
-          const favoritePageId = user.favorites[0];
-          setTargetPageId(favoritePageId);
-        }
+          console.log("move to", user.favorites[0]);
+          changePage(user.favorites[0])
+          setTargetPageId(user.favorites[0]);
       };
-    }
+      }else{
+        deletePage(targetItem.id);
+      };
+      
   };
+};
   useEffect(()=>{
     if(hover.hover){
       setTargetItem(hover.targetItem);
