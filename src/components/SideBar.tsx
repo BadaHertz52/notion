@@ -51,7 +51,7 @@ type ItemTemplageProp ={
 };
 type ListTemplateProp ={
   notion:Notion,
-  targetList: listItem[],
+  targetList: listItem[] |null,
   setTargetPageId: Dispatch<SetStateAction<string>>,
   hover:hoverType,
   setHover: Dispatch<SetStateAction<hoverType>>,
@@ -164,7 +164,7 @@ const ListTemplate =({notion,targetList ,setTargetPageId ,hover ,setHover}:ListT
   };
   return(
     <ul>
-    {targetList.map((item:listItem)=> 
+    {targetList?.map((item:listItem)=> 
       <li       
         id={`item_${item.id}`} 
         key={item.id}
@@ -229,18 +229,21 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
   const [icon, setIcon] =useState<string |null>(targetItem!==null? targetItem.icon:"");
   const recordIcon =user.userName.substring(0,1);
   const editTime =JSON.stringify(Date.now());
-  const makeFavoriteList =(favorites:string[]):listItem[]=>{
-    const list :listItem[] =favorites.map((id: string)=> {
-    const page =findPage(pagesId,pages,id);
-    const listItem ={
-    id:page.id,
-    title:page.header.title,
-    icon:page.header.icon,
-    subPagesId: page.subPagesId,
-    parentsId: page.parentsId,
-    editTime:editTime};
-    return listItem
-  });
+  const makeFavoriteList =(favorites:string[] |null):listItem[]|null=>{
+    const list :listItem[]|null =favorites !==null? 
+                                favorites.map((id: string)=> {
+                                const page =findPage(pagesId,pages,id);
+                                const listItem ={
+                                id:page.id,
+                                title:page.header.title,
+                                icon:page.header.icon,
+                                subPagesId: page.subPagesId,
+                                parentsId: page.parentsId,
+                                editTime:editTime};
+                                return listItem
+                                }) 
+                                :
+                                null;
   return list
 } ;
   const [pageFnStyle, setPageFnStyle] =useState<CSSProperties|undefined>(undefined);
