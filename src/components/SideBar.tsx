@@ -1,5 +1,8 @@
 import React, { ChangeEvent, CSSProperties, Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { Block, blockSample, findPage, listItem, Notion, Page, pageSample } from '../modules/notion';
+import { detectRange } from './BlockFn';
+import { useNavigate } from 'react-router-dom';
+import { UserState } from '../modules/user';
 
 //react-icon
 import {FiCode ,FiChevronsLeft} from 'react-icons/fi';
@@ -13,9 +16,7 @@ import Time from './Time';
 import PageMenu from './PageMenu';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { IoArrowRedoOutline } from 'react-icons/io5';
-import { detectRange } from './BlockFn';
-import { useNavigate } from 'react-router-dom';
-import { UserState } from '../modules/user';
+
 type hoverType={
   hover:boolean, 
   target:HTMLElement|null,
@@ -31,6 +32,7 @@ type SideBarProps ={
   duplicatePage: (targetPageId: string) => void,
   editPage : (pageId:string , newPage:Page, )=>void,
   deletePage : (pageId:string , )=>void,
+  movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
   lockSideBar  : ()=> void ,
   leftSideBar  : ()=> void ,
   closeSideBar  : ()=> void ,
@@ -199,7 +201,7 @@ const ListTemplate =({notion,targetList ,setTargetPageId ,hover ,setHover}:ListT
   )
 };
 
-const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicatePage,editPage,deletePage,lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage, addFavorites, deleteFavorites, addTrash, cleanTrash ,setTargetPageId 
+const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicatePage,editPage,deletePage,movePageToPage, lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage, addFavorites, deleteFavorites, addTrash, cleanTrash ,setTargetPageId 
 }:SideBarProps)=>{
   const inner =document.getElementById("inner");
   const pages =notion.pages;
@@ -220,11 +222,14 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
     target:null,
     targetItem:null,
   });
+  const [targetItem,setTargetItem]=useState<listItem|null>(null);
   const [openSideMoreMenu ,setOpenSideMoreMenu] =useState<boolean>(false);
   const [moveTo ,setMoveTo] =useState<boolean>(false);
   const [rename, setRename]=useState<boolean>(false);
+  const [pageFnStyle, setPageFnStyle] =useState<CSSProperties|undefined>(undefined);
+  const [moreFnStyle, setMoreFnStyle] =useState<CSSProperties|undefined>(undefined);
   const [renameStyle, setRenameStyle]=useState<CSSProperties>();
-  const [targetItem,setTargetItem]=useState<listItem|null>(null);
+  const [pageMenuStyle, setPageMenuStyle]=useState<CSSProperties>();
   const [title, setTitle] =useState<string>(targetItem!==null? targetItem.title:"");
   const [icon, setIcon] =useState<string |null>(targetItem!==null? targetItem.icon:"");
   const recordIcon =user.userName.substring(0,1);
@@ -246,8 +251,6 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
                                 null;
   return list
 } ;
-  const [pageFnStyle, setPageFnStyle] =useState<CSSProperties|undefined>(undefined);
-  const [moreFnStyle, setMoreFnStyle] =useState<CSSProperties|undefined>(undefined);
   const list:listItem[] = firstPages.filter((page:Page)=> page.parentsId ==null)
                                     .map((page:Page)=> (
                                     { id:page.id,
@@ -318,7 +321,6 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
     const element = document.getElementById(elementId);
     const elementDomRect = element?.getClientRects()[0];
     const isInnerElement = detectRange(event, elementDomRect);
-    console.log("isInner", isInnerElement);
     !isInnerElement && setState(false);
   };
   inner?.addEventListener("click", (event)=>{
@@ -356,7 +358,18 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
       };
       
   };
-};
+  };
+  const onClickMoveToBtn =()=>{
+    setMoveTo(true); 
+    setOpenSideMoreMenu(false);
+    if(moreFnStyle!==undefined){
+      setPageMenuStyle({
+        position:"absolute",
+        top: moreFnStyle.top,
+        left: moreFnStyle.left
+      })
+    }
+  }
   useEffect(()=>{
     if(hover.hover){
       setTargetItem(hover.targetItem);
@@ -396,7 +409,7 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
         width:domRect.width + 50
       })
     }
-  },[rename])
+  },[rename]);
   return(
     <>
     <div id="sideBar">
@@ -588,7 +601,7 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
         </button>
         <button 
           className='moreFn_fn'
-          onClick={()=>setMoveTo(true)}
+          onClick={onClickMoveToBtn}
         >
           <div> 
             <IoArrowRedoOutline/>
@@ -605,17 +618,23 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
       </div>
     }
     {moveTo && targetItem !==null &&
-    <PageMenu
-      what="page"
-      currentPage={findPage(pagesId, pages, targetItem.id)}
-      pages={pages}
-      firstlist={firstlist}
-      addBlock={addBlock}
-      deleteBlock={deleteBlock}
-      editBlock={editBlock}
-      addPage={addPage}
-      setMenuOpen={setOpenSideMoreMenu}
-    />
+    <div 
+      id ="sideBar_pageMenu"
+      style={pageMenuStyle}
+    >
+      <PageMenu
+        what="page"
+        currentPage={findPage(pagesId, pages, targetItem.id)}
+        pages={pages}
+        firstlist={firstlist}
+        addBlock={addBlock}
+        deleteBlock={deleteBlock}
+        editBlock={editBlock}
+        addPage={addPage}
+        movePageToPage={movePageToPage}
+        setMenuOpen={setOpenSideMoreMenu}
+      />
+    </div>
     }
     {rename &&
       <div 

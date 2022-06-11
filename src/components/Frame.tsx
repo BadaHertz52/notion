@@ -25,13 +25,14 @@ type FrameProps ={
   deleteBlock: (pageId: string, block: Block) => void,
   addPage :(newPage:Page ,)=>void,
   duplicatePage: (targetPageId: string) => void,
-  editPage :(pageId:string,newPage:Page ,)=>void;
-  deletePage :(pageId:string,)=>void;
+  editPage :(pageId:string,newPage:Page ,)=>void,
+  deletePage :(pageId:string,)=>void,
+  movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
   setTargetPageId:Dispatch<SetStateAction<string>>
 };
 
 
-const Frame =({ pages, firstlist,userName, page,side,  editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, duplicatePage,editPage, deletePage ,setTargetPageId}:FrameProps)=>{
+const Frame =({ pages, firstlist,userName, page,side,  editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, duplicatePage,editPage, movePageToPage, deletePage ,setTargetPageId}:FrameProps)=>{
   const [decoOpen ,setdecoOpen] =useState<boolean>(true);
   const [commentBlock, setCommentBlock]=useState<Block|null>(null);
   const [moreOpen, setMoreOpen]= useState<boolean>(false);
@@ -201,6 +202,7 @@ const Frame =({ pages, firstlist,userName, page,side,  editBlock, addBlock,chang
                 addPage={addPage}
                 duplicatePage={duplicatePage}
                 editPage={editPage}
+                movePageToPage={movePageToPage}
                 deletePage={deletePage}
                 commentBlock={commentBlock}
                 setCommentBlock={setCommentBlock}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {  Route, Routes, useNavigate, useParams, } from 'react-router-dom';
 import { RootState } from '../modules';
-import { add_block, add_page, Block, change_to_sub, delete_block, delete_page, duplicate_page, edit_block, edit_page, findPage, Page, raise_block } from '../modules/notion';
+import { add_block, add_page, Block, change_to_sub, delete_block, delete_page, duplicate_page, edit_block, edit_page, findPage, move_page_to_page, Page, raise_block } from '../modules/notion';
 import { closeNewPage, closeSide, leftSide, lockSide, openNewPage } from '../modules/side';
 import { delete_favorites } from '../modules/user';
 import EditorContainer from './EditorContainer';
@@ -39,6 +39,7 @@ const NotionRouter =()=>{
       user.favorites?.includes(pageId) && dispatch(delete_favorites(pageId));
     };
   };
+  const movePageToPage =(targetPageId:string, destinationPageId:string)=>{dispatch(move_page_to_page(targetPageId, destinationPageId))};
   const lockSideBar =() => {dispatch(lockSide())} ;
   const leftSideBar =()=>{dispatch(leftSide())} ;
   const closeSideBar =()=>{dispatch(closeSide())} ;
@@ -125,6 +126,7 @@ const NotionRouter =()=>{
         addPage={addPage}
         editPage={editPage}
         deletePage={deletePage}
+        movePageToPage={movePageToPage}
       />
       <Routes>
         <Route
@@ -146,6 +148,7 @@ const NotionRouter =()=>{
                   duplicatePage={duplicatePage}
                   editPage={editPage}
                   deletePage={deletePage}
+                  movePageToPage={movePageToPage}
                   />
                 } 
         />

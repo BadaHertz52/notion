@@ -13,6 +13,7 @@ type PageMenuProps ={
   editBlock: (pageId: string, block: Block) => void,
   setMenuOpen:Dispatch<SetStateAction<boolean>> |null,
   addPage:( newPage: Page) => void,
+  movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
 };
 export   const changeSubPage =(currentPage:Page, block:Block, editBlock: (pageId: string, block: Block) => void,addPage:( newPage: Page) => void, )=>{
   const editTime =JSON.stringify(Date.now());
@@ -51,7 +52,7 @@ export   const changeSubPage =(currentPage:Page, block:Block, editBlock: (pageId
       addPage(newPage);
     }
 };
-const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock, addBlock, editBlock,addPage ,setMenuOpen}:PageMenuProps)=>{
+const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock, addBlock, editBlock,addPage , movePageToPage ,setMenuOpen}:PageMenuProps)=>{
 
   type PageButtonProps={
     item: listItem
@@ -61,7 +62,7 @@ const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock, addBlock, edi
   const [block, setBlock]=useState<Block|null>(null);
   const sessionItem = sessionStorage.getItem("blockFnTargetBlock") as string;
   useEffect(()=>{
-    if(sessionItem !==null){
+    if(sessionItem !==null && what ==="block"){
       const block:Block= JSON.parse(sessionItem);
       setBlock(block);
     };
@@ -76,9 +77,18 @@ const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock, addBlock, edi
     setMenuOpen !==null && setMenuOpen(false);
   };
   const onClickToMove =(id:string)=>{
-  block!==null &&  
-  what==="block" &&
-  moveBlockToPage(id ,block);
+    switch (what) {
+      case "block":
+        block!==null &&  
+        moveBlockToPage(id ,block);
+        break;
+      case "page":
+        
+        break;
+      default:
+        break;
+    }
+
 
   };
   const PageButton =({item}:PageButtonProps)=>{

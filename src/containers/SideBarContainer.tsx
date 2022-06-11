@@ -15,6 +15,7 @@ type SideBarContainerProp ={
   duplicatePage: (targetPageId: string) => void,
   editPage : (pageId:string , newPage:Page, )=>void,
   deletePage : (pageId:string , )=>void,
+  movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
   lockSideBar  : ()=> void ,
   leftSideBar  : ()=> void ,
   closeSideBar  : ()=> void ,
@@ -22,7 +23,7 @@ type SideBarContainerProp ={
   closeNewPage : ()=> void ,
   setTargetPageId: React.Dispatch<React.SetStateAction<string>>,
 };
-const SideBarContainer =({addBlock,editBlock,deleteBlock,addPage,duplicatePage,editPage,deletePage,lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage ,setTargetPageId }:SideBarContainerProp)=>{
+const SideBarContainer =({addBlock,editBlock,deleteBlock,addPage,duplicatePage,editPage,deletePage,movePageToPage, lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage ,setTargetPageId }:SideBarContainerProp)=>{
   const notion =useSelector((state:RootState)=> state.notion);
   const user = useSelector((state:RootState)=> state.user);
   const dispatch =useDispatch();
@@ -47,6 +48,7 @@ const SideBarContainer =({addBlock,editBlock,deleteBlock,addPage,duplicatePage,e
     duplicatePage={duplicatePage}
     editPage={editPage}
     deletePage={deletePage}
+    movePageToPage={movePageToPage}
     addFavorites={addFavorites}
     deleteFavorites={deleteFavorites}
     addTrash={addTrash}

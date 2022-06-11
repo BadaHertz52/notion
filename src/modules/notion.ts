@@ -138,6 +138,7 @@ const RAISE_BLOCK="notion/RAISE_BLOCK" as const; //cancle tab
 const ADD_PAGE ="notion/ADD_PAGE" as const;
 const DUPLICATE_PAGE ="notion/DUPLICATE_PAGE" as const;
 const EDIT_PAGE ="notion/EDIT_PAGE" as const;
+const MOVE_PAGE_TO_PAGE ="notion/MOVE_PAGE_TO_PAGE" as const;
 const DELETE_PAGE ="notion/DELETE_PAGE" as const;
 
 
@@ -190,6 +191,12 @@ export const edit_page =(pageId:string, newPage:Page )=>({
   newPage: newPage,
   block:null
 });
+export const move_page_to_page =(targetPageId:string, destinationPageId:string, )=>({
+  type: MOVE_PAGE_TO_PAGE,
+  pageId: targetPageId, 
+  destinationPageId: destinationPageId,
+  block:null
+});
 export const delete_page =(pageId:string)=>(
 {
   type:DELETE_PAGE,
@@ -206,6 +213,7 @@ ReturnType < typeof raise_block>|
 ReturnType<typeof add_page> | 
 ReturnType<typeof duplicate_page>|
 ReturnType<typeof edit_page> | 
+ReturnType<typeof move_page_to_page> | 
 ReturnType <typeof delete_page>
 ;
 
@@ -926,6 +934,55 @@ export default function notion (state:Notion =initialState , action :NotionActio
     case EDIT_PAGE :
       pages.splice(pageIndex,1,action.newPage);
       console.log("edit page",pages);
+      return{
+        pages:pages,
+        firstPagesId:firstPagesId,
+        pagesId:pagesId
+      };
+    case MOVE_PAGE_TO_PAGE:
+      const destinationPage = findPage(pagesId, pages, action.destinationPageId);
+      const destinationPageIndex = pagesId.indexOf(destinationPage.id);
+      // target page 관련 변경
+      if(firstPagesId.includes(targetPage.id)){
+        const index = firstPagesId.indexOf(targetPage.id);
+        firstPagesId.splice(index,1);
+      };
+      if(targetPage.parentsId !==null){
+        const parentPage = findPage(pagesId, pages, targetPage.parentsId[targetPage.parentsId.length-1]);
+        const parentPageIndex =pagesId.indexOf(parentPage.id);
+        const editedParentPage:Page ={
+          ...parentPage,
+          blocks : parentPage.blocks.filter((block:Block)=> block.id !== targetPage.id),
+          blocksId: parentPage.blocksId.filter((id:string)=> id !== targetPage.id),
+          firstBlocksId: parentPage.firstBlocksId?.includes(targetPage.id)?   
+                          parentPage.firstBlocksId?.filter((id:string)=> id !== targetPage.id)
+                        : 
+                        parentPage.firstBlocksId,
+          subPagesId : parentPage.subPagesId? 
+                      parentPage.subPagesId.filter((id:string)=> id !== targetPage.id) : 
+                      null,
+          editTime:editTime,
+        };
+        pages.splice(parentPageIndex,1,editedParentPage);
+      };
+      const editedTargetPage:Page ={
+        ...targetPage,
+        editTime:editTime,
+        parentsId : destinationPage.parentsId !==null ?
+                    destinationPage.parentsId.concat(destinationPage.id)  : 
+                    [...destinationPage.id],
+      };
+      pages.splice(pageIndex,1,editedTargetPage);
+      //destination page 관련 변경
+      const editedDestinationPage :Page ={
+        ...destinationPage,
+        editTime:editTime,
+        subPagesId: destinationPage.subPagesId !==null ? 
+                    destinationPage.subPagesId.concat(targetPage.id) :
+                    [...targetPage.id]
+      };
+      pages.splice(destinationPageIndex,1,editedDestinationPage);
+      console.log("move page to other page", pages , firstPagesId)
       return{
         pages:pages,
         firstPagesId:firstPagesId,

@@ -30,11 +30,12 @@ type MenuProps ={
   addPage : ( newPage:Page, )=>void,
   duplicatePage: (targetPageId: string) => void,
   deletePage : (pageId:string , )=>void,
+  movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
   setPopup :Dispatch<SetStateAction<PopupType>> ,
   popup:PopupType
 };
 
-const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, deleteBlock ,addPage ,duplicatePage,deletePage,setPopup ,popup}:MenuProps)=>{
+const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, deleteBlock ,addPage ,duplicatePage,deletePage,movePageToPage,setPopup ,popup}:MenuProps)=>{
   const sessionItem = sessionStorage.getItem("blockFnTargetBlock") as string;
   const block:Block= JSON.parse(sessionItem);
   const blockFnElement = document.getElementById("blockFn") ;
@@ -290,6 +291,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
             editBlock={editBlock}
             deleteBlock={deleteBlock}
             addPage={addPage}
+            movePageToPage={movePageToPage}
             setMenuOpen={setMenuOpen}
           />
         }

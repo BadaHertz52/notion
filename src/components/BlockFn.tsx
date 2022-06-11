@@ -20,7 +20,8 @@ type BlockFnProp ={
   duplicatePage: (targetPageId: string) => void,
   editPage : (pageId:string , newPage:Page, )=>void,
   deletePage : (pageId:string , )=>void,
-  commentBlock: Block|null
+  commentBlock: Block|null,
+  movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
   setCommentBlock: Dispatch<SetStateAction<Block|null>>,
 };
 export const popupMoveToPage= "popupMoveToPage" ;
@@ -68,7 +69,7 @@ export const detectRange =(event:MouseEvent| React.MouseEvent , targetArea:DOMRe
   return (inner_x && inner_y);
 };
 
-const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlock, deleteBlock ,addPage, editPage, deletePage ,commentBlock,setCommentBlock}:BlockFnProp)=>{
+const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlock, deleteBlock ,addPage, editPage,movePageToPage, deletePage ,commentBlock,setCommentBlock}:BlockFnProp)=>{
   const inner =document.getElementById("inner");
   const editTime = JSON.stringify(Date.now());
   const newContents:string ="";
@@ -163,6 +164,7 @@ const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlo
             deleteBlock={deleteBlock}
             addPage={addPage}
             duplicatePage={duplicatePage}
+            movePageToPage={movePageToPage}
             deletePage={deletePage}
             popup={popup}
             setPopup={setPopup}
@@ -180,6 +182,7 @@ const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlo
                   addBlock={addBlock}
                   editBlock={editBlock}
                   addPage={addPage}
+                  movePageToPage={movePageToPage}
                   setMenuOpen={setMenuOpen}
                 /> 
               </div>
