@@ -84,6 +84,12 @@
       width: 81% ;
     }
   }
+  #sideBar_pageMenu{
+    @include popupMenu;
+    z-index: 15;
+    width: fit-content;
+    padding:3%;
+  }
   //--sideBarBtn
   .sideBarBtn{
     color:$itemSvg;
