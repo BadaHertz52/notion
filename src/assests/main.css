@@ -1753,11 +1753,11 @@ a:link, a:active, a:visited {
   min-height: 27px;
 }
 
-#sideBar #rename_icon {
+#sideBar #rename .rename_icon {
   width: 9%;
 }
 
-#sideBar #rename_title {
+#sideBar #rename .rename_title {
   width: 81%;
 }
 

@@ -384,7 +384,19 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
       moreFn_fns.forEach((fn:HTMLButtonElement)=> fn.addEventListener("click", ()=> setOpenSideMoreMenu(false)));
     }
   },[openSideMoreMenu]);
-
+  useEffect(()=>{
+    if(rename && hover.target !==null && targetItem!==null){
+      setIcon(targetItem.icon);
+      setTitle(targetItem.title);
+      const domRect =hover.target.getClientRects()[0];
+      setRenameStyle({
+        position:"absolute",
+        top: domRect.bottom,
+        left:domRect.left +10,
+        width:domRect.width + 50
+      })
+    }
+  },[rename])
   return(
     <>
     <div id="sideBar">
