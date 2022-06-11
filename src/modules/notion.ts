@@ -881,27 +881,31 @@ export default function notion (state:Notion =initialState , action :NotionActio
       };
     case DUPLICATE_PAGE :
       const targetPageIndex = pagesId.indexOf(targetPage.id);
-      const duplicatePages = pages.filter((page:Page)=>page.header.title.includes(targetPage.header.title));
+      const nextPageId =pagesId[targetPageIndex+1]
+      const nextPage:Page =findPage(pagesId, pages, nextPageId ) ;
       let number :string ="1";
-      if(duplicatePages.length >0){
-        const lastDuplicatePage = duplicatePages[duplicatePages.length-1];
-        const title = lastDuplicatePage.header.title;
-        const start = title.lastIndexOf("(");
-        const end = title.lastIndexOf(")");
-        number = title.substring(start+1, end);
+      let stop :boolean = false;
+      if(nextPage.header.title === `${targetPage.header.title}(1)`){
+        const slicedPages =pages.slice(targetPageIndex+1);
+        for (let i = 0; i < slicedPages.length && !stop; i++) {
+          const title = slicedPages[i].header.title;
+          if(title === `${targetPage.header.title}(${i+1})`){
+            number = (i+2).toString();
+            console.log("number", number)
+          }else{
+            stop= true;
+          }
+        }
       };
-
       const newPage:Page ={
         ...targetPage,
-        id:editTime,
+        id:`${targetPage.id}_duplicate_${number}`,
         header:{
           ...targetPage.header,
           title: `${targetPage.header.title}(${number})`
         },
         editTime:editTime
       };
-
-
       if(targetPage.parentsId ==null){
         const index= firstPagesId.indexOf(targetPage.id);
         firstPagesId.splice(index+1,0, newPage.id);
