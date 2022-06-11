@@ -172,7 +172,7 @@ export const CommentInput =({userName, pageId ,comment,editBlock, commentBlock, 
     }
   };
 
-  const onClick =(event:React.MouseEvent<HTMLButtonElement>)=>{
+  const onClickToMakeNewComment =(event:React.MouseEvent<HTMLButtonElement>)=>{
     const editTime =JSON.stringify(Date.now());
     const newId = `comment_${editTime}`;
     const updateBlock =(newBlock:Block)=>{
@@ -294,7 +294,7 @@ export const CommentInput =({userName, pageId ,comment,editBlock, commentBlock, 
         />
         <button 
           type="button"
-          onClick={onClick}
+          onClick={onClickToMakeNewComment}
           id="commentInputSubmit"
           name="commentInputSubmit"
           disabled ={text ==null || text ===""}
