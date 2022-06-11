@@ -43,9 +43,11 @@ const findTargetBlock =(page:Page):findTargetBlockReturn=>{
   }
 };
 export const makeNewBlock=(page:Page, editTime:string,addBlock:(pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) =>void ,editBlock :(pageId: string, block: Block) => void, addPage:( newPage: Page) => void ,targetBlock:Block, targetBlockIndex:number, newContents:string  )=>{
+  
   if(targetBlock.type !=="toggle"){
+    let number =page.blocksId.length.toString();
     const newBlock:Block ={
-      id:editTime,
+      id: `${page.id}_${number}_${editTime}`,
       editTime:editTime,
       type:"text",
       contents: newContents=== undefined ? "" : newContents,
@@ -76,8 +78,9 @@ export const makeNewBlock=(page:Page, editTime:string,addBlock:(pageId: string, 
       addPage(newPage);
     }
   }else{
+    const number = targetBlock.subBlocksId? targetBlock.subBlocksId.length.toString() : "1";
     const newSubBlock:Block ={
-      id:editTime,
+      id:`${page.id}_${targetBlock.id}_${number}_${editTime}`,
       editTime:editTime,
       type:"text",
       contents: "" ,

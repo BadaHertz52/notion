@@ -174,13 +174,14 @@ export const CommentInput =({userName, pageId ,comment,editBlock, commentBlock, 
 
   const onClickToMakeNewComment =(event:React.MouseEvent<HTMLButtonElement>)=>{
     const editTime =JSON.stringify(Date.now());
-    const newId = `comment_${editTime}`;
     const updateBlock =(newBlock:Block)=>{
       editBlock(pageId, newBlock );
       setCommentBlock(newBlock);
     };
     
     const addComment =(block:Block , blockComments:BlockCommentType[])=>{
+      const number = block.comments?.length.toString()
+      const newId = `comment_${number}_${editTime}`;
       if(comment !==null ){
         // commentBlock.comments 중 특정 comment에 comment를 다는 (Comment의 하위 요소로 존재할 경우) 
         const commentsArry =[...blockComments];

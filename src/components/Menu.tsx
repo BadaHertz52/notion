@@ -103,9 +103,10 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
     const blockIndex= page.blocksId.indexOf(block.id);
     const previousBlockId = page.blocksId[blockIndex-1];
     const editTime =JSON.stringify(Date.now());
+    const number =page.blocksId.length.toString();
     const newBlock:Block ={
       ...block,
-      id:editTime,
+      id:`${page.id}_${number}_${editTime}`,
       editTime:editTime,
     } ;
     addBlock(page.id , newBlock,  blockIndex+1, block.parentBlocksId ===null? null : previousBlockId);
