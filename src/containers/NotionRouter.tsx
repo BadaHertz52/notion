@@ -4,6 +4,7 @@ import {  Route, Routes, useNavigate, useParams, } from 'react-router-dom';
 import { RootState } from '../modules';
 import { add_block, add_page, Block, change_to_sub, delete_block, delete_page, duplicate_page, edit_block, edit_page, findPage, Page, raise_block } from '../modules/notion';
 import { closeNewPage, closeSide, leftSide, lockSide, openNewPage } from '../modules/side';
+import { delete_favorites } from '../modules/user';
 import EditorContainer from './EditorContainer';
 import SideBarContainer from './SideBarContainer';
 export type pathType={
@@ -15,13 +16,16 @@ const NotionRouter =()=>{
   const navigate= useNavigate();
   const dispatch =useDispatch();
   const notion = useSelector((state:RootState)=> state.notion);
+  const user =useSelector((state:RootState)=> state.user);
   const location =window.location;
   const hash=location.hash;
   const firstPage = notion.pages[0];
   const [targetPageId, setTargetPageId]= useState<string>(firstPage.id);
   const [routePage, setRoutePage]=useState<Page>(firstPage);
   const editBlock = (pageId:string, block:Block)=> {dispatch(edit_block(pageId, block ))};
-  const addBlock =(pageId:string , block:Block , newBlockIndex:number ,previousBlockId:string|null)=>{dispatch(add_block(pageId,block ,newBlockIndex ,previousBlockId))};
+  const addBlock =(pageId:string , block:Block , newBlockIndex:number ,previousBlockId:string|null)=>{
+    dispatch(add_block(pageId,block ,newBlockIndex ,previousBlockId))
+  };
   const deleteBlock=(pageId:string,block:Block)=>{dispatch(delete_block(pageId,block))};
   const changeToSub =(pageId:string, block:Block , first:boolean ,newParentBlock:Block)=>{dispatch(change_to_sub(pageId,block,first,newParentBlock));
   };
@@ -29,12 +33,19 @@ const NotionRouter =()=>{
   const addPage=(newPage:Page)=>{dispatch(add_page( newPage))};
   const duplicatePage =(targetPageId:string)=>{dispatch(duplicate_page(targetPageId))};
   const editPage=(pageId:string,newPage:Page )=>{dispatch(edit_page(pageId, newPage))};
-  const deletePage=(pageId:string,)=>{dispatch(delete_page(pageId))};
+  const deletePage =(pageId:string )=>{
+    dispatch(delete_page(pageId));
+    if(user.favorites !==null){
+      user.favorites?.includes(pageId) && dispatch(delete_favorites(pageId));
+    };
+  };
   const lockSideBar =() => {dispatch(lockSide())} ;
   const leftSideBar =()=>{dispatch(leftSide())} ;
   const closeSideBar =()=>{dispatch(closeSide())} ;
   const open_newPage =()=>{dispatch(openNewPage())};
   const close_newPage =()=>{dispatch(closeNewPage())};
+
+
 
   const makePagePath=(page:Page):pathType[]|null=>{
     if(page.parentsId !==null){
@@ -75,7 +86,6 @@ const NotionRouter =()=>{
         };
       };
     };
-    console.log("path", path)
     return path;
   };
   useEffect(()=>{
