@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {  Route, Routes, useNavigate, useParams, } from 'react-router-dom';
+import {  Route, Routes, useNavigate} from 'react-router-dom';
+import QuickFindBord from '../components/QuickFindBord';
 import { RootState } from '../modules';
 import { add_block, add_page, Block, change_to_sub, delete_block, delete_page, duplicate_page, edit_block, edit_page, findPage, listItem, move_page_to_page, Page, raise_block } from '../modules/notion';
 import { change_side, SideAppear } from '../modules/side';
@@ -20,8 +21,11 @@ const NotionRouter =()=>{
   const location =window.location;
   const hash=location.hash;
   const firstPage = notion.pages[0];
+
   const [targetPageId, setTargetPageId]= useState<string>(firstPage.id);
   const [routePage, setRoutePage]=useState<Page>(firstPage);
+  const [search, setSearch]=useState<string|null>(null);
+
   //---action.function 
     //--block
   const editBlock = (pageId:string, block:Block)=> {dispatch(edit_block(pageId, block ))};
@@ -56,6 +60,7 @@ const NotionRouter =()=>{
   const changeSide =(appear:SideAppear) => {dispatch(change_side(appear))} ;
   //side--
   //action.function ---
+
 
   const makePagePath=(page:Page):pathType[]|null=>{
     if(page.parentsId !==null){
@@ -101,6 +106,7 @@ const NotionRouter =()=>{
   useEffect(()=>{
         const path =makeRoutePath(routePage);
         navigate(path);
+        addRecentPage(path);
   },[routePage]);
 
   useEffect(()=>{
@@ -157,8 +163,13 @@ const NotionRouter =()=>{
                 } 
         />
       </Routes>
-
-
+      <QuickFindBord
+        userName={user.userName}
+        pages={notion.pages}
+        pagesId={notion.pagesId}
+        search={search}
+        setTargetPageId={setTargetPageId}
+      />
     </div>
   )
 };
