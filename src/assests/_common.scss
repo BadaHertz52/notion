@@ -13,7 +13,6 @@ $comment:rgba(255,212,0,0.14);
   background-color:transparent;
   padding:0
 };
-
 @mixin searchInput {
   width:90%;
   height: 1.5rem;
@@ -47,7 +46,27 @@ $comment:rgba(255,212,0,0.14);
     background-color: #edece9;
   }
 } ;
-
+@mixin popup {
+  position: absolute;
+  top:0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.53);
+  width: 100vw;
+  height: 100vh;
+  .inner{
+    background-color: #ffff;
+    border-radius: 5px;
+    position: relative;
+    top:90px;
+    left: 25%;
+    width:50% ;
+    z-index: 15;
+    overflow: hidden;
+    min-height: 50px;
+    max-height: 80vh;
+    box-shadow: rgba(15, 15, 15, 0.091) 0px 0px 0px 1px;
+  }
+}
 @mixin popupMenu {
   width:320px ;
   display: flex;
