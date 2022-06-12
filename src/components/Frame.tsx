@@ -17,7 +17,6 @@ type FrameProps ={
   firstlist:listItem[],
   userName : string,
   page:Page,
-  side:Side,
   editBlock :(pageId: string, block: Block) => void,
   addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
   changeToSub: (pageId: string, block: Block, first: boolean, newParentBlock: Block) => void
@@ -32,7 +31,7 @@ type FrameProps ={
 };
 
 
-const Frame =({ pages, firstlist,userName, page,side,  editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, duplicatePage,editPage, movePageToPage, deletePage ,setTargetPageId}:FrameProps)=>{
+const Frame =({ pages, firstlist,userName, page, editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, duplicatePage,editPage, movePageToPage, deletePage ,setTargetPageId}:FrameProps)=>{
   const [decoOpen ,setdecoOpen] =useState<boolean>(true);
   const [commentBlock, setCommentBlock]=useState<Block|null>(null);
   const [moreOpen, setMoreOpen]= useState<boolean>(false);
@@ -46,7 +45,7 @@ const Frame =({ pages, firstlist,userName, page,side,  editBlock, addBlock,chang
 
   return(
     <div className='frame'>
-      {side.newPage ?
+      {page.blocksId[0]==undefined ?
         <div className='newPageFrame frame_inner'>
           <div 
           className='pageHeader'

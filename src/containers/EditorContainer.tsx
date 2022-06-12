@@ -18,11 +18,7 @@ type EditorContainerProps ={
   editPage : (pageId:string , newPage:Page, )=>void,
   movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
   deletePage : (pageId:string , )=>void,
-  lockSideBar  : ()=> void ,
-  leftSideBar  : ()=> void ,
-  closeSideBar  : ()=> void ,
-  openNewPage  : ()=> void ,
-  closeNewPage : ()=> void ,
+  changeSide: (appear: SideAppear) => void,
   setTargetPageId:Dispatch<SetStateAction<string>>
 };
 
@@ -30,7 +26,7 @@ export type Command ={
   boolean:boolean,
   command:string | null
 };
-const EditorContainer =({ pagePath ,lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage ,addBlock,duplicatePage,editBlock,deleteBlock,addPage,editPage,deletePage,movePageToPage, setTargetPageId}:EditorContainerProps)=>{
+const EditorContainer =({ pagePath ,changeSide,addBlock,duplicatePage,editBlock,deleteBlock,addPage,editPage,deletePage,movePageToPage, setTargetPageId}:EditorContainerProps)=>{
   const notion :Notion = useSelector((state:RootState)=> state.notion);
   const dispatch =useDispatch();
   const changeToSub =(pageId: string, block: Block, first: boolean, newParentBlock: Block) => dispatch((change_to_sub(pageId, block, first ,newParentBlock)));
@@ -67,11 +63,7 @@ const EditorContainer =({ pagePath ,lockSideBar, leftSideBar,closeSideBar, openN
       page={page}
       pagePath ={pagePath}
       side ={side}
-      lockSideBar ={lockSideBar}
-      leftSideBar ={leftSideBar}
-      closeSideBar ={closeSideBar}
-      openNewPage ={openNewPage}
-      closeNewPage={closeNewPage}
+      changeSide={changeSide}
       setTargetPageId={setTargetPageId}
       />
       <Frame
@@ -79,7 +71,6 @@ const EditorContainer =({ pagePath ,lockSideBar, leftSideBar,closeSideBar, openN
         firstlist={firstlist}
         userName ={userName}
         page={page}
-        side={side}
         addBlock={addBlock}
         editBlock={editBlock}
         changeToSub={changeToSub}

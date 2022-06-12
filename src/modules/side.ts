@@ -1,62 +1,27 @@
-const LOCK_SIDE = 'side/LOCK_SIDE' as const ;
-const LEFT_SIDE = 'side/LEFT_SIDE' as const ;
-const CLOSE_SIDE = 'side/CLOSE_SIDE' as const ;
-const OPEN_NEW_PAGE = 'side/OPEN_PAGE' as const ;
-const CLOSE_NEW_PAGE = 'side/CLOSE_PAGE' as const ;
+const lock ="lock" as const ;
+const left ="left" as const ;
+const close ="close" as const; 
+export type SideAppear = typeof lock | typeof left | typeof close
 
-export const lockSide =()=>({
-  type:LOCK_SIDE ,
+const CHANGE_SIDE = 'side/CHANGE_SIDE' as const ;
+export const change_side =(appear:SideAppear)=>({
+  type:CHANGE_SIDE,
+  appear:appear
 });
-export const leftSide =()=>({
-  type:LEFT_SIDE ,
-});
-export const closeSide =()=>({
-  type:CLOSE_SIDE ,
-});
-export const openNewPage =()=>({
-  type:OPEN_NEW_PAGE ,
-});
-export const closeNewPage =()=>({
-  type:CLOSE_NEW_PAGE ,
-});
-
 export type Side = {
-  sideState: string
-  // 'lock'| 'left' | 'close' ,
-  newPage: boolean
+  appear:SideAppear ,
 };
-
 type SideAction = 
-ReturnType<typeof lockSide> |
-ReturnType<typeof leftSide> |
-ReturnType<typeof closeSide> |
-ReturnType<typeof openNewPage>| 
-ReturnType<typeof closeNewPage> ;
+ReturnType<typeof change_side> 
 
-const initialState = {
-  sideState:"lock",
-  newPage: false
+const initialState:Side = {
+  appear:lock
 } ;
 
 export default function side (state:Side = initialState, action:SideAction):Side{
   switch (action.type) {
-    case LOCK_SIDE:
-      return  { ...state, sideState:"lock"} ;
-    case LEFT_SIDE :
-      return { ...state, sideState:"left"} ;
-    case CLOSE_SIDE :
-      return  { ...state, sideState:"close"} ;
-    case OPEN_NEW_PAGE :
-      return {
-        ...state,
-        newPage:true
-      }
-    case CLOSE_NEW_PAGE :
-      return {
-        ...state,
-        newPage:false
-      } ;
-
+    case CHANGE_SIDE:
+      return  { appear: action.appear} ;
     default:
       return state;
   }

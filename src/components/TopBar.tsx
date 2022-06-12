@@ -5,22 +5,18 @@ import { BsThreeDots } from 'react-icons/bs';
 import { FiChevronsLeft } from 'react-icons/fi';
 import { pathType } from '../containers/NotionRouter';
 import { Page } from '../modules/notion';
-import { Side } from '../modules/side';
+import { Side, SideAppear } from '../modules/side';
 type TopBarProps ={
   side:Side,
   page:Page,
   pagePath: pathType[] |null ,
-  lockSideBar  : ()=> void ,
-  leftSideBar  : ()=> void ,
-  closeSideBar  : ()=> void ,
-  openNewPage  : ()=> void ,
-  closeNewPage : ()=> void ,
+  changeSide: (appear: SideAppear) => void
   setTargetPageId:Dispatch<SetStateAction<string>>
 }
-const TopBar =({side,page,pagePath, lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage ,setTargetPageId}:TopBarProps)=>{
+const TopBar =({side,page,pagePath, changeSide,setTargetPageId}:TopBarProps)=>{
   const [title, setTitle]= useState<string>("");
   useEffect(()=>{
-    if(side.sideState ==="left"){
+    if(side.appear ==="left"){
       setTitle("Lock sideBar open")
     }
   },[]);
@@ -29,15 +25,15 @@ const TopBar =({side,page,pagePath, lockSideBar, leftSideBar,closeSideBar, openN
     <div className="topbar">
       <button 
       className='sideBarBtn'
-      onMouseMove={leftSideBar}
-      onMouseOut={closeSideBar}
-      onClick={lockSideBar}
+      // onMouseMove={leftSideBar}
+      // onMouseOut={closeSideBar}
+      // onClick={lockSideBar}
       title ={title}
       aria-label ={title}
       >
-        {side.sideState ==="close" && 
+        {side.appear ==="close" && 
         <AiOutlineMenu/>}
-        {side.sideState ==="left" &&
+        {side.appear ==="left" &&
         <FiChevronsLeft/>}
       </button>
       <div className="pagePathes">

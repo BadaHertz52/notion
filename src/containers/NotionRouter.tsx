@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {  Route, Routes, useNavigate, useParams, } from 'react-router-dom';
 import { RootState } from '../modules';
-import { add_block, add_page, Block, change_to_sub, delete_block, delete_page, duplicate_page, edit_block, edit_page, findPage, move_page_to_page, Page, raise_block } from '../modules/notion';
-import { closeNewPage, closeSide, leftSide, lockSide, openNewPage } from '../modules/side';
-import { delete_favorites } from '../modules/user';
+import { add_block, add_page, Block, change_to_sub, delete_block, delete_page, duplicate_page, edit_block, edit_page, findPage, listItem, move_page_to_page, Page, raise_block } from '../modules/notion';
+import { change_side, SideAppear } from '../modules/side';
+import { add_recent_page, clean_recent_page, delete_favorites } from '../modules/user';
 import EditorContainer from './EditorContainer';
 import SideBarContainer from './SideBarContainer';
 export type pathType={
@@ -40,13 +40,10 @@ const NotionRouter =()=>{
     };
   };
   const movePageToPage =(targetPageId:string, destinationPageId:string)=>{dispatch(move_page_to_page(targetPageId, destinationPageId))};
-  const lockSideBar =() => {dispatch(lockSide())} ;
-  const leftSideBar =()=>{dispatch(leftSide())} ;
-  const closeSideBar =()=>{dispatch(closeSide())} ;
-  const open_newPage =()=>{dispatch(openNewPage())};
-  const close_newPage =()=>{dispatch(closeNewPage())};
 
-
+  //--side
+  const changeSide =(appear:SideAppear) => {dispatch(change_side(appear))} ;
+  //side--
 
   const makePagePath=(page:Page):pathType[]|null=>{
     if(page.parentsId !==null){
@@ -111,11 +108,6 @@ const NotionRouter =()=>{
   return(
     <div id="inner">
       <SideBarContainer 
-        lockSideBar ={lockSideBar}
-        leftSideBar ={leftSideBar}
-        closeSideBar ={closeSideBar}
-        openNewPage ={open_newPage}
-        closeNewPage={close_newPage}
         setTargetPageId={setTargetPageId}
         addBlock={addBlock}
         duplicatePage={duplicatePage}
@@ -127,17 +119,14 @@ const NotionRouter =()=>{
         editPage={editPage}
         deletePage={deletePage}
         movePageToPage={movePageToPage}
+        changeSide={changeSide}
       />
       <Routes>
         <Route
           path={makeRoutePath(routePage)} 
           element={<EditorContainer 
                   pagePath ={makePagePath(routePage)}
-                  lockSideBar ={lockSideBar}
-                  leftSideBar ={leftSideBar}
-                  closeSideBar ={closeSideBar}
-                  openNewPage ={open_newPage}
-                  closeNewPage={close_newPage}
+                  changeSide={changeSide}
                   setTargetPageId={setTargetPageId}
                   addBlock={addBlock}
                   editBlock={editBlock}

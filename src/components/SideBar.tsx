@@ -16,6 +16,7 @@ import Time from './Time';
 import PageMenu from './PageMenu';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { IoArrowRedoOutline } from 'react-icons/io5';
+import { SideAppear } from '../modules/side';
 
 type hoverType={
   hover:boolean, 
@@ -25,23 +26,24 @@ type hoverType={
 type SideBarProps ={
   notion : Notion,
   user:UserState,
+
   editBlock :(pageId: string, block: Block) => void,
   addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
   deleteBlock: (pageId: string, block: Block) => void,
+
   addPage : ( newPage:Page, )=>void,
   duplicatePage: (targetPageId: string) => void,
   editPage : (pageId:string , newPage:Page, )=>void,
   deletePage : (pageId:string , )=>void,
   movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
-  lockSideBar  : ()=> void ,
-  leftSideBar  : ()=> void ,
-  closeSideBar  : ()=> void ,
-  openNewPage  : ()=> void ,
-  closeNewPage : ()=> void ,
+
   addFavorites: (itemId: string) => void,
   deleteFavorites: (itemId: string) => void,
   addTrash: (itemId: string) => void,
   cleanTrash: (itemId: string) => void,
+  
+  changeSide: (appear: SideAppear) => void,
+
   setTargetPageId: Dispatch<SetStateAction<string>>,
 };
 
@@ -201,7 +203,7 @@ const ListTemplate =({notion,targetList ,setTargetPageId ,hover ,setHover}:ListT
   )
 };
 
-const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicatePage,editPage,deletePage,movePageToPage, lockSideBar, leftSideBar,closeSideBar, openNewPage, closeNewPage, addFavorites, deleteFavorites, addTrash, cleanTrash ,setTargetPageId 
+const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicatePage,editPage,deletePage,movePageToPage, addFavorites, deleteFavorites, addTrash, cleanTrash  , changeSide,setTargetPageId 
 }:SideBarProps)=>{
   const inner =document.getElementById("inner");
   const pages =notion.pages;
