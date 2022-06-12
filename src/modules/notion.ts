@@ -241,6 +241,8 @@ const initialState :Notion ={
         content:"this is content",
         editTime: JSON.stringify(Date.parse("2021-05-20-12")
         ),
+        createTime: JSON.stringify(Date.parse("2021-05-20-12")
+        ),
         comments:null,
         commentsId:null,
       }],
@@ -627,6 +629,7 @@ const initialState :Notion ={
       title:"page2"
     },
     editTime: JSON.stringify(Date.parse("2021-5-20-9:00")),
+    createTime: JSON.stringify(Date.parse("2021-5-20-9:00")),
     parentsId:['12345']
   },
   {
