@@ -41,6 +41,11 @@ const NotionRouter =()=>{
   };
   const movePageToPage =(targetPageId:string, destinationPageId:string)=>{dispatch(move_page_to_page(targetPageId, destinationPageId))};
 
+  //--user
+  const addRecentPage=(itemId:string)=>{dispatch(add_recent_page(itemId))};
+  const cleanRecentPage=()=>{dispatch(clean_recent_page())};
+  //---user
+  
   //--side
   const changeSide =(appear:SideAppear) => {dispatch(change_side(appear))} ;
   //side--
