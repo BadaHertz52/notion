@@ -191,6 +191,7 @@ export const CommentInput =({userName, pageId ,comment,editBlock, commentBlock, 
           id:newId,
           userName: userName,
           editTime:editTime,
+          createTime:editTime,
           content: text ,
         };
         const updatedComment:BlockCommentType ={
@@ -217,6 +218,7 @@ export const CommentInput =({userName, pageId ,comment,editBlock, commentBlock, 
           content:text,
           type:"open",
           editTime:editTime,
+          createTime:editTime,
           comments:null,
           commentsId:null,
         };

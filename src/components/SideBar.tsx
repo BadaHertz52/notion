@@ -159,7 +159,8 @@ const ListTemplate =({notion,targetList ,setTargetPageId ,hover ,setHover}:ListT
       icon: subPage.header.icon,
       subPagesId:subPage.subPagesId,
       parentsId: subPage.parentsId,
-      editTime:subPage.editTime
+      editTime:subPage.editTime,
+      createTime:subPage.createTime,
     };
   };
   const makeTargetList =(ids:string[]):listItem[]=>{
@@ -217,6 +218,7 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
       subPagesId: page.subPagesId,
       parentsId: page.parentsId,
       editTime: page.editTime,
+      createTime:page.createTime
     }
   });
   const [hover ,setHover] =useState<hoverType>({
@@ -247,6 +249,7 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
                                 subPagesId: page.subPagesId,
                                 parentsId: page.parentsId,
                                 editTime:page.editTime,
+                                createTime:page.createTime,
                               };
                                 return listItem
                                 }) 
@@ -261,7 +264,8 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
                                       title: page.header.title,
                                       subPagesId: page.subPagesId,
                                       parentsId: page.parentsId,
-                                      editTime:page.editTime
+                                      editTime:page.editTime,
+                                      createTime:page.createTime,
                                     })) ;
   const navigate =useNavigate();  
   const addNewPage=()=>{

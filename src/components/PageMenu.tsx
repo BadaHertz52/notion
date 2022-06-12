@@ -121,7 +121,8 @@ const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock, addBlock, edi
       icon: page.header.icon,
       subPagesId:page.subPagesId,
       parentsId:page.parentsId,
-      editTime:JSON.stringify(Date.now())
+      editTime:JSON.stringify(Date.now()),
+      createTime:JSON.stringify(Date.now()),
     })) ;
     setResult(RESULT);
   };
