@@ -372,7 +372,12 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
         left: moreFnStyle.left
       })
     }
-  }
+  };
+  const showQuickFind =()=>{
+    const quickFind =document.getElementById("quickFind");
+    quickFind !==null &&
+    quickFind.setAttribute("style","display:none");
+  };
   useEffect(()=>{
     if(hover.hover){
       setTargetItem(hover.targetItem);
@@ -438,12 +443,14 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
           </div>
         </div>
         <div className="fun1">
-          <div>
+          <button
+            onClick={showQuickFind}
+          >
             <div className='itemInner'>
               <BiSearchAlt2/>
               <span>Quick Find</span>
             </div>
-          </div>
+          </button>
           <div>
             <div className="itemInner">
               <AiOutlineClockCircle/>
