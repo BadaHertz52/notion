@@ -53,6 +53,7 @@ export type CommentType ={
   userName:string,
   content: string,
   editTime: string,
+  createTime:string,
 }
 export type BlockCommentType = CommentType &{
   type:"open"|"resolve",
@@ -68,6 +69,7 @@ export type Block ={
   type: BlockType ,
   icon: string | null ,
   editTime: string ,
+  createTime:string,
   style :BlockStyle,
   comments :BlockCommentType[] |null
 } ;
@@ -81,6 +83,7 @@ export  const blockSample:Block ={
   type:text,
   icon:null,
   editTime:editTime,
+  createTime:JSON.stringify(Date.now()),
   style :basicBlockStyle ,
   comments:null
 };
@@ -90,7 +93,8 @@ export type listItem = {
   icon: string | null;
   subPagesId: string[]|null;
   parentsId:string[]|null;
-  editTime:string
+  editTime:string,
+  createTime:string,
 };
 export type Page ={
   id:string ,  // 형식 : comment_현재 시간 
@@ -106,6 +110,7 @@ export type Page ={
   subPagesId:string[] | null,
   parentsId: string[] | null ,
   editTime: string,
+  createTime:string,
 };
 export const  pageSample:Page ={
   id:editTime, 
@@ -120,7 +125,8 @@ export const  pageSample:Page ={
   blocksId :  [blockSample.id], 
   subPagesId: null,
   parentsId:  null ,
-  editTime: editTime
+  editTime: editTime,
+  createTime:editTime,
 };
 export type Notion={ 
   pagesId :string [],
@@ -248,8 +254,8 @@ const initialState :Notion ={
       parentBlocksId: null,
       type: text,
       icon:  null ,
-      editTime: JSON.stringify(Date.parse("2021-5-18-15:00"))
-      ,
+      editTime:Date.parse("2021-5-18-15:00").toString(),
+      createTime: Date.parse("2021-5-18-1:00").toString(),
       style :{
         color: blue,
         bgColor: bg_default,
@@ -262,7 +268,8 @@ const initialState :Notion ={
         userName:userName,
         type:"open",
         content:"hi! ☺️", 
-        editTime:JSON.stringify(1654086822451),
+        editTime:(1654086822451).toString(),
+        createTime: (Date.parse("2021-5-20-15:00")).toString(),
         comments:null,
         commentsId:null,
       },]
@@ -275,8 +282,9 @@ const initialState :Notion ={
       parentBlocksId: null,
       type: toggle,
       icon:  null ,
-      editTime: JSON.stringify(Date.parse("2021-5-18-16:00"))
+      editTime: (Date.parse("2021-5-18-16:00")).toString()
       ,
+      createTime: (Date.parse("2021-5-18-2:00")).toString(),
       style :basicBlockStyle,
       comments: null
     },{
@@ -287,7 +295,8 @@ const initialState :Notion ={
       parentBlocksId: null,
       type: todo,
       icon:  null ,
-      editTime: JSON.stringify(Date.parse("2021-5-18-16:01:00")),
+      editTime: (Date.parse("2021-5-18-16:01:00")).toString(),
+      createTime: (Date.parse("2021-5-18-3:00")).toString(),
       style :{
         color: defaultColor,
         bgColor: bg_yellow,
@@ -300,7 +309,8 @@ const initialState :Notion ={
         userName:userName,
         type:"open",
         content:"todo comments", 
-        editTime:JSON.stringify(Date.parse("2021-5-18-16:01:30")),
+        editTime:(Date.parse("2021-5-18-16:01:30")).toString(),
+        createTime: (Date.parse("2021-5-21-14:00")).toString(),
         comments:null,
         commentsId:null,
       },]
@@ -312,8 +322,9 @@ const initialState :Notion ={
       parentBlocksId: null,
       type: todo_done,
       icon:  null ,
-      editTime: JSON.stringify(Date.parse("2021-5-19-11:30"))
+      editTime: (Date.parse("2021-5-19-11:30")).toString()
       ,
+      createTime: (Date.parse("2021-5-18-5:00")).toString(),
       style :basicBlockStyle,
       comments:null
     },{
@@ -324,8 +335,8 @@ const initialState :Notion ={
       parentBlocksId: null,
       type: h1,
       icon:  null ,
-      editTime: JSON.stringify(Date.parse("2021-5-19-12:00"))
-      ,
+      editTime: (Date.parse("2021-5-19-12:00")).toString(),
+      createTime: (Date.parse("2021-5-18-15:00")).toString(),
       style :basicBlockStyle,
       comments:null
     },{
@@ -336,8 +347,8 @@ const initialState :Notion ={
       parentBlocksId: null,
       type: h2,
       icon:  null ,
-      editTime: JSON.stringify(Date.parse("2021-5-18-20:00"))
-      ,
+      editTime: (Date.parse("2021-5-18-20:00")).toString(),
+      createTime: (Date.parse("2021-5-18-15:00")).toString(),
       style :basicBlockStyle,
       comments:null
     },{
@@ -348,8 +359,9 @@ const initialState :Notion ={
       parentBlocksId: null,
       type: h3,
       icon:  null ,
-      editTime: JSON.stringify(Date.parse("2021-5-19-19:20"))
-      ,  
+      editTime: (Date.parse("2021-5-19-19:20")).toString()
+      , 
+      createTime: (Date.parse("2021-5-18-15:00")).toString(), 
       style :basicBlockStyle,
       comments:null
     },{
@@ -360,8 +372,9 @@ const initialState :Notion ={
       parentBlocksId: null,
       type: page,
       icon:  null ,
-      editTime: JSON.stringify(Date.parse("2021-5-20-21:00"))
+      editTime: (Date.parse("2021-5-20-21:00")).toString()
       ,
+      createTime: (Date.parse("2021-5-19-15:00")).toString(),
       style :basicBlockStyle,
       comments:null
     },
@@ -373,7 +386,8 @@ const initialState :Notion ={
       parentBlocksId: null,
       type: page,
       icon: "🌈" ,
-      editTime: JSON.stringify(Date.parse("2021-5-20-9:00")),
+      editTime: (Date.parse("2021-5-20-9:00")).toString(),
+      createTime: (Date.parse("2021-5-19-20:00")).toString(),
 
       style :basicBlockStyle,
       comments:null
@@ -385,8 +399,8 @@ const initialState :Notion ={
     parentBlocksId: ["text"],
     type: text,
     icon:  null ,
-    editTime: JSON.stringify(Date.parse("2021-6-1-1:00")),
-
+    editTime: (Date.parse("2021-6-1-1:00")).toString() ,   
+    createTime: (Date.parse("2021-5-30-15:00")).toString(),
     style :{
       color: defaultColor,
       bgColor: bg_default,
@@ -404,8 +418,8 @@ const initialState :Notion ={
     parentBlocksId: ["text"],
     type: text,
     icon:  null ,
-    editTime: JSON.stringify(Date.parse("2021-5-12-09:00"))
-    ,
+    editTime: (Date.parse("2021-5-12-09:00")).toString(),
+    createTime: (Date.parse("2021-5-12-08:50")).toString(),
     style :{
       color: defaultColor,
       bgColor: bg_default,
@@ -418,7 +432,8 @@ const initialState :Notion ={
       userName:userName,
       type:"open",
       content:"subBlock comments", 
-      editTime:JSON.stringify(Date.parse("2021-5-18-8:00")),
+      editTime:(Date.parse("2021-5-18-8:00")).toString(),
+      createTime:(Date.parse("2021-5-18-8:00")).toString(),
       comments:null,
       commentsId:null,
     },]
@@ -431,7 +446,8 @@ const initialState :Notion ={
     parentBlocksId: ["text", "sub1_1"],
     type: text,
     icon:  null ,
-    editTime: JSON.stringify(Date.parse("2021-5-27-7:00")),
+    editTime: (Date.parse("2021-5-27-7:00")).toString(),
+    createTime: (Date.parse("2021-5-27-7:00")).toString(),
     style :{
       color: defaultColor,
       bgColor: bg_default,
@@ -449,7 +465,8 @@ const initialState :Notion ={
     parentBlocksId: null,
     type: numberList,
     icon:  null ,
-    editTime: JSON.stringify(Date.parse("2021-6-1-18:45")),
+    editTime: (Date.parse("2021-6-1-18:45")).toString(),
+    createTime: (Date.parse("2021-6-1-18:45")).toString(),
     style :{
       color: defaultColor,
       bgColor: bg_default,
@@ -467,7 +484,8 @@ const initialState :Notion ={
     parentBlocksId: [numberList],
     type: numberList,
     icon:  null ,
-    editTime: JSON.stringify(Date.parse("2021-6-1-19:03")),
+    editTime: (Date.parse("2021-6-1-19:03")).toString(),
+    createTime: (Date.parse("2021-6-1-19:03")).toString(),
     style :{
       color: defaultColor,
       bgColor: bg_green,
@@ -485,7 +503,8 @@ const initialState :Notion ={
     parentBlocksId: [numberList],
     type: numberList,
     icon:  null ,
-    editTime: JSON.stringify(Date.parse("2021-6-1-19:03:50")),
+    editTime: (Date.parse("2021-6-1-19:03:50")).toString(),
+    createTime: (Date.parse("2021-6-1-19:03:50")).toString(),
     style :{
       color: defaultColor,
       bgColor: bg_default,
@@ -498,7 +517,8 @@ const initialState :Notion ={
       userName:userName,
       type:"open",
       content:"comment n2", 
-      editTime:JSON.stringify(1654086822451),
+      editTime:(1654086822451).toString(),
+      createTime:(1654086822451).toString(),
       comments:null,
       commentsId:null,
     },]
@@ -511,7 +531,8 @@ const initialState :Notion ={
     parentBlocksId: [numberList],
     type: numberList,
     icon:  null ,
-    editTime: JSON.stringify(Date.parse("2021-6-1-19:12:13")),
+    editTime: Date.parse("2021-6-1-19:12:13").toString(),
+    createTime: Date.parse("2021-6-1-19:12:13").toString(),
     style :{
       color: defaultColor,
       bgColor: bg_default,
@@ -529,7 +550,8 @@ const initialState :Notion ={
     parentBlocksId:null,
     type: bulletList,
     icon:  null ,
-    editTime: JSON.stringify(Date.parse("2021-6-1-19:13:45")),
+    editTime: (Date.parse("2021-6-1-19:13:45")).toString(),
+    createTime: (Date.parse("2021-6-1-19:13:45")).toString(),
     style :{
       color: defaultColor,
       bgColor: bg_default,
@@ -547,7 +569,8 @@ const initialState :Notion ={
     parentBlocksId:[bulletList],
     type: bulletList,
     icon:  null ,
-    editTime: JSON.stringify(Date.parse("2021-6-1-19:23")),
+    editTime: (Date.parse("2021-6-1-19:23")).toString(),
+    createTime: (Date.parse("2021-6-1-19:23")).toString(),
     style :{
       color: defaultColor,
       bgColor: bg_default,
@@ -565,7 +588,8 @@ const initialState :Notion ={
     parentBlocksId:[bulletList],
     type: bulletList,
     icon:  null ,
-    editTime: JSON.stringify(Date.parse("2021-6-1-20:12" )),
+    editTime: (Date.parse("2021-6-1-20:12" )).toString(),
+    createTime: (Date.parse("2021-6-1-20:12" )).toString(),
     style :{
       color: defaultColor,
       bgColor: bg_default,
@@ -580,7 +604,8 @@ const initialState :Notion ={
     blocksId:["text", 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page1', 'page2' , 'sub1_1' ,'sub1_2', 'sub2_1' ,"numberList" , "num1", "num2", "num3" , "bulletList", "b1", "b2"],
     subPagesId:['page1','page2'],
     parentsId: null,
-    editTime :JSON.stringify(Date.parse("2021-5-16-15:00"))
+    editTime :(Date.parse("2021-5-16-15:00")).toString(),
+    createTime :(Date.parse("2021-5-16-15:00")).toString(),
   },
   {
     ...pageSample,
@@ -589,7 +614,8 @@ const initialState :Notion ={
       ...pageSample.header,
       title:"page page page"
     },
-    editTime: JSON.stringify(Date.parse("2021-5-20-21:00")),
+    editTime: (Date.parse("2021-5-20-21:00")).toString(),
+    createTime: (Date.parse("2021-5-20-21:00")).toString(),
     parentsId:['12345']
   },
   {
@@ -616,7 +642,8 @@ const initialState :Notion ={
     blocksId:[blockSample.id],
     subPagesId:null,
     parentsId: null,
-    editTime:JSON.stringify(Date.parse("2021-5-18-19:00"))
+    editTime:JSON.stringify(Date.parse("2021-5-18-19:00")),
+    createTime:JSON.stringify(Date.parse("2021-5-18-19:00")),
   },
   {
     id: '123',
@@ -631,7 +658,8 @@ const initialState :Notion ={
     blocksId:[blockSample.id],
     subPagesId:null,
     parentsId:null,
-    editTime:JSON.stringify(Date.parse("2021-5-13-15:00"))
+    editTime:JSON.stringify(Date.parse("2021-5-13-15:00")),
+    createTime:JSON.stringify(Date.parse("2021-5-13-15:00")),
   }
 ]
 };
