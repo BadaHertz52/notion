@@ -22,6 +22,8 @@ const NotionRouter =()=>{
   const firstPage = notion.pages[0];
   const [targetPageId, setTargetPageId]= useState<string>(firstPage.id);
   const [routePage, setRoutePage]=useState<Page>(firstPage);
+  //---action.function 
+    //--block
   const editBlock = (pageId:string, block:Block)=> {dispatch(edit_block(pageId, block ))};
   const addBlock =(pageId:string , block:Block , newBlockIndex:number ,previousBlockId:string|null)=>{
     dispatch(add_block(pageId,block ,newBlockIndex ,previousBlockId))
@@ -30,6 +32,9 @@ const NotionRouter =()=>{
   const changeToSub =(pageId:string, block:Block , first:boolean ,newParentBlock:Block)=>{dispatch(change_to_sub(pageId,block,first,newParentBlock));
   };
   const raiseBlock=(pageId:string, block:Block)=>{dispatch(raise_block(pageId,block))};
+  //block--
+
+  //--page
   const addPage=(newPage:Page)=>{dispatch(add_page( newPage))};
   const duplicatePage =(targetPageId:string)=>{dispatch(duplicate_page(targetPageId))};
   const editPage=(pageId:string,newPage:Page )=>{dispatch(edit_page(pageId, newPage))};
@@ -40,6 +45,7 @@ const NotionRouter =()=>{
     };
   };
   const movePageToPage =(targetPageId:string, destinationPageId:string)=>{dispatch(move_page_to_page(targetPageId, destinationPageId))};
+  //page---
 
   //--user
   const addRecentPage=(itemId:string)=>{dispatch(add_recent_page(itemId))};
@@ -49,6 +55,7 @@ const NotionRouter =()=>{
   //--side
   const changeSide =(appear:SideAppear) => {dispatch(change_side(appear))} ;
   //side--
+  //action.function ---
 
   const makePagePath=(page:Page):pathType[]|null=>{
     if(page.parentsId !==null){
@@ -114,16 +121,19 @@ const NotionRouter =()=>{
     <div id="inner">
       <SideBarContainer 
         setTargetPageId={setTargetPageId}
+
         addBlock={addBlock}
-        duplicatePage={duplicatePage}
         editBlock={editBlock}
         changeToSub={changeToSub}
         raiseBlock={raiseBlock}
         deleteBlock={deleteBlock}
+
         addPage={addPage}
         editPage={editPage}
         deletePage={deletePage}
         movePageToPage={movePageToPage}
+        duplicatePage={duplicatePage}
+
         changeSide={changeSide}
       />
       <Routes>
