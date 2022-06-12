@@ -4,6 +4,7 @@ import Frame from '../components/Frame';
 import TopBar from '../components/TopBar';
 import { RootState } from '../modules';
 import {  Block, Page,  findPage, listItem, Notion, change_to_sub, raise_block } from '../modules/notion';
+import { SideAppear } from '../modules/side';
 import { pathType } from './NotionRouter';
 
 type EditorContainerProps ={
@@ -17,7 +18,7 @@ type EditorContainerProps ={
   duplicatePage: (targetPageId: string) => void,
   editPage : (pageId:string , newPage:Page, )=>void,
   movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
-  deletePage : (pageId:string , )=>void,
+  deletePage : (pageId:string )=>void,
   changeSide: (appear: SideAppear) => void,
   setTargetPageId:Dispatch<SetStateAction<string>>
 };
@@ -42,6 +43,7 @@ const EditorContainer =({ pagePath ,changeSide,addBlock,duplicatePage,editBlock,
       title:PAGE.header.title,
       icon :PAGE.header.icon,
       editTime:JSON.stringify(Date.now()),
+      createTime:JSON.stringify(Date.now()),
       subPagesId:PAGE.subPagesId,
       parentsId:PAGE.parentsId
     }
