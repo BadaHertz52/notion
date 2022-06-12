@@ -29,7 +29,7 @@ const CommandBlock =({ page ,block , editTime , editBlock ,addPage ,setCommand}:
   };
   const textContent =blockElement.textContent?.toLowerCase() as string ;
   const commandBtns = document.querySelectorAll(".command_btn");
-  const no_result =document.getElementById("no_result");
+  const noResult =document.getElementById("noResult");
   const commandBlock_inner = document.querySelector("#commandBlock_inner");
   if(textContent !==null){
     const command = textContent.slice(1);
@@ -48,9 +48,9 @@ const CommandBlock =({ page ,block , editTime , editBlock ,addPage ,setCommand}:
 
     if(onBtns[0]!== undefined){
       onBtns[0].classList.add("first");
-      no_result?.setAttribute("style", "display:none")
+      noResult?.setAttribute("style", "display:none")
     }else{
-      no_result?.setAttribute("style", "display:block");
+      noResult?.setAttribute("style", "display:block");
       commandBlock_inner?.setAttribute("style", "display:none");
     }
     
@@ -241,7 +241,7 @@ const CommandBlock =({ page ,block , editTime , editBlock ,addPage ,setCommand}:
             </div>
           </div>
         </div>
-        <div className='no_result'>
+        <div className='noResult'>
           No results
         </div>
       </div>

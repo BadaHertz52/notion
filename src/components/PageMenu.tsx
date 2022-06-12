@@ -146,7 +146,7 @@ const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock, addBlock, edi
           )}
           </div>
           :
-          <div className='pages no_result'>
+          <div className='pages noResult'>
             No result 
           </div>
           )
