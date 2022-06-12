@@ -244,7 +244,8 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
                                 icon:page.header.icon,
                                 subPagesId: page.subPagesId,
                                 parentsId: page.parentsId,
-                                editTime:editTime};
+                                editTime:page.editTime,
+                              };
                                 return listItem
                                 }) 
                                 :
@@ -258,7 +259,7 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
                                       title: page.header.title,
                                       subPagesId: page.subPagesId,
                                       parentsId: page.parentsId,
-                                      editTime:editTime
+                                      editTime:page.editTime
                                     })) ;
   const navigate =useNavigate();  
   const addNewPage=()=>{
