@@ -94,7 +94,6 @@ const NotionRouter =()=>{
               const id :string =element.id;
               PATH =PATH.concat(`/${id}`);
               if(i=== pagePath.length-1){
-                console.log(PATH, pagePath[i] ,pagePath);
                 path =PATH;
               };
             }
@@ -106,7 +105,6 @@ const NotionRouter =()=>{
   useEffect(()=>{
         const path =makeRoutePath(routePage);
         navigate(path);
-        addRecentPage(path);
   },[routePage]);
 
   useEffect(()=>{
@@ -121,6 +119,7 @@ const NotionRouter =()=>{
     //sideBar 에서 페이지 이동 시 
   const page = findPage(notion.pagesId, notion.pages,targetPageId);
     setRoutePage(page);
+    addRecentPage(page.id);
   },[targetPageId]);
   
   return(
