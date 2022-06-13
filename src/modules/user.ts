@@ -36,7 +36,7 @@ export type UserState = {
   userEmail:string,
   favorites:string[]|null,
   trash:string[]|null,
-  recentPageId:string[]|null,
+  recentPagesId:string[]|null,
 };
 type UserAction = ReturnType<typeof add_favorites >|
 ReturnType<typeof delete_favorites>|
@@ -50,7 +50,7 @@ const initialState ={
   userEmail:"amet@notion.com",
   favorites:["12345"],
   trash:null,
-  recentPageId:null
+  recentPagesId:null
 };
 
 export default function user (state:UserState =initialState, action:UserAction):UserState{
@@ -83,9 +83,9 @@ export default function user (state:UserState =initialState, action:UserAction):
         null
       } ;
     case ADD_RECENT_PAGE:
-      let recentPageId ; 
-      if(state.recentPageId ==null){
-        recentPageId = [action.itemId];
+      let recentPagesId ; 
+      if(state.recentPagesId ==null){
+        recentPagesId = [action.itemId];
       }else{
         recentPageId =[...state.recentPageId];
         recentPageId.splice(0,0,action.itemId);
@@ -93,7 +93,7 @@ export default function user (state:UserState =initialState, action:UserAction):
       }
       return {
         ...state,
-        recentPageId:recentPageId
+        recentPagesId:recentPagesId
       };
     case CLEAN_RECENT_PAGE :
       return {
