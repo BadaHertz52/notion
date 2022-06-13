@@ -7,7 +7,7 @@ $itemText: rgb(141, 141, 141);
 $itemHover:rgba(49, 45, 33, 0.11);
 $commentHover: rgba(255, 212, 0, 0.8);
 $comment:rgba(255,212,0,0.14);
-
+$darkgrey:rgb(112, 112, 112);
 @mixin initialBtn {
   border:none;
   background-color:transparent;
@@ -55,16 +55,16 @@ $comment:rgba(255,212,0,0.14);
   height: 100vh;
   .inner{
     background-color: #ffff;
-    border-radius: 5px;
+    border-radius:2px;
     position: relative;
     top:90px;
-    left: 25%;
-    width:50% ;
+    left: 10%;
+    width:80% ;
     z-index: 15;
     overflow: hidden;
     min-height: 50px;
     max-height: 80vh;
-    box-shadow: rgba(15, 15, 15, 0.091) 0px 0px 0px 1px;
+    box-shadow: rgba(15, 15, 15, 0.039) 0px 0px 0px 1px;
   }
 }
 @mixin popupMenu {
