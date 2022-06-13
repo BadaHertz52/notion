@@ -1,12 +1,14 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { GrDocumentText } from "react-icons/gr";
-import { findPage, listItem, Page } from "../modules/notion";
+import { findPage, Page } from "../modules/notion";
 type QuickFindBordProps ={
   userName:string,
+  recentPagesId: string[]|null,
   pages:Page[],
   pagesId:string[],
   search: string | null,
-  setTargetPageId: Dispatch<SetStateAction<string>>
+  setTargetPageId: Dispatch<SetStateAction<string>>,
+  cleanRecentPage: ()=>void,
 };
 type resultType ={
   id:string,
@@ -15,27 +17,67 @@ type resultType ={
   createTime:string,
   editTime:string,
   path:string |null,
-}
-const QuickFindBord =({userName, pages,pagesId,search ,setTargetPageId}:QuickFindBordProps)=>{
-  const [result, setResult]=useState<resultType[]|undefined|null>(null);
+};
+type ResultProps={
+  item:resultType,
+  setTargetPageId:Dispatch<SetStateAction<string>>,
+};
 
+const Result =({item,setTargetPageId}:ResultProps)=>{
+  return(
+    <button 
+    className="result"
+    onClick={()=>setTargetPageId(item.id)}
+  >
+    <div>
+      {item.icon !==null ?
+      item.icon:
+      < GrDocumentText/>
+      }
+    </div>
+    <div>
+      {item.title}
+    </div>
+    {item.path !==null &&
+      <div className="path">
+        {item.path}
+      </div>
+    }
+  </button>
+  )
+}
+const QuickFindBord =({userName,recentPagesId, pages,pagesId,search ,setTargetPageId, cleanRecentPage }:QuickFindBordProps)=>{
+  const [result, setResult]=useState<resultType[]|null|"noResult">(null);
+  const recentPagesList  =recentPagesId?.map((id:string)=> {
+    console.log(recentPagesId, id)
+    const page =findPage(pagesId, pages, id);
+    return {
+      id: page.id,
+      title: page.header.title,
+      icon: page.header.icon,
+      createTime: page.createTime,
+      editTime: page.editTime,
+      path: page.parentsId !==null? makePath(page.parentsId):null
+    }
+    });
+  const makePath =(parentsId:string[]):string=>{
+    let path ="";
+    parentsId.forEach((id:string)=>
+    { const title =findPage(pagesId,pages,id).header.title;
+      if(parentsId.indexOf(id)===0){
+        path= title;
+      }else{
+        path.concat(`/${title}`)
+      }
+    });
+    return path
+  };
   const onChangeQuikFindInput =(event: React.ChangeEvent<HTMLInputElement>)=>{
     const value =event.target.value ;
     const resultPage = pages.filter((page:Page)=>page.header.title.includes(value));
-    const makePath =(parentsId:string[]):string=>{
-      let path ="";
-      parentsId.forEach((id:string)=>
-      { const title =findPage(pagesId,pages,id).header.title;
-        if(parentsId.indexOf(id)===0){
-          path= title;
-        }else{
-          path.concat(`/${title}`)
-        }
-      });
-      return path
-    };
+
     if(resultPage[0]===undefined){
-      setResult(undefined)
+      setResult("noResult")
     }else{
       const listItems :resultType[]= resultPage.map((page:Page)=>({
         id: page.id,
@@ -62,7 +104,7 @@ const QuickFindBord =({userName, pages,pagesId,search ,setTargetPageId}:QuickFin
       <div className="inner_body" >
         <div className='header'>
           {result !==null ?
-            (result !==undefined ?
+            (result !=="noResult" &&
             <>
             <div>
               <span>Sort</span>
@@ -85,14 +127,6 @@ const QuickFindBord =({userName, pages,pagesId,search ,setTargetPageId}:QuickFin
               </select>
             </div>
             </>
-            :
-            <div className="noResult">
-              <p>No result</p>
-              <p>Some results may be in your deleted pages</p>
-              <button>
-                Search deleted pages
-              </button>
-            </div>
               )
           :
           <>
@@ -107,23 +141,36 @@ const QuickFindBord =({userName, pages,pagesId,search ,setTargetPageId}:QuickFin
 
         </div>
         <div className="results">
-          {result?.map((item:resultType)=>
-          <div className="result">
-            <div>
-              {item.icon !==null ?
-              item.icon:
-              < GrDocumentText/>
-              }
+          {result !==null ?
+          (result !== "noResult"?
+          result.map((item:resultType)=>
+            <Result 
+              item={item}
+              setTargetPageId={setTargetPageId}
+            />
+          )
+          :
+          <div className="noResult">
+            <p>No result</p>
+            <p>Some results may be in your deleted pages</p>
+            <button>
+              Search deleted pages
+            </button>
+          </div>
+          )
+          :
+          (recentPagesList !== undefined?
+            recentPagesList.map((item:resultType)=>
+            <Result
+              item={item}
+              setTargetPageId={setTargetPageId}
+            />)
+            :
+            <div className="noRecentPages">
+              There are no pages visited recently.
             </div>
-            <div>
-              {item.title}
-            </div>
-            {item.path !==null &&
-              <div className="path">
-                {item.path}
-              </div>
-            }
-          </div>)}
+          )
+          }
         </div>
       </div>
       <div className="filter">
