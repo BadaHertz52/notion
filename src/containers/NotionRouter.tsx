@@ -164,10 +164,12 @@ const NotionRouter =()=>{
       </Routes>
       <QuickFindBord
         userName={user.userName}
+        recentPagesId={user.recentPagesId}
         pages={notion.pages}
         pagesId={notion.pagesId}
         search={search}
         setTargetPageId={setTargetPageId}
+        cleanRecentPage={cleanRecentPage}
       />
     </div>
   )
