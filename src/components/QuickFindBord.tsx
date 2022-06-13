@@ -1,6 +1,11 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { GrDocumentText } from "react-icons/gr";
+import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { findPage, Page } from "../modules/notion";
+
+//icon
+import { AiOutlineCheck } from "react-icons/ai";
+import {  BsChevronDown, BsSearch } from "react-icons/bs";
+import { GrDocumentText } from "react-icons/gr";
+
 type QuickFindBordProps ={
   userName:string,
   recentPagesId: string[]|null,
@@ -29,17 +34,18 @@ const Result =({item,setTargetPageId}:ResultProps)=>{
     className="result"
     onClick={()=>setTargetPageId(item.id)}
   >
-    <div>
+    <div className="pageIcon">
       {item.icon !==null ?
       item.icon:
       < GrDocumentText/>
       }
     </div>
-    <div>
+    <div className="pageTitle">
       {item.title}
     </div>
     {item.path !==null &&
       <div className="path">
+        <span>—</span>
         {item.path}
       </div>
     }
@@ -48,6 +54,9 @@ const Result =({item,setTargetPageId}:ResultProps)=>{
 }
 const QuickFindBord =({userName,recentPagesId, pages,pagesId,search ,setTargetPageId, cleanRecentPage }:QuickFindBordProps)=>{
   const [result, setResult]=useState<resultType[]|null|"noResult">(null);
+  const [selectedOption, setSelectedOption] =useState<string>("Best matches");
+  const sortOptions  =useRef<HTMLDivElement>(null);
+  const openSortOptionsBtn  =useRef<HTMLButtonElement>(null);
   const recentPagesList  =recentPagesId?.map((id:string)=> {
     console.log(recentPagesId, id)
     const page =findPage(pagesId, pages, id);
@@ -60,7 +69,7 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId,search ,setTargetPa
       path: page.parentsId !==null? makePath(page.parentsId):null
     }
     });
-  const makePath =(parentsId:string[]):string=>{
+  function makePath (parentsId:string[]):string{
     let path ="";
     parentsId.forEach((id:string)=>
     { const title =findPage(pagesId,pages,id).header.title;
@@ -72,9 +81,12 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId,search ,setTargetPa
     });
     return path
   };
-  const onChangeQuikFindInput =(event: React.ChangeEvent<HTMLInputElement>)=>{
+  const onChangeQuickFindInput =(event: React.ChangeEvent<HTMLInputElement>)=>{
     const value =event.target.value ;
-    const resultPage = pages.filter((page:Page)=>page.header.title.includes(value));
+    if(value ===""){
+      setResult(null);
+    }else{
+      const resultPage = pages.filter((page:Page)=>page.header.title.includes(value));
 
     if(resultPage[0]===undefined){
       setResult("noResult")
@@ -89,42 +101,134 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId,search ,setTargetPa
       }) ); 
       setResult(listItems);
     }
+    }
+    
   };
+  const openSortOptions =()=>{
+    if(sortOptions.current !==null){
+      sortOptions.current.classList.toggle("on");
+    };
+  };
+  const onClickOption =(event:React.MouseEvent)=>{
+    const selected =document.getElementById("quickFindBord")?.getElementsByClassName("selected")[0];
+    if(selected !==null){
+      selected?.classList.remove("selected");
+    };
+    const target =event.target as HTMLElement;
+    let option:string ="";
+    switch (target.tagName.toLocaleLowerCase()) {
+      case "button":
+        option = target.firstChild?.textContent as string;
+        target.classList.add("selected");
+        break;
+      case "div":
+        target.parentElement?.classList.add("selected");
+        if(target.className==="optionName"){
+          option =target.textContent as string ;
+        }else{
+          option = target.previousElementSibling?.textContent as string ;
+        }
+        break;
+      case "svg":
+        option = target.parentElement?.previousElementSibling?.textContent as string; 
+        target.parentElement?.parentElement?.classList.add("selected");
+        break; 
+      case "path":
+        option = target.parentElement?.parentElement?.previousElementSibling?.textContent as string; 
+        target.parentElement?.parentElement?.parentElement?.classList.add("selected");
+        break; 
+      default:
+        break;
+    };
+    setSelectedOption(option);
+    openSortOptions();
+  }
   return(
     <div 
     id='quickFindBord'
   >
     <div className='inner'>
-      <input 
+      <div className ="qf_search">
+        <BsSearch/>
+        <input 
+        id="quickFinBordInput"
         type="text"
-        onChange={onChangeQuikFindInput}
+        onChange={onChangeQuickFindInput}
         placeholder={`Search ${userName}'s Notion`}
-      >
-      </input>
-      <div className="inner_body" >
+        />
+      </div>
+
+      <div className="qf_results" >
         <div className='header'>
           {result !==null ?
             (result !=="noResult" &&
             <>
-            <div>
-              <span>Sort</span>
-              <select>
-                <option value="bestMatch">
-                  Best matches
-                  </option>
-                <option value="editedNewsest">
-                  Last edited:Newest first
-                </option>
-                <option value="editedOldest">
-                  Last edited: Oldest first
-                </option>
-                <option value="createdNewst">
-                  Created:Newest first
-                </option>
-                <option value="createdOldest">
-                  Created:Oldest first
-                </option>
-              </select>
+            <div className="sort">
+                <div>Sort :</div>
+                <button 
+                onClick={openSortOptions}
+                ref={openSortOptionsBtn}
+                >
+                  <div>{selectedOption}</div>
+                  <BsChevronDown/>
+                </button>
+              <div 
+                className="sort_options"
+                ref={sortOptions}
+              >
+                <button
+                  onClick ={onClickOption}
+                  className="selected"
+                >
+                  <div className="optionName">
+                    Best matches
+                  </div>
+                  <div className="checkIcon">
+                    <AiOutlineCheck/>
+                  </div>
+                </button>
+                <button  
+                  onClick ={onClickOption}
+                >
+                  <div className="optionName">
+                    Last edited:Newest first
+                  </div>
+                  <div className="checkIcon">
+                    <AiOutlineCheck/>
+                  </div>
+                </button>
+                <button  
+                  onClick ={onClickOption}
+                >
+                  <div className="optionName">
+                    Last edited: Oldest first
+                  </div>
+                  
+                  <div className="checkIcon" >
+                    <AiOutlineCheck/>
+                  </div>
+                </button>
+                <button
+                onClick ={onClickOption}
+                >
+                  <div className="optionName">
+                    Created:Newest first
+                  </div>
+                  <div className="checkIcon">
+                    <AiOutlineCheck/>
+                  </div>
+                </button>
+                <button 
+                  onClick ={onClickOption}
+                >
+                  <div className="optionName">
+                    Created:Oldest first
+                  </div>
+                  <div className="checkIcon">
+                    <AiOutlineCheck/>
+                  </div>
+                </button>
+              </div>
             </div>
             </>
               )
@@ -140,7 +244,7 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId,search ,setTargetPa
           }
 
         </div>
-        <div className="results">
+        <div className="body">
           {result !==null ?
           (result !== "noResult"?
           result.map((item:resultType)=>
