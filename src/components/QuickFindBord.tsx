@@ -8,36 +8,6 @@ type QuickFindBordProps ={
   search: string | null,
   setTargetPageId: Dispatch<SetStateAction<string>>
 };
-// type ParentPathProps ={
-//   pages:Page[],
-//   pagesId:string[],
-//   parentsId: string[]
-// }
-// const ParentPath=({pages, pagesId, parentsId}:ParentPathProps)=>{
-//   const parentsTitle:string[] = parentsId.map((id:string)=>{
-//     const pageId= findPage(pagesId, pages, id).header.title; 
-//     return pageId
-//   });
-//   const [path, setPath]=useState<string>("");
-//   let PATH="";
-//   for (let i = 0; i < parentsTitle.length; i++) {
-//     const title = parentsTitle[i];
-//     if(i===0){
-//       PATH =`${title}`
-//     }else{
-//       PATH.concat(`/${title}`);
-//     };
-//     if(i===parentsTitle.length-1){
-//       setPath(PATH);
-//     }
-//   }
-  
-//   return(
-//     <div className="parentPath">
-//       {path}
-//     </div>
-//   )
-// };
 type resultType ={
   id:string,
   title:string,
