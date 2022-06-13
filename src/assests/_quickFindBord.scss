@@ -1,4 +1,122 @@
 @import './common';
 #quickFindBord {
-  @include popup
+  @include popup;
+  .inner{
+    min-height: 300px;
+    &>div{
+      padding:10px;
+    }
+    .qf_search{
+      padding : 1rem 10px;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 3.3rem;
+      font-size: 1.1rem;
+      border-bottom: 1px solid $mud;
+      svg{
+        color:$mud;
+        margin-left: 5px;
+      }
+      input{
+        padding:0;
+        box-sizing: border-box;
+        border:none;
+        font-size: 1.1rem;
+        font-weight: lighter;
+        margin-left: 10px;
+      }
+      input::placeholder{
+        color: $mud;
+      }
+      input:focus{
+        outline: none;
+      }
+    }
+    .qf_results{
+      .header{
+        display: flex;
+        justify-content: space-between;
+        font-size: 11px;
+        color: $itemText;
+        height: fit-content;
+        padding-left: 5px;
+        p {
+          margin: 0;
+        }
+        button{
+          color: $itemText;
+        }
+        .sort{
+          display: flex;
+          position: relative;
+          &> button{
+            margin-left: 5px;
+            display: flex;
+            align-items: center;
+            svg{
+              margin-left: 5px;
+            }
+          }
+          .sort_options{
+            display: none;
+          }
+          .sort_options.on{
+            @include popupMenu;
+            z-index: 20;
+            left :30px;
+            top:1.2rem;
+            display: flex;
+            position: absolute;
+            border-radius: 3px;
+            flex-direction: column;
+            width: 180px;
+            button{
+              display: flex;
+              justify-content: space-between;
+              padding: 5px 10px;
+              color: $darkgrey;
+              .checkIcon{
+                display: none;
+              }
+            }
+            button:first-child{
+              padding-top: 10px;
+            }
+            button:last-child{
+              padding-bottom: 10px;
+            }
+            button:hover{
+              background-color: $itemHover;
+            }
+            .selected {
+              .checkIcon{
+                display: block;
+                color:rgb(46, 170, 220);
+                font-size: 14px;
+                font-weight: bolder;
+              }
+            }
+          }
+        }
+      }
+      .result {
+        display: flex;
+        font-size: 14px;
+        height: fit-content;
+        padding: 8px 5px;
+        .pageIcon{
+          margin-right: 10px;
+        }
+        .path{
+          color:$mud;
+          font-size: 12px;
+          margin-left: 5px;
+          span{
+            margin-right: 5px;
+          }
+        }
+      }
+    }
+  }
 }
