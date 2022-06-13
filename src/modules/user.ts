@@ -87,10 +87,14 @@ export default function user (state:UserState =initialState, action:UserAction):
       if(state.recentPagesId ==null){
         recentPagesId = [action.itemId];
       }else{
-        recentPageId =[...state.recentPageId];
-        recentPageId.splice(0,0,action.itemId);
-        recentPageId.length >5 && recentPageId.slice(0,5);
-      }
+        recentPagesId =[...state.recentPagesId];
+        if(state.recentPagesId.includes(action.itemId)){
+          recentPagesId= recentPagesId.filter((id:string)=> id !== action.itemId);
+        };
+        recentPagesId.splice(0,0,action.itemId);
+        recentPagesId.length >5 && recentPagesId.slice(0,5);
+      };
+      console.log("add recent Page", recentPagesId)
       return {
         ...state,
         recentPagesId:recentPagesId
