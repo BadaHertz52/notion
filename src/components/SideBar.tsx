@@ -71,7 +71,6 @@ const ItemTemplate =({item,setTargetPageId ,setHover, hover }:ItemTemplageProp)=
     const toggleSubPage=(subPageElement:null|undefined|Element)=>{
       if(subPageElement !==null && subPageElement !== undefined){
         subPageElement.classList.toggle("on");
-        console.log(subPageElement.classList)
         subPageElement.classList.contains("on")?
         setToggleStyle({
           transform: "rotate(90deg)"
