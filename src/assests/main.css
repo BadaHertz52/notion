@@ -2180,6 +2180,11 @@ a:link, a:active, a:visited {
   min-height: min-content;
 }
 
+#quickFindBord .qf_results .header,
+#quickFindBord .qf_results .body {
+  margin-bottom: 14px;
+}
+
 #quickFindBord .qf_results .header {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -2193,7 +2198,6 @@ a:link, a:active, a:visited {
   height: -moz-fit-content;
   height: fit-content;
   padding-left: 5px;
-  margin-bottom: 14px;
 }
 
 #quickFindBord .qf_results .header p {

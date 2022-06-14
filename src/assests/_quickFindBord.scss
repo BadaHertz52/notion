@@ -37,6 +37,10 @@ $turkeyBlue :rgb(46, 170, 220);
   }
   .qf_results{
     min-height:min-content;
+    .header ,
+    .body{
+      margin-bottom: 14px;
+    }
     .header{
       display: flex;
       justify-content: space-between;
@@ -44,7 +48,6 @@ $turkeyBlue :rgb(46, 170, 220);
       color: $itemText;
       height: fit-content;
       padding-left: 5px;
-      margin-bottom: 14px;
       p {
         margin: 0;
       }
