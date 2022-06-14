@@ -53,8 +53,14 @@ const Result =({item,setTargetPageId}:ResultProps)=>{
   )
 }
 const QuickFindBord =({userName,recentPagesId, pages,pagesId,search ,setTargetPageId, cleanRecentPage }:QuickFindBordProps)=>{
+  const bestMatches= "Best matches";
+  const lastEditedNewest ="Last edited:Nwest first";
+  const lastEditedOldest ="Last edited:Oldest first";
+  const createdNewest ="Created:Newest first";
+  const createdOldest ="Created:Oldest first";
+  const [selectedOption, setSelectedOption] =useState<string>(bestMatches);
   const [result, setResult]=useState<resultType[]|null|"noResult">(null);
-  const [selectedOption, setSelectedOption] =useState<string>("Best matches");
+  const [bestMatchesResult, setBestMatchesResult]=useState<resultType[]|null|"noResult">(null);
   const sortOptions  =useRef<HTMLDivElement>(null);
   const openSortOptionsBtn  =useRef<HTMLButtonElement>(null);
   const recentPagesList  =recentPagesId?.map((id:string)=> {
@@ -100,6 +106,7 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId,search ,setTargetPa
         path : page.parentsId==null? null : makePath(page.parentsId)
       }) ); 
       setResult(listItems);
+      setBestMatchesResult(listItems)
     }
     }
     
@@ -140,7 +147,51 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId,search ,setTargetPa
       default:
         break;
     };
+
     setSelectedOption(option);
+    if(result !== null && result !== "noResult" ){
+      if(bestMatchesResult !==null && bestMatchesResult !=="noResult"){
+        const compareResult =(a:resultType,b:resultType, what:"editTime"|"createTime", sort:"newest"|"oldest")=>{
+          const A = what==="createTime"? Number(a.createTime):Number(a.editTime);
+          const B = what==="createTime"? Number(b.createTime):Number(b.editTime);
+          let value :number =0 ;
+          switch (sort) {
+            case "newest":
+              value= A-B;
+              break;
+            case "oldest":
+              value= B-A;
+              break;
+            default:
+              break;
+          };
+          return value ;
+        };
+        let sortedResult:resultType[]|null = null;
+        switch (option) {
+          case bestMatches:
+            setResult(bestMatchesResult);
+            break;
+          case lastEditedNewest:
+              sortedResult = bestMatchesResult.sort((a,b)=>compareResult(a,b,"editTime","newest"));
+            break;
+          case lastEditedOldest:
+            sortedResult = bestMatchesResult.sort((a,b)=>compareResult(a,b,"editTime","oldest"));
+            break;
+          case createdNewest:
+            sortedResult = bestMatchesResult.sort((a,b)=>compareResult(a,b,"createTime","newest"));
+            break;
+          case createdOldest:
+            sortedResult = bestMatchesResult.sort((a,b)=>compareResult(a,b,"createTime","oldest"));
+            break;
+          default:
+            break;
+        };
+        setResult(sortedResult);
+      }else{
+        setResult(bestMatchesResult)
+      };
+    };
     openSortOptions();
   }
   return(
@@ -181,7 +232,7 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId,search ,setTargetPa
                   className="selected"
                 >
                   <div className="optionName">
-                    Best matches
+                    {bestMatches}
                   </div>
                   <div className="checkIcon">
                     <AiOutlineCheck/>
@@ -191,7 +242,7 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId,search ,setTargetPa
                   onClick ={onClickOption}
                 >
                   <div className="optionName">
-                    Last edited:Newest first
+                    {lastEditedNewest}
                   </div>
                   <div className="checkIcon">
                     <AiOutlineCheck/>
@@ -201,7 +252,7 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId,search ,setTargetPa
                   onClick ={onClickOption}
                 >
                   <div className="optionName">
-                    Last edited: Oldest first
+                    {lastEditedOldest}
                   </div>
                   
                   <div className="checkIcon" >
@@ -212,7 +263,7 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId,search ,setTargetPa
                 onClick ={onClickOption}
                 >
                   <div className="optionName">
-                    Created:Newest first
+                    {createdNewest}
                   </div>
                   <div className="checkIcon">
                     <AiOutlineCheck/>
@@ -222,7 +273,7 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId,search ,setTargetPa
                   onClick ={onClickOption}
                 >
                   <div className="optionName">
-                    Created:Oldest first
+                    {createdOldest}
                   </div>
                   <div className="checkIcon">
                     <AiOutlineCheck/>
