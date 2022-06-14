@@ -88,11 +88,11 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId,search ,setTargetPa
     return path
   };
   const onChangeQuickFindInput =(event: React.ChangeEvent<HTMLInputElement>)=>{
-    const value =event.target.value ;
+    const value =event.target.value.toLowerCase();
     if(value ===""){
       setResult(null);
     }else{
-      const resultPage = pages.filter((page:Page)=>page.header.title.includes(value));
+      const resultPage = pages.filter((page:Page)=>page.header.title.toLowerCase().includes(value));
 
     if(resultPage[0]===undefined){
       setResult("noResult")
@@ -287,7 +287,8 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId,search ,setTargetPa
           <>
             <p>RECENT PAGES</p>
             <button
-              //onClick={cleanRecentPage}
+              className="clearBtn"
+              onClick={cleanRecentPage}
             >
               Clear
             </button>
