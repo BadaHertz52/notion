@@ -4,146 +4,161 @@ $turkeyBlue :rgb(46, 170, 220);
   @include popup;
   .inner{
     height: fit-content;
-    &>div{
+    &>div >div{
       padding:10px;
     }
-    .qf_search{
-      padding : 1rem 10px;
-      display: flex;
-      align-items: center;
-      width: 100%;
-      height: 3.3rem;
+  }
+  .qf_search{
+    padding : 1rem 10px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 3.3rem;
+    font-size: 1.1rem;
+    border-bottom: 1px solid $mud;
+    svg{
+      color:$mud;
+      margin-left: 5px;
+    }
+    input{
+      padding:0;
+      box-sizing: border-box;
+      border:none;
       font-size: 1.1rem;
-      border-bottom: 1px solid $mud;
-      svg{
-        color:$mud;
-        margin-left: 5px;
+      font-weight: lighter;
+      margin-left: 10px;
+    }
+    input::placeholder{
+      color: $mud;
+    }
+    input:focus{
+      outline: none;
+    }
+  }
+  .qf_results{
+    min-height:min-content;
+    .header{
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: $itemText;
+      height: fit-content;
+      padding-left: 5px;
+      margin-bottom: 14px;
+      p {
+        margin: 0;
       }
-      input{
-        padding:0;
-        box-sizing: border-box;
-        border:none;
-        font-size: 1.1rem;
-        font-weight: lighter;
-        margin-left: 10px;
+      button{
+        color: $itemText;
       }
-      input::placeholder{
-        color: $mud;
-      }
-      input:focus{
-        outline: none;
+      .addFilterBtn{
+        display: flex;
+        align-items: center;
+        color:$turkeyBlue;
+        font-size: inherit;
+        &:hover{
+          background-color: rgba(46, 171, 220, 0.164);
+        }
       }
     }
-    .qf_results{
-      min-height: fit-content;
-      .header{
+    .clearBtn{
+      padding:5px;
+      &:hover{
+        background-color: $itemHover;
+      }
+    }
+    .sort{
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+    }
+    .sort_selecter{
+      display: flex;
+      position: relative;
+      &> button{
+        margin-left: 5px;
+        display: flex;
+        align-items: center;
+        svg{
+          margin-left: 5px;
+        }
+      }
+    }
+    .sort_options{
+      display: none;
+    }
+    .sort_options.on{
+      @include popupMenu;
+      z-index: 20;
+      left :30px;
+      top:1.2rem;
+      display: flex;
+      position: absolute;
+      border-radius: 3px;
+      flex-direction: column;
+      width: 180px;
+      button{
         display: flex;
         justify-content: space-between;
-        font-size: 11px;
-        color: $itemText;
-        height: fit-content;
-        padding-left: 5px;
-        p {
-          margin: 0;
-        }
-        button{
-          color: $itemText;
-        }
-        .clearBtn{
-          padding:5px;
-          &:hover{
-            background-color: $itemHover;
-          }
-        }
-        .sort{
-          display: flex;
-          position: relative;
-          &> button{
-            margin-left: 5px;
-            display: flex;
-            align-items: center;
-            svg{
-              margin-left: 5px;
-            }
-          }
-          .sort_options{
-            display: none;
-          }
-          .sort_options.on{
-            @include popupMenu;
-            z-index: 20;
-            left :30px;
-            top:1.2rem;
-            display: flex;
-            position: absolute;
-            border-radius: 3px;
-            flex-direction: column;
-            width: 180px;
-            button{
-              display: flex;
-              justify-content: space-between;
-              padding: 5px 10px;
-              color: $darkgrey;
-              .checkIcon{
-                display: none;
-              }
-            }
-            button:first-child{
-              padding-top: 10px;
-            }
-            button:last-child{
-              padding-bottom: 10px;
-            }
-            button:hover{
-              background-color: $itemHover;
-            }
-            .selected {
-              .checkIcon{
-                display: block;
-                color:$turkeyBlue;
-                font-size: 14px;
-                font-weight: bolder;
-              }
-            }
-          }
-        }
-      }
-      .body{
-        position: relative;
-      }
-      .result {
-        display: flex;
-        font-size: 14px;
-        height: fit-content;
-        padding: 8px 5px;
-        .pageIcon{
-          margin-right: 10px;
-        }
-        .path{
-          color:$mud;
-          font-size: 12px;
-          margin-left: 5px;
-          span{
-            margin-right: 5px;
-          }
-        }
-      }
-      .noResult, 
-      .noRecentPages{
+        padding: 5px 10px;
         color: $darkgrey;
-        font-size: 14px;
-        text-align: center;
+        .checkIcon{
+          display: none;
+        }
       }
-      .noResult{
-        p {
-          margin: 0;
+      button:first-child{
+        padding-top: 10px;
+      }
+      button:last-child{
+        padding-bottom: 10px;
+      }
+      button:hover{
+        background-color: $itemHover;
+      }
+      .selected {
+        .checkIcon{
+          display: block;
+          color:$turkeyBlue;
+          font-size: 14px;
+          font-weight: bolder;
         }
-        p:nth-child(2){
-          color:$mud;
+      }
+    }
+    .body{
+      position: relative;
+    }
+    .result {
+      display: flex;
+      font-size: 14px;
+      height: fit-content;
+      padding: 8px 5px;
+      .pageIcon{
+        margin-right: 10px;
+      }
+      .path{
+        color:$mud;
+        font-size: 12px;
+        margin-left: 5px;
+        span{
+          margin-right: 5px;
         }
-        button{
-          color:$turkeyBlue ;
-        }
+      }
+    }
+    .noResult, 
+    .noRecentPages{
+      color: $darkgrey;
+      font-size: 14px;
+      text-align: center;
+    }
+    .noResult{
+      p {
+        margin: 0;
+      }
+      p:nth-child(2){
+        color:$mud;
+      }
+      button{
+        color:$turkeyBlue ;
       }
     }
   }
