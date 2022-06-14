@@ -99,9 +99,10 @@ export default function user (state:UserState =initialState, action:UserAction):
         recentPagesId:recentPagesId
       };
     case CLEAN_RECENT_PAGE :
+      console.log("clean recent pages", {...state, recentPagesId:null});
       return {
         ...state,
-        trash:null
+        recentPagesId:null
       }
     default:
       return state;
