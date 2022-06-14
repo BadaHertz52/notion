@@ -5,6 +5,7 @@ import { findPage, Page } from "../modules/notion";
 import { AiOutlineCheck } from "react-icons/ai";
 import {  BsChevronDown, BsSearch } from "react-icons/bs";
 import { GrDocumentText } from "react-icons/gr";
+import { CgMenuRound } from "react-icons/cg";
 
 type QuickFindBordProps ={
   userName:string,
@@ -197,140 +198,145 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId,search ,setTargetPa
       };
     };
     openSortOptions();
-  }
+  };
   return(
     <div 
     id='quickFindBord'
   >
     <div className='inner'>
-      <div className ="qf_search">
-        <BsSearch/>
-        <input 
-        id="quickFinBordInput"
-        type="text"
-        onChange={onChangeQuickFindInput}
-        placeholder={`Search ${userName}'s Notion`}
-        />
-      </div>
+      <div>
+        <div className ="qf_search">
+          <BsSearch/>
+          <input 
+          id="quickFinBordInput"
+          type="text"
+          onChange={onChangeQuickFindInput}
+          placeholder={`Search ${userName}'s Notion`}
+          />
+        </div>
+        <div className="qf_results" >
+          <div className='header'>
+            {result !==null ?
+              (result !=="noResult" &&
+              <div className="sort">
+                <div className="sort_selecter">
+                  <div>Sort :</div>
+                  <button 
+                  onClick={openSortOptions}
+                  ref={openSortOptionsBtn}
+                  >
+                    <div>{selectedOption}</div>
+                    <BsChevronDown/>
+                  </button>
+                  <div 
+                    className="sort_options"
+                    ref={sortOptions}
+                  >
+                    <button
+                      onClick ={onClickOption}
+                      className="selected"
+                    >
+                      <div className="optionName">
+                        {bestMatches}
+                      </div>
+                      <div className="checkIcon">
+                        <AiOutlineCheck/>
+                      </div>
+                    </button>
+                  <button  
+                    onClick ={onClickOption}
+                  >
+                    <div className="optionName">
+                      {lastEditedNewest}
+                    </div>
+                    <div className="checkIcon">
+                      <AiOutlineCheck/>
+                    </div>
+                  </button>
+                  <button  
+                    onClick ={onClickOption}
+                  >
+                    <div className="optionName">
+                      {lastEditedOldest}
+                    </div>
 
-      <div className="qf_results" >
-        <div className='header'>
-          {result !==null ?
-            (result !=="noResult" &&
-            <>
-            <div className="sort">
-                <div>Sort :</div>
-                <button 
-                onClick={openSortOptions}
-                ref={openSortOptionsBtn}
-                >
-                  <div>{selectedOption}</div>
-                  <BsChevronDown/>
-                </button>
-              <div 
-                className="sort_options"
-                ref={sortOptions}
-              >
-                <button
+                    <div className="checkIcon" >
+                      <AiOutlineCheck/>
+                    </div>
+                  </button>
+                  <button
                   onClick ={onClickOption}
-                  className="selected"
-                >
-                  <div className="optionName">
-                    {bestMatches}
+                  >
+                    <div className="optionName">
+                      {createdNewest}
+                    </div>
+                    <div className="checkIcon">
+                      <AiOutlineCheck/>
+                    </div>
+                  </button>
+                  <button 
+                    onClick ={onClickOption}
+                  >
+                    <div className="optionName">
+                      {createdOldest}
+                    </div>
+                    <div className="checkIcon">
+                      <AiOutlineCheck/>
+                    </div>
+                  </button>
                   </div>
-                  <div className="checkIcon">
-                    <AiOutlineCheck/>
-                  </div>
-                </button>
-                <button  
-                  onClick ={onClickOption}
-                >
-                  <div className="optionName">
-                    {lastEditedNewest}
-                  </div>
-                  <div className="checkIcon">
-                    <AiOutlineCheck/>
-                  </div>
-                </button>
-                <button  
-                  onClick ={onClickOption}
-                >
-                  <div className="optionName">
-                    {lastEditedOldest}
-                  </div>
-                  
-                  <div className="checkIcon" >
-                    <AiOutlineCheck/>
-                  </div>
-                </button>
-                <button
-                onClick ={onClickOption}
-                >
-                  <div className="optionName">
-                    {createdNewest}
-                  </div>
-                  <div className="checkIcon">
-                    <AiOutlineCheck/>
-                  </div>
-                </button>
-                <button 
-                  onClick ={onClickOption}
-                >
-                  <div className="optionName">
-                    {createdOldest}
-                  </div>
-                  <div className="checkIcon">
-                    <AiOutlineCheck/>
-                  </div>
+                </div>
+                <button className="addFilterBtn">
+                  <CgMenuRound/>
+                  <span>Add filter</span>
                 </button>
               </div>
-            </div>
-            </>
-              )
-          :
-          <>
-            <p>RECENT PAGES</p>
-            <button
-              className="clearBtn"
-              onClick={cleanRecentPage}
-            >
-              Clear
-            </button>
-          </>
-          }
-
-        </div>
-        <div className="body">
-          {result !==null ?
-          (result !== "noResult"?
-          result.map((item:resultType)=>
-            <Result 
-              item={item}
-              setTargetPageId={setTargetPageId}
-            />
-          )
-          :
-          <div className="noResult">
-            <p>No result</p>
-            <p>Some results may be in your deleted pages</p>
-            <button>
-              Search deleted pages
-            </button>
-          </div>
-          )
-          :
-          (recentPagesList !== undefined?
-            recentPagesList.map((item:resultType)=>
-            <Result
-              item={item}
-              setTargetPageId={setTargetPageId}
-            />)
+                )
             :
-            <div className="noRecentPages">
-              There are no pages visited recently.
+            <>
+              <p>RECENT PAGES</p>
+              <button
+                className="clearBtn"
+                onClick={cleanRecentPage}
+              >
+                Clear
+              </button>
+            </>
+            }
+
+          </div>
+          <div className="body">
+            {result !==null ?
+            (result !== "noResult"?
+            result.map((item:resultType)=>
+              <Result 
+                item={item}
+                setTargetPageId={setTargetPageId}
+              />
+            )
+            :
+            <div className="noResult">
+              <p>No result</p>
+              <p>Some results may be in your deleted pages</p>
+              <button>
+                Search deleted pages
+              </button>
             </div>
-          )
-          }
+            )
+            :
+            (recentPagesList !== undefined?
+              recentPagesList.map((item:resultType)=>
+              <Result
+                item={item}
+                setTargetPageId={setTargetPageId}
+              />)
+              :
+              <div className="noRecentPages">
+                There are no pages visited recently.
+              </div>
+            )
+            }
+          </div>
         </div>
       </div>
       <div className="filter">
