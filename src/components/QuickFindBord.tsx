@@ -2,10 +2,9 @@ import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from "re
 import { findPage, Page } from "../modules/notion";
 
 //icon
-import { AiFillCloseCircle, AiOutlineCheck } from "react-icons/ai";
+import {AiOutlineCheck } from "react-icons/ai";
 import {  BsChevronDown, BsSearch } from "react-icons/bs";
 import { GrDocumentText } from "react-icons/gr";
-import { CgMenuRound } from "react-icons/cg";
 
 type QuickFindBordProps ={
   userName:string,
