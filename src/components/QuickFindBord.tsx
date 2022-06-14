@@ -114,6 +114,10 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId,search ,setTargetPa
   const openSortOptions =()=>{
     if(sortOptions.current !==null){
       sortOptions.current.classList.toggle("on");
+      const qf_results =document.getElementsByClassName("qf_results")[0]; 
+      sortOptions.current.classList.contains("on")?
+      qf_results.setAttribute("style", "min-height:170px"):
+      qf_results.setAttribute("style", "min-height:min-content")
     };
   };
   const onClickOption =(event:React.MouseEvent)=>{
