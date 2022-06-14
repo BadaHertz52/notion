@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Dispatch } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SideBar from '../components/SideBar';
 import { RootState } from '../modules';
@@ -21,7 +21,7 @@ type SideBarContainerProp ={
 
   changeSide: (appear: SideAppear) => void,
 
-  setTargetPageId: React.Dispatch<React.SetStateAction<string>>,
+  setTargetPageId: Dispatch<React.SetStateAction<string>>,
 };
 const SideBarContainer =({addBlock,editBlock,deleteBlock,addPage,duplicatePage,editPage,deletePage,movePageToPage, changeSide,setTargetPageId }:SideBarContainerProp)=>{
   const notion =useSelector((state:RootState)=> state.notion);
