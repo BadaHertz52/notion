@@ -24,8 +24,7 @@ const NotionRouter =()=>{
 
   const [targetPageId, setTargetPageId]= useState<string>(firstPage.id);
   const [routePage, setRoutePage]=useState<Page>(firstPage);
-  const [search, setSearch]=useState<string|null>(null);
-
+  const [openQF, setOpenQF]=useState<boolean>(false);
   //---action.function 
     //--block
   const editBlock = (pageId:string, block:Block)=> {dispatch(edit_block(pageId, block ))};
@@ -137,8 +136,8 @@ const NotionRouter =()=>{
         deletePage={deletePage}
         movePageToPage={movePageToPage}
         duplicatePage={duplicatePage}
-
         changeSide={changeSide}
+        setOpenQF={setOpenQF}
       />
       <Routes>
         <Route
@@ -161,6 +160,7 @@ const NotionRouter =()=>{
                 } 
         />
       </Routes>
+      {openQF &&
       <QuickFindBord
         userName={user.userName}
         recentPagesId={user.recentPagesId}
@@ -168,7 +168,9 @@ const NotionRouter =()=>{
         pagesId={notion.pagesId}
         setTargetPageId={setTargetPageId}
         cleanRecentPage={cleanRecentPage}
+        setOpenQF={setOpenQF}
       />
+      }
     </div>
   )
 };

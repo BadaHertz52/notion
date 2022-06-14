@@ -45,6 +45,8 @@ type SideBarProps ={
   changeSide: (appear: SideAppear) => void,
 
   setTargetPageId: Dispatch<SetStateAction<string>>,
+
+  setOpenQF: Dispatch<React.SetStateAction<boolean>>
 };
 
 type ItemTemplageProp ={
@@ -203,7 +205,7 @@ const ListTemplate =({notion,targetList ,setTargetPageId ,hover ,setHover}:ListT
   )
 };
 
-const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicatePage,editPage,deletePage,movePageToPage, addFavorites, deleteFavorites, addTrash, cleanTrash  , changeSide,setTargetPageId 
+const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicatePage,editPage,deletePage,movePageToPage, addFavorites, deleteFavorites, addTrash, cleanTrash  , changeSide,setTargetPageId ,setOpenQF
 }:SideBarProps)=>{
   const inner =document.getElementById("inner");
   const pages =notion.pages;
@@ -376,11 +378,6 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
       })
     }
   };
-  const showQuickFind =()=>{
-    const quickFind =document.getElementById("quickFind");
-    quickFind !==null &&
-    quickFind.setAttribute("style","display:none");
-  };
   useEffect(()=>{
     if(hover.hover){
       setTargetItem(hover.targetItem);
@@ -447,7 +444,7 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
         </div>
         <div className="fun1">
           <button
-            onClick={showQuickFind}
+            onClick={()=>setOpenQF(true)}
           >
             <div className='itemInner'>
               <BiSearchAlt2/>

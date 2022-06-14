@@ -22,8 +22,9 @@ type SideBarContainerProp ={
   changeSide: (appear: SideAppear) => void,
 
   setTargetPageId: Dispatch<React.SetStateAction<string>>,
+  setOpenQF: Dispatch<React.SetStateAction<boolean>>
 };
-const SideBarContainer =({addBlock,editBlock,deleteBlock,addPage,duplicatePage,editPage,deletePage,movePageToPage, changeSide,setTargetPageId }:SideBarContainerProp)=>{
+const SideBarContainer =({addBlock,editBlock,deleteBlock,addPage,duplicatePage,editPage,deletePage,movePageToPage, changeSide,setTargetPageId ,setOpenQF }:SideBarContainerProp)=>{
   const notion =useSelector((state:RootState)=> state.notion);
   const user = useSelector((state:RootState)=> state.user);
   const dispatch =useDispatch();
@@ -53,6 +54,7 @@ const SideBarContainer =({addBlock,editBlock,deleteBlock,addPage,duplicatePage,e
 
     changeSide={changeSide}
     setTargetPageId={setTargetPageId}
+    setOpenQF={setOpenQF}
     />
   )
 };

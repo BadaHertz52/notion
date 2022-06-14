@@ -5,6 +5,7 @@ import { findPage, Page } from "../modules/notion";
 import {AiOutlineCheck } from "react-icons/ai";
 import {  BsChevronDown, BsSearch } from "react-icons/bs";
 import { GrDocumentText } from "react-icons/gr";
+import { detectRange } from "./BlockFn";
 
 type QuickFindBordProps ={
   userName:string,
@@ -13,6 +14,7 @@ type QuickFindBordProps ={
   pagesId:string[],
   setTargetPageId: Dispatch<SetStateAction<string>>,
   cleanRecentPage: ()=>void,
+  setOpenQF: Dispatch<React.SetStateAction<boolean>>
 };
 type resultType ={
   id:string,
@@ -51,7 +53,7 @@ const Result =({item,setTargetPageId}:ResultProps)=>{
   </button>
   )
 }
-const QuickFindBord =({userName,recentPagesId, pages,pagesId ,setTargetPageId, cleanRecentPage }:QuickFindBordProps)=>{
+const QuickFindBord =({userName,recentPagesId, pages,pagesId ,setTargetPageId, cleanRecentPage ,setOpenQF }:QuickFindBordProps)=>{
   const bestMatches= "Best matches";
   const lastEditedNewest ="Last edited:Nwest first";
   const lastEditedOldest ="Last edited:Oldest first";
@@ -197,11 +199,27 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId ,setTargetPageId, c
     };
     openSortOptions();
   };
+  const closeQuickFindBord=(event:React.MouseEvent)=>{
+    const inner =document.getElementById
+    ("quickFindBoard_inner");
+    const innerDomRect =inner?.getClientRects()[0];
+
+    if(innerDomRect !==undefined){
+      const isInBord =detectRange(event, innerDomRect);
+      console.log(isInBord)
+      !isInBord && 
+      setOpenQF(false)
+    }
+  }
   return(
     <div 
-    id='quickFindBord'
-  >
-    <div className='inner'>
+      id='quickFindBord'
+      onClick={closeQuickFindBord}
+    >
+    <div 
+      className='inner'
+      id="quickFindBoard_inner"
+    >
       <div>
         <div className ="qf_search">
           <BsSearch/>
