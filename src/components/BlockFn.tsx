@@ -109,20 +109,20 @@ const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlo
     const mainMenuArea =mainMenu?.getClientRects()[0] ;
     const sideMenuArea =sideMenu?.getClientRects()[0] ;
 
-    const isInnerrMain = detectRange(event, mainMenuArea);
-    const isInnerSide =detectRange(event, sideMenuArea );
+    const isInrMain = detectRange(event, mainMenuArea);
+    const isInSide =detectRange(event, sideMenuArea );
 
     if(sideMenuArea !==undefined){
-      (isInnerrMain || isInnerSide) ? setMenuOpen(true) :setMenuOpen(false);
+      (isInrMain || isInSide) ? setMenuOpen(true) :setMenuOpen(false);
     }else{
-      isInnerrMain ? setMenuOpen(true) : setMenuOpen(false);
+      isInrMain ? setMenuOpen(true) : setMenuOpen(false);
     }
   };
   const closePopup =(event:MouseEvent)=>{
     const popupMenu =document.getElementById("popupMenu");
     const popupMenuArea =popupMenu?.getClientRects()[0];
-    const isInnerPopupMenu =detectRange(event, popupMenuArea);
-    !isInnerPopupMenu && setPopup({
+    const isInPopupMenu =detectRange(event, popupMenuArea);
+    !isInPopupMenu && setPopup({
       popup:false,
       what: null
     });

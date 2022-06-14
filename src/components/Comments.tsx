@@ -440,8 +440,8 @@ const CommentTool =({mainComment , comment,block ,pageId ,editBlock ,setCommentB
   const inner =document.getElementById("inner");
   const closeToolMore=(event:MouseEvent , toolMore:HTMLElement)=>{
     const tooleMoreArea = toolMore.getClientRects()[0];
-    const isInnerToolMore = detectRange(event, tooleMoreArea);
-    if(!isInnerToolMore){
+    const isInToolMore = detectRange(event, tooleMoreArea);
+    if(!isInToolMore){
       setMoreOpen(false);
       sessionStorage.removeItem("toolMoreItem");
     }

@@ -326,8 +326,8 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
   const closePopup =(elementId:string ,setState:Dispatch<SetStateAction<boolean>> , event:MouseEvent)=>{
     const element = document.getElementById(elementId);
     const elementDomRect = element?.getClientRects()[0];
-    const isInnerElement = detectRange(event, elementDomRect);
-    !isInnerElement && setState(false);
+    const isInElement = detectRange(event, elementDomRect);
+    !isInElement && setState(false);
   };
   inner?.addEventListener("click", (event)=>{
     openSideMoreMenu && closePopup("moreFn",setOpenSideMoreMenu, event );
