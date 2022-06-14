@@ -316,8 +316,8 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
     };
     const closeComments =(event:React.MouseEvent)=>{
       const commentsDocArea =comments?.getClientRects()[0];
-      const isInnerCommentsDoc =detectRange(event, commentsDocArea);
-      if(!isInnerCommentsDoc){
+      const isInCommentsDoc =detectRange(event, commentsDocArea);
+      if(!isInCommentsDoc){
         setCommentBlock(null);
         editor?.setAttribute("style", "overflow-y:scroll");
       }
