@@ -651,7 +651,7 @@ const initialState :Notion ={
   {
     id: '123',
     header : {
-      title:"notino3",
+      title:"notion3",
       icon:'👋' ,
       cover: null,
       comments:  null,
