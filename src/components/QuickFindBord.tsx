@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from "re
 import { findPage, Page } from "../modules/notion";
 
 //icon
-import { AiOutlineCheck } from "react-icons/ai";
+import { AiFillCloseCircle, AiOutlineCheck } from "react-icons/ai";
 import {  BsChevronDown, BsSearch } from "react-icons/bs";
 import { GrDocumentText } from "react-icons/gr";
 import { CgMenuRound } from "react-icons/cg";
@@ -286,10 +286,6 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId,search ,setTargetPa
                   </button>
                   </div>
                 </div>
-                <button className="addFilterBtn">
-                  <CgMenuRound/>
-                  <span>Add filter</span>
-                </button>
               </div>
                 )
             :
@@ -337,13 +333,6 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId,search ,setTargetPa
             )
             }
           </div>
-        </div>
-      </div>
-      <div className="filter">
-        <div className="closeBtn">
-
-        </div>
-        <div className="fliterContents">
         </div>
       </div>
     </div>
