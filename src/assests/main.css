@@ -2105,18 +2105,20 @@ a:link, a:active, a:visited {
   border-radius: 2px;
   position: relative;
   top: 90px;
-  left: 10%;
-  width: 80%;
+  left: 12.5%;
+  width: 75%;
+  max-height: 80vh;
+  max-width: 600px;
   z-index: 15;
   overflow: hidden;
-  min-height: 50px;
-  max-height: 80vh;
   -webkit-box-shadow: rgba(15, 15, 15, 0.039) 0px 0px 0px 1px;
           box-shadow: rgba(15, 15, 15, 0.039) 0px 0px 0px 1px;
 }
 
 #quickFindBord .inner {
-  min-height: 300px;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
 }
 
 #quickFindBord .inner > div {
@@ -2172,6 +2174,12 @@ a:link, a:active, a:visited {
   outline: none;
 }
 
+#quickFindBord .inner .qf_results {
+  min-height: -webkit-fit-content;
+  min-height: -moz-fit-content;
+  min-height: fit-content;
+}
+
 #quickFindBord .inner .qf_results .header {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -2193,6 +2201,14 @@ a:link, a:active, a:visited {
 
 #quickFindBord .inner .qf_results .header button {
   color: #8d8d8d;
+}
+
+#quickFindBord .inner .qf_results .header .clearBtn {
+  padding: 5px;
+}
+
+#quickFindBord .inner .qf_results .header .clearBtn:hover {
+  background-color: rgba(49, 45, 33, 0.11);
 }
 
 #quickFindBord .inner .qf_results .header .sort {
@@ -2292,6 +2308,10 @@ a:link, a:active, a:visited {
   font-weight: bolder;
 }
 
+#quickFindBord .inner .qf_results .body {
+  position: relative;
+}
+
 #quickFindBord .inner .qf_results .result {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -2315,6 +2335,25 @@ a:link, a:active, a:visited {
 
 #quickFindBord .inner .qf_results .result .path span {
   margin-right: 5px;
+}
+
+#quickFindBord .inner .qf_results .noResult,
+#quickFindBord .inner .qf_results .noRecentPages {
+  color: #707070;
+  font-size: 14px;
+  text-align: center;
+}
+
+#quickFindBord .inner .qf_results .noResult p {
+  margin: 0;
+}
+
+#quickFindBord .inner .qf_results .noResult p:nth-child(2) {
+  color: #B9B8B6;
+}
+
+#quickFindBord .inner .qf_results .noResult button {
+  color: #2eaadc;
 }
 
 #inner {

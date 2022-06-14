@@ -1,8 +1,9 @@
 @import './common';
+$turkeyBlue :rgb(46, 170, 220);
 #quickFindBord {
   @include popup;
   .inner{
-    min-height: 300px;
+    height: fit-content;
     &>div{
       padding:10px;
     }
@@ -34,6 +35,7 @@
       }
     }
     .qf_results{
+      min-height: fit-content;
       .header{
         display: flex;
         justify-content: space-between;
@@ -46,6 +48,12 @@
         }
         button{
           color: $itemText;
+        }
+        .clearBtn{
+          padding:5px;
+          &:hover{
+            background-color: $itemHover;
+          }
         }
         .sort{
           display: flex;
@@ -92,13 +100,16 @@
             .selected {
               .checkIcon{
                 display: block;
-                color:rgb(46, 170, 220);
+                color:$turkeyBlue;
                 font-size: 14px;
                 font-weight: bolder;
               }
             }
           }
         }
+      }
+      .body{
+        position: relative;
       }
       .result {
         display: flex;
@@ -115,6 +126,23 @@
           span{
             margin-right: 5px;
           }
+        }
+      }
+      .noResult, 
+      .noRecentPages{
+        color: $darkgrey;
+        font-size: 14px;
+        text-align: center;
+      }
+      .noResult{
+        p {
+          margin: 0;
+        }
+        p:nth-child(2){
+          color:$mud;
+        }
+        button{
+          color:$turkeyBlue ;
         }
       }
     }
