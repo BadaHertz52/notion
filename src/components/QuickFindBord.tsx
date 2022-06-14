@@ -11,7 +11,6 @@ type QuickFindBordProps ={
   recentPagesId: string[]|null,
   pages:Page[],
   pagesId:string[],
-  search: string | null,
   setTargetPageId: Dispatch<SetStateAction<string>>,
   cleanRecentPage: ()=>void,
 };
@@ -52,7 +51,7 @@ const Result =({item,setTargetPageId}:ResultProps)=>{
   </button>
   )
 }
-const QuickFindBord =({userName,recentPagesId, pages,pagesId,search ,setTargetPageId, cleanRecentPage }:QuickFindBordProps)=>{
+const QuickFindBord =({userName,recentPagesId, pages,pagesId ,setTargetPageId, cleanRecentPage }:QuickFindBordProps)=>{
   const bestMatches= "Best matches";
   const lastEditedNewest ="Last edited:Nwest first";
   const lastEditedOldest ="Last edited:Oldest first";

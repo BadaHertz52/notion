@@ -126,7 +126,6 @@ const NotionRouter =()=>{
     <div id="inner">
       <SideBarContainer 
         setTargetPageId={setTargetPageId}
-
         addBlock={addBlock}
         editBlock={editBlock}
         changeToSub={changeToSub}
@@ -167,7 +166,6 @@ const NotionRouter =()=>{
         recentPagesId={user.recentPagesId}
         pages={notion.pages}
         pagesId={notion.pagesId}
-        search={search}
         setTargetPageId={setTargetPageId}
         cleanRecentPage={cleanRecentPage}
       />
