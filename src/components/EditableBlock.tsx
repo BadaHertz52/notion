@@ -342,7 +342,7 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
       const name =element.getAttribute(attribute);
       name !==null && setTargetPageId(name);
     };
-    switch (target.tagName.toLocaleLowerCase()) {
+    switch (target.tagName.toLowerCase()) {
       case "div":
         if(targetClassName?.includes("pageIcon")){
           const pageTitle = target.nextElementSibling?.firstElementChild as HTMLElement;

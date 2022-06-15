@@ -128,7 +128,7 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId ,setTargetPageId, c
     };
     const target =event.target as HTMLElement;
     let option:string ="";
-    switch (target.tagName.toLocaleLowerCase()) {
+    switch (target.tagName.toLowerCase()) {
       case "button":
         option = target.firstChild?.textContent as string;
         target.classList.add("selected");
