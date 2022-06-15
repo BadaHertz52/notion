@@ -227,6 +227,7 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
     targetItem:null,
   });
   const [targetItem,setTargetItem]=useState<listItem|null>(null);
+  const [openTrash, setOpenTrash]=useState<boolean>(false);
   const [openSideMoreMenu ,setOpenSideMoreMenu] =useState<boolean>(false);
   const [openPageMenu ,setOpenPageMenu] =useState<boolean>(false);
   const [openRename, setOpenRename]=useState<boolean>(false);
@@ -235,9 +236,11 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
   const [renameStyle, setRenameStyle]=useState<CSSProperties>();
   const [pageMenuStyle, setPageMenuStyle]=useState<CSSProperties>();
   const [title, setTitle] =useState<string>(targetItem!==null? targetItem.title:"");
-  const [icon, setIcon] =useState<string |null>(targetItem!==null? targetItem.icon:"");
+  const [icon, setIcon] =useState<string |null>
+  (targetItem!==null? targetItem.icon:"");
   const recordIcon =user.userName.substring(0,1);
   const editTime =JSON.stringify(Date.now());
+
   const makeFavoriteList =(favorites:string[] |null):listItem[]|null=>{
     const list :listItem[]|null =favorites !==null? 
                                 favorites.map((id: string)=> {
@@ -322,8 +325,14 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
   };
   const onClickMoreBtn=()=>{
     setOpenSideMoreMenu(true); 
+    if( pageFnStyle !==undefined){
+      setMoreFnStyle({
+        position: "absolute",
+        top: pageFnStyle.top,
+        left: pageFnStyle.left,
+      });
+    }
   };
-
   const closePopup =(elementId:string ,setState:Dispatch<SetStateAction<boolean>> , event:MouseEvent)=>{
     const element = document.getElementById(elementId);
     const elementDomRect = element?.getClientRects()[0];
@@ -397,7 +406,23 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
     setOpenSideMoreMenu
     (false);
     setOpenRename(true);
+    if(hover.target !==null && targetItem!==null){
+      setIcon(targetItem.icon);
+      setTitle(targetItem.title);
+      const domRect =hover.target.getClientRects()[0];
+      setRenameStyle({
+        position:"absolute",
+        top: domRect.bottom,
+        left:domRect.left +10,
+        width:domRect.width + 50
+      })
+    }
   };
+  const onClickTrashBtn=(event:React.MouseEvent)=>{
+    setOpenTrash(true);
+    const target = event?.target; 
+
+  }
   useEffect(()=>{
     if(hover.hover){
       setTargetItem(hover.targetItem);
@@ -414,28 +439,11 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
       }
     }
   },[hover.hover]);
+
   useEffect(()=>{
-    if(openSideMoreMenu && pageFnStyle !==undefined){
-      setMoreFnStyle({
-        position: "absolute",
-        top: pageFnStyle.top,
-        left: pageFnStyle.left,
-      });
-    }
+    
   },[openSideMoreMenu]);
-  useEffect(()=>{
-    if(openRename && hover.target !==null && targetItem!==null){
-      setIcon(targetItem.icon);
-      setTitle(targetItem.title);
-      const domRect =hover.target.getClientRects()[0];
-      setRenameStyle({
-        position:"absolute",
-        top: domRect.bottom,
-        left:domRect.left +10,
-        width:domRect.width + 50
-      })
-    }
-  },[openRename]);
+
   return(
     <>
     <div id="sideBar">
@@ -532,7 +540,9 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
                 <span>Import</span>
               </div>
             </button>
-            <button>
+            <button
+              onClick={onClickTrashBtn}
+            >
               <div className="itemInner">
                 <BsFillTrash2Fill/>
                 <span>Trash</span>
