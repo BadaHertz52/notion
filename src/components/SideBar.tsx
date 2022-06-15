@@ -17,6 +17,8 @@ import PageMenu from './PageMenu';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { IoArrowRedoOutline } from 'react-icons/io5';
 import { SideAppear } from '../modules/side';
+import { GrDocumentText } from 'react-icons/gr';
+import Trash from './Trash';
 
 type hoverType={
   hover:boolean, 
@@ -137,9 +139,13 @@ const ItemTemplate =({item,setTargetPageId ,setHover, hover }:ItemTemplageProp)=
         className='pageName'
             onClick={()=>{setTargetPageId(item.id) }}
       >
-        {item.icon !==null && 
+        {item.icon !==null ?
           <span>
             {item.icon}
+          </span>
+          :
+          <span>
+            < GrDocumentText/>
           </span>
           }
         <span>{item.title}</span>
@@ -209,6 +215,7 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
   const inner =document.getElementById("inner");
   const pages =notion.pages;
   const pagesId =notion.pagesId;
+  const trashPages=notion.trash.pages;
   const firstPages:Page[] = notion.firstPagesId.map((id:string)=>findPage(notion.pagesId, pages, id));
   const firstlist:listItem[] = firstPages.map((page:Page)=>{
     return {
@@ -221,6 +228,7 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
       createTime:page.createTime
     }
   });
+  const trashBtn =useRef<HTMLButtonElement>(null);
   const [hover ,setHover] =useState<hoverType>({
     hover:false,
     target:null,
@@ -232,6 +240,7 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
   const [openPageMenu ,setOpenPageMenu] =useState<boolean>(false);
   const [openRename, setOpenRename]=useState<boolean>(false);
   const [pageFnStyle, setPageFnStyle] =useState<CSSProperties|undefined>(undefined);
+  const [trashStyle, setTrashStyle] =useState<CSSProperties|undefined>(undefined);
   const [moreFnStyle, setMoreFnStyle] =useState<CSSProperties|undefined>(undefined);
   const [renameStyle, setRenameStyle]=useState<CSSProperties>();
   const [pageMenuStyle, setPageMenuStyle]=useState<CSSProperties>();
@@ -420,8 +429,14 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
   };
   const onClickTrashBtn=(event:React.MouseEvent)=>{
     setOpenTrash(true);
-    const target = event?.target; 
-
+    if(trashBtn.current){
+      const domRect =trashBtn.current.getClientRects()[0];
+      setTrashStyle({
+        position:"absolute",
+        top: domRect.top - 50,
+        left: domRect.right,
+      })
+    }
   }
   useEffect(()=>{
     if(hover.hover){
@@ -542,6 +557,7 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
             </button>
             <button
               onClick={onClickTrashBtn}
+              ref={trashBtn}
             >
               <div className="itemInner">
                 <BsFillTrash2Fill/>
@@ -696,8 +712,17 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
             type="text"
             value ={title}
           />
-
       </div>
+    }
+    {openTrash && trashPages!==null &&
+      <Trash
+        style={trashStyle}
+        trashPages={trashPages}
+        cleanTrash={cleanTrash}
+        restorePage={restorePage}
+        setTargetPageId={setTargetPageId}
+        setOpenTrash={setOpenTrash}
+      />
     }
     </div>
     </>
