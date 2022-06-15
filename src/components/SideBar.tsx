@@ -378,6 +378,21 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
       })
     }
   };
+  const onClickToAddFavorite=()=>{ 
+    setOpenSideMoreMenu(false);
+    targetItem!==null && 
+    addFavorites(targetItem.id);
+  };
+  const onClickToDuplicate=()=>{
+    setOpenSideMoreMenu(false);
+    targetItem!==null &&
+    duplicatePage(targetItem.id);
+  };
+  const  onClickToRename=()=>{
+    setOpenSideMoreMenu
+    (false);
+    setOpenRename(true);
+  };
   useEffect(()=>{
     if(hover.hover){
       setTargetItem(hover.targetItem);
@@ -401,8 +416,6 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
         top: pageFnStyle.top,
         left: pageFnStyle.left,
       });
-      const moreFn_fns = document.querySelectorAll('moreFn_fn') as NodeListOf<HTMLButtonElement>;
-      moreFn_fns.forEach((fn:HTMLButtonElement)=> fn.addEventListener("click", ()=> setOpenSideMoreMenu(false)));
     }
   },[openSideMoreMenu]);
   useEffect(()=>{
@@ -570,10 +583,7 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
         </button>
         <button
           className='moreFn_fn'
-          onClick={()=>{ 
-            targetItem!==null && 
-            addFavorites(targetItem.id);
-          }}
+          onClick={onClickToAddFavorite}
         >  
           <div>
             <AiOutlineStar/>
@@ -582,10 +592,7 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
         </button>
         <button
           className='moreFn_fn'
-          onClick={()=>{
-            targetItem!==null &&
-            duplicatePage(targetItem.id);
-          }}
+          onClick={onClickToDuplicate}
         >
           <div>
             <HiOutlineDuplicate/>
@@ -595,11 +602,7 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
         </button>
         <button
           className='moreFn_fn'
-          onClick={()=>{
-            setOpenSideMoreMenu
-            (false);
-            setRename(true);
-          }}
+          onClick={onClickToRename}
         >
           <div>
             <BsPencilSquare/>
@@ -620,10 +623,12 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
           </div>
         </button>
         <div className='edit_inform'>
-                <p>Last edited by {user.userName} </p>
-                  <Time 
-                    editTime={targetItem.editTime}
-                  />
+          <p>
+            Last edited by {user.userName} 
+          </p>
+            <Time 
+              editTime={targetItem.editTime}
+            />
         </div>
       </div>
     }
