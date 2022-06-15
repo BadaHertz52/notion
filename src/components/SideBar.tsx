@@ -383,6 +383,11 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
     targetItem!==null && 
     addFavorites(targetItem.id);
   };
+  const onClickToRemoveFavorite=()=>{
+    setOpenSideMoreMenu(false);
+    targetItem!==null &&
+    removeFavorites(targetItem.id);
+  };
   const onClickToDuplicate=()=>{
     setOpenSideMoreMenu(false);
     targetItem!==null &&
@@ -581,15 +586,28 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
             </span>
           </div>
         </button>
-        <button
+        {user.favorites?.includes(targetItem.id) ?
+            <button
+            className='moreFn_fn'
+            onClick={onClickToRemoveFavorite}
+          >  
+            <div>
+              <AiOutlineStar/>
+              <span>Remove to Favorites</span>
+            </div>
+          </button>
+        :
+          <button
           className='moreFn_fn'
           onClick={onClickToAddFavorite}
-        >  
-          <div>
-            <AiOutlineStar/>
-            <span>Add to Favorites</span>
-          </div>
-        </button>
+          >  
+            <div>
+              <AiOutlineStar/>
+              <span>Add to Favorites</span>
+            </div>
+          </button>
+        }
+
         <button
           className='moreFn_fn'
           onClick={onClickToDuplicate}
