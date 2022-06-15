@@ -50,11 +50,11 @@ const SideBarContainer =({addBlock,editBlock,deleteBlock,addPage,duplicatePage,e
     editPage={editPage}
     deletePage={deletePage}
     movePageToPage={movePageToPage}
+    restorePage={restorePage}
+    cleanTrash={cleanTrash}
 
     addFavorites={addFavorites}
     removeFavorites={removeFavorites}
-    cleanTrash={cleanTrash}
-    restorePage={restorePage}
 
     changeSide={changeSide}
     setTargetPageId={setTargetPageId}
