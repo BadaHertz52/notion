@@ -1,0 +1,29 @@
+@import './common';
+
+#trash{
+  @include popupMenu;
+  width: 414px;
+  min-width: 180px;
+  max-width: calc(100vw -24px);
+  height: 50vh;
+  max-height: 70vh;
+  padding:5%;
+  box-sizing: border-box;
+  .header{
+    display: flex;
+    button{
+      margin-right: 2rem;
+      &:hover {
+        background-color: $itemHover;
+      }
+    }
+  }
+  .search{
+    
+    input{
+      @include searchInput;
+      margin-left: 0;
+      width: 100%;
+    }
+  }
+}

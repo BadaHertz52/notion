@@ -2091,7 +2091,144 @@ a:link, a:active, a:visited {
   color: inherit;
 }
 
+#trash {
+  width: 320px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  background-color: #ffff;
+  margin: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  pointer-events: auto;
+  -webkit-transform: matrix(1, 0, 0, 1, 0, 0);
+          transform: matrix(1, 0, 0, 1, 0, 0);
+  z-index: 1;
+  border-radius: 8px;
+  -webkit-box-shadow: 0px 0px 23px -5px #ababab;
+  box-shadow: 0px 0px 23px -5px #ababab;
+  width: 414px;
+  min-width: 180px;
+  max-width: calc(100vw -24px);
+  height: 50vh;
+  max-height: 70vh;
+  padding: 5%;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+#trash::-webkit-scrollbar-thumb {
+  background: #D3D1CB;
+}
+
+#trash::-webkit-scrollbar-track {
+  background: #EDECE9;
+}
+
+#trash .header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+#trash .header button {
+  margin-right: 2rem;
+}
+
+#trash .header button:hover {
+  background-color: rgba(49, 45, 33, 0.11);
+}
+
+#trash .search input {
+  width: 90%;
+  height: 1.5rem;
+  font-size: 15px;
+  padding-left: 6px;
+  color: #8d8d8d;
+  margin: 0 5%;
+  border-radius: 5px;
+  background-color: rgba(242, 241, 238, 0.6);
+  border: 1px solid #B9B8B6;
+  -webkit-box-shadow: rgba(15, 15, 15, 0.162) 0px 0px 1px inset;
+          box-shadow: rgba(15, 15, 15, 0.162) 0px 0px 1px inset;
+  margin-left: 0;
+  width: 100%;
+}
+
+#trash .search input::-webkit-input-placeholder {
+  color: #B9B8B6;
+}
+
+#trash .search input:-ms-input-placeholder {
+  color: #B9B8B6;
+}
+
+#trash .search input::-ms-input-placeholder {
+  color: #B9B8B6;
+}
+
+#trash .search input::placeholder {
+  color: #B9B8B6;
+}
+
+#trash .search input:focus {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  outline: 3.5px solid #a9e2f5;
+  border: none;
+}
+
+.edit_inform {
+  border-top: 1px solid #B9B8B6;
+  font-size: 14px;
+  text-align: left;
+  color: #B9B8B6;
+  margin-bottom: 0;
+}
+
+.edit_inform p {
+  margin: 2px 0;
+}
+
+div {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.pageLink:hover {
+  background-color: rgba(49, 45, 33, 0.11);
+}
+
+button {
+  border: none;
+  background-color: transparent;
+  padding: 0;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  padding-left: 1rem;
+}
+
+ul li,
+ol li {
+  padding-left: 10px;
+}
+
+a:link, a:active, a:visited {
+  text-decoration: none;
+  color: inherit;
+}
+
 #quickFindBord {
+  -webkit-transition-delay: 1s;
+          transition-delay: 1s;
   position: absolute;
   top: 0;
   left: 0;
