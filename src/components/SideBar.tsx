@@ -228,8 +228,8 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
   });
   const [targetItem,setTargetItem]=useState<listItem|null>(null);
   const [openSideMoreMenu ,setOpenSideMoreMenu] =useState<boolean>(false);
-  const [moveTo ,setMoveTo] =useState<boolean>(false);
-  const [rename, setRename]=useState<boolean>(false);
+  const [openPageMenu ,setOpenPageMenu] =useState<boolean>(false);
+  const [openRename, setOpenRename]=useState<boolean>(false);
   const [pageFnStyle, setPageFnStyle] =useState<CSSProperties|undefined>(undefined);
   const [moreFnStyle, setMoreFnStyle] =useState<CSSProperties|undefined>(undefined);
   const [renameStyle, setRenameStyle]=useState<CSSProperties>();
@@ -332,10 +332,11 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
   };
   inner?.addEventListener("click", (event)=>{
     openSideMoreMenu && closePopup("moreFn",setOpenSideMoreMenu, event );
-    moveTo && closePopup("pageMenu", setMoveTo, event);
-    rename && closePopup("rename", setRename ,event);
+    openPageMenu && closePopup("pageMenu", setOpenPageMenu, event);
+    openRename && closePopup("rename", setOpenRename ,event);
   } );
   const onClickToDelete=()=>{
+    setOpenSideMoreMenu(false);
     const changePage =(pageId:string)=>{
       setTargetPageId(pageId);
       navigate(`/${pageId}`);
@@ -364,10 +365,10 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
         deletePage(targetItem.id);
       };
       
-  };
+    };
   };
   const onClickMoveToBtn =()=>{
-    setMoveTo(true); 
+    setOpenPageMenu(true); 
     setOpenSideMoreMenu(false);
     if(moreFnStyle!==undefined){
       setPageMenuStyle({
@@ -405,7 +406,7 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
     }
   },[openSideMoreMenu]);
   useEffect(()=>{
-    if(rename && hover.target !==null && targetItem!==null){
+    if(openRename && hover.target !==null && targetItem!==null){
       setIcon(targetItem.icon);
       setTitle(targetItem.title);
       const domRect =hover.target.getClientRects()[0];
@@ -416,7 +417,7 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
         width:domRect.width + 50
       })
     }
-  },[rename]);
+  },[openRename]);
   return(
     <>
     <div id="sideBar">
@@ -626,7 +627,7 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
         </div>
       </div>
     }
-    {moveTo && targetItem !==null &&
+    {openPageMenu && targetItem !==null &&
     <div 
       id ="sideBar_pageMenu"
       style={pageMenuStyle}
@@ -645,7 +646,7 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
       />
     </div>
     }
-    {rename &&
+    {openRename &&
       <div 
         id='rename'
         style={renameStyle}
