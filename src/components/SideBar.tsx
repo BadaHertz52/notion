@@ -38,7 +38,7 @@ type SideBarProps ={
   movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
 
   addFavorites: (itemId: string) => void,
-  deleteFavorites: (itemId: string) => void,
+  removeFavorites: (itemId: string) => void,
   cleanTrash: (itemId: string) => void,
   restorePage: (pageId: string) => void
   changeSide: (appear: SideAppear) => void,
@@ -204,7 +204,7 @@ const ListTemplate =({notion,targetList ,setTargetPageId ,hover ,setHover}:ListT
   )
 };
 
-const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicatePage,editPage,deletePage,movePageToPage, cleanTrash, restorePage, addFavorites, deleteFavorites, changeSide,setTargetPageId ,setOpenQF
+const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicatePage,editPage,deletePage,movePageToPage, cleanTrash, restorePage, addFavorites, removeFavorites, changeSide,setTargetPageId ,setOpenQF
 }:SideBarProps)=>{
   const inner =document.getElementById("inner");
   const pages =notion.pages;

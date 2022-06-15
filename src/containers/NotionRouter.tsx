@@ -5,7 +5,7 @@ import QuickFindBord from '../components/QuickFindBord';
 import { RootState } from '../modules';
 import { add_block, add_page, Block, change_to_sub, delete_block, delete_page, duplicate_page, edit_block, edit_page, findPage,  move_page_to_page, Page, raise_block, } from '../modules/notion';
 import { change_side, SideAppear } from '../modules/side';
-import { add_recent_page, clean_recent_page, delete_favorites } from '../modules/user';
+import { add_recent_page, clean_recent_page, remove_favorites } from '../modules/user';
 import EditorContainer from './EditorContainer';
 import SideBarContainer from './SideBarContainer';
 export type pathType={
@@ -44,7 +44,7 @@ const NotionRouter =()=>{
   const deletePage =(pageId:string )=>{
     dispatch(delete_page(pageId));
     if(user.favorites !==null){
-      user.favorites?.includes(pageId) && dispatch(delete_favorites(pageId));
+      user.favorites?.includes(pageId) && dispatch(remove_favorites(pageId));
     };
   };
   const movePageToPage =(targetPageId:string, destinationPageId:string)=>{dispatch(move_page_to_page(targetPageId, destinationPageId))};

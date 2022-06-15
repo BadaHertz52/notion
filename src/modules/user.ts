@@ -1,5 +1,5 @@
 const ADD_FAVORITES ="user/ADD_FAVORITES" as const ;
-const DELETE_FAVORITES ="user/DELETE_FAVORITES" as const ;
+const REMOVE_FAVORITES ="user/REMOVE_FAVORITES" as const ;
 const ADD_RECENT_PAGE ="user/ADD_RECENT_PAGE" as const;
 const CLEAN_RECENT_PAGE ="user/CLEAN_RECENT_PAGE" as const;
 
@@ -7,8 +7,8 @@ export const add_favorites =(itemId:string)=>({
   type:ADD_FAVORITES,
   itemId :itemId
 });
-export const delete_favorites =(itemId:string)=>({
-  type:DELETE_FAVORITES,
+export const remove_favorites =(itemId:string)=>({
+  type:REMOVE_FAVORITES,
   itemId:itemId
 });
 
@@ -27,7 +27,7 @@ export type UserState = {
   recentPagesId:string[]|null,
 };
 type UserAction = ReturnType<typeof add_favorites >|
-ReturnType<typeof delete_favorites>|
+ReturnType<typeof remove_favorites>|
 ReturnType<typeof add_recent_page>|
 ReturnType<typeof clean_recent_page>;
 
@@ -48,7 +48,7 @@ export default function user (state:UserState =initialState, action:UserAction):
         [...action.itemId]
       }
         ;
-    case DELETE_FAVORITES :
+    case REMOVE_FAVORITES :
       return {
         ...state,
         favorites:state.favorites !==null?

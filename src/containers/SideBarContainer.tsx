@@ -4,7 +4,7 @@ import SideBar from '../components/SideBar';
 import { RootState } from '../modules';
 import { Block, clean_trash, Page, restore_page } from '../modules/notion';
 import { SideAppear } from '../modules/side';
-import { add_favorites, delete_favorites } from '../modules/user';
+import { add_favorites, remove_favorites } from '../modules/user';
 
 type SideBarContainerProp ={
   editBlock :(pageId: string, block: Block) => void,
@@ -29,7 +29,7 @@ const SideBarContainer =({addBlock,editBlock,deleteBlock,addPage,duplicatePage,e
   const user = useSelector((state:RootState)=> state.user);
   const dispatch =useDispatch();
   const addFavorites =(itemId:string)=>{dispatch(add_favorites(itemId))};
-  const deleteFavorites =(itemId:string)=>{dispatch((delete_favorites(itemId)))};
+  const removeFavorites =(itemId:string)=>{dispatch((remove_favorites(itemId)))};
   const restorePage=(pageId:string)=> {
     dispatch(restore_page(pageId))
   };
@@ -52,7 +52,7 @@ const SideBarContainer =({addBlock,editBlock,deleteBlock,addPage,duplicatePage,e
     movePageToPage={movePageToPage}
 
     addFavorites={addFavorites}
-    deleteFavorites={deleteFavorites}
+    removeFavorites={removeFavorites}
     cleanTrash={cleanTrash}
     restorePage={restorePage}
 
