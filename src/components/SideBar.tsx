@@ -348,10 +348,12 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
     const isInElement = detectRange(event, elementDomRect);
     !isInElement && setState(false);
   };
+
   inner?.addEventListener("click", (event)=>{
     openSideMoreMenu && closePopup("moreFn",setOpenSideMoreMenu, event );
     openPageMenu && closePopup("pageMenu", setOpenPageMenu, event);
     openRename && closePopup("rename", setOpenRename ,event);
+    openTrash && closePopup("trash",setOpenTrash, event );
   } );
   const onClickToDelete=()=>{
     setOpenSideMoreMenu(false);

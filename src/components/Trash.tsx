@@ -4,7 +4,6 @@ import { IoTrashOutline } from 'react-icons/io5';
 import { RiArrowGoBackLine } from 'react-icons/ri';
 import { CSSProperties } from 'styled-components';
 import { Page } from '../modules/notion';
-import { detectRange } from './BlockFn';
 type trashListItem ={
   id:string,
   title:string,
@@ -77,14 +76,6 @@ const Trash=({style,trashPages , restorePage, cleanTrash ,setTargetPageId ,setOp
     setResult(resultlist):
     setResult(null);
   };
-  const closeTrash =(event:MouseEvent)=>{
-    const trashDomRect = trash?.getClientRects()[0];
-    if(trashDomRect !==undefined){
-      const isInTrashDom = detectRange(event, trashDomRect);
-      !isInTrashDom && setOpenTrash(false);
-    }
-  }
-  inner?.addEventListener("click" , event => closeTrash(event))
   return(
     <div 
       id="trash"
