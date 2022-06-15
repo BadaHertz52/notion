@@ -1,4 +1,3 @@
-
 //TYPE 
 export const text= "text" as const ;
 export const toggle ="toggle" as const  ;
@@ -132,6 +131,10 @@ export type Notion={
   pagesId :string [],
   firstPagesId: string[]
   pages: Page[],
+  trash:{
+    pagesId:string[]|null,
+    pages:Page[]|null
+  }
 };
 
 //action
@@ -146,7 +149,8 @@ const DUPLICATE_PAGE ="notion/DUPLICATE_PAGE" as const;
 const EDIT_PAGE ="notion/EDIT_PAGE" as const;
 const MOVE_PAGE_TO_PAGE ="notion/MOVE_PAGE_TO_PAGE" as const;
 const DELETE_PAGE ="notion/DELETE_PAGE" as const;
-
+const RESTORE_PAGE ="notion/RESTORE_PAGE" as const ;
+const CLEAN_TRASH ="notion/CLEAN_TRASH" as const ;
 
 export const add_block =(pageId:string, block:Block ,newBlockIndex:number ,previousBlockId:string|null)=> ({
   type:ADD_BLOCK ,
@@ -209,7 +213,18 @@ export const delete_page =(pageId:string)=>(
   pageId: pageId,
   block:null
 });
-
+export const restore_page=(pageId:string)=>(
+  {
+    type:RESTORE_PAGE,
+    pageId:pageId,
+    block:null
+  }
+)
+export const clean_trash =(pageId:string)=>({
+  type: CLEAN_TRASH,
+  pageId:pageId,
+  block:null,
+})
 type NotionAction = 
 ReturnType<typeof add_block> | 
 ReturnType<typeof edit_block> | 
@@ -220,7 +235,9 @@ ReturnType<typeof add_page> |
 ReturnType<typeof duplicate_page>|
 ReturnType<typeof edit_page> | 
 ReturnType<typeof move_page_to_page> | 
-ReturnType <typeof delete_page>
+ReturnType <typeof delete_page>|
+ReturnType <typeof restore_page>|
+ReturnType <typeof clean_trash>
 ;
 
 //reducer
@@ -664,7 +681,11 @@ const initialState :Notion ={
     editTime:JSON.stringify(Date.parse("2021-5-13-15:00")),
     createTime:JSON.stringify(Date.parse("2021-5-13-15:00")),
   }
-]
+],
+  trash:{
+    pagesId:null,
+    pages:null
+  }
 };
 
 export function findBlock( page:Page,blockId: string):{index: number ,BLOCK:Block} {
@@ -693,22 +714,30 @@ export const findPage =(pagesId: string[] ,pages:Page[] ,pageId:string):Page=>{
   return PAGE
 };
 export default function notion (state:Notion =initialState , action :NotionAction) :Notion{
-  
   const pagesId = [...state.pagesId];
   const firstPagesId=[...state.firstPagesId];
   const pages =[...state.pages];
-
-  const pageIndex:number = pagesId.indexOf(action.pageId) as number;
-  const targetPage:Page =pages[pageIndex] ;
+  const trash = {
+    pagesId:state.trash.pagesId? [...state.trash.pagesId] :null,
+    pages: state.trash.pages? [...state.trash.pages]:null
+  };
+  const pageIndex:number = action.type !==RESTORE_PAGE ?  
+                            pagesId.indexOf(action.pageId) as number :
+                            trash.pagesId?.indexOf(action.pageId) as number;
+  const targetPage:Page =action.type !==RESTORE_PAGE ? 
+                        pages[pageIndex] : 
+                        trash.pages !==null?
+                        trash.pages[pageIndex]: 
+                        pageSample ;
   const  blockIndex:number = action.block !==null ?( pages[pageIndex]?.blocksId.indexOf(action.block.id) ): 0 as number;
 
   const editBlockData =(index:number ,block:Block)=>{
-    targetPage.blocks.splice(index,1,block);
+    targetPage?.blocks.splice(index,1,block);
     console.log("editBlockData", block, targetPage);
   };
   //subBlock 추가 시 parentBlock update
   const updateParentBlock =(subBlock:Block , previousBlockId:string|null)=>{
-    if(subBlock.parentBlocksId!==null){
+    if(subBlock.parentBlocksId!==null ){
       //find parentBlock
         const {parentBlockIndex, parentBlock} =findParentBlock(targetPage, subBlock);
         
@@ -734,7 +763,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
     }
   };
   const deleteBlockData =(block :Block ,targetIndex:number)=>{
-    if(block.subBlocksId !==null ){
+    if(block.subBlocksId !==null  ){
     // block.suBlocksId를 이전 block의 subBlocks로 옮기기
     const blockDoc = document.getElementById(block.id) as HTMLElement; 
     const previousBlockId = blockDoc.previousElementSibling?.id as string ;
@@ -779,7 +808,8 @@ export default function notion (state:Notion =initialState , action :NotionActio
       return {
         pages:pages,
         firstPagesId:firstPagesId,
-        pagesId:pagesId
+        pagesId:pagesId,
+        trash:state.trash
       }; 
 
     case EDIT_BLOCK:
@@ -788,7 +818,8 @@ export default function notion (state:Notion =initialState , action :NotionActio
       return {
         pages:pages,
         firstPagesId:firstPagesId,
-        pagesId:pagesId
+        pagesId:pagesId,
+        trash:state.trash
       };
     
     case CHANGE_TO_SUB_BLOCK:
@@ -810,7 +841,8 @@ export default function notion (state:Notion =initialState , action :NotionActio
       return {
         pages:pages,
         firstPagesId:firstPagesId,
-        pagesId:pagesId
+        pagesId:pagesId,
+        trash:state.trash
       }; 
 
     case RAISE_BLOCK :
@@ -856,7 +888,8 @@ export default function notion (state:Notion =initialState , action :NotionActio
       return {
         pages:pages,
         firstPagesId:firstPagesId,
-        pagesId:pagesId
+        pagesId:pagesId,
+        trash:state.trash
       }; ;
 
     case DELETE_BLOCK:
@@ -891,7 +924,8 @@ export default function notion (state:Notion =initialState , action :NotionActio
       return {
         pages:pages,
         firstPagesId:firstPagesId,
-        pagesId:pagesId
+        pagesId:pagesId,
+        trash:state.trash
       };
     case ADD_PAGE :
       if(action.newPage.blocksId.includes("blockSample")){
@@ -916,7 +950,8 @@ export default function notion (state:Notion =initialState , action :NotionActio
       return {
         pages:pages,
         firstPagesId:firstPagesId,
-        pagesId:pagesId
+        pagesId:pagesId,
+        trash:state.trash
       };
     case DUPLICATE_PAGE :
       const targetPageIndex = pagesId.indexOf(targetPage.id);
@@ -960,7 +995,8 @@ export default function notion (state:Notion =initialState , action :NotionActio
       return{
         pages:pages,
         firstPagesId:firstPagesId,
-        pagesId:pagesId
+        pagesId:pagesId,
+        trash:state.trash
       }
     case EDIT_PAGE :
       pages.splice(pageIndex,1,action.newPage);
@@ -968,7 +1004,8 @@ export default function notion (state:Notion =initialState , action :NotionActio
       return{
         pages:pages,
         firstPagesId:firstPagesId,
-        pagesId:pagesId
+        pagesId:pagesId,
+        trash:state.trash
       };
     case MOVE_PAGE_TO_PAGE:
       const destinationPage = findPage(pagesId, pages, action.destinationPageId);
@@ -1017,7 +1054,8 @@ export default function notion (state:Notion =initialState , action :NotionActio
       return{
         pages:pages,
         firstPagesId:firstPagesId,
-        pagesId:pagesId
+        pagesId:pagesId,
+        trash:state.trash
       };
     case DELETE_PAGE:
       pages.splice(pageIndex, 1);
@@ -1043,11 +1081,50 @@ export default function notion (state:Notion =initialState , action :NotionActio
           pagesId.splice(index,1);
         })
       };
-      console.log("delete page", pages)
+      const newTrash ={
+        pagesId:trash.pagesId ==null? [targetPage.id] : trash.pagesId.concat(targetPage.id),
+        pages:trash.pages ==null? [targetPage] : trash.pages.concat(targetPage),
+      }
+      console.log("delete page", pages ,newTrash );
+      
       return{
         pages:pages,
         firstPagesId:firstPagesId,
-        pagesId:pagesId
+        pagesId:pagesId,
+        trash:newTrash
+      };
+    case RESTORE_PAGE:
+      pages.push(targetPage);
+      pagesId.push(targetPage.id);
+      firstPagesId.push(targetPage.id);
+      trash.pagesId?.splice(pageIndex,1);
+      trash.pages?.splice(pageIndex,1);
+      console.log("restore", state)
+      return {
+        pages:pages,
+        pagesId:pagesId,
+        firstPagesId:firstPagesId,
+        trash: (trash.pages!==null && trash.pagesId!==null && trash.pages[0]!==undefined) ?
+              {
+                pages: trash.pages,
+                pagesId:trash.pagesId
+              }
+              :
+              {
+                pages:null,
+                pagesId:null
+              }
+      } ;
+    case CLEAN_TRASH:
+      trash.pages?.splice(pageIndex,1);
+      trash.pagesId?.splice(pageIndex,1);
+      console.log("clean trash", trash)
+      return{
+        ...state,
+        trash:{
+          pages:trash.pages ? (trash.pages[0]!==undefined? trash.pages:null):null,
+          pagesId:trash.pagesId? (trash.pagesId[0]!==undefined? trash.pagesId:null):null
+        }
       }
     default:
       return state;

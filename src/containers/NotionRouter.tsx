@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {  Route, Routes, useNavigate} from 'react-router-dom';
 import QuickFindBord from '../components/QuickFindBord';
 import { RootState } from '../modules';
-import { add_block, add_page, Block, change_to_sub, delete_block, delete_page, duplicate_page, edit_block, edit_page, findPage, listItem, move_page_to_page, Page, raise_block } from '../modules/notion';
+import { add_block, add_page, Block, change_to_sub, delete_block, delete_page, duplicate_page, edit_block, edit_page, findPage,  move_page_to_page, Page, raise_block, } from '../modules/notion';
 import { change_side, SideAppear } from '../modules/side';
 import { add_recent_page, clean_recent_page, delete_favorites } from '../modules/user';
 import EditorContainer from './EditorContainer';
@@ -137,6 +137,7 @@ const NotionRouter =()=>{
         movePageToPage={movePageToPage}
         duplicatePage={duplicatePage}
         changeSide={changeSide}
+
         setOpenQF={setOpenQF}
       />
       <Routes>
