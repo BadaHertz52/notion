@@ -6,6 +6,7 @@ import {AiOutlineCheck } from "react-icons/ai";
 import {  BsChevronDown, BsSearch } from "react-icons/bs";
 import { GrDocumentText } from "react-icons/gr";
 import { detectRange } from "./BlockFn";
+import Result, { makeResultType, resultType } from "./Result";
 
 type QuickFindBordProps ={
   userName:string,
@@ -16,43 +17,7 @@ type QuickFindBordProps ={
   cleanRecentPage: ()=>void,
   setOpenQF: Dispatch<React.SetStateAction<boolean>>
 };
-type resultType ={
-  id:string,
-  title:string,
-  icon:string|null,
-  createTime:string,
-  editTime:string,
-  path:string |null,
-};
-type ResultProps={
-  item:resultType,
-  setTargetPageId:Dispatch<SetStateAction<string>>,
-};
 
-const Result =({item,setTargetPageId}:ResultProps)=>{
-  return(
-    <button 
-    className="result"
-    onClick={()=>setTargetPageId(item.id)}
-  >
-    <div className="pageIcon">
-      {item.icon !==null ?
-      item.icon:
-      < GrDocumentText/>
-      }
-    </div>
-    <div className="pageTitle">
-      {item.title}
-    </div>
-    {item.path !==null &&
-      <div className="path">
-        <span>—</span>
-        {item.path}
-      </div>
-    }
-  </button>
-  )
-}
 const QuickFindBord =({userName,recentPagesId, pages,pagesId ,setTargetPageId, cleanRecentPage ,setOpenQF }:QuickFindBordProps)=>{
   const bestMatches= "Best matches";
   const lastEditedNewest ="Last edited:Nwest first";
@@ -65,29 +30,10 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId ,setTargetPageId, c
   const sortOptions  =useRef<HTMLDivElement>(null);
   const openSortOptionsBtn  =useRef<HTMLButtonElement>(null);
   const recentPagesList  =recentPagesId?.map((id:string)=> {
-    console.log(recentPagesId, id)
     const page =findPage(pagesId, pages, id);
-    return {
-      id: page.id,
-      title: page.header.title,
-      icon: page.header.icon,
-      createTime: page.createTime,
-      editTime: page.editTime,
-      path: page.parentsId !==null? makePath(page.parentsId):null
-    }
+    return makeResultType(page , pagesId,pages , null,null)
     });
-  function makePath (parentsId:string[]):string{
-    let path ="";
-    parentsId.forEach((id:string)=>
-    { const title =findPage(pagesId,pages,id).header.title;
-      if(parentsId.indexOf(id)===0){
-        path= title;
-      }else{
-        path.concat(`/${title}`)
-      }
-    });
-    return path
-  };
+
   const onChangeQuickFindInput =(event: React.ChangeEvent<HTMLInputElement>)=>{
     const value =event.target.value.toLowerCase();
     if(value ===""){
@@ -98,14 +44,7 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId ,setTargetPageId, c
     if(resultPage[0]===undefined){
       setResult("noResult")
     }else{
-      const listItems :resultType[]= resultPage.map((page:Page)=>({
-        id: page.id,
-        title: page.header.title,
-        icon: page.header.icon,
-        editTime: page.editTime,
-        createTime: page.createTime,
-        path : page.parentsId==null? null : makePath(page.parentsId)
-      }) ); 
+      const listItems :resultType[]= resultPage.map((page:Page)=>(makeResultType(page , pagesId,pages , null, null)) ); 
       setResult(listItems);
       setBestMatchesResult(listItems)
     }
@@ -321,10 +260,13 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId ,setTargetPageId, c
             {result !==null ?
             (result !== "noResult"?
             result.map((item:resultType)=>
+            <button
+              onClick={()=> setTargetPageId(item.id)}
+            >
               <Result 
                 item={item}
-                setTargetPageId={setTargetPageId}
               />
+            </button>
             )
             :
             <div className="noResult">
@@ -338,10 +280,14 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId ,setTargetPageId, c
             :
             (recentPagesList !== undefined?
               recentPagesList.map((item:resultType)=>
-              <Result
-                item={item}
-                setTargetPageId={setTargetPageId}
-              />)
+              <button
+                onClick={()=> setTargetPageId(item.id)}
+              >
+                <Result 
+                  item={item}
+                />
+              </button>
+              )
               :
               <div className="noRecentPages">
                 There are no pages visited recently.

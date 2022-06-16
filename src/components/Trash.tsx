@@ -9,6 +9,7 @@ type trashListItem ={
   title:string,
   icon:string|null
 };
+import Result, { makeResultType,resultType } from './Result';
 type ResultItemProps ={
   item:trashListItem,
   cleanTrash: (itemId: string) => void,

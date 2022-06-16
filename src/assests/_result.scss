@@ -1,0 +1,47 @@
+.result {
+  display: flex;
+  font-size: 14px;
+  height: fit-content;
+  padding: 8px 5px;
+  .pageTitle{
+    min-width: fit-content;
+  }
+  .pageIcon{
+    margin-right: 10px;
+    svg{
+      width: 100%;
+      height: 100%;
+      font-size: inherit;
+    }
+  }
+  .path{
+    color:$mud;
+    font-size: 12px;
+    margin-left: 5px;
+    span{
+      margin-right: 5px;
+    }
+  }
+}
+#quickFindBord{
+  .result {
+    &>div:nth-child(2){
+      display: flex;
+    }
+  }
+}
+#trash{
+  .result{
+    flex-direction: row;
+    align-items: center;
+    .pageTitle{
+      text-align: left;
+    }
+    .path{
+      margin-left: 0;
+      span{
+        display: none;
+      }
+    }
+  }
+}

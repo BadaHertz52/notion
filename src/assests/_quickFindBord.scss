@@ -129,23 +129,8 @@ $turkeyBlue :rgb(46, 170, 220);
     }
     .body{
       position: relative;
-    }
-    .result {
       display: flex;
-      font-size: 14px;
-      height: fit-content;
-      padding: 8px 5px;
-      .pageIcon{
-        margin-right: 10px;
-      }
-      .path{
-        color:$mud;
-        font-size: 12px;
-        margin-left: 5px;
-        span{
-          margin-right: 5px;
-        }
-      }
+      flex-direction: column;
     }
     .noResult, 
     .noRecentPages{
