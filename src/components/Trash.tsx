@@ -4,14 +4,9 @@ import { IoTrashOutline } from 'react-icons/io5';
 import { RiArrowGoBackLine } from 'react-icons/ri';
 import { CSSProperties } from 'styled-components';
 import { Page } from '../modules/notion';
-type trashListItem ={
-  id:string,
-  title:string,
-  icon:string|null
-};
 import Result, { makeResultType,resultType } from './Result';
 type ResultItemProps ={
-  item:trashListItem,
+  item:resultType,
   cleanTrash: (itemId: string) => void,
   restorePage: (pageId: string) => void,
   setTargetPageId: Dispatch<SetStateAction<string>>,
@@ -38,18 +33,13 @@ const ResultItem=({item , restorePage, cleanTrash ,setTargetPageId, setOpenTrash
     className='page'
     onClick={goPage}
   >
-    <div className='content'>
-      <p>
-        {item.icon?
-        < GrDocumentText/>:
-        item.icon}
-      </p>
-      <p>{item.title}</p>
-    </div>
+    <Result 
+      item={item}
+    />
     <div className='btns'>
       <button 
         className='restoreBtn'
-        onClick={()=>restorePage(item.id)}
+        onClick={()=> restorePage(item.id)}
       >
         <RiArrowGoBackLine/>
       </button>
