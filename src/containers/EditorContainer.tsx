@@ -40,8 +40,6 @@ const EditorContainer =({page,isInTrash, pagePath ,changeSide,addBlock,duplicate
   const raiseBlock =(pageId: string, block: Block) =>dispatch((raise_block(pageId, block)));
   const side =useSelector((state:RootState)=> state.side);
   const pages:Page[] =notion.pages;
-  const pagesId :string[] =notion.pagesId;
-  const [page, setPage]=useState<Page|null>(null);
   const firstlist:listItem[] = notion.firstPagesId.map((id:string)=> {
     const PAGE:Page = findPage(notion.pagesId, pages,id);
     return {
@@ -56,17 +54,27 @@ const EditorContainer =({page,isInTrash, pagePath ,changeSide,addBlock,duplicate
   });
   const userName :string  =useSelector((state:RootState)=> state.user.userName) ;
 
-  useEffect(()=>{
-    if(pagePath !== null){
-      const pageId = pagePath[pagePath.length-1].id;
-      const PAGE =findPage(pagesId,pages,pageId);
-      setPage(PAGE);
-    }
-  },[pagePath])
   return(
     <div className='editor'>
-      {page !==null &&
-      <>
+      {isInTrash &&
+      <div className='isInTrash'>
+        <div>
+          This is page is in Trash.
+        </div>
+        <div className="isInTrashBtns">
+          <button
+            onClick={()=>restorePage(page.id)}
+          >
+            Restore page
+          </button>
+          <button
+            onClick={()=>cleanTrash(page.id)}
+          >
+            Delete permanently
+          </button>
+        </div>
+      </div>
+      }
       <TopBar
       page={page}
       pagePath ={pagePath}
@@ -91,8 +99,7 @@ const EditorContainer =({page,isInTrash, pagePath ,changeSide,addBlock,duplicate
         deletePage={deletePage}
         setTargetPageId={setTargetPageId}
       />
-      </>
-      }
+
     </div>
   )
 };
