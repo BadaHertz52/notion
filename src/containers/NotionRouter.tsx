@@ -72,8 +72,6 @@ const NotionRouter =()=>{
   const changeSide =(appear:SideAppear) => {dispatch(change_side(appear))} ;
   //side--
   //action.function ---
-
-
   const makePagePath=(page:Page):pathType[]|null=>{
     if(page.parentsId !==null){
       const parentPages:Page[] = page.parentsId.map((id:string)=>findPage(notion.pagesId, notion.pages,id));
@@ -114,6 +112,17 @@ const NotionRouter =()=>{
     };
     return path;
   };
+  const findRoutePage =(pageId: string )=>{
+    if(pagesId.includes(pageId)){
+      const page =findPage(pagesId, pages, pageId);
+      setRoutePage(page); 
+    }else if(trashPagesId !==null && trashPages !==null&& trashPagesId.includes(pageId)){
+      const page =findPage(trashPagesId, trashPages, pageId);
+      setRoutePage(page); 
+    }else{
+      setRoutePage(firstPage)
+    };
+  } 
   useEffect(()=>{
         const path =makeRoutePath(routePage);
         navigate(path);
@@ -123,15 +132,16 @@ const NotionRouter =()=>{
     //url 변경시 
     const lastSlash =hash.lastIndexOf("/");
     const id = hash.slice(lastSlash+1);
-    const page =findPage(notion.pagesId, notion.pages, id);
-    setRoutePage(page); 
+    findRoutePage(id);
   },[hash]);
 
   useEffect(()=>{
     //sideBar 에서 페이지 이동 시 
-  const page = findPage(notion.pagesId, notion.pages,targetPageId);
-    setRoutePage(page);
-    addRecentPage(page.id);
+    findRoutePage(targetPageId);
+    if(notion.pagesId.includes(targetPageId)){
+      addRecentPage(targetPageId);
+    }
+    
   },[targetPageId]);
   
   return(
