@@ -24,10 +24,15 @@ type TrashProps={
   setOpenTrash :Dispatch<React.SetStateAction<boolean>>
 };
 const ResultItem=({item , restorePage, cleanTrash ,setTargetPageId, setOpenTrash}:ResultItemProps)=>{
-  const goPage=()=>{
-    setTargetPageId(item.id);
-    setOpenTrash(false)
+  const goPage=(event: React.MouseEvent)=>{
+    const target = event.target as HTMLElement;
+    const tagName = target.tagName.toLowerCase();
+    setOpenTrash(false);
+    if(!["button","svg","path"].includes(tagName) ){
+      setTargetPageId(item.id);
+    }
   };
+
   return(
     <div 
     className='page'
