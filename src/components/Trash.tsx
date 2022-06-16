@@ -1,5 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
-import { GrDocumentText } from 'react-icons/gr';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { IoTrashOutline } from 'react-icons/io5';
 import { RiArrowGoBackLine } from 'react-icons/ri';
 import { CSSProperties } from 'styled-components';
@@ -59,22 +58,57 @@ const ResultItem=({item , restorePage, cleanTrash ,setTargetPageId, setOpenTrash
   )
 };
 
-const Trash=({style,trashPages , restorePage, cleanTrash ,setTargetPageId ,setOpenTrash}:TrashProps)=>{
-  const trashList:trashListItem[]= trashPages.map((page:Page)=>({
-    id: page.id,
-    title: page.header.title,
-    icon: page.header.icon
-  }));
-  const [result, setResult] =useState<trashListItem[]|null>(trashList);
-  const trash =document.getElementById("trash");
-  const inner =document.getElementById("inner");
+const Trash=({style,trashPages, trashPagesId ,pages,pagesId, restorePage, cleanTrash ,setTargetPageId ,setOpenTrash}:TrashProps)=>{
+  const [trashList ,setTrashList ]=useState<resultType[]|undefined>(undefined);
+  //undefined 이면 trash가 없는것 
+  const [result, setResult] =useState<resultType[]|null>(null);
+  //null 이면 검색의 결과값이 없는것 
+  const [sort , setSort]=useState<"all"|"current">("all");
   const onChange=(event:React.ChangeEvent<HTMLInputElement>)=>{
+    if(trashList !==undefined){
     const value =event.target.value.toLowerCase();
-    const resultlist:trashListItem[] = trashList.filter((item:trashListItem)=> item.title.toLowerCase().includes(value));
-    resultlist[0]!==undefined?
-    setResult(resultlist):
-    setResult(null);
+        const resultlist= trashList.filter((item:resultType)=> item.title.toLowerCase().includes(value));
+      resultlist?.[0]!==undefined?
+      setResult(resultlist):
+      setResult(null);
+    }
   };
+
+  useEffect(()=>{
+    let filteringTargetList :resultType[]|undefined=undefined;
+
+    const makeFilteringTargetList =(pages:Page[]|null) : resultType[]|undefined=> pages?.map((page:Page)=>(
+      makeResultType(page,pagesId , pages ,trashPagesId,trashPages)));
+
+    switch (sort) {
+      case "all":
+        filteringTargetList = makeFilteringTargetList(trashPages)
+        break;
+      case "current":
+        const location =window.location;
+        const path =location.hash;
+        const lastSlash = path.lastIndexOf("/");
+        const currentPageId = path.slice(lastSlash+1);
+        const filteredTrashPages = trashPages?.filter((page:Page)=> page.parentsId?.includes(currentPageId));
+        console.log(filteredTrashPages);
+        filteringTargetList = filteredTrashPages!==undefined 
+                              ?
+                              (filteredTrashPages[0]!==undefined
+                                ?
+                              makeFilteringTargetList(filteredTrashPages)
+                                : 
+                              undefined)
+                              :
+                              undefined;
+        break;
+      default:
+        break;
+        
+    };
+    setTrashList(filteringTargetList);
+    filteringTargetList!==undefined && setResult(filteringTargetList)
+  },[sort]);
+
   return(
     <div 
       id="trash"
@@ -82,10 +116,14 @@ const Trash=({style,trashPages , restorePage, cleanTrash ,setTargetPageId ,setOp
     >
       <div className='inner'>
         <div className='header'>
-          <button>
+          <button
+            onClick={()=>setSort("all")}
+          >
             All Pages
           </button>
-          <button>
+          <button
+            onClick={()=>setSort("current")}
+          >
             In current page
           </button>
         </div>
@@ -96,20 +134,26 @@ const Trash=({style,trashPages , restorePage, cleanTrash ,setTargetPageId ,setOp
             placeholder="Filter by page title..."
           />
         </div>
-        <div className='result'>
-          { result !==null?
-            result.map((item:trashListItem)=>
-            <ResultItem
-              item={item}
-              restorePage={restorePage}
-              cleanTrash={cleanTrash}
-              setTargetPageId={setTargetPageId}
-              setOpenTrash={setOpenTrash}
-            />
-          )
+        <div className='trashList'>
+          { trashList !==undefined?
+            (result !==null?
+              result.map((item:resultType)=>
+              <ResultItem
+                item={item}
+                restorePage={restorePage}
+                cleanTrash={cleanTrash}
+                setTargetPageId={setTargetPageId}
+                setOpenTrash={setOpenTrash}
+              />
+              )
+              :
+              <div className='noResult'>
+                  No matches found.
+              </div>
+            )
           :
-          <div className='noResult'>
-              No matches found.
+          <div className='noTrash'>
+            Empty
           </div>
           } 
         </div>
