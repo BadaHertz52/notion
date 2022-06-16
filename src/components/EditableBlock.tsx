@@ -160,7 +160,6 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
       const {BLOCK} =findBlock(page, id);
       return BLOCK;
     }): null ;
-
     const blockNode = ReactDOMServer.renderToString
     (<BlockComponent
       userName={userName} 
@@ -405,9 +404,7 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
     const targetClassName = target.getAttribute("class");
     const blockFn = document.getElementById("blockFn");
     if( innerRef.current !==null){
-      const editableBlockPosition = innerRef.current.getBoundingClientRect();
-      const positionX =editableBlockPosition.left;
-      const left = positionX - 45 ;
+      const left =45;
       blockFn?.classList.toggle("on");
       const getTitle =(element:Element)=>{
         const title = element.getAttribute("title");
@@ -415,7 +412,7 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
           const start = title.indexOf("_contents");
           const id= title.substring(0, start);
           const {BLOCK} =findBlock(page, id);
-          const position = element.parentElement?.getBoundingClientRect() as DOMRect;
+          const position = element.parentElement?.getClientRects()[0] as DOMRect;
           const targetHeight = position.height;
           const targetY = position.top;
           if(blockFn?.classList.contains("on")){
@@ -523,6 +520,7 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
           <ContentEditable
             id={block.id}
             html={command.command !==null? command.command : ""}
+            innerRef={innerRef}
             onChange={commandChange}
             onKeyUp={(event)=>commandKeyUp(event,block)}
             onMouseOver ={showBlockFn}
