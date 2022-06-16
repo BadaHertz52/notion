@@ -206,6 +206,16 @@
     }
     .pageName {
       font-size: inherit;
+      display: flex;
+      align-items: center;
+      span{
+        display: flex;
+        align-items: center;
+      }
+      svg{
+        font-size: 13px;
+        margin-right: 0;
+      }
       span:first-child{
         margin-right: 5px;
       }
