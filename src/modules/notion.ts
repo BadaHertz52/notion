@@ -1081,7 +1081,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
           pagesId.splice(index,1);
         })
       };
-      const newTrash ={
+      let newTrash ={
         pagesId:trash.pagesId ==null? [targetPage.id] : trash.pagesId.concat(targetPage.id),
         pages:trash.pages ==null? [targetPage] : trash.pages.concat(targetPage),
       }
@@ -1094,37 +1094,44 @@ export default function notion (state:Notion =initialState , action :NotionActio
         trash:newTrash
       };
     case RESTORE_PAGE:
-      pages.push(targetPage);
-      pagesId.push(targetPage.id);
-      firstPagesId.push(targetPage.id);
-      trash.pagesId?.splice(pageIndex,1);
-      trash.pages?.splice(pageIndex,1);
-      console.log("restore", state)
-      return {
-        pages:pages,
-        pagesId:pagesId,
-        firstPagesId:firstPagesId,
-        trash: (trash.pages!==null && trash.pagesId!==null && trash.pages[0]!==undefined) ?
-              {
-                pages: trash.pages,
-                pagesId:trash.pagesId
-              }
-              :
-              {
-                pages:null,
-                pagesId:null
-              }
-      } ;
+      const trashPages= trash.pages?.filter((page:Page)=> page.id !== targetPage.id) as Page[];
+      const trashPagesId= trash.pagesId?.filter((id:string)=> id !== targetPage.id) as string[];
+      const restoredPage :Page ={
+        ... targetPage,
+        editTime:editTime,
+        parentsId:null,
+      }
+      const newNotion :Notion={
+        pages:pages.concat(restoredPage),
+        pagesId:pagesId.concat(restoredPage.id),
+        firstPagesId:firstPagesId.concat(restoredPage.id),
+        trash: (trashPagesId[0] !==undefined && trashPagesId[0] !==undefined)
+        ? 
+        {
+          pages:trashPages ,
+          pagesId:trashPagesId 
+        }
+        :
+        {
+          pages:null,
+          pagesId:null
+        }
+      };
+      console.log("restore",newNotion)
+      return newNotion  ;
     case CLEAN_TRASH:
       trash.pages?.splice(pageIndex,1);
       trash.pagesId?.splice(pageIndex,1);
-      console.log("clean trash", trash)
+      const cleanedTrash ={
+        pages:trash.pages?.[0]!==undefined? 
+        trash.pages:null,
+        pagesId:trash.pagesId?.[0]!==undefined? 
+        trash.pagesId:null,
+      };
+      console.log("clean trash", cleanedTrash)
       return{
         ...state,
-        trash:{
-          pages:trash.pages ? (trash.pages[0]!==undefined? trash.pages:null):null,
-          pagesId:trash.pagesId? (trash.pagesId[0]!==undefined? trash.pagesId:null):null
-        }
+        trash:cleanedTrash
       }
     default:
       return state;
