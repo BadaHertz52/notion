@@ -762,21 +762,50 @@ export default function notion (state:Notion =initialState , action :NotionActio
       console.log("can't find parentBlocks of this block")
     }
   };
-  const deleteBlockData =(block :Block ,targetIndex:number)=>{
+  const deleteBlockData =(page:Page,block :Block ,targetIndex:number)=>{
     if(block.subBlocksId !==null  ){
     // block.suBlocksId를 이전 block의 subBlocks로 옮기기
-    const blockDoc = document.getElementById(block.id) as HTMLElement; 
-    const previousBlockId = blockDoc.previousElementSibling?.id as string ;
-    const {index, BLOCK}= findBlock( targetPage,previousBlockId);
-    const previousBlockIndex =index;
-    const previousBlock =BLOCK;
+    const subBlocks :Block[] =block.subBlocksId.map((id:string)=> {
+      const {BLOCK} =findBlock(page, id);
+      return BLOCK 
+    });
 
-    const editedPreviousBlock :Block ={
-      ...previousBlock,
-      editTime: editTime,
-      subBlocksId:[...block.subBlocksId]
-    };
-    editBlockData(previousBlockIndex, editedPreviousBlock);
+    const blockDoc = document.getElementById(block.id)?.parentElement?.parentElement as HTMLElement; 
+    const previouseBlockElement = blockDoc.previousElementSibling;
+    if(previouseBlockElement !==null){
+      const previousBlockDom =previouseBlockElement.firstChild?.firstChild  as HTMLElement;
+      const previousBlockId =previousBlockDom.getAttribute("id") as string;
+      const {index, BLOCK}= findBlock( targetPage,previousBlockId);
+      const previousBlockIndex =index;
+      const previousBlock =BLOCK;
+      const editedPreviousBlock :Block ={
+        ...previousBlock,
+        editTime: editTime,
+        subBlocksId:[...block.subBlocksId]
+      };
+      editBlockData(previousBlockIndex, editedPreviousBlock);
+      subBlocks.forEach((subBlock
+        :Block)=>{
+          const editedSubBlock :Block={
+            ...subBlock,
+            parentBlocksId: previousBlock.parentBlocksId !==null? previousBlock.parentBlocksId.concat(previousBlock.id):[...previousBlock.id],
+            editTime:editTime
+          };
+          const editedSubBlockIndex = page.blocksId.indexOf(subBlock.id);
+          editBlockData(editedSubBlockIndex, editedSubBlock);
+        })
+    }else{
+      subBlocks.forEach((block:Block)=>{
+        const index = page.blocksId.indexOf(block.id);
+        const editedSubBlock:Block ={
+          ...block,
+          parentBlocksId:null,
+          editTime:editTime
+        };
+        editBlockData(index, editedSubBlock);
+      })
+    }
+
   };
     targetPage.blocks?.splice(targetIndex,1);
     targetPage.blocksId?.splice(targetIndex,1);
@@ -863,7 +892,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
             editTime: editTime
           };
           editBlockData(parentBlockIndex, newParentBlock);
-          deleteBlockData(action.block, blockIndex );
+          deleteBlockData(targetPage, action.block, blockIndex );
 
         }else {
           const newParentBlock :Block ={
@@ -883,7 +912,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
           editBlockData(index, newPrevisousBlock);
         };
         // action.block data 지우기 
-        deleteBlockData(action.block, blockIndex);
+        deleteBlockData(targetPage ,action.block, blockIndex);
         console.log("raiseBlock",targetPage.blocks );
       return {
         pages:pages,
@@ -908,7 +937,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
         }else{
 
           if(action.block.type === "bulletList" || action.block.type ==="numberList"){
-            deleteBlockData(parentBlock , parentBlockIndex);
+            deleteBlockData(targetPage ,parentBlock , parentBlockIndex);
           }else {
             editBlockData(parentBlockIndex, {
               ...parentBlock,
@@ -918,7 +947,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
           
         }
       };
-      deleteBlockData(action.block , blockIndex);
+      deleteBlockData(targetPage, action.block , blockIndex);
 
       console.log("delete", {pages:pages[pageIndex]});
       return {
