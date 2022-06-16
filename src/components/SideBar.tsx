@@ -282,6 +282,7 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
                                     })) ;
   const navigate =useNavigate();  
   const addNewPage=()=>{
+    addPage(pageSample)
   };
   const renamePage =(title:string|null, icon:string| null)=>{
     if(targetItem !==null){
@@ -569,7 +570,7 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
             </button>
           </div>
         </div>
-        <div className= "addNewPage">
+        <div className= "addNewPageBtn">
           <button
             onClick={addNewPage}
           >

@@ -2067,7 +2067,7 @@ a:link, a:active, a:visited {
           justify-content: flex-start;
 }
 
-#sideBar .addNewPage {
+#sideBar .addNewPageBtn {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -2076,11 +2076,11 @@ a:link, a:active, a:visited {
   min-height: 27px;
 }
 
-#sideBar .addNewPage:hover {
+#sideBar .addNewPageBtn:hover {
   background-color: rgba(49, 45, 33, 0.11);
 }
 
-#sideBar .addNewPage button {
+#sideBar .addNewPageBtn button {
   color: #8d8d8d;
   font-size: 15px;
   font-weight: 600;
@@ -2095,7 +2095,7 @@ a:link, a:active, a:visited {
           align-items: center;
 }
 
-#sideBar .addNewPage button svg {
+#sideBar .addNewPageBtn button svg {
   -webkit-box-flex: 0;
       -ms-flex-positive: 0;
           flex-grow: 0;
