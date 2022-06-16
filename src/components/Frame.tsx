@@ -1,13 +1,11 @@
 import React, { CSSProperties, Dispatch, SetStateAction, useState } from 'react';
-import { Block, CommentType, listItem, Page } from '../modules/notion';
+import { Block, listItem, Page } from '../modules/notion';
 import EditableBlock from './EditableBlock';
 
 //icon
 import { BiMessageDetail } from 'react-icons/bi';
 import { BsFillEmojiSmileFill} from 'react-icons/bs';
-import {GrDocumentText ,GrDocument} from 'react-icons/gr';
-import { Side } from '../modules/side';
-import { MdInsertPhoto } from 'react-icons/md';
+import {GrDocumentText ,GrDocument} from 'react-icons/gr';import { MdInsertPhoto } from 'react-icons/md';
 import BlockFn from './BlockFn';
 import Comments, { ToolMore } from './Comments';
 
