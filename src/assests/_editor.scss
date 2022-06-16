@@ -112,10 +112,17 @@
   .pageContent{
     max-width: 100%;
     width: 100%;
-    // padding-left: calc(96px +env(safe-area-inset-left));
+    padding-left: calc(96px + env(safe-area-inset-left));
+  }
+  .pageTitle ,
+  .editableBlock {
+    padding-right: calc(96px + env(safe-area-inset-left));
+  }
+  .subBlocks .editableBlock{
+    padding-right: 0;
   }
   .pageHeader {
-    padding: 0 calc(96px);
+    //padding: 0 calc(96px);
     &> div{
       position: relative;
     }

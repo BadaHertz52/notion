@@ -59,7 +59,6 @@ a:link, a:active, a:visited {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  padding: 0 calc(96px);
 }
 
 .mainBlock {
@@ -1446,10 +1445,16 @@ a:link, a:active, a:visited {
 .editor .pageContent {
   max-width: 100%;
   width: 100%;
+  padding-left: calc(96px + env(safe-area-inset-left));
 }
 
-.editor .pageHeader {
-  padding: 0 calc(96px);
+.editor .pageTitle,
+.editor .editableBlock {
+  padding-right: calc(96px + env(safe-area-inset-left));
+}
+
+.editor .subBlocks .editableBlock {
+  padding-right: 0;
 }
 
 .editor .pageHeader > div {
