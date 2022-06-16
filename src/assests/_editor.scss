@@ -11,6 +11,34 @@
   display: flex;
   flex-direction: column;
   @include webkitScroll;
+  position: relative;
+  //isInTrash
+  .isInTrash{
+    position: absolute;
+    align-items: center;
+    justify-items: center;
+    top:0;
+    left: 0;
+    display: flex;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color:rgb(235, 87, 87); 
+    color:#ffff;
+    font-size: 14px;
+    .isInTrashBtns{
+      display: flex;
+      justify-content: space-between;
+    }
+    button{
+      color:#ffff;
+      border : 1px solid #ffff;
+      border-radius: 3px;
+      padding:5px;
+      margin-left: 8px;
+      font-size: 13px;
+    }
+  }
   // topbar ---
   .topbar {
     width:100%;
