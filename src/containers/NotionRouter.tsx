@@ -42,7 +42,9 @@ const NotionRouter =()=>{
   //block--
 
   //--page
-  const addPage=(newPage:Page)=>{dispatch(add_page( newPage))};
+  const addPage=(newPage:Page)=>{
+    dispatch(add_page( newPage));
+    setRoutePage(newPage);  };
   const duplicatePage =(targetPageId:string)=>{dispatch(duplicate_page(targetPageId))};
   const editPage=(pageId:string,newPage:Page )=>{dispatch(edit_page(pageId, newPage))};
   const deletePage =(pageId:string )=>{
