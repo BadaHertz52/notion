@@ -19,7 +19,10 @@ type ResultItemProps ={
 };
 type TrashProps={
   style:CSSProperties |undefined,
-  trashPages: Page[],
+  trashPagesId:string[]|null,
+  trashPages: Page[] |null,
+  pagesId:string[],
+  pages:Page[],
   cleanTrash: (itemId: string) => void,
   restorePage: (pageId: string) => void,
   setTargetPageId: Dispatch<SetStateAction<string>>,

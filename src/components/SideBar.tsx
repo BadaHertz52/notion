@@ -216,6 +216,7 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
   const pages =notion.pages;
   const pagesId =notion.pagesId;
   const trashPages=notion.trash.pages;
+  const trashPagesId=notion.trash.pagesId;
   const firstPages:Page[] = notion.firstPagesId.map((id:string)=>findPage(notion.pagesId, pages, id));
   const firstlist:listItem[] = firstPages.map((page:Page)=>{
     return {
@@ -435,7 +436,7 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
       const domRect =trashBtn.current.getClientRects()[0];
       setTrashStyle({
         position:"absolute",
-        top: domRect.top - 50,
+        top: domRect.top - 100,
         left: domRect.right,
       })
     }
@@ -716,10 +717,13 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
           />
       </div>
     }
-    {openTrash && trashPages!==null &&
+    {openTrash && 
       <Trash
         style={trashStyle}
+        trashPagesId={trashPagesId}
         trashPages={trashPages}
+        pages={pages}
+        pagesId={pagesId}
         cleanTrash={cleanTrash}
         restorePage={restorePage}
         setTargetPageId={setTargetPageId}
