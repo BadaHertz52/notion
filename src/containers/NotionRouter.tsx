@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {  Route, Routes, useNavigate} from 'react-router-dom';
 import QuickFindBord from '../components/QuickFindBord';
 import { RootState } from '../modules';
-import { add_block, add_page, Block, change_to_sub, delete_block, delete_page, duplicate_page, edit_block, edit_page, findPage,  move_page_to_page, Page, raise_block, } from '../modules/notion';
+import { add_block, add_page, Block, change_to_sub, clean_trash, delete_block, delete_page, duplicate_page, edit_block, edit_page, findPage,  move_page_to_page, Page, raise_block, restore_page, } from '../modules/notion';
 import { change_side, SideAppear } from '../modules/side';
 import { add_recent_page, clean_recent_page, remove_favorites } from '../modules/user';
 import EditorContainer from './EditorContainer';
@@ -17,10 +17,14 @@ const NotionRouter =()=>{
   const navigate= useNavigate();
   const dispatch =useDispatch();
   const notion = useSelector((state:RootState)=> state.notion);
+  const pagesId =notion.pagesId;
+  const pages =notion.pages;
+  const trashPagesId =notion.trash.pagesId;
+  const trashPages =notion.trash.pages;
   const user =useSelector((state:RootState)=> state.user);
   const location =window.location;
   const hash=location.hash;
-  const firstPage = notion.pages[0];
+  const firstPage =user.favorites!==null? findPage(pagesId, pages,user.favorites[0]) : notion.pages[0];
 
   const [targetPageId, setTargetPageId]= useState<string>(firstPage.id);
   const [routePage, setRoutePage]=useState<Page>(firstPage);
@@ -48,6 +52,15 @@ const NotionRouter =()=>{
     };
   };
   const movePageToPage =(targetPageId:string, destinationPageId:string)=>{dispatch(move_page_to_page(targetPageId, destinationPageId))};
+  const restorePage=(pageId:string)=> {
+    dispatch(restore_page(pageId))
+  };
+  const cleanTrash=(pageId:string)=>{
+    dispatch(clean_trash(pageId));
+    if(routePage.id === pageId){
+      setRoutePage(firstPage);
+    }
+  };
   //page---
 
   //--user
@@ -136,6 +149,8 @@ const NotionRouter =()=>{
         deletePage={deletePage}
         movePageToPage={movePageToPage}
         duplicatePage={duplicatePage}
+        restorePage={restorePage}
+        cleanTrash={cleanTrash}
         changeSide={changeSide}
 
         setOpenQF={setOpenQF}
@@ -144,19 +159,26 @@ const NotionRouter =()=>{
         <Route
           path={makeRoutePath(routePage)} 
           element={<EditorContainer 
+                  page={routePage}
+                  isInTrash={!notion.pagesId.includes(routePage.id)}
                   pagePath ={makePagePath(routePage)}
-                  changeSide={changeSide}
                   setTargetPageId={setTargetPageId}
+
                   addBlock={addBlock}
                   editBlock={editBlock}
                   changeToSub={changeToSub}
                   raiseBlock={raiseBlock}
                   deleteBlock={deleteBlock}
+
                   addPage={addPage}
                   duplicatePage={duplicatePage}
                   editPage={editPage}
                   deletePage={deletePage}
                   movePageToPage={movePageToPage}
+                  cleanTrash={cleanTrash}
+                  restorePage={restorePage}
+
+                  changeSide={changeSide}
                   />
                 } 
         />

@@ -2,7 +2,7 @@ import React, { Dispatch } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SideBar from '../components/SideBar';
 import { RootState } from '../modules';
-import { Block, clean_trash, Page, restore_page } from '../modules/notion';
+import { Block,Page, } from '../modules/notion';
 import { SideAppear } from '../modules/side';
 import { add_favorites, remove_favorites } from '../modules/user';
 
@@ -18,24 +18,20 @@ type SideBarContainerProp ={
   editPage : (pageId:string , newPage:Page, )=>void,
   deletePage : (pageId:string , )=>void,
   movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
+  restorePage: (pageId: string) => void,
+  cleanTrash: (pageId: string) => void,
 
   changeSide: (appear: SideAppear) => void,
 
   setTargetPageId: Dispatch<React.SetStateAction<string>>,
   setOpenQF: Dispatch<React.SetStateAction<boolean>>
 };
-const SideBarContainer =({addBlock,editBlock,deleteBlock,addPage,duplicatePage,editPage,deletePage,movePageToPage, changeSide,setTargetPageId ,setOpenQF }:SideBarContainerProp)=>{
+const SideBarContainer =({addBlock,editBlock,deleteBlock,addPage,duplicatePage,editPage,deletePage,movePageToPage,restorePage, cleanTrash, changeSide,setTargetPageId ,setOpenQF }:SideBarContainerProp)=>{
   const notion =useSelector((state:RootState)=> state.notion);
   const user = useSelector((state:RootState)=> state.user);
   const dispatch =useDispatch();
   const addFavorites =(itemId:string)=>{dispatch(add_favorites(itemId))};
   const removeFavorites =(itemId:string)=>{dispatch((remove_favorites(itemId)))};
-  const restorePage=(pageId:string)=> {
-    dispatch(restore_page(pageId))
-  };
-  const cleanTrash=(pageId:string)=>{
-    dispatch(clean_trash(pageId))
-  };
 
   return(
     <SideBar 
