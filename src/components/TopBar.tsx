@@ -7,7 +7,7 @@ import { pathType } from '../containers/NotionRouter';
 import { Page } from '../modules/notion';
 import { Side, SideAppear } from '../modules/side';
 type TopBarProps ={
-  side:Side,
+  sideAppear:SideAppear,
   page:Page,
   pagePath: pathType[] |null ,
   changeSide: (appear: SideAppear) => void
@@ -22,20 +22,26 @@ const TopBar =({side,page,pagePath, changeSide,setTargetPageId}:TopBarProps)=>{
   },[]);
 
   return(
-    <div className="topbar">
-      <button 
-      className='sideBarBtn'
-      // onMouseMove={leftSideBar}
-      // onMouseOut={closeSideBar}
-      // onClick={lockSideBar}
-      title ={title}
-      aria-label ={title}
-      >
-        {side.appear ==="close" && 
-        <AiOutlineMenu/>}
-        {side.appear ==="left" &&
-        <FiChevronsLeft/>}
-      </button>
+    <div 
+      className="topbar"
+    >
+      <div>
+      {sideAppear !=="lock" &&
+        <button 
+          id="sideBarBtn"
+          title ={title}
+          aria-label ={title}
+          onMouseEnter={()=>{
+            changeSide("float")}}
+          onClick={onClickSideBarBtn}
+        >
+          {sideAppear ==="close" && 
+          <AiOutlineMenu/>}
+          {sideAppear ==="float" &&
+          <FiChevronsLeft/>}
+        </button>
+
+      }
       <div className="pagePathes">
         {pagePath == null ? 
           <div className="pagePath">

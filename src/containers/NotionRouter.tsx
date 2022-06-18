@@ -22,6 +22,7 @@ const NotionRouter =()=>{
   const trashPagesId =notion.trash.pagesId;
   const trashPages =notion.trash.pages;
   const user =useSelector((state:RootState)=> state.user);
+  const sideAppear =useSelector((state:RootState)=>state.side.appear);
   const location =window.location;
   const hash=location.hash;
   const firstPage =user.favorites!==null? findPage(pagesId, pages,user.favorites[0]) : notion.pages[0];
@@ -147,8 +148,12 @@ const NotionRouter =()=>{
   },[targetPageId]);
   
   return(
-    <div id="inner">
+    <div 
+      id="inner"
+      className='sideBar_lock'
+    >
       <SideBarContainer 
+        sideAppear={sideAppear}
         setTargetPageId={setTargetPageId}
         addBlock={addBlock}
         editBlock={editBlock}
@@ -171,6 +176,7 @@ const NotionRouter =()=>{
         <Route
           path={makeRoutePath(routePage)} 
           element={<EditorContainer 
+                  sideAppear={sideAppear}
                   page={routePage}
                   isInTrash={!notion.pagesId.includes(routePage.id)}
                   pagePath ={makePagePath(routePage)}

@@ -8,6 +8,7 @@ import { SideAppear } from '../modules/side';
 import { pathType } from './NotionRouter';
 
 type EditorContainerProps ={
+  sideAppear:SideAppear,
   page:Page,
   isInTrash:boolean,
   pagePath : pathType[]|null,

@@ -29,6 +29,7 @@ type SideBarProps ={
   notion : Notion,
   user:UserState,
 
+  sideAppear: SideAppear;
   editBlock :(pageId: string, block: Block) => void,
   addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
   deleteBlock: (pageId: string, block: Block) => void,
