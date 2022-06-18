@@ -365,11 +365,12 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
   };
   const onClickMoreBtn=()=>{
     setOpenSideMoreMenu(true); 
-    if( pageFnStyle !==undefined){
+    if( hover.target !==null){
+      const position = hover.target.getClientRects()[0];
       setMoreFnStyle({
         position: "absolute",
-        top: pageFnStyle.top,
-        left: pageFnStyle.left,
+        top: position.top,
+        left: position.right,
       });
     }
   };
