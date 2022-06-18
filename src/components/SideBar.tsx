@@ -215,6 +215,8 @@ const ListTemplate =({notion,targetList ,setTargetPageId ,hover ,setHover , onCl
             setTargetPageId={setTargetPageId}
             hover={hover}
             setHover={setHover}
+            onClickMoreBtn={onClickMoreBtn}
+            addNewSubPage={addNewSubPage}
           />
         </div>
         {
@@ -226,6 +228,8 @@ const ListTemplate =({notion,targetList ,setTargetPageId ,hover ,setHover , onCl
             setTargetPageId={setTargetPageId} 
             hover={hover} 
             setHover={setHover}
+            onClickMoreBtn={onClickMoreBtn}
+            addNewSubPage={addNewSubPage}
           />
         </div>
         :
