@@ -16,11 +16,13 @@ type TopBarProps ={
 const TopBar =({sideAppear,page,pagePath, changeSide ,setTargetPageId}:TopBarProps)=>{
   const [title, setTitle]= useState<string>("");
   useEffect(()=>{
-    if(side.appear ==="left"){
+    if(sideAppear ==="float"){
       setTitle("Lock sideBar open")
     }
+    if(sideAppear ==="close"){
+      setTitle("Float sideBar ")
+    }
   },[]);
-
   return(
     <div 
       className="topbar"
