@@ -6,7 +6,7 @@ import { UserState } from '../modules/user';
 
 //react-icon
 import {FiCode ,FiChevronsLeft} from 'react-icons/fi';
-import {AiOutlineClockCircle, AiOutlinePlus, AiOutlineStar} from 'react-icons/ai';
+import {AiOutlineClockCircle, AiOutlineMenu, AiOutlinePlus, AiOutlineStar} from 'react-icons/ai';
 import {BiSearchAlt2} from 'react-icons/bi';
 import {BsFillTrash2Fill, BsPencilSquare, BsThreeDots} from 'react-icons/bs';
 import {IoIosSettings} from 'react-icons/io';
@@ -27,8 +27,6 @@ type hoverType={
 type SideBarProps ={
   notion : Notion,
   user:UserState,
-
-  sideAppear: SideAppear;
   editBlock :(pageId: string, block: Block) => void,
   addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
   deleteBlock: (pageId: string, block: Block) => void,
@@ -242,7 +240,7 @@ const ListTemplate =({notion,targetList ,setTargetPageId ,hover ,setHover , onCl
   )
 };
 
-const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicatePage,editPage,deletePage,movePageToPage, cleanTrash, restorePage, addFavorites, removeFavorites, changeSide,setTargetPageId ,setOpenQF
+const SideBar =({notion, user  ,addBlock,editBlock,deleteBlock,addPage ,duplicatePage,editPage,deletePage,movePageToPage, cleanTrash, restorePage, addFavorites, removeFavorites, changeSide,setTargetPageId ,setOpenQF
 }:SideBarProps)=>{
   const inner =document.getElementById("inner");
   const pages =notion.pages;
