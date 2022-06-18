@@ -63,17 +63,24 @@ const TopBar =({sideAppear,page,pagePath, changeSide ,setTargetPageId}:TopBarPro
       }
       <div className="pagePathes">
         {pagePath == null ? 
-          <div className="pagePath">
+          <button 
+            className="pagePath"
+            onClick={()=>setTargetPageId(page.id)}
+          >
             <span>
               {page.header.title? 
               page.header.title 
               : 
               ""}
             </span>
-          </div>
+          </button>
         :
           pagePath.map((path:pathType )=>
-          <div className="pagePath" key={pagePath.indexOf(path)}>
+          <button 
+            className="pagePath" 
+            key={pagePath.indexOf(path)}
+            onClick={()=>setTargetPageId(path.id)}
+            >
             <span>/</span> 
             <span className='pageLink'>
               <a href='path'>
@@ -81,11 +88,11 @@ const TopBar =({sideAppear,page,pagePath, changeSide ,setTargetPageId}:TopBarPro
                 {path.title}
               </a>
               </span>
-          </div>
+          </button>
           )
         }
       </div>
-
+      </div>
       <div className="pageFun">
         <button
           title='Share or publish to the web'
