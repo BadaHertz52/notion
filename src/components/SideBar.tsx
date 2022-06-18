@@ -71,7 +71,7 @@ const ItemTemplate =({item,setTargetPageId ,setHover, hover ,onClickMoreBtn, add
   const [toggleStyle ,setToggleStyle]=useState<CSSProperties>({
     transform : "rotate(0deg)" 
   });
-  const itemInner =useRef<HTMLDivElement>(null);
+  const sideBarPageFn = useRef<HTMLDivElement>(null);
   const onToggleSubPage =(event:React.MouseEvent)=>{
     const target =event.target as HTMLElement ;
     const toggleSubPage=(subPageElement:null|undefined|Element)=>{
@@ -106,29 +106,28 @@ const ItemTemplate =({item,setTargetPageId ,setHover, hover ,onClickMoreBtn, add
         break;
     }
   };
-  const showPageFn=()=>{
-    
-    if(hover.hover){
-      setHover({
-        hover:false,
-        target:null,
-        targetItem:null,
-      })
-    }else{
-      itemInner.current !==null &&
-        setHover({
-          hover:true,
-          target:itemInner.current,
-          targetItem:item
-        })
+  const changeTargetItem =()=>{
+    sideBarPageFn.current !==null && setHover({
+      target:sideBarPageFn.current,
+      targetItem: item
+    })
+  };
+  const showPageFn =()=>{
+    if(sideBarPageFn.current!==null){
+      sideBarPageFn.current.classList.toggle("on");
     }
-    
+  };
+  const removeOn =()=>{
+    if(sideBarPageFn.current!==null){
+      sideBarPageFn.current.classList.contains("on")&&
+      sideBarPageFn.current.classList.remove("on")
+    }
   }
   return (
   <div 
     className='itemInner pageLink'
-    ref={itemInner}
-    onMouseOver={showPageFn}
+    onMouseOver ={showPageFn}
+    onMouseOut ={removeOn}
   >
     <div className='pageItem'>
       <button 
