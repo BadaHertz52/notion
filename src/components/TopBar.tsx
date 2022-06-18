@@ -23,6 +23,23 @@ const TopBar =({sideAppear,page,pagePath, changeSide ,setTargetPageId}:TopBarPro
       setTitle("Float sideBar ")
     }
   },[]);
+  const onClickSideBarBtn =(event:React.MouseEvent)=>{
+    const target =event.target as HTMLElement;
+    const targetTag =target.tagName.toLowerCase();
+    switch (targetTag) {
+      case "button":
+        target.id ==="sideBarBtn" && changeSide("lock");
+        break;
+      case "svg":
+        target.parentElement?.id==="sideBarBtn" && changeSide("lock");
+        break;
+      case "path":
+        target.parentElement?.parentElement?.id=== "sideBarBt" && changeSide("lock");
+        break;
+      default:
+        break;
+    }
+  };
   return(
     <div 
       className="topbar"
