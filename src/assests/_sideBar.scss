@@ -1,21 +1,61 @@
 @import './common';
 
-#sideBar{
-  width: 240px;
+.sideBar_close , .sideBar_float{
+  .frame{
+    z-index: 1;
+    div, button {
+      z-index: inherit;
+    }
+  }
+  .sideBar{
+    position: absolute;
+    z-index: 10;
+  }
+  .sideBarPageFn{
+    button{
+      color :$darkgrey
+    }
+  }
+  .sideBarBtn{
+    display: none;
+  }
+
+}
+.sideBar_close {
+  .sideBar{
+    transform: translate(-300px, 0)
+  }
+}
+.sideBar_float{
+  .sideBar{
+    @include popupMenu;
+    top:45px;
+    left: 0;
+    background-color:#ffff;
+    width: 230px;
+    height: fit-content;
+  }
+}
+.sideBar_lock{
+  .sideBar{
+    transform: translate(0,0);
+    flex-shrink: 0; 
+    flex-grow: 0;
+  }
+}
+.sideBar{
+  display: block;
+  width: 250px;
   height: 100%;
-  flex-shrink: 0; 
-  flex-grow: 0;
-  position: relative;
-  background-color: $pistachioshell;
-  transition-timing-function: ease-in;
-  transition-property: box-shadow;
+  background-color:$pistachioshell;
+  transition: transform 2000ms cubic-bezier(0.4, 0, 0.2, 1);
   &_inner{  
-    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
     height: 100%;
     width: 100%;
-    & > div {
-      border-top:1px solid $lightMud ;
-    }
   }
   .itemInner ,
   .subPage.no {
@@ -30,7 +70,7 @@
     font-size: 14px;
     text-align: center;
     min-height: 27px;
-    #record-icon, svg{
+    .record-icon, svg{
       margin-right: 8px;
     }
     svg{
@@ -41,59 +81,30 @@
       color: $itemSvg;
     }
   }
+  .list .itemInner{
+    justify-content: space-between;
+  }
   .switcher, .fun1{
     .itemInner{
       font-size: 13px;
     }
   }
-  #sideBarPageFn{
+  .sideBarPageFn{
+    display: none;
+  }
+  .sideBarPageFn.on{
     display: flex;
     align-content: center;
     padding-top: 5px;
     button{
+      width: fit-content;
+      font-size: 12px;
       color:$itemSvg;
-      margin-right: 5px
+      svg{
+        width: fit-content;
+        margin-right: 0;
+      }
     }
-  }
-  #moreFn{
-    @include popupMenu;
-    width: 230px;
-    button{
-      padding:  3%; 
-      @include editMenuBtns;
-    }
-    p {
-      margin: 0;
-      margin-left: 5px;
-      padding: 3%;
-      color: $itemText
-    }
-  }
-  #rename {
-    @include popupMenu;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-content: center;
-    box-sizing: border-box;
-    padding: 5%;
-    input{
-      border: 1px solid $lightMud;
-      border-radius: 1px;
-      min-height: 27px;
-    }
-    .rename_icon {
-      width: 9%
-    }
-    .rename_title{
-      width: 81% ;
-    }
-  }
-  #sideBar_pageMenu{
-    @include popupMenu;
-    z-index: 15;
-    width: fit-content;
-    padding:3%;
   }
   //--sideBarBtn
   .sideBarBtn{
@@ -104,7 +115,7 @@
       margin-right: 0;
     }
   }
-  #openSideBarBtn{
+  .openSideBarBtn{
     position: absolute;
     top:10px;
     right: -10%;
@@ -122,7 +133,7 @@
       }
     }
   }
-  #record-icon{
+  .record-icon{
     background-color:$mud ;
     color: #ffff;
     border-radius: 3px;
@@ -276,20 +287,17 @@
 
   // addNewPageBtn --
   .addNewPageBtn {
-    position: absolute;
-    bottom:0;
-    left: 0;
     width: 100%;
     height: 45px;
     min-height: 27px;
+    border-top: 1px solid $lightMud;
     &:hover{
       background-color: $itemHover;
     }
     button {
-      color:$itemText;
+      color:$darkgrey;
       font : {
-        size:15px;
-        weight: 600;
+        size:14px;
       }
       width: 100%;
       height: 100%;
@@ -297,15 +305,56 @@
       display: flex;
       align-items: center;
       svg{
+        color:$itemSvg;
         flex-grow: 0;
         flex-shrink: 0;
         margin-right: 8px;
         font : {
           size: 1rem;
-          weight: 700
+          weight: bolder
         }
       }
     }
   }
   //--addNewPage
+}
+#moreFn{
+  @include popupMenu;
+  width: 230px;
+  button{
+    padding:  3%; 
+    @include editMenuBtns;
+  }
+  p {
+    margin: 0;
+    margin-left: 5px;
+    padding: 3%;
+    color: $itemText
+  }
+}
+#rename {
+  @include popupMenu;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-content: center;
+  box-sizing: border-box;
+  padding: 5%;
+  input{
+    border: 1px solid $lightMud;
+    border-radius: 1px;
+    min-height: 27px;
+  }
+  .rename_icon {
+    width: 9%
+  }
+  .rename_title{
+    width: 81% ;
+  }
+}
+#sideBar_pageMenu{
+  @include popupMenu;
+  z-index: 15;
+  width: fit-content;
+  padding:3%;
 }
