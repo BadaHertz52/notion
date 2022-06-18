@@ -130,7 +130,7 @@ const ItemTemplate =({item,setTargetPageId ,setHover, hover ,onClickMoreBtn, add
     ref={itemInner}
     onMouseOver={showPageFn}
   >
-    <div className='pageContent'>
+    <div className='pageItem'>
       <button 
         className='toggleBtn'
         onClick={onToggleSubPage}
