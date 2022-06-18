@@ -56,6 +56,8 @@ type ItemTemplageProp ={
   setTargetPageId: Dispatch<SetStateAction<string>>,
   hover:hoverType,
   setHover: Dispatch<SetStateAction<hoverType>>,
+  onClickMoreBtn : ()=>void, 
+  addNewSubPage : ()=> void 
 };
 type ListTemplateProp ={
   notion:Notion,
@@ -63,9 +65,10 @@ type ListTemplateProp ={
   setTargetPageId: Dispatch<SetStateAction<string>>,
   hover:hoverType,
   setHover: Dispatch<SetStateAction<hoverType>>,
-
+  onClickMoreBtn : ()=>void, 
+  addNewSubPage : ()=> void 
 };
-const ItemTemplate =({item,setTargetPageId ,setHover, hover }:ItemTemplageProp)=>{
+const ItemTemplate =({item,setTargetPageId ,setHover, hover ,onClickMoreBtn, addNewSubPage  }:ItemTemplageProp)=>{
   const [toggleStyle ,setToggleStyle]=useState<CSSProperties>({
     transform : "rotate(0deg)" 
   });
@@ -151,12 +154,38 @@ const ItemTemplate =({item,setTargetPageId ,setHover, hover }:ItemTemplageProp)=
           }
         <span>{item.title}</span>
       </button>
+
+    </div>
+    <div 
+      className="sideBarPageFn"
+      ref={sideBarPageFn}
+    >
+      <button  
+        className='moreBtn'
+        title='delete, duplicate, and more'
+        onClick={()=>{
+          changeTargetItem();
+          onClickMoreBtn();
+        }}
+      >
+        <BsThreeDots/>
+      </button>
+      <button 
+        className='addPageBtn'
+        title="Quickly add a page inside"
+        onClick={()=>{
+          changeTargetItem();
+          addNewSubPage();
+        }}
+      >
+        <AiOutlinePlus/>
+      </button>
     </div>
   </div>
   )
 };
 
-const ListTemplate =({notion,targetList ,setTargetPageId ,hover ,setHover}:ListTemplateProp)=>{
+const ListTemplate =({notion,targetList ,setTargetPageId ,hover ,setHover , onClickMoreBtn, addNewSubPage}:ListTemplateProp)=>{
   const findSubPage =(id:string):listItem=>{
     const index =notion.pagesId.indexOf(id);
     const subPage:Page =notion.pages[index];
@@ -241,7 +270,6 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
   const [openSideMoreMenu ,setOpenSideMoreMenu] =useState<boolean>(false);
   const [openPageMenu ,setOpenPageMenu] =useState<boolean>(false);
   const [openRename, setOpenRename]=useState<boolean>(false);
-  const [pageFnStyle, setPageFnStyle] =useState<CSSProperties|undefined>(undefined);
   const [trashStyle, setTrashStyle] =useState<CSSProperties|undefined>(undefined);
   const [moreFnStyle, setMoreFnStyle] =useState<CSSProperties|undefined>(undefined);
   const [renameStyle, setRenameStyle]=useState<CSSProperties>();
@@ -251,7 +279,6 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
   (targetItem!==null? targetItem.icon:"");
   const recordIcon =user.userName.substring(0,1);
   const editTime =JSON.stringify(Date.now());
-
   const makeFavoriteList =(favorites:string[] |null):listItem[]|null=>{
     const list :listItem[]|null =favorites !==null? 
                                 favorites.map((id: string)=> {
@@ -358,6 +385,7 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
     openRename && closePopup("rename", setOpenRename ,event);
     openTrash && closePopup("trash",setOpenTrash, event );
   } );
+
   const onClickToDelete=()=>{
     setOpenSideMoreMenu(false);
     const changePage =(pageId:string)=>{
@@ -444,46 +472,33 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
     }
   }
   useEffect(()=>{
-    if(hover.hover){
       setTargetItem(hover.targetItem);
-      const sideBarPageFn =document.getElementById("sideBarPageFn");
-      const sideBarPageFnDomRect =sideBarPageFn?.getClientRects()[0];
-      const domRect =hover.target?.getClientRects()[0];
-      if(domRect !==undefined && sideBarPageFnDomRect !==undefined){
-        setPageFnStyle({
-          position:"absolute",
-          top: domRect.top ,
-          left: domRect.right - sideBarPageFnDomRect.width - 10,
-          height:domRect.height,
-        });
-      }
-    }
-  },[hover.hover]);
-
-  useEffect(()=>{
-    
-  },[openSideMoreMenu]);
-
+  },[hover.target]);
   return(
     <>
-    <div id="sideBar">
-      <div id="sideBar_inner">
+  <div 
+    className="sideBar"
+  >
+    <div className="sideBar_inner">
+      <div>
         <div className="switcher">
           <div className='itemInner'>
             <div>
-              <div id="record-icon">
+              <div className="record-icon">
                 <div>
                   {recordIcon}
                 </div>
-                
+
               </div>
               <div className='user'>
                 <div>{user.userName}'s Notion</div>
                 <div><FiCode/></div>
               </div>
             </div>
-            <button id='closeSideBarBtn' 
-            className ="sideBarBtn">
+            <button 
+              className='closeSideBarBtn sideBarBtn' 
+              onClick={()=>changeSide("close")}
+            >
               <FiChevronsLeft/>
             </button>
           </div>
@@ -523,6 +538,8 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
                 setTargetPageId={setTargetPageId}
                 hover={hover}
                 setHover={setHover}
+                onClickMoreBtn={onClickMoreBtn}
+                addNewSubPage={addNewSubPage}
               />
             </div>
             }
@@ -544,10 +561,13 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
                 setTargetPageId={setTargetPageId}
                 hover={hover}
                 setHover={setHover}
+                onClickMoreBtn={onClickMoreBtn}
+                addNewSubPage={addNewSubPage}
               />
             </div>
           </div>
-          <div className="fun2">
+        </div>
+        <div className="fun2">
             <button>
               <div className="itemInner">
                 <HiTemplate/>
@@ -570,37 +590,17 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
               </div>
             </button>
           </div>
-        </div>
-        <div className= "addNewPageBtn">
-          <button
-            onClick={addNewPage}
-          >
-            <AiOutlinePlus/>
-            <span>New page</span>
-          </button>
-        </div>
       </div>
-      {hover.hover &&
-          <div 
-            id="sideBarPageFn"
-            style={pageFnStyle}
-          >
-          <button  
-            className='moreBtn'
-            title='delete, duplicate, and more'
-            onClick={onClickMoreBtn}
-          >
-            <BsThreeDots/>
-          </button>
-          <button 
-            className='addPageBtn'
-            title="Quickly add a page inside"
-            onClick={addNewSubPage}
-          >
-            <AiOutlinePlus/>
-          </button>
-          </div>
-    }
+      <div className= "addNewPageBtn">
+        <button
+          onClick={addNewPage}
+        >
+          <AiOutlinePlus/>
+          <span>New page</span>
+        </button>
+      </div>
+    </div>
+    </div>
     {openSideMoreMenu && targetItem !==null &&
       <div 
         id='moreFn'
@@ -732,8 +732,7 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
         setOpenTrash={setOpenTrash}
       />
     }
-    </div>
-    </>
+  </>
   )
 };
 
