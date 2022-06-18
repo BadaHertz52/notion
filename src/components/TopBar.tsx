@@ -4,8 +4,8 @@ import { BiMessageDetail } from 'react-icons/bi';
 import { BsThreeDots } from 'react-icons/bs';
 import { FiChevronsLeft } from 'react-icons/fi';
 import { pathType } from '../containers/NotionRouter';
-import { Page } from '../modules/notion';
-import { Side, SideAppear } from '../modules/side';
+import {  Page } from '../modules/notion';
+import {  SideAppear } from '../modules/side';
 type TopBarProps ={
   sideAppear:SideAppear,
   page:Page,
@@ -13,7 +13,7 @@ type TopBarProps ={
   changeSide: (appear: SideAppear) => void
   setTargetPageId:Dispatch<SetStateAction<string>>
 }
-const TopBar =({side,page,pagePath, changeSide,setTargetPageId}:TopBarProps)=>{
+const TopBar =({sideAppear,page,pagePath, changeSide ,setTargetPageId}:TopBarProps)=>{
   const [title, setTitle]= useState<string>("");
   useEffect(()=>{
     if(side.appear ==="left"){

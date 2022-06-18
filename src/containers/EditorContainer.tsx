@@ -27,19 +27,18 @@ type EditorContainerProps ={
   cleanTrash: (pageId: string) => void,
 
   changeSide: (appear: SideAppear) => void,
-  setTargetPageId:Dispatch<SetStateAction<string>>
+  setTargetPageId:Dispatch<SetStateAction<string>>,
 };
 
 export type Command ={
   boolean:boolean,
   command:string | null
 };
-const EditorContainer =({page,isInTrash, pagePath ,changeSide,addBlock,duplicatePage,editBlock,deleteBlock,addPage,editPage,deletePage,movePageToPage,restorePage, cleanTrash, setTargetPageId}:EditorContainerProps)=>{
+const EditorContainer =({sideAppear,page,isInTrash, pagePath ,changeSide,addBlock,duplicatePage,editBlock,deleteBlock,addPage,editPage,deletePage,movePageToPage,restorePage, cleanTrash, setTargetPageId}:EditorContainerProps)=>{
   const notion :Notion = useSelector((state:RootState)=> state.notion);
   const dispatch =useDispatch();
   const changeToSub =(pageId: string, block: Block, first: boolean, newParentBlock: Block) => dispatch((change_to_sub(pageId, block, first ,newParentBlock)));
   const raiseBlock =(pageId: string, block: Block) =>dispatch((raise_block(pageId, block)));
-  const side =useSelector((state:RootState)=> state.side);
   const pages:Page[] =notion.pages;
   const firstlist:listItem[] = notion.firstPagesId.map((id:string)=> {
     const PAGE:Page = findPage(notion.pagesId, pages,id);
@@ -77,9 +76,9 @@ const EditorContainer =({page,isInTrash, pagePath ,changeSide,addBlock,duplicate
       </div>
       }
       <TopBar
+      sideAppear={sideAppear}
       page={page}
       pagePath ={pagePath}
-      side ={side}
       changeSide={changeSide}
       setTargetPageId={setTargetPageId}
       />
