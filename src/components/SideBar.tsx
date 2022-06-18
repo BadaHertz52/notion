@@ -21,7 +21,6 @@ import { GrDocumentText } from 'react-icons/gr';
 import Trash from './Trash';
 
 type hoverType={
-  hover:boolean, 
   target:HTMLElement|null,
   targetItem:listItem |null,
 };
@@ -261,7 +260,6 @@ const SideBar =({notion, user ,addBlock,editBlock,deleteBlock,addPage ,duplicate
   });
   const trashBtn =useRef<HTMLButtonElement>(null);
   const [hover ,setHover] =useState<hoverType>({
-    hover:false,
     target:null,
     targetItem:null,
   });
