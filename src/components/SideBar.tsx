@@ -20,10 +20,6 @@ import { SideAppear } from '../modules/side';
 import { GrDocumentText } from 'react-icons/gr';
 import Trash from './Trash';
 
-type hoverType={
-  target:HTMLElement|null,
-  targetItem:listItem |null,
-};
 type SideBarProps ={
   notion : Notion,
   user:UserState,
@@ -52,21 +48,17 @@ type SideBarProps ={
 type ItemTemplageProp ={
   item: listItem,
   setTargetPageId: Dispatch<SetStateAction<string>>,
-  hover:hoverType,
-  setHover: Dispatch<SetStateAction<hoverType>>,
-  onClickMoreBtn : ()=>void, 
-  addNewSubPage : ()=> void 
+  onClickMoreBtn :(item: listItem, target: HTMLElement) => void, 
+  addNewSubPage : (item: listItem) => void,
 };
 type ListTemplateProp ={
   notion:Notion,
   targetList: listItem[] |null,
   setTargetPageId: Dispatch<SetStateAction<string>>,
-  hover:hoverType,
-  setHover: Dispatch<SetStateAction<hoverType>>,
-  onClickMoreBtn : ()=>void, 
-  addNewSubPage : ()=> void 
+  onClickMoreBtn :(item: listItem, target: HTMLElement) => void, 
+  addNewSubPage : (item: listItem) => void,
 };
-const ItemTemplate =({item,setTargetPageId ,setHover, hover ,onClickMoreBtn, addNewSubPage  }:ItemTemplageProp)=>{
+const ItemTemplate =({item,setTargetPageId ,onClickMoreBtn, addNewSubPage  }:ItemTemplageProp)=>{
   const [toggleStyle ,setToggleStyle]=useState<CSSProperties>({
     transform : "rotate(0deg)" 
   });
@@ -104,12 +96,6 @@ const ItemTemplate =({item,setTargetPageId ,setHover, hover ,onClickMoreBtn, add
       default:
         break;
     }
-  };
-  const changeTargetItem =()=>{
-    sideBarPageFn.current !==null && setHover({
-      target:sideBarPageFn.current,
-      targetItem: item
-    })
   };
   const showPageFn =()=>{
     if(sideBarPageFn.current!==null){
@@ -161,8 +147,8 @@ const ItemTemplate =({item,setTargetPageId ,setHover, hover ,onClickMoreBtn, add
         className='moreBtn'
         title='delete, duplicate, and more'
         onClick={()=>{
-          changeTargetItem();
-          onClickMoreBtn();
+          sideBarPageFn.current!==null &&
+          onClickMoreBtn(item,sideBarPageFn.current );
         }}
       >
         <BsThreeDots/>
@@ -171,8 +157,7 @@ const ItemTemplate =({item,setTargetPageId ,setHover, hover ,onClickMoreBtn, add
         className='addPageBtn'
         title="Quickly add a page inside"
         onClick={()=>{
-          changeTargetItem();
-          addNewSubPage();
+          addNewSubPage(item);
         }}
       >
         <AiOutlinePlus/>
@@ -182,7 +167,7 @@ const ItemTemplate =({item,setTargetPageId ,setHover, hover ,onClickMoreBtn, add
   )
 };
 
-const ListTemplate =({notion,targetList ,setTargetPageId ,hover ,setHover , onClickMoreBtn, addNewSubPage}:ListTemplateProp)=>{
+const ListTemplate =({notion,targetList ,setTargetPageId , onClickMoreBtn, addNewSubPage}:ListTemplateProp)=>{
   const findSubPage =(id:string):listItem=>{
     const index =notion.pagesId.indexOf(id);
     const subPage:Page =notion.pages[index];
@@ -211,8 +196,6 @@ const ListTemplate =({notion,targetList ,setTargetPageId ,hover ,setHover , onCl
           <ItemTemplate 
             item={item}
             setTargetPageId={setTargetPageId}
-            hover={hover}
-            setHover={setHover}
             onClickMoreBtn={onClickMoreBtn}
             addNewSubPage={addNewSubPage}
           />
@@ -224,8 +207,6 @@ const ListTemplate =({notion,targetList ,setTargetPageId ,hover ,setHover , onCl
             notion={notion}     
             targetList={makeTargetList(item.subPagesId)}
             setTargetPageId={setTargetPageId} 
-            hover={hover} 
-            setHover={setHover}
             onClickMoreBtn={onClickMoreBtn}
             addNewSubPage={addNewSubPage}
           />
@@ -261,10 +242,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock,addPag
     }
   });
   const trashBtn =useRef<HTMLButtonElement>(null);
-  const [hover ,setHover] =useState<hoverType>({
-    target:null,
-    targetItem:null,
-  });
+  const [target ,setTarget] =useState<HTMLElement|null>(null);
   const [targetItem,setTargetItem]=useState<listItem|null>(null);
   const [openTrash, setOpenTrash]=useState<boolean>(false);
   const [openSideMoreMenu ,setOpenSideMoreMenu] =useState<boolean>(false);
@@ -344,9 +322,9 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock,addPag
       renamePage(value, null );
     };
   };
-  const addNewSubPage =()=>{
+  const addNewSubPage =(item:listItem)=>{
     if(targetItem!==null){
-      const targetPage = findPage(pagesId ,pages,targetItem.id);
+      const targetPage = findPage(pagesId ,pages,item.id);
       const editedTargetPage:Page ={
         ...targetPage,
         subPagesId: targetPage.subPagesId ==null? [...pageSample.id] : targetPage.subPagesId.concat([pageSample.id]),
@@ -362,16 +340,16 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock,addPag
       addBlock(targetPage.id,newPageBlock, targetPage.blocksId.length, targetPage.blocks==null? null: targetPage.blocksId[targetPage.blocksId.length-1]);
     };
   };
-  const onClickMoreBtn=()=>{
+  const onClickMoreBtn=(item:listItem, target:HTMLElement)=>{
     setOpenSideMoreMenu(true); 
-    if( hover.target !==null){
-      const position = hover.target.getClientRects()[0];
+    setTargetItem(item);
+    setTarget(target);
+      const position = target.getClientRects()[0];
       setMoreFnStyle({
         position: "absolute",
         top: position.top,
         left: position.right,
       });
-    }
   };
   const closePopup =(elementId:string ,setState:Dispatch<SetStateAction<boolean>> , event:MouseEvent)=>{
     const element = document.getElementById(elementId);
@@ -449,10 +427,12 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock,addPag
     setOpenSideMoreMenu
     (false);
     setOpenRename(true);
-    if(hover.target !==null && targetItem!==null){
+    if(targetItem!==null && 
+      target !==null &&
+      target?.parentElement !==null){
       setIcon(targetItem.icon);
       setTitle(targetItem.title);
-      const domRect =hover.target.getClientRects()[0];
+      const domRect =target.parentElement.getClientRects()[0];
       setRenameStyle({
         position:"absolute",
         top: domRect.bottom,
@@ -537,8 +517,6 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock,addPag
                 notion ={notion}
                 targetList={makeFavoriteList(user.favorites)}
                 setTargetPageId={setTargetPageId}
-                hover={hover}
-                setHover={setHover}
                 onClickMoreBtn={onClickMoreBtn}
                 addNewSubPage={addNewSubPage}
               />
@@ -560,8 +538,6 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock,addPag
                 notion={notion}
                 targetList={list}
                 setTargetPageId={setTargetPageId}
-                hover={hover}
-                setHover={setHover}
                 onClickMoreBtn={onClickMoreBtn}
                 addNewSubPage={addNewSubPage}
               />
