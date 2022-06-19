@@ -1625,24 +1625,36 @@ a:link, a:active, a:visited {
   color: inherit;
 }
 
-.sideBar_close .frame, .sideBar_float .frame {
+.sideBar_close .frame,
+.sideBar_float .frame,
+.sideBar_floatHide .frame {
   z-index: 1;
 }
 
-.sideBar_close .frame div, .sideBar_close .frame button, .sideBar_float .frame div, .sideBar_float .frame button {
+.sideBar_close .frame div, .sideBar_close .frame button,
+.sideBar_float .frame div,
+.sideBar_float .frame button,
+.sideBar_floatHide .frame div,
+.sideBar_floatHide .frame button {
   z-index: inherit;
 }
 
-.sideBar_close .sideBar, .sideBar_float .sideBar {
+.sideBar_close .sideBar,
+.sideBar_float .sideBar,
+.sideBar_floatHide .sideBar {
   position: absolute;
   z-index: 10;
 }
 
-.sideBar_close .sideBarPageFn button, .sideBar_float .sideBarPageFn button {
+.sideBar_close .sideBarPageFn button,
+.sideBar_float .sideBarPageFn button,
+.sideBar_floatHide .sideBarPageFn button {
   color: #707070;
 }
 
-.sideBar_close .sideBarBtn, .sideBar_float .sideBarBtn {
+.sideBar_close .sideBarBtn,
+.sideBar_float .sideBarBtn,
+.sideBar_floatHide .sideBarBtn {
   display: none;
 }
 
@@ -1651,7 +1663,8 @@ a:link, a:active, a:visited {
           transform: translate(-300px, 0);
 }
 
-.sideBar_float .sideBar {
+.sideBar_float .sideBar,
+.sideBar_floatHide .sideBar {
   width: 320px;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1680,12 +1693,19 @@ a:link, a:active, a:visited {
   height: fit-content;
 }
 
-.sideBar_float .sideBar::-webkit-scrollbar-thumb {
+.sideBar_float .sideBar::-webkit-scrollbar-thumb,
+.sideBar_floatHide .sideBar::-webkit-scrollbar-thumb {
   background: #D3D1CB;
 }
 
-.sideBar_float .sideBar::-webkit-scrollbar-track {
+.sideBar_float .sideBar::-webkit-scrollbar-track,
+.sideBar_floatHide .sideBar::-webkit-scrollbar-track {
   background: #EDECE9;
+}
+
+.sideBar_floatHide .sideBar {
+  -webkit-transform: translate(-250px, 0);
+          transform: translate(-250px, 0);
 }
 
 .sideBar_lock .sideBar {

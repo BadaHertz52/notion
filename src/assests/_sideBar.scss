@@ -1,6 +1,8 @@
 @import './common';
 
-.sideBar_close , .sideBar_float{
+.sideBar_close , 
+.sideBar_float,
+.sideBar_floatHide{
   .frame{
     z-index: 1;
     div, button {
@@ -26,7 +28,8 @@
     transform: translate(-300px, 0)
   }
 }
-.sideBar_float{
+.sideBar_float,
+.sideBar_floatHide{
   .sideBar{
     @include popupMenu;
     top:45px;
@@ -34,6 +37,11 @@
     background-color:#ffff;
     width: 230px;
     height: fit-content;
+  }
+}
+.sideBar_floatHide{
+  .sideBar{
+    transform: translate(-250px, 0);
   }
 }
 .sideBar_lock{
