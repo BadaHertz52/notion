@@ -387,7 +387,6 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock,addPag
           changePage(firstlist[1].id):
           changePage(firstPageId);
         }else{
-          console.log("move to", user.favorites[0]);
           changePage(user.favorites[0])
           setTargetPageId(user.favorites[0]);
       };
