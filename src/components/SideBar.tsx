@@ -452,14 +452,17 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock,addPag
       })
     }
   }
-  useEffect(()=>{
-      setTargetItem(hover.targetItem);
-  },[hover.target]);
+  const onMouseOutSideBar =()=>{
+    sideAppear ==="float" && changeSide("floatHide"); 
+  };
   return(
-    <>
-  <div 
-    className="sideBar"
+  <div
+  onMouseLeave={onMouseOutSideBar}
   >
+    <div 
+      className="sideBar"
+
+    >
     <div className="sideBar_inner">
       <div>
         <div className="switcher">
@@ -709,7 +712,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock,addPag
         setOpenTrash={setOpenTrash}
       />
     }
-  </>
+  </div>
   )
 };
 
