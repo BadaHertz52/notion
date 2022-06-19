@@ -27,6 +27,7 @@ type hoverType={
 type SideBarProps ={
   notion : Notion,
   user:UserState,
+  sideAppear:SideAppear,
   editBlock :(pageId: string, block: Block) => void,
   addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
   deleteBlock: (pageId: string, block: Block) => void,
@@ -240,7 +241,7 @@ const ListTemplate =({notion,targetList ,setTargetPageId ,hover ,setHover , onCl
   )
 };
 
-const SideBar =({notion, user  ,addBlock,editBlock,deleteBlock,addPage ,duplicatePage,editPage,deletePage,movePageToPage, cleanTrash, restorePage, addFavorites, removeFavorites, changeSide,setTargetPageId ,setOpenQF
+const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock,addPage ,duplicatePage,editPage,deletePage,movePageToPage, cleanTrash, restorePage, addFavorites, removeFavorites, changeSide,setTargetPageId ,setOpenQF
 }:SideBarProps)=>{
   const inner =document.getElementById("inner");
   const pages =notion.pages;

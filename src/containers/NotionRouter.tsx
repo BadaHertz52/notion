@@ -153,6 +153,7 @@ const NotionRouter =()=>{
       className='sideBar_lock'
     >
       <SideBarContainer 
+        sideAppear ={sideAppear}
         setTargetPageId={setTargetPageId}
         addBlock={addBlock}
         editBlock={editBlock}
