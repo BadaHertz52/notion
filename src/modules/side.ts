@@ -1,7 +1,11 @@
 const lock ="lock" as const ;
 const float ="float" as const ;
+const floatHide="floatHide" as const;
 const close ="close" as const; 
-export type SideAppear = typeof lock | typeof float | typeof close
+export type SideAppear = typeof lock | 
+typeof float | 
+typeof floatHide | 
+typeof close;
 
 const CHANGE_SIDE = 'side/CHANGE_SIDE' as const ;
 export const change_side =(appear:SideAppear)=>({
