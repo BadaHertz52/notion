@@ -40,6 +40,13 @@ const TopBar =({sideAppear,page,pagePath, changeSide ,setTargetPageId}:TopBarPro
         break;
     }
   };
+  const onMouseEnterSidBarBtn=()=>{
+    (sideAppear ==="close" || sideAppear==="floatHide") ?
+    changeSide("float"):
+    changeSide("floatHide");
+    
+  };
+
   return(
     <div 
       className="topbar"
@@ -50,14 +57,16 @@ const TopBar =({sideAppear,page,pagePath, changeSide ,setTargetPageId}:TopBarPro
           id="sideBarBtn"
           title ={title}
           aria-label ={title}
-          onMouseEnter={()=>{
-            changeSide("float")}}
+          onMouseEnter={onMouseEnterSidBarBtn}
           onClick={onClickSideBarBtn}
         >
-          {sideAppear ==="close" && 
-          <AiOutlineMenu/>}
-          {sideAppear ==="float" &&
-          <FiChevronsLeft/>}
+          {sideAppear ==="float"
+          ? 
+          <FiChevronsLeft
+          />
+          :
+          <AiOutlineMenu/>
+          }
         </button>
 
       }
