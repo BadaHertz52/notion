@@ -1,4 +1,4 @@
-import React, { CSSProperties, Dispatch, SetStateAction, useState } from 'react';
+import React, { CSSProperties, Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Block, blockSample, listItem, Page } from '../modules/notion';
 import EditableBlock from './EditableBlock';
 
@@ -15,7 +15,7 @@ type FrameProps ={
   pages:Page[],
   firstlist:listItem[],
   userName : string,
-  page:Page,
+  targetPage:Page,
   editBlock :(pageId: string, block: Block) => void,
   addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
   changeToSub: (pageId: string, block: Block, first: boolean, newParentBlock: Block) => void
@@ -30,11 +30,13 @@ type FrameProps ={
 };
 
 
-const Frame =({ pages, firstlist,userName, page, editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, duplicatePage,editPage, movePageToPage, deletePage ,setTargetPageId}:FrameProps)=>{
+const Frame =({ pages, firstlist,userName, targetPage, editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, duplicatePage,editPage, movePageToPage, deletePage ,setTargetPageId}:FrameProps)=>{
+  const [page, setPage]=useState<Page>(targetPage);
+  const [newPageFram, setNewPageFrame]=useState<boolean>(false);
   const [cover, setCover]=useState<ImageData|null>(page.header.cover);
   const [icon, setIcon]=useState<string|null>(page.header.icon);
   const [title, setTitle]=useState<string>(page.header.title);
-  const [decoOpen ,setdecoOpen] =useState<boolean>(true);
+  const [decoOpen ,setdecoOpen] =useState<boolean>(false);
   const [commentBlock, setCommentBlock]=useState<Block|null>(null);
   const [moreOpen, setMoreOpen]= useState<boolean>(false);
   const headerStyle: CSSProperties ={
@@ -64,9 +66,12 @@ const Frame =({ pages, firstlist,userName, page, editBlock, addBlock,changeToSub
       }
     };
     editPage(page.id, newPageWithIcon);
+    setIcon(icons[index]);
+    setPage(newPageWithIcon);
   };
   const onClickEmpty =()=>{
-    editPage(page.id ,newPage)
+    setPage(newPage);
+    editPage(page.id ,newPage);
   };
   const onChangePageHeader =(event:React.ChangeEvent<HTMLInputElement>, what:"icon"|"title")=>{
     const value =event.target.value; 
@@ -84,18 +89,24 @@ const Frame =({ pages, firstlist,userName, page, editBlock, addBlock,changeToSub
       ...page, 
       header:{
         ...page.header,
-        icon: icon,
-        title:title,
+        icon: what==="icon" ?value : page.header.icon,
+        title:what==="title"? value : page.header.title
     }})
   };
-
+  useEffect(()=>{
+    page.blocksId[0] ===undefined?
+    setNewPageFrame(true):
+    setNewPageFrame(false);
+    
+  },[page])
   return(
-    <div className={page.blocksId[0]=== undefined ? "newPageFrame frame" :'frame'}>
+    <div className={newPageFram? "newPageFrame frame" :'frame'}>
         <div className='frame_inner'>
           <div 
             className='pageHeader'
             style={headerStyle}
             onMouseMove={()=>{setdecoOpen(true)}}
+            onMouseLeave={()=>setdecoOpen(false)}
           >
             {page.header.cover !== null &&        
               <div className='pageCover'>
@@ -137,8 +148,6 @@ const Frame =({ pages, firstlist,userName, page, editBlock, addBlock,changeToSub
                   }
               </div>
               }
-              {page.blocksId[0]!== undefined ?
-              <>
               <div 
                 className='pageTitle'
               >
@@ -148,8 +157,8 @@ const Frame =({ pages, firstlist,userName, page, editBlock, addBlock,changeToSub
                     onChange={(event)=>onChangePageHeader(event, "title")}
                   />
               </div>
-
-              {page.header.comments!==null &&
+              {!newPageFram ?
+                page.header.comments!==null &&
               <div className='pageComment'>
                 {/* {page.header.comments.map((comment:CommentType)=>
                 <Comment 
@@ -157,23 +166,18 @@ const Frame =({ pages, firstlist,userName, page, editBlock, addBlock,changeToSub
                   comment={comment} 
                   />
                 )} */}
-              </div>}
-              </>
+              </div>
+
               :
-              <>
-                <div className='pageTitle'>
-                  Untitled
-                </div>
                 <div className='pageComment'>
                   Press Enter to continue with an empty pagem or pick a templage
                 </div>
-              </>
             }
             </div>
           </div>
           
           <div className="pageContent">
-            {page.blocksId[0]!==undefined?
+            {!newPageFram?
             <div 
               className='pageContent_inner'
               id="pageContent_inner"
