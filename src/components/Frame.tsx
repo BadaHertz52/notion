@@ -1,5 +1,5 @@
 import React, { CSSProperties, Dispatch, SetStateAction, useState } from 'react';
-import { Block, listItem, Page } from '../modules/notion';
+import { Block, blockSample, listItem, Page } from '../modules/notion';
 import EditableBlock from './EditableBlock';
 
 //icon
@@ -44,9 +44,53 @@ const Frame =({ pages, firstlist,userName, page, editBlock, addBlock,changeToSub
     marginTop: page.header.cover !==null ? "-39px" :"0"
   };
   const firstBlocks:Block[] =page.blocks.filter((block:Block)=> block.firstBlock);
+  const newPage :Page ={
+    ...page,
+    header:{
+      ...page.header,
+    },
+    blocks:[blockSample],
+    blocksId:[blockSample.id],
+    firstBlocksId:[blockSample.id]
+  };
+  const onClickEmptyWithIcon =()=>{
+    const icons :string[] =["😁","🌸","🍟","⚾","📣",'🎹','📷','✉️','🖍️','📝','⌛','⌚'];
+    const index = Math.floor(Math.random() * (3));
+    const newPageWithIcon:Page ={
+      ...newPage,
+      header:{
+        ...newPage.header,
+        icon: icons[index]
+      }
+    };
+    editPage(page.id, newPageWithIcon);
+  };
+  const onClickEmpty =()=>{
+    editPage(page.id ,newPage)
+  };
+  const onChangePageHeader =(event:React.ChangeEvent<HTMLInputElement>, what:"icon"|"title")=>{
+    const value =event.target.value; 
+    switch (what) {
+      case "icon":
+          setIcon(value);
+        break;
+      case "title":
+        setTitle(value);
+        break;
+      default:
+        break;
+    };
+    editPage(page.id,{
+      ...page, 
+      header:{
+        ...page.header,
+        icon: icon,
+        title:title,
+    }})
+  };
 
   return(
-    <div className={`${page.blocksId[0]=== undefined && "newPageFrame"} frame `}>
+    <div className={page.blocksId[0]=== undefined ? "newPageFrame frame" :'frame'}>
         <div className='frame_inner'>
           <div 
             className='pageHeader'
@@ -194,11 +238,15 @@ const Frame =({ pages, firstlist,userName, page, editBlock, addBlock,changeToSub
             </div>
             :
             <div className='pageContent_inner'>
-              <button>
+              <button
+                onClick={onClickEmptyWithIcon}
+              >
                 <GrDocumentText/>
                 <span>Empty with icon</span>
               </button>
-              <button>
+              <button
+                onClick={onClickEmpty}
+              >
                 <GrDocument/>
                 <span>Empty</span>
               </button>
