@@ -511,13 +511,14 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock,addPag
               </button>
             </div>
             <div className="list">
+              {notion.pages[0]!==undefined &&
               <ListTemplate 
                 notion={notion}
                 targetList={list}
                 setTargetPageId={setTargetPageId}
                 onClickMoreBtn={onClickMoreBtn}
                 addNewSubPage={addNewSubPage}
-              />
+              /> }
             </div>
           </div>
         </div>

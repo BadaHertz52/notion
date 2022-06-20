@@ -26,9 +26,8 @@ const NotionRouter =()=>{
   const location =window.location;
   const hash=location.hash;
   const firstPage =user.favorites!==null? findPage(pagesId, pages,user.favorites[0]) : notion.pages[0];
-
-  const [targetPageId, setTargetPageId]= useState<string>(firstPage.id);
-  const [routePage, setRoutePage]=useState<Page>(firstPage);
+  const [targetPageId, setTargetPageId]= useState<string>(firstPage !== undefined? firstPage.id: "none");
+  const [routePage, setRoutePage]=useState<Page|null>(firstPage!==undefined? firstPage: null);
   const [openQF, setOpenQF]=useState<boolean>(false);
   //---action.function 
     //--block
@@ -85,7 +84,7 @@ const NotionRouter =()=>{
   };
   const cleanTrash=(pageId:string)=>{
     dispatch(clean_trash(pageId));
-    if(routePage.id === pageId){
+    if(routePage?.id === pageId){
       setRoutePage(firstPage);
     }
   };
@@ -153,8 +152,10 @@ const NotionRouter =()=>{
   };
 
   useEffect(()=>{
-        const path =makeRoutePath(routePage);
-        navigate(path);
+    if(routePage!==null){
+      const path =makeRoutePath(routePage);
+      navigate(path);
+    }
   },[routePage]);
 
   useEffect(()=>{
@@ -171,7 +172,10 @@ const NotionRouter =()=>{
       if(notion.pagesId.includes(targetPageId)){
         addRecentPage(targetPageId);
       }
-    };
+    }else{
+      setRoutePage(null);
+      changeSide("lock")
+    }
     
   },[targetPageId]);
   
@@ -200,7 +204,7 @@ const NotionRouter =()=>{
 
         setOpenQF={setOpenQF}
       />
-      {targetPageId!=="none"?
+      {routePage!== null?
             <Routes>
             <Route
               path={makeRoutePath(routePage)} 
@@ -231,9 +235,9 @@ const NotionRouter =()=>{
             />
           </Routes>
       :
-        <div className='ediator nonePage'>
+        <div className='editor nonePage'>
           <p>
-            Page isn't existence
+            Page doesn't existence
           </p>
           <p>
             Try make new Page 
