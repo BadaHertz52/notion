@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {  Route, Routes, useNavigate} from 'react-router-dom';
 import QuickFindBord from '../components/QuickFindBord';
 import { RootState } from '../modules';
-import { add_block, add_page, Block, change_to_sub, clean_trash, delete_block, delete_page, duplicate_page, edit_block, edit_page, findPage,  move_page_to_page, Page, raise_block, restore_page, } from '../modules/notion';
+import { add_block, add_page, Block, change_to_sub, clean_trash, delete_block, delete_page, duplicate_page, edit_block, edit_page, findPage,  move_page_to_page, Page, pageSample, raise_block, restore_page, } from '../modules/notion';
 import { change_side, SideAppear } from '../modules/side';
 import { add_recent_page, clean_recent_page, remove_favorites } from '../modules/user';
 import EditorContainer from './EditorContainer';
@@ -49,10 +49,35 @@ const NotionRouter =()=>{
   const duplicatePage =(targetPageId:string)=>{dispatch(duplicate_page(targetPageId))};
   const editPage=(pageId:string,newPage:Page )=>{dispatch(edit_page(pageId, newPage))};
   const deletePage =(pageId:string )=>{
+    const lastSlash =hash.lastIndexOf("/");
+    const currentPageId = hash.slice(lastSlash+1);
+    if(pageId === currentPageId){
+      if(user.favorites!==null){
+        if(user.favorites.includes(pageId)){
+          user.favorites[0]===pageId?
+            (user.favorites.length>1?
+              setTargetPageId(user.favorites[1])
+            :
+              notion.firstPagesId[0]=== pageId ?
+              (notion.firstPagesId.length>1 ?
+                setTargetPageId(notion.firstPagesId[1]):
+                setTargetPageId("none")
+              )
+              :
+                setTargetPageId(notion.firstPagesId[0])
+            )
+          :
+          setTargetPageId(user.favorites[0])
+        }else{
+          setTargetPageId(user.favorites[0])
+        }
+      }
+    }
     dispatch(delete_page(pageId));
     if(user.favorites !==null){
       user.favorites?.includes(pageId) && dispatch(remove_favorites(pageId));
     };
+
   };
   const movePageToPage =(targetPageId:string, destinationPageId:string)=>{dispatch(move_page_to_page(targetPageId, destinationPageId))};
   const restorePage=(pageId:string)=> {
@@ -125,7 +150,8 @@ const NotionRouter =()=>{
     }else{
       setRoutePage(firstPage)
     };
-  } 
+  };
+
   useEffect(()=>{
         const path =makeRoutePath(routePage);
         navigate(path);
@@ -140,10 +166,12 @@ const NotionRouter =()=>{
 
   useEffect(()=>{
     //sideBar 에서 페이지 이동 시 
-    findRoutePage(targetPageId);
-    if(notion.pagesId.includes(targetPageId)){
-      addRecentPage(targetPageId);
-    }
+    if(targetPageId!== "none"){
+      findRoutePage(targetPageId);
+      if(notion.pagesId.includes(targetPageId)){
+        addRecentPage(targetPageId);
+      }
+    };
     
   },[targetPageId]);
   
@@ -172,35 +200,52 @@ const NotionRouter =()=>{
 
         setOpenQF={setOpenQF}
       />
-      <Routes>
-        <Route
-          path={makeRoutePath(routePage)} 
-          element={<EditorContainer 
-                  sideAppear={sideAppear}
-                  page={routePage}
-                  isInTrash={!notion.pagesId.includes(routePage.id)}
-                  pagePath ={makePagePath(routePage)}
-                  setTargetPageId={setTargetPageId}
+      {targetPageId!=="none"?
+            <Routes>
+            <Route
+              path={makeRoutePath(routePage)} 
+              element={<EditorContainer 
+                      sideAppear={sideAppear}
+                      page={routePage}
+                      isInTrash={!notion.pagesId.includes(routePage.id)}
+                      pagePath ={makePagePath(routePage)}
+                      setTargetPageId={setTargetPageId}
+    
+                      addBlock={addBlock}
+                      editBlock={editBlock}
+                      changeToSub={changeToSub}
+                      raiseBlock={raiseBlock}
+                      deleteBlock={deleteBlock}
+    
+                      addPage={addPage}
+                      duplicatePage={duplicatePage}
+                      editPage={editPage}
+                      deletePage={deletePage}
+                      movePageToPage={movePageToPage}
+                      cleanTrash={cleanTrash}
+                      restorePage={restorePage}
+    
+                      changeSide={changeSide}
+                      />
+                    } 
+            />
+          </Routes>
+      :
+        <div className='ediator nonePage'>
+          <p>
+            Page isn't existence
+          </p>
+          <p>
+            Try make new Page 
+          </p>
+          <button
+            onClick={()=>addPage(pageSample)}
+          >
+            Make new page
+          </button>
+        </div>
+      }
 
-                  addBlock={addBlock}
-                  editBlock={editBlock}
-                  changeToSub={changeToSub}
-                  raiseBlock={raiseBlock}
-                  deleteBlock={deleteBlock}
-
-                  addPage={addPage}
-                  duplicatePage={duplicatePage}
-                  editPage={editPage}
-                  deletePage={deletePage}
-                  movePageToPage={movePageToPage}
-                  cleanTrash={cleanTrash}
-                  restorePage={restorePage}
-
-                  changeSide={changeSide}
-                  />
-                } 
-        />
-      </Routes>
       {openQF &&
       <QuickFindBord
         userName={user.userName}
