@@ -49,10 +49,17 @@ export default function user (state:UserState =initialState, action:UserAction):
       }
         ;
     case REMOVE_FAVORITES :
+      const newFavorites = state.favorites?.filter((id:string)=> id !== action.itemId);
+
       return {
         ...state,
-        favorites:state.favorites !==null?
-        state.favorites.filter((id:string)=> id !== action.itemId):
+        favorites:
+        newFavorites !==undefined?
+        ( newFavorites[0]!==undefined? 
+          newFavorites :
+          null
+        )
+        :
         null
       } ;
     case ADD_RECENT_PAGE:
