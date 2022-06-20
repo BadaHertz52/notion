@@ -8,6 +8,7 @@ import { BsFillEmojiSmileFill} from 'react-icons/bs';
 import {GrDocumentText ,GrDocument} from 'react-icons/gr';import { MdInsertPhoto } from 'react-icons/md';
 import BlockFn from './BlockFn';
 import Comments, { ToolMore } from './Comments';
+import { HiTemplate } from 'react-icons/hi';
 
 
 type FrameProps ={
@@ -42,62 +43,7 @@ const Frame =({ pages, firstlist,userName, page, editBlock, addBlock,changeToSub
   const firstBlocks:Block[] =page.blocks.filter((block:Block)=> block.firstBlock);
 
   return(
-    <div className='frame'>
-      {page.blocksId[0]=== undefined ?
-        <div className='newPageFrame frame_inner'>
-          <div 
-          className='pageHeader'
-          style={headerStyle}
-          onMouseMove={()=>{setdecoOpen(true)}}
-          onMouseOut={()=>{setdecoOpen(false)}}
-          >
-            {decoOpen &&
-              <div className='deco'>
-                {page.header.icon ==null &&
-                  <button className='decoIcon'>
-                    <BsFillEmojiSmileFill/>
-                    <span>Add Icon</span>
-                  </button>
-                }
-                {page.header.cover == null&&        
-                  <button className='decoCover'>
-                    <MdInsertPhoto/>
-                    <span>Add Cover</span>
-                  </button>
-                }
-                {page.header.comments==null &&
-                <button className='decoComment'>
-                  <BiMessageDetail/>
-                  <span>Add Commnet</span>
-                </button>
-                }
-            </div>
-            }
-            <div className='pageTitle'>
-              Untitled
-            </div>
-            <div className='pageComment'>
-              Press Enter to continue with an empty pagem or pick a templage
-            </div>
-          
-          </div>
-          <div className="pageContent">
-            <div className='pageContent_inner'>
-              <button>
-                <GrDocumentText/>
-                <span>Empty with icon</span>
-              </button>
-              <button>
-                <GrDocument/>
-                <span>Empty</span>
-              </button>
-              <button>
-                <span>Templates</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      :
+    <div className={`${page.blocksId[0]=== undefined && "newPageFrame"} frame `}>
         <div className='frame_inner'>
           <div 
             className='pageHeader'
@@ -140,12 +86,14 @@ const Frame =({ pages, firstlist,userName, page, editBlock, addBlock,changeToSub
                   }
               </div>
               }
+              {page.blocksId[0]!== undefined ?
+              <>
               <div 
                 className='pageTitle'
               >
                 {page.header.title}
               </div>
-            
+
               {page.header.comments!==null &&
               <div className='pageComment'>
                 {/* {page.header.comments.map((comment:CommentType)=>
@@ -154,11 +102,23 @@ const Frame =({ pages, firstlist,userName, page, editBlock, addBlock,changeToSub
                   comment={comment} 
                   />
                 )} */}
-              </div>
-              }
+              </div>}
+              </>
+              :
+              <>
+                <div className='pageTitle'>
+                  Untitled
+                </div>
+                <div className='pageComment'>
+                  Press Enter to continue with an empty pagem or pick a templage
+                </div>
+              </>
+            }
             </div>
           </div>
+          
           <div className="pageContent">
+            {page.blocksId[0]!==undefined?
             <div 
               className='pageContent_inner'
               id="pageContent_inner"
@@ -221,9 +181,25 @@ const Frame =({ pages, firstlist,userName, page, editBlock, addBlock,changeToSub
               />
               }
             </div>
+            :
+            <div className='pageContent_inner'>
+              <button>
+                <GrDocumentText/>
+                <span>Empty with icon</span>
+              </button>
+              <button>
+                <GrDocument/>
+                <span>Empty</span>
+              </button>
+              <button>
+                <HiTemplate/>
+                <span>Templates</span>
+              </button>
+            </div>
+            }
           </div>
+          
         </div>
-      }
     </div>
   )
 };
