@@ -367,33 +367,8 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock,addPag
 
   const onClickToDelete=()=>{
     setOpenSideMoreMenu(false);
-    const changePage =(pageId:string)=>{
-      setTargetPageId(pageId);
-      navigate(`/${pageId}`);
-      const hash = window.location.hash;
-      console.log("hash", hash)
-      targetItem!==null && 
-      deletePage(targetItem.id)
-    };
     if(targetItem!==null){
-      const hash =window.location.hash;
-      const lastSlash =hash.lastIndexOf("/");
-      const currentPageId = hash.slice(lastSlash+1);
-      if(targetItem.id ===currentPageId){
-        if((user.favorites==null)||
-        (user.favorites[0]===targetItem.id && user.favorites.length ===1)){
-          const firstPageId= firstlist[0].id;
-          (firstPageId ===targetItem.id )?
-          changePage(firstlist[1].id):
-          changePage(firstPageId);
-        }else{
-          changePage(user.favorites[0])
-          setTargetPageId(user.favorites[0]);
-      };
-      }else{
-        deletePage(targetItem.id);
-      };
-      
+      deletePage(targetItem.id);
     };
   };
   const onClickMoveToBtn =()=>{
