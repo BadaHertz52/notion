@@ -43,7 +43,7 @@ const Frame =({ pages, firstlist,userName, page, editBlock, addBlock,changeToSub
 
   return(
     <div className='frame'>
-      {page.blocksId[0]==undefined ?
+      {page.blocksId[0]=== undefined ?
         <div className='newPageFrame frame_inner'>
           <div 
           className='pageHeader'
@@ -103,16 +103,13 @@ const Frame =({ pages, firstlist,userName, page, editBlock, addBlock,changeToSub
             className='pageHeader'
             style={headerStyle}
             onMouseMove={()=>{setdecoOpen(true)}}
-            //onMouseOut={()=>{setdecoOpen(false)}}
           >
-            <div >
-              {page.header.cover !== null &&        
-                <div className='pageCover'>
-                  {page.header.cover}
-                </div>
-              }
-            </div>
-            <div style={headerBottomStyle}>
+            {page.header.cover !== null &&        
+              <div className='pageCover'>
+                {page.header.cover}
+              </div>
+            }
+            <div className="pageHeader_notCover" style={headerBottomStyle}>
               {page.header.icon !==null &&
                 <div 
                 className='pageIcon'

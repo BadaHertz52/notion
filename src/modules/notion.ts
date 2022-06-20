@@ -124,7 +124,7 @@ export const  pageSample:Page ={
   },
   firstBlocksId :null,
   blocks :  [blockSample], 
-  blocksId :  [blockSample.id], 
+  blocksId :  [], 
   subPagesId: null,
   parentsId:  null ,
   editTime: editTime,
