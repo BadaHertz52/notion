@@ -51,25 +51,32 @@ const NotionRouter =()=>{
     const lastSlash =hash.lastIndexOf("/");
     const currentPageId = hash.slice(lastSlash+1);
     if(pageId === currentPageId){
+      const openOtherFirstPage =()=>{
+          notion.firstPagesId[0]=== pageId ?
+          (
+            notion.firstPagesId.length>1 ?
+            setTargetPageId(notion.firstPagesId[1]):
+            setTargetPageId("none")
+          )
+          :
+            setTargetPageId(notion.firstPagesId[0])
+      };
       if(user.favorites!==null){
         if(user.favorites.includes(pageId)){
           user.favorites[0]===pageId?
             (user.favorites.length>1?
               setTargetPageId(user.favorites[1])
             :
-              notion.firstPagesId[0]=== pageId ?
-              (notion.firstPagesId.length>1 ?
-                setTargetPageId(notion.firstPagesId[1]):
-                setTargetPageId("none")
-              )
-              :
-                setTargetPageId(notion.firstPagesId[0])
-            )
+              openOtherFirstPage()
+            ) 
           :
           setTargetPageId(user.favorites[0])
         }else{
           setTargetPageId(user.favorites[0])
-        }
+        };
+        console.log(targetPageId)
+      }else{
+        openOtherFirstPage();
       }
     }
     dispatch(delete_page(pageId));
@@ -167,6 +174,7 @@ const NotionRouter =()=>{
 
   useEffect(()=>{
     //sideBar 에서 페이지 이동 시 
+    console.log("tp", targetPageId)
     if(targetPageId!== "none"){
       findRoutePage(targetPageId);
       if(notion.pagesId.includes(targetPageId)){
