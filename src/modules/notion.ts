@@ -111,6 +111,9 @@ export type Page ={
   editTime: string,
   createTime:string,
 };
+type TrashPage =Page &{
+  subPages:Page[]|null
+};
 export const  pageSample:Page ={
   id:editTime, 
   header : {
@@ -133,7 +136,7 @@ export type Notion={
   pages: Page[],
   trash:{
     pagesId:string[]|null,
-    pages:Page[]|null
+    pages:TrashPage[]|null
   }
 };
 
@@ -708,9 +711,9 @@ export function findParentBlock ( page:Page, subBlock:Block) : { parentBlockInde
     parentBlock :BLOCK
   };
 };
-export const findPage =(pagesId: string[] ,pages:Page[] ,pageId:string):Page=>{
+export const findPage =(pagesId: string[] ,pages:Page[] ,pageId:string):Page|TrashPage=>{
   const index :number =pagesId.indexOf(pageId);
-  const PAGE :Page = pages[index];
+  const PAGE :Page|TrashPage = pages[index];
   return PAGE
 };
 export default function notion (state:Notion =initialState , action :NotionAction) :Notion{
@@ -724,11 +727,11 @@ export default function notion (state:Notion =initialState , action :NotionActio
   const pageIndex:number = action.type !==RESTORE_PAGE ?  
                             pagesId.indexOf(action.pageId) as number :
                             trash.pagesId?.indexOf(action.pageId) as number;
-  const targetPage:Page =action.type !==RESTORE_PAGE ? 
-                        pages[pageIndex] : 
+  const targetPage : Page |TrashPage  =  action.type !==RESTORE_PAGE ? 
+                        pages[pageIndex] as Page: 
                         trash.pages !==null?
-                        trash.pages[pageIndex]: 
-                        pageSample ;
+                        trash.pages[pageIndex] as TrashPage: 
+                        {...pageSample, subPages:null};
   const  blockIndex:number = action.block !==null ?( pages[pageIndex]?.blocksId.indexOf(action.block.id) ): 0 as number;
 
   const editBlockData =(index:number ,block:Block)=>{
@@ -1102,20 +1105,29 @@ export default function notion (state:Notion =initialState , action :NotionActio
         const index= firstPagesId.indexOf(targetPage.id);
         firstPagesId.splice(index,1);
       };
-
-      if(targetPage.subPagesId !==null){
-        targetPage.subPagesId.forEach((id:string)=>{
-          const index= pagesId.indexOf(id);
-          pages.splice(index,1);
-          pagesId.splice(index,1);
-        })
+      let trashTargetPage :TrashPage ={
+        ...targetPage,
+        subPages:null,
       };
-      let newTrash ={
-        pagesId:trash.pagesId ==null? [targetPage.id] : trash.pagesId.concat(targetPage.id),
-        pages:trash.pages ==null? [targetPage] : trash.pages.concat(targetPage),
-      }
+        if(targetPage.subPagesId !==null){
+          const subPages:Page[] = targetPage.subPagesId.map((id:string)=>findPage(pagesId, pages,id));
+          trashTargetPage ={
+            ...targetPage,
+            subPages:subPages
+          }
+          targetPage.subPagesId.forEach((id:string)=>{
+            const index= pagesId.indexOf(id);
+            pages.splice(index,1);
+            pagesId.splice(index,1);
+          })
+      };
+      const newTrash ={
+        pagesId:trash.pagesId ==null? 
+        [targetPage.id] : 
+        trash.pagesId.concat(targetPage.id),
+        pages: trash.pages ==null? [trashTargetPage] : trash.pages.concat(trashTargetPage)
+      };
       console.log("delete page", pages ,newTrash );
-      
       return{
         pages:pages,
         firstPagesId:firstPagesId,
@@ -1123,18 +1135,33 @@ export default function notion (state:Notion =initialState , action :NotionActio
         trash:newTrash
       };
     case RESTORE_PAGE:
-      const trashPages= trash.pages?.filter((page:Page)=> page.id !== targetPage.id) as Page[];
-      const trashPagesId= trash.pagesId?.filter((id:string)=> id !== targetPage.id) as string[];
+      let trashPages = trash.pages ==null? null :[...trash.pages];
+      let trashPagesId =trash.pagesId ===null? null : [...trash.pagesId];
       const restoredPage :Page ={
-        ... targetPage,
+        ...targetPage,
         editTime:editTime,
         parentsId:null,
+      };
+    pages.push(restoredPage);
+    pagesId.push(restoredPage.id);
+    firstPagesId.push(restoredPage.id);
+    if(trashPages!==null && trashPagesId !==null){
+      const trashTargetPage = findPage(trashPagesId, trashPages, action.pageId) as TrashPage; 
+      const trashTargetPageIndex= trashPagesId.indexOf(trashTargetPage.id);
+      trashPages.splice(trashTargetPageIndex,1);
+      trashPagesId.splice(trashTargetPageIndex,1);
+      if(trashTargetPage.subPages !==null){
+        trashTargetPage.subPages.forEach((sub:Page)=>{
+          pages.push(sub);
+          pagesId.push(sub.id);
+        })
       }
+    };
       const newNotion :Notion={
-        pages:pages.concat(restoredPage),
-        pagesId:pagesId.concat(restoredPage.id),
-        firstPagesId:firstPagesId.concat(restoredPage.id),
-        trash: (trashPagesId[0] !==undefined && trashPagesId[0] !==undefined)
+        pages:pages,
+        pagesId:pagesId,
+        firstPagesId:firstPagesId,
+        trash: (trashPages?.[0] !==undefined && trashPagesId?.[0] !==undefined)
         ? 
         {
           pages:trashPages ,
