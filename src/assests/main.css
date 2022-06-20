@@ -1546,6 +1546,13 @@ a:link, a:active, a:visited {
   position: relative;
 }
 
+.editor .pageHeader input {
+  width: 100%;
+  outline: none;
+  border: none;
+  font-size: inherit;
+}
+
 .editor .pageHeader .deco {
   display: -webkit-box;
   display: -ms-flexbox;

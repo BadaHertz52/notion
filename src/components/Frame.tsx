@@ -31,6 +31,9 @@ type FrameProps ={
 
 
 const Frame =({ pages, firstlist,userName, page, editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, duplicatePage,editPage, movePageToPage, deletePage ,setTargetPageId}:FrameProps)=>{
+  const [cover, setCover]=useState<ImageData|null>(page.header.cover);
+  const [icon, setIcon]=useState<string|null>(page.header.icon);
+  const [title, setTitle]=useState<string>(page.header.title);
   const [decoOpen ,setdecoOpen] =useState<boolean>(true);
   const [commentBlock, setCommentBlock]=useState<Block|null>(null);
   const [moreOpen, setMoreOpen]= useState<boolean>(false);
@@ -52,7 +55,7 @@ const Frame =({ pages, firstlist,userName, page, editBlock, addBlock,changeToSub
           >
             {page.header.cover !== null &&        
               <div className='pageCover'>
-                {page.header.cover}
+                {cover}
               </div>
             }
             <div className="pageHeader_notCover" style={headerBottomStyle}>
@@ -61,7 +64,11 @@ const Frame =({ pages, firstlist,userName, page, editBlock, addBlock,changeToSub
                 className='pageIcon'
                 
                 >
-                  {page.header.icon}
+                  <input 
+                    type="text" 
+                    value={icon!==null ? icon : ""}
+                    onChange={(event)=>onChangePageHeader(event, "icon")}
+                  />
                 </div>
               }
               {decoOpen &&
@@ -91,7 +98,11 @@ const Frame =({ pages, firstlist,userName, page, editBlock, addBlock,changeToSub
               <div 
                 className='pageTitle'
               >
-                {page.header.title}
+                <input 
+                    type="text" 
+                    value={title}
+                    onChange={(event)=>onChangePageHeader(event, "title")}
+                  />
               </div>
 
               {page.header.comments!==null &&

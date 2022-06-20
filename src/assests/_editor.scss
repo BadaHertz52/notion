@@ -169,6 +169,12 @@
     &> div{
       position: relative;
     }
+    input{
+      width: 100%;
+      outline: none;
+      border: none;
+      font-size: inherit;
+    }
     .deco{
       display: flex;
       flex-wrap: wrap;
