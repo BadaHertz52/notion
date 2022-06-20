@@ -178,7 +178,7 @@
     .deco{
       display: flex;
       flex-wrap: wrap;
-      justify-content: space-evenly;
+      justify-content: flex-start;
       margin-top: 8px;
       margin-bottom: 10px;
       width: 100%;
@@ -186,6 +186,7 @@
       button{
       width: fit-content;
       height: 100%;
+      margin-right: 5px;
       color:$mud;
       flex-grow: 0;
       flex-shrink: 0;
