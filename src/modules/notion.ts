@@ -812,7 +812,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
   };
     targetPage.blocks?.splice(targetIndex,1);
     targetPage.blocksId?.splice(targetIndex,1);
-    console.log("deletedata", block);
+    console.log("deletedata", targetPage.blocks);
 
   if(block.firstBlock){
     const index:number= targetPage.firstBlocksId?.indexOf(block.id) as number;
@@ -878,43 +878,73 @@ export default function notion (state:Notion =initialState , action :NotionActio
       }; 
 
     case RAISE_BLOCK :
-      // cursor.focusOffset== 0 일때 backspace 를 누르면 해당 block data는 삭제되고 해당 block 의 contents가 이전 block 을 붇여지는 것 
+      // cursor.anchorOffset== 0 일때 backspace 를 누르면 해당 block data는 삭제되고 해당 block 의 contents가 이전 block 을 붇여지는 것 
 
         // dom 상 이전 block 찾기 
-        const {parentBlockIndex, parentBlock} =findParentBlock(targetPage, action.block);
-
-        const subBlocksId = parentBlock.subBlocksId;
-        const subBlockIndex = subBlocksId?.indexOf(action.block.id) as number;
-        const newSubBlocksId = parentBlock.subBlocksId?.filter((id:string)=> id !== action.block.id) as string[]; 
-
-        if(subBlockIndex ===0){
-          const newParentBlock:Block ={
-            ...parentBlock,
-            contents: `${parentBlock.contents}${action.block.contents}`,
-            subBlocksId : newSubBlocksId,
-            editTime: editTime
+        if(action.block.parentBlocksId==null){
+          const previousBlock = targetPage.blocks[blockIndex-1];
+          const newPreviousBlock:Block ={
+            ...previousBlock,
+            contents:`${previousBlock.contents}${action.block.contents}`,
+            editTime:editTime
           };
-          editBlockData(parentBlockIndex, newParentBlock);
-          deleteBlockData(targetPage, action.block, blockIndex );
+          editBlockData(blockIndex-1, newPreviousBlock);
 
-        }else {
-          const newParentBlock :Block ={
-            ...parentBlock,
-            subBlocksId:newSubBlocksId
-          };
-          editBlockData(parentBlockIndex, newParentBlock);
-
-          const previousSubBlockId = subBlocksId?.[subBlockIndex -1] as string ;
-          const {index, BLOCK} = findBlock(targetPage, previousSubBlockId);
-          const newPrevisousBlock:Block ={
-            ...BLOCK,
-            contents : `${BLOCK.contents}${action.block.contents}`,
-            editTime: editTime
-          };
+        }else{
+          const {parentBlockIndex, parentBlock} =findParentBlock(targetPage, action.block);
+   
+          const subBlocksId = parentBlock.subBlocksId;
+          if(subBlocksId?.includes(action.block.id)){
+            const subBlockIndex = subBlocksId?.indexOf(action.block.id) as number;
+            const newSubBlocksId = parentBlock.subBlocksId?.filter((id:string)=> id !== action.block.id) as string[]; 
+  
+            if(subBlockIndex ===0){
+              const newParentBlock:Block ={
+                ...parentBlock,
+                contents: `${parentBlock.contents}${action.block.contents}`,
+                subBlocksId : newSubBlocksId,
+                editTime: editTime
+              };
+              editBlockData(parentBlockIndex, newParentBlock);
+            }else {
+              const newParentBlock :Block ={
+                ...parentBlock,
+                subBlocksId:newSubBlocksId
+              };
+              editBlockData(parentBlockIndex, newParentBlock);
+              const {index, BLOCK} =findBlock(targetPage,subBlocksId[subBlockIndex-1]); 
+  
+              const newSubBlock:Block ={
+                ...BLOCK,
+                contents:`${BLOCK.contents}${action.block.contents}`,
+                parentBlocksId:null,
+                editTime:editTime,
+              };
+              editBlockData(index, newSubBlock);
+            };
+          }else{
+            if(subBlocksId!==null){
+              const lastSubBlockId = subBlocksId?.[subBlocksId.length -1] as string ;
+              const {index, BLOCK}= findBlock(targetPage, lastSubBlockId);
+              const newLastSubBlock:Block ={
+                ...BLOCK,
+                contents : `${BLOCK.contents}${action.block.contents}`,
+                editTime: editTime
+              };
+              editBlockData(index, newLastSubBlock);
           
-          editBlockData(index, newPrevisousBlock);
+            }else{
+              const previousBlock:Block =targetPage.blocks[blockIndex-1];
+              const editedPreviousBlock:Block ={
+                ...previousBlock,
+                contents:`${previousBlock.contents}${action.block.contents}`,
+                editTime:editTime
+              };
+              editBlockData(blockIndex-1, editedPreviousBlock);
+              
+            }
+          };
         };
-        // action.block data 지우기 
         deleteBlockData(targetPage ,action.block, blockIndex);
         console.log("raiseBlock",targetPage.blocks );
       return {
