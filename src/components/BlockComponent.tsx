@@ -1,16 +1,16 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useRef} from 'react';
+import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import { GoPrimitiveDot } from 'react-icons/go';
 import { GrCheckbox, GrCheckboxSelected, GrDocumentText } from 'react-icons/gr';
 import { IoChatboxOutline } from 'react-icons/io5';
 import { MdPlayArrow } from 'react-icons/md';
 import {  CSSProperties} from 'styled-components';
-import { Block,Page } from '../modules/notion';
-import EditableBlock  from './EditableBlock';
+import { Command } from '../containers/EditorContainer';
+import {  Block,BlockType,blockTypes,findBlock,makeNewBlock,Page } from '../modules/notion';
 
 type BlockProp ={
   userName:string,
   block:Block,
-  subBlocks :Block[]|null,
   page:Page,
   editBlock :(pageId: string, block: Block) => void,
   addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
@@ -22,10 +22,17 @@ type BlockProp ={
   deletePage : (pageId:string , )=>void,
   setCommentBlock : Dispatch<SetStateAction<Block|null>>,
   commentBlock:Block|null,
-  setTargetPageId:Dispatch<SetStateAction<string>>
+  setTargetPageId:Dispatch<SetStateAction<string>>,
+  setCommand: Dispatch<SetStateAction<Command>>,
+  command:Command,
 };
 type BlockCommentProps ={
   block:Block,
+};
+type BlockContentProps={
+  block:Block,
+  onChangeContents: (event: ContentEditableEvent) => void,
+  onKeyDownContents: (event: React.KeyboardEvent<HTMLDivElement>) => void,
 }
 export const BlockComment =({block}:BlockCommentProps)=>{
   return (
@@ -46,43 +53,63 @@ export const BlockComment =({block}:BlockCommentProps)=>{
 
   )
 };
-const BlockContent =({block}:{block:Block})=>{
-  return(
+const BlockContent =({block, onChangeContents, onKeyDownContents}:BlockContentProps)=>{
+  const contentEditableRef= useRef<HTMLElement>(null);
+      return(
     <>
     {block.comments ==null ?
     ( block.type==="page"?
       <button 
         className="contents pageTitle"
-        name={block.id}
+        id={`${block.id}_contents`}
         placeholder="type '/' for commmands"
       >
-        {block.contents}
+        <ContentEditable
+          html={block.contents}
+          innerRef={contentEditableRef}
+          onChange={(event)=>onChangeContents(event)}
+          onKeyDown={(event)=>onKeyDownContents(event)}
+
+        />  
       </button>
       :
       <div 
+        id={`${block.id}_contents`}
         className="contents"
         placeholder="type '/' for commmands"
       >
-        {block.contents}
+      <ContentEditable
+        html={block.contents}
+        innerRef={contentEditableRef}
+        onChange={(event)=>onChangeContents(event)}
+        onKeyDown={(event)=>onKeyDownContents(event)}
+      />  
       </div>
     )
     :
     <button 
+      id={`${block.id}_contents`}
       className="contents commentBtn"
-      name={block.id}
       placeholder="type '/' for commmands"
     >
-      {block.contents}
+      <ContentEditable
+        html={block.contents}
+        innerRef={contentEditableRef}
+        onChange={(event)=>onChangeContents(event)}
+        onKeyDown={(event)=>onKeyDownContents(event)}
+      />  
     </button>
     }
   </>
   )
-}
-const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,addPage, editPage, deletePage,setCommentBlock ,commentBlock ,setTargetPageId}:BlockProp)=>{
+};
+const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,addPage, editPage, deletePage,setCommentBlock ,commentBlock ,setTargetPageId ,setCommand , command }:BlockProp)=>{
   const className = block.type !== "toggle" ?
                     `${block.type} block ` :
                     `${block.type} block ${block.subBlocksId!==null?'on' : ""}`;
-
+  const editTime = JSON.stringify(Date.now());
+  const subBlocks:Block[]|undefined= block.subBlocksId?.map((id:string)=>findBlock(page, id).BLOCK);
+  //const [text, setText] =useState<string>(block.contents);
   const blockContentsStyle =(block:Block):CSSProperties =>{
     return ({
       color: block.type !=="todo done" ? block.style.color: "grey",
@@ -92,7 +119,154 @@ const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,chang
       textDecoration: block.type !=="todo done"? block.style.textDeco :"line-through",
     })
   };
+  const findTargetBlock =(event:ContentEditableEvent|React.KeyboardEvent<HTMLDivElement>|React.MouseEvent):Block=>{
+    const target =event.currentTarget.parentElement as HTMLElement;
+    const targetId= target.id;
+    const end =targetId.indexOf("_contents");
+    const blockId = targetId.slice(0, end);
+    const targetBlock = findBlock(page, blockId).BLOCK;
+    return targetBlock;
+  };
+  const onChangeContents=(event:ContentEditableEvent)=>{
+    const value =event.target.value;
+    const targetBlock= findTargetBlock(event);
+    const targetBlockIndex= page.blocksId.indexOf(targetBlock.id);
+    if(value.includes("<div>")){
+      //enter 시에 새로운 블록 생성 
+      const start = value.indexOf("<div>");
+      const end =value.indexOf("</div>");
+      const editedContents =value.slice(0, start);
+      const newBlockContents= value.slice(start+5,end );
+      const editedBlock:Block ={
+        ...targetBlock,
+        contents:editedContents,
+        editTime:editTime
+      };
+      editBlock(page.id, editedBlock);
+      const newBlock = makeNewBlock(page, targetBlock, newBlockContents);
+      addBlock(page.id, newBlock, targetBlockIndex+1 ,targetBlock.id)
+    }else{
+      const editedBlock :Block ={
+                ...targetBlock,
+                contents: value,
+                editTime:editTime
+              };
+      editBlock(page.id, editedBlock);
+    }
+  };
+  const onKeyDownContents=(event:React.KeyboardEvent<HTMLDivElement>)=>{
+    // const targetBlock= findTargetBlock(event);
+    // const targetBlockIndex= page.blocksId.indexOf(targetBlock.id);
+    // const currentTarget =event.currentTarget as HTMLDivElement;
+    // const childeNodes =[...event.currentTarget.childNodes];
+    //console.log(childeNodes , currentTarget);
+    // if(!command.boolean){
+    //   const code =event.code.toLowerCase();
+    //   if(code.startsWith("key")){
+    //     if(text.startsWith("/")){
+
+    //     }else{
+    //       const newBlock :Block ={
+    //         ...targetBlock,
+    //         contents: text,
+    //         editTime:editTime
+    //       };
+    //       editBlock(page.id, newBlock);
+    //     }
+    //   }else{
+    //     switch (code) {
+    //       case "enter":
+    //         const end = text?.indexOf("<div>");
+    //         console.log("enter", text,end, text.slice(0, end),text.slice(end));
+    //         const editedTargetBlock:Block ={
+    //           ...targetBlock,
+    //           contents: text.slice(0, end),
+    //           editTime:editTime
+    //         };
+    //        //editBlock(page.id, editedTargetBlock);
+    //         
+    //         break;
+    //       case"tab" :
+    //       break;
+    //       case "backspace":
+    //         break;
+          
+    //       default:
+    //         break;
+    //     }
+    //   }
+
+    // }else{
+    //   ///command.boolean ===true
+    //   commandKeyUp(event, block);
+    // }
+
+  };
+  function commandChange (event:ContentEditableEvent){
+    const value = event.target.value;
+    const trueOrFale = value.startsWith("/");
+
+    if(trueOrFale){
+      setCommand({
+        boolean: true , 
+        command: value
+      });
+    }else {
+      setCommand({
+        boolean:false,
+        command:null
+      })
+    };
+
+  }
+
+  function commandKeyUp(event:React.KeyboardEvent<HTMLDivElement>, block:Block){
+    const code= event.code;
+    const firstOn =document.querySelector(".command_btn.on.first");
+    if(code ==="Enter"  ){
+      const name = firstOn?.getAttribute("name") as string ;
+      
+      const blockType:BlockType = blockTypes.filter((type)=> name.includes(type))[0];
+
+      const newBlock:Block={
+        ...block,
+        type: blockType,
+        editTime:editTime
+      };
+      editBlock(page.id, newBlock);
+      setCommand({boolean:false, command:null})
+    }
+  };
+  // function showBlockFn( blockId:string){
+  //   const blockDoc = document.getElementById(`block_${block.id}`) as HTMLElement;
+  //   const blockContentsCollection =blockDoc.getElementsByClassName("blockContents");
+  //   const blockContents =blockContentsCollection[0];
+  //   console.log(blockDoc,blockContents);
+  //   //blockFn positon
+  //   if(blockContents!==undefined){
+  //     const targetBlock =findBlock(page, blockId).BLOCK;
+  //     const blockFn = document.getElementById("blockFn");
+  //     blockFn?.classList.toggle("on");
+  //     if(blockFn?.classList.contains("on")){
+  //       sessionStorage.setItem("blockFnTargetBlock", JSON.stringify(targetBlock));
+  //     }else{
+  //       sessionStorage.removeItem("blockFnTargetBlock");
+  //     };
+  //     const domRect =blockContents?.getClientRects()[0];
+  //     if(domRect!==undefined){
+  //       const targetY = domRect.top;
+  //       const top = domRect.y -(domRect.height * 0.8) ;
+  //       console.log("y", targetY);
+  //       blockFn?.setAttribute("style", `top:${top}px;left: -45px;`);
+  //       }else{
+  //         console.log("Cant' find blockContents")
+  //       };
+  //     };
+
+  // };
+
   const ListSub = ()=>{
+    const blockContentsRef= useRef<HTMLDivElement>(null);
     const listStyle =(block:Block):CSSProperties=>{
       return({
         textDecoration:"none",
@@ -113,7 +287,7 @@ const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,chang
             <div 
               id ={block.id}
               className= "blockContents"
-              title={`${block.id}_contents`}
+              ref={blockContentsRef}
               style={listStyle(block)}
               >
               <div 
@@ -127,6 +301,8 @@ const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,chang
               </div>
               <BlockContent 
                 block={block}
+                onChangeContents={onChangeContents}
+                onKeyDownContents={onKeyDownContents}
               />
             </div>
             </div>
@@ -140,10 +316,11 @@ const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,chang
         }
       </>
     )
-  }
+  };
 
   return(
     <div 
+      id={`block_${block.id}`}
       className={className} 
     > 
 
@@ -200,11 +377,12 @@ const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,chang
         }
         <div 
           className='blockContents' 
-          title={`${block.id}_contents`}
           style={blockContentsStyle(block)}
         >
         <BlockContent
           block={block}
+          onChangeContents={onChangeContents}
+          onKeyDownContents={onKeyDownContents}
         />
         </div>
         </div>
@@ -220,7 +398,7 @@ const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,chang
         className='subBlocks'
       >
         {subBlocks?.map((subBlock :Block)=> 
-          <EditableBlock
+          <BlockComponent
             key ={subBlock.id} 
             userName={userName} 
             page={page}
@@ -236,6 +414,8 @@ const BlockComponent=({ userName,block,subBlocks, page ,addBlock,editBlock,chang
             setCommentBlock={setCommentBlock}
             commentBlock={commentBlock}
             setTargetPageId={setTargetPageId}
+            command={command} 
+            setCommand={setCommand}
           />
         )
         }
