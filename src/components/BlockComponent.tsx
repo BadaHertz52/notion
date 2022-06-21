@@ -74,8 +74,20 @@ const BlockContent =({block, onChangeContents, onKeyDownContents}:BlockContentPr
       const blockFnStyle =`top:${top}px; left: ${left}px`
       blockFn?.setAttribute("style",blockFnStyle);
     }
+  };
+
+  const BlockContentEditable=()=>{
+    return(
+        <ContentEditable
+          className='contentEditable'
+          html= {block.contents}
+          innerRef={contentEditableRef}
+          onChange={(event)=> onChangeContents(event )}
+          onKeyDown={(event)=> onKeyDownContents(event)}
+        /> 
+    )
   }
-      return(
+  return(
     <>
     {block.comments ==null ?
     ( block.type==="page"?
@@ -85,14 +97,7 @@ const BlockContent =({block, onChangeContents, onKeyDownContents}:BlockContentPr
         placeholder="type '/' for commmands"
         onMouseOver={showBlockFn}
       >
-        <ContentEditable
-          className='contentEditable'
-          html={block.contents}
-          innerRef={contentEditableRef}
-          onChange={(event)=>onChangeContents(event)}
-          onKeyDown={(event)=>onKeyDownContents(event)}
-
-        />  
+        <BlockContentEditable/>
       </button>
       :
       <div 
@@ -101,13 +106,7 @@ const BlockContent =({block, onChangeContents, onKeyDownContents}:BlockContentPr
         placeholder="type '/' for commmands"
         onMouseOver={showBlockFn}
       >
-      <ContentEditable
-        className='contentEditable'
-        html={block.contents}
-        innerRef={contentEditableRef}
-        onChange={(event)=>onChangeContents(event)}
-        onKeyDown={(event)=>onKeyDownContents(event)}
-      />  
+        <BlockContentEditable/>
       </div>
     )
     :
@@ -117,13 +116,7 @@ const BlockContent =({block, onChangeContents, onKeyDownContents}:BlockContentPr
       placeholder="type '/' for commmands"
       onMouseOver={showBlockFn}
     >
-      <ContentEditable
-        className='contentEditable'
-        html={block.contents}
-        innerRef={contentEditableRef}
-        onChange={(event)=>onChangeContents(event)}
-        onKeyDown={(event)=>onKeyDownContents(event)}
-      />  
+      <BlockContentEditable/>
     </button>
     }
   </>
