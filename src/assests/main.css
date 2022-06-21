@@ -82,7 +82,7 @@ a:link, a:active, a:visited {
   position: relative;
 }
 
-.subBlocks .editableBlock {
+.subBlocks {
   padding: 0;
   padding-left: 20px;
 }
@@ -107,6 +107,7 @@ a:link, a:active, a:visited {
   display: flex;
   position: absolute;
   padding-right: 3rem;
+  z-index: 5;
 }
 
 .blockFn.on .blockFnIcon {
@@ -1644,6 +1645,10 @@ a:link, a:active, a:visited {
 
 .editor .pageHeader .pageTitle {
   font-size: 40px;
+}
+
+.editor .pageContent_inner {
+  position: relative;
 }
 
 .editor .newPageFrame {

@@ -239,8 +239,9 @@
       font-size: 40px;
     }
   }
-
-
+  .pageContent_inner{
+    position: relative;
+  }
   .newPageFrame{
     color: $mud;
     span{
