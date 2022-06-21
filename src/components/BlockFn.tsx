@@ -1,10 +1,9 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import Menu from './Menu';
-import {Block, listItem, Page} from '../modules/notion';
+import {Block, listItem, makeNewBlock, Page} from '../modules/notion';
 
 import { AiOutlinePlus } from 'react-icons/ai';
 import { CgMenuGridO } from 'react-icons/cg';
-import { makeNewBlock } from './EditableBlock';
 import PageMenu from './PageMenu';
 import { CommentInput } from './Comments';
 
@@ -71,8 +70,6 @@ export const detectRange =(event:MouseEvent| React.MouseEvent , targetArea:DOMRe
 
 const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlock, deleteBlock ,addPage, editPage,movePageToPage, deletePage ,commentBlock,setCommentBlock}:BlockFnProp)=>{
   const inner =document.getElementById("inner");
-  const editTime = JSON.stringify(Date.now());
-  const newContents:string ="";
   const [menuOpen, setMenuOpen]= useState<boolean>(false);
   const [popup, setPopup]=useState<PopupType>({
     popup:false,
@@ -84,7 +81,8 @@ const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlo
     if(sessionItem !==null){
       const targetBlock= JSON.parse(sessionItem);
       const targetBlockIndex= page.blocksId.indexOf(targetBlock.id);
-      makeNewBlock(page, editTime,addBlock, editBlock, addPage,targetBlock, targetBlockIndex, newContents);
+      const newBlock =makeNewBlock(page, targetBlock,"");
+      addBlock(page.id, newBlock, targetBlockIndex+1, null);
     }else{
       console.log("BlockFn-makeBlock error: there is no session item")
     }
