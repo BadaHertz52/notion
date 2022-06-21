@@ -33,6 +33,10 @@ type BlockContentProps={
   block:Block,
   onChangeContents: (event: ContentEditableEvent) => void,
   onKeyDownContents: (event: React.KeyboardEvent<HTMLDivElement>) => void,
+};
+export type itemType ={
+  block:Block,
+  blockIndex:number ,
 }
 export const BlockComment =({block}:BlockCommentProps)=>{
   return (
@@ -55,6 +59,7 @@ export const BlockComment =({block}:BlockCommentProps)=>{
 };
 const BlockContent =({block, onChangeContents, onKeyDownContents}:BlockContentProps)=>{
   const contentEditableRef= useRef<HTMLElement>(null);
+  const editTime= JSON.stringify(Date.now());
   const showBlockFn=(event: React.MouseEvent)=>{
     const mainBlock= event.currentTarget.parentElement?.parentElement ;
     const domReact =mainBlock?.getBoundingClientRect();
@@ -68,7 +73,6 @@ const BlockContent =({block, onChangeContents, onKeyDownContents}:BlockContentPr
     sessionStorage.removeItem("blockFnTargetBlock");
 
     if(domReact!==undefined){
-      console.log("rect", editableBlockDomRect,document.getElementsByClassName("editableBlock")[0] );
       const top = domReact.top +5;
       const left = editableBlockDomRect.x - 45;
       const blockFnStyle =`top:${top}px; left: ${left}px`
@@ -127,7 +131,7 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
                     `${block.type} block ` :
                     `${block.type} block ${block.subBlocksId!==null?'on' : ""}`;
   const editTime = JSON.stringify(Date.now());
-  const subBlocks:Block[]|undefined= block.subBlocksId?.map((id:string)=>findBlock(page, id).BLOCK);
+  const subBlocks =  block.subBlocksId?.map((id:string)=>findBlock(page, id).BLOCK)
   //const [text, setText] =useState<string>(block.contents);
   const blockContentsStyle =(block:Block):CSSProperties =>{
     return ({
@@ -150,27 +154,36 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
     const value =event.target.value;
     const targetBlock= findTargetBlock(event);
     const targetBlockIndex= page.blocksId.indexOf(targetBlock.id);
+
     if(value.includes("<div>")){
       //enter 시에 새로운 블록 생성 
       const start = value.indexOf("<div>");
       const end =value.indexOf("</div>");
       const editedContents =value.slice(0, start);
       const newBlockContents= value.slice(start+5,end );
-      const editedBlock:Block ={
-        ...targetBlock,
-        contents:editedContents,
-        editTime:editTime
-      };
-      editBlock(page.id, editedBlock);
+      if(block.contents!== editedContents){
+        const editedBlock:Block ={
+          ...targetBlock,
+          contents:editedContents,
+          editTime:editTime,
+        };
+        editBlock(page.id, editedBlock);
+      } 
       const newBlock = makeNewBlock(page, targetBlock, newBlockContents);
-      addBlock(page.id, newBlock, targetBlockIndex+1 ,targetBlock.id)
+      addBlock(page.id, newBlock,targetBlockIndex+1, targetBlock.id);
     }else{
       const editedBlock :Block ={
                 ...targetBlock,
                 contents: value,
-                editTime:editTime
+                editTime:editTime,
               };
-      editBlock(page.id, editedBlock);
+      sessionStorage.setItem("itemsTobeEdited", JSON.stringify(editedBlock));
+    };
+    if(value.startsWith("/")){
+      setCommand({boolean:true, command:value})
+    }else{
+      command.boolean &&
+      setCommand({boolean:false, command:null})
     }
   };
   const onKeyDownContents=(event:React.KeyboardEvent<HTMLDivElement>)=>{
@@ -224,7 +237,6 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
   function commandChange (event:ContentEditableEvent){
     const value = event.target.value;
     const trueOrFale = value.startsWith("/");
-
     if(trueOrFale){
       setCommand({
         boolean: true , 
@@ -237,7 +249,7 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
       })
     };
 
-  }
+  };
 
   function commandKeyUp(event:React.KeyboardEvent<HTMLDivElement>, block:Block){
     const code= event.code;
@@ -297,7 +309,8 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
     }
     return(
       <>
-        {subBlocks?.map((block:Block)=>(
+        {subBlocks !== undefined  && 
+          subBlocks.map((block:Block)=>(
           <div 
             className='list mainBlock'
             key={`listItem_${subBlocks.indexOf(block)}`}
@@ -416,9 +429,10 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
       <div 
         className='subBlocks'
       >
-        {subBlocks?.map((subBlock :Block)=> 
+        {subBlocks!==undefined&&
+        subBlocks.map((subBlock :Block)=> 
           <BlockComponent
-            key ={subBlock.id} 
+            key ={subBlocks.indexOf(subBlock)} 
             userName={userName} 
             page={page}
             block={subBlock}

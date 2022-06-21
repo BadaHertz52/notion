@@ -1,8 +1,8 @@
-import React, { Dispatch, SetStateAction, useState, } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState, } from 'react';
 import { Block, Page,  } from '../modules/notion';
 import CommandBlock from './CommandBlock';
 import { Command } from '../containers/EditorContainer';
-import BlockComponent from './BlockComponent';
+import BlockComponent, { itemType } from './BlockComponent';
 
 
 type EditableBlockProps ={
@@ -20,7 +20,7 @@ type EditableBlockProps ={
   
   setCommentBlock : Dispatch<SetStateAction<Block|null>>,
   commentBlock :Block |null,
-  setTargetPageId:Dispatch<SetStateAction<string>>
+  setTargetPageId:Dispatch<SetStateAction<string>>,
 };
 export   type CommentOpenType ={
   open:boolean,
@@ -32,7 +32,23 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
     boolean:false,
     command:null
   }); 
-
+  const updateBlock=()=>{
+    const item = sessionStorage.getItem("itemsTobeEdited");
+    const cursorElement =document.getSelection()?.anchorNode?.parentElement;
+    const className =cursorElement?.className ;
+    if(item!==null){
+      const  targetBlock:Block = JSON.parse(item);
+      const condition = className ==="contentEditable" && cursorElement!==undefined && cursorElement!==null && cursorElement.parentElement?.id ===`${targetBlock.id}_contents`;
+        if(!condition){
+        editBlock(page.id, targetBlock);
+        sessionStorage.removeItem("itemsTobeEdited");
+        }
+    }
+  };
+  const inner =document.getElementById("inner");
+  inner?.addEventListener("click",updateBlock);
+  inner?.addEventListener("keyup",updateBlock);
+  
   return(
       <div 
         className="editableBlock"
@@ -57,8 +73,7 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
             commentBlock={commentBlock}
             setTargetPageId={setTargetPageId}
             command={command}
-            setCommand={setCommand}
-                  
+            setCommand={setCommand}    
           />
         </>
         :
@@ -87,6 +102,7 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
             block={block}
             editTime={editTime}
             editBlock={editBlock}
+            command={command}
             setCommand={setCommand}
             addPage={addPage}
           />
