@@ -55,6 +55,26 @@ export const BlockComment =({block}:BlockCommentProps)=>{
 };
 const BlockContent =({block, onChangeContents, onKeyDownContents}:BlockContentProps)=>{
   const contentEditableRef= useRef<HTMLElement>(null);
+  const showBlockFn=(event: React.MouseEvent)=>{
+    const mainBlock= event.currentTarget.parentElement?.parentElement ;
+    const domReact =mainBlock?.getBoundingClientRect();
+    const editableBlockDomRect =document.getElementsByClassName("editableBlock")[0].getBoundingClientRect(); 
+    
+    const blockFn =document.getElementById("blockFn");
+    blockFn?.classList.toggle("on");
+    blockFn?.classList.contains("on")?
+    sessionStorage.setItem("blockFnTargetBlock", JSON.stringify(block))
+    :
+    sessionStorage.removeItem("blockFnTargetBlock");
+
+    if(domReact!==undefined){
+      console.log("rect", editableBlockDomRect,document.getElementsByClassName("editableBlock")[0] );
+      const top = domReact.top +5;
+      const left = editableBlockDomRect.x - 45;
+      const blockFnStyle =`top:${top}px; left: ${left}px`
+      blockFn?.setAttribute("style",blockFnStyle);
+    }
+  }
       return(
     <>
     {block.comments ==null ?
@@ -63,8 +83,10 @@ const BlockContent =({block, onChangeContents, onKeyDownContents}:BlockContentPr
         className="contents pageTitle"
         id={`${block.id}_contents`}
         placeholder="type '/' for commmands"
+        onMouseOver={showBlockFn}
       >
         <ContentEditable
+          className='contentEditable'
           html={block.contents}
           innerRef={contentEditableRef}
           onChange={(event)=>onChangeContents(event)}
@@ -77,8 +99,10 @@ const BlockContent =({block, onChangeContents, onKeyDownContents}:BlockContentPr
         id={`${block.id}_contents`}
         className="contents"
         placeholder="type '/' for commmands"
+        onMouseOver={showBlockFn}
       >
       <ContentEditable
+        className='contentEditable'
         html={block.contents}
         innerRef={contentEditableRef}
         onChange={(event)=>onChangeContents(event)}
@@ -91,8 +115,10 @@ const BlockContent =({block, onChangeContents, onKeyDownContents}:BlockContentPr
       id={`${block.id}_contents`}
       className="contents commentBtn"
       placeholder="type '/' for commmands"
+      onMouseOver={showBlockFn}
     >
       <ContentEditable
+        className='contentEditable'
         html={block.contents}
         innerRef={contentEditableRef}
         onChange={(event)=>onChangeContents(event)}
