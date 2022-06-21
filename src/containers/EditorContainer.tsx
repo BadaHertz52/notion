@@ -18,40 +18,26 @@ type EditorContainerProps ={
   raiseBlock: (pageId: string, block: Block) => void,
   deleteBlock: (pageId: string, block: Block) => void,
   
-  addPage : ( newPage:Page, )=>void,
-  duplicatePage: (targetPageId: string) => void,
+  addPage : ( newPage:Page, )=>void
   editPage : (pageId:string , newPage:Page, )=>void,
-  movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
   deletePage : (pageId:string )=>void,
   restorePage: (pageId: string) => void,
   cleanTrash: (pageId: string) => void,
 
   changeSide: (appear: SideAppear) => void,
   setTargetPageId:Dispatch<SetStateAction<string>>,
+  commentBlock: Block | null,
+  setCommentBlock :Dispatch<SetStateAction<Block|null>>,
 };
 
 export type Command ={
   boolean:boolean,
   command:string | null
 };
-const EditorContainer =({sideAppear,page,isInTrash, pagePath ,changeSide,addBlock,duplicatePage,editBlock,deleteBlock,addPage,editPage,deletePage,movePageToPage,restorePage, cleanTrash, setTargetPageId}:EditorContainerProps)=>{
-  const notion :Notion = useSelector((state:RootState)=> state.notion);
+const EditorContainer =({sideAppear,page,isInTrash, pagePath ,changeSide,addBlock,editBlock,deleteBlock,addPage,editPage,deletePage,restorePage, cleanTrash, setTargetPageId ,commentBlock,setCommentBlock}:EditorContainerProps)=>{
   const dispatch =useDispatch();
   const changeToSub =(pageId: string, block: Block, first: boolean, newParentBlock: Block) => dispatch((change_to_sub(pageId, block, first ,newParentBlock)));
   const raiseBlock =(pageId: string, block: Block) =>dispatch((raise_block(pageId, block)));
-  const pages:Page[] =notion.pages;
-  const firstlist:listItem[] = notion.firstPagesId.map((id:string)=> {
-    const PAGE:Page = findPage(notion.pagesId, pages,id);
-    return {
-      id:PAGE.id,
-      title:PAGE.header.title,
-      icon :PAGE.header.icon,
-      editTime:JSON.stringify(Date.now()),
-      createTime:JSON.stringify(Date.now()),
-      subPagesId:PAGE.subPagesId,
-      parentsId:PAGE.parentsId
-    }
-  });
   const userName :string  =useSelector((state:RootState)=> state.user.userName) ;
 
   return(
@@ -83,8 +69,6 @@ const EditorContainer =({sideAppear,page,isInTrash, pagePath ,changeSide,addBloc
       setTargetPageId={setTargetPageId}
       />
       <Frame
-        pages={pages}
-        firstlist={firstlist}
         userName ={userName}
         targetPage={page}
         addBlock={addBlock}
@@ -93,11 +77,11 @@ const EditorContainer =({sideAppear,page,isInTrash, pagePath ,changeSide,addBloc
         raiseBlock={raiseBlock}
         deleteBlock={deleteBlock}
         addPage={addPage}
-        duplicatePage={duplicatePage}
         editPage={editPage}
-        movePageToPage={movePageToPage}
         deletePage={deletePage}
         setTargetPageId={setTargetPageId}
+        commentBlock={commentBlock}
+        setCommentBlock={setCommentBlock}
       />
 
     </div>

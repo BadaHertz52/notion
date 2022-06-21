@@ -12,8 +12,6 @@ import { HiTemplate } from 'react-icons/hi';
 
 
 type FrameProps ={
-  pages:Page[],
-  firstlist:listItem[],
   userName : string,
   targetPage:Page,
   editBlock :(pageId: string, block: Block) => void,
@@ -22,23 +20,22 @@ type FrameProps ={
   raiseBlock: (pageId: string, block: Block) => void,
   deleteBlock: (pageId: string, block: Block) => void,
   addPage :(newPage:Page ,)=>void,
-  duplicatePage: (targetPageId: string) => void,
   editPage :(pageId:string,newPage:Page ,)=>void,
   deletePage :(pageId:string,)=>void,
-  movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
-  setTargetPageId:Dispatch<SetStateAction<string>>
+  setTargetPageId:Dispatch<SetStateAction<string>>,
+  commentBlock: Block | null,
+  setCommentBlock :Dispatch<SetStateAction<Block|null>>,
 };
 
 
-const Frame =({ pages, firstlist,userName, targetPage, editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, duplicatePage,editPage, movePageToPage, deletePage ,setTargetPageId}:FrameProps)=>{
+const Frame =({ userName, targetPage, editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage, deletePage ,setTargetPageId ,commentBlock,setCommentBlock}:FrameProps)=>{
   const [page, setPage]=useState<Page>(targetPage);
   const [newPageFram, setNewPageFrame]=useState<boolean>(false);
   const [cover, setCover]=useState<ImageData|null>(page.header.cover);
   const [icon, setIcon]=useState<string|null>(page.header.icon);
   const [title, setTitle]=useState<string>(page.header.title);
   const [decoOpen ,setdecoOpen] =useState<boolean>(false);
-  const [commentBlock, setCommentBlock]=useState<Block|null>(null);
-  const [moreOpen, setMoreOpen]= useState<boolean>(false);
+
   const headerStyle: CSSProperties ={
     marginTop: page.header.cover !==null? "10px": "30px" 
   };
@@ -93,12 +90,13 @@ const Frame =({ pages, firstlist,userName, targetPage, editBlock, addBlock,chang
         title:what==="title"? value : page.header.title
     }})
   };
+
   useEffect(()=>{
     page.blocksId[0] ===undefined?
     setNewPageFrame(true):
     setNewPageFrame(false);
     
-  },[page])
+  },[page]);
   return(
     <div className={newPageFram? "newPageFrame frame" :'frame'}>
         <div className='frame_inner'>
@@ -204,41 +202,7 @@ const Frame =({ pages, firstlist,userName, targetPage, editBlock, addBlock,chang
                   )
                 }
               )}
-              <BlockFn
-                page={page}
-                pages={pages}
-                firstlist={firstlist}
-                userName={userName}
-                addBlock={addBlock}
-                editBlock={editBlock}
-                deleteBlock={deleteBlock}
-                addPage={addPage}
-                duplicatePage={duplicatePage}
-                editPage={editPage}
-                movePageToPage={movePageToPage}
-                deletePage={deletePage}
-                commentBlock={commentBlock}
-                setCommentBlock={setCommentBlock}
-              />
-              {commentBlock !==null &&
-                  <Comments
-                    userName={userName}
-                    block={commentBlock}
-                    pageId={page.id}
-                    editBlock={editBlock}
-                    setCommentBlock={setCommentBlock}
-                    setMoreOpen={setMoreOpen}
-                />              
-              }
-              {moreOpen &&
-              <ToolMore
-                pageId={page.id}
-                block={commentBlock}
-                editBlock={editBlock}
-                setCommentBlock={setCommentBlock}
-                setMoreOpen={setMoreOpen}
-              />
-              }
+
             </div>
             :
             <div className='pageContent_inner'>

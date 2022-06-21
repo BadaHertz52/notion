@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {  Route, Routes, useNavigate} from 'react-router-dom';
+import BlockFn from '../components/BlockFn';
+import Comments, { ToolMore } from '../components/Comments';
 import QuickFindBord from '../components/QuickFindBord';
 import { RootState } from '../modules';
-import { add_block, add_page, Block, change_to_sub, clean_trash, delete_block, delete_page, duplicate_page, edit_block, edit_page, findPage,  move_page_to_page, Page, pageSample, raise_block, restore_page, } from '../modules/notion';
+import { add_block, add_page, Block, change_to_sub, clean_trash, delete_block, delete_page, duplicate_page, edit_block, edit_page, findPage,  listItem,  move_page_to_page, Page, pageSample, raise_block, restore_page, } from '../modules/notion';
 import { change_side, SideAppear } from '../modules/side';
 import { add_recent_page, clean_recent_page, remove_favorites } from '../modules/user';
 import EditorContainer from './EditorContainer';
@@ -15,20 +17,38 @@ export type pathType={
 };
 const NotionRouter =()=>{
   const navigate= useNavigate();
+
   const dispatch =useDispatch();
   const notion = useSelector((state:RootState)=> state.notion);
   const pagesId =notion.pagesId;
   const pages =notion.pages;
+  const firstlist:listItem[] = notion.firstPagesId.map((id:string)=> {
+    const PAGE:Page = findPage(notion.pagesId, pages,id);
+    return {
+      id:PAGE.id,
+      title:PAGE.header.title,
+      icon :PAGE.header.icon,
+      editTime:JSON.stringify(Date.now()),
+      createTime:JSON.stringify(Date.now()),
+      subPagesId:PAGE.subPagesId,
+      parentsId:PAGE.parentsId
+    }
+  });
   const trashPagesId =notion.trash.pagesId;
   const trashPages =notion.trash.pages;
   const user =useSelector((state:RootState)=> state.user);
   const sideAppear =useSelector((state:RootState)=>state.side.appear);
+
+
   const location =window.location;
   const hash=location.hash;
   const firstPage =user.favorites!==null? findPage(pagesId, pages,user.favorites[0]) : notion.pages[0];
   const [targetPageId, setTargetPageId]= useState<string>(firstPage !== undefined? firstPage.id: "none");
   const [routePage, setRoutePage]=useState<Page|null>(firstPage!==undefined? firstPage: null);
   const [openQF, setOpenQF]=useState<boolean>(false);
+  const [moreOpen, setMoreOpen]= useState<boolean>(false);
+  const [commentBlock, setCommentBlock]=useState<Block|null>(null);
+
   //---action.function 
     //--block
   const editBlock = (pageId:string, block:Block)=> {dispatch(edit_block(pageId, block ))};
@@ -213,6 +233,7 @@ const NotionRouter =()=>{
         setOpenQF={setOpenQF}
       />
       {routePage!== null?
+      <>
             <Routes>
             <Route
               path={makeRoutePath(routePage)} 
@@ -230,18 +251,55 @@ const NotionRouter =()=>{
                       deleteBlock={deleteBlock}
     
                       addPage={addPage}
-                      duplicatePage={duplicatePage}
                       editPage={editPage}
                       deletePage={deletePage}
-                      movePageToPage={movePageToPage}
                       cleanTrash={cleanTrash}
                       restorePage={restorePage}
     
                       changeSide={changeSide}
+
+                      commentBlock={commentBlock}
+                      setCommentBlock={setCommentBlock}
                       />
                     } 
             />
           </Routes>
+          <BlockFn
+                page={routePage}
+                pages={pages}
+                firstlist={firstlist}
+                userName={user.userName}
+                addBlock={addBlock}
+                editBlock={editBlock}
+                deleteBlock={deleteBlock}
+                addPage={addPage}
+                duplicatePage={duplicatePage}
+                editPage={editPage}
+                movePageToPage={movePageToPage}
+                deletePage={deletePage}
+                commentBlock={commentBlock}
+                setCommentBlock={setCommentBlock}
+              />
+              {commentBlock !==null &&
+                  <Comments
+                    userName={user.userName}
+                    block={commentBlock}
+                    pageId={routePage.id}
+                    editBlock={editBlock}
+                    setCommentBlock={setCommentBlock}
+                    setMoreOpen={setMoreOpen}
+                />              
+              }
+              {moreOpen &&
+              <ToolMore
+                pageId={routePage.id}
+                block={commentBlock}
+                editBlock={editBlock}
+                setCommentBlock={setCommentBlock}
+                setMoreOpen={setMoreOpen}
+              />
+              }
+      </>    
       :
         <div className='editor nonePage'>
           <p>
