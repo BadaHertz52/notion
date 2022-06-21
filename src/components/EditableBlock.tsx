@@ -32,30 +32,32 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
     boolean:false,
     command:null
   }); 
+
   return(
       <div 
         className="editableBlock"
+        
       >
-        <div>
+        <div className='editableBlockInner'>
         {!command.boolean?
         <>
           <BlockComponent
-                  userName={userName} 
-                  block={block} 
-                  page={page}
-                  addBlock={addBlock}
-                  editBlock={editBlock}
-                  changeToSub={changeToSub}
-                  raiseBlock={raiseBlock}
-                  deleteBlock={deleteBlock}
-                  addPage={addPage}
-                  editPage={editPage}
-                  deletePage={deletePage}
-                  setCommentBlock={setCommentBlock}
-                  commentBlock={commentBlock}
-                  setTargetPageId={setTargetPageId}
-                  command={command}
-                  setCommand={setCommand}
+            userName={userName} 
+            block={block} 
+            page={page}
+            addBlock={addBlock}
+            editBlock={editBlock}
+            changeToSub={changeToSub}
+            raiseBlock={raiseBlock}
+            deleteBlock={deleteBlock}
+            addPage={addPage}
+            editPage={editPage}
+            deletePage={deletePage}
+            setCommentBlock={setCommentBlock}
+            commentBlock={commentBlock}
+            setTargetPageId={setTargetPageId}
+            command={command}
+            setCommand={setCommand}
                   
           />
         </>
