@@ -86,6 +86,24 @@ export  const blockSample:Block ={
   style :basicBlockStyle ,
   comments:null
 };
+export function makeNewBlock(page:Page, targetBlock:Block, newBlockContents :string):Block{
+  let number =page.blocksId.length.toString();
+  const editTime= JSON.stringify(Date.now());
+  const newBlock:Block ={
+    id: `${page.id}_${number}_${editTime}`,
+    editTime:editTime,
+    createTime:editTime,
+    type:"text",
+    contents: newBlockContents === "<br>"? "": newBlockContents,
+    firstBlock:targetBlock.firstBlock,
+    subBlocksId:targetBlock.subBlocksId,
+    parentBlocksId:targetBlock.parentBlocksId,
+    icon:null,
+    style :basicBlockStyle,
+    comments:null
+  };
+  return newBlock
+}
 export type listItem = {
   id: string;
   title: string ;
@@ -160,7 +178,7 @@ export const add_block =(pageId:string, block:Block ,newBlockIndex:number ,previ
   pageId:pageId,
   block:block,
   newBlockIndex :newBlockIndex,
-  previousBlockId:previousBlockId
+  previousBlockId:previousBlockId // subBlock으로 만들어질 때 필요 
 });
 export const edit_block =(pageId:string, block:Block)=> ({
   type:EDIT_BLOCK ,
