@@ -154,24 +154,40 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
     const value =event.target.value;
     const targetBlock= findTargetBlock(event);
     const targetBlockIndex= page.blocksId.indexOf(targetBlock.id);
-
     if(value.includes("<div>")){
       //enter 시에 새로운 블록 생성 
       const start = value.indexOf("<div>");
       const end =value.indexOf("</div>");
       const editedContents =value.slice(0, start);
       const newBlockContents= value.slice(start+5,end );
-      if(block.contents!== editedContents){
+      const newBlock:Block ={
+        ...makeNewBlock(page, targetBlock, newBlockContents),
+        firstBlock: targetBlock.firstBlock,
+        subBlocksId: targetBlock.subBlocksId
+      } ;
+      const previouseBlockId : string|null = targetBlock.firstBlock ? null : targetBlock.id ;
+
+      if((targetBlock.contents!== editedContents) || (targetBlock.subBlocksId!==null)){
         const editedBlock:Block ={
           ...targetBlock,
-          contents:editedContents,
+          contents:block.contents!== editedContents ?editedContents : targetBlock.contents,
+          subBlocksId: targetBlock.subBlocksId !==null ? null : targetBlock.subBlocksId,
           editTime:editTime,
         };
         editBlock(page.id, editedBlock);
-      } 
-      const newBlock = makeNewBlock(page, targetBlock, newBlockContents);
-      addBlock(page.id, newBlock,targetBlockIndex+1, targetBlock.id);
+      }
+      if(block.type ===toggle){
+        const newSubToggleBlock :Block ={
+          ...newBlock,
+          parentBlocksId:[targetBlock.id],
+          firstBlock:false,
+        };
+        addBlock(page.id, newSubToggleBlock, targetBlockIndex+1, previouseBlockId);
+      }else{
+        addBlock(page.id, newBlock,targetBlockIndex+1, previouseBlockId);
+      };
     }else{
+      // edite targetBlock 
       const editedBlock :Block ={
                 ...targetBlock,
                 contents: value,
