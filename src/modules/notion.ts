@@ -178,7 +178,7 @@ export const add_block =(pageId:string, block:Block ,newBlockIndex:number ,previ
   pageId:pageId,
   block:block,
   newBlockIndex :newBlockIndex,
-  previousBlockId:previousBlockId // subBlock으로 만들어질 때 필요 
+  previousBlockId:previousBlockId // enter시에 기준이 된 block이 subBlock 일 경우 넣어주기 , subBlock 으로 추가시 첫번째 sub 으로 되는지, 다음 sub 인지 결정 
 });
 export const edit_block =(pageId:string, block:Block)=> ({
   type:EDIT_BLOCK ,
@@ -847,12 +847,23 @@ export default function notion (state:Notion =initialState , action :NotionActio
       if(action.block.firstBlock){
         targetPage.firstBlocksId?.splice(action.newBlockIndex, theNumber,action.block.id);
       };
+      if(action.block.subBlocksId!==null){
+        // subBlock을 가지는 블록을 기준을  그 다음 블록으로 만들어진 경우  
+        action.block.subBlocksId.forEach((id:string)=>{
+          const {BLOCK,index} =findBlock(targetPage, id);
+          const editedBlock :Block ={
+            ...BLOCK,
+            parentBlocksId : action.block.parentBlocksId !==null ? action.block.parentBlocksId.concat(action.block.id) :[action.block.id],
+            editTime: editTime
+          };
+          editBlockData(index, editedBlock);
+        }
+          ) ;
+      }
       //subBlock 으로 만들어 졌을 때 
       if(action.block.parentBlocksId!==null){
         updateParentBlock(action.block , action.previousBlockId);
-      }else{
-
-      }
+      };
       console.log( "addBlock", targetPage.blocks)
       return {
         pages:pages,
