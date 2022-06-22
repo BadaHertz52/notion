@@ -133,8 +133,7 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
     if(!value.startsWith("/")){
       changeBlockContent();
     }else{
-      
-      commandChange(event);
+      setCommand({boolean:true, command:"/"})
     }
   };
   const onKeyDownContents=(event:React.KeyboardEvent<HTMLDivElement>)=>{
@@ -160,13 +159,14 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
         break;
     };
   };
-  function commandChange (event:ContentEditableEvent){
+  function commandChange (event:React.ChangeEvent<HTMLInputElement>){
     const value = event.target.value;
     const trueOrFale = value.startsWith("/");
+    console.log("cc",value);
     if(trueOrFale){
       setCommand({
         boolean: true , 
-        command: value
+        command: value.toLowerCase()
       });
     }else {
       setCommand({
@@ -176,7 +176,7 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
     };
 
   };
-  function commandKeyUp(event:React.KeyboardEvent<HTMLDivElement>, block:Block){
+  function commandKeyUp(event:React.KeyboardEvent<HTMLInputElement>){
     const code= event.code;
     const firstOn =document.querySelector(".command_btn.on.first");
     if(code ==="Enter"  ){
@@ -196,6 +196,7 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
   const BlockContentEditable=()=>{
     return(
       <>
+      {!command.command? 
         <ContentEditable
           className='contentEditable'
           placeholder="type '/' for commmands"
@@ -204,7 +205,15 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
           onChange={(event)=> onChangeContents(event )}
           onKeyDown={(event)=> onKeyDownContents(event)}
         /> 
-        {command.boolean &&
+        :
+        <>
+          <input
+            type="text"
+            value={command.command}
+            className='contentEditable'
+            onChange={commandChange}
+            onKeyUp={commandKeyUp}
+          />
           <CommandBlock 
             key={`${block.id}_command`}
             page={page}
@@ -215,6 +224,7 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
             setCommand={setCommand}
             addPage={addPage}
           />
+        </>
         }
       </>
     )

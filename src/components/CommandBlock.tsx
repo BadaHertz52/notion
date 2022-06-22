@@ -1,5 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
-import { CSSProperties } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { FcTodoList } from 'react-icons/fc';
 import { IoIosList } from 'react-icons/io';
 import { IoDocumentTextOutline, IoTextOutline } from 'react-icons/io5';
@@ -14,47 +13,24 @@ type CommandBlockProp ={
   block:Block,
   editTime:string,
   editBlock :(pageId:string, block:Block)=>void,
+  command:Command,
   setCommand: Dispatch<SetStateAction<Command>> ,
   addPage:( newPage: Page) => void,
 };
 
-const CommandBlock =({ page ,block , editTime , editBlock ,addPage ,setCommand}:CommandBlockProp)=>{
-  const blockElement = document.getElementById(block.id) as HTMLElement;
-  const mainMenu =document.getElementById("mainMenu");
-  const commandStyle :CSSProperties={
-    position: 'absolute',
-    top: mainMenu !== null? 0: blockElement.clientHeight ,
-    zIndex:10,
-
-  };
-  const textContent =blockElement.textContent?.toLowerCase() as string ;
-  const commandBtns = document.querySelectorAll(".command_btn");
-  const noResult =document.getElementById("noResult");
-  const commandBlock_inner = document.querySelector("#commandBlock_inner");
-  if(textContent !==null){
-    const command = textContent.slice(1);
-    commandBtns.forEach((btn:Element)=>{
-      btn.classList.contains("first") && btn.classList.remove("first");
-
-      if(command !== null &&btn.getAttribute("name")?.includes(command)){
-        !btn.classList.contains("on")&&
-        btn.classList.add("on");
-      }else{
-        btn.classList.contains("on")&&
-        btn.classList.remove("on");
-      };
-    });
-    const onBtns = document.querySelectorAll('.command_btn.on');
-
+const CommandBlock =({ page ,block , editTime , editBlock ,addPage,setCommand ,command}:CommandBlockProp)=>{
+  const [result, setResult]=useState<boolean>(true);
+  const showResult =()=>{
+    const onBtns = document.getElementsByClassName('command_btn on');
+    console.log(onBtns[0]);
     if(onBtns[0]!== undefined){
       onBtns[0].classList.add("first");
-      noResult?.setAttribute("style", "display:none")
+      setResult(true);
     }else{
-      noResult?.setAttribute("style", "display:block");
-      commandBlock_inner?.setAttribute("style", "display:none");
-    }
-    
+      setResult(false)
+    }   
   };
+
   const changeType=( type:string)=>{
     const blockType:BlockType = blockTypes.filter((block_type)=> block_type === type)[0];
 
@@ -71,12 +47,29 @@ const CommandBlock =({ page ,block , editTime , editBlock ,addPage ,setCommand}:
     };
     setCommand({boolean:false, command:null})
   };
+  const makeClassName=(type:string):string=>{
+    const typeCommand = command.command?.slice(1);
+    let className ="";
+    typeCommand !==undefined?
+    (
+      type.includes(typeCommand)?
+      className='command_btn on' :
+      className='command_btn'
+    )
+    :
+    className="command_btn on";
+
+    return className
+  };
+  useEffect(()=>{
+    showResult();
+  },[command.command])
   return(
       <div 
         id='commandBlock'
-        style={commandStyle}
       >
-        <div id='commandBlock_inner'>
+        {result? 
+          <div id='commandBlock_inner'>
           <div className='command basic_blocks'>
             <header className='command_header'>
               BASIC BLOCKS
@@ -84,7 +77,7 @@ const CommandBlock =({ page ,block , editTime , editBlock ,addPage ,setCommand}:
             <div className='command_btns type'>
               <button
                 onClick={()=>changeType("text")} 
-                className='command_btn on' 
+                className={makeClassName("text")} 
                 name='text'
               >
                 <div className='command_btn_inner'>
@@ -101,7 +94,7 @@ const CommandBlock =({ page ,block , editTime , editBlock ,addPage ,setCommand}:
               </button>
               <button  
                 onClick={()=>changeType("page")}
-                className='command_btn on' 
+                className={makeClassName("page")}  
                 name='page'
               >
                 <div className='command_btn_inner'>
@@ -118,7 +111,7 @@ const CommandBlock =({ page ,block , editTime , editBlock ,addPage ,setCommand}:
               </button>
               <button   
                 onClick={()=>changeType("todo")}
-                className='command_btn on' 
+                className={makeClassName("todo list")}  
                 name='todo list'
               >
                 <div className='command_btn_inner'>
@@ -135,7 +128,7 @@ const CommandBlock =({ page ,block , editTime , editBlock ,addPage ,setCommand}:
               </button>
               <button 
                 onClick={()=>changeType("h1")}
-                className='command_btn on'
+                className={makeClassName("h1")} 
                 name='h1'
               >
               <div className='command_btn_inner'>
@@ -153,7 +146,7 @@ const CommandBlock =({ page ,block , editTime , editBlock ,addPage ,setCommand}:
               </button>
               <button 
                 onClick={()=>changeType("h2")}
-                className='command_btn on'
+                className={makeClassName("h2")} 
                 name='h2'
               >
                 <div className='command_btn_inner'>
@@ -171,7 +164,7 @@ const CommandBlock =({ page ,block , editTime , editBlock ,addPage ,setCommand}:
               </button>
               <button 
                 onClick={()=>changeType("h3")}
-                className='command_btn on'
+                className={makeClassName("h3")} 
                 name="h3"
               >
                 <div className='command_btn_inner'>
@@ -189,7 +182,7 @@ const CommandBlock =({ page ,block , editTime , editBlock ,addPage ,setCommand}:
               </button>
               <button 
                 onClick={()=>changeType("bullet")}
-                className='command_btn on'
+                className={makeClassName("bullet list")} 
                 name='bullet list'
               >
                 <div className='command_btn_inner'>
@@ -206,7 +199,7 @@ const CommandBlock =({ page ,block , editTime , editBlock ,addPage ,setCommand}:
               </button>
               <button 
                 onClick={()=>changeType("number")}
-                className='command_btn on'
+                className={makeClassName('number list')} 
                 name="number list"
               >
                 <div className='command_btn_inner'>
@@ -223,7 +216,7 @@ const CommandBlock =({ page ,block , editTime , editBlock ,addPage ,setCommand}:
               </button>
               <button
                 onClick={()=>changeType("toggle")}
-                className='command_btn on'
+                className={makeClassName("toggle list")} 
                 name="toggle list"
               >
               <div className='command_btn_inner'>
@@ -240,10 +233,14 @@ const CommandBlock =({ page ,block , editTime , editBlock ,addPage ,setCommand}:
               </button>
             </div>
           </div>
-        </div>
-        <div className='noResult'>
-          No results
-        </div>
+          </div>
+        :
+          <div className='noResult'>
+            No results
+          </div>
+        }
+
+
       </div>
   )
 };
