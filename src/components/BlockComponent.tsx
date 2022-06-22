@@ -38,7 +38,7 @@ type BlockContentProps={
 export type itemType ={
   block:Block,
   blockIndex:number ,
-}
+};
 export const BlockComment =({block}:BlockCommentProps)=>{
   return (
       <div 
@@ -60,11 +60,12 @@ export const BlockComment =({block}:BlockCommentProps)=>{
 };
 const BlockContent =({block, onChangeContents, onKeyDownContents}:BlockContentProps)=>{
   const contentEditableRef= useRef<HTMLElement>(null);
+
   const showBlockFn=(event: React.MouseEvent)=>{
-    const mainBlock= event.currentTarget.parentElement?.parentElement ;
+    const currentTarget =event.currentTarget as Element;
+    const mainBlock= currentTarget.parentElement?.parentElement ;
     const domReact =mainBlock?.getBoundingClientRect();
     const editableBlockDomRect =document.getElementsByClassName("editableBlock")[0].getBoundingClientRect(); 
-    
     const blockFn =document.getElementById("blockFn");
     blockFn?.classList.toggle("on");
     blockFn?.classList.contains("on")?
@@ -81,6 +82,7 @@ const BlockContent =({block, onChangeContents, onKeyDownContents}:BlockContentPr
   };
 
   const BlockContentEditable=()=>{
+
     return(
         <ContentEditable
           className='contentEditable'
@@ -181,16 +183,19 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
           firstBlock:false,
         };
         addBlock(page.id, newSubToggleBlock, targetBlockIndex+1, previouseBlockId);
+
       }else{
         addBlock(page.id, newBlock,targetBlockIndex+1, previouseBlockId);
       };
     }else{
       // edite targetBlock 
+      
       const editedBlock :Block ={
                 ...targetBlock,
                 contents: value,
                 editTime:editTime,
               };
+      targetBlock.contents !== value &&
       sessionStorage.setItem("itemsTobeEdited", JSON.stringify(editedBlock));
     };
     /// about Commane
