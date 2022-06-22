@@ -243,7 +243,7 @@ a:link, a:active, a:visited {
   background-color: rgba(255, 212, 0, 0.8);
 }
 
-.blockContents .contentEditable:empty::after {
+.blockContents .contentEditable:focus:empty::after {
   content: attr(placeholder);
   color: #B9B8B6;
 }
