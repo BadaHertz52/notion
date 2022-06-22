@@ -43,7 +43,7 @@
 .blockFn.on {
   display: flex;
   position: absolute;
-  padding-right:3rem;
+  padding-right:5px;
   z-index: 5;
   .blockFnIcon{
     svg{
@@ -182,6 +182,7 @@
 #commandBlock{
 
   @include popupMenu;
+  margin-top: 1rem;
   &_inner {
     padding: 5px;
     height: 350px;

@@ -106,7 +106,7 @@ a:link, a:active, a:visited {
   display: -ms-flexbox;
   display: flex;
   position: absolute;
-  padding-right: 3rem;
+  padding-right: 5px;
   z-index: 5;
 }
 
@@ -243,7 +243,7 @@ a:link, a:active, a:visited {
   background-color: rgba(255, 212, 0, 0.8);
 }
 
-.blockContents .contents:empty::after {
+.blockContents .contentEditable:empty::after {
   content: attr(placeholder);
   color: #B9B8B6;
 }
@@ -272,6 +272,7 @@ a:link, a:active, a:visited {
   border-radius: 8px;
   -webkit-box-shadow: 0px 0px 23px -5px #ababab;
   box-shadow: 0px 0px 23px -5px #ababab;
+  margin-top: 1rem;
 }
 
 #commandBlock::-webkit-scrollbar-thumb {
