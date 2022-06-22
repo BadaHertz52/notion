@@ -48,7 +48,6 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
   const giveFocusToContent =(event:React.MouseEvent)=>{
   const currentTarget =event.currentTarget as HTMLElement;
   const contentEditable =currentTarget.getElementsByClassName("contentEditable")[0] as HTMLElement ;
-  console.log(currentTarget, contentEditable);
   contentEditable.focus();
   }
 
