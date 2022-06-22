@@ -204,7 +204,6 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
   const onKeyDownContents=(event:React.KeyboardEvent<HTMLDivElement>)=>{
     const code =event.code.toLowerCase();
     const targetBlock= findTargetBlock(event);
-    const targetBlockIndex= page.blocksId.indexOf(targetBlock.id);
     switch (code) {
       case "tab":
         event.preventDefault();
@@ -213,55 +212,17 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
           const previousBlockDoc= previousEditableDoc.firstChild?.firstChild as HTMLElement;
           const previousBlockId = previousBlockDoc.id.slice(6);
           changeToSub(page.id, targetBlock,previousBlockId );
-          
         break;
-    
+      case "backspace":
+        const text =event.currentTarget.innerText;
+        console.log(text, text==="");
+        if(text===""){
+          deleteBlock(page.id, targetBlock);
+        }
+        break;
       default:
         break;
-    }
-    // const childeNodes =[...event.currentTarget.childNodes];
-    //console.log(childeNodes , currentTarget);
-    // if(!command.boolean){
-    //   const code =event.code.toLowerCase();
-    //   if(code.startsWith("key")){
-    //     if(text.startsWith("/")){
-
-    //     }else{
-    //       const newBlock :Block ={
-    //         ...targetBlock,
-    //         contents: text,
-    //         editTime:editTime
-    //       };
-    //       editBlock(page.id, newBlock);
-    //     }
-    //   }else{
-    //     switch (code) {
-    //       case "enter":
-    //         const end = text?.indexOf("<div>");
-    //         console.log("enter", text,end, text.slice(0, end),text.slice(end));
-    //         const editedTargetBlock:Block ={
-    //           ...targetBlock,
-    //           contents: text.slice(0, end),
-    //           editTime:editTime
-    //         };
-    //        //editBlock(page.id, editedTargetBlock);
-    //         
-    //         break;
-    //       case"tab" :
-    //       break;
-    //       case "backspace":
-    //         break;
-          
-    //       default:
-    //         break;
-    //     }
-    //   }
-
-    // }else{
-    //   ///command.boolean ===true
-    //   commandKeyUp(event, block);
-    // }
-
+    };
   };
   function commandChange (event:ContentEditableEvent){
     const value = event.target.value;
