@@ -48,7 +48,17 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
   const inner =document.getElementById("inner");
   inner?.addEventListener("click",updateBlock);
   inner?.addEventListener("keyup",updateBlock);
-  
+  useEffect(()=>{
+    const newBlockItem= sessionStorage.getItem("newBlock");
+    if(newBlockItem!==null){
+        const newBlockContentsDoc = document.getElementById(`${newBlockItem}_contents`);
+        if(newBlockContentsDoc !==null){
+          const newBlockContentEditableDoc= newBlockContentsDoc.firstElementChild as HTMLElement; 
+          newBlockContentEditableDoc.focus();
+        };
+        sessionStorage.removeItem("newBlock");
+    }
+  },[])
   return(
       <div 
         className="editableBlock"

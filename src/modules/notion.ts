@@ -864,6 +864,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
       if(action.block.parentBlocksId!==null){
         updateParentBlock(action.block , action.previousBlockId);
       };
+      sessionStorage.setItem("newBlock", action.block.id);
       console.log( "addBlock", targetPage.blocks)
       return {
         pages:pages,
@@ -871,7 +872,6 @@ export default function notion (state:Notion =initialState , action :NotionActio
         pagesId:pagesId,
         trash:state.trash
       }; 
-
     case EDIT_BLOCK:
       editBlockData(blockIndex, action.block);
       console.log("edit",action.block  ,targetPage.blocks )
