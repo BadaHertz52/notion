@@ -84,13 +84,14 @@ const BlockContent =({block, onChangeContents, onKeyDownContents}:BlockContentPr
     return(
         <ContentEditable
           className='contentEditable'
+          placeholder="type '/' for commmands"
           html= {block.contents}
           innerRef={contentEditableRef}
           onChange={(event)=> onChangeContents(event )}
           onKeyDown={(event)=> onKeyDownContents(event)}
         /> 
     )
-  }
+  };
   return(
     <>
     {block.comments ==null ?
@@ -98,7 +99,6 @@ const BlockContent =({block, onChangeContents, onKeyDownContents}:BlockContentPr
       <button 
         className="contents pageTitle"
         id={`${block.id}_contents`}
-        placeholder="type '/' for commmands"
         onMouseOver={showBlockFn}
       >
         <BlockContentEditable/>
@@ -107,7 +107,6 @@ const BlockContent =({block, onChangeContents, onKeyDownContents}:BlockContentPr
       <div 
         id={`${block.id}_contents`}
         className="contents"
-        placeholder="type '/' for commmands"
         onMouseOver={showBlockFn}
       >
         <BlockContentEditable/>
@@ -117,7 +116,6 @@ const BlockContent =({block, onChangeContents, onKeyDownContents}:BlockContentPr
     <button 
       id={`${block.id}_contents`}
       className="contents commentBtn"
-      placeholder="type '/' for commmands"
       onMouseOver={showBlockFn}
     >
       <BlockContentEditable/>
