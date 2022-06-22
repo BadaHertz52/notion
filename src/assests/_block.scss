@@ -168,7 +168,7 @@
       background-color: $commentHover;
     }
   }
-  .contents:empty::after{
+  .contentEditable:empty::after{
     content: attr(placeholder);
     color: $mud;
   }
