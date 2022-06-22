@@ -59,7 +59,6 @@ export const BlockComment =({block}:BlockCommentProps)=>{
 };
 const BlockContent =({block, onChangeContents, onKeyDownContents}:BlockContentProps)=>{
   const contentEditableRef= useRef<HTMLElement>(null);
-  const editTime= JSON.stringify(Date.now());
   const showBlockFn=(event: React.MouseEvent)=>{
     const mainBlock= event.currentTarget.parentElement?.parentElement ;
     const domReact =mainBlock?.getBoundingClientRect();
@@ -296,34 +295,7 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
       setCommand({boolean:false, command:null})
     }
   };
-  // function showBlockFn( blockId:string){
-  //   const blockDoc = document.getElementById(`block_${block.id}`) as HTMLElement;
-  //   const blockContentsCollection =blockDoc.getElementsByClassName("blockContents");
-  //   const blockContents =blockContentsCollection[0];
-  //   console.log(blockDoc,blockContents);
-  //   //blockFn positon
-  //   if(blockContents!==undefined){
-  //     const targetBlock =findBlock(page, blockId).BLOCK;
-  //     const blockFn = document.getElementById("blockFn");
-  //     blockFn?.classList.toggle("on");
-  //     if(blockFn?.classList.contains("on")){
-  //       sessionStorage.setItem("blockFnTargetBlock", JSON.stringify(targetBlock));
-  //     }else{
-  //       sessionStorage.removeItem("blockFnTargetBlock");
-  //     };
-  //     const domRect =blockContents?.getClientRects()[0];
-  //     if(domRect!==undefined){
-  //       const targetY = domRect.top;
-  //       const top = domRect.y -(domRect.height * 0.8) ;
-  //       console.log("y", targetY);
-  //       blockFn?.setAttribute("style", `top:${top}px;left: -45px;`);
-  //       }else{
-  //         console.log("Cant' find blockContents")
-  //       };
-  //     };
-
-  // };
-
+  
   const ListSub = ()=>{
     const blockContentsRef= useRef<HTMLDivElement>(null);
     const listStyle =(block:Block):CSSProperties=>{
@@ -475,8 +447,6 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
             setCommentBlock={setCommentBlock}
             commentBlock={commentBlock}
             setTargetPageId={setTargetPageId}
-            command={command} 
-            setCommand={setCommand}
           />
         )
         }
