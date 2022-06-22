@@ -193,6 +193,7 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
               };
       sessionStorage.setItem("itemsTobeEdited", JSON.stringify(editedBlock));
     };
+    /// about Commane
     if(value.startsWith("/")){
       setCommand({boolean:true, command:value})
     }else{
