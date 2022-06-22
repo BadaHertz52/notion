@@ -14,7 +14,7 @@ type EditorContainerProps ={
   pagePath : pathType[]|null,
   editBlock :(pageId: string, block: Block) => void,
   addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
-  changeToSub: (pageId: string, block: Block, first: boolean, newParentBlock: Block) => void
+  changeToSub: (pageId: string, block: Block, newParentBlockId: string) => void,
   raiseBlock: (pageId: string, block: Block) => void,
   deleteBlock: (pageId: string, block: Block) => void,
   
@@ -36,7 +36,7 @@ export type Command ={
 };
 const EditorContainer =({sideAppear,page,isInTrash, pagePath ,changeSide,addBlock,editBlock,deleteBlock,addPage,editPage,deletePage,restorePage, cleanTrash, setTargetPageId ,commentBlock,setCommentBlock}:EditorContainerProps)=>{
   const dispatch =useDispatch();
-  const changeToSub =(pageId: string, block: Block, first: boolean, newParentBlock: Block) => dispatch((change_to_sub(pageId, block, first ,newParentBlock)));
+  const changeToSub =(pageId: string, block: Block,  newParentBlockId: string)=> dispatch(change_to_sub(pageId, block, newParentBlockId));
   const raiseBlock =(pageId: string, block: Block) =>dispatch((raise_block(pageId, block)));
   const userName :string  =useSelector((state:RootState)=> state.user.userName) ;
 

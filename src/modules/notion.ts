@@ -191,12 +191,11 @@ export const delete_block =(pageId:string, block:Block)=> ({
   block:block
 });
 
-export const change_to_sub =(pageId:string, block:Block ,first:boolean ,newParentBlock:Block)=> ({
+export const change_to_sub =(pageId:string, block:Block ,newParentBlockId:string)=> ({
   type:CHANGE_TO_SUB_BLOCK ,
   pageId:pageId,
   block:block,
-  first:first,
-  newParentBlock:newParentBlock
+  newParentBlockId:newParentBlockId
 });
 
 export const raise_block =(pageId:string, block:Block)=>({
@@ -873,20 +872,44 @@ export default function notion (state:Notion =initialState , action :NotionActio
       };
     
     case CHANGE_TO_SUB_BLOCK:
-      //1. change  subBlocksId of parentBlock which is action.block's new parentBlock
-        const parentIndex= targetPage.blocksId.indexOf(action.newParentBlock.id);
-        editBlockData(parentIndex, action.newParentBlock);
+      //1. change  action.block's new parentBlock
+        const {BLOCK, index} = findBlock(targetPage, action.newParentBlockId);
+        const parentBlock:Block ={
+          ...BLOCK,
+          subBlocksId: BLOCK.subBlocksId !==null? BLOCK.subBlocksId.concat(action.block.id)  :[action.block.id],
+          editTime:editTime
+        }
+        const parentBlockIndex =index;
+        editBlockData(parentBlockIndex, parentBlock);
       
       //2. change actoin.block to subBlopck : edit parentsId of action.block 
-      editBlockData(blockIndex, action.block);
-
-      // first-> sub 인 경우  
-      if(action.first){
+        const editedBlock :Block ={
+          ...action.block,
+          firstBlock: false,
+          parentBlocksId: parentBlock.parentBlocksId !==null?
+                          parentBlock.parentBlocksId.concat(parentBlock.id):
+                          [parentBlock.id],
+          editTime:editTime
+        }
+      editBlockData(blockIndex,editedBlock);
+      // 3. first-> sub 인 경우  
+      if(action.block.firstBlock){
         // delte  id from firstBlocksId
         const index:number = targetPage.firstBlocksId?.indexOf(action.block.id) as number;
         targetPage.firstBlocksId?.splice(index,1);
       };
+       // 4. action.block의 subBlock 에서 다른 subBlock 으로 변경되었을 경우 
+      if(action.block.parentBlocksId !==null){
+        const previouseParentBlockId = action.block.parentBlocksId[action.block.parentBlocksId.length-1];
+        const {BLOCK, index} =findBlock(targetPage,previouseParentBlockId);
 
+        const edtitedPreviousParentBlock :Block ={
+          ...BLOCK,
+          subBlocksId: BLOCK.subBlocksId !==null?BLOCK.subBlocksId.filter((id:string)=> id !== action.block.id) :null ,
+          editTime:editTime,
+        };
+        editBlockData(index, edtitedPreviousParentBlock);
+      };
       console.log("CHANGE subBlock", targetPage.blocks);
       return {
         pages:pages,

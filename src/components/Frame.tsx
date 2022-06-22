@@ -16,7 +16,7 @@ type FrameProps ={
   targetPage:Page,
   editBlock :(pageId: string, block: Block) => void,
   addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
-  changeToSub: (pageId: string, block: Block, first: boolean, newParentBlock: Block) => void
+  changeToSub: (pageId: string, block: Block, newParentBlockId: string) => void,
   raiseBlock: (pageId: string, block: Block) => void,
   deleteBlock: (pageId: string, block: Block) => void,
   addPage :(newPage:Page ,)=>void,

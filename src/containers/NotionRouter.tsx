@@ -56,7 +56,7 @@ const NotionRouter =()=>{
     dispatch(add_block(pageId,block ,newBlockIndex ,previousBlockId))
   };
   const deleteBlock=(pageId:string,block:Block)=>{dispatch(delete_block(pageId,block))};
-  const changeToSub =(pageId:string, block:Block , first:boolean ,newParentBlock:Block)=>{dispatch(change_to_sub(pageId,block,first,newParentBlock));
+  const changeToSub =(pageId:string, block:Block ,newParentBlockId:string)=>{dispatch(change_to_sub(pageId,block,newParentBlockId));
   };
   const raiseBlock=(pageId:string, block:Block)=>{dispatch(raise_block(pageId,block))};
   //block--
