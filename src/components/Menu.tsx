@@ -270,6 +270,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
               block={block}
               editTime={JSON.stringify(Date.now())}
               editBlock={editBlock}
+              command={command}
               setCommand={setCommand}
               addPage={addPage}
             />
