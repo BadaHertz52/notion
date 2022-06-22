@@ -187,9 +187,23 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
     }
   };
   const onKeyDownContents=(event:React.KeyboardEvent<HTMLDivElement>)=>{
-    // const targetBlock= findTargetBlock(event);
-    // const targetBlockIndex= page.blocksId.indexOf(targetBlock.id);
-    // const currentTarget =event.currentTarget as HTMLDivElement;
+    const code =event.code.toLowerCase();
+    const targetBlock= findTargetBlock(event);
+    const targetBlockIndex= page.blocksId.indexOf(targetBlock.id);
+    switch (code) {
+      case "tab":
+        event.preventDefault();
+          const targetEditableDoc = document.getElementById(`block_${targetBlock.id}`)?.parentElement?.parentElement as HTMLElement ;
+          const previousEditableDoc = targetEditableDoc.previousElementSibling as HTMLElement ;  
+          const previousBlockDoc= previousEditableDoc.firstChild?.firstChild as HTMLElement;
+          const previousBlockId = previousBlockDoc.id.slice(6);
+          changeToSub(page.id, targetBlock,previousBlockId );
+          
+        break;
+    
+      default:
+        break;
+    }
     // const childeNodes =[...event.currentTarget.childNodes];
     //console.log(childeNodes , currentTarget);
     // if(!command.boolean){
