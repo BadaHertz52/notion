@@ -150,6 +150,12 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
     const targetBlock = findBlock(page, blockId).BLOCK;
     return targetBlock;
   };
+  const giveFocusToContent =(event:React.MouseEvent)=>{
+    const currentTarget =event.currentTarget as HTMLElement;
+    const contentEditable =currentTarget.getElementsByClassName("contentEditable")[0] as HTMLElement ;
+    console.log(currentTarget, contentEditable);
+    contentEditable.focus();
+  }
   const onChangeContents=(event:ContentEditableEvent)=>{
     const value =event.target.value;
     const targetBlock= findTargetBlock(event);
@@ -289,6 +295,7 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
               className= "blockContents"
               ref={blockContentsRef}
               style={listStyle(block)}
+              onMouseOver={giveFocusToContent}
               >
               <div 
                 className='list_marker'
@@ -378,6 +385,7 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
         <div 
           className='blockContents' 
           style={blockContentsStyle(block)}
+          onMouseOver={ giveFocusToContent}
         >
         <BlockContent
           block={block}
