@@ -5,8 +5,9 @@ import { GrCheckbox, GrCheckboxSelected, GrDocumentText } from 'react-icons/gr';
 import { IoChatboxOutline } from 'react-icons/io5';
 import { MdPlayArrow } from 'react-icons/md';
 import {  CSSProperties} from 'styled-components';
-import { Command } from '../containers/EditorContainer';
-import {  Block,BlockType,blockTypes,findBlock,makeNewBlock,Page } from '../modules/notion';
+import EditorContainer, { Command } from '../containers/EditorContainer';
+import {  Block,BlockType,blockTypes,findBlock,findParentBlock,makeNewBlock,Page, toggle } from '../modules/notion';
+import EditableBlock from './EditableBlock';
 
 type BlockProp ={
   userName:string,
@@ -431,7 +432,7 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
       >
         {subBlocks!==undefined&&
         subBlocks.map((subBlock :Block)=> 
-          <BlockComponent
+          <EditableBlock
             key ={subBlocks.indexOf(subBlock)} 
             userName={userName} 
             page={page}
