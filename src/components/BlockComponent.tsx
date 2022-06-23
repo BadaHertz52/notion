@@ -150,9 +150,14 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
         break;
       case "backspace":
         const text =event.currentTarget.innerText;
-        console.log(text, text==="");
+        const cursor = document.getSelection();
+        const offset =cursor?.anchorOffset;
         if(text===""){
           deleteBlock(page.id, targetBlock);
+        };
+        if(text === targetBlock.contents && offset ===0){
+          raiseBlock(page.id, targetBlock);
+          
         }
         break;
       default:
