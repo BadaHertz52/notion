@@ -1,3 +1,6 @@
+import { BsNutFill } from "react-icons/bs";
+import { RiAncientPavilionFill } from "react-icons/ri";
+
 //TYPE 
 export const text= "text" as const ;
 export const toggle ="toggle" as const  ;
@@ -782,61 +785,107 @@ export default function notion (state:Notion =initialState , action :NotionActio
       console.log("can't find parentBlocks of this block")
     }
   };
-  const deleteBlockData =(page:Page,block :Block ,targetIndex:number)=>{
+  const findPreviousBlockInDoc =(page:Page ,block :Block):{previousBlockInDoc:Block,
+  previousBlockInDocIndex: number}=>{
+    const editableDoc = document.getElementById(`block_${block.id}`)?.parentElement?.parentElement as HTMLElement; 
+      const previouseBlockElement = editableDoc.previousElementSibling;
+
+      const findPreviousBlockId =():string=>{
+        let previousBlockId =""; 
+        if(previouseBlockElement ==null && block.parentBlocksId!==null){
+          const length =block.parentBlocksId.length as number;
+          previousBlockId =block.parentBlocksId[length-1];
+        }
+        if(previouseBlockElement!==null){
+          const previousBlockDom =previouseBlockElement.firstChild?.firstChild  as HTMLElement;
+          previousBlockId =previousBlockDom.getAttribute("id")?.slice(6) as string;
+          
+        };
+        return previousBlockId ;
+      };
+      const previousBlockId = findPreviousBlockId();
+      const BLOCK= findBlock( page,previousBlockId).BLOCK;
+      const previousBlockInDoc =(BLOCK.subBlocksId ===null|| (BLOCK.subBlocksId !==null && BLOCK.subBlocksId.includes(block.id)))? BLOCK :
+      findBlock(page,BLOCK.subBlocksId[BLOCK.subBlocksId.length -1]).BLOCK;
+      console.log("predoc,", previousBlockInDoc)
+      const previousBlockInDocIndex = page.blocksId.indexOf(previousBlockInDoc.id);
+      return {
+        previousBlockInDoc:previousBlockInDoc,
+        previousBlockInDocIndex:previousBlockInDocIndex
+      }
+
+  };
+  const deleteBlockData =(page:Page,block :Block, blockIndex:number)=>{
+    
     if(block.subBlocksId !==null  ){
-    // block.suBlocksId를 이전 block의 subBlocks로 옮기기
+    // 가정 설명 : 삭제 시 , 삭제되는 block 이 firstBlock 이면 subBlock 은 firstBlock 이 되고 아니면 화면상 이전 블록의 subBlock이 됨
     const subBlocks :Block[] =block.subBlocksId.map((id:string)=> {
       const {BLOCK} =findBlock(page, id);
       return BLOCK 
     });
-
-    const blockDoc = document.getElementById(block.id)?.parentElement?.parentElement as HTMLElement; 
-    const previouseBlockElement = blockDoc.previousElementSibling;
-    if(previouseBlockElement !==null){
-      const previousBlockDom =previouseBlockElement.firstChild?.firstChild  as HTMLElement;
-      const previousBlockId =previousBlockDom.getAttribute("id") as string;
-      const {index, BLOCK}= findBlock( targetPage,previousBlockId);
-      const previousBlockIndex =index;
-      const previousBlock =BLOCK;
-      const editedPreviousBlock :Block ={
-        ...previousBlock,
-        editTime: editTime,
-        subBlocksId:[...block.subBlocksId]
-      };
-      editBlockData(previousBlockIndex, editedPreviousBlock);
-      subBlocks.forEach((subBlock
-        :Block)=>{
-          const editedSubBlock :Block={
-            ...subBlock,
-            parentBlocksId: previousBlock.parentBlocksId !==null? previousBlock.parentBlocksId.concat(previousBlock.id):[...previousBlock.id],
-            editTime:editTime
-          };
-          const editedSubBlockIndex = page.blocksId.indexOf(subBlock.id);
-          editBlockData(editedSubBlockIndex, editedSubBlock);
-        })
-    }else{
-      subBlocks.forEach((block:Block)=>{
-        const index = page.blocksId.indexOf(block.id);
-        const editedSubBlock:Block ={
-          ...block,
+    if(block.firstBlock ==null){
+      subBlocks.forEach((subBlock:Block)=>{
+        const raisedSubBlock :Block ={
+          ...subBlock,
           parentBlocksId:null,
+          firstBlock:true,
           editTime:editTime
         };
-        editBlockData(index, editedSubBlock);
-      })
+        const index = page.blocksId.indexOf(subBlock.id);
+        editBlockData(index, raisedSubBlock);
+      });
+      //block 삭제와 page firstBlockId 수정은 뒤에서 함 
+    }else{
+      if(page.firstBlocksId !== null && page.firstBlocksId[0]!== block.id){
+        const {previousBlockInDoc,
+        previousBlockInDocIndex} =findPreviousBlockInDoc(page, block);
+        const editedPreviousBlock :Block ={
+          ...previousBlockInDoc,
+          editTime: editTime,
+          subBlocksId:previousBlockInDoc.subBlocksId ==null? [...block.subBlocksId] : previousBlockInDoc.subBlocksId.concat(block.subBlocksId),
+        };
+        editBlockData(previousBlockInDocIndex, editedPreviousBlock);
+        subBlocks.forEach((subBlock
+          :Block)=>{
+            const editedSubBlock :Block={
+              ...subBlock,
+              parentBlocksId: previousBlockInDoc.parentBlocksId !==null? previousBlockInDoc.parentBlocksId.concat(previousBlockInDoc.id):[...previousBlockInDoc.id],
+              editTime:editTime
+            };
+            const editedSubBlockIndex = page.blocksId.indexOf(subBlock.id);
+            editBlockData(editedSubBlockIndex, editedSubBlock);
+          })
+      }
     }
+    };
+    // firstBlocks 수정 
+    if(block.firstBlock !==null && page.firstBlocksId!==null){
+      const index:number= page.firstBlocksId?.indexOf(block.id) as number;
+      let editedTargetPage :Page ={
+        ...page,
+        firstBlocksId: page.firstBlocksId.filter((id:string)=> id !== block.id),
+        editTime:editTime
+      };
 
-  };
-    targetPage.blocks?.splice(targetIndex,1);
-    targetPage.blocksId?.splice(targetIndex,1);
-    console.log("deletedata", targetPage.blocks);
+      if(block.subBlocksId!==null){
+        const pre =page.firstBlocksId?.slice(0, index);
+        const after =page.firstBlocksId?.slice(index+1);
+        editedTargetPage ={
+          ...editedTargetPage,
+          firstBlocksId: after[0]!==undefined? 
+                      [...pre, ...block.subBlocksId, ...after] : 
+                      [...pre, ...block.subBlocksId],
+        };
+      };
 
-  if(block.firstBlock){
-    const index:number= targetPage.firstBlocksId?.indexOf(block.id) as number;
-    targetPage.firstBlocksId?.splice( index,1
-    );
+      pages.splice(pageIndex,1,editedTargetPage);
+    };
+
+    page.blocks?.splice(blockIndex,1);
+    page.blocksId?.splice(blockIndex,1);
+    console.log("deletedata", page.blocks);
   };
-  };
+
 
   switch (action.type) {
     case ADD_BLOCK:
@@ -930,75 +979,93 @@ export default function notion (state:Notion =initialState , action :NotionActio
       }; 
 
     case RAISE_BLOCK :
-      // cursor.anchorOffset== 0 일때 backspace 를 누르면 해당 block data는 삭제되고 해당 block 의 contents가 이전 block 을 붇여지는 것 
+      // cursor.anchorOffset== 0 일때 backspace 를 누를때 단. targetPage의 fistBlocksId 의 첫번째 인수는 불가 
+      //  1. previsouBlockInDoc 의 content 수정 
+        // : actionblock 이 firstBlock 인 경우, 
+        //   block 이 sub 이면서 previousblock이 같은 sub 합렬의 다른 sub 의 sub인 경우 
+      // 2. action block 의 subBlock 앞으로 땡기기 
+        if(targetPage.firstBlocksId!==null &&
+          targetPage.firstBlocksId[0] !== action.block.id
+          ){
+          // 1. 
+            const {previousBlockInDoc , previousBlockInDocIndex}=findPreviousBlockInDoc(targetPage, action.block);
+            const preIsParent = previousBlockInDoc.subBlocksId!==null && previousBlockInDoc.subBlocksId[0] ===action.block.id ;
+            const preIsSubOfPreSub = action.block.parentBlocksId !==null && previousBlockInDoc.parentBlocksId!==null && (action.block.parentBlocksId?.length < previousBlockInDoc.parentBlocksId.length);
 
-        // dom 상 이전 block 찾기 
-        if(action.block.parentBlocksId==null){
-          const previousBlock = targetPage.blocks[blockIndex-1];
-          const newPreviousBlock:Block ={
-            ...previousBlock,
-            contents:`${previousBlock.contents}${action.block.contents}`,
-            editTime:editTime
-          };
-          editBlockData(blockIndex-1, newPreviousBlock);
+            console.log(action.block.firstBlock,preIsParent , preIsSubOfPreSub );
 
-        }else{
-          const {parentBlockIndex, parentBlock} =findParentBlock(targetPage, action.block);
-   
-          const subBlocksId = parentBlock.subBlocksId;
-          if(subBlocksId?.includes(action.block.id)){
-            const subBlockIndex = subBlocksId?.indexOf(action.block.id) as number;
-            const newSubBlocksId = parentBlock.subBlocksId?.filter((id:string)=> id !== action.block.id) as string[]; 
-  
-            if(subBlockIndex ===0){
-              const newParentBlock:Block ={
-                ...parentBlock,
-                contents: `${parentBlock.contents}${action.block.contents}`,
-                subBlocksId : newSubBlocksId,
-                editTime: editTime
-              };
-              editBlockData(parentBlockIndex, newParentBlock);
-            }else {
-              const newParentBlock :Block ={
-                ...parentBlock,
-                subBlocksId:newSubBlocksId
-              };
-              editBlockData(parentBlockIndex, newParentBlock);
-              const {index, BLOCK} =findBlock(targetPage,subBlocksId[subBlockIndex-1]); 
-  
-              const newSubBlock:Block ={
-                ...BLOCK,
-                contents:`${BLOCK.contents}${action.block.contents}`,
-                parentBlocksId:null,
-                editTime:editTime,
-              };
-              editBlockData(index, newSubBlock);
-            };
-          }else{
-            if(subBlocksId!==null){
-              const lastSubBlockId = subBlocksId?.[subBlocksId.length -1] as string ;
-              const {index, BLOCK}= findBlock(targetPage, lastSubBlockId);
-              const newLastSubBlock:Block ={
-                ...BLOCK,
-                contents : `${BLOCK.contents}${action.block.contents}`,
-                editTime: editTime
-              };
-              editBlockData(index, newLastSubBlock);
-          
-            }else{
-              const previousBlock:Block =targetPage.blocks[blockIndex-1];
-              const editedPreviousBlock:Block ={
-                ...previousBlock,
-                contents:`${previousBlock.contents}${action.block.contents}`,
+            if(action.block.firstBlock ||preIsParent || preIsSubOfPreSub){
+              const editedPreBlockInDoc: Block= {
+                ...previousBlockInDoc,
+                contents: `${previousBlockInDoc.contents}${action.block.contents}`,
                 editTime:editTime
               };
-              editBlockData(blockIndex-1, editedPreviousBlock);
-              
-            }
-          };
-        };
-        deleteBlockData(targetPage ,action.block, blockIndex);
-        console.log("raiseBlock",targetPage.blocks );
+              editBlockData(previousBlockInDocIndex, editedPreBlockInDoc);
+
+              targetPage.blocks.splice(blockIndex,1);
+              targetPage.blocksId.splice(blockIndex,1);
+
+              if(action.block.firstBlock){
+                const index= targetPage.firstBlocksId.indexOf(action.block.id); 
+                targetPage.firstBlocksId.splice(index,1)
+              }else{
+                const {parentBlock, parentBlockIndex}=findParentBlock(targetPage, action.block);
+                editBlockData(parentBlockIndex,{
+                  ...parentBlock,
+                  subBlocksId: parentBlock.subBlocksId!==null? parentBlock.subBlocksId.filter((id:string)=> id !== action.block.id):null,
+                  editTime:editTime
+                })
+              }
+            }else{
+              /// action.block 이 subBlock 이고 previous 가 action block 의 parent 인 경우나 같은 paretn 의 같은 항렬읠 subBlock 인 경우 
+              const {parentBlock, parentBlockIndex}= findParentBlock(targetPage, action.block);
+
+              const raisedBlock :Block={
+                ...action.block,
+                firstBlock:parentBlock.firstBlock,
+                parentBlocksId: parentBlock.parentBlocksId,
+              };
+              editBlockData(blockIndex, raisedBlock);
+              if(parentBlock.firstBlock){
+                const firstBlockIndex = targetPage.firstBlocksId.indexOf(parentBlock.id); 
+                targetPage.firstBlocksId.splice(firstBlockIndex+1,0, action.block.id);
+              }
+              parentBlock.subBlocksId !==null &&
+              editBlockData(parentBlockIndex,{
+                ...parentBlock,
+                subBlocksId: parentBlock.subBlocksId.filter((id:string)=> id !== action.block.id),
+                editTime:editTime
+              } );
+            
+            };
+            if(action.block.subBlocksId !==null){
+              const subBlocks =action.block.subBlocksId?.map((id:string)=> findBlock(targetPage,id).BLOCK);
+              subBlocks.forEach((block:Block)=>{
+                const index = targetPage.blocksId.indexOf(block.id);
+                const raisedBlock :Block ={
+                  ...block,
+                  firstBlock:action.block.firstBlock,
+                  parentBlocksId: action.block.parentBlocksId,
+                  editTime:editTime
+                };
+                editBlockData(index, raisedBlock);
+              });
+              if(action.block.parentBlocksId !==null){
+                const grandParentBlockId = action.block.parentBlocksId[action.block.parentBlocksId.length -1];
+                const {BLOCK , index} =findBlock(targetPage,grandParentBlockId);
+                
+                const grandParentBlock :Block ={
+                  ...BLOCK,
+                  subBlocksId: BLOCK.subBlocksId !== null? BLOCK.subBlocksId.concat(action.block.subBlocksId) : [...action.block.subBlocksId]
+                };
+                editBlockData( index, grandParentBlock);
+                
+              }
+            };
+          }
+
+
+        console.log("raiseBlock",targetPage.blocks , targetPage.firstBlocksId);
       return {
         pages:pages,
         firstPagesId:firstPagesId,
