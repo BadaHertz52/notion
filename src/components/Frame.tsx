@@ -1,5 +1,5 @@
 import React, { CSSProperties, Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { Block, blockSample, listItem, Page } from '../modules/notion';
+import { Block, blockSample, findBlock, listItem, Page } from '../modules/notion';
 import EditableBlock from './EditableBlock';
 
 //icon
@@ -30,6 +30,7 @@ type FrameProps ={
 
 const Frame =({ userName, targetPage, editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage, deletePage ,setTargetPageId ,commentBlock,setCommentBlock}:FrameProps)=>{
   const [page, setPage]=useState<Page>(targetPage);
+  const firstBlocks = targetPage.firstBlocksId !==null? targetPage.firstBlocksId.map((id:string)=> findBlock(targetPage,id).BLOCK) :null;
   const [newPageFram, setNewPageFrame]=useState<boolean>(false);
   const [cover, setCover]=useState<ImageData|null>(page.header.cover);
   const [icon, setIcon]=useState<string|null>(page.header.icon);
@@ -42,7 +43,6 @@ const Frame =({ userName, targetPage, editBlock, addBlock,changeToSub ,raiseBloc
   const headerBottomStyle :CSSProperties ={
     marginTop: page.header.cover !==null ? "-39px" :"0"
   };
-  const firstBlocks:Block[] =page.blocks.filter((block:Block)=> block.firstBlock);
   const newPage :Page ={
     ...page,
     header:{
@@ -95,8 +95,8 @@ const Frame =({ userName, targetPage, editBlock, addBlock,changeToSub ,raiseBloc
     page.blocksId[0] ===undefined?
     setNewPageFrame(true):
     setNewPageFrame(false);
-    
   },[page]);
+
   return(
     <div className={newPageFram? "newPageFrame frame" :'frame'}>
         <div className='frame_inner'>
@@ -180,7 +180,8 @@ const Frame =({ userName, targetPage, editBlock, addBlock,changeToSub ,raiseBloc
               className='pageContent_inner'
               id="pageContent_inner"
               >
-              {firstBlocks.map((block:Block)=>{
+              {firstBlocks!==null &&
+              firstBlocks.map((block:Block)=>{
                   return (
                     <EditableBlock
                       key={block.id}
