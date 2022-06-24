@@ -1061,13 +1061,12 @@ export default function notion (state:Notion =initialState , action :NotionActio
               const lastSubBlock =findBlock(targetPage, lastSubBlockId).BLOCK; 
               const conditon2 = (targetBlock.parentBlocksId.length === previousBlockInDoc.parentBlocksId?.length)&&(lastSubBlock.id === targetBlock.id); 
               if((previousBlockInDoc.id === parentBlock.id)|| conditon2){
-                console.log("pull")
                 editTargetSub();
-                const editedPreviousBlock :Block ={
+                const editedParentBlock :Block ={
                   ...parentBlock,
                   subBlocksId : conditon2
                                 ?  
-                                  ( parentBlock.subBlocksId
+                                  ( parentBlock.subBlocksId !==null
                                     ? 
                                     parentBlock.subBlocksId.filter((id:string)=> id !== targetBlock.id)
                                     : 
@@ -1077,22 +1076,27 @@ export default function notion (state:Notion =initialState , action :NotionActio
                                 null,
                   editTime:editTime
                 };
-                editBlockData(parentBlockIndex,editedPreviousBlock );
+                console.log("pull", "editedparent");
+                editBlockData(parentBlockIndex,editedParentBlock );
                 const editedTargetBlock :Block ={
                   ...targetBlock,
                   parentBlocksId:parentBlock.parentBlocksId,
                   firstBlock:parentBlock.firstBlock,
                   editTime:editTime
                 };
+                console.log("pull", "editarget");
                 editBlockData(blockIndex, editedTargetBlock);
                 if(parentBlock.firstBlock){
                   const firstIndex= targetPage.firstBlocksId.indexOf(parentBlock.id);
                   targetPage.firstBlocksId.splice(firstIndex+1,0, targetBlock.id);
+                  console.log("firsindex", firstIndex);
                 };
+
                 if(parentBlock.parentBlocksId !==null){
                   const grandParentBlockId = parentBlock.parentBlocksId[parentBlock.parentBlocksId.length -1];
                   const {BLOCK, index}= findBlock(targetPage, grandParentBlockId);
                   const grandParentBlock =BLOCK;
+                  const grandParentBlockIndex= index; 
                     if(grandParentBlock.subBlocksId!==null){
                       const grandSubsId = [...grandParentBlock.subBlocksId];
                       const subIndex= grandSubsId.indexOf(parentBlock.id);
@@ -1102,8 +1106,8 @@ export default function notion (state:Notion =initialState , action :NotionActio
                         subBlocksId:grandSubsId,
                         editTime:editTime
                       };
-                      targetPage.blocks.splice(index, 1, newGrandParentBlock);
-    
+                      console.log("grandParent")
+                      editBlockData(grandParentBlockIndex, newGrandParentBlock);
                     }
                 }
               }else{
@@ -1120,9 +1124,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
               combineContents();
             };
           };
-
-
-        console.log("raiseBlock",targetPage.blocks , targetPage.firstBlocksId);
+        console.log("raiseBlock", pages[pageIndex]);
       return {
         pages:pages,
         firstPagesId:firstPagesId,
