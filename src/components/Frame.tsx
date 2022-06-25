@@ -1,13 +1,11 @@
 import React, { CSSProperties, Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { Block, blockSample, findBlock, listItem, Page } from '../modules/notion';
+import { Block, blockSample, findBlock, Page } from '../modules/notion';
 import EditableBlock from './EditableBlock';
 
 //icon
 import { BiMessageDetail } from 'react-icons/bi';
 import { BsFillEmojiSmileFill} from 'react-icons/bs';
 import {GrDocumentText ,GrDocument} from 'react-icons/gr';import { MdInsertPhoto } from 'react-icons/md';
-import BlockFn from './BlockFn';
-import Comments, { ToolMore } from './Comments';
 import { HiTemplate } from 'react-icons/hi';
 import CommandBlock from './CommandBlock';
 
@@ -20,6 +18,7 @@ export type Command ={
 type FrameProps ={
   userName : string,
   targetPage:Page,
+  firstBlocksId:string[]|null,
   editBlock :(pageId: string, block: Block) => void,
   addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
   changeToSub: (pageId: string, block: Block, newParentBlockId: string) => void,
@@ -33,9 +32,8 @@ type FrameProps ={
   setCommentBlock :Dispatch<SetStateAction<Block|null>>,
 };
 
-const Frame =({ userName, targetPage, editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage, deletePage ,setTargetPageId ,commentBlock,setCommentBlock}:FrameProps)=>{
+const Frame =({ userName, targetPage,firstBlocksId,editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage, deletePage ,setTargetPageId ,commentBlock,setCommentBlock}:FrameProps)=>{
   const [page, setPage]=useState<Page>(targetPage);
-  const firstBlocks = targetPage.firstBlocksId !==null? targetPage.firstBlocksId.map((id:string)=> findBlock(targetPage,id).BLOCK) :null;
   const [newPageFram, setNewPageFrame]=useState<boolean>(false);
   const [cover, setCover]=useState<ImageData|null>(page.header.cover);
   const [icon, setIcon]=useState<string|null>(page.header.icon);
@@ -99,7 +97,6 @@ const Frame =({ userName, targetPage, editBlock, addBlock,changeToSub ,raiseBloc
         title:what==="title"? value : page.header.title
     }})
   };
-
   useEffect(()=>{
     page.blocksId[0] ===undefined?
     setNewPageFrame(true):
@@ -122,6 +119,10 @@ const Frame =({ userName, targetPage, editBlock, addBlock,changeToSub ,raiseBloc
       }
     }
   },[command.targetBlock])
+
+  useEffect(()=>{
+    console.log("fistblocksId", firstBlocksId)
+  },[firstBlocksId])
   return(
     <div className={newPageFram? "newPageFrame frame" :'frame'}>
         <div className='frame_inner'>
@@ -205,8 +206,9 @@ const Frame =({ userName, targetPage, editBlock, addBlock,changeToSub ,raiseBloc
               className='pageContent_inner'
               id="pageContent_inner"
               >
-              {firstBlocks!==null &&
-                firstBlocks.map((block:Block)=>{
+              {firstBlocksId!==null &&
+                firstBlocksId.map((id:string)=> findBlock(targetPage,id).BLOCK)
+                .map((block:Block)=>{
                   return (
                     <EditableBlock
                       key={block.id}

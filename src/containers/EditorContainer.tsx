@@ -1,9 +1,9 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import {useDispatch, useSelector } from 'react-redux';
 import Frame from '../components/Frame';
 import TopBar from '../components/TopBar';
 import { RootState } from '../modules';
-import {  Block, Page,  findPage, listItem, Notion, change_to_sub, raise_block } from '../modules/notion';
+import {  Block, Page,  change_to_sub, raise_block } from '../modules/notion';
 import { SideAppear } from '../modules/side';
 import { pathType } from './NotionRouter';
 
@@ -67,6 +67,7 @@ const EditorContainer =({sideAppear,page,isInTrash, pagePath ,changeSide,addBloc
       <Frame
         userName ={userName}
         targetPage={page}
+        firstBlocksId={page.firstBlocksId}
         addBlock={addBlock}
         editBlock={editBlock}
         changeToSub={changeToSub}
