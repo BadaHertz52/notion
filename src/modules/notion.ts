@@ -1,5 +1,3 @@
-import { BsNutFill } from "react-icons/bs";
-import { RiAncientPavilionFill } from "react-icons/ri";
 
 //TYPE 
 export const text= "text" as const ;
@@ -816,6 +814,26 @@ export default function notion (state:Notion =initialState , action :NotionActio
       }
 
   };
+  const editFirstBlocksId=(page:Page, block:Block)=>{
+    if(block.firstBlock !==null && block.subBlocksId!==null && page.firstBlocksId!==null){
+      const firstIndex:number= page.firstBlocksId?.indexOf(block.id) as number;
+        if(firstIndex ===0){
+          page.firstBlocksId =[...block.subBlocksId, ...page.firstBlocksId?.slice(1)];
+          console.log("0", page.firstBlocksId ,page.firstBlocksId?.slice(1) , block.subBlocksId.concat(page.firstBlocksId?.slice(1)));
+        }else{
+          const pre = page.firstBlocksId.slice(0, firstIndex);
+          if(firstIndex === page.firstBlocksId.length-1){
+            page.firstBlocksId =pre.concat(block.subBlocksId);
+            console.log("short", page.firstBlocksId, pre );
+          }else{
+            const after =page.firstBlocksId.slice(firstIndex+1);
+            page.firstBlocksId=pre.concat(block.subBlocksId).concat(after);
+          }
+        }
+        console.log("raisesub firstBLocks", page.firstBlocksId);
+    };
+  };
+
   const raiseSubBlock =(page:Page,block :Block)=>{
     if(block.subBlocksId !==null  ){
     // 가정 설명 : 삭제 시 , 삭제되는 block 이 firstBlock 이면 subBlock 은 firstBlock 이 되고 아니면 화면상 이전 블록의 subBlock이 됨
@@ -839,32 +857,15 @@ export default function notion (state:Notion =initialState , action :NotionActio
         subBlock.subBlocksId !==null && raiseSubBlock(page, subBlock);
       }
     });
-    //block 삭제와 page firstBlockId 수정은 뒤에서 함 
-    
-    // firstBlocks 수정 
-    if(block.firstBlock !==null && page.firstBlocksId!==null){
-      const firstIndex:number= page.firstBlocksId?.indexOf(block.id) as number;
-        const pre =page.firstBlocksId?.[0]===block.id ? [] : 
-        page.firstBlocksId?.slice(0, firstIndex);
-        const after =page.firstBlocksId?.slice(firstIndex+1);
-        const editedTargetPage ={
-          ...targetPage,
-          firstBlocksId: page.firstBlocksId?.length > firstIndex+1 ?
-                      [...pre, ...block.subBlocksId, ...after] : 
-                      [...pre, ...block.subBlocksId],
-        };
-        pages.splice(pageIndex,1,editedTargetPage);
-        console.log("raisesub firstBLocks", editedTargetPage.firstBlocksId);
+    //block 삭제와 page firstBlockId 수정은 따로 (sub=sub에서도 실행하기 때문에 sub만 수정 )
     };
-    };
-    console.log("raiseSub", pages[pageIndex]);
   };
 
   const deleteBlockData =(page:Page, block:Block)=>{
     const index = page.blocksId.indexOf(block.id);
     if(block.firstBlock && page.firstBlocksId !==null){
       const firstIndex= page.firstBlocksId.indexOf(block.id);
-      block.firstBlock && page.firstBlocksId?.splice(firstIndex,1);
+      block.firstBlock && firstIndex >=0 && page.firstBlocksId?.splice(firstIndex,1);
     };
     page.blocks?.splice(index,1);
     page.blocksId?.splice(index,1);
@@ -1147,7 +1148,9 @@ export default function notion (state:Notion =initialState , action :NotionActio
         deleteBlockData(targetPage,action.block);
       }else{
         raiseSubBlock(targetPage, action.block);
-        deleteBlockData(targetPage, action.block);
+        editFirstBlocksId(targetPage, action.block);
+        targetPage.blocks.splice(blockIndex,1);
+        targetPage.blocksId.splice(blockIndex,1);
       };
 
       console.log("delete", pages[pageIndex]);
