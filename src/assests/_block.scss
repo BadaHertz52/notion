@@ -217,16 +217,17 @@
   }
   .command_btn {
     display: none;
-  }
-  .command_btn.on {
-    display: block;
     width: 100%;
     padding: 2% 0; 
     border-radius: 3px;
-     // transition: background 20ms ease-in 0s;
     &:hover{
       background-color: rgba(55, 53, 47, 0.08);
+      transition: backgroundColor 20ms ease-in 0s;
     }
+  }
+  .command_btn.on {
+    display: block;
+
   }
   .command_btn.on.first{
     background-color:rgba(55, 53, 47, 0.08);

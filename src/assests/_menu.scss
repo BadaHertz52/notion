@@ -55,6 +55,12 @@
   .noResult{
     display: none;
   }
+  #commandBlock {
+    margin-top: 0;
+    .command_btn {
+      display: block
+    }
+  }
 }
 .menu_color{
   @include popupMenu;

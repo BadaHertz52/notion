@@ -323,17 +323,19 @@ a:link, a:active, a:visited {
 
 #commandBlock .command_btn {
   display: none;
-}
-
-#commandBlock .command_btn.on {
-  display: block;
   width: 100%;
   padding: 2% 0;
   border-radius: 3px;
 }
 
-#commandBlock .command_btn.on:hover {
+#commandBlock .command_btn:hover {
   background-color: rgba(55, 53, 47, 0.08);
+  -webkit-transition: backgroundColor 20ms ease-in 0s;
+  transition: backgroundColor 20ms ease-in 0s;
+}
+
+#commandBlock .command_btn.on {
+  display: block;
 }
 
 #commandBlock .command_btn.on.first {
@@ -1126,6 +1128,14 @@ a:link, a:active, a:visited {
 
 #sideMenu .noResult {
   display: none;
+}
+
+#sideMenu #commandBlock {
+  margin-top: 0;
+}
+
+#sideMenu #commandBlock .command_btn {
+  display: block;
 }
 
 .menu_color {
