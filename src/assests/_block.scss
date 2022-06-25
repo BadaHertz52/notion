@@ -155,25 +155,31 @@
   text-align: left;
   display: flex;
   align-items: flex-end;
-  .contents.commentBtn {
-    color:inherit;
-    text-decoration: inherit;
-    font : {
-      size: inherit;
-      weight: inherit
-    }
-    background-color: $comment;
-    border-bottom: 2px solid $commentHover;
-    &:hover{
-      background-color: $commentHover;
-    }
-  }
-  .contentEditable:focus:empty::after{
-    content: attr(placeholder);
-    color: $mud;
+}
+.contents input{
+  border:none;
+  width: 100%;
+  &:focus{
+    outline: none
   }
 }
-
+.contents.commentBtn {
+  color:inherit;
+  text-decoration: inherit;
+  font : {
+    size: inherit;
+    weight: inherit
+  }
+  background-color: $comment;
+  border-bottom: 2px solid $commentHover;
+  &:hover{
+    background-color: $commentHover;
+  }
+}
+.contentEditable:focus:empty::after{
+  content: attr(placeholder);
+  color: $mud;
+}
 .commentBtn.btnIcon{
   svg,span{
     color: $itemSvg;
@@ -209,7 +215,6 @@
     user-select: none;
     text-transform: uppercase;
   }
-
   .command_btn {
     display: none;
   }

@@ -230,7 +230,16 @@ a:link, a:active, a:visited {
           align-items: flex-end;
 }
 
-.blockContents .contents.commentBtn {
+.contents input {
+  border: none;
+  width: 100%;
+}
+
+.contents input:focus {
+  outline: none;
+}
+
+.contents.commentBtn {
   color: inherit;
   text-decoration: inherit;
   font-size: inherit;
@@ -239,11 +248,11 @@ a:link, a:active, a:visited {
   border-bottom: 2px solid rgba(255, 212, 0, 0.8);
 }
 
-.blockContents .contents.commentBtn:hover {
+.contents.commentBtn:hover {
   background-color: rgba(255, 212, 0, 0.8);
 }
 
-.blockContents .contentEditable:focus:empty::after {
+.contentEditable:focus:empty::after {
   content: attr(placeholder);
   color: #B9B8B6;
 }
@@ -286,6 +295,15 @@ a:link, a:active, a:visited {
 #commandBlock_inner {
   padding: 5px;
   height: 350px;
+  position: relative;
+}
+
+#commandBlock .command div {
+  z-index: 5;
+}
+
+#commandBlock .command div button {
+  z-index: 5;
 }
 
 #commandBlock .command > header {
