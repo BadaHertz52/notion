@@ -816,77 +816,59 @@ export default function notion (state:Notion =initialState , action :NotionActio
       }
 
   };
-  const deleteBlockData =(page:Page,block :Block, blockIndex:number)=>{
-    
+  const raiseSubBlock =(page:Page,block :Block)=>{
     if(block.subBlocksId !==null  ){
     // 가정 설명 : 삭제 시 , 삭제되는 block 이 firstBlock 이면 subBlock 은 firstBlock 이 되고 아니면 화면상 이전 블록의 subBlock이 됨
+  
     const subBlocks :Block[] =block.subBlocksId.map((id:string)=> {
-      const {BLOCK} =findBlock(page, id);
+      const BLOCK =findBlock(page, id).BLOCK;
       return BLOCK 
     });
-    if(block.firstBlock ==null){
-      subBlocks.forEach((subBlock:Block)=>{
+    subBlocks.forEach((subBlock:Block)=>{
+      if(subBlock.parentBlocksId!==null){
+        const newParentBlocksId =subBlock.parentBlocksId.slice(1);
         const raisedSubBlock :Block ={
           ...subBlock,
-          parentBlocksId:null,
-          firstBlock:true,
+          parentBlocksId:newParentBlocksId[0]!==undefined? newParentBlocksId :null,
+          firstBlock:block.firstBlock,
           editTime:editTime
         };
+        console.log( "originblock",subBlock,"raisedblock", raisedSubBlock)
         const index = page.blocksId.indexOf(subBlock.id);
         editBlockData(index, raisedSubBlock);
-      });
-      //block 삭제와 page firstBlockId 수정은 뒤에서 함 
-    }else{
-      if(page.firstBlocksId !== null && page.firstBlocksId[0]!== block.id){
-        const {previousBlockInDoc,
-        previousBlockInDocIndex} =findPreviousBlockInDoc(page, block);
-        const editedPreviousBlock :Block ={
-          ...previousBlockInDoc,
-          editTime: editTime,
-          subBlocksId:previousBlockInDoc.subBlocksId ==null? [...block.subBlocksId] : previousBlockInDoc.subBlocksId.concat(block.subBlocksId),
-        };
-        editBlockData(previousBlockInDocIndex, editedPreviousBlock);
-        subBlocks.forEach((subBlock
-          :Block)=>{
-            const editedSubBlock :Block={
-              ...subBlock,
-              parentBlocksId: previousBlockInDoc.parentBlocksId !==null? previousBlockInDoc.parentBlocksId.concat(previousBlockInDoc.id):[...previousBlockInDoc.id],
-              editTime:editTime
-            };
-            const editedSubBlockIndex = page.blocksId.indexOf(subBlock.id);
-            editBlockData(editedSubBlockIndex, editedSubBlock);
-          })
+        subBlock.subBlocksId !==null && raiseSubBlock(page, subBlock);
       }
-    }
-    };
+    });
+    //block 삭제와 page firstBlockId 수정은 뒤에서 함 
+    
     // firstBlocks 수정 
     if(block.firstBlock !==null && page.firstBlocksId!==null){
-      const index:number= page.firstBlocksId?.indexOf(block.id) as number;
-      let editedTargetPage :Page ={
-        ...page,
-        firstBlocksId: page.firstBlocksId.filter((id:string)=> id !== block.id),
-        editTime:editTime
-      };
-
-      if(block.subBlocksId!==null){
-        const pre =page.firstBlocksId?.slice(0, index);
-        const after =page.firstBlocksId?.slice(index+1);
-        editedTargetPage ={
-          ...editedTargetPage,
-          firstBlocksId: after[0]!==undefined? 
+      const firstIndex:number= page.firstBlocksId?.indexOf(block.id) as number;
+        const pre =page.firstBlocksId?.[0]===block.id ? [] : 
+        page.firstBlocksId?.slice(0, firstIndex);
+        const after =page.firstBlocksId?.slice(firstIndex+1);
+        const editedTargetPage ={
+          ...targetPage,
+          firstBlocksId: page.firstBlocksId?.length > firstIndex+1 ?
                       [...pre, ...block.subBlocksId, ...after] : 
                       [...pre, ...block.subBlocksId],
         };
-      };
-
-      pages.splice(pageIndex,1,editedTargetPage);
+        pages.splice(pageIndex,1,editedTargetPage);
+        console.log("raisesub firstBLocks", editedTargetPage.firstBlocksId);
     };
-
-    page.blocks?.splice(blockIndex,1);
-    page.blocksId?.splice(blockIndex,1);
-    console.log("deletedata", page.blocks);
+    };
+    console.log("raiseSub", pages[pageIndex]);
   };
 
+  const deleteBlockData =(page:Page, block:Block)=>{
+    const index = page.blocksId.indexOf(block.id);
+    if(block.firstBlock && page.firstBlocksId !==null){
+      const firstIndex= page.firstBlocksId.indexOf(block.id);
+      block.firstBlock && page.firstBlocksId?.splice(firstIndex,1);
+    };
+    page.blocks?.splice(index,1);
+    page.blocksId?.splice(index,1);
+  };
 
   switch (action.type) {
     case ADD_BLOCK:
@@ -896,7 +878,12 @@ export default function notion (state:Notion =initialState , action :NotionActio
 
       if(action.block.firstBlock){
         targetPage.firstBlocksId?.splice(action.newBlockIndex, theNumber,action.block.id);
-      };
+      }else{
+              //subBlock 으로 만들어 졌을 때 
+        if(action.block.parentBlocksId!==null){
+        updateParentBlock(action.block , action.previousBlockId);
+        };
+      }
       if(action.block.subBlocksId!==null){
         // subBlock을 가지는 블록을 기준을  그 다음 블록으로 만들어진 경우  
         action.block.subBlocksId.forEach((id:string)=>{
@@ -910,10 +897,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
         }
           ) ;
       }
-      //subBlock 으로 만들어 졌을 때 
-      if(action.block.parentBlocksId!==null){
-        updateParentBlock(action.block , action.previousBlockId);
-      };
+
       sessionStorage.setItem("newBlock", action.block.id);
       console.log( "addBlock", targetPage.blocks)
       return {
@@ -1134,34 +1118,39 @@ export default function notion (state:Notion =initialState , action :NotionActio
       }; ;
 
     case DELETE_BLOCK:
+
       if(action.block.parentBlocksId !== null){
         const parentBlocksId = action.block?.parentBlocksId as string[];
         const parentBlockId :string = parentBlocksId[parentBlocksId.length-1] ;
         const parentBlockIndex = targetPage.blocksId.indexOf(parentBlockId);
         const parentBlock = targetPage.blocks[parentBlockIndex];
         const newSubBlocksId  = parentBlock.subBlocksId?.filter((id:string)=> id !== action.block.id) as string[] ;
-        console.log(newSubBlocksId,newSubBlocksId[0]);
         if(newSubBlocksId[0] !== undefined){
           editBlockData( parentBlockIndex, {
             ...parentBlock,
             subBlocksId: newSubBlocksId
           })
         }else{
-
-          if(action.block.type === "bulletList" || action.block.type ==="numberList"){
-            deleteBlockData(targetPage ,parentBlock , parentBlockIndex);
-          }else {
-            editBlockData(parentBlockIndex, {
+          if(action.block.type.includes("List")){
+            deleteBlockData(targetPage, parentBlock);
+          }else{
+            editBlockData( parentBlockIndex, {
               ...parentBlock,
-              subBlocksId:null
+              subBlocksId: null,
             })
           }
-          
-        }
+        };
       };
-      deleteBlockData(targetPage, action.block , blockIndex);
+      // 삭제 타깃인 block 이 subBlock을 가지는 경우 .... 
+      if(action.isInMenu){
+        
+        deleteBlockData(targetPage,action.block);
+      }else{
+        raiseSubBlock(targetPage, action.block);
+        deleteBlockData(targetPage, action.block);
+      };
 
-      console.log("delete", {pages:pages[pageIndex]});
+      console.log("delete", pages[pageIndex]);
       return {
         pages:pages,
         firstPagesId:firstPagesId,
