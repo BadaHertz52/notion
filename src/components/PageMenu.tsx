@@ -8,7 +8,7 @@ type PageMenuProps ={
   currentPage:Page,
   pages:Page[],
   firstlist:listItem[],
-  deleteBlock: (pageId: string, block: Block) => void,
+  deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
   addBlock:(pageId: string, block: Block, nextBlockIndex: number, previousBlockId: string | null) => void,
   editBlock: (pageId: string, block: Block) => void,
   setMenuOpen:Dispatch<SetStateAction<boolean>> |null,
@@ -70,7 +70,7 @@ const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock, addBlock, edi
 
   const moveBlockToPage =(pageId:string ,block:Block)=>{
     // 기존 페이지에서 블록 삭제
-      deleteBlock(currentPage.id, block);
+      deleteBlock(currentPage.id, block, true);
       // 블록을 다른 페이지로 이동
       addBlock(pageId, block, 0 , null);
     // close Menu and recovery Menu state

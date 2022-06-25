@@ -15,8 +15,8 @@ type EditorContainerProps ={
   editBlock :(pageId: string, block: Block) => void,
   addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
   changeToSub: (pageId: string, block: Block, newParentBlockId: string) => void,
-  raiseBlock: (pageId: string, block: Block) => void,
-  deleteBlock: (pageId: string, block: Block) => void,
+  raiseBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
+  deleteBlock: (pageId: string, block: Block , isInMenu:boolean) => void,
   
   addPage : ( newPage:Page, )=>void
   editPage : (pageId:string , newPage:Page, )=>void,

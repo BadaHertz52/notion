@@ -12,7 +12,7 @@ type  BlockProps ={
   addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
   changeToSub: (pageId: string, block: Block, newParentBlockId: string) => void,
   raiseBlock: (pageId: string, block: Block) => void,
-  deleteBlock: (pageId: string, block: Block) => void,
+  deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
   addPage : (newPage:Page, )=>void,
   editPage : (pageId:string , newPage:Page, )=>void,
   deletePage : (pageId:string , )=>void,
@@ -120,14 +120,31 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
         };
       }else{
         // edite targetBlock 
-        
-        const editedBlock :Block ={
-                  ...targetBlock,
-                  contents: value,
-                  editTime:editTime,
-                };
-        targetBlock.contents !== value &&
-        sessionStorage.setItem("itemsTobeEdited", JSON.stringify(editedBlock));
+        const cursor = document.getSelection();
+        const offset =cursor?.anchorOffset;
+        console.log(":value", value ,offset)
+        if(!(targetBlock.contents==="" && offset===0&& value ==="")){
+          const editedBlock :Block ={
+            ...targetBlock,
+            contents: value,
+            editTime:editTime,
+          };
+          targetBlock.contents !== value &&
+          sessionStorage.setItem("itemsTobeEdited", JSON.stringify(editedBlock));
+        };
+
+        //}
+        //else{
+          ///offset==0;
+          // const item = sessionStorage.getItem("itemsTobeEdited");
+
+          // if(item !==null){
+          //   const editedBlock = JSON.parse(item);
+          //   editedBlock.id === targetBlock.id &&
+          //   sessionStorage.removeItem("itemTobeEdited");
+          // }
+        //}
+
       };
     }
     if(!value.startsWith("/")){
@@ -156,13 +173,14 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
         const text =event.currentTarget.innerText;
         const cursor = document.getSelection();
         const offset =cursor?.anchorOffset;
-        if(text===""){
-          deleteBlock(page.id, targetBlock);
-        };
-        if(text === targetBlock.contents && offset ===0){
-          raiseBlock(page.id, targetBlock);
-          
+        console.log("offset", offset, text==="" ,targetBlock.contents);
+        if(offset===0 && text===""){
+          deleteBlock(page.id, targetBlock, false);
         }
+        if(offset===0 && text!==""){
+          raiseBlock(page.id, targetBlock )
+        }
+
         break;
       default:
         break;
@@ -170,7 +188,6 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
   };
   function commandChange (event:React.ChangeEvent<HTMLInputElement>){
     const value = event.target.value;
-    console.log(value)
     const trueOrFale = value.startsWith("/");
     if(trueOrFale){
       setCommand({

@@ -188,10 +188,11 @@ export const edit_block =(pageId:string, block:Block)=> ({
   pageId:pageId,
   block:block,
 });
-export const delete_block =(pageId:string, block:Block)=> ({
+export const delete_block =(pageId:string, block:Block, isInMenu:boolean)=> ({
   type:DELETE_BLOCK ,
   pageId:pageId,
-  block:block
+  block:block,
+  isInMenu:isInMenu
 });
 
 export const change_to_sub =(pageId:string, block:Block ,newParentBlockId:string)=> ({

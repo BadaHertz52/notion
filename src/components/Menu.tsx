@@ -26,7 +26,7 @@ type MenuProps ={
   setMenuOpen : Dispatch<SetStateAction<boolean>>,
   addBlock:(pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
   editBlock : (pageId: string, block: Block) => void,
-  deleteBlock :(pageId: string, block: Block) => void,
+  deleteBlock :(pageId: string, block: Block ,isInMenu:boolean) => void,
   addPage : ( newPage:Page, )=>void,
   duplicatePage: (targetPageId: string) => void,
   deletePage : (pageId:string , )=>void,
@@ -93,7 +93,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
     })
   };
   const removeBlock =()=>{
-    deleteBlock(page.id, block);
+    deleteBlock(page.id, block , true);
     if(block.type==="page"){
       deletePage(block.id);
     };

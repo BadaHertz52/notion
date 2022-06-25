@@ -55,7 +55,7 @@ const NotionRouter =()=>{
   const addBlock =(pageId:string , block:Block , newBlockIndex:number ,previousBlockId:string|null)=>{
     dispatch(add_block(pageId,block ,newBlockIndex ,previousBlockId))
   };
-  const deleteBlock=(pageId:string,block:Block)=>{dispatch(delete_block(pageId,block))};
+  const deleteBlock=(pageId:string,block:Block ,isInMenu:boolean)=>{dispatch(delete_block(pageId,block ,isInMenu))};
   const changeToSub =(pageId:string, block:Block ,newParentBlockId:string)=>{dispatch(change_to_sub(pageId,block,newParentBlockId));
   };
   const raiseBlock=(pageId:string, block:Block)=>{dispatch(raise_block(pageId,block))};
@@ -206,7 +206,6 @@ const NotionRouter =()=>{
     }
     
   },[targetPageId]);
-  
   return(
     <div 
       id="inner"

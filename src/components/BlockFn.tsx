@@ -14,7 +14,7 @@ type BlockFnProp ={
   userName:string,
   addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void, 
   editBlock: (pageId: string, block: Block) => void,
-  deleteBlock :(pageId: string, block: Block) => void,
+  deleteBlock :(pageId: string, block: Block ,isInMenu:boolean) => void,
   addPage : ( newPage:Page, )=>void,
   duplicatePage: (targetPageId: string) => void,
   editPage : (pageId:string , newPage:Page, )=>void,
