@@ -265,40 +265,40 @@ const NotionRouter =()=>{
             />
           </Routes>
           <BlockFn
-                page={routePage}
-                pages={pages}
-                firstlist={firstlist}
+            page={routePage}
+            pages={pages}
+            firstlist={firstlist}
+            userName={user.userName}
+            addBlock={addBlock}
+            editBlock={editBlock}
+            deleteBlock={deleteBlock}
+            addPage={addPage}
+            duplicatePage={duplicatePage}
+            editPage={editPage}
+            movePageToPage={movePageToPage}
+            deletePage={deletePage}
+            commentBlock={commentBlock}
+            setCommentBlock={setCommentBlock}
+          />
+          {commentBlock !==null &&
+              <Comments
                 userName={user.userName}
-                addBlock={addBlock}
-                editBlock={editBlock}
-                deleteBlock={deleteBlock}
-                addPage={addPage}
-                duplicatePage={duplicatePage}
-                editPage={editPage}
-                movePageToPage={movePageToPage}
-                deletePage={deletePage}
-                commentBlock={commentBlock}
-                setCommentBlock={setCommentBlock}
-              />
-              {commentBlock !==null &&
-                  <Comments
-                    userName={user.userName}
-                    block={commentBlock}
-                    pageId={routePage.id}
-                    editBlock={editBlock}
-                    setCommentBlock={setCommentBlock}
-                    setMoreOpen={setMoreOpen}
-                />              
-              }
-              {moreOpen &&
-              <ToolMore
-                pageId={routePage.id}
                 block={commentBlock}
+                pageId={routePage.id}
                 editBlock={editBlock}
                 setCommentBlock={setCommentBlock}
                 setMoreOpen={setMoreOpen}
-              />
-              }
+            />              
+          }
+          {moreOpen &&
+          <ToolMore
+            pageId={routePage.id}
+            block={commentBlock}
+            editBlock={editBlock}
+            setCommentBlock={setCommentBlock}
+            setMoreOpen={setMoreOpen}
+          />
+          }
       </>    
       :
         <div className='editor nonePage'>
