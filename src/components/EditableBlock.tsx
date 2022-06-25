@@ -1,7 +1,7 @@
 import React, { CSSProperties, Dispatch, SetStateAction, useEffect, useRef, useState, } from 'react';
 import { Block, findBlock, Page,  } from '../modules/notion';
 import CommandBlock from './CommandBlock';
-import { Command } from '../containers/EditorContainer';
+import { Command } from './Frame';
 import BlockComponent, { BlockComment, itemType } from './BlockComponent';
 import { GoPrimitiveDot } from 'react-icons/go';
 import { GrCheckbox, GrCheckboxSelected, GrDocumentText } from 'react-icons/gr';
@@ -24,14 +24,16 @@ type EditableBlockProps ={
   setCommentBlock : Dispatch<SetStateAction<Block|null>>,
   commentBlock :Block |null,
   setTargetPageId:Dispatch<SetStateAction<string>>,
+  command:Command,
+  setCommand:Dispatch<SetStateAction<Command>>,
 };
 export   type CommentOpenType ={
   open:boolean,
   targetId: string | null,
 };
 
-
-const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock , addPage, editPage, deletePage ,setCommentBlock ,commentBlock ,setTargetPageId}:EditableBlockProps)=>{  
+const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock , addPage, editPage, deletePage ,setCommentBlock ,commentBlock ,setTargetPageId ,command, setCommand
+}:EditableBlockProps)=>{  
   const className = block.type !== "toggle" ?
   `${block.type} block ` :
   `${block.type} block ${block.subBlocksId!==null?'on' : ""}`;
@@ -130,6 +132,8 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
                 setCommentBlock={setCommentBlock}
                 commentBlock={commentBlock}
                 setTargetPageId={setTargetPageId}
+                command={command}
+                setCommand={setCommand}
               />
             </div>
             </div>
@@ -224,6 +228,8 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
                 setCommentBlock={setCommentBlock}
                 commentBlock={commentBlock}
                 setTargetPageId={setTargetPageId}
+                command={command}
+                setCommand={setCommand}
               />
               </div>
               </div>
@@ -256,6 +262,8 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
                   setCommentBlock={setCommentBlock}
                   commentBlock={commentBlock}
                   setTargetPageId={setTargetPageId}
+                  command={command}
+                  setCommand={setCommand}
                 />
               )
               }

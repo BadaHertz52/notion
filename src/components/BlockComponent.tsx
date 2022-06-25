@@ -1,10 +1,8 @@
-import React, { Dispatch, SetStateAction, useRef, useState} from 'react';
+import React, { Dispatch, SetStateAction, useRef} from 'react';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import { IoChatboxOutline } from 'react-icons/io5';
-
-import { Command } from '../containers/EditorContainer';
 import {  Block,BlockType,blockTypes,findBlock,makeNewBlock,Page, toggle } from '../modules/notion';
-import CommandBlock from './CommandBlock';
+import { Command } from './Frame';
 
 type  BlockProps ={
   userName:string,
@@ -21,6 +19,8 @@ type  BlockProps ={
   setCommentBlock : Dispatch<SetStateAction<Block|null>>,
   commentBlock:Block|null,
   setTargetPageId:Dispatch<SetStateAction<string>>,
+  command :Command,
+  setCommand:Dispatch<SetStateAction<Command>>,
 };
 type BlockCommentProps={
   block:Block
@@ -49,10 +49,10 @@ export const BlockComment =({block}:BlockCommentProps)=>{
   )
 };
 
-const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,addPage, editPage, deletePage,setCommentBlock ,commentBlock ,setTargetPageId  }:BlockProps)=>{
+const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,addPage, editPage, deletePage,setCommentBlock ,commentBlock ,setTargetPageId, command, setCommand  }:BlockProps)=>{
   const editTime =JSON.stringify(Date.now);
   const contentEditableRef= useRef<HTMLElement>(null);
-  const [command, setCommand]=useState<Command>({boolean:false, command:null})
+
   const findTargetBlock =(event:ContentEditableEvent|React.KeyboardEvent<HTMLDivElement>|React.MouseEvent):Block=>{
     const target =event.currentTarget.parentElement as HTMLElement;
     const targetId= target.id;
@@ -133,7 +133,11 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
     if(!value.startsWith("/")){
       changeBlockContent();
     }else{
-      setCommand({boolean:true, command:"/"})
+      setCommand({
+        boolean:true, 
+        command:"/",
+        targetBlock:targetBlock
+      })
     }
   };
   const onKeyDownContents=(event:React.KeyboardEvent<HTMLDivElement>)=>{
@@ -166,17 +170,19 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
   };
   function commandChange (event:React.ChangeEvent<HTMLInputElement>){
     const value = event.target.value;
+    console.log(value)
     const trueOrFale = value.startsWith("/");
-    console.log("cc",value);
     if(trueOrFale){
       setCommand({
         boolean: true , 
-        command: value.toLowerCase()
+        command: value.toLowerCase(),
+        targetBlock:command.targetBlock
       });
     }else {
       setCommand({
         boolean:false,
-        command:null
+        command:null,
+        targetBlock:null
       })
     };
 
@@ -184,24 +190,25 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
   function commandKeyUp(event:React.KeyboardEvent<HTMLInputElement>){
     const code= event.code;
     const firstOn =document.querySelector(".command_btn.on.first");
-    if(code ==="Enter"  ){
+    if(code ==="Enter" && command.targetBlock!==null  ){
       const name = firstOn?.getAttribute("name") as string ;
-      
       const blockType:BlockType = blockTypes.filter((type)=> name.includes(type))[0];
-
       const newBlock:Block={
-        ...block,
+        ...command.targetBlock,
         type: blockType,
         editTime:editTime
       };
       editBlock(page.id, newBlock);
-      setCommand({boolean:false, command:null})
+      setCommand({
+        boolean:false, 
+        command:null 
+        ,targetBlock:null})
     }
   };
   const BlockContentEditable=()=>{
     return(
       <>
-      {!command.command? 
+      {!command.command || (command.targetBlock !==null && command.targetBlock.id !== block.id) ? 
         <ContentEditable
           className='contentEditable'
           placeholder="type '/' for commmands"
@@ -211,25 +218,14 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
           onKeyDown={(event)=> onKeyDownContents(event)}
         /> 
         :
-        <>
           <input
             type="text"
+            tabIndex={-1}
             value={command.command}
             className='contentEditable'
             onChange={commandChange}
             onKeyUp={commandKeyUp}
           />
-          <CommandBlock 
-            key={`${block.id}_command`}
-            page={page}
-            block={block}
-            editTime={editTime}
-            editBlock={editBlock}
-            command={command}
-            setCommand={setCommand}
-            addPage={addPage}
-          />
-        </>
         }
       </>
     )

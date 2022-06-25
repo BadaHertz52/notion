@@ -11,7 +11,7 @@ import {IoArrowRedoOutline} from 'react-icons/io5';
 import {RiDeleteBin6Line } from 'react-icons/ri';
 import { AiOutlineFormatPainter } from 'react-icons/ai';
 import { CSSProperties } from 'styled-components';
-import { Command } from '../containers/EditorContainer';
+import { Command } from './Frame';
 import ColorMenu from './ColorMenu';
 import { HiOutlineDuplicate } from 'react-icons/hi';
 import PageMenu from './PageMenu';
@@ -43,7 +43,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
   const [turnInto, setTurnInto]= useState<boolean>(false);
   const [color, setColor]= useState<boolean>(false);
   const [turnInToPage ,setTurnIntoPage] = useState<boolean>(false);
-  const [command, setCommand]= useState<Command>({boolean:false, command:null});
+  const [command, setCommand]= useState<Command>({boolean:false, command:null, targetBlock:block});
   const menuStyle:CSSProperties ={
     position:"absolute" ,
     top: blockFnElement?.offsetHeight,

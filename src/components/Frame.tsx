@@ -9,7 +9,13 @@ import {GrDocumentText ,GrDocument} from 'react-icons/gr';import { MdInsertPhoto
 import BlockFn from './BlockFn';
 import Comments, { ToolMore } from './Comments';
 import { HiTemplate } from 'react-icons/hi';
+import CommandBlock from './CommandBlock';
 
+export type Command ={
+  boolean:boolean,
+  command:string | null,
+  targetBlock: Block |null
+};
 
 type FrameProps ={
   userName : string,
@@ -27,7 +33,6 @@ type FrameProps ={
   setCommentBlock :Dispatch<SetStateAction<Block|null>>,
 };
 
-
 const Frame =({ userName, targetPage, editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage, deletePage ,setTargetPageId ,commentBlock,setCommentBlock}:FrameProps)=>{
   const [page, setPage]=useState<Page>(targetPage);
   const firstBlocks = targetPage.firstBlocksId !==null? targetPage.firstBlocksId.map((id:string)=> findBlock(targetPage,id).BLOCK) :null;
@@ -36,7 +41,11 @@ const Frame =({ userName, targetPage, editBlock, addBlock,changeToSub ,raiseBloc
   const [icon, setIcon]=useState<string|null>(page.header.icon);
   const [title, setTitle]=useState<string>(page.header.title);
   const [decoOpen ,setdecoOpen] =useState<boolean>(false);
-
+  const [command, setCommand]=useState<Command>({boolean:false, 
+  command:null,
+  targetBlock:null
+  });
+  const [commandBlockPositon, setCBPositon]=useState<CSSProperties>();
   const headerStyle: CSSProperties ={
     marginTop: page.header.cover !==null? "10px": "30px" 
   };
@@ -97,6 +106,22 @@ const Frame =({ userName, targetPage, editBlock, addBlock,changeToSub ,raiseBloc
     setNewPageFrame(false);
   },[page]);
 
+  useEffect(()=>{
+    if(command.targetBlock!==null){
+      const targetBlockContent =document.getElementById(`${command.targetBlock.id}_contents`);
+      const position = targetBlockContent?.getClientRects()[0];
+      console.log("targetBlockContents", targetBlockContent, position);
+
+      if(position !==undefined){
+        const style :CSSProperties ={
+          position:"absolute",
+          top: position.bottom,
+          left:position.left
+        };
+        setCBPositon(style);
+      }
+    }
+  },[command.targetBlock])
   return(
     <div className={newPageFram? "newPageFrame frame" :'frame'}>
         <div className='frame_inner'>
@@ -181,7 +206,7 @@ const Frame =({ userName, targetPage, editBlock, addBlock,changeToSub ,raiseBloc
               id="pageContent_inner"
               >
               {firstBlocks!==null &&
-              firstBlocks.map((block:Block)=>{
+                firstBlocks.map((block:Block)=>{
                   return (
                     <EditableBlock
                       key={block.id}
@@ -199,11 +224,13 @@ const Frame =({ userName, targetPage, editBlock, addBlock,changeToSub ,raiseBloc
                       commentBlock={commentBlock}
                       setCommentBlock={setCommentBlock}
                       setTargetPageId={setTargetPageId}
+                      command={command}
+                      setCommand={setCommand}
                     />
                   )
                 }
-              )}
-
+              )
+              }
             </div>
             :
             <div className='pageContent_inner'>
@@ -228,6 +255,23 @@ const Frame =({ userName, targetPage, editBlock, addBlock,changeToSub ,raiseBloc
           </div>
           
         </div>
+        {command.command !==null && command.targetBlock !==null &&
+              <div 
+                id="block_commandBlock"
+                style={commandBlockPositon}
+              >
+                  <CommandBlock 
+                  key={`${command.targetBlock.id}_command`}
+                  page={page}
+                  block={command.targetBlock}
+                  editTime={JSON.stringify(Date.now())}
+                  editBlock={editBlock}
+                  command={command}
+                  setCommand={setCommand}
+                  addPage={addPage}
+                />
+              </div>
+              }
     </div>
   )
 };

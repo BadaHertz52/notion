@@ -30,10 +30,6 @@ type EditorContainerProps ={
   setCommentBlock :Dispatch<SetStateAction<Block|null>>,
 };
 
-export type Command ={
-  boolean:boolean,
-  command:string | null
-};
 const EditorContainer =({sideAppear,page,isInTrash, pagePath ,changeSide,addBlock,editBlock,deleteBlock,addPage,editPage,deletePage,restorePage, cleanTrash, setTargetPageId ,commentBlock,setCommentBlock}:EditorContainerProps)=>{
   const dispatch =useDispatch();
   const changeToSub =(pageId: string, block: Block,  newParentBlockId: string)=> dispatch(change_to_sub(pageId, block, newParentBlockId));

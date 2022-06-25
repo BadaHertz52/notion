@@ -179,13 +179,20 @@
     color: $itemSvg;
   }
 }
-#commandBlock{
 
+#commandBlock{
   @include popupMenu;
   margin-top: 1rem;
   &_inner {
     padding: 5px;
     height: 350px;
+    position: relative;
+  }
+  .command div{
+    z-index: 5;
+    button {
+      z-index: 5;
+    }
   }
   .command > header{
     padding:0 14px;
