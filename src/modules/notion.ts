@@ -900,18 +900,34 @@ export default function notion (state:Notion =initialState , action :NotionActio
 
   switch (action.type) {
     case ADD_BLOCK:
-      const theNumber = action.newBlockIndex===0? 1:0;
-      targetPage.blocks?.splice(action.newBlockIndex, theNumber, action.block);
-      targetPage.blocksId?.splice(action.newBlockIndex, theNumber, action.block.id);
+      if(action.newBlockIndex===0){
+        targetPage.blocks =[action.block];
+        targetPage.blocksId=[action.block.id];
+      }else{
+        targetPage.blocks?.splice(action.newBlockIndex, 0, action.block);
+        targetPage.blocksId?.splice(action.newBlockIndex, 0, action.block.id);
+      }
 
       if(action.block.firstBlock){
-        targetPage.firstBlocksId?.splice(action.newBlockIndex, theNumber,action.block.id);
+        if(targetPage.firstBlocksId!==null){
+          if(action.previousBlockId !==null){
+            const firstIndex = targetPage.firstBlocksId.indexOf(action.previousBlockId);
+            targetPage.firstBlocksId.splice(firstIndex+1, 0,action.block.id);
+          }else{
+            targetPage.firstBlocksId =targetPage.firstBlocksId.concat(action.block.id);
+          }
+
+        }else{
+          targetPage.firstBlocksId =[action.block.id]
+        }
+
       }else{
               //subBlock 으로 만들어 졌을 때 
         if(action.block.parentBlocksId!==null){
         updateParentBlock(action.block , action.previousBlockId);
         };
-      }
+      };
+
       if(action.block.subBlocksId!==null){
         // subBlock을 가지는 블록을 기준을  그 다음 블록으로 만들어진 경우  
         action.block.subBlocksId.forEach((id:string)=>{
@@ -927,7 +943,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
       }
 
       sessionStorage.setItem("newBlock", action.block.id);
-      console.log( "addBlock", targetPage.blocks)
+      console.log( "addBlock", targetPage)
       return {
         pages:pages,
         firstPagesId:firstPagesId,
