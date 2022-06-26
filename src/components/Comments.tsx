@@ -179,10 +179,10 @@ export const CommentInput =({userName, pageId ,comment,editBlock, commentBlock, 
       setCommentBlock(newBlock);
     };
     
-    const addComment =(block:Block , blockComments:BlockCommentType[])=>{
-      const number = block.comments?.length.toString()
+    const addComment =(block:Block , blockComments:BlockCommentType[]|null)=>{
+      const number = block.comments !==null? block.comments.length.toString() :0;
       const newId = `comment_${number}_${editTime}`;
-      if(comment !==null ){
+      if(comment !==null && blockComments !==null ){
         // commentBlock.comments 중 특정 comment에 comment를 다는 (Comment의 하위 요소로 존재할 경우) 
         const commentsArry =[...blockComments];
         const ids: string[] = blockComments?.map((comment:BlockCommentType)=> comment.id) as string[];
@@ -235,34 +235,21 @@ export const CommentInput =({userName, pageId ,comment,editBlock, commentBlock, 
         updateComments(pageId, block, comment ,editTime, editBlock,setCommentBlock, "edit" ,text);
       }
     };
-    const addOrEdit =(block:Block  ,blockComments:BlockCommentType[])=>{
+    if(commentBlock !==null){
       if(item ==null){
-        addComment(block, blockComments);
+        addComment(commentBlock, commentBlock?.comments);
       }else{
         !edit ?
-        addComment(block, blockComments):
-        editComment(block);
+        addComment(commentBlock, commentBlock?.comments):
+        editComment(commentBlock);
       };
+    }else{
+      console.log("Can't find commentBlock")
+    }
+
       setText("");
       setEdit(false);
       setEditItem(null);
-    };
-    if(commentBlock ==null){
-      const sessionItem = sessionStorage.getItem("blockFnTargetBlock") as string;
-      const block:Block= JSON.parse(sessionItem);
-      if(block.comments !==null){
-        addOrEdit(block, block.comments);
-
-      }else{
-        console.log("Erro: comments of this block is not ")
-      };
-    }else{  
-      if(commentBlock.comments !==null){
-        addOrEdit(commentBlock, commentBlock.comments);
-      }else{
-        console.log("Erro: comments of this block is not ")
-      };
-    }
   };
 
   useEffect(()=>{
