@@ -72,7 +72,22 @@ const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock, addBlock, edi
     // 기존 페이지에서 블록 삭제
       deleteBlock(currentPage.id, block, true);
       // 블록을 다른 페이지로 이동
-      addBlock(pageId, block, 0 , null);
+      const newBlock:Block ={
+        ...block,
+        firstBlock:true,
+        parentBlocksId:null,
+        editTime: JSON.stringify(Date.now())
+      };
+      const moveTargetPage = pages.filter((page:Page)=> page.id === pageId)[0];
+      const firstBlockId =moveTargetPage.blocksId[0];
+      const blocksIdLength = moveTargetPage.blocksId.length; 
+
+      if(blocksIdLength===1 && firstBlockId.includes("blockSample")){
+        addBlock(pageId, newBlock, 0 , null);
+      }else{  
+        addBlock(pageId, newBlock, blocksIdLength , null);
+      }
+    
     // close Menu and recovery Menu state
     setMenuOpen !==null && setMenuOpen(false);
   };
