@@ -17,7 +17,6 @@ type BlockFnProp ={
   deleteBlock :(pageId: string, block: Block ,isInMenu:boolean) => void,
   addPage : ( newPage:Page, )=>void,
   duplicatePage: (targetPageId: string) => void,
-  editPage : (pageId:string , newPage:Page, )=>void,
   deletePage : (pageId:string , )=>void,
   commentBlock: Block|null,
   movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
@@ -68,7 +67,7 @@ export const detectRange =(event:MouseEvent| React.MouseEvent , targetArea:DOMRe
   return (inner_x && inner_y);
 };
 
-const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlock, deleteBlock ,addPage, editPage,movePageToPage, deletePage ,commentBlock,setCommentBlock}:BlockFnProp)=>{
+const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlock, deleteBlock ,addPage, movePageToPage, deletePage ,commentBlock,setCommentBlock}:BlockFnProp)=>{
   const inner =document.getElementById("inner");
   const [menuOpen, setMenuOpen]= useState<boolean>(false);
   const [popup, setPopup]=useState<PopupType>({

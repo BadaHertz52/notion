@@ -5,7 +5,6 @@ import {  Block,BlockType,blockTypes,findBlock,makeNewBlock,Page, toggle } from 
 import { Command } from './Frame';
 
 type  BlockProps ={
-  userName:string,
   block:Block,
   page:Page,
   editBlock :(pageId: string, block: Block) => void,
@@ -13,12 +12,6 @@ type  BlockProps ={
   changeToSub: (pageId: string, block: Block, newParentBlockId: string) => void,
   raiseBlock: (pageId: string, block: Block) => void,
   deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
-  addPage : (newPage:Page, )=>void,
-  editPage : (pageId:string , newPage:Page, )=>void,
-  deletePage : (pageId:string , )=>void,
-  setCommentBlock : Dispatch<SetStateAction<Block|null>>,
-  commentBlock:Block|null,
-  setTargetPageId:Dispatch<SetStateAction<string>>,
   command :Command,
   setCommand:Dispatch<SetStateAction<Command>>,
 };
@@ -49,7 +42,7 @@ export const BlockComment =({block}:BlockCommentProps)=>{
   )
 };
 
-const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,addPage, editPage, deletePage,setCommentBlock ,commentBlock ,setTargetPageId, command, setCommand  }:BlockProps)=>{
+const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock , command, setCommand  }:BlockProps)=>{
   const editTime =JSON.stringify(Date.now);
   const contentEditableRef= useRef<HTMLElement>(null);
 
@@ -132,19 +125,6 @@ const BlockComponent=({ userName,block, page ,addBlock,editBlock,changeToSub,rai
           targetBlock.contents !== value &&
           sessionStorage.setItem("itemsTobeEdited", JSON.stringify(editedBlock));
         };
-
-        //}
-        //else{
-          ///offset==0;
-          // const item = sessionStorage.getItem("itemsTobeEdited");
-
-          // if(item !==null){
-          //   const editedBlock = JSON.parse(item);
-          //   editedBlock.id === targetBlock.id &&
-          //   sessionStorage.removeItem("itemTobeEdited");
-          // }
-        //}
-
       };
     }
     if(!value.startsWith("/")){

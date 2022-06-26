@@ -16,7 +16,6 @@ export type Command ={
 };
 
 type FrameProps ={
-  userName : string,
   targetPage:Page,
   firstBlocksId:string[]|null,
   editBlock :(pageId: string, block: Block) => void,
@@ -26,13 +25,9 @@ type FrameProps ={
   deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
   addPage :(newPage:Page ,)=>void,
   editPage :(pageId:string,newPage:Page ,)=>void,
-  deletePage :(pageId:string,)=>void,
-  setTargetPageId:Dispatch<SetStateAction<string>>,
-  commentBlock: Block | null,
-  setCommentBlock :Dispatch<SetStateAction<Block|null>>,
 };
 
-const Frame =({ userName, targetPage,firstBlocksId,editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage, deletePage ,setTargetPageId ,commentBlock,setCommentBlock}:FrameProps)=>{
+const Frame =({ targetPage,firstBlocksId,editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage}:FrameProps)=>{
   const [page, setPage]=useState<Page>(targetPage);
   const [newPageFram, setNewPageFrame]=useState<boolean>(false);
   const [cover, setCover]=useState<ImageData|null>(page.header.cover);
@@ -212,7 +207,6 @@ const Frame =({ userName, targetPage,firstBlocksId,editBlock, addBlock,changeToS
                   return (
                     <EditableBlock
                       key={block.id}
-                      userName={userName}
                       page={page}
                       block={block}
                       addBlock={addBlock}
@@ -220,12 +214,6 @@ const Frame =({ userName, targetPage,firstBlocksId,editBlock, addBlock,changeToS
                       changeToSub={changeToSub}
                       raiseBlock={raiseBlock}
                       deleteBlock={deleteBlock}
-                      addPage={addPage}
-                      editPage={editPage}
-                      deletePage={deletePage}
-                      commentBlock={commentBlock}
-                      setCommentBlock={setCommentBlock}
-                      setTargetPageId={setTargetPageId}
                       command={command}
                       setCommand={setCommand}
                     />

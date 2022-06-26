@@ -9,7 +9,6 @@ import { MdPlayArrow } from 'react-icons/md';
 
 
 type EditableBlockProps ={
-  userName:string,
   page:Page,
   block:Block,
   editBlock :(pageId: string, block: Block) => void,
@@ -17,13 +16,6 @@ type EditableBlockProps ={
   changeToSub: (pageId: string, block: Block, newParentBlockId: string) => void,
   raiseBlock: (pageId: string, block: Block) => void,
   deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
-  addPage : ( newPage:Page, )=>void,
-  editPage : (pageId:string , newPage:Page, )=>void,
-  deletePage : (pageId:string , )=>void,
-  
-  setCommentBlock : Dispatch<SetStateAction<Block|null>>,
-  commentBlock :Block |null,
-  setTargetPageId:Dispatch<SetStateAction<string>>,
   command:Command,
   setCommand:Dispatch<SetStateAction<Command>>,
 };
@@ -32,7 +24,7 @@ export   type CommentOpenType ={
   targetId: string | null,
 };
 
-const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock , addPage, editPage, deletePage ,setCommentBlock ,commentBlock ,setTargetPageId ,command, setCommand
+const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,command, setCommand
 }:EditableBlockProps)=>{  
   const className = block.type !== "toggle" ?
   `${block.type} block ` :
@@ -118,7 +110,6 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
                 }
               </div>
               <BlockComponent 
-                userName={userName} 
                 block={block} 
                 page={page}
                 addBlock={addBlock}
@@ -126,12 +117,6 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
                 changeToSub={changeToSub}
                 raiseBlock={raiseBlock}
                 deleteBlock={deleteBlock}
-                addPage={addPage}
-                editPage={editPage}
-                deletePage={deletePage}
-                setCommentBlock={setCommentBlock}
-                commentBlock={commentBlock}
-                setTargetPageId={setTargetPageId}
                 command={command}
                 setCommand={setCommand}
               />
@@ -214,7 +199,6 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
                 onMouseOver={ giveFocusToContent}
               >
               <BlockComponent
-                userName={userName} 
                 block={block} 
                 page={page}
                 addBlock={addBlock}
@@ -222,12 +206,6 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
                 changeToSub={changeToSub}
                 raiseBlock={raiseBlock}
                 deleteBlock={deleteBlock}
-                addPage={addPage}
-                editPage={editPage}
-                deletePage={deletePage}
-                setCommentBlock={setCommentBlock}
-                commentBlock={commentBlock}
-                setTargetPageId={setTargetPageId}
                 command={command}
                 setCommand={setCommand}
               />
@@ -248,7 +226,6 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
               subBlocks.map((subBlock :Block)=> 
                 <EditableBlock
                   key ={subBlocks.indexOf(subBlock)} 
-                  userName={userName} 
                   page={page}
                   block={subBlock}
                   addBlock={addBlock}
@@ -256,12 +233,6 @@ const EditableBlock =({userName, page, block , editBlock, addBlock,changeToSub ,
                   changeToSub={changeToSub}
                   raiseBlock={raiseBlock}
                   deleteBlock={deleteBlock}
-                  addPage={addPage}
-                  editPage={editPage}
-                  deletePage={deletePage}
-                  setCommentBlock={setCommentBlock}
-                  commentBlock={commentBlock}
-                  setTargetPageId={setTargetPageId}
                   command={command}
                   setCommand={setCommand}
                 />

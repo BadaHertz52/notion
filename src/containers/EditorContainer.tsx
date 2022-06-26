@@ -1,8 +1,7 @@
 import React, { Dispatch, SetStateAction } from 'react';
-import {useDispatch, useSelector } from 'react-redux';
+import {useDispatch } from 'react-redux';
 import Frame from '../components/Frame';
 import TopBar from '../components/TopBar';
-import { RootState } from '../modules';
 import {  Block, Page,  change_to_sub, raise_block } from '../modules/notion';
 import { SideAppear } from '../modules/side';
 import { pathType } from './NotionRouter';
@@ -26,15 +25,12 @@ type EditorContainerProps ={
 
   changeSide: (appear: SideAppear) => void,
   setTargetPageId:Dispatch<SetStateAction<string>>,
-  commentBlock: Block | null,
-  setCommentBlock :Dispatch<SetStateAction<Block|null>>,
 };
 
-const EditorContainer =({sideAppear,page,isInTrash, pagePath ,changeSide,addBlock,editBlock,deleteBlock,addPage,editPage,deletePage,restorePage, cleanTrash, setTargetPageId ,commentBlock,setCommentBlock}:EditorContainerProps)=>{
+const EditorContainer =({sideAppear,page,isInTrash, pagePath ,changeSide,addBlock,editBlock,deleteBlock,addPage,editPage,restorePage, cleanTrash, setTargetPageId}:EditorContainerProps)=>{
   const dispatch =useDispatch();
   const changeToSub =(pageId: string, block: Block,  newParentBlockId: string)=> dispatch(change_to_sub(pageId, block, newParentBlockId));
   const raiseBlock =(pageId: string, block: Block) =>dispatch((raise_block(pageId, block)));
-  const userName :string  =useSelector((state:RootState)=> state.user.userName) ;
 
   return(
     <div className='editor'>
@@ -65,7 +61,6 @@ const EditorContainer =({sideAppear,page,isInTrash, pagePath ,changeSide,addBloc
       setTargetPageId={setTargetPageId}
       />
       <Frame
-        userName ={userName}
         targetPage={page}
         firstBlocksId={page.firstBlocksId}
         addBlock={addBlock}
@@ -75,10 +70,6 @@ const EditorContainer =({sideAppear,page,isInTrash, pagePath ,changeSide,addBloc
         deleteBlock={deleteBlock}
         addPage={addPage}
         editPage={editPage}
-        deletePage={deletePage}
-        setTargetPageId={setTargetPageId}
-        commentBlock={commentBlock}
-        setCommentBlock={setCommentBlock}
       />
 
     </div>

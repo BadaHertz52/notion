@@ -256,9 +256,6 @@ const NotionRouter =()=>{
                       restorePage={restorePage}
     
                       changeSide={changeSide}
-
-                      commentBlock={commentBlock}
-                      setCommentBlock={setCommentBlock}
                       />
                     } 
             />
@@ -273,7 +270,6 @@ const NotionRouter =()=>{
             deleteBlock={deleteBlock}
             addPage={addPage}
             duplicatePage={duplicatePage}
-            editPage={editPage}
             movePageToPage={movePageToPage}
             deletePage={deletePage}
             commentBlock={commentBlock}
