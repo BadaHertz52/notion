@@ -32,10 +32,11 @@ type MenuProps ={
   deletePage : (pageId:string , )=>void,
   movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
   setPopup :Dispatch<SetStateAction<PopupType>> ,
-  popup:PopupType
+  popup:PopupType,
+  setCommentBlock: React.Dispatch<React.SetStateAction<Block | null>>
 };
 
-const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, deleteBlock ,addPage ,duplicatePage,deletePage,movePageToPage,setPopup ,popup}:MenuProps)=>{
+const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, deleteBlock ,addPage ,duplicatePage,deletePage,movePageToPage,setPopup ,popup ,setCommentBlock}:MenuProps)=>{
   const sessionItem = sessionStorage.getItem("blockFnTargetBlock") as string;
   const block:Block= JSON.parse(sessionItem);
   const blockFnElement = document.getElementById("blockFn") ;
@@ -86,6 +87,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
     })
   };
   const onOpenCommentInput=()=>{
+    setCommentBlock(block);
     setMenuOpen(false);
     setPopup({
       popup:true,

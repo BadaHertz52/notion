@@ -119,10 +119,16 @@ const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlo
     const popupMenu =document.getElementById("popupMenu");
     const popupMenuArea =popupMenu?.getClientRects()[0];
     const isInPopupMenu =detectRange(event, popupMenuArea);
-    !isInPopupMenu && setPopup({
-      popup:false,
-      what: null
-    });
+    if(!isInPopupMenu){
+      popup.what==="popupComment" && 
+      setCommentBlock(null);
+      
+      setPopup({
+        popup:false,
+        what: null
+      });
+    }
+
   };
 
   inner?.addEventListener("click", (event:MouseEvent)=>{
@@ -165,6 +171,7 @@ const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlo
             deletePage={deletePage}
             popup={popup}
             setPopup={setPopup}
+            setCommentBlock={setCommentBlock}
           />
         }
       {popup.popup && (
