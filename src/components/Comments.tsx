@@ -17,7 +17,7 @@ type CommentsProps={
   userName:string,
   editBlock :(pageId: string, block: Block) => void,
   setCommentBlock: Dispatch<SetStateAction<Block|null>>,
-  setMoreOpen:Dispatch<React.SetStateAction<boolean>>,
+  setMoreOpen:Dispatch<SetStateAction<boolean>>,
 };
 type CommentProps ={
   userName: string,
@@ -26,7 +26,7 @@ type CommentProps ={
   block:Block,
   editBlock :(pageId: string, block: Block) => void,
   setCommentBlock: Dispatch<SetStateAction<Block|null>>,
-  setMoreOpen:Dispatch<React.SetStateAction<boolean>>,
+  setMoreOpen:Dispatch<SetStateAction<boolean>>,
 };
 type CommentInputProps={
   userName: string,
@@ -43,7 +43,7 @@ type CommentBlockProps ={
   pageId: string,
   editBlock:(pageId: string, block: Block) => void,
   setCommentBlock: Dispatch<SetStateAction<Block|null>>,
-  setMoreOpen:Dispatch<React.SetStateAction<boolean>>,
+  setMoreOpen:Dispatch<SetStateAction<boolean>>,
 };
 
 type CommentToolProps ={
@@ -53,7 +53,7 @@ type CommentToolProps ={
   pageId: string,
   editBlock: (pageId: string, block: Block) => void,
   setCommentBlock: Dispatch<SetStateAction<Block|null>>,
-  setMoreOpen:Dispatch<React.SetStateAction<boolean>>,
+  setMoreOpen:Dispatch<SetStateAction<boolean>>,
 };
 
 type ResolveBtnProps ={
