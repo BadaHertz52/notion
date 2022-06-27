@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {  Route, Routes, useNavigate} from 'react-router-dom';
-import BlockFn from '../components/BlockFn';
+import BlockFn, { detectRange } from '../components/BlockFn';
 import Comments, { ToolMore } from '../components/Comments';
 import QuickFindBord from '../components/QuickFindBord';
 import { RootState } from '../modules';
@@ -207,10 +207,26 @@ const NotionRouter =()=>{
     }
     
   },[targetPageId]);
+  
+  const clickInner =(event:React.MouseEvent)=>{
+    if(openComment){
+      const comments= document.getElementById("comments");
+      const commentsDomRect =comments?.getClientRects()[0];
+      if(commentsDomRect !==undefined){
+        const isInComments= detectRange(event,commentsDomRect);
+        if(!isInComments){
+          setOpenComment(false);
+          setCommentBlock(null);
+        }
+      }
+    }
+
+  }
   return(
     <div 
       id="inner"
       className='sideBar_lock'
+      onClick={clickInner}
     >
       <SideBarContainer 
         sideAppear ={sideAppear}
@@ -279,7 +295,6 @@ const NotionRouter =()=>{
             commentBlock={commentBlock}
             setCommentBlock={setCommentBlock}
           />
-          {commentBlock !==null &&
           {commentBlock !==null && openComment &&
               <Comments
                 userName={user.userName}
