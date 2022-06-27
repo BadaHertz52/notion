@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import Menu from './Menu';
-import {Block, listItem, makeNewBlock, Page} from '../modules/notion';
+import {Block, CommentType, listItem, makeNewBlock, Page} from '../modules/notion';
 
 import { AiOutlinePlus } from 'react-icons/ai';
 import { CgMenuGridO } from 'react-icons/cg';
@@ -193,12 +193,13 @@ const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlo
               :
               <div id="popupMenu">
                   <CommentInput
+                    where="menu"
                     pageId={page.id}
                     userName={userName}
                     editBlock={editBlock}
                     comment={null}
                     commentBlock={commentBlock}
-                    setCommentBlock={setCommentBlock}
+                    setComments={null}
                   />
               </div>
           )
