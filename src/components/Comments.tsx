@@ -302,39 +302,51 @@ export const CommentInput =({where ,userName, pageId ,comment,editBlock, comment
 };
 
 
-export const ToolMore =({pageId, block, editBlock, setCommentBlock ,setMoreOpen}:ToolMoreProps)=>{
-  const toolMoreItem = sessionStorage.getItem("toolMoreItem");
-  const [comment, setComment] =useState<BlockCommentType | CommentType | null >(null);
-  const [style, setStyle]= useState<CSSProperties>();
-  const editTime = JSON.stringify(Date.now());
+const ToolMore =({pageId, block, editBlock,comments,
+  setComments ,setMoreOpen,toolTargetComment, mainComment,
+  style}:ToolMoreProps)=>{
 
+  const editTime = JSON.stringify(Date.now());
+  const blockCommentsId = comments?.map((comment:BlockCommentType)=> comment.id);
+  
   const deleteComment =()=>{
     setMoreOpen(false);
-    sessionStorage.removeItem("toolMoreItem");
-    if(block !==null){
-      updateComments(pageId,block,comment,editTime,editBlock, setCommentBlock,"delete", null);
+    if(block !==null && comments !==null && mainComment !==null && toolTargetComment !==null){
+      const mainIndex = blockCommentsId?.indexOf(mainComment.id) as number; 
+      if(mainComment.id === toolTargetComment.id){
+        const newComments =comments.filter((comment:BlockCommentType)=> comment.id !== toolTargetComment.id);
+        const editedBlock :Block ={
+          ...block,
+          comments: newComments,
+          editTime:editTime 
+        };
+        editBlock(pageId, editedBlock);
+        setComments(newComments);
+      }else{
+        if(mainComment.subComments !==null && mainComment.subCommentsId!==null){
+          const subIndex= mainComment.subCommentsId.indexOf(toolTargetComment.id);
+          mainComment.subComments.splice(subIndex,1);
+          mainComment.subCommentsId.splice(subIndex,1); 
+          comments.splice(mainIndex,1, mainComment);
+          const editedBlock :Block ={
+            ...block,
+            editTime:editTime,
+          };
+          editBlock(pageId, editedBlock);
+          setComments(comments); 
+        }
+      }
     };
 
   };
 
   const editComment =()=>{
-    sessionStorage.removeItem("toolMoreItem");
     setMoreOpen(false);
-    if(comment !== null){
-      const item:EditCommentItem ={
-        edit:true, 
-        comment :comment};
-        sessionStorage.setItem("editCommentItem", JSON.stringify(item));
+    if(toolTargetComment !== null && mainComment !==null){
+      const item=toolTargetComment;
+      sessionStorage.setItem("editCommentItem", JSON.stringify(item));
     };
   };
-  useEffect(()=>{
-    if(toolMoreItem !==null){
-      const item :ToolMoreItem = JSON.parse(toolMoreItem);
-      setComment(item.comment);
-      setStyle(item.style);
-    }
-  },[toolMoreItem]); 
-  
   return(
     <div 
       id='tool_more'
