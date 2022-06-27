@@ -1,8 +1,7 @@
-import React, { CSSProperties, Dispatch, SetStateAction, useEffect, useRef, useState, } from 'react';
+import React, { CSSProperties, Dispatch, SetStateAction, useEffect, useRef} from 'react';
 import { Block, findBlock, Page,  } from '../modules/notion';
-import CommandBlock from './CommandBlock';
 import { Command } from './Frame';
-import BlockComponent, { BlockComment, itemType } from './BlockComponent';
+import BlockComponent, { BlockComment } from './BlockComponent';
 import { GoPrimitiveDot } from 'react-icons/go';
 import { GrCheckbox, GrCheckboxSelected, GrDocumentText } from 'react-icons/gr';
 import { MdPlayArrow } from 'react-icons/md';
@@ -18,13 +17,15 @@ type EditableBlockProps ={
   deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
   command:Command,
   setCommand:Dispatch<SetStateAction<Command>>,
+  setOpenComment: Dispatch<SetStateAction<boolean>>,
+  setCommentBlock: React.Dispatch<React.SetStateAction<Block | null>>
 };
 export   type CommentOpenType ={
   open:boolean,
   targetId: string | null,
 };
 
-const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,command, setCommand
+const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,command, setCommand ,setOpenComment ,setCommentBlock
 }:EditableBlockProps)=>{  
   const className = block.type !== "toggle" ?
   `${block.type} block ` :
@@ -43,8 +44,11 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
   const currentTarget =event.currentTarget as HTMLElement;
   const contentEditable =currentTarget.getElementsByClassName("contentEditable")[0] as HTMLElement ;
   contentEditable.focus();
-  }
-
+  };
+  const onClickCommentBtn=(block:Block)=>{
+    setOpenComment(true); 
+    setCommentBlock(block);
+  };
   const updateBlock=()=>{
     const item = sessionStorage.getItem("itemsTobeEdited");
     const cursorElement =document.getSelection()?.anchorNode?.parentElement;
@@ -119,12 +123,14 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                 deleteBlock={deleteBlock}
                 command={command}
                 setCommand={setCommand}
+                onClickCommentBtn={onClickCommentBtn}
               />
             </div>
             </div>
           {block.comments !==null &&
             <BlockComment
               block={block} 
+              onClickCommentBtn={onClickCommentBtn}
             />
           }
           </div>
@@ -208,12 +214,14 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                 deleteBlock={deleteBlock}
                 command={command}
                 setCommand={setCommand}
+                onClickCommentBtn={onClickCommentBtn}
               />
               </div>
               </div>
               {block.comments !==null &&
               <BlockComment
                 block={block}
+                onClickCommentBtn={onClickCommentBtn}
               />
               }
             </div>
@@ -235,6 +243,8 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                   deleteBlock={deleteBlock}
                   command={command}
                   setCommand={setCommand}
+                  setOpenComment={setOpenComment}
+                  setCommentBlock={setCommentBlock}
                 />
               )
               }

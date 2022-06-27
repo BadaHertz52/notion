@@ -14,23 +14,26 @@ type  BlockProps ={
   deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
   command :Command,
   setCommand:Dispatch<SetStateAction<Command>>,
+  onClickCommentBtn: (block: Block) => void
 };
 type BlockCommentProps={
-  block:Block
+  block:Block,
+  onClickCommentBtn: (block: Block) => void
 }
 export type itemType ={
   block:Block,
   blockIndex:number ,
 };
-export const BlockComment =({block}:BlockCommentProps)=>{
+export const BlockComment =({block , onClickCommentBtn}:BlockCommentProps)=>{
   return (
       <div 
         id={`${block.id}_comments`}
-        className="blockId_comments"
+        className="commentsBubble"
         >
         <button 
           className='commentBtn btnIcon'
           name={block.id}
+          onClick={()=>onClickCommentBtn(block)}
         >
           <IoChatboxOutline/>
           <span className="commentLength">
@@ -42,7 +45,7 @@ export const BlockComment =({block}:BlockCommentProps)=>{
   )
 };
 
-const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock , command, setCommand  }:BlockProps)=>{
+const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock , command, setCommand  ,onClickCommentBtn  }:BlockProps)=>{
   const editTime =JSON.stringify(Date.now);
   const contentEditableRef= useRef<HTMLElement>(null);
 
@@ -202,6 +205,9 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
         ,targetBlock:null})
     }
   };
+
+
+
   const BlockContentEditable=()=>{
     return(
       <>
@@ -252,6 +258,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
         id={`${block.id}_contents`}
         className="contents commentBtn"
         onMouseOver={showBlockFn}
+        onClick={()=>onClickCommentBtn(block)}
       >
         <BlockContentEditable/>
       </button>

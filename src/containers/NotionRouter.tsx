@@ -47,6 +47,7 @@ const NotionRouter =()=>{
   const [routePage, setRoutePage]=useState<Page|null>(firstPage!==undefined? firstPage: null);
   const [openQF, setOpenQF]=useState<boolean>(false);
   const [moreOpen, setMoreOpen]= useState<boolean>(false);
+  const [openComment, setOpenComment]=useState<boolean>(false);
   const [commentBlock, setCommentBlock]=useState<Block|null>(null);
 
   //---action.function 
@@ -256,6 +257,9 @@ const NotionRouter =()=>{
                       restorePage={restorePage}
     
                       changeSide={changeSide}
+
+                      setOpenComment={setOpenComment}
+                      setCommentBlock ={setCommentBlock}
                       />
                     } 
             />
@@ -276,6 +280,7 @@ const NotionRouter =()=>{
             setCommentBlock={setCommentBlock}
           />
           {commentBlock !==null &&
+          {commentBlock !==null && openComment &&
               <Comments
                 userName={user.userName}
                 block={commentBlock}

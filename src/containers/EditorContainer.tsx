@@ -25,9 +25,12 @@ type EditorContainerProps ={
 
   changeSide: (appear: SideAppear) => void,
   setTargetPageId:Dispatch<SetStateAction<string>>,
+
+  setOpenComment: Dispatch<SetStateAction<boolean>>,
+  setCommentBlock: React.Dispatch<React.SetStateAction<Block | null>>
 };
 
-const EditorContainer =({sideAppear,page,isInTrash, pagePath ,changeSide,addBlock,editBlock,deleteBlock,addPage,editPage,restorePage, cleanTrash, setTargetPageId}:EditorContainerProps)=>{
+const EditorContainer =({sideAppear,page,isInTrash, pagePath ,changeSide,addBlock,editBlock,deleteBlock,addPage,editPage,restorePage, cleanTrash, setTargetPageId ,setOpenComment ,setCommentBlock}:EditorContainerProps)=>{
   const dispatch =useDispatch();
   const changeToSub =(pageId: string, block: Block,  newParentBlockId: string)=> dispatch(change_to_sub(pageId, block, newParentBlockId));
   const raiseBlock =(pageId: string, block: Block) =>dispatch((raise_block(pageId, block)));
@@ -70,6 +73,8 @@ const EditorContainer =({sideAppear,page,isInTrash, pagePath ,changeSide,addBloc
         deleteBlock={deleteBlock}
         addPage={addPage}
         editPage={editPage}
+        setOpenComment={setOpenComment}
+        setCommentBlock ={setCommentBlock}
       />
 
     </div>
