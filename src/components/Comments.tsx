@@ -7,10 +7,6 @@ import { HiOutlinePencil } from 'react-icons/hi';
 import { IoTrashOutline } from 'react-icons/io5';
 import Time from './Time';
 import { detectRange } from './BlockFn';
-type EditCommentItem = {
-  edit:boolean,
-  comment:BlockCommentType | CommentType
-};
 type CommentsProps={
   block:Block,
   pageId: string,
