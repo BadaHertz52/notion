@@ -580,6 +580,10 @@ a:link, a:active, a:visited {
   background: #EDECE9;
 }
 
+#commentsInner {
+  position: relative;
+}
+
 .commentType {
   border-bottom: 1px solid #d6d6d6;
   padding: 0 5%;

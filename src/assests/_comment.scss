@@ -39,6 +39,9 @@
   @include popupMenu;
   z-index: 10;
 }
+#commentsInner {
+  position: relative;
+}
 .commentType{
   border-bottom: 1px solid $lightMud;
   padding: 0 5%; 
