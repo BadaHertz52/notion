@@ -70,6 +70,15 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
     };
     editBlock(page.id, editedTobo);
   };
+  const onClickToggle=(event:React.MouseEvent)=>{
+    const target =event.currentTarget ;
+    const blockId =target.getAttribute("name");
+    const toggleMainDoc = document.getElementById(`block_${blockId}`) ;
+    target.classList.toggle("on");
+    toggleMainDoc?.classList.toggle("on");
+    console.log(toggleMainDoc?.className);
+  };
+
   const inner =document.getElementById("inner");
   inner?.addEventListener("click",updateBlock);
   inner?.addEventListener("keyup",updateBlock);
@@ -188,6 +197,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
               {block.type ==="toggle" &&
                 <button 
                   name={block.id}
+                  onClick={onClickToggle}
                   className={block.subBlocksId!==null ? 
                     'blockToggleBtn on left blockBtn' :
                     'blockToggleBtn left blockBtn' 
