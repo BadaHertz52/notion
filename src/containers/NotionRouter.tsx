@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {  Route, Routes, useNavigate} from 'react-router-dom';
 import BlockFn, { detectRange } from '../components/BlockFn';
-import Comments, { ToolMore } from '../components/Comments';
+import Comments from '../components/Comments';
 import QuickFindBord from '../components/QuickFindBord';
 import { RootState } from '../modules';
 import { add_block, add_page, Block, change_to_sub, clean_trash, delete_block, delete_page, duplicate_page, edit_block, edit_page, findPage,  listItem,  move_page_to_page, Page, pageSample, raise_block, restore_page, } from '../modules/notion';
@@ -17,7 +17,6 @@ export type pathType={
 };
 const NotionRouter =()=>{
   const navigate= useNavigate();
-
   const dispatch =useDispatch();
   const notion = useSelector((state:RootState)=> state.notion);
   const pagesId =notion.pagesId;
@@ -46,7 +45,6 @@ const NotionRouter =()=>{
   const [targetPageId, setTargetPageId]= useState<string>(firstPage !== undefined? firstPage.id: "none");
   const [routePage, setRoutePage]=useState<Page|null>(firstPage!==undefined? firstPage: null);
   const [openQF, setOpenQF]=useState<boolean>(false);
-  const [moreOpen, setMoreOpen]= useState<boolean>(false);
   const [openComment, setOpenComment]=useState<boolean>(false);
   const [commentBlock, setCommentBlock]=useState<Block|null>(null);
 
@@ -301,18 +299,7 @@ const NotionRouter =()=>{
                 block={commentBlock}
                 pageId={routePage.id}
                 editBlock={editBlock}
-                setCommentBlock={setCommentBlock}
-                setMoreOpen={setMoreOpen}
             />              
-          }
-          {moreOpen &&
-          <ToolMore
-            pageId={routePage.id}
-            block={commentBlock}
-            editBlock={editBlock}
-            setCommentBlock={setCommentBlock}
-            setMoreOpen={setMoreOpen}
-          />
           }
       </>    
       :
