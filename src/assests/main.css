@@ -16,7 +16,7 @@ div {
 }
 
 .pageLink:hover {
-  background-color: rgba(49, 45, 33, 0.11);
+  background-color: #EDECE9;
 }
 
 button {
@@ -121,7 +121,7 @@ a:link, a:active, a:visited {
 
 .blockFn button:hover,
 .toggle.block .left:hover {
-  background-color: #d6d6d6;
+  background-color: #EDECE9;
 }
 
 .contentEditable {
@@ -239,6 +239,11 @@ a:link, a:active, a:visited {
   outline: none;
 }
 
+.contentEditable:focus:empty::after {
+  content: attr(placeholder);
+  color: #B9B8B6;
+}
+
 .contents.commentBtn {
   color: inherit;
   text-decoration: inherit;
@@ -252,12 +257,18 @@ a:link, a:active, a:visited {
   background-color: rgba(255, 212, 0, 0.8);
 }
 
-.contentEditable:focus:empty::after {
-  content: attr(placeholder);
-  color: #B9B8B6;
+.commentsBubble .commentBtn {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 3px;
 }
 
-.commentBtn.btnIcon svg, .commentBtn.btnIcon span {
+.commentsBubble .commentBtn:hover {
+  background-color: #EDECE9;
+}
+
+.commentsBubble .commentBtn svg, .commentsBubble .commentBtn span {
   color: #a3a3a2;
 }
 
@@ -428,7 +439,7 @@ div {
 }
 
 .pageLink:hover {
-  background-color: rgba(49, 45, 33, 0.11);
+  background-color: #EDECE9;
 }
 
 button {
@@ -472,7 +483,7 @@ div {
 }
 
 .pageLink:hover {
-  background-color: rgba(49, 45, 33, 0.11);
+  background-color: #EDECE9;
 }
 
 button {
@@ -697,7 +708,7 @@ a:link, a:active, a:visited {
 }
 
 .commentBlock .tool button:hover {
-  background-color: rgba(49, 45, 33, 0.11);
+  background-color: #EDECE9;
   color: black;
 }
 
@@ -867,7 +878,7 @@ a:link, a:active, a:visited {
 }
 
 #tool_more button:hover {
-  background-color: rgba(49, 45, 33, 0.11);
+  background-color: #EDECE9;
 }
 
 #tool_more button svg {
@@ -904,7 +915,7 @@ div {
 }
 
 .pageLink:hover {
-  background-color: rgba(49, 45, 33, 0.11);
+  background-color: #EDECE9;
 }
 
 button {
@@ -1734,7 +1745,7 @@ div {
 }
 
 .pageLink:hover {
-  background-color: rgba(49, 45, 33, 0.11);
+  background-color: #EDECE9;
 }
 
 button {
@@ -2194,7 +2205,7 @@ a:link, a:active, a:visited {
 }
 
 .sideBar .addNewPageBtn:hover {
-  background-color: rgba(49, 45, 33, 0.11);
+  background-color: #EDECE9;
 }
 
 .sideBar .addNewPageBtn button {
@@ -2414,7 +2425,7 @@ div {
 }
 
 .pageLink:hover {
-  background-color: rgba(49, 45, 33, 0.11);
+  background-color: #EDECE9;
 }
 
 button {
@@ -2495,7 +2506,7 @@ a:link, a:active, a:visited {
 }
 
 #trash .header button:hover {
-  background-color: rgba(49, 45, 33, 0.11);
+  background-color: #EDECE9;
 }
 
 #trash .search input {
@@ -2565,7 +2576,7 @@ a:link, a:active, a:visited {
 }
 
 #trash .page .btns button:hover {
-  background-color: rgba(49, 45, 33, 0.11);
+  background-color: #EDECE9;
 }
 
 #trash .page .btns svg {
@@ -2604,7 +2615,7 @@ div {
 }
 
 .pageLink:hover {
-  background-color: rgba(49, 45, 33, 0.11);
+  background-color: #EDECE9;
 }
 
 button {
@@ -2767,7 +2778,7 @@ a:link, a:active, a:visited {
 }
 
 #quickFindBord .qf_results .clearBtn:hover {
-  background-color: rgba(49, 45, 33, 0.11);
+  background-color: #EDECE9;
 }
 
 #quickFindBord .qf_results .sort {
@@ -2867,7 +2878,7 @@ a:link, a:active, a:visited {
 }
 
 #quickFindBord .qf_results .sort_options.on button:hover {
-  background-color: rgba(49, 45, 33, 0.11);
+  background-color: #EDECE9;
 }
 
 #quickFindBord .qf_results .sort_options.on .selected .checkIcon {
