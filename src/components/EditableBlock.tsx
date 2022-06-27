@@ -62,6 +62,14 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
         }
     }
   };
+  const onClickTodoBtn =()=>{
+    const editedTobo :Block ={
+      ...block,
+      type : block.type ==="todo" ? "todo done" : "todo",
+      editTime:JSON.stringify(Date.now())
+    };
+    editBlock(page.id, editedTobo);
+  };
   const inner =document.getElementById("inner");
   inner?.addEventListener("click",updateBlock);
   inner?.addEventListener("keyup",updateBlock);
@@ -159,6 +167,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                 <button 
                   className='checkbox left blockBtn'
                   name={block.id}
+                  onClick={onClickTodoBtn}
                   >
                   <GrCheckbox 
                     className='blockBtnSvg' 
@@ -169,6 +178,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                 <button 
                   className='checkbox done left blockBtn'
                   name={block.id}
+                  onClick={onClickTodoBtn}
                 >
                   <GrCheckboxSelected   
                     className='blockBtnSvg '
