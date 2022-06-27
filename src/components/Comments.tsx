@@ -12,18 +12,21 @@ type CommentsProps={
   pageId: string,
   userName:string,
   editBlock :(pageId: string, block: Block) => void,
-  setCommentBlock: Dispatch<SetStateAction<Block|null>>,
-  setMoreOpen:Dispatch<SetStateAction<boolean>>,
 };
+
 type CommentProps ={
   userName: string,
   comment:BlockCommentType,
   pageId:string,
   block:Block,
   editBlock :(pageId: string, block: Block) => void,
-  setCommentBlock: Dispatch<SetStateAction<Block|null>>,
+  setComments: Dispatch<SetStateAction<BlockCommentType[] | null>>
   setMoreOpen:Dispatch<SetStateAction<boolean>>,
+  setToolMoreStyle: Dispatch<SetStateAction<CSSProperties | undefined>>,
+  setToolTargetComment :Dispatch<SetStateAction<CommentType|BlockCommentType|null>>,
+  setMainComment:Dispatch<SetStateAction<BlockCommentType|null>>,
 };
+
 type CommentInputProps={
   where : "comments" | "menu",
   userName: string,
@@ -31,115 +34,47 @@ type CommentInputProps={
   comment:BlockCommentType | null,
   editBlock :(pageId: string, block: Block) => void,
   commentBlock: Block|null,
-  setCommentBlock: Dispatch<SetStateAction<Block|null>>,
-}
+  setComments: Dispatch<SetStateAction<BlockCommentType[] | null>> | null
+};
 type CommentBlockProps ={
+  mainComment:BlockCommentType,
   comment: CommentType | BlockCommentType,
-  mainComment:boolean,
+  main:boolean,
   block :Block,
   pageId: string,
   editBlock:(pageId: string, block: Block) => void,
-  setCommentBlock: Dispatch<SetStateAction<Block|null>>,
+  setComments: Dispatch<SetStateAction<BlockCommentType[] | null>>
   setMoreOpen:Dispatch<SetStateAction<boolean>>,
+  setToolMoreStyle: Dispatch<SetStateAction<CSSProperties | undefined>>,
+  setToolTargetComment :Dispatch<SetStateAction<CommentType|BlockCommentType|null>>,
+  setMainComment:Dispatch<SetStateAction<BlockCommentType|null>>,
 };
-
 type CommentToolProps ={
-  mainComment:boolean,
+  mainComment:BlockCommentType,
+  main:boolean,
   comment: CommentType | BlockCommentType,
   block:Block,
   pageId: string,
   editBlock: (pageId: string, block: Block) => void,
-  setCommentBlock: Dispatch<SetStateAction<Block|null>>,
+  setComments: Dispatch<SetStateAction<BlockCommentType[] | null>>
   setMoreOpen:Dispatch<SetStateAction<boolean>>,
+  setToolMoreStyle: Dispatch<SetStateAction<CSSProperties | undefined>>,
+  setToolTargetComment :Dispatch<SetStateAction<CommentType|
+  BlockCommentType|null>>,
+  setMainComment:Dispatch<SetStateAction<BlockCommentType|null>>,
 };
 
-type ResolveBtnProps ={
-  comment:BlockCommentType,
-  block:Block,
-  pageId: string,
-  editBlock:(pageId: string, block: Block) => void,
-  setCommentBlock: Dispatch<SetStateAction<Block|null>>,
-};
 type ToolMoreProps ={
   pageId:string,
   block:Block | null,
   editBlock:(pageId: string, block: Block) => void,
-  setCommentBlock: Dispatch<SetStateAction<Block|null>>
-  setMoreOpen: Dispatch<SetStateAction<boolean>>
-};
-type ToolMoreItem ={
-  comment: BlockCommentType |CommentType, 
-  style:CSSProperties
-};
-const updateComments =(pageId: string, block:Block, comment:CommentType | BlockCommentType | null , editTime:string, editBlock:(pageId: string, block: Block) => void ,setCommentBlock:Dispatch<SetStateAction<Block|null>>,fnType:"delete"|"edit", text:string|null)=>{
-  if(comment !==null && block.comments !==null){
-    const block_comments :BlockCommentType[] =[...block.comments];
-    const mainCommentIds = block.comments.map((comment:BlockCommentType)=> comment.id);
-    const updateBlock =()=>{
-      const newBlock ={
-        ...block,
-        editTime:editTime,
-        comments : block_comments[0]=== undefined ? null :block_comments
-      };
-      editBlock(pageId, newBlock);
-      setCommentBlock(newBlock);
-      sessionStorage.remove("editCommentItem");
-    };
-    if(mainCommentIds?.includes(comment.id)){
-        //BlockCommentType
-        const index = mainCommentIds.indexOf(comment.id);
-        switch (fnType) {
-          case "delete":
-            block_comments.splice(index,1);
-            break;
-          case  "edit":
-            if(text !==null ){
-              const mainComment:BlockCommentType = block_comments[index];
-              const newMainComment:BlockCommentType ={
-                ...mainComment,
-                editTime:editTime,
-                content:text 
-              }
-              block_comments.splice(index,1 , newMainComment);
-            };
-          break;
-          default:
-            break;
-        };
-        updateBlock();
-    }else{
-      //CommentType
-      const mainComments :BlockCommentType = block.comments.filter((block_comment:BlockCommentType)=>
-        block_comment.commentsId?.includes(comment.id))[0];
-      const mainCommentsIndex= mainCommentIds.indexOf(mainComments.id);
-      const commentIndex = mainCommentIds.indexOf(comment.id);
-
-      switch (fnType) {
-        case "delete":
-          mainComments.comments?.splice(commentIndex,1);
-          mainComments.commentsId?.splice(commentIndex,1);
-          break;
-        case "edit":
-          if(text !==null){
-            const newComment:CommentType ={
-              ...comment,
-              editTime:editTime,
-              content:text 
-            };
-            mainComments.comments?.splice(commentIndex,1 , newComment);
-          }
-        break;
-        default:
-          break;
-      };
-
-      const newMainComments :BlockCommentType ={
-        ...mainComments,
-      };
-      block_comments.splice(mainCommentsIndex, 1, newMainComments);
-      updateBlock();
-  }
-  };
+  comments: BlockCommentType[] | null,
+  setComments: Dispatch<SetStateAction<BlockCommentType[] | null>>
+  setMoreOpen: Dispatch<SetStateAction<boolean>>,
+  style:CSSProperties |undefined,
+  setToolTargetComment :Dispatch<SetStateAction<CommentType|BlockCommentType|null>>,
+  toolTargetComment: CommentType|BlockCommentType|null ,
+  mainComment:BlockCommentType|null,
 };
 
 export const CommentInput =({where ,userName, pageId ,comment,editBlock, commentBlock, setComments
@@ -150,8 +85,7 @@ export const CommentInput =({where ,userName, pageId ,comment,editBlock, comment
     border:"none"
   });
   const [text, setText]=useState<string>("");
-  const [edit, setEdit]=useState<boolean>(false);
-  const [editItem, setEditItem]=useState<EditCommentItem|null>(null);
+  const [editItem, setEditItem]=useState<BlockCommentType|CommentType|null>(null);
   const item= sessionStorage.getItem("editCommentItem");
   const onInputText=(event:FormEvent<HTMLInputElement>)=>{
     const target =event?.currentTarget ; 
@@ -167,106 +101,156 @@ export const CommentInput =({where ,userName, pageId ,comment,editBlock, comment
       setSubmitStyle({
         fill: " rgb(46, 170, 220)",
       }) ;
-    }
-  };
-
-  const onClickToMakeNewComment =(event:React.MouseEvent<HTMLButtonElement>)=>{
-    const editTime =JSON.stringify(Date.now());
-    const updateBlock =(newBlock:Block)=>{
-      editBlock(pageId, newBlock );
-      setCommentBlock(newBlock);
     };
     
-    const addComment =(block:Block , blockComments:BlockCommentType[]|null)=>{
-      const number = block.comments !==null? block.comments.length.toString() :0;
-      const newId = `comment_${number}_${editTime}`;
-      if(comment !==null && blockComments !==null ){
-        // commentBlock.comments 중 특정 comment에 comment를 다는 (Comment의 하위 요소로 존재할 경우) 
-        const commentsArry =[...blockComments];
-        const ids: string[] = blockComments?.map((comment:BlockCommentType)=> comment.id) as string[];
-        const commentIndex = ids.indexOf(comment.id);
-        const comment_newComment:CommentType ={
-          id:newId,
-          userName: userName,
-          editTime:editTime,
-          createTime:editTime,
-          content: text ,
-        };
-        const updatedComment:BlockCommentType ={
-          ...comment,
-          comments:comment.comments !==null? 
-                  comment.comments.concat(comment_newComment) :
-                  [comment_newComment],
-          commentsId: comment.commentsId !==null ?
-          comment.commentsId.concat(comment_newComment.id):
-          [comment_newComment.id],
-        };
-        commentsArry.splice(commentIndex,1, updatedComment);
-
-        const newBlock:Block ={
-          ...block,
-          comments:commentsArry
-        }
-        updateBlock(newBlock)
-      }else{
-        //blockFn 에서 새로운 mainComment를 만듦 
-        const newComment :BlockCommentType ={
-          id:newId,
-          userName:userName,
-          content:text,
-          type:"open",
-          editTime:editTime,
-          createTime:editTime,
-          comments:null,
-          commentsId:null,
-        };
-          const newBlock :Block={
-            ...block,
-            comments:blockComments === null? [newComment]:blockComments.concat(newComment)
-          };
-          updateBlock(newBlock);
-      }
-    };
-    const editComment =(block:Block)=>{
-      if(editItem !==null){
-        const comment =editItem.comment;
-        updateComments(pageId, block, comment ,editTime, editBlock,setCommentBlock, "edit" ,text);
-      }
-    };
+  };
+  const onClickToMakeNewComment =(event:React.MouseEvent<HTMLButtonElement>)=>{
     if(commentBlock !==null){
-      if(item ==null){
-        addComment(commentBlock, commentBlock?.comments);
-      }else{
-        !edit ?
-        addComment(commentBlock, commentBlock?.comments):
-        editComment(commentBlock);
+      console.log('where', where, editItem, comment)
+      const editTime =JSON.stringify(Date.now());
+      const newMainId = `${commentBlock.id}_comment_${editTime}`;
+      function editComment(block:Block){
+        if(comment !==null && block.comments!==null && editItem !==null){
+          const mainComment =comment ;
+          const blockComments=[...block.comments];
+          const mainIndex =blockComments.map((comment:BlockCommentType)=>comment.id).indexOf(mainComment.id);
+          
+          if(editItem.id === mainComment.id){
+            const editedMainComment:BlockCommentType ={
+              ...mainComment,
+              content:text ,
+              editTime:editTime
+            };
+            blockComments.splice(mainIndex, 1, editedMainComment);
+            const editedBlock :Block ={
+              ...block,
+              comments: blockComments,
+              editTime:editTime
+            };
+            editBlock(pageId, editedBlock);
+            setComments !==null && setComments(editedBlock.comments)
+          }else{
+            if(mainComment.subComments !==null && mainComment.subCommentsId!==null){
+              const editedSubComment:CommentType ={
+                ...editItem,
+                content:text ,
+                editTime:editTime
+              };
+              const subIndex= mainComment.subCommentsId?.indexOf(editItem.id);
+              const subComments= [...mainComment.subComments];
+              subComments.splice(subIndex,1, editedSubComment);
+              const editedMianComment:BlockCommentType ={
+                ...mainComment,
+                subComments:subComments,
+                editTime:editTime
+              };
+              blockComments.splice(mainIndex,1, editedMianComment);
+              const editedBlock :Block ={
+                ...block,
+                comments: blockComments,
+                editTime:editTime
+              };
+              editBlock(pageId, editedBlock);
+              setComments !==null && setComments(editedBlock.comments)
+            }
+          }
+          setEditItem(null);
+          sessionStorage.removeItem("editCommentItem")
+        }
       };
-    }else{
-      console.log("Can't find commentBlock")
-    }
+  
+      function addMainComment (block:Block){
+        const newMaiComment:BlockCommentType ={
+          id: newMainId,
+          userName:userName,
+          content: text,
+          editTime:editTime,
+          createTime:editTime,
+          type: "open",
+          subComments: null,
+          subCommentsId: null
+        };
+        let  editedBlock:Block ={
+          ...block,
+          comments: [newMaiComment],
+          editTime:editTime
+        };
+        block.comments==null?
+        editedBlock ={
+          ...editedBlock,
+          comments: [newMaiComment],
+        }
+        :
+        editedBlock ={
+          ...editedBlock,
+          comments: block.comments.concat(newMaiComment),
+        };
+        editBlock(pageId, editedBlock);
+        setComments !==null && setComments(editedBlock.comments);
+      };
+      function addSubComment(block:Block){
+        if(comment !==null && block.comments !==null){
+          const blockComments=[...block.comments];
+          const mainIndex =blockComments.map((comment:BlockCommentType)=> comment.id).indexOf(comment.id);
+          const newSubComment :CommentType ={
+            id: `${comment.id}_subComment_${editTime}`,
+            userName:userName,
+            content: text,
+            editTime:editTime,
+            createTime:editTime,
+          };
 
-      setText("");
-      setEdit(false);
-      setEditItem(null);
+          const newMainComment :BlockCommentType ={
+            ...comment,
+            subComments: comment.subComments ===null ? [newSubComment] : comment.subComments.concat(newSubComment),
+            subCommentsId: comment.subCommentsId ===null?  [newSubComment.id] :comment.subCommentsId.concat(newSubComment.id),
+            editTime:editTime
+          };
+          blockComments.splice(mainIndex, 1, newMainComment);
+          const editedBlock ={
+            ...block,
+            comments: blockComments,
+            editTime:editTime
+          };
+          console.log("newMain." , newMainComment , blockComments);
+          editBlock(pageId , editedBlock);
+          setComments!==null && setComments(blockComments);
+        }
+      };
+      
+      switch (where) {
+        case "menu":
+          addMainComment(commentBlock);
+          break;
+        case "comments":
+          if(editItem !==null){
+            editComment(commentBlock);
+          }else{
+            addSubComment(commentBlock);
+          };
+        break;
+        default:
+          break;
+      }
+        setText("");
+        setEditItem(null);
+    }
   };
 
   useEffect(()=>{
     if(item !==null){
-      const editCommentItem :EditCommentItem= JSON.parse(item);
-      if(editCommentItem?.edit){
+      const editCommentItem :BlockCommentType| CommentType= JSON.parse(item);
         setEditItem(editCommentItem);
-        setEdit(true) 
-      }else{
-        setEditItem(null);
-        setEdit(false) 
-      }
+    }else{
+      setEditItem(null)
     }
-  },[item])
+  },[item]);
+
   return(
     <div 
-      className={edit ? "commentInput editComment" : "commentInput" }
+      className={editItem!==null ? "commentInput editComment" : "commentInput" }
     >
-      {!edit &&
+      {editItem ==null &&
       <div className='firstLetter'>
         {userNameFirstLetter}
       </div> 
@@ -275,9 +259,11 @@ export const CommentInput =({where ,userName, pageId ,comment,editBlock, comment
       >
         <input
           type="text"
-          placeholder='Add a comment'
+          placeholder={editItem==null? "Add a comment" : 
+        "edit a comment"}
           className="commentText"
           name="comment"
+          value={text}
           onInput={onInputText}
         />
         <button 
@@ -368,24 +354,26 @@ const ToolMore =({pageId, block, editBlock,comments,
   )
 };
 
-const CommentTool =({mainComment , comment,block ,pageId ,editBlock ,setCommentBlock ,setMoreOpen}:CommentToolProps)=>{
+const CommentTool =({mainComment ,main , comment,block ,pageId ,editBlock ,setComments,setMoreOpen ,setToolMoreStyle, setToolTargetComment ,setMainComment}:CommentToolProps)=>{
 
-  const ResolveBtn =({comment, block, editBlock, pageId}:ResolveBtnProps)=>{
-    const changeToResolve =()=>{
-      const newComment:BlockCommentType ={
-        ...comment,
-          type:"resolve",
-      }; 
+  const ResolveBtn =()=>{
+    const changeToResolve =()=>{ 
       const comments = block.comments !==null ?[...block.comments] :[];
       const commentIdes :string[] = comments?.map((comment:BlockCommentType)=> comment.id) as string[];
-      const index  = commentIdes.indexOf(comment.id);
-      comments.splice(index, 1, newComment);
-      const newBlock :Block={
-        ...block,
-        comments: comments
+      if(mainComment){
+        const index  = commentIdes.indexOf(comment.id);
+        const newComment:BlockCommentType ={
+          ...comment as BlockCommentType,
+            type:"resolve",
+        };
+        comments.splice(index, 1, newComment);
+        const newBlock :Block={
+          ...block,
+          comments: comments
+        }
+        editBlock(pageId, newBlock);
+        setComments(newBlock.comments)
       }
-      editBlock(pageId, newBlock);
-      setCommentBlock(newBlock);
     };
 
     return (
@@ -399,40 +387,21 @@ const CommentTool =({mainComment , comment,block ,pageId ,editBlock ,setCommentB
   };
   const openToolMore =(event: React.MouseEvent<HTMLButtonElement>)=>{
     setMoreOpen(true);
-    const target = event.target as HTMLElement;
-    const targetParent = target.parentElement as HTMLElement ;
-    const setItem =(element:HTMLElement)=>{
-      const position = element.parentElement?.getClientRects()[0] as DOMRect;
-      const style:CSSProperties ={
+    setToolTargetComment(comment);
+    setMainComment(mainComment);
+    const  commentsInner =document.getElementById("commentsInner");
+    const commentInnerDomRect =commentsInner?.getClientRects()[0];
+    //const toolMoreDomRect =toolMore?.getClientRects()[0];
+    const target = event.currentTarget;
+    const position = target.getClientRects()[0];
+    if(position !== undefined && commentInnerDomRect !==undefined) {
+      const toolMoreStyle :CSSProperties = {
         position:"absolute" ,
-        top: position.top,
-        left:position.right -position.width -200
+        top: position.top - commentInnerDomRect.top ,
+        right:commentInnerDomRect.right - position.right +position.width,
       };
-      const item:ToolMoreItem ={
-        comment:comment,
-        style:style
-      };
-      sessionStorage.setItem("toolMoreItem", JSON.stringify(item));
+      setToolMoreStyle(toolMoreStyle);
     }
-    switch (target.tagName) {
-      case "svg":
-        if(targetParent.className ==="moreTool"){
-          setItem(targetParent);
-        }
-        break;
-      case "path":
-        if(targetParent.parentElement?.className ==="moreTool"){
-          setItem(targetParent.parentElement);
-        }
-        break;
-      case "button":
-        if(target.className ==="moreTool"){
-          setItem(target);
-        }
-      break;
-      default:
-        break;
-    };
   };
   const inner =document.getElementById("inner");
   const closeToolMore=(event:MouseEvent , toolMore:HTMLElement)=>{
@@ -455,13 +424,8 @@ const CommentTool =({mainComment , comment,block ,pageId ,editBlock ,setCommentB
   
   return(
     <div className="tool">
-      {mainComment &&
+      {main &&
         <ResolveBtn
-          comment ={comment as BlockCommentType}
-          block={block}
-          pageId={pageId}
-          editBlock={editBlock}
-          setCommentBlock={setCommentBlock}
         />
       }
       <button 
@@ -475,7 +439,8 @@ const CommentTool =({mainComment , comment,block ,pageId ,editBlock ,setCommentB
   )
 };
 
-const CommentBlock =({comment ,mainComment ,block ,pageId,editBlock ,setCommentBlock ,setMoreOpen}:CommentBlockProps)=>{
+const CommentBlock =({comment ,main,mainComment ,block ,pageId,editBlock ,setComments,setMoreOpen ,setToolMoreStyle ,setToolTargetComment ,setMainComment
+}:CommentBlockProps)=>{
   const firstLetter = comment.userName.substring(0,1).toUpperCase();
   return (
     <div 
@@ -496,16 +461,20 @@ const CommentBlock =({comment ,mainComment ,block ,pageId,editBlock ,setCommentB
         </div>
       </div>
       <CommentTool
-        mainComment={mainComment }
+        main={main}
+        mainComment={mainComment}
         comment={comment}
         block={block}
         pageId={pageId}
         editBlock={editBlock}
-        setCommentBlock={setCommentBlock}
+        setComments={setComments}
         setMoreOpen={setMoreOpen}
+        setToolMoreStyle={setToolMoreStyle}
+        setToolTargetComment={setToolTargetComment}
+        setMainComment={setMainComment}
       />
     </section>
-    {mainComment &&
+    {main &&
     <section className='comment_block'>
       <div className='comment_block_line'>
 
@@ -521,32 +490,41 @@ const CommentBlock =({comment ,mainComment ,block ,pageId,editBlock ,setCommentB
     </div>
   )
 }
-const Comment =({userName,comment, block, pageId, editBlock ,setCommentBlock ,setMoreOpen}:CommentProps)=>{
+const Comment =({userName,comment, block, pageId, editBlock ,
+  setComments,setMoreOpen ,setToolMoreStyle ,setToolTargetComment ,setMainComment}:CommentProps)=>{
 
   return(
     <div className='comment'>
       <div className="main_comment">
         <CommentBlock 
           comment={comment}
-          mainComment={true}
+          mainComment={comment}
+          main={true}
           block={block}
           pageId={pageId}
           editBlock={editBlock}
-          setCommentBlock={setCommentBlock}
+          setComments={setComments}
           setMoreOpen={setMoreOpen}
+          setToolMoreStyle={setToolMoreStyle}
+          setToolTargetComment={setToolTargetComment}
+          setMainComment={setMainComment}
         />
       </div>
-      <div className='comment_comment'>
-        {comment.comments?.map((comment:CommentType)=>
+      <div className='comment_subComment'>
+        {comment.subComments?.map((subComment:CommentType)=>
         <CommentBlock
-          key={`commentBlock_${comment.id}`} 
-          comment={comment}
-          mainComment={false}
+          key={`${block.id}'s comment_${comment.id}_${subComment.id}`} 
+          comment={subComment}
+          mainComment={comment}
+          main={false}
           pageId={pageId}
           block={block}
           editBlock={editBlock}
-          setCommentBlock={setCommentBlock}
+          setComments={setComments}
           setMoreOpen={setMoreOpen}
+          setToolMoreStyle={setToolMoreStyle}
+          setToolTargetComment={setToolTargetComment}
+          setMainComment={setMainComment}
         />)
         }
       </div>
@@ -556,23 +534,33 @@ const Comment =({userName,comment, block, pageId, editBlock ,setCommentBlock ,se
         editBlock={editBlock}
         comment={comment}
         commentBlock={block}
-        setCommentBlock={setCommentBlock}
+        setComments={setComments}
+        where={"comments"}
       />
     </div>
   )
 };
-const Comments =({pageId,block, userName ,editBlock ,setCommentBlock ,setMoreOpen}:CommentsProps)=>{
-  const [targetComments, setTargetComment]= useState<BlockCommentType[]| null>(null);
+const Comments =({pageId,block, userName ,editBlock ,
+  //setMoreOpen
+}:CommentsProps)=>{
+  const [comments, setComments]=useState<BlockCommentType[]|null>(block.comments); 
+  const [targetComments, setTargetComments]= useState<BlockCommentType[]| null>(null);
   const [resolveComments, setResolveComments]= useState<BlockCommentType[]| null>(null);
   const [openComments, setOpenComments]= useState<BlockCommentType[]| null>(null);
   const [commentsStyle, setCommentsStyle]= useState<CSSProperties>();
-  useEffect(()=>{
-    setTargetComment(block.comments);
-    if(block.comments !==null){
-      setResolveComments(block.comments?.filter((comment:BlockCommentType)=> comment.type ==="resolve") );
+  const [moreOpen, setMoreOpen]= useState<boolean>(false);
+  const [toolMoreStyle, setToolMoreStyle]=useState<CSSProperties>();
+  const [toolTargetComment, setToolTargetComment]=useState<CommentType|BlockCommentType|null>(null);
+  const [mainComment, setMainComment]=useState<BlockCommentType|null>(null);
 
-      setOpenComments( block.comments?.filter((comment:BlockCommentType)=> comment.type ==="open"))
+  useEffect(()=>{
+    if(comments !==null){
+      setResolveComments(comments.filter((comment:BlockCommentType)=> comment.type ==="resolve") );
+      setOpenComments( comments.filter((comment:BlockCommentType)=> comment.type ==="open"))
     };
+  },[comments]);
+  
+  useEffect(()=>{
     const blockDoc = document.getElementById(`block_${block.id}`);
     const position =blockDoc?.getClientRects()[0]
     if(position !== undefined){
@@ -585,51 +573,88 @@ const Comments =({pageId,block, userName ,editBlock ,setCommentBlock ,setMoreOpe
       setCommentsStyle(style);
     } 
   },[block]);
+
   const showComments =(what:"open" | "resolve")=>{
     (what ==="open")?
-    setTargetComment(openComments):
-    setTargetComment(resolveComments)
+    setTargetComments(openComments):
+    setTargetComments(resolveComments)
   };
   return(
     <div 
       id='comments'
       style={commentsStyle}
     >
-      {resolveComments !==null && resolveComments.length>0 &&
-        <section className="commentType">
-          <button 
-            id="openTypeBtn"
-            onClick={()=>showComments("open")}
-          >
-            <span>Open</span>
-            <span>{`(${openComments?.length})`}</span>
-          </button>
-          <button 
-            id="resolveTypeBtn"
-            onClick={()=>showComments("resolve")}
-          >
-            <span>Resolve</span>
-            <span>{`(${resolveComments?.length})`}</span>
-          </button>
-        </section>
-      }
-      {targetComments !==null &&
+      <div
+        id="commentsInner"
+      >
+        {resolveComments !==null && resolveComments.length>0 &&
+          <section className="commentType">
+            <button 
+              id="openTypeBtn"
+              onClick={()=>showComments("open")}
+            >
+              <span>Open</span>
+              <span>{`(${openComments?.length})`}</span>
+            </button>
+            <button 
+              id="resolveTypeBtn"
+              onClick={()=>showComments("resolve")}
+            >
+              <span>Resolve</span>
+              <span>{`(${resolveComments?.length})`}</span>
+            </button>
+          </section>
+        }
+
         <section className='comments_comments'>
-          {targetComments.map((comment:BlockCommentType)=>
+          { targetComments !==null ?
+            targetComments.map((comment:BlockCommentType)=>
             <Comment 
               key={`comment_${comment.id}`}
               userName={userName}
               comment={comment}
+              setComments={setComments}
               block={block}
               pageId={pageId}
               editBlock={editBlock}
-              setCommentBlock={setCommentBlock}
               setMoreOpen={setMoreOpen}
+              setToolMoreStyle={setToolMoreStyle}
+              setToolTargetComment={setToolTargetComment}
+              setMainComment={setMainComment}
             />
-          )
+          ):
+          comments?.map((comment:BlockCommentType)=>
+          <Comment 
+            key={`comment_${comment.id}`}
+            userName={userName}
+            comment={comment}
+            setComments={setComments}
+            block={block}
+            pageId={pageId}
+            editBlock={editBlock}
+            setMoreOpen={setMoreOpen}
+            setToolMoreStyle={setToolMoreStyle}
+            setToolTargetComment={setToolTargetComment}
+            setMainComment={setMainComment}
+          />
+        )
           }
         </section>
-      }
+        {moreOpen &&
+          <ToolMore
+            style={toolMoreStyle}
+            pageId={pageId}
+            block={block}
+            editBlock={editBlock}
+            comments={comments}
+            setComments={setComments}
+            setMoreOpen={setMoreOpen}
+            toolTargetComment ={toolTargetComment}
+            setToolTargetComment={setToolTargetComment}
+            mainComment={mainComment}
+          />
+        }
+      </div>
     </div>
   )
 };
