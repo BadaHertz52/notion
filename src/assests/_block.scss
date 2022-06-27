@@ -163,6 +163,10 @@
     outline: none
   }
 }
+.contentEditable:focus:empty::after{
+  content: attr(placeholder);
+  color: $mud;
+}
 .contents.commentBtn {
   color:inherit;
   text-decoration: inherit;
@@ -176,15 +180,17 @@
     background-color: $commentHover;
   }
 }
-.contentEditable:focus:empty::after{
-  content: attr(placeholder);
-  color: $mud;
-}
-.commentBtn.btnIcon{
+.commentsBubble .commentBtn{
+  display: flex;
+  padding:3px;
+  &:hover{
+    background-color: $itemHover; 
+  }
   svg,span{
     color: $itemSvg;
   }
 }
+  
 
 #commandBlock{
   @include popupMenu;
