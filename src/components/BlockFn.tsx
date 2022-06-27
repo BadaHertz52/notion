@@ -120,9 +120,9 @@ const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlo
     const popupMenuArea =popupMenu?.getClientRects()[0];
     const isInPopupMenu =detectRange(event, popupMenuArea);
     if(!isInPopupMenu){
-      popup.what==="popupComment" && 
-      setCommentBlock(null);
-      
+      if(popup.what==="popupComment"){
+        setCommentBlock(null)
+      }
       setPopup({
         popup:false,
         what: null
