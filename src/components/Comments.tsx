@@ -555,29 +555,48 @@ const Comments =({pageId,block, userName ,editBlock ,setCommentBlock ,setMoreOpe
   const [targetComments, setTargetComment]= useState<BlockCommentType[]| null>(null);
   const [resolveComments, setResolveComments]= useState<BlockCommentType[]| null>(null);
   const [openComments, setOpenComments]= useState<BlockCommentType[]| null>(null);
-
+  const [commentsStyle, setCommentsStyle]= useState<CSSProperties>();
   useEffect(()=>{
     setTargetComment(block.comments);
     if(block.comments !==null){
       setResolveComments(block.comments?.filter((comment:BlockCommentType)=> comment.type ==="resolve") );
 
       setOpenComments( block.comments?.filter((comment:BlockCommentType)=> comment.type ==="open"))
-    }
+    };
+    const blockDoc = document.getElementById(`block_${block.id}`);
+    const position =blockDoc?.getClientRects()[0]
+    if(position !== undefined){
+      const style :CSSProperties ={
+        position:"absolute",
+        top: position.bottom,
+        left: position.left,
+        width:position.width
+      };
+      setCommentsStyle(style);
+    } 
   },[block]);
+  const showComments =(what:"open" | "resolve")=>{
+    (what ==="open")?
+    setTargetComment(openComments):
+    setTargetComment(resolveComments)
+  };
   return(
     <div 
       id='comments'
+      style={commentsStyle}
     >
       {resolveComments !==null && resolveComments.length>0 &&
         <section className="commentType">
           <button 
             id="openTypeBtn"
+            onClick={()=>showComments("open")}
           >
             <span>Open</span>
             <span>{`(${openComments?.length})`}</span>
           </button>
           <button 
             id="resolveTypeBtn"
+            onClick={()=>showComments("resolve")}
           >
             <span>Resolve</span>
             <span>{`(${resolveComments?.length})`}</span>
