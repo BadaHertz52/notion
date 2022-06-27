@@ -25,9 +25,11 @@ type FrameProps ={
   deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
   addPage :(newPage:Page ,)=>void,
   editPage :(pageId:string,newPage:Page ,)=>void,
+  setOpenComment: Dispatch<SetStateAction<boolean>>,
+  setCommentBlock: React.Dispatch<React.SetStateAction<Block | null>>
 };
 
-const Frame =({ targetPage,firstBlocksId,editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage}:FrameProps)=>{
+const Frame =({ targetPage,firstBlocksId,editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,setOpenComment , setCommentBlock}:FrameProps)=>{
   const [page, setPage]=useState<Page>(targetPage);
   const [newPageFram, setNewPageFrame]=useState<boolean>(false);
   const [cover, setCover]=useState<ImageData|null>(page.header.cover);
@@ -216,6 +218,8 @@ const Frame =({ targetPage,firstBlocksId,editBlock, addBlock,changeToSub ,raiseB
                       deleteBlock={deleteBlock}
                       command={command}
                       setCommand={setCommand}
+                      setOpenComment={setOpenComment}
+                      setCommentBlock={setCommentBlock}
                     />
                   )
                 }
