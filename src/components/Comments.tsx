@@ -7,6 +7,7 @@ import { HiOutlinePencil } from 'react-icons/hi';
 import { IoTrashOutline } from 'react-icons/io5';
 import Time from './Time';
 import { detectRange } from './BlockFn';
+import { PopupType } from '../containers/EditorContainer';
 type EditCommentItem = {
   edit:boolean,
   comment:BlockCommentType | CommentType
@@ -34,6 +35,8 @@ type CommentInputProps={
   editBlock :(pageId: string, block: Block) => void,
   commentBlock: Block|null,
   setCommentBlock: Dispatch<SetStateAction<Block|null>>,
+  setPopup:Dispatch<SetStateAction<PopupType>>| null,
+
 }
 type CommentBlockProps ={
   comment: CommentType | BlockCommentType,
@@ -144,7 +147,7 @@ const updateComments =(pageId: string, block:Block, comment:CommentType | BlockC
   };
 };
 
-export const CommentInput =({userName, pageId ,comment,editBlock, commentBlock, setCommentBlock }:CommentInputProps)=>{
+export const CommentInput =({userName, pageId ,comment,editBlock, commentBlock, setCommentBlock ,setPopup }:CommentInputProps)=>{
   const userNameFirstLetter =userName.substring(0,1).toUpperCase();
   const [submitStyle,setSubmitStyle] =useState<CSSProperties>({
     fill:"grey",
@@ -249,6 +252,10 @@ export const CommentInput =({userName, pageId ,comment,editBlock, commentBlock, 
       setText("");
       setEdit(false);
       setEditItem(null);
+      setPopup !==null&& setPopup({
+        popup:false,
+        what:null
+      })
   };
 
   useEffect(()=>{
@@ -528,6 +535,7 @@ const Comment =({userName,comment, block, pageId, editBlock ,setCommentBlock ,se
         comment={comment}
         commentBlock={block}
         setCommentBlock={setCommentBlock}
+        setPopup={null}
       />
     </div>
   )

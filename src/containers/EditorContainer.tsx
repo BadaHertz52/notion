@@ -185,6 +185,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pa
                 comment={null}
                 commentBlock={commentBlock}
                 setCommentBlock={setCommentBlock}
+                setPopup={setPopup}
               />
           </div>
       )
