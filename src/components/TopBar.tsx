@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { AiOutlineClockCircle, AiOutlineMenu, AiOutlineStar } from 'react-icons/ai';
+import { AiFillStar, AiOutlineClockCircle, AiOutlineMenu, AiOutlineStar } from 'react-icons/ai';
 import { BiMessageDetail } from 'react-icons/bi';
 import { BsThreeDots } from 'react-icons/bs';
 import { FiChevronsLeft } from 'react-icons/fi';
@@ -7,14 +7,18 @@ import { pathType } from '../containers/NotionRouter';
 import {  Page } from '../modules/notion';
 import {  SideAppear } from '../modules/side';
 type TopBarProps ={
+  favorites:string[]|null,
   sideAppear:SideAppear,
   page:Page,
   pagePath: pathType[] |null ,
   changeSide: (appear: SideAppear) => void
-  setTargetPageId:Dispatch<SetStateAction<string>>
+  setTargetPageId:Dispatch<SetStateAction<string>>,
+  addFavorites: (itemId: string) => void,
+  removeFavorites: (itemId: string) => void,
 }
-const TopBar =({sideAppear,page,pagePath, changeSide ,setTargetPageId}:TopBarProps)=>{
+const TopBar =({ favorites,sideAppear,page,pagePath, changeSide ,addFavorites, removeFavorites ,setTargetPageId}:TopBarProps)=>{
   const [title, setTitle]= useState<string>("");
+  const pageInFavorites :boolean = favorites !==null && favorites.includes(page.id); 
   useEffect(()=>{
     if(sideAppear ==="float"){
       setTitle("Lock sideBar open")
@@ -46,7 +50,13 @@ const TopBar =({sideAppear,page,pagePath, changeSide ,setTargetPageId}:TopBarPro
     changeSide("floatHide");
     
   };
-
+  const addOrRemoveFavorite =()=>{
+    if(pageInFavorites ){
+      removeFavorites(page.id);
+    }else{
+      addFavorites(page.id)
+    };
+  };
   return(
     <div 
       className="topbar"
@@ -110,6 +120,7 @@ const TopBar =({sideAppear,page,pagePath, changeSide ,setTargetPageId}:TopBarPro
         </button>
         <button
           title='View all comments'
+          //onClick={showAllComments}
         >
           <BiMessageDetail/>
         </button>
@@ -120,8 +131,15 @@ const TopBar =({sideAppear,page,pagePath, changeSide ,setTargetPageId}:TopBarPro
         </button>
         <button
           title="Pin this page in your sidebar"
+          className={pageInFavorites?"favoriteBtn on" : "favoriteBtn"}
+          onClick={addOrRemoveFavorite}
         >
+          {pageInFavorites ?
+          <AiFillStar/>
+          :
           <AiOutlineStar/>
+          }
+          
         </button>
         <button
           title=" Style, export, and more"
