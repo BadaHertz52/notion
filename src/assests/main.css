@@ -833,6 +833,10 @@ a:link, a:active, a:visited {
   outline: none;
 }
 
+.commentInputSubmit {
+  font-size: 1rem;
+}
+
 #tool_more {
   width: 320px;
   display: -webkit-box;

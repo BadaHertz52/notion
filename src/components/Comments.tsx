@@ -291,7 +291,7 @@ export const CommentInput =({userName, pageId ,comment,editBlock, commentBlock, 
         <button 
           type="button"
           onClick={onClickToMakeNewComment}
-          id="commentInputSubmit"
+          className="commentInputSubmit"
           name="commentInputSubmit"
           disabled ={text ==null || text ===""}
         >
