@@ -207,26 +207,10 @@ const NotionRouter =()=>{
     
   },[targetPageId]);
   
-  // const clickInner =(event:React.MouseEvent)=>{
-  //   const comments= document.getElementById("comments");
-  //   if(openComment){
-      
-  //     const commentsDomRect =comments?.getClientRects()[0];
-  //     if(commentsDomRect !==undefined){
-  //       const isInComments= detectRange(event,commentsDomRect);
-  //       if(!isInComments){
-  //         setOpenComment(false);
-  //         setCommentBlock(null);
-  //       }
-  //     }
-  //   }
-
-  // }
   return(
     <div 
       id="inner"
       className='sideBar_lock'
-     // onClick={clickInner}
     >
       <SideBarContainer 
         sideAppear ={sideAppear}
@@ -282,8 +266,7 @@ const NotionRouter =()=>{
                     addFavorites={addFavorites}
                     removeFavorites={removeFavorites}
                     changeSide={changeSide}
-                    // setOpenComment={setOpenComment}
-                    // setCommentBlock ={setCommentBlock}
+
                     setShowAllComments={setShowAllComments}
                     />
                   } 
@@ -306,11 +289,14 @@ const NotionRouter =()=>{
         </div>
       }
        {/* ----editor */}
-      {/* {showAllComments &&
+      {showAllComments && routePage !==null &&
         <AllComments
           allCommentsBlocks={allCommentsBlocks}
+          pageId={routePage.id}
+          userName={user.userName}
+          editBlock={editBlock}
         />
-      } */}
+      }
       {openQF &&
       <QuickFindBord
         userName={user.userName}
