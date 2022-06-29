@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import {useDispatch } from 'react-redux';
 import { CSSProperties } from 'styled-components';
-import BlockFn from '../components/BlockFn';
+import BlockFn, { detectRange } from '../components/BlockFn';
 import Comments, { CommentInput } from '../components/Comments';
 import Frame from '../components/Frame';
 import PageMenu from '../components/PageMenu';
@@ -52,7 +52,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pa
   const dispatch =useDispatch();
   const changeToSub =(pageId: string, block: Block,  newParentBlockId: string)=> dispatch(change_to_sub(pageId, block, newParentBlockId));
   const raiseBlock =(pageId: string, block: Block) =>dispatch((raise_block(pageId, block)));
-
+  const inner =document.getElementById("inner");
   const [openComment, setOpenComment]=useState<boolean>(false);
   const [commentBlock, setCommentBlock]=useState<Block|null>(null);
   const [menuOpen, setMenuOpen]= useState<boolean>(false);
@@ -60,8 +60,31 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pa
     popup:false,
     what:null
   });
-
   const [popupStyle, setPopupStyle]=useState<CSSProperties |undefined>(undefined); 
+
+  const closePopup=(event: MouseEvent)=>{
+    if(popup.popup){
+      const popupMenu =document.getElementById("popupMenu");
+      const popupMenuDomRect= popupMenu?.getClientRects()[0];
+      const isInPopupMenu =detectRange(event, popupMenuDomRect);
+       console.log("is", isInPopupMenu)
+      !isInPopupMenu && setPopup({
+        popup:false,
+        what:null
+      });
+    };
+    if(openComment){
+      const editor =document.getElementsByClassName("editor")[0] as HTMLElement;
+      const commentsDoc= editor.getElementsByClassName("comments")[0] as HTMLElement;
+      const commentsDocDomRect= commentsDoc.getClientRects()[0];
+      const isInComments =detectRange(event, commentsDocDomRect);
+      if(!isInComments){
+        setCommentBlock(null);
+        setOpenComment(false); 
+      }
+    }
+  }
+  inner?.addEventListener("click",(event)=>closePopup(event))
   return(
     <div className='editor'>
       {isInTrash &&
@@ -124,41 +147,41 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pa
         setMenuOpen={setMenuOpen}
         setPopupStyle={setPopupStyle}
       />
-          {popup.popup && (
-            popup.what === popupMoveToPage ?
-              <div 
-                id="popupMenu"
-                style ={popupStyle}
-              >
-                <PageMenu
-                  what="block"
-                  currentPage={page}
-                  pages={pages}
-                  firstlist={firstlist}
-                  deleteBlock={deleteBlock}
-                  addBlock={addBlock}
-                  editBlock={editBlock}
-                  addPage={addPage}
-                  movePageToPage={movePageToPage}
-                  setMenuOpen={setMenuOpen}
-                /> 
-              </div>
-              :
-              <div 
-                id="popupMenu"
-                style={popupStyle}
-              >
-                  <CommentInput
-                    pageId={page.id}
-                    userName={userName}
-                    editBlock={editBlock}
-                    comment={null}
-                    commentBlock={commentBlock}
-                    setCommentBlock={setCommentBlock}
-                  />
-              </div>
-          )
-          }
+      {popup.popup && (
+        popup.what === popupMoveToPage ?
+          <div 
+            id="popupMenu"
+            style ={popupStyle}
+          >
+            <PageMenu
+              what="block"
+              currentPage={page}
+              pages={pages}
+              firstlist={firstlist}
+              deleteBlock={deleteBlock}
+              addBlock={addBlock}
+              editBlock={editBlock}
+              addPage={addPage}
+              movePageToPage={movePageToPage}
+              setMenuOpen={setMenuOpen}
+            /> 
+          </div>
+          :
+          <div 
+            id="popupMenu"
+            style={popupStyle}
+          >
+              <CommentInput
+                pageId={page.id}
+                userName={userName}
+                editBlock={editBlock}
+                comment={null}
+                commentBlock={commentBlock}
+                setCommentBlock={setCommentBlock}
+              />
+          </div>
+      )
+      }
       {commentBlock !==null && openComment &&
         <Comments
           userName={userName}
