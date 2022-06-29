@@ -57,6 +57,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
     left: 240 *0.88 ,
     zIndex:2
   };
+  const popupStyle = blockFnElement?.getAttribute("style");
 
   const recoveryMenuState=()=>{
     turnInto &&setTurnInto(false);
@@ -69,7 +70,6 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
   };
   const showTurnInto =()=>{
     setTurnInto(true);
-    console.log("turninto", turnInto);
   };
   const showColorMenu =()=>{
     setColor(true);
@@ -81,6 +81,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
   };
   const onClickMoveTo=()=>{
     setMenuOpen(false);
+    sessionStorage.setItem("popupStyle", JSON.stringify(popupStyle));
     setPopup({
       popup:true,
       what: popupMoveToPage
@@ -89,6 +90,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
   const onOpenCommentInput=()=>{
     setCommentBlock(block);
     setMenuOpen(false);
+    sessionStorage.setItem("popupStyle", JSON.stringify(popupStyle));
     setPopup({
       popup:true,
       what:popupComment

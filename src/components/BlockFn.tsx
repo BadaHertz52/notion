@@ -134,20 +134,19 @@ const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlo
     });
 
   useEffect(()=>{
-    const blockFn= document.getElementById("blockFn");
-    const blockFnStyle =blockFn?.getAttribute("style");
-    if(popup && blockFnStyle !==null && blockFnStyle!==undefined){
-      const index = blockFnStyle.indexOf("px;");
-      const leftIndex= blockFnStyle.indexOf("left:")
-      const lastIndex= blockFnStyle.lastIndexOf("px");
-      const top =Number(blockFnStyle.slice(4, index))+18 ;
-      const left= Number(blockFnStyle.slice(leftIndex+5, lastIndex))+18;
-      const top2 = top+10 ;
-      console.log(blockFnStyle, top, top2, left);
+    const popupStyleItem =sessionStorage.getItem("popupStyle");
+    if(popup && popupStyleItem !==null){
+      const firstPoint= popupStyleItem.indexOf("px;");
+      const secondPosint =popupStyleItem.indexOf("left:");
+      const lastPosint =popupStyleItem.lastIndexOf("px");
+      const top =Number(popupStyleItem.slice(5, firstPoint))+24;
+      const left =Number(popupStyleItem.slice(secondPosint+5, lastPosint))+45 ;
+      console.log("bf" ,popupStyleItem, top,left);
       setPopupStyle({
-        top:popup.what ===popupComment ?`${top2}px` : `${top}px`,
+        top: `${top}px`,
         left:`${left}px`
-      })
+      });
+      sessionStorage.removeItem("popupStyle")
     }
   },[popup])
   return (
