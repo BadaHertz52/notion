@@ -548,7 +548,7 @@ a:link, a:active, a:visited {
   height: 24px;
 }
 
-#comments {
+.comments {
   position: absolute;
   width: 320px;
   display: -webkit-box;
@@ -572,11 +572,11 @@ a:link, a:active, a:visited {
   z-index: 20;
 }
 
-#comments::-webkit-scrollbar-thumb {
+.comments::-webkit-scrollbar-thumb {
   background: #D3D1CB;
 }
 
-#comments::-webkit-scrollbar-track {
+.comments::-webkit-scrollbar-track {
   background: #EDECE9;
 }
 
