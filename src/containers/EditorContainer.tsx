@@ -72,7 +72,6 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pa
       const popupMenu =document.getElementById("popupMenu");
       const popupMenuDomRect= popupMenu?.getClientRects()[0];
       const isInPopupMenu =detectRange(event, popupMenuDomRect);
-       console.log("is", isInPopupMenu)
       !isInPopupMenu && setPopup({
         popup:false,
         what:null
