@@ -46,9 +46,6 @@ type EditorContainerProps ={
 
   changeSide: (appear: SideAppear) => void,
   setTargetPageId:Dispatch<SetStateAction<string>>,
-
-  // setOpenComment: Dispatch<SetStateAction<boolean>>,
-  // setCommentBlock:Dispatch<SetStateAction<Block | null>>,
   setShowAllComments:Dispatch<SetStateAction<boolean>>,
 };
 
@@ -196,7 +193,6 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pa
           pageId={page.id}
           editBlock={editBlock}
           setCommentBlock={setCommentBlock}
-          //setMoreOpen={setMoreOpen}
         />              
       }
     </div>
