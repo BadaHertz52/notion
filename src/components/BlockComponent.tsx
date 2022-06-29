@@ -258,7 +258,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
         id={`${block.id}_contents`}
         className="contents commentBtn"
         onMouseOver={showBlockFn}
-        onClick={()=>onClickCommentBtn(block)}
+        onClick={()=>{console.log(":olick") ;onClickCommentBtn(block)}}
       >
         <BlockContentEditable/>
       </button>

@@ -141,7 +141,6 @@ const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlo
       const lastPosint =popupStyleItem.lastIndexOf("px");
       const top =Number(popupStyleItem.slice(5, firstPoint))+24;
       const left =Number(popupStyleItem.slice(secondPosint+5, lastPosint))+45 ;
-      console.log("bf" ,popupStyleItem, top,left);
       setPopupStyle({
         top: `${top}px`,
         left:`${left}px`
