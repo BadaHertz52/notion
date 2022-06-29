@@ -48,7 +48,6 @@ export const BlockComment =({block , onClickCommentBtn}:BlockCommentProps)=>{
 const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock , command, setCommand  ,onClickCommentBtn  }:BlockProps)=>{
   const editTime =JSON.stringify(Date.now);
   const contentEditableRef= useRef<HTMLElement>(null);
-
   const findTargetBlock =(event:ContentEditableEvent|React.KeyboardEvent<HTMLDivElement>|React.MouseEvent):Block=>{
     const target =event.currentTarget.parentElement as HTMLElement;
     const targetId= target.id;
@@ -57,22 +56,23 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
     const targetBlock = findBlock(page, blockId).BLOCK;
     return targetBlock;
   };
+  const editor =document.getElementsByClassName("editor")[0] as HTMLElement ;
+  
   const showBlockFn=(event: React.MouseEvent)=>{
     const currentTarget =event.currentTarget as Element;
     const mainBlock= currentTarget.parentElement?.parentElement ;
-    const domReact =mainBlock?.getBoundingClientRect();
-    const editableBlockDomRect =document.getElementsByClassName("editableBlock")[0].getBoundingClientRect(); 
+    const domReact =mainBlock?.getClientRects()[0];
+    const editableBlockDomRect =document.getElementsByClassName("editableBlock")[0].getClientRects()[0] ; 
     const blockFn =document.getElementById("blockFn");
     blockFn?.classList.toggle("on");
     blockFn?.classList.contains("on")?
     sessionStorage.setItem("blockFnTargetBlock", JSON.stringify(block))
     :
     sessionStorage.removeItem("blockFnTargetBlock");
-
     if(domReact!==undefined){
-      const top = domReact.top +5;
+      const top =domReact.top +editor.scrollTop +5;
       const left = editableBlockDomRect.x - 45;
-      const blockFnStyle =`top:${top}px; left: ${left}px`
+      const blockFnStyle =`top:${top}px; left:${left}px`;
       blockFn?.setAttribute("style",blockFnStyle);
     }
   };
