@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import Menu from './Menu';
 import {Block, listItem, makeNewBlock, Page} from '../modules/notion';
 
@@ -6,6 +6,9 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import { CgMenuGridO } from 'react-icons/cg';
 import PageMenu from './PageMenu';
 import { CommentInput } from './Comments';
+import { popupComment, PopupType } from '../containers/EditorContainer';
+import { CSSProperties } from 'styled-components';
+import { IoFunnelSharp } from 'react-icons/io5';
 
 type BlockFnProp ={
   pages:Page[],
@@ -21,13 +24,14 @@ type BlockFnProp ={
   commentBlock: Block|null,
   movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
   setCommentBlock: Dispatch<SetStateAction<Block|null>>,
+  popup:PopupType,
+  setPopup: Dispatch<SetStateAction<PopupType>>,
+  menuOpen:boolean,
+  setMenuOpen:Dispatch<SetStateAction<boolean>>,
+  setPopupStyle:Dispatch<SetStateAction<CSSProperties|undefined>>,
 };
-export const popupMoveToPage= "popupMoveToPage" ;
-export const popupComment ="popupComment" ;
-export type PopupType ={
-  popup: boolean,
-  what: typeof popupMoveToPage | typeof popupComment | null,
-};
+
+
 export type Position ={
   top:number,
   bottom:number,
@@ -67,13 +71,8 @@ export const detectRange =(event:MouseEvent| React.MouseEvent , targetArea:DOMRe
   return (inner_x && inner_y);
 };
 
-const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlock, deleteBlock ,addPage, movePageToPage, deletePage ,commentBlock,setCommentBlock}:BlockFnProp)=>{
+const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlock, deleteBlock ,addPage, movePageToPage, deletePage ,commentBlock,setCommentBlock, popup, setPopup ,menuOpen,setMenuOpen ,setPopupStyle}:BlockFnProp)=>{
   const inner =document.getElementById("inner");
-  const [menuOpen, setMenuOpen]= useState<boolean>(false);
-  const [popup, setPopup]=useState<PopupType>({
-    popup:false,
-    what:null
-  });
 
   const makeBlock =()=>{
     const sessionItem = sessionStorage.getItem("blockFnTargetBlock") ;
@@ -120,9 +119,7 @@ const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlo
     const popupMenuArea =popupMenu?.getClientRects()[0];
     const isInPopupMenu =detectRange(event, popupMenuArea);
     if(!isInPopupMenu){
-      if(popup.what==="popupComment"){
-        setCommentBlock(null)
-      }
+
       setPopup({
         popup:false,
         what: null
@@ -135,7 +132,26 @@ const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlo
       menuOpen &&closeMenu(event);
       popup.popup && closePopup(event);
     });
+
+  useEffect(()=>{
+    const blockFn= document.getElementById("blockFn");
+    const blockFnStyle =blockFn?.getAttribute("style");
+    if(popup && blockFnStyle !==null && blockFnStyle!==undefined){
+      const index = blockFnStyle.indexOf("px;");
+      const leftIndex= blockFnStyle.indexOf("left:")
+      const lastIndex= blockFnStyle.lastIndexOf("px");
+      const top =Number(blockFnStyle.slice(4, index))+18 ;
+      const left= Number(blockFnStyle.slice(leftIndex+5, lastIndex))+18;
+      const top2 = top+10 ;
+      console.log(blockFnStyle, top, top2, left);
+      setPopupStyle({
+        top:popup.what ===popupComment ?`${top2}px` : `${top}px`,
+        left:`${left}px`
+      })
+    }
+  },[popup])
   return (
+  <>
     <div 
       id="blockFn"
       className='blockFn'
@@ -174,38 +190,10 @@ const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlo
             setCommentBlock={setCommentBlock}
           />
         }
-      {popup.popup && (
-            popup.what === popupMoveToPage ?
-              <div id="popupMenu">
-                <PageMenu
-                  what="block"
-                  currentPage={page}
-                  pages={pages}
-                  firstlist={firstlist}
-                  deleteBlock={deleteBlock}
-                  addBlock={addBlock}
-                  editBlock={editBlock}
-                  addPage={addPage}
-                  movePageToPage={movePageToPage}
-                  setMenuOpen={setMenuOpen}
-                /> 
-              </div>
-              :
-              <div id="popupMenu">
-                  <CommentInput
-                    pageId={page.id}
-                    userName={userName}
-                    editBlock={editBlock}
-                    comment={null}
-                    commentBlock={commentBlock}
-                    setCommentBlock={setCommentBlock}
-                  />
-              </div>
-          )
-          }
       </div>
+    </div>
 
-  </div>
+  </>
   )
 };
 

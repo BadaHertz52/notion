@@ -9,11 +9,13 @@
   @include popupMenu;
   width: fit-content
 }
-#blockFn #popupMenu{
-  margin: 5px 10px;
+#popupMenu{
+  position: absolute;
+  font-size: 14px;
+  padding: 3px;
   .commentInput{
     width: 300px;
-    
+    margin: 10PX;
     box-sizing: border-box
   }
 }
@@ -112,6 +114,7 @@
   .search{
     input{
       @include searchInput;
+      font-size: 14px;
     }
   }
   .pages{
@@ -129,14 +132,21 @@
       margin-bottom: 10px;
     }
   }
+  .page{
+    font-size: 14px;
+    padding: 5px 0;
+    &_inner{
+      display: flex;
+    }
+  }
   #new_sub_page{
     width: 100%;
     text-align: left;
     border-top: 1px solid $lightMud;
-    padding : 5px 0; 
-    padding-left: 5%;
-    
+    padding-top: 10px;
+    padding-left: 10px;
     svg{
+      color:$itemText;
       font-weight: bolder;
       margin-right: 5px;
     }
@@ -146,11 +156,7 @@
       font-weight: 400;
     }
   }
-  .page{
-    &_inner{
-      display: flex;
-    }
-  }
+
 }
 #moveTo_pageMenu{
   #pageSugested, #new_sub_page {
