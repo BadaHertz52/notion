@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import {useDispatch, useSelector } from 'react-redux';
 import { CSSProperties } from 'styled-components';
 import BlockFn, { detectRange } from '../components/BlockFn';
@@ -76,16 +76,19 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pa
     };
     if(openComment){
       const editor =document.getElementsByClassName("editor")[0] as HTMLElement;
-      const commentsDoc= editor.getElementsByClassName("comments")[0] as HTMLElement;
-      const commentsDocDomRect= commentsDoc.getClientRects()[0];
-      const isInComments =detectRange(event, commentsDocDomRect);
-      if(!isInComments){
-        setCommentBlock(null);
-        setOpenComment(false); 
+      const commentsDoc= editor.getElementsByClassName("comments")[0] ;
+      if(commentsDoc !==undefined){
+        const commentsDocDomRect= commentsDoc.getClientRects()[0];
+        const isInComments =detectRange(event, commentsDocDomRect);
+        if(!isInComments){
+          setCommentBlock(null);
+          setOpenComment(false); 
+        }
       }
     }
-  }
-  inner?.addEventListener("click",(event)=>closePopup(event))
+  };
+  inner?.addEventListener("click",(event)=>closePopup(event));
+  useEffect(()=>{ console.log("opencomment", openComment)},[openComment])
   return(
     <div className='editor'>
       {isInTrash &&
@@ -192,7 +195,6 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pa
           block={commentBlock}
           pageId={page.id}
           editBlock={editBlock}
-          setCommentBlock={setCommentBlock}
         />              
       }
     </div>
