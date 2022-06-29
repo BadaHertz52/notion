@@ -34,7 +34,7 @@
     height: 24px;
   }
 }
-#comments {
+.comments {
   position: absolute;
   @include popupMenu;
   z-index: 20;

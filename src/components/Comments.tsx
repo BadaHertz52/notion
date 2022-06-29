@@ -582,10 +582,11 @@ const Comments =({pageId,block, userName ,editBlock ,setCommentBlock}:CommentsPr
     setTargetComment(openComments):
     setTargetComment(resolveComments)
   };
+
   return(
     <>
     <div 
-      id='comments'
+      className='comments'
       style={commentsStyle}
     >
       {resolveComments !==null && resolveComments.length>0 &&
