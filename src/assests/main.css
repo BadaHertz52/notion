@@ -854,7 +854,7 @@ a:link, a:active, a:visited {
   -webkit-box-shadow: 0px 0px 23px -5px #ababab;
   box-shadow: 0px 0px 23px -5px #ababab;
   width: 200px;
-  z-index: 15;
+  z-index: 25;
 }
 
 #tool_more::-webkit-scrollbar-thumb {
