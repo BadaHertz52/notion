@@ -1,13 +1,16 @@
 import React from "react";
 import { Block } from "../modules/notion";
 import Comments from "./Comments";
+
 type AllCommentsProps={
   allCommentsBlocks :Block[]|null,
-
+  pageId:string,
+  userName:string,
+  editBlock: (pageId: string, block: Block) => void
 }
-const AllComments=({allCommentsBlocks}:AllCommentsProps)=>{
+const AllComments=({allCommentsBlocks , pageId, userName,editBlock}:AllCommentsProps)=>{
   return(
-    <div id="allComments">
+  <div id="allComments">
     <div className='inner'>
       <div className='allComments_header'>
         <span>Comments</span>
@@ -33,15 +36,14 @@ const AllComments=({allCommentsBlocks}:AllCommentsProps)=>{
           
         </div>
         :
-        <div>
-        </div>
-        // allCommentsBlocks.map((block:Block)=>
-        //   <Comments
-        //     pageId={pageId}
-        //     userName={userName}
-        //     block={block}
-        //   />
-        // )
+        allCommentsBlocks.map((block:Block)=>
+          <Comments
+            pageId={pageId}
+            userName={userName}
+            block={block}
+            editBlock={editBlock}
+          />
+        )
       }
     </div>
   </div>
