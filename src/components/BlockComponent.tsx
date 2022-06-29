@@ -14,7 +14,8 @@ type  BlockProps ={
   deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
   command :Command,
   setCommand:Dispatch<SetStateAction<Command>>,
-  onClickCommentBtn: (block: Block) => void
+  onClickCommentBtn: (block: Block) => void,
+  setOpenComment :Dispatch<SetStateAction<boolean>>,
 };
 type BlockCommentProps={
   block:Block,
@@ -45,7 +46,7 @@ export const BlockComment =({block , onClickCommentBtn}:BlockCommentProps)=>{
   )
 };
 
-const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock , command, setCommand  ,onClickCommentBtn  }:BlockProps)=>{
+const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock , command, setCommand  ,onClickCommentBtn ,setOpenComment  }:BlockProps)=>{
   const editTime =JSON.stringify(Date.now);
   const contentEditableRef= useRef<HTMLElement>(null);
   const findTargetBlock =(event:ContentEditableEvent|React.KeyboardEvent<HTMLDivElement>|React.MouseEvent):Block=>{
@@ -133,6 +134,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
     if(!value.startsWith("/")){
       changeBlockContent();
     }else{
+      setOpenComment(false);
       setCommand({
         boolean:true, 
         command:"/",
@@ -258,7 +260,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
         id={`${block.id}_contents`}
         className="contents commentBtn"
         onMouseOver={showBlockFn}
-        onClick={()=>{console.log(":olick") ;onClickCommentBtn(block)}}
+        onClick={()=>{!command.boolean && onClickCommentBtn(block)}}
       >
         <BlockContentEditable/>
       </button>
