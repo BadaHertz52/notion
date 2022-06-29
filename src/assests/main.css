@@ -548,7 +548,7 @@ a:link, a:active, a:visited {
   height: 24px;
 }
 
-#comments {
+.comments {
   position: absolute;
   width: 320px;
   display: -webkit-box;
@@ -569,14 +569,14 @@ a:link, a:active, a:visited {
   border-radius: 8px;
   -webkit-box-shadow: 0px 0px 23px -5px #ababab;
   box-shadow: 0px 0px 23px -5px #ababab;
-  z-index: 10;
+  z-index: 20;
 }
 
-#comments::-webkit-scrollbar-thumb {
+.comments::-webkit-scrollbar-thumb {
   background: #D3D1CB;
 }
 
-#comments::-webkit-scrollbar-track {
+.comments::-webkit-scrollbar-track {
   background: #EDECE9;
 }
 
@@ -984,12 +984,15 @@ a:link, a:active, a:visited {
   background: #EDECE9;
 }
 
-#blockFn #popupMenu {
-  margin: 5px 10px;
+#popupMenu {
+  position: absolute;
+  font-size: 14px;
+  padding: 3px;
 }
 
-#blockFn #popupMenu .commentInput {
+#popupMenu .commentInput {
   width: 300px;
+  margin: 10PX;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
 }
@@ -1246,6 +1249,7 @@ a:link, a:active, a:visited {
   border: 1px solid #B9B8B6;
   -webkit-box-shadow: rgba(15, 15, 15, 0.162) 0px 0px 1px inset;
           box-shadow: rgba(15, 15, 15, 0.162) 0px 0px 1px inset;
+  font-size: 14px;
 }
 
 #pageMenu .search input::-webkit-input-placeholder {
@@ -1291,15 +1295,27 @@ a:link, a:active, a:visited {
   margin-bottom: 10px;
 }
 
+#pageMenu .page {
+  font-size: 14px;
+  padding: 5px 0;
+}
+
+#pageMenu .page_inner {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
 #pageMenu #new_sub_page {
   width: 100%;
   text-align: left;
   border-top: 1px solid #d6d6d6;
-  padding: 5px 0;
-  padding-left: 5%;
+  padding-top: 10px;
+  padding-left: 10px;
 }
 
 #pageMenu #new_sub_page svg {
+  color: #8d8d8d;
   font-weight: bolder;
   margin-right: 5px;
 }
@@ -1308,12 +1324,6 @@ a:link, a:active, a:visited {
   color: #8d8d8d;
   font-size: 14px;
   font-weight: 400;
-}
-
-#pageMenu .page_inner {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
 }
 
 #moveTo_pageMenu #pageSugested, #moveTo_pageMenu #new_sub_page {

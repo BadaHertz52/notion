@@ -34,10 +34,10 @@
     height: 24px;
   }
 }
-#comments {
+.comments {
   position: absolute;
   @include popupMenu;
-  z-index: 10;
+  z-index: 20;
 }
 .commentType{
   border-bottom: 1px solid $lightMud;

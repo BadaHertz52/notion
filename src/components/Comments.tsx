@@ -17,7 +17,7 @@ type CommentsProps={
   userName:string,
   editBlock :(pageId: string, block: Block) => void,
   setCommentBlock: Dispatch<SetStateAction<Block|null>>,
-  setMoreOpen:Dispatch<SetStateAction<boolean>>,
+  //setMoreOpen:Dispatch<SetStateAction<boolean>>,
 };
 type CommentProps ={
   userName: string,
@@ -551,11 +551,12 @@ const Comment =({userName,comment, block, pageId, editBlock ,setCommentBlock ,se
     </div>
   )
 };
-const Comments =({pageId,block, userName ,editBlock ,setCommentBlock ,setMoreOpen}:CommentsProps)=>{
+const Comments =({pageId,block, userName ,editBlock ,setCommentBlock}:CommentsProps)=>{
   const [targetComments, setTargetComment]= useState<BlockCommentType[]| null>(null);
   const [resolveComments, setResolveComments]= useState<BlockCommentType[]| null>(null);
   const [openComments, setOpenComments]= useState<BlockCommentType[]| null>(null);
   const [commentsStyle, setCommentsStyle]= useState<CSSProperties>();
+  const [moreOpen, setMoreOpen]= useState<boolean>(false);
   useEffect(()=>{
     setTargetComment(block.comments);
     if(block.comments !==null){
@@ -564,11 +565,12 @@ const Comments =({pageId,block, userName ,editBlock ,setCommentBlock ,setMoreOpe
       setOpenComments( block.comments?.filter((comment:BlockCommentType)=> comment.type ==="open"))
     };
     const blockDoc = document.getElementById(`block_${block.id}`);
+    const editor =document.getElementsByClassName("editor")[0] as HTMLElement;
     const position =blockDoc?.getClientRects()[0]
     if(position !== undefined){
       const style :CSSProperties ={
         position:"absolute",
-        top: position.bottom,
+        top: position.bottom +editor.scrollTop,
         left: position.left,
         width:position.width
       };
@@ -580,9 +582,11 @@ const Comments =({pageId,block, userName ,editBlock ,setCommentBlock ,setMoreOpe
     setTargetComment(openComments):
     setTargetComment(resolveComments)
   };
+
   return(
+    <>
     <div 
-      id='comments'
+      className='comments'
       style={commentsStyle}
     >
       {resolveComments !==null && resolveComments.length>0 &&
@@ -621,6 +625,16 @@ const Comments =({pageId,block, userName ,editBlock ,setCommentBlock ,setMoreOpe
         </section>
       }
     </div>
+    {moreOpen &&
+        <ToolMore
+          pageId={pageId}
+          block={block}
+          editBlock={editBlock}
+          setCommentBlock={setCommentBlock}
+          setMoreOpen={setMoreOpen}
+        />
+        }
+  </>
   )
 };
 

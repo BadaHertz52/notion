@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {  Route, Routes, useNavigate} from 'react-router-dom';
+import AllComments from '../components/AllComments';
 import BlockFn, { detectRange } from '../components/BlockFn';
 import Comments, { ToolMore } from '../components/Comments';
 import QuickFindBord from '../components/QuickFindBord';
@@ -39,17 +40,14 @@ const NotionRouter =()=>{
   const user =useSelector((state:RootState)=> state.user);
   const sideAppear =useSelector((state:RootState)=>state.side.appear);
 
-
   const location =window.location;
   const hash=location.hash;
   const firstPage =user.favorites!==null? findPage(pagesId, pages,user.favorites[0]) : notion.pages[0];
   const [targetPageId, setTargetPageId]= useState<string>(firstPage !== undefined? firstPage.id: "none");
   const [routePage, setRoutePage]=useState<Page|null>(firstPage!==undefined? firstPage: null);
   const [openQF, setOpenQF]=useState<boolean>(false);
-  const [moreOpen, setMoreOpen]= useState<boolean>(false);
-  const [openComment, setOpenComment]=useState<boolean>(false);
-  const [commentBlock, setCommentBlock]=useState<Block|null>(null);
-
+  const [showAllComments,setShowAllComments]=useState<boolean>(false);
+  const [allCommentsBlocks, setAllCommentsBlocks]=useState<Block[]|null>(null);
   //---action.function 
     //--block
   const editBlock = (pageId:string, block:Block)=> {dispatch(edit_block(pageId, block ))};
@@ -208,25 +206,26 @@ const NotionRouter =()=>{
     
   },[targetPageId]);
   
-  const clickInner =(event:React.MouseEvent)=>{
-    if(openComment){
-      const comments= document.getElementById("comments");
-      const commentsDomRect =comments?.getClientRects()[0];
-      if(commentsDomRect !==undefined){
-        const isInComments= detectRange(event,commentsDomRect);
-        if(!isInComments){
-          setOpenComment(false);
-          setCommentBlock(null);
-        }
-      }
-    }
+  // const clickInner =(event:React.MouseEvent)=>{
+  //   const comments= document.getElementById("comments");
+  //   if(openComment){
+      
+  //     const commentsDomRect =comments?.getClientRects()[0];
+  //     if(commentsDomRect !==undefined){
+  //       const isInComments= detectRange(event,commentsDomRect);
+  //       if(!isInComments){
+  //         setOpenComment(false);
+  //         setCommentBlock(null);
+  //       }
+  //     }
+  //   }
 
-  }
+  // }
   return(
     <div 
       id="inner"
       className='sideBar_lock'
-      onClick={clickInner}
+     // onClick={clickInner}
     >
       <SideBarContainer 
         sideAppear ={sideAppear}
@@ -248,72 +247,44 @@ const NotionRouter =()=>{
 
         setOpenQF={setOpenQF}
       />
+      {/* editor------ */}
       {routePage!== null?
       <>
-            <Routes>
-            <Route
-              path={makeRoutePath(routePage)} 
-              element={<EditorContainer 
-                      sideAppear={sideAppear}
-                      page={routePage}
-                      isInTrash={!notion.pagesId.includes(routePage.id)}
-                      pagePath ={makePagePath(routePage)}
-                      setTargetPageId={setTargetPageId}
-    
-                      addBlock={addBlock}
-                      editBlock={editBlock}
-                      changeToSub={changeToSub}
-                      raiseBlock={raiseBlock}
-                      deleteBlock={deleteBlock}
-    
-                      addPage={addPage}
-                      editPage={editPage}
-                      deletePage={deletePage}
-                      cleanTrash={cleanTrash}
-                      restorePage={restorePage}
-    
-                      changeSide={changeSide}
+        <Routes>
+          <Route
+            path={makeRoutePath(routePage)} 
+            element={<EditorContainer 
+                    sideAppear={sideAppear}
+                    firstlist ={firstlist}
+                    userName={user.userName}
+                    page={routePage}
+                    pages={pages}
+                    isInTrash={!notion.pagesId.includes(routePage.id)}
+                    pagePath ={makePagePath(routePage)}
+                    setTargetPageId={setTargetPageId}
+  
+                    addBlock={addBlock}
+                    editBlock={editBlock}
+                    changeToSub={changeToSub}
+                    raiseBlock={raiseBlock}
+                    deleteBlock={deleteBlock}
+  
+                    addPage={addPage}
+                    editPage={editPage}
+                    deletePage={deletePage}
+                    duplicatePage={duplicatePage}
+                    movePageToPage={movePageToPage}
+                    cleanTrash={cleanTrash}
+                    restorePage={restorePage}
 
-                      setOpenComment={setOpenComment}
-                      setCommentBlock ={setCommentBlock}
-                      />
-                    } 
-            />
-          </Routes>
-          <BlockFn
-            page={routePage}
-            pages={pages}
-            firstlist={firstlist}
-            userName={user.userName}
-            addBlock={addBlock}
-            editBlock={editBlock}
-            deleteBlock={deleteBlock}
-            addPage={addPage}
-            duplicatePage={duplicatePage}
-            movePageToPage={movePageToPage}
-            deletePage={deletePage}
-            commentBlock={commentBlock}
-            setCommentBlock={setCommentBlock}
+                    changeSide={changeSide}
+                    // setOpenComment={setOpenComment}
+                    // setCommentBlock ={setCommentBlock}
+                    setShowAllComments={setShowAllComments}
+                    />
+                  } 
           />
-          {commentBlock !==null && openComment &&
-              <Comments
-                userName={user.userName}
-                block={commentBlock}
-                pageId={routePage.id}
-                editBlock={editBlock}
-                setCommentBlock={setCommentBlock}
-                setMoreOpen={setMoreOpen}
-            />              
-          }
-          {moreOpen &&
-          <ToolMore
-            pageId={routePage.id}
-            block={commentBlock}
-            editBlock={editBlock}
-            setCommentBlock={setCommentBlock}
-            setMoreOpen={setMoreOpen}
-          />
-          }
+        </Routes>         
       </>    
       :
         <div className='editor nonePage'>
@@ -330,7 +301,12 @@ const NotionRouter =()=>{
           </button>
         </div>
       }
-
+       {/* ----editor */}
+      {/* {showAllComments &&
+        <AllComments
+          allCommentsBlocks={allCommentsBlocks}
+        />
+      } */}
       {openQF &&
       <QuickFindBord
         userName={user.userName}
