@@ -4,21 +4,23 @@ import { BiMessageDetail } from 'react-icons/bi';
 import { BsThreeDots } from 'react-icons/bs';
 import { FiChevronsLeft } from 'react-icons/fi';
 import { pathType } from '../containers/NotionRouter';
-import {  Page } from '../modules/notion';
+import {  Block, Page } from '../modules/notion';
 import {  SideAppear } from '../modules/side';
+
 type TopBarProps ={
   favorites:string[]|null,
   sideAppear:SideAppear,
   page:Page,
   pagePath: pathType[] |null ,
-  changeSide: (appear: SideAppear) => void
-  setTargetPageId:Dispatch<SetStateAction<string>>,
-  addFavorites: (itemId: string) => void,
+  changeSide: (appear: SideAppear) => void,
   removeFavorites: (itemId: string) => void,
+  addFavorites: (itemId: string) => void
+  setTargetPageId:Dispatch<SetStateAction<string>>,
+  setShowAllComments:Dispatch<SetStateAction<boolean>>,
 }
-const TopBar =({ favorites,sideAppear,page,pagePath, changeSide ,addFavorites, removeFavorites ,setTargetPageId}:TopBarProps)=>{
+const TopBar =({favorites,sideAppear,page,pagePath, changeSide ,addFavorites,removeFavorites ,setTargetPageId  ,setShowAllComments}:TopBarProps)=>{
   const [title, setTitle]= useState<string>("");
-  const pageInFavorites :boolean = favorites !==null && favorites.includes(page.id); 
+  const pageInFavorites = favorites?.includes(page.id); 
   useEffect(()=>{
     if(sideAppear ==="float"){
       setTitle("Lock sideBar open")
@@ -48,14 +50,15 @@ const TopBar =({ favorites,sideAppear,page,pagePath, changeSide ,addFavorites, r
     (sideAppear ==="close" || sideAppear==="floatHide") ?
     changeSide("float"):
     changeSide("floatHide");
-    
   };
-  const addOrRemoveFavorite =()=>{
-    if(pageInFavorites ){
-      removeFavorites(page.id);
-    }else{
-      addFavorites(page.id)
-    };
+
+  const addOrRemoveFavorite=()=>{
+    pageInFavorites ?
+    removeFavorites(page.id):
+    addFavorites(page.id);
+  }
+  const showAllComments=()=>{
+    setShowAllComments(true)
   };
   return(
     <div 
@@ -120,7 +123,7 @@ const TopBar =({ favorites,sideAppear,page,pagePath, changeSide ,addFavorites, r
         </button>
         <button
           title='View all comments'
-          //onClick={showAllComments}
+          onClick={showAllComments}
         >
           <BiMessageDetail/>
         </button>

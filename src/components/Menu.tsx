@@ -15,7 +15,7 @@ import { Command } from './Frame';
 import ColorMenu from './ColorMenu';
 import { HiOutlineDuplicate } from 'react-icons/hi';
 import PageMenu from './PageMenu';
-import { popupComment, popupMoveToPage, PopupType } from './BlockFn';
+import { popupComment, popupMoveToPage, PopupType } from '../containers/EditorContainer';
 import Time from './Time';
 
 type MenuProps ={
