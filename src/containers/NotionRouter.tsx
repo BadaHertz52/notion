@@ -7,7 +7,7 @@ import QuickFindBord from '../components/QuickFindBord';
 import { RootState } from '../modules';
 import { add_block, add_page, Block, change_to_sub, clean_trash, delete_block, delete_page, duplicate_page, edit_block, edit_page, findPage,  listItem,  move_page_to_page, Page, pageSample, raise_block, restore_page, } from '../modules/notion';
 import { change_side, SideAppear } from '../modules/side';
-import { add_recent_page, clean_recent_page, remove_favorites } from '../modules/user';
+import { add_favorites, add_recent_page, clean_recent_page, remove_favorites } from '../modules/user';
 import EditorContainer from './EditorContainer';
 import SideBarContainer from './SideBarContainer';
 export type pathType={
@@ -119,6 +119,8 @@ const NotionRouter =()=>{
   //--user
   const addRecentPage=(itemId:string)=>{dispatch(add_recent_page(itemId))};
   const cleanRecentPage=()=>{dispatch(clean_recent_page())};
+  const addFavorites =(itemId:string)=>{dispatch(add_favorites(itemId))};
+  const removeFavorites =(itemId:string)=>{dispatch((remove_favorites(itemId)))};
   //---user
   
   //--side
@@ -243,7 +245,8 @@ const NotionRouter =()=>{
         restorePage={restorePage}
         cleanTrash={cleanTrash}
         changeSide={changeSide}
-
+        addFavorites={addFavorites}
+        removeFavorites ={removeFavorites}
         setOpenQF={setOpenQF}
       />
       {routePage!== null?
@@ -269,7 +272,8 @@ const NotionRouter =()=>{
                       deletePage={deletePage}
                       cleanTrash={cleanTrash}
                       restorePage={restorePage}
-    
+                      addFavorites={addFavorites}
+                      removeFavorites ={removeFavorites}
                       changeSide={changeSide}
 
                       setOpenComment={setOpenComment}

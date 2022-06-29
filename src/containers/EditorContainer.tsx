@@ -1,8 +1,10 @@
-import React, { Dispatch, SetStateAction } from 'react';
-import {useDispatch } from 'react-redux';
+import React, { Dispatch, SetStateAction, useState } from 'react';
+import {useDispatch, useSelector } from 'react-redux';
+import Comments from '../components/Comments';
 import Frame from '../components/Frame';
 import TopBar from '../components/TopBar';
-import {  Block, Page,  change_to_sub, raise_block } from '../modules/notion';
+import { RootState } from '../modules';
+import {  Block, Page,  change_to_sub, raise_block, CommentType } from '../modules/notion';
 import { SideAppear } from '../modules/side';
 import { pathType } from './NotionRouter';
 
@@ -23,6 +25,9 @@ type EditorContainerProps ={
   restorePage: (pageId: string) => void,
   cleanTrash: (pageId: string) => void,
 
+  addFavorites: (itemId: string) => void,
+  removeFavorites: (itemId: string) => void,
+
   changeSide: (appear: SideAppear) => void,
   setTargetPageId:Dispatch<SetStateAction<string>>,
 
@@ -30,10 +35,12 @@ type EditorContainerProps ={
   setCommentBlock: React.Dispatch<React.SetStateAction<Block | null>>
 };
 
-const EditorContainer =({sideAppear,page,isInTrash, pagePath ,changeSide,addBlock,editBlock,deleteBlock,addPage,editPage,restorePage, cleanTrash, setTargetPageId ,setOpenComment ,setCommentBlock}:EditorContainerProps)=>{
+const EditorContainer =({sideAppear,page,isInTrash, pagePath ,changeSide,addBlock,editBlock,deleteBlock,addPage,editPage,restorePage, cleanTrash,addFavorites,removeFavorites,  setTargetPageId ,setOpenComment ,setCommentBlock}:EditorContainerProps)=>{
   const dispatch =useDispatch();
+  const user =useSelector((state:RootState)=>state.user);
   const changeToSub =(pageId: string, block: Block,  newParentBlockId: string)=> dispatch(change_to_sub(pageId, block, newParentBlockId));
   const raiseBlock =(pageId: string, block: Block) =>dispatch((raise_block(pageId, block)));
+  const [allCommentBlocks, setAllCommentBlocks]=useState<Block[]|null>(null); 
 
   return(
     <div className='editor'>
@@ -57,11 +64,14 @@ const EditorContainer =({sideAppear,page,isInTrash, pagePath ,changeSide,addBloc
       </div>
       }
       <TopBar
+      favorites={user.favorites}
       sideAppear={sideAppear}
       page={page}
       pagePath ={pagePath}
       changeSide={changeSide}
       setTargetPageId={setTargetPageId}
+      addFavorites={addFavorites}
+      removeFavorites={removeFavorites}
       />
       <Frame
         targetPage={page}
@@ -76,7 +86,22 @@ const EditorContainer =({sideAppear,page,isInTrash, pagePath ,changeSide,addBloc
         setOpenComment={setOpenComment}
         setCommentBlock ={setCommentBlock}
       />
-
+      {allCommentBlocks !==null &&
+        <div id="page_allComments">
+          {allCommentBlocks.map((block:Block)=>
+            <Comments
+              pageId={page.id}
+              userName={user.userName}
+              block={block}
+              editBlock={editBlock}
+              
+              //setCommentBlock={setCommentBlock}
+              //setMoreOpen={setMoreOpen}
+            />
+          )
+          }
+        </div>
+      }
     </div>
   )
 };
