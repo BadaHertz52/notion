@@ -16,8 +16,6 @@ type CommentsProps={
   pageId: string,
   userName:string,
   editBlock :(pageId: string, block: Block) => void,
-  setCommentBlock: Dispatch<SetStateAction<Block|null>>,
-  //setMoreOpen:Dispatch<SetStateAction<boolean>>,
 };
 type CommentProps ={
   userName: string,
@@ -27,6 +25,7 @@ type CommentProps ={
   editBlock :(pageId: string, block: Block) => void,
   setCommentBlock: Dispatch<SetStateAction<Block|null>>,
   setMoreOpen:Dispatch<SetStateAction<boolean>>,
+  setToolMoreStyle:Dispatch<SetStateAction<CSSProperties | undefined>>
 };
 type CommentInputProps={
   userName: string,
@@ -44,6 +43,7 @@ type CommentBlockProps ={
   editBlock:(pageId: string, block: Block) => void,
   setCommentBlock: Dispatch<SetStateAction<Block|null>>,
   setMoreOpen:Dispatch<SetStateAction<boolean>>,
+  setToolMoreStyle:Dispatch<SetStateAction<CSSProperties | undefined>>
 };
 
 type CommentToolProps ={
@@ -54,6 +54,7 @@ type CommentToolProps ={
   editBlock: (pageId: string, block: Block) => void,
   setCommentBlock: Dispatch<SetStateAction<Block|null>>,
   setMoreOpen:Dispatch<SetStateAction<boolean>>,
+  setToolMoreStyle:Dispatch<SetStateAction<CSSProperties | undefined>>
 };
 
 type ResolveBtnProps ={
@@ -68,12 +69,10 @@ type ToolMoreProps ={
   block:Block | null,
   editBlock:(pageId: string, block: Block) => void,
   setCommentBlock: Dispatch<SetStateAction<Block|null>>
-  setMoreOpen: Dispatch<SetStateAction<boolean>>
+  setMoreOpen: Dispatch<SetStateAction<boolean>>,
+  toolMoreStyle:CSSProperties|undefined,
 };
-type ToolMoreItem ={
-  comment: BlockCommentType |CommentType, 
-  style:CSSProperties
-};
+
 const updateComments =(pageId: string, block:Block, comment:CommentType | BlockCommentType | null , editTime:string, editBlock:(pageId: string, block: Block) => void ,setCommentBlock:Dispatch<SetStateAction<Block|null>>,fnType:"delete"|"edit", text:string|null)=>{
   if(comment !==null && block.comments !==null){
     const block_comments :BlockCommentType[] =[...block.comments];
@@ -86,7 +85,7 @@ const updateComments =(pageId: string, block:Block, comment:CommentType | BlockC
       };
       editBlock(pageId, newBlock);
       setCommentBlock(newBlock);
-      sessionStorage.remove("editCommentItem");
+      sessionStorage.removeItem("editCommentItem");
     };
     if(mainCommentIds?.includes(comment.id)){
         //BlockCommentType
@@ -300,15 +299,13 @@ export const CommentInput =({userName, pageId ,comment,editBlock, commentBlock, 
 };
 
 
-export const ToolMore =({pageId, block, editBlock, setCommentBlock ,setMoreOpen}:ToolMoreProps)=>{
+const ToolMore =({pageId, block, editBlock, setCommentBlock ,setMoreOpen ,toolMoreStyle}:ToolMoreProps)=>{
   const toolMoreItem = sessionStorage.getItem("toolMoreItem");
   const [comment, setComment] =useState<BlockCommentType | CommentType | null >(null);
-  const [style, setStyle]= useState<CSSProperties>();
   const editTime = JSON.stringify(Date.now());
 
   const deleteComment =()=>{
     setMoreOpen(false);
-    sessionStorage.removeItem("toolMoreItem");
     if(block !==null){
       updateComments(pageId,block,comment,editTime,editBlock, setCommentBlock,"delete", null);
     };
@@ -316,7 +313,6 @@ export const ToolMore =({pageId, block, editBlock, setCommentBlock ,setMoreOpen}
   };
 
   const editComment =()=>{
-    sessionStorage.removeItem("toolMoreItem");
     setMoreOpen(false);
     if(comment !== null){
       const item:EditCommentItem ={
@@ -327,16 +323,16 @@ export const ToolMore =({pageId, block, editBlock, setCommentBlock ,setMoreOpen}
   };
   useEffect(()=>{
     if(toolMoreItem !==null){
-      const item :ToolMoreItem = JSON.parse(toolMoreItem);
-      setComment(item.comment);
-      setStyle(item.style);
+      const item = JSON.parse(toolMoreItem);
+      setComment(item);
+      sessionStorage.removeItem("toolMoreItem");
     }
   },[toolMoreItem]); 
-  
+
   return(
     <div 
       id='tool_more'
-      style={style}
+      style={toolMoreStyle}
     >
       <button
         onClick={editComment}
@@ -358,7 +354,7 @@ export const ToolMore =({pageId, block, editBlock, setCommentBlock ,setMoreOpen}
   )
 };
 
-const CommentTool =({mainComment , comment,block ,pageId ,editBlock ,setCommentBlock ,setMoreOpen}:CommentToolProps)=>{
+const CommentTool =({mainComment , comment,block ,pageId ,editBlock ,setCommentBlock ,setMoreOpen ,setToolMoreStyle}:CommentToolProps)=>{
 
   const ResolveBtn =({comment, block, editBlock, pageId}:ResolveBtnProps)=>{
     const changeToResolve =()=>{
@@ -389,40 +385,22 @@ const CommentTool =({mainComment , comment,block ,pageId ,editBlock ,setCommentB
   };
   const openToolMore =(event: React.MouseEvent<HTMLButtonElement>)=>{
     setMoreOpen(true);
-    const target = event.target as HTMLElement;
-    const targetParent = target.parentElement as HTMLElement ;
-    const setItem =(element:HTMLElement)=>{
-      const position = element.parentElement?.getClientRects()[0] as DOMRect;
-      const style:CSSProperties ={
-        position:"absolute" ,
-        top: position.top,
-        left:position.right -position.width -200
-      };
-      const item:ToolMoreItem ={
-        comment:comment,
-        style:style
-      };
-      sessionStorage.setItem("toolMoreItem", JSON.stringify(item));
-    }
-    switch (target.tagName) {
-      case "svg":
-        if(targetParent.className ==="moreTool"){
-          setItem(targetParent);
-        }
-        break;
-      case "path":
-        if(targetParent.parentElement?.className ==="moreTool"){
-          setItem(targetParent.parentElement);
-        }
-        break;
-      case "button":
-        if(target.className ==="moreTool"){
-          setItem(target);
-        }
-      break;
-      default:
-        break;
+    const target = event.currentTarget ;
+    const editor =document.getElementsByClassName("editor")[0] as HTMLElement;
+    const editorDomRect =editor.getClientRects()[0] as DOMRect; 
+    const editorScrollTop =editor.scrollTop;
+    const position = target.getClientRects()[0] as DOMRect;
+    console.log(position)
+    const style:CSSProperties ={
+      position:"absolute" ,
+      top: position.top+ editorScrollTop,
+      right:editorDomRect.width -position.left-8
     };
+
+    setToolMoreStyle(style);
+
+    sessionStorage.setItem("toolMoreItem", JSON.stringify(comment));
+
   };
   const inner =document.getElementById("inner");
   const closeToolMore=(event:MouseEvent , toolMore:HTMLElement)=>{
@@ -465,7 +443,7 @@ const CommentTool =({mainComment , comment,block ,pageId ,editBlock ,setCommentB
   )
 };
 
-const CommentBlock =({comment ,mainComment ,block ,pageId,editBlock ,setCommentBlock ,setMoreOpen}:CommentBlockProps)=>{
+const CommentBlock =({comment ,mainComment ,block ,pageId,editBlock ,setCommentBlock ,setMoreOpen ,setToolMoreStyle}:CommentBlockProps)=>{
   const firstLetter = comment.userName.substring(0,1).toUpperCase();
   return (
     <div 
@@ -493,6 +471,7 @@ const CommentBlock =({comment ,mainComment ,block ,pageId,editBlock ,setCommentB
         editBlock={editBlock}
         setCommentBlock={setCommentBlock}
         setMoreOpen={setMoreOpen}
+        setToolMoreStyle={setToolMoreStyle}
       />
     </section>
     {mainComment &&
@@ -511,7 +490,7 @@ const CommentBlock =({comment ,mainComment ,block ,pageId,editBlock ,setCommentB
     </div>
   )
 }
-const Comment =({userName,comment, block, pageId, editBlock ,setCommentBlock ,setMoreOpen}:CommentProps)=>{
+const Comment =({userName,comment, block, pageId, editBlock ,setCommentBlock ,setMoreOpen ,setToolMoreStyle}:CommentProps)=>{
 
   return(
     <div className='comment'>
@@ -524,6 +503,7 @@ const Comment =({userName,comment, block, pageId, editBlock ,setCommentBlock ,se
           editBlock={editBlock}
           setCommentBlock={setCommentBlock}
           setMoreOpen={setMoreOpen}
+          setToolMoreStyle={setToolMoreStyle}
         />
       </div>
       <div className='comment_comment'>
@@ -537,6 +517,7 @@ const Comment =({userName,comment, block, pageId, editBlock ,setCommentBlock ,se
           editBlock={editBlock}
           setCommentBlock={setCommentBlock}
           setMoreOpen={setMoreOpen}
+          setToolMoreStyle={setToolMoreStyle}
         />)
         }
       </div>
@@ -551,32 +532,38 @@ const Comment =({userName,comment, block, pageId, editBlock ,setCommentBlock ,se
     </div>
   )
 };
-const Comments =({pageId,block, userName ,editBlock ,setCommentBlock}:CommentsProps)=>{
+const Comments =({pageId,block, userName ,editBlock }:CommentsProps)=>{
   const [targetComments, setTargetComment]= useState<BlockCommentType[]| null>(null);
   const [resolveComments, setResolveComments]= useState<BlockCommentType[]| null>(null);
   const [openComments, setOpenComments]= useState<BlockCommentType[]| null>(null);
   const [commentsStyle, setCommentsStyle]= useState<CSSProperties>();
   const [moreOpen, setMoreOpen]= useState<boolean>(false);
-  useEffect(()=>{
-    setTargetComment(block.comments);
-    if(block.comments !==null){
-      setResolveComments(block.comments?.filter((comment:BlockCommentType)=> comment.type ==="resolve") );
+  const [toolMoreStyle, setToolMoreStyle]=useState<CSSProperties|undefined>(undefined);
+  const [commentBlock, setCommentBlock]=useState<Block|null>(block);
 
-      setOpenComments( block.comments?.filter((comment:BlockCommentType)=> comment.type ==="open"))
-    };
-    const blockDoc = document.getElementById(`block_${block.id}`);
-    const editor =document.getElementsByClassName("editor")[0] as HTMLElement;
-    const position =blockDoc?.getClientRects()[0]
-    if(position !== undefined){
-      const style :CSSProperties ={
-        position:"absolute",
-        top: position.bottom +editor.scrollTop,
-        left: position.left,
-        width:position.width
+  useEffect(()=>{
+    if(commentBlock!==null){
+      setTargetComment(commentBlock.comments);
+      if(commentBlock.comments !==null){
+        setResolveComments(commentBlock.comments?.filter((comment:BlockCommentType)=> comment.type ==="resolve") );
+  
+        setOpenComments( commentBlock.comments?.filter((comment:BlockCommentType)=> comment.type ==="open"))
       };
-      setCommentsStyle(style);
-    } 
-  },[block]);
+      const blockDoc = document.getElementById(`block_${commentBlock.id}`);
+      const editor =document.getElementsByClassName("editor")[0] as HTMLElement;
+      const position =blockDoc?.getClientRects()[0]
+      if(position !== undefined){
+        const style :CSSProperties ={
+          position:"absolute",
+          top: position.bottom +editor.scrollTop,
+          left: position.left,
+          width:position.width
+        };
+        setCommentsStyle(style);
+      } 
+    }
+  },[commentBlock]);
+  
   const showComments =(what:"open" | "resolve")=>{
     (what ==="open")?
     setTargetComment(openComments):
@@ -607,18 +594,19 @@ const Comments =({pageId,block, userName ,editBlock ,setCommentBlock}:CommentsPr
           </button>
         </section>
       }
-      {targetComments !==null &&
+      {targetComments !==null && commentBlock !==null &&
         <section className='comments_comments'>
           {targetComments.map((comment:BlockCommentType)=>
             <Comment 
               key={`comment_${comment.id}`}
               userName={userName}
               comment={comment}
-              block={block}
+              block={commentBlock}
               pageId={pageId}
               editBlock={editBlock}
               setCommentBlock={setCommentBlock}
               setMoreOpen={setMoreOpen}
+              setToolMoreStyle={setToolMoreStyle}
             />
           )
           }
@@ -627,8 +615,9 @@ const Comments =({pageId,block, userName ,editBlock ,setCommentBlock}:CommentsPr
     </div>
     {moreOpen &&
         <ToolMore
+          toolMoreStyle={toolMoreStyle}
           pageId={pageId}
-          block={block}
+          block={commentBlock}
           editBlock={editBlock}
           setCommentBlock={setCommentBlock}
           setMoreOpen={setMoreOpen}
