@@ -119,7 +119,6 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
         // edite targetBlock 
         const cursor = document.getSelection();
         const offset =cursor?.anchorOffset;
-        console.log(":value", value ,offset)
         if(!(targetBlock.contents==="" && offset===0&& value ==="")){
           const editedBlock :Block ={
             ...targetBlock,
