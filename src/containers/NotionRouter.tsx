@@ -46,8 +46,7 @@ const NotionRouter =()=>{
   const [routePage, setRoutePage]=useState<Page|null>(firstPage!==undefined? firstPage: null);
   const [openQF, setOpenQF]=useState<boolean>(false);
   const [showAllComments,setShowAllComments]=useState<boolean>(false);
-  const [allCommentsBlocks, setAllCommentsBlocks]=useState<Block[]|null>(null);
-  //---action.function 
+    //---action.function 
     //--block
   const editBlock = (pageId:string, block:Block)=> {dispatch(edit_block(pageId, block ))};
   const addBlock =(pageId:string , block:Block , newBlockIndex:number ,previousBlockId:string|null)=>{
@@ -206,7 +205,6 @@ const NotionRouter =()=>{
     }
     
   },[targetPageId]);
-  
   return(
     <div 
       id="inner"
@@ -291,8 +289,7 @@ const NotionRouter =()=>{
        {/* ----editor */}
       {showAllComments && routePage !==null &&
         <AllComments
-          allCommentsBlocks={allCommentsBlocks}
-          pageId={routePage.id}
+          page={routePage}
           userName={user.userName}
           editBlock={editBlock}
         />

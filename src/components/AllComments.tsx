@@ -1,14 +1,20 @@
-import React from "react";
-import { Block } from "../modules/notion";
+import React, { useEffect, useState } from "react";
+import { Block, Page } from "../modules/notion";
 import Comments from "./Comments";
 
 type AllCommentsProps={
-  allCommentsBlocks :Block[]|null,
-  pageId:string,
+  page:Page,
   userName:string,
   editBlock: (pageId: string, block: Block) => void
 }
-const AllComments=({allCommentsBlocks , pageId, userName,editBlock}:AllCommentsProps)=>{
+const AllComments=({page, userName,editBlock}:AllCommentsProps)=>{
+  const pageId= page.id;
+  const [allCommentsBlocks, setAllCommentsBlocks] =useState<Block[]|null>(null);
+
+  useEffect(()=>{
+    const blocks= page.blocks.filter((block:Block)=> block.comments !==null);
+    setAllCommentsBlocks(blocks);
+  },[page])
   return(
   <div id="allComments">
     <div className='inner'>
@@ -38,6 +44,7 @@ const AllComments=({allCommentsBlocks , pageId, userName,editBlock}:AllCommentsP
         :
         allCommentsBlocks.map((block:Block)=>
           <Comments
+            commentsStyle={undefined}
             pageId={pageId}
             userName={userName}
             block={block}
