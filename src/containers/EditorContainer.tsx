@@ -57,13 +57,13 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pa
   const inner =document.getElementById("inner");
   const [openComment, setOpenComment]=useState<boolean>(false);
   const [commentBlock, setCommentBlock]=useState<Block|null>(null);
+  const [commentsStyle, setCommentsStyle]= useState<CSSProperties>();
   const [menuOpen, setMenuOpen]= useState<boolean>(false);
   const [popup, setPopup]=useState<PopupType>({
     popup:false,
     what:null
   });
   const [popupStyle, setPopupStyle]=useState<CSSProperties |undefined>(undefined); 
-
   const closePopup=(event: MouseEvent)=>{
     if(popup.popup){
       const popupMenu =document.getElementById("popupMenu");
@@ -88,7 +88,23 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pa
     }
   };
   inner?.addEventListener("click",(event)=>closePopup(event));
-  useEffect(()=>{ console.log("opencomment", openComment)},[openComment])
+
+  useEffect(()=>{
+    if(commentBlock !==null){
+      const blockDoc = document.getElementById(`block_${commentBlock.id}`);
+      const editor =document.getElementsByClassName("editor")[0] as HTMLElement;
+      const position =blockDoc?.getClientRects()[0]
+      if(position !== undefined){
+        const style :CSSProperties ={
+          position:"absolute",
+          top: position.bottom +editor.scrollTop,
+          left: position.left,
+          width:position.width
+        };
+        setCommentsStyle(style);
+      } 
+    }
+  },[commentBlock])
   return(
     <div className='editor'>
       {isInTrash &&
@@ -192,6 +208,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pa
       }
       {commentBlock !==null && openComment &&
         <Comments
+          commentsStyle={commentsStyle}
           userName={userName}
           block={commentBlock}
           pageId={page.id}

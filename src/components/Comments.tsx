@@ -17,6 +17,7 @@ type CommentsProps={
   pageId: string,
   userName:string,
   editBlock :(pageId: string, block: Block) => void,
+  commentsStyle: CSSProperties | undefined
 };
 type CommentProps ={
   userName: string,
@@ -540,11 +541,11 @@ const Comment =({userName,comment, block, pageId, editBlock ,setCommentBlock ,se
     </div>
   )
 };
-const Comments =({pageId,block, userName ,editBlock }:CommentsProps)=>{
+const Comments =({pageId,block, userName ,editBlock ,commentsStyle }:CommentsProps)=>{
   const [targetComments, setTargetComment]= useState<BlockCommentType[]| null>(null);
   const [resolveComments, setResolveComments]= useState<BlockCommentType[]| null>(null);
   const [openComments, setOpenComments]= useState<BlockCommentType[]| null>(null);
-  const [commentsStyle, setCommentsStyle]= useState<CSSProperties>();
+
   const [moreOpen, setMoreOpen]= useState<boolean>(false);
   const [toolMoreStyle, setToolMoreStyle]=useState<CSSProperties|undefined>(undefined);
   const [commentBlock, setCommentBlock]=useState<Block|null>(block);
@@ -557,18 +558,6 @@ const Comments =({pageId,block, userName ,editBlock }:CommentsProps)=>{
   
         setOpenComments( commentBlock.comments?.filter((comment:BlockCommentType)=> comment.type ==="open"))
       };
-      const blockDoc = document.getElementById(`block_${commentBlock.id}`);
-      const editor =document.getElementsByClassName("editor")[0] as HTMLElement;
-      const position =blockDoc?.getClientRects()[0]
-      if(position !== undefined){
-        const style :CSSProperties ={
-          position:"absolute",
-          top: position.bottom +editor.scrollTop,
-          left: position.left,
-          width:position.width
-        };
-        setCommentsStyle(style);
-      } 
     }
   },[commentBlock]);
   
