@@ -1,0 +1,7 @@
+#allComments{
+  display: flex;
+  flex-direction: column;
+  .comments{
+    position: relative;
+  }
+}
