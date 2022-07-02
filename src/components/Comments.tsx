@@ -592,7 +592,7 @@ const Comments =({pageId,block, userName ,editBlock ,commentsStyle  ,select}:Com
       className='comments'
       style={commentsStyle}
     >
-      {resolveComments !==null && resolveComments.length>0 && select!==null &&
+      {resolveComments !==null && resolveComments.length>0 && select==null &&
         <section className="commentType">
           <button 
             id="openTypeBtn"
