@@ -1,5 +1,5 @@
 import React, { CSSProperties, Dispatch, SetStateAction, useEffect, useRef} from 'react';
-import { Block, findBlock, Page,  } from '../modules/notion';
+import { Block, BlockCommentType, findBlock, Page,  } from '../modules/notion';
 import { Command } from './Frame';
 import BlockComponent, { BlockComment } from './BlockComponent';
 import { GoPrimitiveDot } from 'react-icons/go';
@@ -30,6 +30,12 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
   const className = block.type !== "toggle" ?
   `${block.type} block ` :
   `${block.type} block ${block.subBlocksId!==null?'on' : ""}`;
+  const blockComments = 
+  block.comments==null? 
+  false : 
+  (block.comments.filter((comment:BlockCommentType)=>  comment.type ==="open" )[0] ===undefined? 
+  false:  
+  true );
   const subBlocks =  block.subBlocksId?.map((id:string)=>findBlock(page, id).BLOCK)
   const blockContentsStyle =(block:Block):CSSProperties =>{
   return ({
@@ -138,6 +144,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                 changeToSub={changeToSub}
                 raiseBlock={raiseBlock}
                 deleteBlock={deleteBlock}
+                blockComments={blockComments}
                 command={command}
                 setCommand={setCommand}
                 onClickCommentBtn={onClickCommentBtn}
@@ -145,7 +152,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
               />
             </div>
             </div>
-          {block.comments !==null &&
+          {blockComments &&
             <BlockComment
               block={block} 
               onClickCommentBtn={onClickCommentBtn}
@@ -233,6 +240,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                 changeToSub={changeToSub}
                 raiseBlock={raiseBlock}
                 deleteBlock={deleteBlock}
+                blockComments={blockComments}
                 command={command}
                 setCommand={setCommand}
                 onClickCommentBtn={onClickCommentBtn}
@@ -240,7 +248,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
               />
               </div>
               </div>
-              {block.comments !==null &&
+              {blockComments &&
               <BlockComment
                 block={block}
                 onClickCommentBtn={onClickCommentBtn}
