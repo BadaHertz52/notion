@@ -12,6 +12,7 @@ type  BlockProps ={
   changeToSub: (pageId: string, block: Block, newParentBlockId: string) => void,
   raiseBlock: (pageId: string, block: Block) => void,
   deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
+  blockComments:boolean,
   command :Command,
   setCommand:Dispatch<SetStateAction<Command>>,
   onClickCommentBtn: (block: Block) => void,
@@ -46,7 +47,7 @@ export const BlockComment =({block , onClickCommentBtn}:BlockCommentProps)=>{
   )
 };
 
-const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock , command, setCommand  ,onClickCommentBtn ,setOpenComment  }:BlockProps)=>{
+const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,blockComments , command, setCommand  ,onClickCommentBtn ,setOpenComment  }:BlockProps)=>{
   const editTime =JSON.stringify(Date.now);
   const contentEditableRef= useRef<HTMLElement>(null);
   const findTargetBlock =(event:ContentEditableEvent|React.KeyboardEvent<HTMLDivElement>|React.MouseEvent):Block=>{
@@ -58,7 +59,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
     return targetBlock;
   };
   const editor =document.getElementsByClassName("editor")[0] as HTMLElement ;
-  
+
   const showBlockFn=(event: React.MouseEvent)=>{
     const currentTarget =event.currentTarget as Element;
     const mainBlock= currentTarget.parentElement?.parentElement ;
@@ -207,8 +208,6 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
     }
   };
 
-
-
   const BlockContentEditable=()=>{
     return(
       <>
@@ -234,9 +233,10 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
       </>
     )
   };
+
   return(
     <>
-      {block.comments ==null ?
+      {!blockComments ?
       ( block.type==="page"?
         <button 
           className="contents pageTitle"
