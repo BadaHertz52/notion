@@ -200,10 +200,13 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pa
                 pageId={page.id}
                 userName={userName}
                 editBlock={editBlock}
-                comment={null}
+                blockComment={null}
+                subComment={null}
                 commentBlock={commentBlock}
                 setCommentBlock={setCommentBlock}
                 setPopup={setPopup}
+                addOrEdit="add"
+                setEdit={null}
               />
           </div>
       )
