@@ -31,6 +31,11 @@ const TopBar =({favorites,sideAppear,page,pagePath, changeSide ,addFavorites,rem
   const onClickSideBarBtn =(event:React.MouseEvent)=>{
     const target =event.target as HTMLElement;
     const targetTag =target.tagName.toLowerCase();
+    const width =window.outerWidth;
+    console.log("width,", width);
+    if(showAllComments && width <1000 ){
+      setShowAllComments(false);
+    }
     switch (targetTag) {
       case "button":
         target.id ==="sideBarBtn" && changeSide("lock");
