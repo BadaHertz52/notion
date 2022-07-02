@@ -22,19 +22,18 @@ type SideBarContainerProp ={
   restorePage: (pageId: string) => void,
   cleanTrash: (pageId: string) => void,
 
+  addFavorites: (itemId: string) => void,
+  removeFavorites: (itemId: string) => void,
+
   changeSide: (appear: SideAppear) => void,
 
   setTargetPageId: Dispatch<React.SetStateAction<string>>,
   setOpenQF: Dispatch<React.SetStateAction<boolean>>
 };
-const SideBarContainer =({sideAppear,addBlock,editBlock,deleteBlock,addPage,duplicatePage,editPage,deletePage,movePageToPage,restorePage, cleanTrash, changeSide,setTargetPageId ,setOpenQF }:SideBarContainerProp)=>{
+const SideBarContainer =({sideAppear,addBlock,editBlock,deleteBlock,addPage,duplicatePage,editPage,deletePage,movePageToPage,restorePage, cleanTrash, addFavorites, removeFavorites, changeSide,setTargetPageId ,setOpenQF }:SideBarContainerProp)=>{
   const notion =useSelector((state:RootState)=> state.notion);
   
   const user = useSelector((state:RootState)=> state.user);
-  const dispatch =useDispatch();
-  const addFavorites =(itemId:string)=>{dispatch(add_favorites(itemId))};
-  const removeFavorites =(itemId:string)=>{dispatch((remove_favorites(itemId)))};
-
   return(
     <SideBar 
     notion={notion}

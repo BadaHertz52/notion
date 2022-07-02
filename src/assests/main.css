@@ -580,6 +580,10 @@ a:link, a:active, a:visited {
   background: #EDECE9;
 }
 
+#commentsInner {
+  position: relative;
+}
+
 .commentType {
   border-bottom: 1px solid #d6d6d6;
   padding: 0 5%;
@@ -829,6 +833,10 @@ a:link, a:active, a:visited {
   outline: none;
 }
 
+.commentInputSubmit {
+  font-size: 1rem;
+}
+
 #tool_more {
   width: 320px;
   display: -webkit-box;
@@ -850,7 +858,7 @@ a:link, a:active, a:visited {
   -webkit-box-shadow: 0px 0px 23px -5px #ababab;
   box-shadow: 0px 0px 23px -5px #ababab;
   width: 200px;
-  z-index: 15;
+  z-index: 25;
 }
 
 #tool_more::-webkit-scrollbar-thumb {
@@ -1520,6 +1528,10 @@ a:link, a:active, a:visited {
   display: none;
 }
 
+.editor .pagePath {
+  font-size: 14px;
+}
+
 .editor .pageFun {
   width: 180PX;
   display: -webkit-box;
@@ -1531,6 +1543,15 @@ a:link, a:active, a:visited {
 
 .editor .pageFun button {
   color: inherit;
+  font-size: 1rem;
+}
+
+.editor .pageFun button:first-child {
+  font-size: 14px;
+}
+
+.editor .pageFun .favoriteBtn.on svg {
+  fill: #f6c050;
 }
 
 .editor .frame {

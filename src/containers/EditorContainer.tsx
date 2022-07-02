@@ -1,11 +1,12 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
-import {useDispatch } from 'react-redux';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import {useDispatch, useSelector } from 'react-redux';
 import { CSSProperties } from 'styled-components';
 import BlockFn, { detectRange } from '../components/BlockFn';
 import Comments, { CommentInput } from '../components/Comments';
 import Frame from '../components/Frame';
 import PageMenu from '../components/PageMenu';
 import TopBar from '../components/TopBar';
+import { RootState } from '../modules';
 import {  Block, Page,  change_to_sub, raise_block, listItem } from '../modules/notion';
 import { SideAppear } from '../modules/side';
 import { pathType } from './NotionRouter';
@@ -40,16 +41,17 @@ type EditorContainerProps ={
   restorePage: (pageId: string) => void,
   cleanTrash: (pageId: string) => void,
 
+  addFavorites: (itemId: string) => void,
+  removeFavorites: (itemId: string) => void,
+
   changeSide: (appear: SideAppear) => void,
   setTargetPageId:Dispatch<SetStateAction<string>>,
-
-  // setOpenComment: Dispatch<SetStateAction<boolean>>,
-  // setCommentBlock:Dispatch<SetStateAction<Block | null>>,
   setShowAllComments:Dispatch<SetStateAction<boolean>>,
 };
 
-const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pagePath ,changeSide,addBlock,editBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, cleanTrash, setTargetPageId ,setShowAllComments}:EditorContainerProps)=>{
+const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pagePath ,changeSide,addBlock,editBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId ,setShowAllComments}:EditorContainerProps)=>{
   const dispatch =useDispatch();
+  const user =useSelector((state:RootState)=>state.user);
   const changeToSub =(pageId: string, block: Block,  newParentBlockId: string)=> dispatch(change_to_sub(pageId, block, newParentBlockId));
   const raiseBlock =(pageId: string, block: Block) =>dispatch((raise_block(pageId, block)));
   const inner =document.getElementById("inner");
@@ -67,7 +69,6 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pa
       const popupMenu =document.getElementById("popupMenu");
       const popupMenuDomRect= popupMenu?.getClientRects()[0];
       const isInPopupMenu =detectRange(event, popupMenuDomRect);
-       console.log("is", isInPopupMenu)
       !isInPopupMenu && setPopup({
         popup:false,
         what:null
@@ -75,16 +76,19 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pa
     };
     if(openComment){
       const editor =document.getElementsByClassName("editor")[0] as HTMLElement;
-      const commentsDoc= editor.getElementsByClassName("comments")[0] as HTMLElement;
-      const commentsDocDomRect= commentsDoc.getClientRects()[0];
-      const isInComments =detectRange(event, commentsDocDomRect);
-      if(!isInComments){
-        setCommentBlock(null);
-        setOpenComment(false); 
+      const commentsDoc= editor.getElementsByClassName("comments")[0] ;
+      if(commentsDoc !==undefined){
+        const commentsDocDomRect= commentsDoc.getClientRects()[0];
+        const isInComments =detectRange(event, commentsDocDomRect);
+        if(!isInComments){
+          setCommentBlock(null);
+          setOpenComment(false); 
+        }
       }
     }
-  }
-  inner?.addEventListener("click",(event)=>closePopup(event))
+  };
+  inner?.addEventListener("click",(event)=>closePopup(event));
+  useEffect(()=>{ console.log("opencomment", openComment)},[openComment])
   return(
     <div className='editor'>
       {isInTrash &&
@@ -107,10 +111,13 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pa
       </div>
       }
       <TopBar
+      favorites={user.favorites}
       sideAppear={sideAppear}
       page={page}
       pagePath ={pagePath}
       changeSide={changeSide}
+      removeFavorites={removeFavorites}
+      addFavorites={addFavorites}
       setTargetPageId={setTargetPageId}
       setShowAllComments={setShowAllComments}
       />
@@ -178,6 +185,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pa
                 comment={null}
                 commentBlock={commentBlock}
                 setCommentBlock={setCommentBlock}
+                setPopup={setPopup}
               />
           </div>
       )
@@ -188,8 +196,6 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pa
           block={commentBlock}
           pageId={page.id}
           editBlock={editBlock}
-          setCommentBlock={setCommentBlock}
-          //setMoreOpen={setMoreOpen}
         />              
       }
     </div>

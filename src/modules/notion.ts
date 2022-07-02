@@ -57,8 +57,8 @@ export type CommentType ={
 }
 export type BlockCommentType = CommentType &{
   type:"open"|"resolve",
-  comments:CommentType[]|null,
-  commentsId : string[] |null,
+  subComments:CommentType[]|null,
+  subCommentsId : string[] |null,
 };
 export type Block ={
   id:string,
@@ -282,8 +282,8 @@ const initialState :Notion ={
         ),
         createTime: JSON.stringify(Date.parse("2021-05-20-12")
         ),
-        comments:null,
-        commentsId:null,
+        subComments:null,
+        subCommentsId:null,
       }],
     },
     firstBlocksId :["text", 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page1', 'page2'],
@@ -311,8 +311,8 @@ const initialState :Notion ={
         content:"hi! ☺️", 
         editTime:(1654086822451).toString(),
         createTime: (Date.parse("2021-5-20-15:00")).toString(),
-        comments:null,
-        commentsId:null,
+        subComments:null,
+        subCommentsId:null,
       },]
     },
     {
@@ -352,8 +352,8 @@ const initialState :Notion ={
         content:"todo comments", 
         editTime:(Date.parse("2021-5-18-16:01:30")).toString(),
         createTime: (Date.parse("2021-5-21-14:00")).toString(),
-        comments:null,
-        commentsId:null,
+        subComments:null,
+        subCommentsId:null,
       },]
     },{
       id:"todo done",
@@ -367,7 +367,7 @@ const initialState :Notion ={
       ,
       createTime: (Date.parse("2021-5-18-5:00")).toString(),
       style :basicBlockStyle,
-      comments:null
+      comments:null,
     },{
       id:"h1",
       contents:"header1", 
@@ -475,8 +475,8 @@ const initialState :Notion ={
       content:"subBlock comments", 
       editTime:(Date.parse("2021-5-18-8:00")).toString(),
       createTime:(Date.parse("2021-5-18-8:00")).toString(),
-      comments:null,
-      commentsId:null,
+      subComments:null,
+      subCommentsId:null,
     },]
   },
   {
@@ -560,8 +560,8 @@ const initialState :Notion ={
       content:"comment n2", 
       editTime:(1654086822451).toString(),
       createTime:(1654086822451).toString(),
-      comments:null,
-      commentsId:null,
+      subComments:null,
+      subCommentsId:null,
     },]
   },
   {

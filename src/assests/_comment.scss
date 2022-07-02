@@ -39,6 +39,9 @@
   @include popupMenu;
   z-index: 20;
 }
+#commentsInner {
+  position: relative;
+}
 .commentType{
   border-bottom: 1px solid $lightMud;
   padding: 0 5%; 
@@ -176,10 +179,13 @@
       }
     }
   }
+.commentInputSubmit{
+  font-size: 1rem
+}
 #tool_more{
   @include popupMenu;
   width: 200px;
-  z-index: 15;
+  z-index: 25;
   button{
     width: 100%;
     padding: 10px;

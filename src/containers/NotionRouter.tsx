@@ -3,12 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import {  Route, Routes, useNavigate} from 'react-router-dom';
 import AllComments from '../components/AllComments';
 import BlockFn, { detectRange } from '../components/BlockFn';
-import Comments, { ToolMore } from '../components/Comments';
+import Comments from '../components/Comments';
 import QuickFindBord from '../components/QuickFindBord';
 import { RootState } from '../modules';
 import { add_block, add_page, Block, change_to_sub, clean_trash, delete_block, delete_page, duplicate_page, edit_block, edit_page, findPage,  listItem,  move_page_to_page, Page, pageSample, raise_block, restore_page, } from '../modules/notion';
 import { change_side, SideAppear } from '../modules/side';
-import { add_recent_page, clean_recent_page, remove_favorites } from '../modules/user';
+import { add_favorites, add_recent_page, clean_recent_page, remove_favorites } from '../modules/user';
 import EditorContainer from './EditorContainer';
 import SideBarContainer from './SideBarContainer';
 export type pathType={
@@ -18,7 +18,6 @@ export type pathType={
 };
 const NotionRouter =()=>{
   const navigate= useNavigate();
-
   const dispatch =useDispatch();
   const notion = useSelector((state:RootState)=> state.notion);
   const pagesId =notion.pagesId;
@@ -119,6 +118,8 @@ const NotionRouter =()=>{
   //--user
   const addRecentPage=(itemId:string)=>{dispatch(add_recent_page(itemId))};
   const cleanRecentPage=()=>{dispatch(clean_recent_page())};
+  const addFavorites =(itemId:string)=>{dispatch(add_favorites(itemId))};
+  const removeFavorites =(itemId:string)=>{dispatch((remove_favorites(itemId)))};
   //---user
   
   //--side
@@ -206,26 +207,10 @@ const NotionRouter =()=>{
     
   },[targetPageId]);
   
-  // const clickInner =(event:React.MouseEvent)=>{
-  //   const comments= document.getElementById("comments");
-  //   if(openComment){
-      
-  //     const commentsDomRect =comments?.getClientRects()[0];
-  //     if(commentsDomRect !==undefined){
-  //       const isInComments= detectRange(event,commentsDomRect);
-  //       if(!isInComments){
-  //         setOpenComment(false);
-  //         setCommentBlock(null);
-  //       }
-  //     }
-  //   }
-
-  // }
   return(
     <div 
       id="inner"
       className='sideBar_lock'
-     // onClick={clickInner}
     >
       <SideBarContainer 
         sideAppear ={sideAppear}
@@ -244,7 +229,8 @@ const NotionRouter =()=>{
         restorePage={restorePage}
         cleanTrash={cleanTrash}
         changeSide={changeSide}
-
+        addFavorites={addFavorites}
+        removeFavorites ={removeFavorites}
         setOpenQF={setOpenQF}
       />
       {/* editor------ */}
@@ -277,9 +263,10 @@ const NotionRouter =()=>{
                     cleanTrash={cleanTrash}
                     restorePage={restorePage}
 
+                    addFavorites={addFavorites}
+                    removeFavorites={removeFavorites}
                     changeSide={changeSide}
-                    // setOpenComment={setOpenComment}
-                    // setCommentBlock ={setCommentBlock}
+
                     setShowAllComments={setShowAllComments}
                     />
                   } 
@@ -302,11 +289,14 @@ const NotionRouter =()=>{
         </div>
       }
        {/* ----editor */}
-      {/* {showAllComments &&
+      {showAllComments && routePage !==null &&
         <AllComments
           allCommentsBlocks={allCommentsBlocks}
+          pageId={routePage.id}
+          userName={user.userName}
+          editBlock={editBlock}
         />
-      } */}
+      }
       {openQF &&
       <QuickFindBord
         userName={user.userName}

@@ -141,6 +141,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                 command={command}
                 setCommand={setCommand}
                 onClickCommentBtn={onClickCommentBtn}
+                setOpenComment={setOpenComment}
               />
             </div>
             </div>
@@ -235,6 +236,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                 command={command}
                 setCommand={setCommand}
                 onClickCommentBtn={onClickCommentBtn}
+                setOpenComment={setOpenComment}
               />
               </div>
               </div>

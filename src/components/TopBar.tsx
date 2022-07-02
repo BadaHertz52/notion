@@ -1,22 +1,26 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { AiOutlineClockCircle, AiOutlineMenu, AiOutlineStar } from 'react-icons/ai';
+import { AiFillStar, AiOutlineClockCircle, AiOutlineMenu, AiOutlineStar } from 'react-icons/ai';
 import { BiMessageDetail } from 'react-icons/bi';
 import { BsThreeDots } from 'react-icons/bs';
 import { FiChevronsLeft } from 'react-icons/fi';
 import { pathType } from '../containers/NotionRouter';
 import {  Block, Page } from '../modules/notion';
 import {  SideAppear } from '../modules/side';
+
 type TopBarProps ={
+  favorites:string[]|null,
   sideAppear:SideAppear,
   page:Page,
   pagePath: pathType[] |null ,
-  changeSide: (appear: SideAppear) => void
+  changeSide: (appear: SideAppear) => void,
+  removeFavorites: (itemId: string) => void,
+  addFavorites: (itemId: string) => void
   setTargetPageId:Dispatch<SetStateAction<string>>,
   setShowAllComments:Dispatch<SetStateAction<boolean>>,
 }
-const TopBar =({sideAppear,page,pagePath, changeSide ,setTargetPageId  ,setShowAllComments}:TopBarProps)=>{
+const TopBar =({favorites,sideAppear,page,pagePath, changeSide ,addFavorites,removeFavorites ,setTargetPageId  ,setShowAllComments}:TopBarProps)=>{
   const [title, setTitle]= useState<string>("");
-
+  const pageInFavorites = favorites?.includes(page.id); 
   useEffect(()=>{
     if(sideAppear ==="float"){
       setTitle("Lock sideBar open")
@@ -48,6 +52,11 @@ const TopBar =({sideAppear,page,pagePath, changeSide ,setTargetPageId  ,setShowA
     changeSide("floatHide");
   };
 
+  const addOrRemoveFavorite=()=>{
+    pageInFavorites ?
+    removeFavorites(page.id):
+    addFavorites(page.id);
+  }
   const showAllComments=()=>{
     setShowAllComments(true)
   };
@@ -125,8 +134,15 @@ const TopBar =({sideAppear,page,pagePath, changeSide ,setTargetPageId  ,setShowA
         </button>
         <button
           title="Pin this page in your sidebar"
+          className={pageInFavorites?"favoriteBtn on" : "favoriteBtn"}
+          onClick={addOrRemoveFavorite}
         >
+          {pageInFavorites ?
+          <AiFillStar/>
+          :
           <AiOutlineStar/>
+          }
+          
         </button>
         <button
           title=" Style, export, and more"
