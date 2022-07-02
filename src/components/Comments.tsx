@@ -298,7 +298,7 @@ export const CommentInput =({userName, pageId ,comment,editBlock, commentBlock, 
       >
         <input
           type="text"
-          placeholder='Add a comment'
+          placeholder={item ==null? "Add a comment" : edit && comment!==null ? comment.content : "Reply...." }
           className="commentText"
           name="comment"
           onInput={onInputText}
