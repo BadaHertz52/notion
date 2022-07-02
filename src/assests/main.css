@@ -54,11 +54,12 @@ a:link, a:active, a:visited {
 
 #allComments {
   position: absolute;
-  top: 45px;
+  top: 0;
   right: 0;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  padding-top: 45px;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
@@ -69,12 +70,14 @@ a:link, a:active, a:visited {
   -ms-flex-negative: 0;
       flex-shrink: 0;
   z-index: 100;
-  background-color: #ffff;
-  border-left: 1px #EDECE9;
+  border-left: 1px solid rgba(15, 15, 15, 0.1);
   -webkit-transition: -webkit-transform 3000ms ease;
   transition: -webkit-transform 3000ms ease;
   transition: transform 3000ms ease;
   transition: transform 3000ms ease, -webkit-transform 3000ms ease;
+  width: 480px;
+  height: 100vh;
+  pointer-events: none;
 }
 
 #allComments .pageFun {
@@ -84,7 +87,8 @@ a:link, a:active, a:visited {
 #allComments .inner {
   overflow-y: scroll;
   width: 100%;
-  height: 100vw;
+  height: 100%;
+  background-color: #ffff;
 }
 
 #allComments .allComments_header {
@@ -94,10 +98,84 @@ a:link, a:active, a:visited {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+  padding: 0 5%;
+  font-size: 13px;
+}
+
+#allComments .allComments_header span {
+  font-weight: 600;
 }
 
 #allComments .comments {
   position: relative;
+  pointer-events: auto;
+}
+
+#allComments .commentsTypeBtn {
+  pointer-events: auto;
+}
+
+#allComments .commentsTypeBtn .selectType {
+  color: #8d8d8d;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+#allComments .commentsTypeBtn .types {
+  display: none;
+}
+
+#allComments .commentsTypeBtn.open {
+  position: relative;
+}
+
+#allComments .commentsTypeBtn.open .types {
+  width: 320px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  background-color: #ffff;
+  margin: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  pointer-events: auto;
+  -webkit-transform: matrix(1, 0, 0, 1, 0, 0);
+          transform: matrix(1, 0, 0, 1, 0, 0);
+  z-index: 10;
+  border-radius: 8px;
+  -webkit-box-shadow: 0px 0px 23px -5px #ababab;
+  box-shadow: 0px 0px 23px -5px #ababab;
+  width: 180px;
+  z-index: 110;
+  position: absolute;
+  top: 110%;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+#allComments .commentsTypeBtn.open .types::-webkit-scrollbar-thumb {
+  background: #D3D1CB;
+}
+
+#allComments .commentsTypeBtn.open .types::-webkit-scrollbar-track {
+  background: #EDECE9;
+}
+
+#allComments .commentsTypeBtn.open .types button {
+  padding: 10px 15px;
+}
+
+#allComments .commentsTypeBtn.open .types button:hover {
+  background-color: #EDECE9;
+}
+
+#allComments .commentsTypeBtn.open .types button:last-child {
+  padding-top: 10px;
 }
 
 .edit_inform {

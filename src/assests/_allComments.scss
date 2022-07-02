@@ -7,29 +7,72 @@
 }
 #allComments{
   position: absolute;
-  top:45px;
+  top:0;
   right:0;
   display: flex;
+  padding-top:45px;
   flex-direction: column;
   flex-grow: 0;
   flex-shrink: 0;
   z-index: 100;
-  background-color: #ffff;
-  border-left: 1px $itemHover;
+  border-left: 1px solid rgba(15 ,15,15,0.1);
   transition: transform 3000ms ease;
+  width: 480px;
+  height: 100vh;
+  pointer-events: none;
   .pageFun {
     height: 45px;
   }
   .inner {
     overflow-y:scroll ;
     width: 100%;
-    height: 100vw;
+    height: 100%;
+    background-color: #ffff;
   }
   .allComments_header{
     display: flex;
     justify-content: space-between;
+    padding:0 5%;
+    font-size: 13px;
+    span{
+      font-weight: 600;
+    }
   }
   .comments{
     position: relative;
+    pointer-events: auto;
+  }
+  .commentsTypeBtn {
+    pointer-events: auto;
+    .selectType{
+      color:$itemText;
+      font-size: inherit;
+      font-weight: inherit;
+    }
+    .types{
+      display: none;
+    }
+  }
+  .commentsTypeBtn.open{
+    position: relative;
+    .types{
+      @include popupMenu;
+      width:180px;
+      z-index: 110;
+      position: absolute;
+      top:110%;
+      right:0;
+      display: flex;
+      flex-direction: column;
+      button{
+        padding: 10px 15px;
+        &:hover{
+          background-color: $itemHover;
+        }
+      }
+      button:last-child{
+        padding-top: 10px;
+      }
+    }
   }
 }
