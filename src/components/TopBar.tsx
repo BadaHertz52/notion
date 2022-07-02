@@ -40,7 +40,8 @@ const TopBar =({favorites,sideAppear,page,pagePath, changeSide ,addFavorites,rem
     console.log("width,", width);
     if(showAllComments && width <1000 ){
       setShowAllComments(false);
-    }
+    };
+    
     switch (targetTag) {
       case "button":
         target.id ==="sideBarBtn" && changeSide("lock");
@@ -67,7 +68,7 @@ const TopBar =({favorites,sideAppear,page,pagePath, changeSide ,addFavorites,rem
     addFavorites(page.id);
   }
   const onClickViewAllComments=()=>{
-    setShowAllComments(true)
+    setShowAllComments(!showAllComments)
   };
 
   return(
