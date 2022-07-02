@@ -1,10 +1,14 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { AiOutlineMenu} from 'react-icons/ai';
-import { FiChevronsLeft } from 'react-icons/fi';
+
 import { pathType } from '../containers/NotionRouter';
 import {   Page } from '../modules/notion';
 import {  SideAppear } from '../modules/side';
-import PageFun from './PageFun';
+
+import { AiOutlineMenu} from 'react-icons/ai';
+import { FiChevronsLeft } from 'react-icons/fi';
+import { AiFillStar, AiOutlineClockCircle, AiOutlineStar } from "react-icons/ai";
+import { BiMessageDetail } from "react-icons/bi";
+import { BsThreeDots } from "react-icons/bs";
 
 type TopBarProps ={
   favorites:string[]|null,
@@ -20,6 +24,7 @@ type TopBarProps ={
 }
 const TopBar =({favorites,sideAppear,page,pagePath, changeSide ,addFavorites,removeFavorites ,setTargetPageId  , showAllComments, setShowAllComments}:TopBarProps)=>{
   const [title, setTitle]= useState<string>("");
+  const pageInFavorites = favorites?.includes(page.id); 
   useEffect(()=>{
     if(sideAppear ==="float"){
       setTitle("Lock sideBar open")
@@ -56,6 +61,14 @@ const TopBar =({favorites,sideAppear,page,pagePath, changeSide ,addFavorites,rem
     changeSide("floatHide");
   };
 
+  const addOrRemoveFavorite=()=>{
+    pageInFavorites ?
+    removeFavorites(page.id):
+    addFavorites(page.id);
+  }
+  const onClickViewAllComments=()=>{
+    setShowAllComments(true)
+  };
 
   return(
     <div 
@@ -112,15 +125,41 @@ const TopBar =({favorites,sideAppear,page,pagePath, changeSide ,addFavorites,rem
           }
         </div>
       </div>
-      {!showAllComments &&
-        <PageFun
-          favorites={favorites}
-          page={page}
-          removeFavorites={removeFavorites}
-          addFavorites={addFavorites}
-          setShowAllComments={setShowAllComments}
-        />
-      }
+      <div className="pageFun">
+        <button
+          title='Share or publish to the web'
+        >
+          Share
+        </button>
+        <button
+          title='View all comments'
+          onClick={onClickViewAllComments}
+        >
+          <BiMessageDetail/>
+        </button>
+        <button
+          title="View all updates"
+        >
+          <AiOutlineClockCircle/>
+        </button>
+        <button
+          title="Pin this page in your sidebar"
+          className={pageInFavorites?"favoriteBtn on" : "favoriteBtn"}
+          onClick={addOrRemoveFavorite}
+        >
+          {pageInFavorites ?
+          <AiFillStar/>
+          :
+          <AiOutlineStar/>
+          }
+
+        </button>
+        <button
+          title=" Style, export, and more"
+        >
+          <BsThreeDots/>
+        </button>
+      </div>
     </div>
   )
 };
