@@ -1,18 +1,16 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Block, Page } from "../modules/notion";
 import Comments from "./Comments";
-import PageFun from "./PageFun";
 
 type AllCommentsProps={
   page:Page,
   userName:string,
   favorites:string[]|null,
   editBlock: (pageId: string, block: Block) => void,
-  removeFavorites: (itemId: string) => void,
-  addFavorites: (itemId: string) => void
+  showAllComments:boolean,
   setShowAllComments:Dispatch<SetStateAction<boolean>>,
 }
-const AllComments=({page, userName, favorites,editBlock, removeFavorites, addFavorites, setShowAllComments}:AllCommentsProps)=>{
+const AllComments=({page, userName, editBlock, showAllComments, setShowAllComments}:AllCommentsProps)=>{
   const pageId= page.id;
   const [allCommentsBlocks, setAllCommentsBlocks] =useState<Block[]|null>(null);
 
@@ -21,14 +19,10 @@ const AllComments=({page, userName, favorites,editBlock, removeFavorites, addFav
     setAllCommentsBlocks(blocks);
   },[page])
   return(
-  <div id="allComments">
-    <PageFun
-      favorites={favorites}
-      page={page}
-      removeFavorites={removeFavorites}
-      addFavorites={addFavorites}
-      setShowAllComments={setShowAllComments}
-    />
+  <div 
+    id="allComments"
+    className={showAllComments? "allComments on" : "allComments"}
+  >
     <div className='inner'>
       <div className='allComments_header'>
         <span>Comments</span>

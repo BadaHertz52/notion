@@ -289,14 +289,13 @@ const NotionRouter =()=>{
         </div>
       }
        {/* ----editor */}
-      {showAllComments && routePage !==null &&
+      {routePage !==null &&
         <AllComments
           page={routePage}
           userName={user.userName}
           favorites={user.favorites}
           editBlock={editBlock}
-          removeFavorites={removeFavorites}
-          addFavorites={addFavorites}
+          showAllComments={showAllComments}
           setShowAllComments={setShowAllComments}
         />
       }
