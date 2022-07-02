@@ -1,10 +1,8 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { AiFillStar, AiOutlineClockCircle, AiOutlineMenu, AiOutlineStar } from 'react-icons/ai';
-import { BiMessageDetail } from 'react-icons/bi';
-import { BsThreeDots } from 'react-icons/bs';
+import { AiOutlineMenu} from 'react-icons/ai';
 import { FiChevronsLeft } from 'react-icons/fi';
 import { pathType } from '../containers/NotionRouter';
-import {  Block, Page } from '../modules/notion';
+import {   Page } from '../modules/notion';
 import {  SideAppear } from '../modules/side';
 import PageFun from './PageFun';
 
@@ -22,7 +20,6 @@ type TopBarProps ={
 }
 const TopBar =({favorites,sideAppear,page,pagePath, changeSide ,addFavorites,removeFavorites ,setTargetPageId  , showAllComments, setShowAllComments}:TopBarProps)=>{
   const [title, setTitle]= useState<string>("");
-  const pageInFavorites = favorites?.includes(page.id); 
   useEffect(()=>{
     if(sideAppear ==="float"){
       setTitle("Lock sideBar open")
