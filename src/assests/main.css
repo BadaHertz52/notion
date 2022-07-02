@@ -1,3 +1,17 @@
+#allComments {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+#allComments .comments {
+  position: relative;
+}
+
 .edit_inform {
   border-top: 1px solid #B9B8B6;
   font-size: 14px;
@@ -548,7 +562,7 @@ a:link, a:active, a:visited {
   height: 24px;
 }
 
-.comments {
+.editor .comments {
   position: absolute;
   width: 320px;
   display: -webkit-box;
@@ -572,11 +586,11 @@ a:link, a:active, a:visited {
   z-index: 20;
 }
 
-.comments::-webkit-scrollbar-thumb {
+.editor .comments::-webkit-scrollbar-thumb {
   background: #D3D1CB;
 }
 
-.comments::-webkit-scrollbar-track {
+.editor .comments::-webkit-scrollbar-track {
   background: #EDECE9;
 }
 

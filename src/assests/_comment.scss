@@ -34,7 +34,7 @@
     height: 24px;
   }
 }
-.comments {
+.editor .comments {
   position: absolute;
   @include popupMenu;
   z-index: 20;
