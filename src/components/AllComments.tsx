@@ -1,4 +1,6 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { MdKeyboardArrowDown } from "react-icons/md";
+import { CSSProperties } from "styled-components";
 import { Block, Page } from "../modules/notion";
 import Comments from "./Comments";
 
@@ -12,12 +14,21 @@ type AllCommentsProps={
 }
 const AllComments=({page, userName, editBlock, showAllComments, setShowAllComments}:AllCommentsProps)=>{
   const pageId= page.id;
-  const [allCommentsBlocks, setAllCommentsBlocks] =useState<Block[]|null>(null);
+  const [targetCommentsBlocks, setTargetCommentsBlocks] =useState<Block[]|null>(null);
+  const open ="open";
+  const resolve="resolve" ;
+  const [select, setSelect]=useState<typeof open| typeof resolve>(open);
+  const openSelect =(event:React.MouseEvent)=>{
+    const target =event.currentTarget;
+    const typesDoc = target.parentElement;
+    typesDoc?.classList.toggle("open");
 
+  };
   useEffect(()=>{
-    const blocks= page.blocks.filter((block:Block)=> block.comments !==null);
-    setAllCommentsBlocks(blocks);
-  },[page])
+    const blocks= page.blocks.filter((block:Block)=> block.comments !==null && block.comments); 
+    setTargetCommentsBlocks(blocks);
+  },[page]);
+  
   return(
   <div 
     id="allComments"
@@ -27,34 +38,51 @@ const AllComments=({page, userName, editBlock, showAllComments, setShowAllCommen
       <div className='allComments_header'>
         <span>Comments</span>
         <div className='commentsTypeBtn'>
-          <div className='selectType'></div>
-          <div className="types">
-            <button>
-              open
+          <button 
+            className='selectType'
+            onClick={openSelect}
+          >
+            {select=== open? "Open": "Resolve"} 
+            <MdKeyboardArrowDown/>
+          </button>
+          <div 
+            className="types"
+          >
+            <button
+              onClick={()=>setSelect(open)}
+            >
+              Open Comments
             </button>
-            <button>
-              resolve
+            <button
+              onClick={()=>setSelect(resolve)}
+            >
+              Resolved Comments
             </button>
           </div>
         </div>
       </div>
-      {allCommentsBlocks==null?
+      {targetCommentsBlocks==null?
         <div>
           {/*icon*/}
-          <p>No open comments yet</p>
-          <p>Open comments on thi page
+          <p>
+            No {select=== open? "Open": "Resolved"}  comments yet
+          </p>
+          <p> 
+            {select=== open? "Open": "Resolved"} comments on this page
             will appear here
           </p>
           
         </div>
         :
-        allCommentsBlocks.map((block:Block)=>
+        targetCommentsBlocks.map((block:Block)=>
           <Comments
+            key={`allComments_${block.id}`}
             commentsStyle={undefined}
             pageId={pageId}
             userName={userName}
             block={block}
             editBlock={editBlock}
+            select={select}
           />
         )
       }
