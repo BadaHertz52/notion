@@ -215,6 +215,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pa
           block={commentBlock}
           pageId={page.id}
           editBlock={editBlock}
+          select={null}
         />              
       }
     </div>

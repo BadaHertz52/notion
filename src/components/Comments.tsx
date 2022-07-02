@@ -554,7 +554,7 @@ const Comment =({userName,comment, block, pageId, editBlock ,setCommentBlock ,mo
     </div>
   )
 };
-const Comments =({pageId,block, userName ,editBlock ,commentsStyle }:CommentsProps)=>{
+const Comments =({pageId,block, userName ,editBlock ,commentsStyle  ,select}:CommentsProps)=>{
   const [targetComments, setTargetComment]= useState<BlockCommentType[]| null>(null);
   const [resolveComments, setResolveComments]= useState<BlockCommentType[]| null>(null);
   const [openComments, setOpenComments]= useState<BlockCommentType[]| null>(null);
@@ -573,7 +573,13 @@ const Comments =({pageId,block, userName ,editBlock ,commentsStyle }:CommentsPro
       };
     }
   },[commentBlock]);
-  
+  useEffect(()=>{
+    if(select !==null){
+      select===open? 
+      setTargetComment(openComments): 
+      setTargetComment(resolveComments);
+    }
+  },[select, openComments, resolveComments]);
   const showComments =(what:"open" | "resolve")=>{
     (what ==="open")?
     setTargetComment(openComments):
@@ -586,7 +592,7 @@ const Comments =({pageId,block, userName ,editBlock ,commentsStyle }:CommentsPro
       className='comments'
       style={commentsStyle}
     >
-      {resolveComments !==null && resolveComments.length>0 &&
+      {resolveComments !==null && resolveComments.length>0 && select!==null &&
         <section className="commentType">
           <button 
             id="openTypeBtn"
