@@ -6,6 +6,7 @@ import { FiChevronsLeft } from 'react-icons/fi';
 import { pathType } from '../containers/NotionRouter';
 import {  Block, Page } from '../modules/notion';
 import {  SideAppear } from '../modules/side';
+import PageFun from './PageFun';
 
 type TopBarProps ={
   favorites:string[]|null,
@@ -16,9 +17,10 @@ type TopBarProps ={
   removeFavorites: (itemId: string) => void,
   addFavorites: (itemId: string) => void
   setTargetPageId:Dispatch<SetStateAction<string>>,
+  showAllComments:boolean,
   setShowAllComments:Dispatch<SetStateAction<boolean>>,
 }
-const TopBar =({favorites,sideAppear,page,pagePath, changeSide ,addFavorites,removeFavorites ,setTargetPageId  ,setShowAllComments}:TopBarProps)=>{
+const TopBar =({favorites,sideAppear,page,pagePath, changeSide ,addFavorites,removeFavorites ,setTargetPageId  , showAllComments, setShowAllComments}:TopBarProps)=>{
   const [title, setTitle]= useState<string>("");
   const pageInFavorites = favorites?.includes(page.id); 
   useEffect(()=>{
@@ -52,104 +54,71 @@ const TopBar =({favorites,sideAppear,page,pagePath, changeSide ,addFavorites,rem
     changeSide("floatHide");
   };
 
-  const addOrRemoveFavorite=()=>{
-    pageInFavorites ?
-    removeFavorites(page.id):
-    addFavorites(page.id);
-  }
-  const showAllComments=()=>{
-    setShowAllComments(true)
-  };
+
   return(
     <div 
       className="topbar"
     >
       <div>
-      {sideAppear !=="lock" &&
-        <button 
-          id="sideBarBtn"
-          title ={title}
-          aria-label ={title}
-          onMouseEnter={onMouseEnterSidBarBtn}
-          onClick={onClickSideBarBtn}
-        >
-          {sideAppear ==="float"
-          ? 
-          <FiChevronsLeft
-          />
-          :
-          <AiOutlineMenu/>
-          }
-        </button>
-
-      }
-      <div className="pagePathes">
-        {pagePath == null ? 
+        {sideAppear !=="lock" &&
           <button 
-            className="pagePath"
-            onClick={()=>setTargetPageId(page.id)}
+            id="sideBarBtn"
+            title ={title}
+            aria-label ={title}
+            onMouseEnter={onMouseEnterSidBarBtn}
+            onClick={onClickSideBarBtn}
           >
-            <span>
-              {page.header.title? 
-              page.header.title 
-              : 
-              ""}
-            </span>
+            {sideAppear ==="float"
+            ? 
+            <FiChevronsLeft
+            />
+            :
+            <AiOutlineMenu/>
+            }
           </button>
-        :
-          pagePath.map((path:pathType )=>
-          <button 
-            className="pagePath" 
-            key={pagePath.indexOf(path)}
-            onClick={()=>setTargetPageId(path.id)}
-            >
-            <span>/</span> 
-            <span className='pageLink'>
-              <a href='path'>
-                {path.icon && path.icon}
-                {path.title}
-              </a>
-              </span>
-          </button>
-          )
+
         }
-      </div>
-      </div>
-      <div className="pageFun">
-        <button
-          title='Share or publish to the web'
-        >
-          Share
-        </button>
-        <button
-          title='View all comments'
-          onClick={showAllComments}
-        >
-          <BiMessageDetail/>
-        </button>
-        <button
-          title="View all updates"
-        >
-          <AiOutlineClockCircle/>
-        </button>
-        <button
-          title="Pin this page in your sidebar"
-          className={pageInFavorites?"favoriteBtn on" : "favoriteBtn"}
-          onClick={addOrRemoveFavorite}
-        >
-          {pageInFavorites ?
-          <AiFillStar/>
+        <div className="pagePathes">
+          {pagePath == null ? 
+            <button 
+              className="pagePath"
+              onClick={()=>setTargetPageId(page.id)}
+            >
+              <span>
+                {page.header.title? 
+                page.header.title 
+                : 
+                ""}
+              </span>
+            </button>
           :
-          <AiOutlineStar/>
+            pagePath.map((path:pathType )=>
+            <button 
+              className="pagePath" 
+              key={pagePath.indexOf(path)}
+              onClick={()=>setTargetPageId(path.id)}
+              >
+              <span>/</span> 
+              <span className='pageLink'>
+                <a href='path'>
+                  {path.icon && path.icon}
+                  {path.title}
+                </a>
+                </span>
+            </button>
+            )
           }
-          
-        </button>
-        <button
-          title=" Style, export, and more"
-        >
-          <BsThreeDots/>
-        </button>
+        </div>
       </div>
+      {!showAllComments &&
+        <PageFun
+          favorites={favorites}
+          page={page}
+          removeFavorites={removeFavorites}
+          addFavorites={addFavorites}
+          setShowAllComments={setShowAllComments}
+        />
+      }
     </div>
   )
 };

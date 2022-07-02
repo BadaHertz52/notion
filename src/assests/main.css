@@ -1546,28 +1546,6 @@ a:link, a:active, a:visited {
   font-size: 14px;
 }
 
-.editor .pageFun {
-  width: 180PX;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-pack: distribute;
-      justify-content: space-around;
-}
-
-.editor .pageFun button {
-  color: inherit;
-  font-size: 1rem;
-}
-
-.editor .pageFun button:first-child {
-  font-size: 14px;
-}
-
-.editor .pageFun .favoriteBtn.on svg {
-  fill: #f6c050;
-}
-
 .editor .frame {
   width: 100%;
   height: calc(100% - 45px);
@@ -1770,6 +1748,28 @@ a:link, a:active, a:visited {
 .editor .newPageFrame .pageContent_inner button svg {
   color: #a3a3a2;
   margin-right: 10px;
+}
+
+.pageFun {
+  width: 180PX;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+.pageFun button {
+  color: inherit;
+  font-size: 1rem;
+}
+
+.pageFun button:first-child {
+  font-size: 14px;
+}
+
+.pageFun .favoriteBtn.on svg {
+  fill: #f6c050;
 }
 
 .edit_inform {

@@ -229,6 +229,7 @@ const NotionRouter =()=>{
         changeSide={changeSide}
         addFavorites={addFavorites}
         removeFavorites ={removeFavorites}
+
         setOpenQF={setOpenQF}
       />
       {/* editor------ */}
@@ -265,6 +266,7 @@ const NotionRouter =()=>{
                     removeFavorites={removeFavorites}
                     changeSide={changeSide}
 
+                    showAllComments={showAllComments}
                     setShowAllComments={setShowAllComments}
                     />
                   } 
@@ -291,7 +293,11 @@ const NotionRouter =()=>{
         <AllComments
           page={routePage}
           userName={user.userName}
+          favorites={user.favorites}
           editBlock={editBlock}
+          removeFavorites={removeFavorites}
+          addFavorites={addFavorites}
+          setShowAllComments={setShowAllComments}
         />
       }
       {openQF &&

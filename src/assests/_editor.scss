@@ -121,24 +121,7 @@
   .pagePath {
     font-size: 14px;
   }
-  .pageFun{
-    width: 180PX;
-    display: flex;
-    justify-content: space-around;
-    button{
-      color:inherit;
-      font-size: 1rem;
-    }
-    button:first-child {
-      font-size: 14px;
-    }
-    .favoriteBtn.on{
-      svg{
-        fill: rgb(246, 192, 80);
-      }
-      
-    }
-  }
+
   // --topbar
 
   //frame ----
@@ -279,3 +262,23 @@
   }
   // --frame
 }
+
+.pageFun{
+  width: 180PX;
+  display: flex;
+  justify-content: space-around;
+  button{
+    color:inherit;
+    font-size: 1rem;
+  }
+  button:first-child {
+    font-size: 14px;
+  }
+  .favoriteBtn.on{
+    svg{
+      fill: rgb(246, 192, 80);
+    }
+    
+  }
+}
+
