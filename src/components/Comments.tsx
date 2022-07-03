@@ -522,16 +522,20 @@ const CommentBlock =({comment ,mainComment ,block  ,pageId, userName,editBlock ,
     moreOpen && closeToolMore(event, setMoreOpen)
   };
   useEffect(()=>{
-    if(editCommentItem!==null && comment.id === editCommentItem){
-      setEdit(true);
-    };
-    editCommentItem ==null && setEdit(false);
+    if(editCommentItem !==null){
+    comment.id === editCommentItem && setEdit(true);
+    }
+  },[editCommentItem]);
+
+  useEffect(()=>{
     if(discardEdit){
       setEdit(false);
-     editCommentItem !==null && sessionStorage.removeItem("editComment")
+      
     }
-  },[editCommentItem ,discardEdit]);
-
+  },[discardEdit]);
+  useEffect(()=>{
+    !edit && editCommentItem !==null && sessionStorage.removeItem("editComment");
+  },[edit]);
   return (
     <div 
     className='commentBlock'
