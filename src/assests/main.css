@@ -178,6 +178,10 @@ a:link, a:active, a:visited {
   padding-top: 10px;
 }
 
+#allComments .comment:hover {
+  background-color: rgba(55, 53, 47, 0.03);
+}
+
 .edit_inform {
   border-top: 1px solid #B9B8B6;
   font-size: 14px;
@@ -711,21 +715,36 @@ a:link, a:active, a:visited {
   display: none;
 }
 
+.comment_header,
+.commentInput .firstLetter,
+.commentBlock .firstLetter {
+  height: 20px;
+}
+
 .commentBlock .firstLetter, .commentInput .firstLetter {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   border-radius: 50%;
   border: 1px solid black;
   color: black;
-  aspect-ratio: 1;
   text-align: center;
   -webkit-box-flex: 0;
       -ms-flex-positive: 0;
           flex-grow: 0;
   -ms-flex-negative: 0;
       flex-shrink: 0;
-  font-size: 1rem;
+  width: 20px;
+}
+
+.commentBlock .firstLetter div, .commentInput .firstLetter div {
+  width: inherit;
+  height: inherit;
+  font-size: 14px;
   font-weight: initial;
-  width: 24px;
-  height: 24px;
 }
 
 .editor .comments {
@@ -791,10 +810,6 @@ a:link, a:active, a:visited {
   border-top: none;
 }
 
-.commentBlock section {
-  margin-bottom: 10px;
-}
-
 .commentBlock .comment_header {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -802,8 +817,10 @@ a:link, a:active, a:visited {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  width: 100%;
-  height: 24px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 14px;
 }
 
 .commentBlock .comment_header .information {
@@ -814,12 +831,29 @@ a:link, a:active, a:visited {
   -webkit-box-direction: normal;
       -ms-flex-direction: row;
           flex-direction: row;
-  font-size: 1rem;
+  font-size: 14px;
+  height: inherit;
+}
+
+.commentBlock .comment_header .information > div {
+  height: inherit;
 }
 
 .commentBlock .comment_header .userName {
   margin: 0 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.commentBlock .comment_header .userName p {
+  margin: 0;
   font-weight: bold;
+  text-align: center;
+  line-height: 20px;
 }
 
 .commentBlock .comment_header .time {
@@ -842,23 +876,31 @@ a:link, a:active, a:visited {
       align-content: center;
   border: 1px solid #a3a3a2;
   border-radius: 2px;
+  height: 20px;
 }
 
 .commentBlock .comment_header .tool button {
   color: #a3a3a2;
-  height: 24px;
-  padding: 3px;
+  height: 100%;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-line-pack: center;
-      align-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  justify-items: center;
+  text-align: center;
+  font-size: 12px;
+}
+
+.commentBlock .comment_header .tool button span {
+  padding: 3px;
 }
 
 .commentBlock .comment_header .tool button svg {
-  font-size: 1.1rem;
+  font-font-size: 1rem;
   font-weight: bolder;
 }
 
@@ -866,8 +908,12 @@ a:link, a:active, a:visited {
   border-right: 1px solid #a3a3a2;
 }
 
-.commentBlock .comment_block, .commentBlock .comment_content {
+.commentBlock .comment_block,
+.commentBlock .comment_content,
+.commentBlock .editComment {
   margin-left: 34px;
+  margin-bottom: 14px;
+  font-size: 14px;
 }
 
 .commentBlock .comment_block {
@@ -889,6 +935,16 @@ a:link, a:active, a:visited {
       flex-shrink: 0;
   padding-bottom: 2px;
   background: rgba(255, 212, 0, 0.8);
+}
+
+.commentBlock .commentInput {
+  width: calc( 100% - 34px);
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.commentBlock .commentInput input[type="text"] {
+  margin: 0;
 }
 
 .commentBlock .tool button:hover {
@@ -978,6 +1034,7 @@ a:link, a:active, a:visited {
   border: 1px solid #B9B8B6;
   -webkit-box-shadow: rgba(15, 15, 15, 0.162) 0px 0px 1px inset;
           box-shadow: rgba(15, 15, 15, 0.162) 0px 0px 1px inset;
+  font-size: 14px;
   background-color: initial;
   border: none;
   padding: 0;
@@ -1013,8 +1070,9 @@ a:link, a:active, a:visited {
   outline: none;
 }
 
-.commentInputSubmit {
-  font-size: 1rem;
+form button svg {
+  font-size: 1.3rem;
+  fill: #a3a3a2;
 }
 
 #tool_more {
