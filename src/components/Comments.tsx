@@ -4,10 +4,12 @@ import { CSSProperties } from 'styled-components';
 import { Block, BlockCommentType, blockSample, CommentType } from '../modules/notion';
 import { BsFillArrowUpCircleFill, BsThreeDots } from 'react-icons/bs';
 import { HiOutlinePencil } from 'react-icons/hi';
-import { IoTrashOutline } from 'react-icons/io5';
+import { IoArrowUpCircleSharp, IoCheckmarkCircle, IoTrashOutline } from 'react-icons/io5';
 import Time from './Time';
 import { detectRange } from './BlockFn';
 import { PopupType } from '../containers/EditorContainer';
+import { IoMdCloseCircle } from 'react-icons/io';
+import { DiscardItemType } from '../containers/NotionRouter';
 const open="open";
 const resolve="resolve";
 type CommentsProps={
@@ -17,6 +19,7 @@ type CommentsProps={
   editBlock :(pageId: string, block: Block) => void,
   commentsStyle: CSSProperties | undefined ,
   select : null | typeof open | typeof resolve,
+  discardEdit:boolean
 };
 type CommentProps ={
   userName: string,
@@ -27,7 +30,8 @@ type CommentProps ={
   setCommentBlock: Dispatch<SetStateAction<Block|null>>,
   moreOpen:boolean,
   setMoreOpen:Dispatch<SetStateAction<boolean>>,
-  setToolMoreStyle:Dispatch<SetStateAction<CSSProperties | undefined>>
+  setToolMoreStyle:Dispatch<SetStateAction<CSSProperties | undefined>>,
+  discardEdit:boolean
 };
 type CommentInputProps={
   userName: string,
@@ -53,6 +57,7 @@ type CommentBlockProps ={
   setMoreOpen:Dispatch<SetStateAction<boolean>>,
   setToolMoreStyle:Dispatch<SetStateAction<CSSProperties | undefined>>,
   setPopup:Dispatch<SetStateAction<PopupType>>| null,
+  discardEdit:boolean
 };
 
 type CommentToolProps ={
@@ -164,7 +169,7 @@ const updateComments =(pageId: string, block:Block, comment:CommentType | BlockC
 export const CommentInput =({userName, pageId ,blockComment, subComment,editBlock, commentBlock, setCommentBlock ,setPopup, addOrEdit,setEdit}:CommentInputProps)=>{
   const userNameFirstLetter =userName.substring(0,1).toUpperCase();
   const [submitStyle,setSubmitStyle] =useState<CSSProperties>({
-    fill:"grey",
+    fill:"#a3a3a2;",
     border:"none"
   });
   const [text, setText]=useState<string>("");
@@ -300,25 +305,34 @@ export const CommentInput =({userName, pageId ,blockComment, subComment,editBloc
           editBlockComment():
           editSubComment();
         };
-        setEdit !==null && setEdit(false);
         break;
       default:
         break;
     }
-      setText("");
-      setPopup !==null&& setPopup({
-        popup:false,
-        what:null
-      })
-  };
+      closeInput();
 
+  };
+  const openDiscardEdit =()=>{
+    const discardEdit= document.getElementById("discardEdit");
+    discardEdit?.classList.add("on");
+  };
+  function closeInput (){
+    setEdit !==null && setEdit(false);
+    setText("");
+    setPopup !==null&& setPopup({
+      popup:false,
+      what:null
+    })
+  };
   return(
     <div 
       className={addOrEdit==="edit" ? "commentInput editComment" : "commentInput" }
     >
       {addOrEdit==="add" &&
       <div className='firstLetter'>
-        {userNameFirstLetter}
+        <div>
+          {userNameFirstLetter}
+        </div>
       </div> 
       }
       <form
@@ -335,16 +349,30 @@ export const CommentInput =({userName, pageId ,blockComment, subComment,editBloc
           name="comment"
           onInput={onInputText}
         />
+        {blockComment !==null && addOrEdit ==="edit" &&
+        <button
+          className="cancleEditBtn"
+          onClick={openDiscardEdit}
+        >
+          <IoMdCloseCircle/>
+        </button>
+        }
         <button 
-          type="button"
           onClick={onClickToMakeNewComment}
           className="commentInputSubmit"
           name="commentInputSubmit"
           disabled ={text ==null || text ===""}
+          
         >
-        <BsFillArrowUpCircleFill
-          style={submitStyle}
+        {blockComment !==null && addOrEdit ==="edit" ?
+          <IoCheckmarkCircle
+            style={submitStyle}
           />
+        :
+          <IoArrowUpCircleSharp
+            style={submitStyle}
+          />
+        }
         </button>
       </form>
 
@@ -428,7 +456,9 @@ const CommentTool =({mainComment , comment,block ,pageId ,editBlock ,setCommentB
         className='resolveTool'
         onClick={changeToResolve}
       >
-        Resolve
+        <span>
+          Resolve
+        </span>
       </button>
     )
   };
@@ -439,7 +469,6 @@ const CommentTool =({mainComment , comment,block ,pageId ,editBlock ,setCommentB
     const editorDomRect =editor.getClientRects()[0] as DOMRect; 
     const editorScrollTop =editor.scrollTop;
     const position = target.getClientRects()[0] as DOMRect;
-    console.log(position)
     const style:CSSProperties ={
       position:"absolute" ,
       top: position.top+ editorScrollTop,
@@ -477,14 +506,15 @@ const CommentTool =({mainComment , comment,block ,pageId ,editBlock ,setCommentB
         className='moreTool'
         onClick={ !moreOpen ? (event)=>openToolMore(event): ()=>setMoreOpen(false)}
       >
-        <BsThreeDots/>
-
+        <span>
+          <BsThreeDots/>
+        </span>
       </button>
   </div>
   )
 };
 
-const CommentBlock =({comment ,mainComment ,block  ,pageId, userName,editBlock ,setPopup ,setCommentBlock , moreOpen ,setMoreOpen ,setToolMoreStyle}:CommentBlockProps)=>{
+const CommentBlock =({comment ,mainComment ,block  ,pageId, userName,editBlock ,setPopup ,setCommentBlock , moreOpen ,setMoreOpen ,setToolMoreStyle  ,discardEdit}:CommentBlockProps)=>{
   const firstLetter = comment.userName.substring(0,1).toUpperCase();
   const [edit, setEdit]=useState<boolean>(false);
   const editCommentItem= sessionStorage.getItem("editComment");
@@ -496,7 +526,12 @@ const CommentBlock =({comment ,mainComment ,block  ,pageId, userName,editBlock ,
       setEdit(true);
     };
     editCommentItem ==null && setEdit(false);
-  },[editCommentItem])
+    if(discardEdit){
+      setEdit(false);
+     editCommentItem !==null && sessionStorage.removeItem("editComment")
+    }
+  },[editCommentItem ,discardEdit]);
+
   return (
     <div 
     className='commentBlock'
@@ -505,10 +540,14 @@ const CommentBlock =({comment ,mainComment ,block  ,pageId, userName,editBlock ,
     <section className='comment_header'>
       <div className="information">
         <div className="firstLetter">
-          {firstLetter}
+          <div>
+            {firstLetter}
+          </div>
         </div>
         <div className='userName'>
-          {comment.userName}
+          <p>
+            {comment.userName}
+          </p>
         </div>
         <div className="time">
           <Time
@@ -574,7 +613,7 @@ const CommentBlock =({comment ,mainComment ,block  ,pageId, userName,editBlock ,
     </div>
   )
 }
-const Comment =({userName,comment, block, pageId, editBlock ,setCommentBlock ,moreOpen ,setMoreOpen ,setToolMoreStyle}:CommentProps)=>{
+const Comment =({userName,comment, block, pageId, editBlock ,setCommentBlock ,moreOpen ,setMoreOpen ,setToolMoreStyle ,discardEdit}:CommentProps)=>{
 
   return(
     <div className='comment'>
@@ -591,6 +630,7 @@ const Comment =({userName,comment, block, pageId, editBlock ,setCommentBlock ,mo
           setMoreOpen={setMoreOpen}
           setToolMoreStyle={setToolMoreStyle}
           setPopup={null}
+          discardEdit={discardEdit}
         />
       </div>
       <div className='comment_comment'>
@@ -608,6 +648,7 @@ const Comment =({userName,comment, block, pageId, editBlock ,setCommentBlock ,mo
           setMoreOpen={setMoreOpen}
           setToolMoreStyle={setToolMoreStyle}
           setPopup={null}
+          discardEdit={discardEdit}
         />)
         }
       </div>
@@ -626,7 +667,7 @@ const Comment =({userName,comment, block, pageId, editBlock ,setCommentBlock ,mo
     </div>
   )
 };
-const Comments =({pageId,block, userName ,editBlock ,commentsStyle  ,select}:CommentsProps)=>{
+const Comments =({pageId,block, userName ,editBlock ,commentsStyle  ,select ,discardEdit}:CommentsProps)=>{
   const [targetComments, setTargetComment]= useState<BlockCommentType[]| null>(null);
   const [resolveComments, setResolveComments]= useState<BlockCommentType[]| null>(null);
   const [openComments, setOpenComments]= useState<BlockCommentType[]| null>(null);
@@ -696,6 +737,7 @@ const Comments =({pageId,block, userName ,editBlock ,commentsStyle  ,select}:Com
               moreOpen={moreOpen}
               setMoreOpen={setMoreOpen}
               setToolMoreStyle={setToolMoreStyle}
+              discardEdit={discardEdit}
             />
           )
           }

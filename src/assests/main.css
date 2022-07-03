@@ -23,6 +23,7 @@ button {
   border: none;
   background-color: transparent;
   padding: 0;
+  cursor: pointer;
 }
 
 ul,
@@ -207,6 +208,7 @@ button {
   border: none;
   background-color: transparent;
   padding: 0;
+  cursor: pointer;
 }
 
 ul,
@@ -630,6 +632,7 @@ button {
   border: none;
   background-color: transparent;
   padding: 0;
+  cursor: pointer;
 }
 
 ul,
@@ -674,6 +677,7 @@ button {
   border: none;
   background-color: transparent;
   padding: 0;
+  cursor: pointer;
 }
 
 ul,
@@ -1168,6 +1172,7 @@ button {
   border: none;
   background-color: transparent;
   padding: 0;
+  cursor: pointer;
 }
 
 ul,
@@ -1996,6 +2001,100 @@ a:link, a:active, a:visited {
   fill: #f6c050;
 }
 
+.discardEdit {
+  display: none;
+}
+
+.discardEdit.on {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.53);
+  width: 100vw;
+  height: 100vh;
+  z-index: 300;
+}
+
+.discardEdit.on .inner {
+  background-color: #ffff;
+  border-radius: 2px;
+  position: relative;
+  top: 90px;
+  left: 12.5%;
+  width: 75%;
+  max-height: 80vh;
+  max-width: 600px;
+  z-index: 15;
+  overflow: hidden;
+  -webkit-box-shadow: rgba(15, 15, 15, 0.039) 0px 0px 0px 1px;
+          box-shadow: rgba(15, 15, 15, 0.039) 0px 0px 0px 1px;
+}
+
+.discardEdit.on .inner {
+  top: calc(50% - 102px);
+  left: calc(50% - 168px);
+  width: 336px;
+  height: 204px;
+  padding: 24px 32px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.discardEdit.on .question {
+  min-height: 64px;
+  text-align: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 100%;
+}
+
+.discardEdit.on .btns {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 100%;
+}
+
+.discardEdit.on .btns button {
+  height: 32px;
+  width: 100%;
+  border-radius: 3px;
+  padding: 0 12px;
+  font-size: 14px;
+  line-height: 1.2;
+  margin-top: 8px;
+  white-space: nowrap;
+}
+
+.discardEdit.on .btns button:first-child {
+  color: #eb5757;
+  border: 1px solid rgba(235, 87, 87, 0.5);
+}
+
+.discardEdit.on .btns button:first-child:hover {
+  background-color: rgba(235, 87, 87, 0.1);
+}
+
+.discardEdit.on .btns button:nth-child(2) {
+  border: 1px solid rgba(55, 53, 47, 0.16);
+}
+
+.discardEdit.on .btns button:nth-child(2):hover {
+  background-color: #EDECE9;
+}
+
 .edit_inform {
   border-top: 1px solid #B9B8B6;
   font-size: 14px;
@@ -2021,6 +2120,7 @@ button {
   border: none;
   background-color: transparent;
   padding: 0;
+  cursor: pointer;
 }
 
 ul,
@@ -2701,6 +2801,7 @@ button {
   border: none;
   background-color: transparent;
   padding: 0;
+  cursor: pointer;
 }
 
 ul,
@@ -2891,6 +2992,7 @@ button {
   border: none;
   background-color: transparent;
   padding: 0;
+  cursor: pointer;
 }
 
 ul,

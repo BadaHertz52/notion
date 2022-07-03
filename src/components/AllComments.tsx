@@ -11,8 +11,9 @@ type AllCommentsProps={
   editBlock: (pageId: string, block: Block) => void,
   showAllComments:boolean,
   setShowAllComments:Dispatch<SetStateAction<boolean>>,
+  discardEdit:boolean,
 }
-const AllComments=({page, userName, editBlock, showAllComments, setShowAllComments}:AllCommentsProps)=>{
+const AllComments=({page, userName, editBlock, showAllComments, setShowAllComments ,discardEdit}:AllCommentsProps)=>{
   const pageId= page.id;
   const [targetCommentsBlocks, setTargetCommentsBlocks] =useState<Block[]|null>(null);
   const open ="open";
@@ -83,6 +84,7 @@ const AllComments=({page, userName, editBlock, showAllComments, setShowAllCommen
             block={block}
             editBlock={editBlock}
             select={select}
+            discardEdit={discardEdit}
           />
         )
       }

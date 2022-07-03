@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {  Route, Routes, useNavigate} from 'react-router-dom';
+import { CSSProperties } from 'styled-components';
 import AllComments from '../components/AllComments';
 import BlockFn, { detectRange } from '../components/BlockFn';
 import Comments from '../components/Comments';
@@ -16,6 +17,9 @@ export type pathType={
   title:string,
   icon:string|null
 };
+export   type DiscardItemType ={
+  discard:boolean
+}
 const NotionRouter =()=>{
   const navigate= useNavigate();
   const dispatch =useDispatch();
@@ -46,6 +50,8 @@ const NotionRouter =()=>{
   const [routePage, setRoutePage]=useState<Page|null>(firstPage!==undefined? firstPage: null);
   const [openQF, setOpenQF]=useState<boolean>(false);
   const [showAllComments,setShowAllComments]=useState<boolean>(false);
+  const [discard_edit, setDiscardEdit]=useState<boolean>(false);
+  const discardEdit =document.getElementById("discardEdit");
     //---action.function 
     //--block
   const editBlock = (pageId:string, block:Block)=> {dispatch(edit_block(pageId, block ))};
@@ -176,7 +182,15 @@ const NotionRouter =()=>{
       setRoutePage(firstPage)
     };
   };
+  const onClickDiscardEdit =()=>{
+    discardEdit?.classList.remove("on");
+    setDiscardEdit(true);
+  };
 
+  const onClickCloseEdit =()=>{
+    discardEdit?.classList.remove("on");
+    
+  };
   useEffect(()=>{
     if(routePage!==null){
       const path =makeRoutePath(routePage);
@@ -193,7 +207,6 @@ const NotionRouter =()=>{
 
   useEffect(()=>{
     //sideBar 에서 페이지 이동 시 
-    console.log("tp", targetPageId)
     if(targetPageId!== "none"){
       findRoutePage(targetPageId);
       if(notion.pagesId.includes(targetPageId)){
@@ -268,6 +281,7 @@ const NotionRouter =()=>{
 
                     showAllComments={showAllComments}
                     setShowAllComments={setShowAllComments}
+                    discardEdit={discard_edit}
                     />
                   } 
           />
@@ -297,6 +311,7 @@ const NotionRouter =()=>{
           editBlock={editBlock}
           showAllComments={showAllComments}
           setShowAllComments={setShowAllComments}
+          discardEdit={discard_edit}
         />
       }
       {openQF &&
@@ -310,6 +325,31 @@ const NotionRouter =()=>{
         setOpenQF={setOpenQF}
       />
       }
+        <div 
+          id ="discardEdit"
+          className='discardEdit'
+        >
+          <div className='inner'>
+            <div className='question'>
+              <div>
+                Do you want to discard this edit?
+              </div>
+            </div>
+            <div className='btns'>
+              <button
+                onClick={onClickDiscardEdit}
+              >
+                Discard
+              </button>
+              <button
+                onClick={onClickCloseEdit}
+              >
+                Close
+              </button>
+            </div>
+
+          </div>
+        </div>
     </div>
   )
 };
