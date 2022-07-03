@@ -141,7 +141,8 @@ div {
 }
 
 button {
-  @include initialBtn
+  @include initialBtn;
+  cursor: pointer;
 }
 ul,
 ol{
