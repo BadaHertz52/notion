@@ -26,7 +26,7 @@ type FrameProps ={
   addPage :(newPage:Page ,)=>void,
   editPage :(pageId:string,newPage:Page ,)=>void,
   setOpenComment: Dispatch<SetStateAction<boolean>>,
-  setCommentBlock: React.Dispatch<React.SetStateAction<Block | null>>
+  setCommentBlock: Dispatch<SetStateAction<Block | null>>,
 };
 
 const Frame =({ targetPage,firstBlocksId,editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,setOpenComment , setCommentBlock}:FrameProps)=>{

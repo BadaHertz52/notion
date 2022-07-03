@@ -18,14 +18,14 @@ type EditableBlockProps ={
   command:Command,
   setCommand:Dispatch<SetStateAction<Command>>,
   setOpenComment: Dispatch<SetStateAction<boolean>>,
-  setCommentBlock: React.Dispatch<React.SetStateAction<Block | null>>
+  setCommentBlock: Dispatch<SetStateAction<Block | null>>,
 };
 export   type CommentOpenType ={
   open:boolean,
   targetId: string | null,
 };
 
-const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,command, setCommand ,setOpenComment ,setCommentBlock
+const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,command, setCommand ,setOpenComment ,setCommentBlock 
 }:EditableBlockProps)=>{  
   const className = block.type !== "toggle" ?
   `${block.type} block ` :
