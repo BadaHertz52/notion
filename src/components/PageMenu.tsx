@@ -1,7 +1,7 @@
 import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { GrDocumentText } from 'react-icons/gr';
-import {  Block,  listItem, Page, pageSample } from '../modules/notion';
+import {  basicBlockStyle, Block,  listItem, makeNewBlock, Page, pageSample } from '../modules/notion';
 
 type PageMenuProps ={
   what:"page"|"block",
@@ -15,6 +15,7 @@ type PageMenuProps ={
   setMenuOpen:Dispatch<SetStateAction<boolean>> |null,
   addPage:( newPage: Page) => void,
   movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
+    setTargetPageId: Dispatch<SetStateAction<string>>,
 };
 
 const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock,changeBlockToPage, addBlock, editBlock,addPage , movePageToPage ,setMenuOpen ,setTargetPageId}:PageMenuProps)=>{

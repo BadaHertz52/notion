@@ -189,6 +189,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pa
         menuOpen={menuOpen}
         setMenuOpen={setMenuOpen}
         setPopupStyle={setPopupStyle}
+        setTargetPageId={setTargetPageId}
       />
       {popup.popup && (
         popup.what === popupMoveToPage ?
@@ -208,6 +209,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pa
               addPage={addPage}
               movePageToPage={movePageToPage}
               setMenuOpen={setMenuOpen}
+              setTargetPageId={setTargetPageId}
             /> 
           </div>
           :
