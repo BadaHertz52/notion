@@ -293,7 +293,7 @@ const initialState :Notion ={
         subCommentsId:null,
       }],
     },
-    firstBlocksId :["text", 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page1', 'page2'],
+    firstBlocksId :["text", 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page1', 'page2' ,"numberList", "bulletList"],
     blocks:[{
       id:"text",
       contents:"안녕", 
