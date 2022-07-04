@@ -27,6 +27,7 @@ type EditorContainerProps ={
   isInTrash:boolean,
   pagePath : pathType[]|null,
   editBlock :(pageId: string, block: Block) => void,
+  changeBlockToPage: (currentPageId: string, block: Block) => void,
   addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
   changeToSub: (pageId: string, block: Block, newParentBlockId: string) => void,
   raiseBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
@@ -51,7 +52,7 @@ type EditorContainerProps ={
   discardEdit:boolean
 };
 
-const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pagePath ,changeSide,addBlock,editBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId , showAllComments,  setShowAllComments , discardEdit}:EditorContainerProps)=>{
+const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pagePath ,changeSide,addBlock,editBlock ,changeBlockToPage,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId , showAllComments,  setShowAllComments , discardEdit}:EditorContainerProps)=>{
   const dispatch =useDispatch();
   const user =useSelector((state:RootState)=>state.user);
   const changeToSub =(pageId: string, block: Block,  newParentBlockId: string)=> dispatch(change_to_sub(pageId, block, newParentBlockId));
@@ -145,6 +146,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pa
         firstBlocksId={page.firstBlocksId}
         addBlock={addBlock}
         editBlock={editBlock}
+        changeBlockToPage={changeBlockToPage}
         changeToSub={changeToSub}
         raiseBlock={raiseBlock}
         deleteBlock={deleteBlock}
@@ -160,6 +162,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pa
         userName={userName}
         addBlock={addBlock}
         editBlock={editBlock}
+        changeBlockToPage={changeBlockToPage}
         deleteBlock={deleteBlock}
         addPage={addPage}
         duplicatePage={duplicatePage}

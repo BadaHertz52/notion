@@ -26,6 +26,7 @@ type MenuProps ={
   setMenuOpen : Dispatch<SetStateAction<boolean>>,
   addBlock:(pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
   editBlock : (pageId: string, block: Block) => void,
+  changeBlockToPage: (currentPageId: string, block: Block) => void,
   deleteBlock :(pageId: string, block: Block ,isInMenu:boolean) => void,
   addPage : ( newPage:Page, )=>void,
   duplicatePage: (targetPageId: string) => void,
@@ -33,10 +34,11 @@ type MenuProps ={
   movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
   setPopup :Dispatch<SetStateAction<PopupType>> ,
   popup:PopupType,
-  setCommentBlock: React.Dispatch<React.SetStateAction<Block | null>>
+  setCommentBlock: React.Dispatch<React.SetStateAction<Block | null>>,
+  setTargetPageId: Dispatch<SetStateAction<string>>,
 };
 
-const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, deleteBlock ,addPage ,duplicatePage,deletePage,movePageToPage,setPopup ,popup ,setCommentBlock}:MenuProps)=>{
+const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock,changeBlockToPage, editBlock, deleteBlock ,addPage ,duplicatePage,deletePage,movePageToPage,setPopup ,popup ,setCommentBlock ,setTargetPageId}:MenuProps)=>{
   const sessionItem = sessionStorage.getItem("blockFnTargetBlock") as string;
   const block:Block= JSON.parse(sessionItem);
   const blockFnElement = document.getElementById("blockFn") ;
@@ -98,9 +100,6 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
   };
   const removeBlock =()=>{
     deleteBlock(page.id, block , true);
-    if(block.type==="page"){
-      deletePage(block.id);
-    };
     setMenuOpen(false);
   };
 
@@ -274,6 +273,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
               block={block}
               editTime={JSON.stringify(Date.now())}
               editBlock={editBlock}
+              changeBlockToPage={changeBlockToPage}
               command={command}
               setCommand={setCommand}
               addPage={addPage}
@@ -298,6 +298,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock, editBlock, d
             addPage={addPage}
             movePageToPage={movePageToPage}
             setMenuOpen={setMenuOpen}
+            setTargetPageId={setTargetPageId}
           />
         }
       </div>

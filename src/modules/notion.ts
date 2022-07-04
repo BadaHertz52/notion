@@ -162,6 +162,7 @@ export type Notion={
 //action
 const ADD_BLOCK ="notion/ADD_BLOCK" as const;
 const EDIT_BLOCK ="notion/EDIT_BLOCK" as const;
+const CHANGET_BLOCK_TO_PAGE="notion/CHANGE_BLOCK_TO_PAGE" as const;
 const DELETE_BLOCK ="notion/DELETE_BLOCK" as const;
 const CHANGE_TO_SUB_BLOCK="notion/CHANGE_TO_SUB_BLOCK" as const;
 const RAISE_BLOCK="notion/RAISE_BLOCK" as const; //cancle tab
@@ -184,6 +185,11 @@ export const add_block =(pageId:string, block:Block ,newBlockIndex:number ,previ
 export const edit_block =(pageId:string, block:Block)=> ({
   type:EDIT_BLOCK ,
   pageId:pageId,
+  block:block,
+});
+export const change_block_to_page=(currentPageId: string, block:Block)=>({
+  type:CHANGET_BLOCK_TO_PAGE,
+  pageId: currentPageId,
   block:block,
 });
 export const delete_block =(pageId:string, block:Block, isInMenu:boolean)=> ({
@@ -250,6 +256,7 @@ export const clean_trash =(pageId:string)=>({
 type NotionAction = 
 ReturnType<typeof add_block> | 
 ReturnType<typeof edit_block> | 
+ReturnType<typeof change_block_to_page>|
 ReturnType <typeof delete_block>|
 ReturnType <typeof change_to_sub>|
 ReturnType < typeof raise_block>|
@@ -739,7 +746,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
   const pagesId = [...state.pagesId];
   const firstPagesId=[...state.firstPagesId];
   const pages =[...state.pages];
-  const trash = {
+  let trash = {
     pagesId:state.trash.pagesId? [...state.trash.pagesId] :null,
     pages: state.trash.pages? [...state.trash.pages]:null
   };
@@ -940,15 +947,34 @@ export default function notion (state:Notion =initialState , action :NotionActio
           editBlockData(index, editedBlock);
         }
           ) ;
-      }
+      };
 
       sessionStorage.setItem("newBlock", action.block.id);
+      if(action.block.type ==="page"){
+        const newPage:Page ={
+          id:action.block.id,
+          header:{
+            title: action.block.contents,
+            icon: action.block.icon,
+            cover:null,
+            comments:null
+          },
+          firstBlocksId: null,
+          blocks: [blockSample],
+          blocksId:[blockSample.id],
+          subPagesId:  null,
+          parentsId: [action.pageId],
+          editTime: action.block.editTime,
+          createTime: action.block.createTime,
+        };
+        addPage(newPage);
+      }
       console.log( "addBlock", targetPage)
       return {
         pages:pages,
         firstPagesId:firstPagesId,
         pagesId:pagesId,
-        trash:state.trash
+        trash:trash
       }; 
     case EDIT_BLOCK:
       editBlockData(blockIndex, action.block);
@@ -957,9 +983,60 @@ export default function notion (state:Notion =initialState , action :NotionActio
         pages:pages,
         firstPagesId:firstPagesId,
         pagesId:pagesId,
-        trash:state.trash
+        trash:trash
       };
-    
+    case CHANGET_BLOCK_TO_PAGE :
+      let newBlocksId =[blockSample.id];
+      let newBlocks =[blockSample];
+      let newFirstBlocksId =[blockSample.id];
+      let newSubPagesId: string[]|null = null;
+      const allSubBlocks = targetPage.blocks.filter((block:Block)=> block.parentBlocksId?.includes(action.block.id));
+      if(allSubBlocks[0]!==undefined){
+        newBlocks = allSubBlocks.map((block:Block)=>{
+          const newParentBlocksId =block.parentBlocksId !==null ? block.parentBlocksId.slice(1) : null; 
+          const newBlock:Block ={
+            ...block,
+            parentBlocksId: newParentBlocksId !==null?( newParentBlocksId[0]===undefined? null : newParentBlocksId): null,
+            firstBlock: newParentBlocksId ==null || newParentBlocksId[0]===undefined,
+          };
+          return newBlock
+        });
+        newBlocksId = newBlocks.map((block:Block)=>block.id);
+        newFirstBlocksId = newBlocks.filter((block:Block)=> block.firstBlock ===true).map((block:Block)=> block.id);
+        newSubPagesId = newBlocks.filter((block:Block)=> block.type==="page").map((block:Block)=>block.id);
+        if(newBlocks[0] !==undefined ){
+          targetPage.blocks = targetPage.blocks.filter((block:Block)=> !newBlocksId.includes(block.id) );
+          targetPage.blocksId = targetPage.blocksId.filter((id:string)=> !newBlocksId.includes(id));
+        }
+        if( newSubPagesId[0]!==undefined && targetPage.subPagesId !==null){
+          targetPage.subPagesId= targetPage.subPagesId.filter((id:string)=> !newSubPagesId?.includes(id));
+        };
+      }
+      const newPage:Page ={
+        id:action.block.id,
+        header:{
+          title: action.block.contents,
+          icon: action.block.icon,
+          cover:null,
+          comments:action.block.comments
+        },
+        firstBlocksId:newFirstBlocksId,
+        blocksId:newBlocksId,
+        blocks:newBlocks,
+        subPagesId: newSubPagesId ==null? null : (newSubPagesId[0]===undefined ? null : newSubPagesId) ,
+        parentsId: [action.pageId],
+        editTime: action.block.editTime,
+        createTime: action.block.createTime,
+      };
+      addPage(newPage);
+      deleteBlockData(targetPage, action.block);
+      console.log("change block type to page", targetPage, newPage)
+      return {
+        pages:pages,
+        firstPagesId:firstPagesId,
+        pagesId:pagesId,
+        trash:trash
+      };
     case CHANGE_TO_SUB_BLOCK:
       //1. change  action.block's new parentBlock
         const {BLOCK, index} = findBlock(targetPage, action.newParentBlockId);
@@ -1004,7 +1081,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
         pages:pages,
         firstPagesId:firstPagesId,
         pagesId:pagesId,
-        trash:state.trash
+        trash:trash
       }; 
 
     case RAISE_BLOCK :
@@ -1102,7 +1179,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
         pages:pages,
         firstPagesId:firstPagesId,
         pagesId:pagesId,
-        trash:state.trash
+        trash:trash
       }; ;
 
     case DELETE_BLOCK:
@@ -1140,42 +1217,50 @@ export default function notion (state:Notion =initialState , action :NotionActio
         targetPage.blocks.splice(blockIndex,1);
         targetPage.blocksId.splice(blockIndex,1);
       };
-
+      if(action.block.type ==="page"){
+        deletePage(action.block.id);
+      }
       console.log("delete", pages[pageIndex]);
       return {
         pages:pages,
         firstPagesId:firstPagesId,
         pagesId:pagesId,
-        trash:state.trash
+        trash:trash
       };
     case ADD_PAGE :
-      if(action.newPage.blocksId.includes("blockSample")){
-        pagesId.splice(0,1);
-        pages.splice(0,1);
-      };
-      pagesId.push(action.newPage.id);
-      pages.push(action.newPage);
-      if(action.newPage.parentsId==null){
+      // if(action.newPage.blocksId.includes("blockSample")){
+      //   pagesId.splice(0,1);
+      //   pages.splice(0,1);
+      // };
+      function addPage(newPage:Page){
+        console.log(newPage.parentsId , "np")
+        pagesId.push(newPage.id);
+        pages.push(newPage);
+      if(newPage.parentsId==null){
         //firstPage 일경우
-          firstPagesId.push(action.newPage.id);
+          firstPagesId.push(newPage.id);
       }else{
-        const parentPage:Page = findPage(pagesId,pages,action.newPage.parentsId[action.newPage.parentsId.length-1]) ;
+        const parentPage:Page = findPage(pagesId,pages,newPage.parentsId[newPage.parentsId.length-1]) ;
         const parentPageIndex = pagesId.indexOf(parentPage.id);
-        const editedParentPage ={
+        const editedParentPage :Page={
           ...parentPage,
-          subBlocksId: parentPage.subPagesId?.concat([action.newPage.id])
+          subPagesId: parentPage.subPagesId !==null? parentPage.subPagesId.concat(newPage.id) :[newPage.id],
         };
+        
         pages.splice(parentPageIndex,1, editedParentPage);
       };  
-      console.log("add new page", pages);
+      console.log("add new page", pages, firstPagesId);
+      };
+      addPage(action.newPage); 
       return {
         pages:pages,
         firstPagesId:firstPagesId,
         pagesId:pagesId,
-        trash:state.trash
+        trash:trash
       };
     case DUPLICATE_PAGE :
-      const targetPageIndex = pagesId.indexOf(targetPage.id);
+      function duplicatePage(){
+        const targetPageIndex = pagesId.indexOf(targetPage.id);
       const nextPageId =pagesId[targetPageIndex+1]
       const nextPage:Page =findPage(pagesId, pages, nextPageId ) ;
       let number :string ="1";
@@ -1213,23 +1298,29 @@ export default function notion (state:Notion =initialState , action :NotionActio
       };
       pages.splice(targetPageIndex+1, 0, newPage);
       pagesId.splice(targetPageIndex+1,0, newPage.id);
+      };
+      duplicatePage();
       return{
         pages:pages,
         firstPagesId:firstPagesId,
         pagesId:pagesId,
-        trash:state.trash
+        trash:trash
       }
     case EDIT_PAGE :
-      pages.splice(pageIndex,1,action.newPage);
-      console.log("edit page",pages);
+      function editPage(newPage:Page){
+        pages.splice(pageIndex,1,newPage);
+        console.log("edit page",pages);
+      };
+      editPage(action.newPage)
       return{
         pages:pages,
         firstPagesId:firstPagesId,
         pagesId:pagesId,
-        trash:state.trash
+        trash:trash
       };
     case MOVE_PAGE_TO_PAGE:
-      const destinationPage = findPage(pagesId, pages, action.destinationPageId);
+      function movePageToPage(destinationPageId: string){
+        const destinationPage = findPage(pagesId, pages, destinationPageId);
       const destinationPageIndex = pagesId.indexOf(destinationPage.id);
       // target page 관련 변경
       if(firstPagesId.includes(targetPage.id)){
@@ -1272,56 +1363,64 @@ export default function notion (state:Notion =initialState , action :NotionActio
       };
       pages.splice(destinationPageIndex,1,editedDestinationPage);
       console.log("move page to other page", pages , firstPagesId)
+      };
+      movePageToPage(action.destinationPageId);
       return{
         pages:pages,
         firstPagesId:firstPagesId,
         pagesId:pagesId,
-        trash:state.trash
+        trash:trash
       };
     case DELETE_PAGE:
-      pages.splice(pageIndex, 1);
-      pagesId.splice(pageIndex, 1);
+      function deletePage(pageId:string){
+        const pageIndex= pagesId.indexOf(pageId);
+        const targetPage =pages[pageIndex];
 
-      if(targetPage.parentsId !==null){
-        const parentPages : Page[]= targetPage.parentsId.map((id:string)=> findPage(pagesId, pages,id));
-
-        parentPages.forEach((page:Page)=>{
-          const subIndex = page.subPagesId?.indexOf(targetPage.id) as number;
-          page.subPagesId?.splice(subIndex, 1);
-        });
-      }else{
-        //firstPage 일 경우
-        const index= firstPagesId.indexOf(targetPage.id);
-        firstPagesId.splice(index,1);
-      };
-      let trashTargetPage :TrashPage ={
-        ...targetPage,
-        subPages:null,
-      };
-        if(targetPage.subPagesId !==null){
-          const subPages:Page[] = targetPage.subPagesId.map((id:string)=>findPage(pagesId, pages,id));
-          trashTargetPage ={
-            ...targetPage,
-            subPages:subPages
-          }
-          targetPage.subPagesId.forEach((id:string)=>{
-            const index= pagesId.indexOf(id);
-            pages.splice(index,1);
-            pagesId.splice(index,1);
-          })
-      };
-      const newTrash ={
-        pagesId:trash.pagesId ==null? 
-        [targetPage.id] : 
-        trash.pagesId.concat(targetPage.id),
-        pages: trash.pages ==null? [trashTargetPage] : trash.pages.concat(trashTargetPage)
-      };
-      console.log("delete page", pages ,newTrash );
+        pages.splice(pageIndex, 1);
+        pagesId.splice(pageIndex, 1);
+  
+        if(targetPage.parentsId !==null){
+          const parentPages : Page[]= targetPage.parentsId.map((id:string)=> findPage(pagesId, pages,id));
+  
+          parentPages.forEach((page:Page)=>{
+            const subIndex = page.subPagesId?.indexOf(targetPage.id) as number;
+            page.subPagesId?.splice(subIndex, 1);
+          });
+        }else{
+          //firstPage 일 경우
+          const index= firstPagesId.indexOf(targetPage.id);
+          firstPagesId.splice(index,1);
+        };
+        let trashTargetPage :TrashPage ={
+          ...targetPage,
+          subPages:null,
+        };
+          if(targetPage.subPagesId !==null){
+            const subPages:Page[] = targetPage.subPagesId.map((id:string)=>findPage(pagesId, pages,id));
+            trashTargetPage ={
+              ...targetPage,
+              subPages:subPages
+            }
+            targetPage.subPagesId.forEach((id:string)=>{
+              const index= pagesId.indexOf(id);
+              pages.splice(index,1);
+              pagesId.splice(index,1);
+            })
+        };
+        trash ={
+          pagesId:trash.pagesId ==null? 
+          [targetPage.id] : 
+          trash.pagesId.concat(targetPage.id),
+          pages: trash.pages ==null? [trashTargetPage] : trash.pages.concat(trashTargetPage)
+        };
+        console.log("delete page", pages ,trash);
+      }
+      deletePage(action.pageId);
       return{
         pages:pages,
         firstPagesId:firstPagesId,
         pagesId:pagesId,
-        trash:newTrash
+        trash:trash
       };
     case RESTORE_PAGE:
       let trashPages = trash.pages ==null? null :[...trash.pages];

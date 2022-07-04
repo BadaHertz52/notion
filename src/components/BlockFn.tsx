@@ -17,6 +17,7 @@ type BlockFnProp ={
   userName:string,
   addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void, 
   editBlock: (pageId: string, block: Block) => void,
+  changeBlockToPage: (currentPageId: string, block: Block) => void,
   deleteBlock :(pageId: string, block: Block ,isInMenu:boolean) => void,
   addPage : ( newPage:Page, )=>void,
   duplicatePage: (targetPageId: string) => void,
@@ -29,6 +30,7 @@ type BlockFnProp ={
   menuOpen:boolean,
   setMenuOpen:Dispatch<SetStateAction<boolean>>,
   setPopupStyle:Dispatch<SetStateAction<CSSProperties|undefined>>,
+  setTargetPageId: Dispatch<SetStateAction<string>>,
 };
 
 
@@ -71,7 +73,7 @@ export const detectRange =(event:MouseEvent| React.MouseEvent , targetArea:DOMRe
   return (inner_x && inner_y);
 };
 
-const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlock, deleteBlock ,addPage, movePageToPage, deletePage ,commentBlock,setCommentBlock, popup, setPopup ,menuOpen,setMenuOpen ,setPopupStyle}:BlockFnProp)=>{
+const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlock,changeBlockToPage, deleteBlock ,addPage, movePageToPage, deletePage ,commentBlock,setCommentBlock, popup, setPopup ,menuOpen,setMenuOpen ,setPopupStyle ,setTargetPageId}:BlockFnProp)=>{
   const inner =document.getElementById("inner");
 
   const makeBlock =()=>{
@@ -178,6 +180,7 @@ const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlo
             setMenuOpen={setMenuOpen}
             addBlock={addBlock}
             editBlock={editBlock}
+            changeBlockToPage={changeBlockToPage}
             deleteBlock={deleteBlock}
             addPage={addPage}
             duplicatePage={duplicatePage}
@@ -186,6 +189,7 @@ const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlo
             popup={popup}
             setPopup={setPopup}
             setCommentBlock={setCommentBlock}
+            setTargetPageId={setTargetPageId}
           />
         }
       </div>

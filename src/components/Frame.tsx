@@ -20,6 +20,7 @@ type FrameProps ={
   firstBlocksId:string[]|null,
   editBlock :(pageId: string, block: Block) => void,
   addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
+  changeBlockToPage: (currentPageId: string, block: Block) => void,
   changeToSub: (pageId: string, block: Block, newParentBlockId: string) => void,
   raiseBlock: (pageId: string, block: Block) => void,
   deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
@@ -29,7 +30,7 @@ type FrameProps ={
   setCommentBlock: Dispatch<SetStateAction<Block | null>>,
 };
 
-const Frame =({ targetPage,firstBlocksId,editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,setOpenComment , setCommentBlock}:FrameProps)=>{
+const Frame =({ targetPage,firstBlocksId,editBlock,changeBlockToPage, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,setOpenComment , setCommentBlock}:FrameProps)=>{
   const [page, setPage]=useState<Page>(targetPage);
   const [newPageFram, setNewPageFrame]=useState<boolean>(false);
   const [cover, setCover]=useState<ImageData|null>(page.header.cover);
@@ -260,6 +261,7 @@ const Frame =({ targetPage,firstBlocksId,editBlock, addBlock,changeToSub ,raiseB
                   block={command.targetBlock}
                   editTime={JSON.stringify(Date.now())}
                   editBlock={editBlock}
+                  changeBlockToPage={changeBlockToPage}
                   command={command}
                   setCommand={setCommand}
                   addPage={addPage}
