@@ -7,7 +7,7 @@ import Frame from '../components/Frame';
 import PageMenu from '../components/PageMenu';
 import TopBar from '../components/TopBar';
 import { RootState } from '../modules';
-import {  Block, Page,  change_to_sub, raise_block, listItem } from '../modules/notion';
+import notion, {  Block, Page,  change_to_sub, raise_block, listItem } from '../modules/notion';
 import { SideAppear } from '../modules/side';
 import { pathType } from './NotionRouter';
 
@@ -130,13 +130,26 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pa
       </div>
       }
       <TopBar
+      firstlist={firstlist}
       favorites={user.favorites}
       sideAppear={sideAppear}
       page={page}
+      pages={pages}
+      
       pagePath ={pagePath}
       changeSide={changeSide}
+
+      addBlock={addBlock}
+      editBlock={editBlock}
+      deleteBlock={deleteBlock}
+
+      addPage={addPage}
+      deletePage={deletePage}
+      movePageToPage={movePageToPage}
+
       removeFavorites={removeFavorites}
       addFavorites={addFavorites}
+
       setTargetPageId={setTargetPageId}
       showAllComments={showAllComments}
       setShowAllComments={setShowAllComments}
