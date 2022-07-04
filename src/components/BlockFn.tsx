@@ -82,7 +82,7 @@ const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlo
       const targetBlock= JSON.parse(sessionItem);
       const targetBlockIndex= page.blocksId.indexOf(targetBlock.id);
       const newBlock =makeNewBlock(page, targetBlock,"");
-      addBlock(page.id, newBlock, targetBlockIndex+1, null);
+      addBlock(page.id, newBlock, targetBlockIndex+1, targetBlock.id);
     }else{
       console.log("BlockFn-makeBlock error: there is no session item")
     }

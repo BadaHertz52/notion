@@ -935,18 +935,17 @@ export default function notion (state:Notion =initialState , action :NotionActio
         };
       };
 
-      if(action.block.subBlocksId!==null){
+      if(action.block.subBlocksId!==null && action.previousBlockId!==null){
         // subBlock을 가지는 블록을 기준을  그 다음 블록으로 만들어진 경우  
+        const previousBlock = findBlock(targetPage, action.previousBlockId).BLOCK;
+        previousBlock.subBlocksId =null;
+
         action.block.subBlocksId.forEach((id:string)=>{
-          const {BLOCK,index} =findBlock(targetPage, id);
-          const editedBlock :Block ={
-            ...BLOCK,
-            parentBlocksId : action.block.parentBlocksId !==null ? action.block.parentBlocksId.concat(action.block.id) :[action.block.id],
-            editTime: editTime
-          };
-          editBlockData(index, editedBlock);
-        }
-          ) ;
+          const BLOCK = findBlock(targetPage, id).BLOCK;
+          const parentIndex= BLOCK.parentBlocksId?.indexOf(action.previousBlockId as string);
+          parentIndex !==undefined &&
+          BLOCK.parentBlocksId?.splice(parentIndex,1, action.block.id);
+        })
       };
 
       sessionStorage.setItem("newBlock", action.block.id);
