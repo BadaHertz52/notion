@@ -34,7 +34,7 @@ const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock,changeBlockToP
     };
   },[sessionItem]);
 
-  const moveBlockToPage =(pageId:string ,block:Block)=>{
+  const moveBlockToPage =(destinationPageId:string ,block:Block)=>{
     // 기존 페이지에서 블록 삭제
       deleteBlock(currentPage.id, block, true);
       // 블록을 다른 페이지로 이동
@@ -44,15 +44,18 @@ const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock,changeBlockToP
         parentBlocksId:null,
         editTime: JSON.stringify(Date.now())
       };
-      const moveTargetPage = pages.filter((page:Page)=> page.id === pageId)[0];
+      const moveTargetPage = pages.filter((page:Page)=> page.id === destinationPageId)[0];
       const firstBlockId =moveTargetPage.blocksId[0];
       const blocksIdLength = moveTargetPage.blocksId.length; 
 
       if(blocksIdLength===1 && firstBlockId.includes("blockSample")){
-        addBlock(pageId, newBlock, 0 , null);
+        addBlock(destinationPageId, newBlock, 0 , null);
       }else{  
-        addBlock(pageId, newBlock, blocksIdLength , null);
-      }
+        addBlock(destinationPageId, newBlock, blocksIdLength , null);
+      };
+      if(block.type==="page"){
+        movePageToPage(block.id,destinationPageId)
+      };
     
     // close Menu and recovery Menu state
     setMenuOpen !==null && setMenuOpen(false);
@@ -60,11 +63,13 @@ const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock,changeBlockToP
   const onClickToMove =(id:string)=>{
     switch (what) {
       case "block":
-        block!==null &&  
-        moveBlockToPage(id ,block);
+        if(block !==null){
+          moveBlockToPage(id ,block)
+        }
         break;
       case "page":
-        
+        movePageToPage(currentPage.id, id);
+        setTargetPageId(id);
         break;
       default:
         break;
