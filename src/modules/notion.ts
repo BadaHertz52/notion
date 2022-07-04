@@ -1044,25 +1044,25 @@ export default function notion (state:Notion =initialState , action :NotionActio
         trash:trash
       };
     case CHANGE_TO_SUB_BLOCK:
-      //1. change  action.block's new parentBlock
-        const {BLOCK, index} = findBlock(targetPage, action.newParentBlockId);
-        const parentBlock:Block ={
-          ...BLOCK,
-          subBlocksId: BLOCK.subBlocksId !==null? BLOCK.subBlocksId.concat(action.block.id)  :[action.block.id],
-          editTime:editTime
-        }
-        const parentBlockIndex =index;
-        editBlockData(parentBlockIndex, parentBlock);
-      
-      //2. change actoin.block to subBlopck : edit parentsId of action.block 
-        const editedBlock :Block ={
-          ...action.block,
-          firstBlock: false,
-          parentBlocksId: parentBlock.parentBlocksId !==null?
-                          parentBlock.parentBlocksId.concat(parentBlock.id):
-                          [parentBlock.id],
-          editTime:editTime
-        }
+    //1. change  action.block's new parentBlock
+      const {BLOCK, index} = findBlock(targetPage, action.newParentBlockId);
+      const parentBlock:Block ={
+        ...BLOCK,
+        subBlocksId: BLOCK.subBlocksId !==null? BLOCK.subBlocksId.concat(action.block.id)  :[action.block.id],
+        editTime:editTime
+      }
+      const parentBlockIndex =index;
+      editBlockData(parentBlockIndex, parentBlock);
+    
+    //2. change actoin.block to subBlopck : edit parentsId of action.block 
+      const editedBlock :Block ={
+        ...action.block,
+        firstBlock: false,
+        parentBlocksId: parentBlock.parentBlocksId !==null?
+                        parentBlock.parentBlocksId.concat(parentBlock.id):
+                        [parentBlock.id],
+        editTime:editTime
+      }
       editBlockData(blockIndex,editedBlock);
       // 3. first-> sub 인 경우  
       if(action.block.firstBlock){
