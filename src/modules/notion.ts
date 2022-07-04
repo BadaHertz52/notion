@@ -87,7 +87,7 @@ export  const blockSample:Block ={
   style :basicBlockStyle ,
   comments:null
 };
-export function makeNewBlock(page:Page, targetBlock:Block, newBlockContents :string):Block{
+export function makeNewBlock(page:Page, targetBlock:Block|null, newBlockContents :string):Block{
   let number =page.blocksId.length.toString();
   const editTime= JSON.stringify(Date.now());
   const newBlock:Block ={
@@ -96,9 +96,9 @@ export function makeNewBlock(page:Page, targetBlock:Block, newBlockContents :str
     createTime:editTime,
     type:"text",
     contents: newBlockContents === "<br>"? "": newBlockContents,
-    firstBlock:targetBlock.firstBlock,
-    subBlocksId:targetBlock.subBlocksId,
-    parentBlocksId:targetBlock.parentBlocksId,
+    firstBlock: targetBlock !==null? targetBlock.firstBlock : true,
+    subBlocksId:targetBlock!==null? targetBlock.subBlocksId: null,
+    parentBlocksId:targetBlock!==null? targetBlock.parentBlocksId : null,
     icon:null,
     style :basicBlockStyle,
     comments:null
@@ -162,7 +162,7 @@ export type Notion={
 //action
 const ADD_BLOCK ="notion/ADD_BLOCK" as const;
 const EDIT_BLOCK ="notion/EDIT_BLOCK" as const;
-const CHANGET_BLOCK_TO_PAGE="notion/CHANGE_BLOCK_TO_PAGE" as const;
+const CHANGE_BLOCK_TO_PAGE="notion/CHANGE_BLOCK_TO_PAGE" as const;
 const DELETE_BLOCK ="notion/DELETE_BLOCK" as const;
 const CHANGE_TO_SUB_BLOCK="notion/CHANGE_TO_SUB_BLOCK" as const;
 const RAISE_BLOCK="notion/RAISE_BLOCK" as const; //cancle tab
@@ -188,7 +188,7 @@ export const edit_block =(pageId:string, block:Block)=> ({
   block:block,
 });
 export const change_block_to_page=(currentPageId: string, block:Block)=>({
-  type:CHANGET_BLOCK_TO_PAGE,
+  type:CHANGE_BLOCK_TO_PAGE,
   pageId: currentPageId,
   block:block,
 });
@@ -985,7 +985,14 @@ export default function notion (state:Notion =initialState , action :NotionActio
         pagesId:pagesId,
         trash:trash
       };
-    case CHANGET_BLOCK_TO_PAGE :
+    case CHANGE_BLOCK_TO_PAGE :
+      const changedTypeBlock:Block ={
+        ...action.block,
+        type:"page",
+        subBlocksId:null,
+        editTime:editTime
+      };
+      editBlockData(blockIndex,changedTypeBlock);
       let newBlocksId =[blockSample.id];
       let newBlocks =[blockSample];
       let newFirstBlocksId =[blockSample.id];
@@ -1029,7 +1036,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
         createTime: action.block.createTime,
       };
       addPage(newPage);
-      deleteBlockData(targetPage, action.block);
+
       console.log("change block type to page", targetPage, newPage)
       return {
         pages:pages,
