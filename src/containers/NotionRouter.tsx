@@ -234,7 +234,8 @@ const NotionRouter =()=>{
         changeToSub={changeToSub}
         raiseBlock={raiseBlock}
         deleteBlock={deleteBlock}
-
+        changeBlockToPage={changeBlockToPage}
+        
         addPage={addPage}
         editPage={editPage}
         deletePage={deletePage}

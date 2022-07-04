@@ -9,50 +9,15 @@ type PageMenuProps ={
   pages:Page[],
   firstlist:listItem[],
   deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
+  changeBlockToPage: (currentPageId: string, block: Block) => void
   addBlock:(pageId: string, block: Block, nextBlockIndex: number, previousBlockId: string | null) => void,
   editBlock: (pageId: string, block: Block) => void,
   setMenuOpen:Dispatch<SetStateAction<boolean>> |null,
   addPage:( newPage: Page) => void,
   movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
 };
-export   const changeSubPage =(currentPage:Page, block:Block, editBlock: (pageId: string, block: Block) => void,addPage:( newPage: Page) => void, )=>{
-  const editTime =JSON.stringify(Date.now());
-     //다음 블럭으로 지정한다고 했을 경우 
-    const editedBlock :Block ={
-      ...block,
-      editTime:editTime,
-      type:"page"
-    };
-    editBlock(currentPage.id, editedBlock);
 
-    // page로 바뀐 거 page 에 업데이트 
-    if(block.subBlocksId !==null){
-      const subBlocks:Block[] = currentPage.blocks.filter((BLOCK:Block)=> block.subBlocksId?.includes(BLOCK.id));
-      const newPage :Page ={
-        ...pageSample,
-        id:block.id,
-        header:{
-          ...pageSample.header,
-          title:block.contents
-        },
-        blocksId :block.subBlocksId,
-        blocks:subBlocks,
-        parentsId:[currentPage.id]
-      };
-      addPage(newPage);
-    }else{
-      const newPage :Page ={
-        ...pageSample,
-        id:block.id,
-        header:{
-          ...pageSample.header,
-          title:block.contents
-        }
-      };
-      addPage(newPage);
-    }
-};
-const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock, addBlock, editBlock,addPage , movePageToPage ,setMenuOpen}:PageMenuProps)=>{
+const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock,changeBlockToPage, addBlock, editBlock,addPage , movePageToPage ,setMenuOpen ,setTargetPageId}:PageMenuProps)=>{
 
   type PageButtonProps={
     item: listItem
@@ -141,7 +106,11 @@ const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock, addBlock, edi
     })) ;
     setResult(RESULT);
   };
-  
+  const makeNewSubPage =()=>{
+    if(block !==null){
+      changeBlockToPage(currentPage.id, block);
+    } 
+  };
   return(
     <div id="pageMenu">
       <div className="inner">
@@ -182,7 +151,7 @@ const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock, addBlock, edi
         </div>
         <button 
           id="new_sub_page"
-          onClick={()=>block !==null &&changeSubPage(currentPage, block, editBlock, addPage)}
+          onClick={makeNewSubPage}
         >
           <AiOutlinePlus/>
           <span>

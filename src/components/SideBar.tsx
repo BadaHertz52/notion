@@ -27,6 +27,7 @@ type SideBarProps ={
   editBlock :(pageId: string, block: Block) => void,
   addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
   deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
+  changeBlockToPage: (currentPageId: string, block: Block) => void,
 
   addPage : ( newPage:Page, )=>void,
   duplicatePage: (targetPageId: string) => void,
@@ -222,7 +223,7 @@ const ListTemplate =({notion,targetList ,setTargetPageId , onClickMoreBtn, addNe
   )
 };
 
-const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock,addPage ,duplicatePage,editPage,deletePage,movePageToPage, cleanTrash, restorePage, addFavorites, removeFavorites, changeSide,setTargetPageId ,setOpenQF
+const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,changeBlockToPage,addPage ,duplicatePage,editPage,deletePage,movePageToPage, cleanTrash, restorePage, addFavorites, removeFavorites, changeSide,setTargetPageId ,setOpenQF
 }:SideBarProps)=>{
   const inner =document.getElementById("inner");
   const pages =notion.pages;
@@ -327,7 +328,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock,addPag
       const targetPage = findPage(pagesId ,pages,item.id);
       const editedTargetPage:Page ={
         ...targetPage,
-        subPagesId: targetPage.subPagesId ==null? [...pageSample.id] : targetPage.subPagesId.concat([pageSample.id]),
+        subPagesId: targetPage.subPagesId ==null? [...blockSample.id] : targetPage.subPagesId.concat([blockSample.id]),
         editTime:editTime
       };
       const newPageBlock :Block ={
@@ -335,7 +336,6 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock,addPag
         type:"page",
         parentBlocksId:null,
       };
-      addPage(pageSample);
       editPage(targetPage.id, editedTargetPage);
       addBlock(targetPage.id,newPageBlock, targetPage.blocksId.length, targetPage.blocks==null? null: targetPage.blocksId[targetPage.blocksId.length-1]);
     };
@@ -648,10 +648,12 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock,addPag
         firstlist={firstlist}
         addBlock={addBlock}
         deleteBlock={deleteBlock}
+        changeBlockToPage={changeBlockToPage}
         editBlock={editBlock}
         addPage={addPage}
         movePageToPage={movePageToPage}
         setMenuOpen={setOpenSideMoreMenu}
+        setTargetPageId={setTargetPageId}
       />
     </div>
     }

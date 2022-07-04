@@ -24,6 +24,7 @@ type TopBarProps ={
   addBlock:(pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
   editBlock: (pageId: string, block: Block) => void,
   deleteBlock: (pageId: string, block: Block, isInMenu: boolean) => void,
+  changeBlockToPage: (currentPageId: string, block: Block) => void,
 
   addPage: (newPage: Page) => void
   deletePage: (pageId: string) => void,
@@ -38,7 +39,7 @@ type TopBarProps ={
   showAllComments:boolean,
   setShowAllComments:Dispatch<SetStateAction<boolean>>,
 }
-const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock, editBlock ,deleteBlock ,addPage,deletePage, movePageToPage, changeSide ,addFavorites,removeFavorites ,setTargetPageId  , showAllComments, setShowAllComments}:TopBarProps)=>{
+const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock, editBlock ,changeBlockToPage ,deleteBlock ,addPage,deletePage, movePageToPage, changeSide ,addFavorites,removeFavorites ,setTargetPageId  , showAllComments, setShowAllComments}:TopBarProps)=>{
   const [title, setTitle]= useState<string>("");
   const [openPageMoreFun, setOpenPageMoreFun] =useState<boolean>(false);
   const [openPageMenu, setOpenPageMenu]=useState<boolean>(false);
@@ -271,6 +272,7 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
           pages={pages}
           addBlock={addBlock}
           editBlock={editBlock}
+          changeBlockToPage={changeBlockToPage}
           deleteBlock={deleteBlock}
           addPage={addPage}
           movePageToPage={movePageToPage}

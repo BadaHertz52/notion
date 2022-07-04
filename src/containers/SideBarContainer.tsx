@@ -13,6 +13,7 @@ type SideBarContainerProp ={
   changeToSub: (pageId: string, block: Block, newParentBlockId: string) => void,
   raiseBlock: (pageId: string, block: Block) => void,
   deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
+  changeBlockToPage: (currentPageId: string, block: Block) => void,
 
   addPage : ( newPage:Page, )=>void,
   duplicatePage: (targetPageId: string) => void,
@@ -30,7 +31,7 @@ type SideBarContainerProp ={
   setTargetPageId: Dispatch<React.SetStateAction<string>>,
   setOpenQF: Dispatch<React.SetStateAction<boolean>>
 };
-const SideBarContainer =({sideAppear,addBlock,editBlock,deleteBlock,addPage,duplicatePage,editPage,deletePage,movePageToPage,restorePage, cleanTrash, addFavorites, removeFavorites, changeSide,setTargetPageId ,setOpenQF }:SideBarContainerProp)=>{
+const SideBarContainer =({sideAppear,addBlock,editBlock,deleteBlock,changeBlockToPage,addPage,duplicatePage,editPage,deletePage,movePageToPage,restorePage, cleanTrash, addFavorites, removeFavorites, changeSide,setTargetPageId ,setOpenQF }:SideBarContainerProp)=>{
   const notion =useSelector((state:RootState)=> state.notion);
   
   const user = useSelector((state:RootState)=> state.user);
@@ -42,6 +43,7 @@ const SideBarContainer =({sideAppear,addBlock,editBlock,deleteBlock,addPage,dupl
     addBlock={addBlock}
     editBlock={editBlock}
     deleteBlock={deleteBlock}
+    changeBlockToPage={changeBlockToPage}
     
     addPage={addPage}
     duplicatePage={duplicatePage}

@@ -294,6 +294,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock,changeBlockTo
             firstlist={firstlist}   
             addBlock={addBlock}
             editBlock={editBlock}
+            changeBlockToPage={changeBlockToPage}
             deleteBlock={deleteBlock}
             addPage={addPage}
             movePageToPage={movePageToPage}
