@@ -951,22 +951,22 @@ export default function notion (state:Notion =initialState , action :NotionActio
       sessionStorage.setItem("newBlock", action.block.id);
       if(action.block.type ==="page"){
         const newPage:Page ={
+          ...pageSample,
           id:action.block.id,
-          header:{
-            title: action.block.contents,
-            icon: action.block.icon,
-            cover:null,
-            comments:null
-          },
-          firstBlocksId: null,
-          blocks: [blockSample],
-          blocksId:[blockSample.id],
-          subPagesId:  null,
-          parentsId: [action.pageId],
-          editTime: action.block.editTime,
-          createTime: action.block.createTime,
         };
         addPage(newPage);
+        if(action.block.parentBlocksId !==null){
+          const parentPage =findPage(pagesId, pages, action.block.parentBlocksId[0]) as Page ;
+          const editedParentPage:Page ={
+            ...parentPage,
+            blocks: parentPage.blocks.concat(action.block),
+            blocksId:parentPage.blocksId.concat(action.block.id),
+            firstBlocksId:parentPage.firstBlocksId!==null?  parentPage.firstBlocksId?.concat(action.block.id) : [action.block.id],
+            subPagesId: parentPage.subPagesId ==null? [...blockSample.id] : parentPage.subPagesId.concat([blockSample.id]),
+            editTime:editTime
+          };
+          editPage(editedParentPage);
+        }
       }
       console.log( "addBlock", targetPage)
       return {
@@ -1234,12 +1234,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
         trash:trash
       };
     case ADD_PAGE :
-      // if(action.newPage.blocksId.includes("blockSample")){
-      //   pagesId.splice(0,1);
-      //   pages.splice(0,1);
-      // };
       function addPage(newPage:Page){
-        console.log(newPage.parentsId , "np")
         pagesId.push(newPage.id);
         pages.push(newPage);
       if(newPage.parentsId==null){
