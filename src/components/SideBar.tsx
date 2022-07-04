@@ -286,8 +286,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
                                       parentsId: page.parentsId,
                                       editTime:page.editTime,
                                       createTime:page.createTime,
-                                    })) ;
-  const navigate =useNavigate();  
+                                    })) ; 
   const addNewPage=()=>{
     addPage(pageSample)
   };
@@ -323,23 +322,17 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
       renamePage(value, null );
     };
   };
+
   const addNewSubPage =(item:listItem)=>{
-    if(targetItem!==null){
-      const targetPage = findPage(pagesId ,pages,item.id);
-      const editedTargetPage:Page ={
-        ...targetPage,
-        subPagesId: targetPage.subPagesId ==null? [...blockSample.id] : targetPage.subPagesId.concat([blockSample.id]),
-        editTime:editTime
-      };
-      const newPageBlock :Block ={
-        ...blockSample,
-        type:"page",
-        parentBlocksId:null,
-      };
-      editPage(targetPage.id, editedTargetPage);
-      addBlock(targetPage.id,newPageBlock, targetPage.blocksId.length, targetPage.blocks==null? null: targetPage.blocksId[targetPage.blocksId.length-1]);
+    const targetPage = findPage(pagesId ,pages,item.id);
+    const newPageBlock :Block ={
+      ...blockSample,
+      type:"page",
+      parentBlocksId:null,
     };
+    addBlock(targetPage.id,newPageBlock, targetPage.blocksId.length, targetPage.blocks==null? null: targetPage.blocksId[targetPage.blocksId.length-1]);
   };
+  
   const onClickMoreBtn=(item:listItem, target:HTMLElement)=>{
     setOpenSideMoreMenu(true); 
     setTargetItem(item);
@@ -506,6 +499,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
               <button 
                 className='addPageBtn'
                 title="Quickly add a page inside"
+                onClick={addNewPage}
               >
                 <AiOutlinePlus/>
               </button>
