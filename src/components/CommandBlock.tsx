@@ -14,13 +14,14 @@ type CommandBlockProp ={
   editTime:string,
   editBlock :(pageId:string, block:Block)=>void,
   changeBlockToPage: (currentPageId: string, block: Block) => void,
+  changePageToBlock:(currentPageId: string, block: Block) => void,
   addPage:( newPage: Page) => void,
   command:Command,
   setCommand: Dispatch<SetStateAction<Command>> ,
   
 };
 
-const CommandBlock =({ page ,block , editTime , editBlock ,changeBlockToPage ,addPage,setCommand ,command}:CommandBlockProp)=>{
+const CommandBlock =({ page ,block , editTime , editBlock ,changeBlockToPage,changePageToBlock ,addPage,setCommand ,command}:CommandBlockProp)=>{
   const [result, setResult]=useState<boolean>(true);
   const showResult =()=>{
     const btns = [...document.getElementsByClassName("command_btns")[0].getElementsByTagName("button")];

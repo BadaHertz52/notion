@@ -163,6 +163,7 @@ export type Notion={
 const ADD_BLOCK ="notion/ADD_BLOCK" as const;
 const EDIT_BLOCK ="notion/EDIT_BLOCK" as const;
 const CHANGE_BLOCK_TO_PAGE="notion/CHANGE_BLOCK_TO_PAGE" as const;
+const CHANGE_PAGE_TO_BLOCK="notion/CHANGE_PAGE_TO_BLOCK" as const;
 const DELETE_BLOCK ="notion/DELETE_BLOCK" as const;
 const CHANGE_TO_SUB_BLOCK="notion/CHANGE_TO_SUB_BLOCK" as const;
 const RAISE_BLOCK="notion/RAISE_BLOCK" as const; //cancle tab
@@ -189,6 +190,11 @@ export const edit_block =(pageId:string, block:Block)=> ({
 });
 export const change_block_to_page=(currentPageId: string, block:Block)=>({
   type:CHANGE_BLOCK_TO_PAGE,
+  pageId: currentPageId,
+  block:block,
+});
+export const change_page_to_block=(currentPageId: string, block:Block)=>({
+  type:CHANGE_PAGE_TO_BLOCK,
   pageId: currentPageId,
   block:block,
 });
@@ -257,6 +263,7 @@ type NotionAction =
 ReturnType<typeof add_block> | 
 ReturnType<typeof edit_block> | 
 ReturnType<typeof change_block_to_page>|
+ReturnType<typeof change_page_to_block>|
 ReturnType <typeof delete_block>|
 ReturnType <typeof change_to_sub>|
 ReturnType < typeof raise_block>|
@@ -1043,6 +1050,34 @@ export default function notion (state:Notion =initialState , action :NotionActio
         pagesId:pagesId,
         trash:trash
       };
+    case CHANGE_PAGE_TO_BLOCK:
+      const changedTargetPageIndex= pagesId.indexOf(action.block.id);
+      const changedTargetPage =pages[changedTargetPageIndex];
+      deleteTargetPageData(changedTargetPage ,changedTargetPageIndex ,false);
+      const changedBlock:Block ={
+        ...action.block,
+        subBlocksId: changedTargetPage.blocksId,
+        editTime:editTime
+      };
+      editBlockData(blockIndex, changedBlock);
+      const newSubBlocks =changedTargetPage.blocks.map((block:Block)=>({
+        ...block,
+        firstBlock:false,
+        parentBlocksId:block.parentBlocksId!==null? [action.block.id ,...block.parentBlocksId] :[action.block.id]
+      }))
+      const newTargetPage: Page ={
+        ...targetPage,
+        blocks: targetPage.blocks.concat(newSubBlocks),
+        blocksId:targetPage.blocksId.concat(changedTargetPage.blocksId)
+      };
+      pages.splice(pageIndex,1, newTargetPage);
+      console.log("changePagetoBlock", pages, pages[pageIndex],pagesId);
+      return {
+        pages:pages,
+        firstPagesId:firstPagesId,
+        pagesId:pagesId,
+        trash:trash
+      };
     case CHANGE_TO_SUB_BLOCK:
     //1. change  action.block's new parentBlock
       const {BLOCK, index} = findBlock(targetPage, action.newParentBlockId);
@@ -1074,7 +1109,6 @@ export default function notion (state:Notion =initialState , action :NotionActio
       if(action.block.parentBlocksId !==null){
         const previouseParentBlockId = action.block.parentBlocksId[action.block.parentBlocksId.length-1];
         const {BLOCK, index} =findBlock(targetPage,previouseParentBlockId);
-
         const edtitedPreviousParentBlock :Block ={
           ...BLOCK,
           subBlocksId: BLOCK.subBlocksId !==null?BLOCK.subBlocksId.filter((id:string)=> id !== action.block.id) :null ,
@@ -1378,36 +1412,45 @@ export default function notion (state:Notion =initialState , action :NotionActio
         trash:trash
       };
     case DELETE_PAGE:
-      function deletePage(pageId:string){
-        const pageIndex= pagesId.indexOf(pageId);
-        const targetPage =pages[pageIndex];
-
-        pages.splice(pageIndex, 1);
-        pagesId.splice(pageIndex, 1);
-  
-        if(targetPage.parentsId !==null){
-          const parentPages : Page[]= targetPage.parentsId.map((id:string)=> findPage(pagesId, pages,id));
-  
-          parentPages.forEach((page:Page)=>{
-            const subIndex = page.subPagesId?.indexOf(targetPage.id) as number;
-            page.subPagesId?.splice(subIndex, 1);
-          });
+      function deleteTargetPageData(deletedTargetPage:Page, deletedTargetPageIndex:number, blockDelete:boolean){
+        if(deletedTargetPage.parentsId !==null){
+          const parentPageIndex = pagesId.indexOf(deletedTargetPage.parentsId[deletedTargetPage.parentsId.length-1]);
+          const parentPage = pages[parentPageIndex];
+          if(parentPage.subPagesId !==null){
+            const subPageIndex= parentPage.subPagesId.indexOf(deletedTargetPage.id);
+            parentPage.subPagesId.splice(subPageIndex,1);
+            if(blockDelete){
+              const blockIndex = parentPage.blocksId.indexOf(deletedTargetPage.id);
+              parentPage.blocks.splice(blockIndex,1);
+              parentPage.blocksId.splice(blockIndex,1);
+            }
+            console.log("parent", parentPage);
+          }
         }else{
           //firstPage 일 경우
-          const index= firstPagesId.indexOf(targetPage.id);
+          const index= firstPagesId.indexOf(deletedTargetPage.id);
           firstPagesId.splice(index,1);
         };
+        pages.splice(deletedTargetPageIndex, 1);
+        pagesId.splice(deletedTargetPageIndex, 1);
+      };
+
+      function deletePage(pageId:string){
+        const deletedTargetPageIndex= pagesId.indexOf(pageId);
+        const deletedTargetPage =pages[deletedTargetPageIndex];
+
+        deleteTargetPageData(deletedTargetPage ,deletedTargetPageIndex ,true);
         let trashTargetPage :TrashPage ={
-          ...targetPage,
+          ...deletedTargetPage,
           subPages:null,
         };
-          if(targetPage.subPagesId !==null){
-            const subPages:Page[] = targetPage.subPagesId.map((id:string)=>findPage(pagesId, pages,id));
+          if(deletedTargetPage.subPagesId !==null){
+            const subPages:Page[] = deletedTargetPage.subPagesId.map((id:string)=>findPage(pagesId, pages,id));
             trashTargetPage ={
-              ...targetPage,
+              ...deletedTargetPage,
               subPages:subPages
             }
-            targetPage.subPagesId.forEach((id:string)=>{
+            deletedTargetPage.subPagesId.forEach((id:string)=>{
               const index= pagesId.indexOf(id);
               pages.splice(index,1);
               pagesId.splice(index,1);
@@ -1415,8 +1458,8 @@ export default function notion (state:Notion =initialState , action :NotionActio
         };
         trash ={
           pagesId:trash.pagesId ==null? 
-          [targetPage.id] : 
-          trash.pagesId.concat(targetPage.id),
+          [deletedTargetPage.id] : 
+          trash.pagesId.concat(deletedTargetPage.id),
           pages: trash.pages ==null? [trashTargetPage] : trash.pages.concat(trashTargetPage)
         };
         console.log("delete page", pages ,trash);
