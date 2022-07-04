@@ -41,7 +41,7 @@ const CommandBlock =({ page ,block , editTime , editBlock ,changeBlockToPage,cha
 
   const changeType=( type:string)=>{
     const blockType:BlockType = blockTypes.filter((block_type)=> block_type === type)[0];
-
+    if(block.type !== blockType){
       if(blockType==="page"){
         changeBlockToPage(page.id, block);
       }else{
@@ -50,9 +50,11 @@ const CommandBlock =({ page ,block , editTime , editBlock ,changeBlockToPage,cha
           editTime:editTime,
           type:blockType
         };
+        block.type==="page"?
+        changePageToBlock(page.id, newBlock):
         editBlock(page.id, newBlock);
-      }
-    //};
+      };
+    };
     setCommand({
       boolean:false, 
       command:null,
