@@ -142,7 +142,8 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pa
       addBlock={addBlock}
       editBlock={editBlock}
       deleteBlock={deleteBlock}
-
+      changeBlockToPage={changeBlockToPage}
+      
       addPage={addPage}
       deletePage={deletePage}
       movePageToPage={movePageToPage}
@@ -203,6 +204,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pa
               deleteBlock={deleteBlock}
               addBlock={addBlock}
               editBlock={editBlock}
+              changeBlockToPage={changeBlockToPage}
               addPage={addPage}
               movePageToPage={movePageToPage}
               setMenuOpen={setMenuOpen}
