@@ -1060,7 +1060,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
         editTime:editTime
       };
       editBlockData(blockIndex, changedBlock);
-      const newSubBlocks =changedTargetPage.blocks.map((block:Block)=>({
+      const newSubBlocks :Block[]=changedTargetPage.blocks.map((block:Block)=>({
         ...block,
         firstBlock:false,
         parentBlocksId:block.parentBlocksId!==null? [action.block.id ,...block.parentBlocksId] :[action.block.id]
@@ -1070,8 +1070,10 @@ export default function notion (state:Notion =initialState , action :NotionActio
         blocks: targetPage.blocks.concat(newSubBlocks),
         blocksId:targetPage.blocksId.concat(changedTargetPage.blocksId)
       };
-      pages.splice(pageIndex,1, newTargetPage);
-      console.log("changePagetoBlock", pages, pages[pageIndex],pagesId);
+      targetPage.blocks.push.apply(targetPage.blocks, newSubBlocks);
+      targetPage.blocksId.push.apply(targetPage.blocksId ,changedTargetPage.blocksId);
+      //pages.splice(pageIndex,1, newTargetPage);
+      console.log("changePagetoBlock",targetPage, pages, pages[pageIndex],pagesId);
       return {
         pages:pages,
         firstPagesId:firstPagesId,
@@ -1258,7 +1260,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
         targetPage.blocksId.splice(blockIndex,1);
       };
       if(action.block.type ==="page"){
-        deletePage(action.block.id);
+        deletePage(action.block.id, false);
       }
       console.log("delete", pages[pageIndex]);
       return {
@@ -1435,11 +1437,11 @@ export default function notion (state:Notion =initialState , action :NotionActio
         pagesId.splice(deletedTargetPageIndex, 1);
       };
 
-      function deletePage(pageId:string){
+      function deletePage(pageId:string ,blockDelete:boolean){
         const deletedTargetPageIndex= pagesId.indexOf(pageId);
         const deletedTargetPage =pages[deletedTargetPageIndex];
 
-        deleteTargetPageData(deletedTargetPage ,deletedTargetPageIndex ,true);
+        deleteTargetPageData(deletedTargetPage ,deletedTargetPageIndex ,blockDelete);
         let trashTargetPage :TrashPage ={
           ...deletedTargetPage,
           subPages:null,
@@ -1464,7 +1466,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
         };
         console.log("delete page", pages ,trash);
       }
-      deletePage(action.pageId);
+      deletePage(action.pageId, true);
       return{
         pages:pages,
         firstPagesId:firstPagesId,
