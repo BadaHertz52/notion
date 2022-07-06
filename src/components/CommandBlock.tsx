@@ -14,13 +14,14 @@ type CommandBlockProp ={
   editTime:string,
   editBlock :(pageId:string, block:Block)=>void,
   changeBlockToPage: (currentPageId: string, block: Block) => void,
+  changePageToBlock:(currentPageId: string, block: Block) => void,
   addPage:( newPage: Page) => void,
   command:Command,
   setCommand: Dispatch<SetStateAction<Command>> ,
   
 };
 
-const CommandBlock =({ page ,block , editTime , editBlock ,changeBlockToPage ,addPage,setCommand ,command}:CommandBlockProp)=>{
+const CommandBlock =({ page ,block , editTime , editBlock ,changeBlockToPage,changePageToBlock ,addPage,setCommand ,command}:CommandBlockProp)=>{
   const [result, setResult]=useState<boolean>(true);
   const showResult =()=>{
     const btns = [...document.getElementsByClassName("command_btns")[0].getElementsByTagName("button")];
@@ -40,7 +41,7 @@ const CommandBlock =({ page ,block , editTime , editBlock ,changeBlockToPage ,ad
 
   const changeType=( type:string)=>{
     const blockType:BlockType = blockTypes.filter((block_type)=> block_type === type)[0];
-
+    if(block.type !== blockType){
       if(blockType==="page"){
         changeBlockToPage(page.id, block);
       }else{
@@ -49,9 +50,11 @@ const CommandBlock =({ page ,block , editTime , editBlock ,changeBlockToPage ,ad
           editTime:editTime,
           type:blockType
         };
+        block.type==="page"?
+        changePageToBlock(page.id, newBlock):
         editBlock(page.id, newBlock);
-      }
-    //};
+      };
+    };
     setCommand({
       boolean:false, 
       command:null,

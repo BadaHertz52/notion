@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import Menu from './Menu';
-import {Block, CommentType, listItem, makeNewBlock, Page} from '../modules/notion';
+import {Block, change_page_to_block, CommentType, listItem, makeNewBlock, Page} from '../modules/notion';
 
 import { AiOutlinePlus } from 'react-icons/ai';
 import { CgMenuGridO } from 'react-icons/cg';
@@ -18,6 +18,7 @@ type BlockFnProp ={
   addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void, 
   editBlock: (pageId: string, block: Block) => void,
   changeBlockToPage: (currentPageId: string, block: Block) => void,
+  changePageToBlock: (currentPageId: string, block: Block) => void
   deleteBlock :(pageId: string, block: Block ,isInMenu:boolean) => void,
   addPage : ( newPage:Page, )=>void,
   duplicatePage: (targetPageId: string) => void,
@@ -73,7 +74,7 @@ export const detectRange =(event:MouseEvent| React.MouseEvent , targetArea:DOMRe
   return (inner_x && inner_y);
 };
 
-const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlock,changeBlockToPage, deleteBlock ,addPage, movePageToPage, deletePage ,commentBlock,setCommentBlock, popup, setPopup ,menuOpen,setMenuOpen ,setPopupStyle ,setTargetPageId}:BlockFnProp)=>{
+const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlock,changeBlockToPage,changePageToBlock, deleteBlock ,addPage, movePageToPage, deletePage ,commentBlock,setCommentBlock, popup, setPopup ,menuOpen,setMenuOpen ,setPopupStyle ,setTargetPageId}:BlockFnProp)=>{
   const inner =document.getElementById("inner");
 
   const makeBlock =()=>{
@@ -181,6 +182,7 @@ const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlo
             addBlock={addBlock}
             editBlock={editBlock}
             changeBlockToPage={changeBlockToPage}
+            changePageToBlock={changePageToBlock}
             deleteBlock={deleteBlock}
             addPage={addPage}
             duplicatePage={duplicatePage}

@@ -27,6 +27,7 @@ type MenuProps ={
   addBlock:(pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
   editBlock : (pageId: string, block: Block) => void,
   changeBlockToPage: (currentPageId: string, block: Block) => void,
+  changePageToBlock:(currentPageId: string, block: Block) => void,
   deleteBlock :(pageId: string, block: Block ,isInMenu:boolean) => void,
   addPage : ( newPage:Page, )=>void,
   duplicatePage: (targetPageId: string) => void,
@@ -38,7 +39,7 @@ type MenuProps ={
   setTargetPageId: Dispatch<SetStateAction<string>>,
 };
 
-const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock,changeBlockToPage, editBlock, deleteBlock ,addPage ,duplicatePage,deletePage,movePageToPage,setPopup ,popup ,setCommentBlock ,setTargetPageId}:MenuProps)=>{
+const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock,changeBlockToPage,changePageToBlock ,editBlock, deleteBlock ,addPage ,duplicatePage,deletePage,movePageToPage,setPopup ,popup ,setCommentBlock ,setTargetPageId}:MenuProps)=>{
   const sessionItem = sessionStorage.getItem("blockFnTargetBlock") as string;
   const block:Block= JSON.parse(sessionItem);
   const blockFnElement = document.getElementById("blockFn") ;
@@ -274,6 +275,7 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock,changeBlockTo
               editTime={JSON.stringify(Date.now())}
               editBlock={editBlock}
               changeBlockToPage={changeBlockToPage}
+              changePageToBlock={changePageToBlock}
               command={command}
               setCommand={setCommand}
               addPage={addPage}
