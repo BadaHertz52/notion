@@ -95,13 +95,21 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
   const serif ="serif"; 
   const mono ="mono";
   type fontStyle =typeof defaultStyle | typeof serif |typeof mono; 
-  const changeFontStyle=(font: fontStyle)=>{
   const returnFontFamily =(font:fontStyle)=>{
     const style:CSSProperties ={
       fontFamily: font
     };
     return style
   };
+  const changeFontStyle=(event:React.MouseEvent ,font: fontStyle )=>{
+    const currentTarget =event.currentTarget;
+    const targetFontSample = currentTarget.firstElementChild;
+    const fontSample =[...document.getElementsByClassName("fontSample")];
+    fontSample.forEach((element:Element)=>{
+      element.classList.contains("on") && 
+      element.classList.remove("on"); 
+    });
+    targetFontSample!==null && targetFontSample.classList.add("on");
     const frame_inner = [...document.getElementsByClassName("frame_inner")];
     const serifFontFamily ='Lyon-Text, Georgia, ui-serif, serif';
     const monoFontFamily ='iawriter-mono, Nitti, Menlo, Courier, monospace'; 
