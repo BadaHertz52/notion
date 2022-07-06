@@ -30,9 +30,10 @@ type FrameProps ={
   editPage :(pageId:string,newPage:Page ,)=>void,
   setOpenComment: Dispatch<SetStateAction<boolean>>,
   setCommentBlock: Dispatch<SetStateAction<Block | null>>,
+  smallText: boolean, 
 };
 
-const Frame =({ targetPage,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,setOpenComment , setCommentBlock}:FrameProps)=>{
+const Frame =({ targetPage,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,setOpenComment , setCommentBlock ,smallText}:FrameProps)=>{
   const [page, setPage]=useState<Page>(targetPage);
   const [newPageFram, setNewPageFrame]=useState<boolean>(false);
   const [cover, setCover]=useState<ImageData|null>(page.header.cover);
@@ -44,14 +45,17 @@ const Frame =({ targetPage,firstBlocksId,editBlock,changeBlockToPage,changePageT
   targetBlock:null
   });
   const [commandBlockPositon, setCBPositon]=useState<CSSProperties>();
-  const fontFamily:CSSProperties={
-    fontFamily:defaultFontFamily
+  const frameInnerStyle:CSSProperties={
+    fontFamily:defaultFontFamily ,
+    fontSize: smallText? "14px": "16px",
   };
   const headerStyle: CSSProperties ={
-    marginTop: page.header.cover !==null? "10px": "30px" 
+    marginTop: page.header.cover !==null? "10px": "30px" ,
+    
   };
   const headerBottomStyle :CSSProperties ={
-    marginTop: page.header.cover !==null ? "-39px" :"0"
+    marginTop: page.header.cover !==null ? "-39px" :"0",
+    fontSize: smallText? "32px": "40px"
   };
   const newPage :Page ={
     ...page,
@@ -127,11 +131,24 @@ const Frame =({ targetPage,firstBlocksId,editBlock,changeBlockToPage,changePageT
     console.log("fistblocksId", firstBlocksId)
   },[firstBlocksId]);
 
+  useEffect(()=>{
+    const h1Blocks= document.querySelectorAll(".h1.block");
+    const h2Blocks=document.querySelectorAll(".h2.block");
+    const h3Blocks=document.querySelectorAll(".h3.block");
+    const baseSize = smallText? 14 :16; 
+    const changeFontSizeBySmallText=(nodeList:NodeListOf<Element>, ratio:number)=>{
+      nodeList[0]!==undefined&&
+      nodeList.forEach((element:Element)=> element.setAttribute("style",`font-size: ${baseSize * ratio}px`));
+    };
+    changeFontSizeBySmallText(h1Blocks,3);
+    changeFontSizeBySmallText(h2Blocks,2.5);
+    changeFontSizeBySmallText(h3Blocks,2);
+  },[smallText])
   return(
     <div className={newPageFram? "newPageFrame frame" :'frame'}>
         <div 
           className='frame_inner'
-          style={fontFamily}
+          style={frameInnerStyle}
         >
           <div 
             className='pageHeader'

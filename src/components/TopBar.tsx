@@ -40,9 +40,11 @@ type TopBarProps ={
   setTargetPageId:Dispatch<SetStateAction<string>>,
   showAllComments:boolean,
   setShowAllComments:Dispatch<SetStateAction<boolean>>,
+  smallText:boolean,
+  setSmallText:Dispatch<SetStateAction<boolean>>
 };
 export const defaultFontFamily ='ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"' ;
-const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock, editBlock ,changeBlockToPage ,deleteBlock ,addPage,deletePage, movePageToPage, changeSide ,addFavorites,removeFavorites ,setTargetPageId  , showAllComments, setShowAllComments}:TopBarProps)=>{
+const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock, editBlock ,changeBlockToPage ,deleteBlock ,addPage,deletePage, movePageToPage, changeSide ,addFavorites,removeFavorites ,setTargetPageId  , showAllComments, setShowAllComments ,smallText, setSmallText}:TopBarProps)=>{
   const [title, setTitle]= useState<string>("");
   const [openPageMoreFun, setOpenPageMoreFun] =useState<boolean>(false);
   const [openPageMenu, setOpenPageMenu]=useState<boolean>(false);
@@ -60,7 +62,6 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
     const target =event.target as HTMLElement;
     const targetTag =target.tagName.toLowerCase();
     const width =window.outerWidth;
-    console.log("width,", width);
     if(showAllComments && width <1000 ){
       setShowAllComments(false);
     };
@@ -132,6 +133,13 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
         break;
     };
     frame_inner.forEach((content:Element)=> content.setAttribute("style",`font-family:${fontFamily}` ))
+  };
+  const changeFontSize=(event:React.MouseEvent)=>{
+    const currentTarget= event.currentTarget;
+    const slider= currentTarget.getElementsByClassName("slider")[0];
+    
+    !smallText? slider.classList.add("on"): slider.classList.remove("on"); 
+    setSmallText(!smallText);
   }
   
   return(
