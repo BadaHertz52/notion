@@ -172,7 +172,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
             className={className} 
           > 
 
-            {(block.type ==="numberList" || block.type=== "bulletList" ) ?
+            {block.type.includes("List") ?
               <ListSub/>
             :
             <>
@@ -257,6 +257,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
             </div>
             </>
             }
+            {!block.type.includes("List")&&
             <div 
               className='subBlocks'
             >
@@ -279,6 +280,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
               )
               }
             </div>
+            }
           </div>
         </div>
       </div>
