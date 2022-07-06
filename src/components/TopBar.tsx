@@ -96,6 +96,12 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
   const mono ="mono";
   type fontStyle =typeof defaultStyle | typeof serif |typeof mono; 
   const changeFontStyle=(font: fontStyle)=>{
+  const returnFontFamily =(font:fontStyle)=>{
+    const style:CSSProperties ={
+      fontFamily: font
+    };
+    return style
+  };
     const frame_inner = [...document.getElementsByClassName("frame_inner")];
     const serifFontFamily ='Lyon-Text, Georgia, ui-serif, serif';
     const monoFontFamily ='iawriter-mono, Nitti, Menlo, Courier, monospace'; 
@@ -217,24 +223,46 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
                   <div>
                     STYLE
                   </div>
-                  <button
-                    onClick={()=>changeFontStyle("default")}
-                  >
-                    <div>Ag</div>
-                    <div>Default</div>
-                  </button>
-                  <button
-                    onClick={()=>changeFontStyle("serif")}
-                  >
-                    <div>Ag</div>
-                    <div>Serif</div>
-                  </button>
-                  <button
-                    onClick={()=>changeFontStyle("mono")}
-                  >
-                    <div>Ag</div>
-                    <div>Mono</div>
-                  </button>
+                  <div className='fontStyleBtns'>
+                    <button
+                      onClick={(event)=>changeFontStyle( event,"default")}
+                    >
+                      <div 
+                        className='fontSample on'
+                        style={returnFontFamily("default")}>
+                        Ag
+                      </div>
+                      <div className='fontName'>
+                        Default
+                      </div>
+                    </button>
+                    <button
+                      onClick={(event)=>changeFontStyle( event,"serif")}
+                    >
+                      <div
+                        className='fontSample'
+                        style={returnFontFamily("serif")}
+                      >
+                        Ag
+                      </div>
+                      <div className='fontName'>
+                        Serif
+                      </div>
+                    </button>
+                    <button
+                      onClick={(event)=>changeFontStyle(event,"mono")}
+                    >
+                      <div
+                        className='fontSample'
+                        style={returnFontFamily("mono")}
+                      >
+                        Ag
+                      </div>
+                      <div className='fontName'>
+                        Mono
+                      </div>
+                    </button>
+                  </div>
                 </div>
                 <div className="size">
                   <button>
