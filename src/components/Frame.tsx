@@ -8,6 +8,7 @@ import { BsFillEmojiSmileFill} from 'react-icons/bs';
 import {GrDocumentText ,GrDocument} from 'react-icons/gr';import { MdInsertPhoto } from 'react-icons/md';
 import { HiTemplate } from 'react-icons/hi';
 import CommandBlock from './CommandBlock';
+import { defaultFontFamily } from './TopBar';
 
 export type Command ={
   boolean:boolean,
@@ -43,6 +44,9 @@ const Frame =({ targetPage,firstBlocksId,editBlock,changeBlockToPage,changePageT
   targetBlock:null
   });
   const [commandBlockPositon, setCBPositon]=useState<CSSProperties>();
+  const fontFamily:CSSProperties={
+    fontFamily:defaultFontFamily
+  };
   const headerStyle: CSSProperties ={
     marginTop: page.header.cover !==null? "10px": "30px" 
   };
@@ -121,10 +125,14 @@ const Frame =({ targetPage,firstBlocksId,editBlock,changeBlockToPage,changePageT
 
   useEffect(()=>{
     console.log("fistblocksId", firstBlocksId)
-  },[firstBlocksId])
+  },[firstBlocksId]);
+
   return(
     <div className={newPageFram? "newPageFrame frame" :'frame'}>
-        <div className='frame_inner'>
+        <div 
+          className='frame_inner'
+          style={fontFamily}
+        >
           <div 
             className='pageHeader'
             style={headerStyle}
