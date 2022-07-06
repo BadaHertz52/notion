@@ -1791,6 +1791,10 @@ a:link, a:active, a:visited {
   height: 100%;
 }
 
+.editor .frame_inner div, .editor .frame_inner input, .editor .frame_inner button {
+  font-family: inherit;
+}
+
 .editor .pageHeader,
 .editor .pageContent {
   max-width: 100%;

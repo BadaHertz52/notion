@@ -38,7 +38,8 @@ type TopBarProps ={
   setTargetPageId:Dispatch<SetStateAction<string>>,
   showAllComments:boolean,
   setShowAllComments:Dispatch<SetStateAction<boolean>>,
-}
+};
+export const defaultFontFamily ='ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"' ;
 const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock, editBlock ,changeBlockToPage ,deleteBlock ,addPage,deletePage, movePageToPage, changeSide ,addFavorites,removeFavorites ,setTargetPageId  , showAllComments, setShowAllComments}:TopBarProps)=>{
   const [title, setTitle]= useState<string>("");
   const [openPageMoreFun, setOpenPageMoreFun] =useState<boolean>(false);
@@ -90,7 +91,33 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
   const onClickViewAllComments=()=>{
     setShowAllComments(!showAllComments)
   };
+  const defaultStyle ="default";
+  const serif ="serif"; 
+  const mono ="mono";
+  type fontStyle =typeof defaultStyle | typeof serif |typeof mono; 
+  const changeFontStyle=(font: fontStyle)=>{
+    const frame_inner = [...document.getElementsByClassName("frame_inner")];
+    const serifFontFamily ='Lyon-Text, Georgia, ui-serif, serif';
+    const monoFontFamily ='iawriter-mono, Nitti, Menlo, Courier, monospace'; 
 
+    let fontFamily =defaultFontFamily;
+    
+    switch (font) {
+      case "default":
+        fontFamily =defaultFontFamily;
+        break;
+      case "serif":
+        fontFamily =serifFontFamily;
+        break;
+      case "mono":
+        fontFamily =monoFontFamily;
+        break;
+      default:
+        break;
+    };
+    frame_inner.forEach((content:Element)=> content.setAttribute("style",`font-family:${fontFamily}` ))
+  }
+  
   return(
     <div 
       className="topbar"
@@ -190,15 +217,21 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
                   <div>
                     STYLE
                   </div>
-                  <button>
+                  <button
+                    onClick={()=>changeFontStyle("default")}
+                  >
                     <div>Ag</div>
                     <div>Default</div>
                   </button>
-                  <button>
+                  <button
+                    onClick={()=>changeFontStyle("serif")}
+                  >
                     <div>Ag</div>
                     <div>Serif</div>
                   </button>
-                  <button>
+                  <button
+                    onClick={()=>changeFontStyle("mono")}
+                  >
                     <div>Ag</div>
                     <div>Mono</div>
                   </button>
