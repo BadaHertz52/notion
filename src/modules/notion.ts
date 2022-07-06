@@ -1065,14 +1065,8 @@ export default function notion (state:Notion =initialState , action :NotionActio
         firstBlock:false,
         parentBlocksId:block.parentBlocksId!==null? [action.block.id ,...block.parentBlocksId] :[action.block.id]
       }))
-      const newTargetPage: Page ={
-        ...targetPage,
-        blocks: targetPage.blocks.concat(newSubBlocks),
-        blocksId:targetPage.blocksId.concat(changedTargetPage.blocksId)
-      };
       targetPage.blocks.push.apply(targetPage.blocks, newSubBlocks);
       targetPage.blocksId.push.apply(targetPage.blocksId ,changedTargetPage.blocksId);
-      //pages.splice(pageIndex,1, newTargetPage);
       console.log("changePagetoBlock",targetPage, pages, pages[pageIndex],pagesId);
       return {
         pages:pages,
