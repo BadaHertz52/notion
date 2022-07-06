@@ -275,17 +275,19 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
                   </div>
                 </div>
                 <div className="size">
-                  <button>
+                  <button
+                    onClick={changeFontSize}
+                  >
                     <div>Small text</div>
-                    <div className='switchBtn'>
-                      <span className='circleBtn'></span>
-                    </div>
+                    <label className='switchBtn'>
+                      <span className='slider'></span>
+                    </label>
                   </button>
                   <button>
                     <div>Full with</div>
-                    <div className='switchBtn'>
-                      <span className='circleBtn'></span>
-                    </div>
+                    <label className='switchBtn'>
+                      <span className='slider'></span>
+                    </label>
                   </button>
                   <div></div>
                 </div>
