@@ -133,6 +133,7 @@ $turkeyBlue :rgb(46, 170, 220);
 }
 div {
   box-sizing: border-box;
+  pointer-events: auto;
 }
 .pageLink {
   &:hover{

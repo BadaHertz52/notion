@@ -121,7 +121,89 @@
   .pagePath {
     font-size: 14px;
   }
+  .pageFun{
+    position: relative;
+  }
+  .pageMoreFun{
+    @include popupMenu;
+    position: absolute;
+    top:100%;
+    right: 0;
+    max-width: 200px;
+    
+    .inner >div{
+      padding: 10px;
+    }
+    .fontStyleHeader{
+      color:$itemText;
+      font-size: 12px;
+    }
+    .fontStyleBtns{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      margin-top: 5px;
+      button{
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        user-select: none;
+        transition: color 300ms ease 0s, border 300ms ease 0s;
+        cursor: pointer;
+        min-width: 34px;
+        padding: 10px 6px 6px;
+        border-radius: 3px;
+        line-height: 1;
+        
+        &:hover{
+          background-color: $itemHover;
+        }
+      }
+      .fontSample{
+        font-size:24px;
+        position: relative;
+        top: -2px;
+        height: 24px;
+      }
+      .fontSample.on{
+        color:$turkeyBlue;
+      }
+      .fontName{
+        font-size: 12px;
+        line-height: 16px;
+        color: $itemText;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        margin-top: 4px;
+      }
+      
+    }
+    .function{
+      display: flex;
+      flex-direction: column;
+      button {
+        display: flex;
+        padding-top:10px;
+        svg{
+          margin-right: 10px;
+        }
+        .label{
+          text-align: left;
+          min-width: fit-content;
+        }
+        div{
+          display: flex;
+          flex-direction: column;
+          span:last-child{
+            font-size: 12px;
+            color:$itemText;
+          }
+        }
+      }
+    }
 
+  }
   // --topbar
 
   //frame ----

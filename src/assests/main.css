@@ -13,6 +13,7 @@
 div {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+  pointer-events: auto;
 }
 
 .pageLink:hover {
@@ -198,6 +199,7 @@ a:link, a:active, a:visited {
 div {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+  pointer-events: auto;
 }
 
 .pageLink:hover {
@@ -622,6 +624,7 @@ a:link, a:active, a:visited {
 div {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+  pointer-events: auto;
 }
 
 .pageLink:hover {
@@ -667,6 +670,7 @@ a:link, a:active, a:visited {
 div {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+  pointer-events: auto;
 }
 
 .pageLink:hover {
@@ -1162,6 +1166,7 @@ form button svg {
 div {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+  pointer-events: auto;
 }
 
 .pageLink:hover {
@@ -1775,6 +1780,160 @@ a:link, a:active, a:visited {
   font-size: 14px;
 }
 
+.editor .pageFun {
+  position: relative;
+}
+
+.editor .pageMoreFun {
+  width: 320px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  background-color: #ffff;
+  margin: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  pointer-events: auto;
+  -webkit-transform: matrix(1, 0, 0, 1, 0, 0);
+          transform: matrix(1, 0, 0, 1, 0, 0);
+  z-index: 10;
+  border-radius: 8px;
+  -webkit-box-shadow: 0px 0px 23px -5px #ababab;
+  box-shadow: 0px 0px 23px -5px #ababab;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  max-width: 200px;
+}
+
+.editor .pageMoreFun::-webkit-scrollbar-thumb {
+  background: #D3D1CB;
+}
+
+.editor .pageMoreFun::-webkit-scrollbar-track {
+  background: #EDECE9;
+}
+
+.editor .pageMoreFun .inner > div {
+  padding: 10px;
+}
+
+.editor .pageMoreFun .fontStyleHeader {
+  color: #8d8d8d;
+  font-size: 12px;
+}
+
+.editor .pageMoreFun .fontStyleBtns {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  margin-top: 5px;
+}
+
+.editor .pageMoreFun .fontStyleBtns button {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  -webkit-transition: color 300ms ease 0s, border 300ms ease 0s;
+  transition: color 300ms ease 0s, border 300ms ease 0s;
+  cursor: pointer;
+  min-width: 34px;
+  padding: 10px 6px 6px;
+  border-radius: 3px;
+  line-height: 1;
+}
+
+.editor .pageMoreFun .fontStyleBtns button:hover {
+  background-color: #EDECE9;
+}
+
+.editor .pageMoreFun .fontStyleBtns .fontSample {
+  font-size: 24px;
+  position: relative;
+  top: -2px;
+  height: 24px;
+}
+
+.editor .pageMoreFun .fontStyleBtns .fontSample.on {
+  color: #2eaadc;
+}
+
+.editor .pageMoreFun .fontStyleBtns .fontName {
+  font-size: 12px;
+  line-height: 16px;
+  color: #8d8d8d;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin-top: 4px;
+}
+
+.editor .pageMoreFun .function {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.editor .pageMoreFun .function button {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding-top: 10px;
+}
+
+.editor .pageMoreFun .function button svg {
+  margin-right: 10px;
+}
+
+.editor .pageMoreFun .function button .label {
+  text-align: left;
+  min-width: -webkit-fit-content;
+  min-width: -moz-fit-content;
+  min-width: fit-content;
+}
+
+.editor .pageMoreFun .function button div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.editor .pageMoreFun .function button div span:last-child {
+  font-size: 12px;
+  color: #8d8d8d;
+}
+
 .editor .frame {
   width: 100%;
   height: calc(100% - 45px);
@@ -2114,6 +2273,7 @@ a:link, a:active, a:visited {
 div {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+  pointer-events: auto;
 }
 
 .pageLink:hover {
@@ -2795,6 +2955,7 @@ a:link, a:active, a:visited {
 div {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+  pointer-events: auto;
 }
 
 .pageLink:hover {
@@ -2986,6 +3147,7 @@ a:link, a:active, a:visited {
 div {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+  pointer-events: auto;
 }
 
 .pageLink:hover {
