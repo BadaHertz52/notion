@@ -3,6 +3,7 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { pathType } from '../containers/NotionRouter';
 import {   Block, listItem, Page } from '../modules/notion';
 import {  SideAppear } from '../modules/side';
+import PageMenu from './PageMenu';
 
 import { AiOutlineMenu} from 'react-icons/ai';
 import { FiChevronsLeft } from 'react-icons/fi';
@@ -11,7 +12,8 @@ import { BiMessageDetail } from "react-icons/bi";
 import { BsThreeDots } from "react-icons/bs";
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { IoArrowRedoOutline } from 'react-icons/io5';
-import PageMenu from './PageMenu';
+import { GrDocumentUpload } from 'react-icons/gr';
+import { CSSProperties } from 'styled-components';
 
 type TopBarProps ={
   firstlist:listItem[],
@@ -224,11 +226,11 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
         </button>
         {openPageMoreFun &&
           <div
-            id="pageMoreFun"
+            className="pageMoreFun"
           >
             <div className='inner'>
                 <div className='fontStyle'>
-                  <div>
+                  <div className='fontStyleHeader'>
                     STYLE
                   </div>
                   <div className='fontStyleBtns'>
@@ -323,7 +325,7 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
                     </span>
                   </button>
                   <button>
-                    <span className='icon'></span>
+                    <GrDocumentUpload/>
                     <div>
                       <span className='label'>Export</span>
                       <span>PDF,HTML,Markdown</span>
