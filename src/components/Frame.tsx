@@ -165,7 +165,7 @@ const Frame =({ targetPage,firstBlocksId,editBlock,changeBlockToPage,changePageT
         title:value 
     }})
   };
-  const changePageIcon =(icon:string)=>{
+  const changePageIcon =(icon:string|null)=>{
     setIcon(icon);
     editPage(page.id, {
       ...page,

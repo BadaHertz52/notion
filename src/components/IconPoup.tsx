@@ -8,7 +8,7 @@ type IconPoupProps ={
   editPage: (pageId: string, newPage: Page) => void,
   emojis: Emoji[],
   style :CSSProperties |undefined,
-  changePageIcon: (icon: string) => void, 
+  changePageIcon: (icon: string | null) => void, 
   randomIcon:()=>string,
 }
 const IconPopup =({page ,editPage,style, emojis,changePageIcon,randomIcon} :IconPoupProps)=>{
@@ -18,15 +18,7 @@ const IconPopup =({page ,editPage,style, emojis,changePageIcon,randomIcon} :Icon
   const [category , setCategory] =useState<Category>(emoji);
   const editTime =JSON.stringify(Date.now());
   const removeIcon =()=>{
-    const newPage:Page={
-      ...page,
-      header:{
-        ...page.header,
-        icon:null
-      },
-      editTime:editTime
-    };
-    editPage(page.id, newPage);
+    changePageIcon(null);
   };
 
   const onClickRandom =()=>{
