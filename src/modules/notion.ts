@@ -1340,9 +1340,24 @@ export default function notion (state:Notion =initialState , action :NotionActio
     case EDIT_PAGE :
       function editPage(newPage:Page){
         pages.splice(pageIndex,1,newPage);
+        const parentsId = newPage.parentsId ; 
+        if(parentsId !==null){
+          const parentPageId =parentsId[ parentsId.length -1];
+          const parentPage =findPage(pagesId, pages, parentPageId);
+          const blockIndex = parentPage.blocksId.indexOf(newPage.id);
+          const pageBlock = parentPage.blocks[blockIndex];
+          const editedPageBlock:Block ={
+            ...pageBlock,
+            contents: newPage.header.title,
+            icon: newPage.header.icon,
+            editTime:editTime
+          };
+          parentPage.blocks.splice(blockIndex,1,editedPageBlock);
+        };
         console.log("edit page",pages);
       };
-      editPage(action.newPage)
+      editPage(action.newPage);
+
       return{
         pages:pages,
         firstPagesId:firstPagesId,
