@@ -144,7 +144,10 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
     const width= window.innerWidth;
     !(width<1024 && sideAppear ==="lock") && setFullWidth(!fullWidth);
   };
-  
+  const onClickMoveTo=()=>{
+    setOpenPageMoreFun(false);
+    setOpenPageMenu(!openPageMenu);
+  };
   return(
     <div 
       className="topbar"
@@ -332,7 +335,7 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
                     </span>
                   </button>
                   <button
-                    onClick={()=>setOpenPageMenu(!openPageMenu)}
+                    onClick={onClickMoveTo}
                   >
                     <IoArrowRedoOutline/>
                     <span className='label'>

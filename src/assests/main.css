@@ -1475,9 +1475,36 @@ a:link, a:active, a:visited {
 }
 
 #pageMenu {
+  width: 320px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  background-color: #ffff;
+  margin: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  pointer-events: auto;
+  -webkit-transform: matrix(1, 0, 0, 1, 0, 0);
+          transform: matrix(1, 0, 0, 1, 0, 0);
+  z-index: 10;
+  border-radius: 8px;
+  -webkit-box-shadow: 0px 0px 23px -5px #ababab;
+  box-shadow: 0px 0px 23px -5px #ababab;
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
+}
+
+#pageMenu::-webkit-scrollbar-thumb {
+  background: #D3D1CB;
+}
+
+#pageMenu::-webkit-scrollbar-track {
+  background: #EDECE9;
 }
 
 #pageMenu .inner {
@@ -1776,6 +1803,12 @@ a:link, a:active, a:visited {
 
 .editor .pageFun {
   position: relative;
+}
+
+.editor .pageFun #pageMenu {
+  position: absolute;
+  top: 100%;
+  right: 0;
 }
 
 .editor .pageMoreFun {

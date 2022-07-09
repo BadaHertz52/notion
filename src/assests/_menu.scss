@@ -105,6 +105,7 @@
 }
 
 #pageMenu {
+  @include popupMenu;
   width: fit-content;
   .inner{
     width: 100%;
@@ -158,6 +159,7 @@
   }
 
 }
+
 #moveTo_pageMenu{
   #pageSugested, #new_sub_page {
     display: none;
