@@ -1358,9 +1358,11 @@ export default function notion (state:Notion =initialState , action :NotionActio
         const index = firstPagesId.indexOf(targetPage.id);
         firstPagesId.splice(index,1);
       };
+      let pageBlockStyle:BlockStyle =basicBlockStyle;
       if(targetPage.parentsId !==null){
         const parentPage = findPage(pagesId, pages, targetPage.parentsId[targetPage.parentsId.length-1]);
         const blockIndex= parentPage.blocksId.indexOf(action.pageId);
+        pageBlockStyle = parentPage.blocks[blockIndex].style 
         const subPageIndex= parentPage.subPagesId?.indexOf(action.pageId);
         parentPage.editTime =editTime;
         parentPage.blocks.splice(blockIndex,1);
@@ -1368,12 +1370,27 @@ export default function notion (state:Notion =initialState , action :NotionActio
         subPageIndex !==undefined && parentPage.subPagesId?.splice(subPageIndex,1);
       };
       targetPage.editTime=editTime; 
-      targetPage.parentsId =destinationPage.parentsId !==null ?
-      destinationPage.parentsId.concat(destinationPage.id)  : 
-      [...destinationPage.id];
+      targetPage.parentsId =[destinationPage.id];
 
       //destination page 관련 변경
+      const newPageBlock :Block={
+        id: targetPage.id,
+        contents:targetPage.header.title,
+        firstBlock: true,
+        subBlocksId: null,
+        parentBlocksId: null,
+        type:  "page",
+        icon: targetPage.header.icon,
+        editTime: targetPage.editTime,
+        createTime: targetPage.createTime,
+        style: pageBlockStyle,
+        comments: targetPage.header.comments,
+      };
       destinationPage.editTime =editTime ;
+  
+      destinationPage.firstBlocksId !== null? destinationPage.firstBlocksId.push(newPageBlock.id) : destinationPage.firstBlocksId = [newPageBlock.id];
+      destinationPage.blocks.push(newPageBlock);
+      destinationPage.blocksId.push(targetPage.id);
       destinationPage.subPagesId = destinationPage.subPagesId !==null ? 
       destinationPage.subPagesId.concat(targetPage.id) :
       [targetPage.id];
