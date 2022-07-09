@@ -1360,40 +1360,24 @@ export default function notion (state:Notion =initialState , action :NotionActio
       };
       if(targetPage.parentsId !==null){
         const parentPage = findPage(pagesId, pages, targetPage.parentsId[targetPage.parentsId.length-1]);
-        const parentPageIndex =pagesId.indexOf(parentPage.id);
-        const editedParentPage:Page ={
-          ...parentPage,
-          blocks : parentPage.blocks.filter((block:Block)=> block.id !== targetPage.id),
-          blocksId: parentPage.blocksId.filter((id:string)=> id !== targetPage.id),
-          firstBlocksId: parentPage.firstBlocksId?.includes(targetPage.id)?   
-                          parentPage.firstBlocksId?.filter((id:string)=> id !== targetPage.id)
-                        : 
-                        parentPage.firstBlocksId,
-          subPagesId : parentPage.subPagesId? 
-                      parentPage.subPagesId.filter((id:string)=> id !== targetPage.id) : 
-                      null,
-          editTime:editTime,
-        };
-        pages.splice(parentPageIndex,1,editedParentPage);
+        const blockIndex= parentPage.blocksId.indexOf(action.pageId);
+        const subPageIndex= parentPage.subPagesId?.indexOf(action.pageId);
+        parentPage.editTime =editTime;
+        parentPage.blocks.splice(blockIndex,1);
+        parentPage.blocksId.splice(blockIndex,1);
+        subPageIndex !==undefined && parentPage.subPagesId?.splice(subPageIndex,1);
       };
-      const editedTargetPage:Page ={
-        ...targetPage,
-        editTime:editTime,
-        parentsId : destinationPage.parentsId !==null ?
-                    destinationPage.parentsId.concat(destinationPage.id)  : 
-                    [...destinationPage.id],
-      };
-      pages.splice(pageIndex,1,editedTargetPage);
+      targetPage.editTime=editTime; 
+      targetPage.parentsId =destinationPage.parentsId !==null ?
+      destinationPage.parentsId.concat(destinationPage.id)  : 
+      [...destinationPage.id];
+
       //destination page 관련 변경
-      const editedDestinationPage :Page ={
-        ...destinationPage,
-        editTime:editTime,
-        subPagesId: destinationPage.subPagesId !==null ? 
-                    destinationPage.subPagesId.concat(targetPage.id) :
-                    [...targetPage.id]
-      };
-      pages.splice(destinationPageIndex,1,editedDestinationPage);
-      console.log("move page to other page", pages , firstPagesId)
+      destinationPage.editTime =editTime ;
+      destinationPage.subPagesId = destinationPage.subPagesId !==null ? 
+      destinationPage.subPagesId.concat(targetPage.id) :
+      [targetPage.id];
+      console.log("move page to other page", pages , firstPagesId , destinationPage) 
       };
       movePageToPage(action.destinationPageId);
       return{
