@@ -174,6 +174,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pa
         deleteBlock={deleteBlock}
         addPage={addPage}
         editPage={editPage}
+        setTargetPageId={setTargetPageId}
         setOpenComment={setOpenComment}
         setCommentBlock ={setCommentBlock}
         smallText={smallText}

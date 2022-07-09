@@ -17,6 +17,7 @@ type  BlockProps ={
   setCommand:Dispatch<SetStateAction<Command>>,
   onClickCommentBtn: (block: Block) => void,
   setOpenComment :Dispatch<SetStateAction<boolean>>,
+  setTargetPageId: React.Dispatch<React.SetStateAction<string>>
 };
 type BlockCommentProps={
   block:Block,
@@ -47,7 +48,7 @@ export const BlockComment =({block , onClickCommentBtn}:BlockCommentProps)=>{
   )
 };
 
-const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,blockComments , command, setCommand  ,onClickCommentBtn ,setOpenComment  }:BlockProps)=>{
+const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,blockComments , command, setCommand  ,onClickCommentBtn ,setOpenComment ,setTargetPageId  }:BlockProps)=>{
   const editTime =JSON.stringify(Date.now);
   const contentEditableRef= useRef<HTMLElement>(null);
   const findTargetBlock =(event:ContentEditableEvent|React.KeyboardEvent<HTMLDivElement>|React.MouseEvent):Block=>{
@@ -207,7 +208,9 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
         ,targetBlock:null})
     }
   };
-
+  const onClickBlockContents =()=>{
+    block.type=== "page" &&setTargetPageId(block.id);
+  }
   const BlockContentEditable=()=>{
     return(
       <>
@@ -235,7 +238,10 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
   };
 
   return(
-    <>
+    <div
+      onClick={onClickBlockContents}
+      className ={`${block.type}_blockComponent`}
+    >
       {!blockComments ?
       ( block.type==="page"?
         <button 
@@ -264,7 +270,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
         <BlockContentEditable/>
       </button>
       }
-    </>
+    </div>
   )
 };
 
