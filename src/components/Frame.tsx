@@ -31,9 +31,10 @@ type FrameProps ={
   setOpenComment: Dispatch<SetStateAction<boolean>>,
   setCommentBlock: Dispatch<SetStateAction<Block | null>>,
   smallText: boolean, 
+  fullWidth: boolean, 
 };
 
-const Frame =({ targetPage,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,setOpenComment , setCommentBlock ,smallText}:FrameProps)=>{
+const Frame =({ targetPage,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,setOpenComment , setCommentBlock ,smallText , fullWidth}:FrameProps)=>{
   const [page, setPage]=useState<Page>(targetPage);
   const [newPageFram, setNewPageFrame]=useState<boolean>(false);
   const [cover, setCover]=useState<ImageData|null>(page.header.cover);
@@ -48,6 +49,7 @@ const Frame =({ targetPage,firstBlocksId,editBlock,changeBlockToPage,changePageT
   const frameInnerStyle:CSSProperties={
     fontFamily:defaultFontFamily ,
     fontSize: smallText? "14px": "16px",
+    width: fullWidth? "100%":'900px',
   };
   const headerStyle: CSSProperties ={
     marginTop: page.header.cover !==null? "10px": "30px" ,

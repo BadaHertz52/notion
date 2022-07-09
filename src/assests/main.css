@@ -2018,6 +2018,12 @@ a:link, a:active, a:visited {
   -ms-flex-negative: 1;
       flex-shrink: 1;
   z-index: inherit;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 
 .editor .frame_inner {

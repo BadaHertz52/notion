@@ -273,6 +273,8 @@
     flex-grow: 1;
     flex-shrink: 1;
     z-index: inherit;
+    display: flex;
+    justify-content: center;
   }
   .frame_inner {
     width: 100%;

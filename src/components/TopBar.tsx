@@ -41,10 +41,12 @@ type TopBarProps ={
   showAllComments:boolean,
   setShowAllComments:Dispatch<SetStateAction<boolean>>,
   smallText:boolean,
-  setSmallText:Dispatch<SetStateAction<boolean>>
+  setSmallText:Dispatch<SetStateAction<boolean>>,
+  fullWidth:boolean,
+  setFullWidth:Dispatch<SetStateAction<boolean>>
 };
 export const defaultFontFamily ='ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"' ;
-const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock, editBlock ,changeBlockToPage ,deleteBlock ,addPage,deletePage, movePageToPage, changeSide ,addFavorites,removeFavorites ,setTargetPageId  , showAllComments, setShowAllComments ,smallText, setSmallText}:TopBarProps)=>{
+const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock, editBlock ,changeBlockToPage ,deleteBlock ,addPage,deletePage, movePageToPage, changeSide ,addFavorites,removeFavorites ,setTargetPageId  , showAllComments, setShowAllComments ,smallText, setSmallText ,fullWidth, setFullWidth}:TopBarProps)=>{
   const [title, setTitle]= useState<string>("");
   const [openPageMoreFun, setOpenPageMoreFun] =useState<boolean>(false);
   const [openPageMenu, setOpenPageMenu]=useState<boolean>(false);
@@ -134,13 +136,14 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
     };
     frame_inner.forEach((content:Element)=> content.setAttribute("style",`font-family:${fontFamily}` ))
   };
-  const changeFontSize=(event:React.MouseEvent)=>{
-    const currentTarget= event.currentTarget;
-    const slider= currentTarget.getElementsByClassName("slider")[0];
-    
-    !smallText? slider.classList.add("on"): slider.classList.remove("on"); 
+  const changeFontSize=()=>{
     setSmallText(!smallText);
-  }
+  };
+
+  const changeWidth=(event:React.MouseEvent)=>{
+    const width= window.innerWidth;
+    !(width<1024 && sideAppear ==="lock") && setFullWidth(!fullWidth);
+  };
   
   return(
     <div 
@@ -288,13 +291,15 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
                   >
                     <div>Small text</div>
                     <label className='switchBtn'>
-                      <span className='slider'></span>
+                      <span className={smallText? "slider on": "slider"}></span>
                     </label>
                   </button>
-                  <button>
-                    <div>Full with</div>
+                  <button
+                    onClick={changeWidth}
+                  >
+                    <div>Full width</div>
                     <label className='switchBtn'>
-                      <span className='slider'></span>
+                      <span className={fullWidth? "slider on":"slider"}></span>
                     </label>
                   </button>
                   <div></div>

@@ -69,6 +69,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pa
   });
   const [popupStyle, setPopupStyle]=useState<CSSProperties |undefined>(undefined); 
   const [smallText, setSmallText]=useState<boolean>(false);
+  const [fullWidth, setFullWidth]=useState<boolean>(false);
   const closePopup=(event: MouseEvent)=>{
     if(popup.popup){
       const popupMenu =document.getElementById("popupMenu");
@@ -158,6 +159,8 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pa
       setShowAllComments={setShowAllComments}
       smallText={smallText}
       setSmallText={setSmallText}
+      fullWidth={fullWidth}
+      setFullWidth={setFullWidth}
       />
       <Frame
         targetPage={page}
@@ -174,6 +177,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pa
         setOpenComment={setOpenComment}
         setCommentBlock ={setCommentBlock}
         smallText={smallText}
+        fullWidth={fullWidth}
       />
       <BlockFn
         page={page}
