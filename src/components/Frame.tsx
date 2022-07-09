@@ -9,13 +9,17 @@ import {GrDocumentText ,GrDocument} from 'react-icons/gr';import { MdInsertPhoto
 import { HiTemplate } from 'react-icons/hi';
 import CommandBlock from './CommandBlock';
 import { defaultFontFamily } from './TopBar';
+import IconPoup from './IconPoup';
 
 export type Command ={
   boolean:boolean,
   command:string | null,
   targetBlock: Block |null
 };
-
+export type Emoji ={
+  label:string,
+  symbol:string 
+}
 type FrameProps ={
   targetPage:Page,
   firstBlocksId:string[]|null,
@@ -46,6 +50,8 @@ const Frame =({ targetPage,firstBlocksId,editBlock,changeBlockToPage,changePageT
   command:null,
   targetBlock:null
   });
+  const [openIcon, setOpenIcon]=useState<boolean>(false);
+  const [iconStyle, setIconStyle]=useState<CSSProperties|undefined>(undefined);
   const [commandBlockPositon, setCBPositon]=useState<CSSProperties>();
   const frameInnerStyle:CSSProperties={
     fontFamily:defaultFontFamily ,
@@ -69,43 +75,106 @@ const Frame =({ targetPage,firstBlocksId,editBlock,changeBlockToPage,changePageT
     blocksId:[blockSample.id],
     firstBlocksId:[blockSample.id]
   };
-  const onClickEmptyWithIcon =()=>{
-    const icons :string[] =["😁","🌸","🍟","⚾","📣",'🎹','📷','✉️','🖍️','📝','⌛','⌚'];
+
+
+  const emojis:Emoji[] =[
+    {label:"smile face", symbol:"😁"},
+    {label:"smile with heart  face", symbol:"🥰"},
+    {label:"angry face", symbol:"😠"},
+    {label:"crying face", symbol:"😭"},
+    {label:"redheart", symbol:"❤️"},
+    {label:"purpleheart", symbol:"💜"},
+    {label:"ban", symbol:"🚫"},
+    {label:"attention", symbol:"⚠️"},
+    {label:"pencile", symbol:"📝"},
+    {label:"clock", symbol:"⌚"},
+    {label:"phone", symbol:"📱"},
+    {label:"video game", symbol:"🎮"},
+    {label:"computer", symbol:"🖥️"},
+    {label:"player", symbol:"🙏"},
+    {label:"party", symbol:"🎉"},
+    {label:"present", symbol:"🎁"},
+    {label:"movie", symbol:"🎞️"},
+    {label:"coin", symbol:"🪙"},
+    {label:"money", symbol:"💵"},
+    {label:"card", symbol:"💳"},
+    {label:"calendar", symbol:"🗓️"},
+    {label:"folder", symbol:"📁"},
+    {label:"ligh bulb", symbol:"💡"},
+    {label:"broom", symbol:"🧹"},
+    {label:"unicon", symbol:"🦄"},
+    {label:"french fries", symbol:"🍟"},
+    {label:"cup cake", symbol:"🧁"},
+    {label:"apple", symbol:"🍎"},
+    {label:"ariplane", symbol:"✈️"},
+    {label:"car", symbol:"🚗"},
+    {label:"bus", symbol:"🚌"},
+    {label:"building", symbol:"🏢"},
+    {label:"home", symbol:"🏠"},
+    {label:"tent", symbol:"⛺"},
+    {label:"star", symbol:"⭐"},
+    {label:"sun", symbol:"☀️"},
+    {label:"rainbow", symbol:"🌈"},
+    {label:"rain", symbol:"🌧️"},
+    {label:"snowman", symbol:"☃️"},
+    {label:"cherry blossoms", symbol:"🌸"},
+  ];
+  const randomIcon =():string=>{
+    const icons  = emojis.map((emoji:Emoji)=> emoji.symbol);
     const index = Math.floor(Math.random() * (3));
+    return icons[index]
+  };
+  const addRandomIcon =()=>{
+    const icon =randomIcon();
     const newPageWithIcon:Page ={
       ...newPage,
       header:{
         ...newPage.header,
-        icon: icons[index]
+        icon: icon
       }
     };
     editPage(page.id, newPageWithIcon);
-    setIcon(icons[index]);
+    setIcon(icon);
     setPage(newPageWithIcon);
   };
   const onClickEmpty =()=>{
     setPage(newPage);
     editPage(page.id ,newPage);
   };
-  const onChangePageHeader =(event:React.ChangeEvent<HTMLInputElement>, what:"icon"|"title")=>{
+  const onClickPageIcon =(event:React.MouseEvent)=>{
+    if(openIcon !==true){
+      const currentTarget =event.currentTarget;
+      const domeRect = currentTarget.getClientRects()[0];
+      setIconStyle({
+        position: "absolute",
+        top: domeRect.bottom +10,
+        left:domeRect.left ,
+      })
+      setOpenIcon(true);
+    }else{
+      setOpenIcon(false);
+    }
+  };
+  const onChangePageTitle =(event:React.ChangeEvent<HTMLInputElement>)=>{
     const value =event.target.value; 
-    switch (what) {
-      case "icon":
-          setIcon(value);
-        break;
-      case "title":
-        setTitle(value);
-        break;
-      default:
-        break;
-    };
+    setTitle(value);
     editPage(page.id,{
       ...page, 
       header:{
         ...page.header,
-        icon: what==="icon" ?value : page.header.icon,
-        title:what==="title"? value : page.header.title
+        title:value 
     }})
+  };
+  const changePageIcon =(icon:string)=>{
+    setIcon(icon);
+    editPage(page.id, {
+      ...page,
+      header :{
+        ...page.header,
+        icon: icon
+      }
+    });
+    setOpenIcon(false);
   };
   useEffect(()=>{
     page.blocksId[0] ===undefined?
@@ -168,25 +237,26 @@ const Frame =({ targetPage,firstBlocksId,editBlock,changeBlockToPage,changePageT
               {page.header.icon !==null &&
                 <div 
                 className='pageIcon'
-                
+                onClick={onClickPageIcon}
                 >
-                  <input 
-                    type="text" 
-                    value={icon!==null ? icon : ""}
-                    onChange={(event)=>onChangePageHeader(event, "icon")}
-                  />
+                  {icon}
                 </div>
               }
               {decoOpen &&
                 <div className='deco'>
                   {page.header.icon ==null &&
-                    <button className='decoIcon'>
+                    <button 
+                      className='decoIcon'
+                      onClick={addRandomIcon}
+                    >
                       <BsFillEmojiSmileFill/>
                       <span>Add Icon</span>
                     </button>
                   }
                   {page.header.cover == null&&        
-                    <button className='decoCover'>
+                    <button 
+                      className='decoCover'
+                    >
                       <MdInsertPhoto/>
                       <span>Add Cover</span>
                     </button>
@@ -205,7 +275,7 @@ const Frame =({ targetPage,firstBlocksId,editBlock,changeBlockToPage,changePageT
                 <input 
                     type="text" 
                     value={title}
-                    onChange={(event)=>onChangePageHeader(event, "title")}
+                    onChange={onChangePageTitle}
                   />
               </div>
               {!newPageFram ?
@@ -226,7 +296,16 @@ const Frame =({ targetPage,firstBlocksId,editBlock,changeBlockToPage,changePageT
             }
             </div>
           </div>
-          
+          {openIcon &&
+            <IconPoup 
+              page={page}
+              style={iconStyle}
+              emojis={emojis}
+              changePageIcon={changePageIcon}
+              randomIcon ={randomIcon}
+              editPage={editPage}
+            />
+          }
           <div className="pageContent">
             {!newPageFram?
             <div 
@@ -260,7 +339,7 @@ const Frame =({ targetPage,firstBlocksId,editBlock,changeBlockToPage,changePageT
             :
             <div className='pageContent_inner'>
               <button
-                onClick={onClickEmptyWithIcon}
+                onClick={addRandomIcon}
               >
                 <GrDocumentText/>
                 <span>Empty with icon</span>
