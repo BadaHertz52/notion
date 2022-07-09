@@ -51,6 +51,7 @@ const NotionRouter =()=>{
   const [openQF, setOpenQF]=useState<boolean>(false);
   const [showAllComments,setShowAllComments]=useState<boolean>(false);
   const [discard_edit, setDiscardEdit]=useState<boolean>(false);
+  const [pagePath, setPagePath]= useState<pathType[]|null>(null);
   const discardEdit =document.getElementById("discardEdit");
     //---action.function 
     //--block
@@ -135,6 +136,8 @@ const NotionRouter =()=>{
   const changeSide =(appear:SideAppear) => {dispatch(change_side(appear))} ;
   //side--
   //action.function ---
+
+
   const makePagePath=(page:Page):pathType[]|null=>{
     if(page.parentsId !==null){
       const parentPages:Page[] = page.parentsId.map((id:string)=>findPage(notion.pagesId, notion.pages,id));
@@ -201,7 +204,6 @@ const NotionRouter =()=>{
       navigate(path);
     }
   },[routePage]);
-
   useEffect(()=>{
     //url 변경시 
     const lastSlash =hash.lastIndexOf("/");
@@ -263,9 +265,8 @@ const NotionRouter =()=>{
                     page={routePage}
                     pages={pages}
                     isInTrash={!notion.pagesId.includes(routePage.id)}
-                    pagePath ={makePagePath(routePage)}
+                    makePagePath={makePagePath}
                     setTargetPageId={setTargetPageId}
-  
                     addBlock={addBlock}
                     editBlock={editBlock}
                     changeBlockToPage={changeBlockToPage}

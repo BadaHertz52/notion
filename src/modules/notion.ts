@@ -1339,7 +1339,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
       }
     case EDIT_PAGE :
       function editPage(newPage:Page){
-        pages.splice(pageIndex,1,newPage);
+        targetPage.header = newPage.header;
         const parentsId = newPage.parentsId ; 
         if(parentsId !==null){
           const parentPageId =parentsId[ parentsId.length -1];

@@ -25,7 +25,8 @@ type EditorContainerProps ={
   userName:string,
   firstlist:listItem[],
   isInTrash:boolean,
-  pagePath : pathType[]|null,
+  //pagePath : pathType[]|null,
+  makePagePath: (page: Page) => pathType[] | null,
   editBlock :(pageId: string, block: Block) => void,
   changeBlockToPage: (currentPageId: string, block: Block) => void,
   changePageToBlock:(currentPageId: string, block: Block) => void,
@@ -53,12 +54,13 @@ type EditorContainerProps ={
   discardEdit:boolean
 };
 
-const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pagePath ,changeSide,addBlock,editBlock ,changeBlockToPage, changePageToBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId , showAllComments,  setShowAllComments , discardEdit}:EditorContainerProps)=>{
+const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, makePagePath,changeSide,addBlock,editBlock ,changeBlockToPage, changePageToBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId , showAllComments,  setShowAllComments , discardEdit}:EditorContainerProps)=>{
   const dispatch =useDispatch();
   const user =useSelector((state:RootState)=>state.user);
   const changeToSub =(pageId: string, block: Block,  newParentBlockId: string)=> dispatch(change_to_sub(pageId, block, newParentBlockId));
   const raiseBlock =(pageId: string, block: Block) =>dispatch((raise_block(pageId, block)));
   const inner =document.getElementById("inner");
+  const [pagePath, setPagePath]=useState<pathType[]|null>(null);
   const [openComment, setOpenComment]=useState<boolean>(false);
   const [commentBlock, setCommentBlock]=useState<Block|null>(null);
   const [commentsStyle, setCommentsStyle]= useState<CSSProperties>();
@@ -110,7 +112,11 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pa
         setCommentsStyle(style);
       } 
     }
-  },[commentBlock])
+  },[commentBlock]);
+  useEffect(()=>{
+    setPagePath(makePagePath(page))
+  },[page, page.header.icon, page.header.title]);
+
   return(
     <div className='editor'>
       {isInTrash &&
@@ -138,7 +144,6 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, pa
       sideAppear={sideAppear}
       page={page}
       pages={pages}
-      
       pagePath ={pagePath}
       changeSide={changeSide}
 
