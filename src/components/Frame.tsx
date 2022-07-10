@@ -165,12 +165,13 @@ const Frame =({ targetPage,firstBlocksId,editBlock,changeBlockToPage,changePageT
         title:value 
     }})
   };
-  const changePageIcon =(icon:string|null)=>{
+  const changePageIcon =(icon:string|null ,iconType:IconType)=>{
     setIcon(icon);
     editPage(page.id, {
       ...page,
       header :{
         ...page.header,
+        iconType:iconType,
         icon: icon
       }
     });

@@ -1,14 +1,14 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { BsEmojiSmile } from 'react-icons/bs';
 import { CSSProperties } from 'styled-components';
-import { Page } from '../modules/notion';
+import { IconType, Page } from '../modules/notion';
 import { Emoji } from './Frame';
 type IconPoupProps ={
   page:Page,
   editPage: (pageId: string, newPage: Page) => void,
   emojis: Emoji[],
   style :CSSProperties |undefined,
-  changePageIcon: (icon: string | null) => void, 
+  changePageIcon: (icon: string | null, iconType:IconType) => void, 
   randomIcon:()=>string,
 }
 const IconPopup =({page ,editPage,style, emojis,changePageIcon,randomIcon} :IconPoupProps)=>{
@@ -16,14 +16,22 @@ const IconPopup =({page ,editPage,style, emojis,changePageIcon,randomIcon} :Icon
   const image="image";
   type Category = typeof emoji | typeof image;
   const [category , setCategory] =useState<Category>(emoji);
-  const editTime =JSON.stringify(Date.now());
+  const [imgSrc, setImgSrc]=useState<string|null>(null);
   const removeIcon =()=>{
-    changePageIcon(null);
+    changePageIcon(null , null);
   };
 
   const onClickRandom =()=>{
-    changePageIcon(randomIcon());
+    changePageIcon(randomIcon(), "string");
   };
+
+  const onChangeImgIcon=(event:React.ChangeEvent<HTMLInputElement>)=>{
+    const file = event.target.files?.[0];
+    if(file !==undefined){
+      const url = URL.createObjectURL(file);
+      changePageIcon(url, "img");
+    }
+  }
   return(
     <div 
       id="iconPopup"
@@ -77,11 +85,10 @@ const IconPopup =({page ,editPage,style, emojis,changePageIcon,randomIcon} :Icon
             emojis.map((emoji:Emoji)=>
               <button
                 className='emojiBtn'
-                onClick={()=>changePageIcon(emoji.symbol)}
+                onClick={()=>changePageIcon(emoji.symbol, "string")}
               >
               <span
                 className="emoji"
-                role="img"
                 aria-label={emoji.label ? emoji.label : ""}
                 aria-hidden={emoji.label ? "false" : "true"}
               >
@@ -90,7 +97,27 @@ const IconPopup =({page ,editPage,style, emojis,changePageIcon,randomIcon} :Icon
               </button>
               )
         :
-        <div>
+        <div
+            className='imageIcon'
+        >
+          <label
+            htmlFor="imageIconInput"
+          >
+            Choose an image
+          </label>
+          <input
+            id="imageIconInput"
+            name="imageIcon"
+            type="file"
+            accept='image/*'
+            onChange={onChangeImgIcon}
+          />
+          {imgSrc!==null &&
+          <img
+            src={imgSrc}
+            alt="imgIcon"
+          />
+          }
         </div>
         }
         </div>
