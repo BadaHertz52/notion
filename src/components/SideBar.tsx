@@ -1,5 +1,5 @@
 import React, { ChangeEvent, CSSProperties, Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
-import { Block, blockSample, findPage, listItem, Notion, Page, pageSample } from '../modules/notion';
+import { Block, blockSample, findPage, IconType, listItem, Notion, Page, pageSample } from '../modules/notion';
 import { detectRange } from './BlockFn';
 import { useNavigate } from 'react-router-dom';
 import { UserState } from '../modules/user';
@@ -128,8 +128,16 @@ const ItemTemplate =({item,setTargetPageId ,onClickMoreBtn, addNewSubPage  }:Ite
             onClick={()=>{setTargetPageId(item.id) }}
       >
         {item.icon !==null ?
-          <span>
-            {item.icon}
+        <span>
+          {item.iconType==="string"?
+            item.icon
+          :
+            <img
+              className='pageImgIcon'
+              alt="pageImgIcon"
+              src={item.icon}
+            />
+          }
           </span>
           :
           <span>
@@ -175,6 +183,7 @@ const ListTemplate =({notion,targetList ,setTargetPageId , onClickMoreBtn, addNe
     return {
       id: subPage.id,
       title: subPage.header.title,
+      iconType:subPage.header.iconType,
       icon: subPage.header.icon,
       subPagesId:subPage.subPagesId,
       parentsId: subPage.parentsId,
@@ -235,6 +244,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
     return {
       id: page.id,
       title: page.header.title,
+      iconType:page.header.iconType,
       icon: page.header.icon,
       subPagesId: page.subPagesId,
       parentsId: page.parentsId,
@@ -265,6 +275,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
                                 const listItem ={
                                 id:page.id,
                                 title:page.header.title,
+                                iconType:page.header.iconType,
                                 icon:page.header.icon,
                                 subPagesId: page.subPagesId,
                                 parentsId: page.parentsId,
@@ -280,6 +291,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
   const list:listItem[] = firstPages.filter((page:Page)=> page.parentsId ==null)
                                     .map((page:Page)=> (
                                     { id:page.id,
+                                      iconType:page.header.iconType,
                                       icon:page.header.icon,
                                       title: page.header.title,
                                       subPagesId: page.subPagesId,
@@ -290,7 +302,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
   const addNewPage=()=>{
     addPage(pageSample)
   };
-  const renamePage =(title:string|null, icon:string| null)=>{
+  const renamePage =(title:string|null, icon:string| null, iconType:IconType)=>{
     if(targetItem !==null){
       const page =findPage(pagesId,pages, targetItem.id);
       const renamedPage:Page ={
@@ -298,6 +310,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
         header:{
           ...page.header,
           title: title !==null ? title :page.header.title,
+          iconType: iconType,
           icon: icon !== null ? icon : page.header.icon,
         },
         editTime:editTime
@@ -310,7 +323,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
     setIcon(value);
     if(targetItem!==null){
       value !== targetItem.icon &&
-      renamePage( null, value );
+      renamePage( null, value ,"string");
     }
 
   }
@@ -319,7 +332,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
     setTitle(value);
     if(targetItem !==null){
       value !== targetItem.title &&
-      renamePage(value, null );
+      renamePage(value, null, null );
     };
   };
 

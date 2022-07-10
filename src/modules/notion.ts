@@ -48,6 +48,10 @@ export const basicBlockStyle:BlockStyle ={
 const userName= "amet";
 const editTime =JSON.stringify(Date.now());
 
+const img ="img";
+const string="string";
+export type IconType = typeof img| typeof string |null ;
+
 export type CommentType ={
   id: string,
   userName:string,
@@ -67,6 +71,7 @@ export type Block ={
   subBlocksId : string[]|null ,
   parentBlocksId: string[]|null,
   type: BlockType ,
+  iconType:IconType,
   icon: string | null ,
   editTime: string ,
   createTime:string,
@@ -81,6 +86,7 @@ export  const blockSample:Block ={
   subBlocksId:null ,
   parentBlocksId: null,
   type:text,
+  iconType:null,
   icon:null,
   editTime:editTime,
   createTime:JSON.stringify(Date.now()),
@@ -99,6 +105,7 @@ export function makeNewBlock(page:Page, targetBlock:Block|null, newBlockContents
     firstBlock: targetBlock !==null? targetBlock.firstBlock : true,
     subBlocksId:targetBlock!==null? targetBlock.subBlocksId: null,
     parentBlocksId:targetBlock!==null? targetBlock.parentBlocksId : null,
+    iconType:null,
     icon:null,
     style :basicBlockStyle,
     comments:null
@@ -108,16 +115,19 @@ export function makeNewBlock(page:Page, targetBlock:Block|null, newBlockContents
 export type listItem = {
   id: string;
   title: string ;
+  iconType:IconType,
   icon: string | null;
   subPagesId: string[]|null;
   parentsId:string[]|null;
   editTime:string,
   createTime:string,
 };
+
 export type Page ={
   id:string ,  // 형식 : comment_현재 시간 
   header : {
     title: string ,
+    iconType: IconType,
     icon: string |null,
     cover: ImageData |null,
     comments: BlockCommentType[]| null,
@@ -137,6 +147,7 @@ export const  pageSample:Page ={
   id:editTime, 
   header : {
     title: "untitle",
+    iconType :null,
     icon: null,
     cover: null,
     comments:  null,
@@ -285,6 +296,7 @@ const initialState :Notion ={
     id: '12345',
     header : {
       title:"welcome notion",
+      iconType:"string",
       icon:'👋' ,
       cover: null,
       comments:[{
@@ -308,6 +320,7 @@ const initialState :Notion ={
       subBlocksId: ["sub1_1", "sub1_2"] ,
       parentBlocksId: null,
       type: text,
+      iconType:null,
       icon:  null ,
       editTime:Date.parse("2021-5-18-15:00").toString(),
       createTime: Date.parse("2021-5-18-1:00").toString(),
@@ -336,6 +349,7 @@ const initialState :Notion ={
       subBlocksId:null, 
       parentBlocksId: null,
       type: toggle,
+      iconType:null,
       icon:  null ,
       editTime: (Date.parse("2021-5-18-16:00")).toString()
       ,
@@ -349,6 +363,7 @@ const initialState :Notion ={
       subBlocksId:null ,
       parentBlocksId: null,
       type: todo,
+      iconType:null,
       icon:  null ,
       editTime: (Date.parse("2021-5-18-16:01:00")).toString(),
       createTime: (Date.parse("2021-5-18-3:00")).toString(),
@@ -376,6 +391,7 @@ const initialState :Notion ={
       subBlocksId:null ,
       parentBlocksId: null,
       type: todo_done,
+      iconType:null,
       icon:  null ,
       editTime: (Date.parse("2021-5-19-11:30")).toString()
       ,
@@ -389,6 +405,7 @@ const initialState :Notion ={
       subBlocksId:null ,
       parentBlocksId: null,
       type: h1,
+      iconType:null,
       icon:  null ,
       editTime: (Date.parse("2021-5-19-12:00")).toString(),
       createTime: (Date.parse("2021-5-18-15:00")).toString(),
@@ -401,6 +418,7 @@ const initialState :Notion ={
       subBlocksId:null ,
       parentBlocksId: null,
       type: h2,
+      iconType:null,
       icon:  null ,
       editTime: (Date.parse("2021-5-18-20:00")).toString(),
       createTime: (Date.parse("2021-5-18-15:00")).toString(),
@@ -413,6 +431,7 @@ const initialState :Notion ={
       subBlocksId:null ,
       parentBlocksId: null,
       type: h3,
+      iconType:null,
       icon:  null ,
       editTime: (Date.parse("2021-5-19-19:20")).toString()
       , 
@@ -426,6 +445,7 @@ const initialState :Notion ={
       subBlocksId:null ,
       parentBlocksId: null,
       type: page,
+      iconType:null,
       icon:  null ,
       editTime: (Date.parse("2021-5-20-21:00")).toString()
       ,
@@ -440,6 +460,7 @@ const initialState :Notion ={
       subBlocksId:null ,
       parentBlocksId: null,
       type: page,
+      iconType:null,
       icon: "🌈" ,
       editTime: (Date.parse("2021-5-20-9:00")).toString(),
       createTime: (Date.parse("2021-5-19-20:00")).toString(),
@@ -453,6 +474,7 @@ const initialState :Notion ={
     subBlocksId: ["sub2_1"],
     parentBlocksId: ["text"],
     type: text,
+    iconType:null,
     icon:  null ,
     editTime: (Date.parse("2021-6-1-1:00")).toString() ,   
     createTime: (Date.parse("2021-5-30-15:00")).toString(),
@@ -472,6 +494,7 @@ const initialState :Notion ={
     subBlocksId:null,
     parentBlocksId: ["text"],
     type: text,
+    iconType:null,
     icon:  null ,
     editTime: (Date.parse("2021-5-12-09:00")).toString(),
     createTime: (Date.parse("2021-5-12-08:50")).toString(),
@@ -500,6 +523,7 @@ const initialState :Notion ={
     subBlocksId:null,
     parentBlocksId: ["text", "sub1_1"],
     type: text,
+    iconType:null,
     icon:  null ,
     editTime: (Date.parse("2021-5-27-7:00")).toString(),
     createTime: (Date.parse("2021-5-27-7:00")).toString(),
@@ -519,6 +543,7 @@ const initialState :Notion ={
     subBlocksId:["num1", "num2", "num3"],
     parentBlocksId: null,
     type: numberList,
+    iconType:null,
     icon:  null ,
     editTime: (Date.parse("2021-6-1-18:45")).toString(),
     createTime: (Date.parse("2021-6-1-18:45")).toString(),
@@ -538,6 +563,7 @@ const initialState :Notion ={
     subBlocksId:null,
     parentBlocksId: [numberList],
     type: numberList,
+    iconType:null,
     icon:  null ,
     editTime: (Date.parse("2021-6-1-19:03")).toString(),
     createTime: (Date.parse("2021-6-1-19:03")).toString(),
@@ -557,6 +583,7 @@ const initialState :Notion ={
     subBlocksId:null,
     parentBlocksId: [numberList],
     type: numberList,
+    iconType:null,
     icon:  null ,
     editTime: (Date.parse("2021-6-1-19:03:50")).toString(),
     createTime: (Date.parse("2021-6-1-19:03:50")).toString(),
@@ -585,6 +612,7 @@ const initialState :Notion ={
     subBlocksId:null,
     parentBlocksId: [numberList],
     type: numberList,
+    iconType:null,
     icon:  null ,
     editTime: Date.parse("2021-6-1-19:12:13").toString(),
     createTime: Date.parse("2021-6-1-19:12:13").toString(),
@@ -604,6 +632,7 @@ const initialState :Notion ={
     subBlocksId:["b1", "b2"],
     parentBlocksId:null,
     type: bulletList,
+    iconType:null,
     icon:  null ,
     editTime: (Date.parse("2021-6-1-19:13:45")).toString(),
     createTime: (Date.parse("2021-6-1-19:13:45")).toString(),
@@ -623,6 +652,7 @@ const initialState :Notion ={
     subBlocksId:null,
     parentBlocksId:[bulletList],
     type: bulletList,
+    iconType:null,
     icon:  null ,
     editTime: (Date.parse("2021-6-1-19:23")).toString(),
     createTime: (Date.parse("2021-6-1-19:23")).toString(),
@@ -642,6 +672,7 @@ const initialState :Notion ={
     subBlocksId:null,
     parentBlocksId:[bulletList],
     type: bulletList,
+    iconType:null,
     icon:  null ,
     editTime: (Date.parse("2021-6-1-20:12" )).toString(),
     createTime: (Date.parse("2021-6-1-20:12" )).toString(),
@@ -678,6 +709,7 @@ const initialState :Notion ={
     id:"page2",
     header:{
       ...pageSample.header,
+      iconType:"string",
       icon:"🌈",
       title:"page2"
     },
@@ -689,6 +721,7 @@ const initialState :Notion ={
     id: '1234',
     header : {
       title:"notion2",
+      iconType:"string",
       icon:'👋' ,
       cover: null,
       comments:  null,
@@ -705,6 +738,7 @@ const initialState :Notion ={
     id: '123',
     header : {
       title:"notion3",
+      iconType:"string",
       icon:'👋' ,
       cover: null,
       comments:  null,
@@ -1029,6 +1063,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
         id:action.block.id,
         header:{
           title: action.block.contents,
+          iconType: action.block.iconType,
           icon: action.block.icon,
           cover:null,
           comments:action.block.comments
@@ -1367,7 +1402,6 @@ export default function notion (state:Notion =initialState , action :NotionActio
     case MOVE_PAGE_TO_PAGE:
       function movePageToPage(destinationPageId: string){
         const destinationPage = findPage(pagesId, pages, destinationPageId);
-      const destinationPageIndex = pagesId.indexOf(destinationPage.id);
       // target page 관련 변경
       if(firstPagesId.includes(targetPage.id)){
         const index = firstPagesId.indexOf(targetPage.id);
@@ -1395,6 +1429,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
         subBlocksId: null,
         parentBlocksId: null,
         type:  "page",
+        iconType:targetPage.header.iconType,
         icon: targetPage.header.icon,
         editTime: targetPage.editTime,
         createTime: targetPage.createTime,

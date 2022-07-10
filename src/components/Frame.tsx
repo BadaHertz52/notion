@@ -1,5 +1,5 @@
 import React, { CSSProperties, Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { Block, blockSample, findBlock, Page } from '../modules/notion';
+import { Block, blockSample, findBlock, IconType, Page } from '../modules/notion';
 import EditableBlock from './EditableBlock';
 
 //icon
@@ -234,12 +234,20 @@ const Frame =({ targetPage,firstBlocksId,editBlock,changeBlockToPage,changePageT
               </div>
             }
             <div className="pageHeader_notCover" style={headerBottomStyle}>
-              {page.header.icon !==null &&
+              {icon !==null && page.header.iconType !==null &&
                 <div 
                 className='pageIcon'
                 onClick={onClickPageIcon}
                 >
-                  {icon}
+                {page.header.iconType ==="string"?
+                  icon
+                :
+                  <img
+                    className='pageImgIcon'
+                    alt="pageImgIcon"
+                    src={icon}
+                  />
+                }
                 </div>
               }
               {decoOpen &&

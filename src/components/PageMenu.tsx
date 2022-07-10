@@ -104,6 +104,7 @@ const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock,changeBlockToP
     const RESULT:listItem[] = filteredPages.map((page:Page)=>({
       id: page.id,
       title: page.header.title,
+      iconType:page.header.iconType,
       icon: page.header.icon,
       subPagesId:page.subPagesId,
       parentsId:page.parentsId,

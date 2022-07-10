@@ -7,7 +7,7 @@ import BlockFn, { detectRange } from '../components/BlockFn';
 import Comments from '../components/Comments';
 import QuickFindBord from '../components/QuickFindBord';
 import { RootState } from '../modules';
-import { add_block, add_page, Block, blockSample, change_block_to_page, change_page_to_block, change_to_sub, clean_trash, delete_block, delete_page, duplicate_page, edit_block, edit_page, findBlock, findPage,  listItem,  move_page_to_page, Page, pageSample, raise_block, restore_page, } from '../modules/notion';
+import { add_block, add_page, Block, blockSample, change_block_to_page, change_page_to_block, change_to_sub, clean_trash, delete_block, delete_page, duplicate_page, edit_block, edit_page, findBlock, findPage,  IconType,  listItem,  move_page_to_page, Page, pageSample, raise_block, restore_page, } from '../modules/notion';
 import { change_side, SideAppear } from '../modules/side';
 import { add_favorites, add_recent_page, clean_recent_page, remove_favorites } from '../modules/user';
 import EditorContainer from './EditorContainer';
@@ -15,7 +15,8 @@ import SideBarContainer from './SideBarContainer';
 export type pathType={
   id:string,
   title:string,
-  icon:string|null
+  icon:string|null,
+  iconType:IconType
 };
 export   type DiscardItemType ={
   discard:boolean
@@ -31,6 +32,7 @@ const NotionRouter =()=>{
     return {
       id:PAGE.id,
       title:PAGE.header.title,
+      iconType:PAGE.header.iconType,
       icon :PAGE.header.icon,
       editTime:JSON.stringify(Date.now()),
       createTime:JSON.stringify(Date.now()),
@@ -144,7 +146,8 @@ const NotionRouter =()=>{
       const pagePath:pathType[] =parentPages.concat(page).map((p:Page)=>({
         id:p.id,
         title:p.header.title,
-        icon:p.header.icon
+        icon:p.header.icon,
+        iconType:p.header.iconType,
       }));
       return pagePath;
     }else{
@@ -152,7 +155,8 @@ const NotionRouter =()=>{
         [{
           id:page.id,
           title:page.header.title,
-          icon:page.header.icon
+          icon:page.header.icon,
+          iconType:page.header.iconType
           }])
     }
   };

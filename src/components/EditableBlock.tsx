@@ -221,10 +221,19 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                 <div 
                   className='pageIcon left'
                 >
-                {block.icon == null?
+                {block.iconType == null &&
                   < GrDocumentText/>
-                :
-                  block.icon
+                }
+                {block.icon !==null &&
+                  (block.iconType ==="string"?
+                    block.icon
+                  :
+                    <img
+                      className="pageTypeBlockImgIcon"
+                      src={block.icon}
+                      alt="blockIconImg"
+                    />
+                  )
                 }
                 </div>
               }

@@ -178,6 +178,19 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
               onClick={()=>setTargetPageId(page.id)}
             >
               <span>
+              {page.header.icon !==null&&
+                  (page.header.iconType==="string"? 
+                    page.header.icon
+                  :
+                      <img
+                        className='pageImgIcon'
+                        alt='pageIcon'
+                        src= {page.header.icon}
+                      />
+                  )
+                  }
+              </span>
+              <span>
                 {page.header.title? 
                 page.header.title 
                 : 
@@ -191,11 +204,29 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
               key={pagePath.indexOf(path)}
               onClick={()=>setTargetPageId(path.id)}
               >
-              <span>/</span> 
+              {pagePath.indexOf(path)!==0 &&
+              <span className='pathSlash'>
+                /
+              </span> 
+              }
               <span className='pageLink'>
                 <a href='path'>
-                  {path.icon && path.icon}
-                  {path.title}
+                  <span>
+                    {path.icon !==null&&
+                    (path.iconType==="string"? 
+                      path.icon
+                    :
+                        <img
+                          className='pageImgIcon'
+                          alt='pageImgIcon'
+                          src= {path.icon}
+                        />
+                    )
+                    }
+                  </span>
+                  <span>
+                    {path.title}
+                  </span>
                 </a>
                 </span>
             </button>
