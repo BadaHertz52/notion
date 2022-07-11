@@ -41,10 +41,25 @@
     }
     width: 20px;
   }
-.editor .comments {
+.comments {
+  z-index: 20;
+}
+.pageHeader .comments{
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  .comments_comments {
+    width: inherit;
+  }
+  .commentBlock {
+    .comment_header{
+      margin-bottom: 6px;
+    }
+  }
+}
+.pageContent .comments {
   position: absolute;
   @include popupMenu;
-  z-index: 20;
 }
 #commentsInner {
   position: relative;

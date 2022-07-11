@@ -303,11 +303,10 @@ const initialState :Notion ={
         id:"comment_1",
         userName:userName,
         type:"open",
-        content:"this is content",
-        editTime: JSON.stringify(Date.parse("2021-05-20-12")
-        ),
-        createTime: JSON.stringify(Date.parse("2021-05-20-12")
-        ),
+        content:"this is page comment",
+        editTime: Date.parse("2021-5-20-12:00")
+        .toString(),
+        createTime: Date.parse("2021-5-20-12:00").toString(),
         subComments:null,
         subCommentsId:null,
       }],

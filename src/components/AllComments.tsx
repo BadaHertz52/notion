@@ -80,6 +80,7 @@ const AllComments=({page, userName, editBlock, showAllComments, setShowAllCommen
             key={`allComments_${block.id}`}
             commentsStyle={undefined}
             pageId={pageId}
+            page={null}
             userName={userName}
             block={block}
             editBlock={editBlock}

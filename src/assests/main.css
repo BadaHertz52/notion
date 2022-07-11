@@ -749,7 +749,26 @@ a:link, a:active, a:visited {
   font-weight: initial;
 }
 
-.editor .comments {
+.comments {
+  z-index: 20;
+}
+
+.pageHeader .comments {
+  position: relative;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.pageHeader .comments .comments_comments {
+  width: inherit;
+}
+
+.pageHeader .comments .commentBlock .comment_header {
+  margin-bottom: 6px;
+}
+
+.pageContent .comments {
   position: absolute;
   width: 320px;
   display: -webkit-box;
@@ -770,14 +789,13 @@ a:link, a:active, a:visited {
   border-radius: 8px;
   -webkit-box-shadow: 0px 0px 23px -5px #ababab;
   box-shadow: 0px 0px 23px -5px #ababab;
-  z-index: 20;
 }
 
-.editor .comments::-webkit-scrollbar-thumb {
+.pageContent .comments::-webkit-scrollbar-thumb {
   background: #D3D1CB;
 }
 
-.editor .comments::-webkit-scrollbar-track {
+.pageContent .comments::-webkit-scrollbar-track {
   background: #EDECE9;
 }
 
@@ -2112,7 +2130,8 @@ a:link, a:active, a:visited {
 }
 
 .editor .pageTitle,
-.editor .editableBlock {
+.editor .editableBlock,
+.editor .pageHeader .comments {
   padding-right: calc(96px + env(safe-area-inset-left));
 }
 

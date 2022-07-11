@@ -1,5 +1,5 @@
 import React, { CSSProperties, Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { Block, blockSample, findBlock, Page } from '../modules/notion';
+import { Block, BlockCommentType, blockSample, CommentType, findBlock, Page } from '../modules/notion';
 import EditableBlock from './EditableBlock';
 import IconPoup, { randomIcon } from './IconPoup';
 import basicPageCover from '../assests/artificial-turf-g6e884a1d4_1920.jpg';
@@ -10,6 +10,7 @@ import {GrDocumentText ,GrDocument} from 'react-icons/gr';import { MdInsertPhoto
 import { HiTemplate } from 'react-icons/hi';
 import CommandBlock from './CommandBlock';
 import { defaultFontFamily } from './TopBar';
+import Comments from './Comments';
 
 
 export type Command ={
@@ -18,6 +19,7 @@ export type Command ={
   targetBlock: Block |null
 };
 type FrameProps ={
+  userName:string,
   page:Page,
   firstBlocksId:string[]|null,
   editBlock :(pageId: string, block: Block) => void,
@@ -34,9 +36,10 @@ type FrameProps ={
   setCommentBlock: Dispatch<SetStateAction<Block | null>>,
   smallText: boolean, 
   fullWidth: boolean, 
+  discardEdit:boolean,
 };
 
-const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth}:FrameProps)=>{
+const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit}:FrameProps)=>{
   const innerWidth =window.innerWidth; 
   const editTime =JSON.stringify(Date.now());
   const [newPageFram, setNewPageFrame]=useState<boolean>(false);
@@ -257,12 +260,19 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
                 className='pageComment'
                 style={frameInnerStyle}
               >
-                {/* {page.header.comments.map((comment:CommentType)=>
-                <Comment 
-                  key={`pageComment_${page.header.comments?.indexOf(comment)}`}
-                  comment={comment} 
+                {page.header.comments.map((comment:BlockCommentType)=>
+                <Comments 
+                  key={`pageComment_${comment.id}`}
+                  block={null}
+                  page={page}
+                  pageId={page.id}
+                  userName={userName}
+                  editBlock={editBlock}
+                  discardEdit={discardEdit}
+                  commentsStyle={undefined}
+                  select={null}
                   />
-                )} */}
+                )}
               </div>
 
               :

@@ -184,6 +184,8 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, ma
         setCommentBlock ={setCommentBlock}
         smallText={smallText}
         fullWidth={fullWidth}
+        discardEdit={discardEdit}
+        userName={userName}
       />
       <BlockFn
         page={page}
@@ -236,6 +238,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, ma
           >
               <CommentInput
                 pageId={page.id}
+                page={null}
                 userName={userName}
                 editBlock={editBlock}
                 blockComment={null}
@@ -255,6 +258,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, ma
           userName={userName}
           block={commentBlock}
           pageId={page.id}
+          page={null}
           editBlock={editBlock}
           select={null}
           discardEdit={discardEdit}
