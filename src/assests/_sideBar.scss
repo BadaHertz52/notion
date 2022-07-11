@@ -352,16 +352,21 @@
   align-content: center;
   box-sizing: border-box;
   padding: 10px;
-  input{
+  input, button{
     border: 1px solid $lightMud;
     border-radius: 1px;
-    min-height: 27px;
+    font-size: 15px;
+    text-align: center;
+    padding:2px;
+    height: 2rem;
+    box-sizing: inherit;
   }
   .rename_icon {
-    width: 9%
+    width: 2rem;
+    border-right: none;
   }
   .rename_title{
-    width: 81% ;
+    width: calc(100% - 2rem) ;
   }
 }
 #sideBar_pageMenu{

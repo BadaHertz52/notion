@@ -3244,18 +3244,24 @@ a:link, a:active, a:visited {
   background: #EDECE9;
 }
 
-#rename input {
+#rename input, #rename button {
   border: 1px solid #d6d6d6;
   border-radius: 1px;
-  min-height: 27px;
+  font-size: 15px;
+  text-align: center;
+  padding: 2px;
+  height: 2rem;
+  -webkit-box-sizing: inherit;
+          box-sizing: inherit;
 }
 
 #rename .rename_icon {
-  width: 9%;
+  width: 2rem;
+  border-right: none;
 }
 
 #rename .rename_title {
-  width: 81%;
+  width: calc(100% - 2rem);
 }
 
 #sideBar_pageMenu {
