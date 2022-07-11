@@ -242,9 +242,6 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
             <IconPoup 
               page={page}
               style={iconStyle}
-              emojis={emojis}
-              changePageIcon={changePageIcon}
-              randomIcon ={randomIcon}
               editPage={editPage}
               setOpenIconPopup={setOpenIconPopup}
             />

@@ -58,12 +58,7 @@ export const randomIcon =():string=>{
 type IconPoupProps ={
   page:Page,
   editPage: (pageId: string, newPage: Page) => void,
-  emojis: Emoji[],
   style :CSSProperties |undefined,
-  changePageIcon: (icon: string | null, iconType:IconType) => void, 
-  randomIcon:()=>string,
-}
-const IconPopup =({page ,editPage,style, emojis,changePageIcon,randomIcon} :IconPoupProps)=>{
   const emoji ="emoji";
   const image="image";
   type Category = typeof emoji | typeof image;
