@@ -1785,7 +1785,13 @@ a:link, a:active, a:visited {
   margin-right: 5px;
 }
 
-.editor .pagePathes a, .editor .pagePathes span {
+.editor .pagePathes {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.editor .pagePathes a {
   text-align: center;
 }
 
@@ -1795,11 +1801,36 @@ a:link, a:active, a:visited {
 
 .editor .pagePath {
   font-size: 14px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-right: 3px;
 }
 
 .editor .pagePath .pageImgIcon {
   width: 14px;
   height: 14px;
+}
+
+.editor .pathSlash {
+  margin-right: 3px;
+}
+
+.editor .pageLink a {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.editor .pathTitle {
+  width: 90px;
+}
+
+.editor .pathTitle div {
+  width: inherit;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .editor .pageFun {

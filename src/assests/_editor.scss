@@ -108,7 +108,8 @@
     margin-right: 5px;
   }
   .pagePathes{
-    a, span{
+    display: flex;
+    a{
       text-align: center;
     }
     span{
@@ -117,12 +118,29 @@
   }
   .pagePath {
     font-size: 14px;
+    display: flex;
+    margin-right: 3px;
     .pageImgIcon{
       width:14px;
       height: 14px;
     }
   }
+  .pathSlash{
+    margin-right: 3px;
+  }
+  .pageLink a{
+    display: flex;
 
+  }
+  .pathTitle{
+    width: 90px;
+    div{
+      width: inherit;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
   .pageFun{
     position: relative;
     #pageMenu {
