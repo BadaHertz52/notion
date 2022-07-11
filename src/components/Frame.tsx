@@ -37,6 +37,7 @@ type FrameProps ={
 };
 
 const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth}:FrameProps)=>{
+  const innerWidth =window.innerWidth; 
   const editTime =JSON.stringify(Date.now());
   const [newPageFram, setNewPageFrame]=useState<boolean>(false);
   const [decoOpen ,setdecoOpen] =useState<boolean>(false);
@@ -50,7 +51,7 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
   const frameInnerStyle:CSSProperties={
     fontFamily:defaultFontFamily ,
     fontSize: smallText? "14px": "16px",
-    width: fullWidth? "100%":'900px',
+    width: innerWidth >900?  fullWidth? "100%":'900px' : "100%",
   };
   const headerStyle: CSSProperties ={
     marginTop: page.header.cover !==null? "10px": "30px" ,
@@ -252,7 +253,10 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
               </div>
               {!newPageFram ?
                 page.header.comments!==null &&
-              <div className='pageComment'>
+              <div 
+                className='pageComment'
+                style={frameInnerStyle}
+              >
                 {/* {page.header.comments.map((comment:CommentType)=>
                 <Comment 
                   key={`pageComment_${page.header.comments?.indexOf(comment)}`}
@@ -262,8 +266,11 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
               </div>
 
               :
-                <div className='pageComment'>
-                  Press Enter to continue with an empty pagem or pick a templage
+                <div 
+                  className='pageComment'
+                  style={frameInnerStyle}
+                >
+                  Press Enter to continue with an empty page or pick a templage
                 </div>
             }
             </div>
