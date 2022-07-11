@@ -1,12 +1,11 @@
 import React, { ChangeEvent, CSSProperties, Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
-import { Block, blockSample, findPage, IconType, listItem, Notion, Page, pageSample } from '../modules/notion';
+import { Block, blockSample, findPage, listItem, Notion, Page, pageSample } from '../modules/notion';
 import { detectRange } from './BlockFn';
-import { useNavigate } from 'react-router-dom';
 import { UserState } from '../modules/user';
 
 //react-icon
 import {FiCode ,FiChevronsLeft} from 'react-icons/fi';
-import {AiOutlineClockCircle, AiOutlineMenu, AiOutlinePlus, AiOutlineStar} from 'react-icons/ai';
+import {AiOutlineClockCircle,  AiOutlinePlus, AiOutlineStar} from 'react-icons/ai';
 import {BiSearchAlt2} from 'react-icons/bi';
 import {BsFillTrash2Fill, BsPencilSquare, BsThreeDots} from 'react-icons/bs';
 import {IoIosSettings} from 'react-icons/io';
