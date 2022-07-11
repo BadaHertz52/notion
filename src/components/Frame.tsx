@@ -2,6 +2,7 @@ import React, { CSSProperties, Dispatch, SetStateAction, useEffect, useState } f
 import { Block, blockSample, findBlock, Page } from '../modules/notion';
 import EditableBlock from './EditableBlock';
 import IconPoup, { randomIcon } from './IconPoup';
+import basicPageCover from '../assests/artificial-turf-g6e884a1d4_1920.jpg';
 //icon
 import { BiMessageDetail } from 'react-icons/bi';
 import { BsFillEmojiSmileFill} from 'react-icons/bs';
@@ -36,8 +37,8 @@ type FrameProps ={
 };
 
 const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth}:FrameProps)=>{
+  const editTime =JSON.stringify(Date.now());
   const [newPageFram, setNewPageFrame]=useState<boolean>(false);
-  const [cover, setCover]=useState<ImageData|null>(page.header.cover);
   const [decoOpen ,setdecoOpen] =useState<boolean>(false);
   const [command, setCommand]=useState<Command>({boolean:false, 
   command:null,
@@ -56,9 +57,17 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
     
   };
   const headerBottomStyle :CSSProperties ={
-    marginTop: page.header.cover !==null ? "-39px" :"0",
     fontSize: smallText? "32px": "40px"
   };
+  const pageIconStyle :CSSProperties={
+    width: page.header.iconType=== "img"? 124 : 78,
+    height: page.header.iconType=== "img"? 124 : 78,
+    marginTop: page.header.cover ==null? 0 : (
+      page.header.iconType==="img"?
+      -62:
+      -39
+    )
+  }
   const newPage :Page ={
     ...page,
     header:{
@@ -97,7 +106,9 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
       header:{
         ...page.header,
         title:value 
-    }})
+    },
+    editTime:editTime
+  })
   };
 
   const addRandomIcon =()=>{
@@ -107,11 +118,23 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
       header:{
         ...page.header,
         icon: icon
-      }
+      },
+      editTime:editTime
     };
     editPage(page.id, newPageWithIcon);
   };
 
+  const onClickAddCover =()=>{
+    const editedPage:Page={
+      ...page,
+      header:{
+        ...page.header,
+        cover:basicPageCover
+      },
+      editTime:editTime
+    };
+    editPage(page.id, editedPage)
+  };
   useEffect(()=>{
     page.blocksId[0] ===undefined?
     setNewPageFrame(true):
@@ -151,7 +174,8 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
     changeFontSizeBySmallText(h1Blocks,3);
     changeFontSizeBySmallText(h2Blocks,2.5);
     changeFontSizeBySmallText(h3Blocks,2);
-  },[smallText])
+  },[smallText]);
+  
   return(
     <div className={newPageFram? "newPageFrame frame" :'frame'}>
         <div 
@@ -166,7 +190,7 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
           >
             {page.header.cover !== null &&        
               <div className='pageCover'>
-                {cover}
+                <img src={page.header.cover} alt="page cover " />
               </div>
             }
             <div className="pageHeader_notCover" style={headerBottomStyle}>
@@ -174,9 +198,12 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
                 <div 
                 className='pageIcon'
                 onClick={onClickPageIcon}
+                style={pageIconStyle}
                 >
                 {page.header.iconType ==="string"?
-                  page.header.icon
+                <div className='pageStringIcon'>
+                  {page.header.icon}
+                </div >
                 :
                   <img
                     className='pageImgIcon'
@@ -200,6 +227,7 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
                   {page.header.cover == null&&        
                     <button 
                       className='decoCover'
+                      onClick={onClickAddCover}
                     >
                       <MdInsertPhoto/>
                       <span>Add Cover</span>
