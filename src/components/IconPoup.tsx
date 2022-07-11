@@ -66,7 +66,18 @@ const IconPopup =({page ,editPage,style,  setOpenIconPopup} :IconPoupProps)=>{
   const image="image";
   type Category = typeof emoji | typeof image;
   const [category , setCategory] =useState<Category>(emoji);
-  const [imgSrc, setImgSrc]=useState<string|null>(null);
+
+  const changePageIcon =(icon:string|null ,iconType:IconType)=>{
+    editPage(page.id, {
+      ...page,
+      header :{
+        ...page.header,
+        iconType:iconType,
+        icon: icon
+      }
+    });
+    setOpenIconPopup(false);
+  };
   const removeIcon =()=>{
     changePageIcon(null , null);
   };
@@ -162,12 +173,6 @@ const IconPopup =({page ,editPage,style,  setOpenIconPopup} :IconPoupProps)=>{
             accept='image/*'
             onChange={onChangeImgIcon}
           />
-          {imgSrc!==null &&
-          <img
-            src={imgSrc}
-            alt="imgIcon"
-          />
-          }
         </div>
         }
         </div>
