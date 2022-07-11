@@ -129,7 +129,7 @@ export type Page ={
     title: string ,
     iconType: IconType,
     icon: string |null,
-    cover: ImageData |null,
+    cover: string |null,
     comments: BlockCommentType[]| null,
   }
   firstBlocksId :string[] | null,
