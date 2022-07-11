@@ -82,7 +82,7 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
       const domeRect = currentTarget.getClientRects()[0];
       setIconStyle({
         position: "absolute",
-        top: domeRect.bottom +10,
+        top: domeRect.bottom + 24,
         left:domeRect.left - frameDomRect.left ,
       })
       setOpenIconPopup(true);
