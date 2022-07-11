@@ -2250,6 +2250,11 @@ a:link, a:active, a:visited {
 
 .editor .pageHeader .pageTitle {
   font-size: inherit;
+  width: 100%;
+}
+
+.editor .pageHeader .pageTitle input {
+  text-overflow: ellipsis;
 }
 
 .editor .pageContent_inner {

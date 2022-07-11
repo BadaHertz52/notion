@@ -410,6 +410,10 @@
     }
     .pageTitle{
       font-size: inherit;
+      width: 100%;
+      input{
+        text-overflow: ellipsis;
+      }
     }
   }
   .pageContent_inner{
