@@ -76,12 +76,14 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
   };
   const onClickPageIcon =(event:React.MouseEvent)=>{
     if(openIconPopup !==true){
+      const frame =document.getElementsByClassName("frame")[0];
+      const frameDomRect =frame.getClientRects()[0];
       const currentTarget =event.currentTarget;
       const domeRect = currentTarget.getClientRects()[0];
       setIconStyle({
         position: "absolute",
         top: domeRect.bottom +10,
-        left:domeRect.left ,
+        left:domeRect.left - frameDomRect.left ,
       })
       setOpenIconPopup(true);
     }else{
