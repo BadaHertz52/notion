@@ -158,11 +158,10 @@ const IconPopup =({page ,editPage,style,  setOpenIconPopup} :IconPoupProps)=>{
               </button>
               )
         :
-        <div
-            className='imageIcon'
-        >
+        <div className='imageIconBody'>
           <label
             htmlFor="imageIconInput"
+            className="imageIconInputLabel"
           >
             Choose an image
           </label>
@@ -173,6 +172,9 @@ const IconPopup =({page ,editPage,style,  setOpenIconPopup} :IconPoupProps)=>{
             accept='image/*'
             onChange={onChangeImgIcon}
           />
+          <div>
+            Recommended size 280 x 280 pixels
+          </div>
         </div>
         }
         </div>
