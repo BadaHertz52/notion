@@ -168,7 +168,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, ma
       setFullWidth={setFullWidth}
       />
       <Frame
-        targetPage={page}
+        page={page}
         firstBlocksId={page.firstBlocksId}
         addBlock={addBlock}
         editBlock={editBlock}

@@ -17,7 +17,7 @@ export type Command ={
   targetBlock: Block |null
 };
 type FrameProps ={
-  targetPage:Page,
+  page:Page,
   firstBlocksId:string[]|null,
   editBlock :(pageId: string, block: Block) => void,
   addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
@@ -35,12 +35,9 @@ type FrameProps ={
   fullWidth: boolean, 
 };
 
-const Frame =({ targetPage,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth}:FrameProps)=>{
-  const [page, setPage]=useState<Page>(targetPage);
+const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth}:FrameProps)=>{
   const [newPageFram, setNewPageFrame]=useState<boolean>(false);
   const [cover, setCover]=useState<ImageData|null>(page.header.cover);
-  const [icon, setIcon]=useState<string|null>(page.header.icon);
-  const [title, setTitle]=useState<string>(page.header.title);
   const [decoOpen ,setdecoOpen] =useState<boolean>(false);
   const [command, setCommand]=useState<Command>({boolean:false, 
   command:null,
@@ -74,7 +71,6 @@ const Frame =({ targetPage,firstBlocksId,editBlock,changeBlockToPage,changePageT
 
 
   const onClickEmpty =()=>{
-    setPage(newPage);
     editPage(page.id ,newPage);
   };
   const onClickPageIcon =(event:React.MouseEvent)=>{
@@ -93,7 +89,6 @@ const Frame =({ targetPage,firstBlocksId,editBlock,changeBlockToPage,changePageT
   };
   const onChangePageTitle =(event:React.ChangeEvent<HTMLInputElement>)=>{
     const value =event.target.value; 
-    setTitle(value);
     editPage(page.id,{
       ...page, 
       header:{
@@ -171,18 +166,18 @@ const Frame =({ targetPage,firstBlocksId,editBlock,changeBlockToPage,changePageT
               </div>
             }
             <div className="pageHeader_notCover" style={headerBottomStyle}>
-              {icon !==null && page.header.iconType !==null &&
+              { page.header.icon !==null &&
                 <div 
                 className='pageIcon'
                 onClick={onClickPageIcon}
                 >
                 {page.header.iconType ==="string"?
-                  icon
+                  page.header.icon
                 :
                   <img
                     className='pageImgIcon'
                     alt="pageImgIcon"
-                    src={icon}
+                    src={page.header.icon}
                   />
                 }
                 </div>
@@ -219,7 +214,7 @@ const Frame =({ targetPage,firstBlocksId,editBlock,changeBlockToPage,changePageT
               >
                 <input 
                     type="text" 
-                    value={title}
+                    value={page.header.title}
                     onChange={onChangePageTitle}
                   />
               </div>
@@ -258,7 +253,7 @@ const Frame =({ targetPage,firstBlocksId,editBlock,changeBlockToPage,changePageT
               id="pageContent_inner"
               >
               {firstBlocksId!==null &&
-                firstBlocksId.map((id:string)=> findBlock(targetPage,id).BLOCK)
+                firstBlocksId.map((id:string)=> findBlock(page,id).BLOCK)
                 .map((block:Block)=>{
                   return (
                     <EditableBlock
