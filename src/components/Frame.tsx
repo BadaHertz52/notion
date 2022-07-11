@@ -97,18 +97,19 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
         title:value 
     }})
   };
-  const changePageIcon =(icon:string|null ,iconType:IconType)=>{
-    setIcon(icon);
-    editPage(page.id, {
+
+  const addRandomIcon =()=>{
+    const icon =randomIcon();
+    const newPageWithIcon:Page ={
       ...page,
-      header :{
+      header:{
         ...page.header,
-        iconType:iconType,
         icon: icon
       }
-    });
-    setOpenIcon(false);
+    };
+    editPage(page.id, newPageWithIcon);
   };
+
   useEffect(()=>{
     page.blocksId[0] ===undefined?
     setNewPageFrame(true):
