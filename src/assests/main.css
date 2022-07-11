@@ -2069,7 +2069,11 @@ a:link, a:active, a:visited {
   font-family: inherit;
 }
 
-.editor .pageHeader,
+.editor .pageHeader {
+  width: 100%;
+}
+
+.editor .pageHeader_notCover,
 .editor .pageContent {
   max-width: 100%;
   width: 100%;
@@ -2101,6 +2105,16 @@ a:link, a:active, a:visited {
       -ms-flex-pack: space-evenly;
           justify-content: space-evenly;
   margin-bottom: 30px;
+}
+
+.editor .pageHeader .pageCover {
+  width: 100%;
+  height: 30vh;
+}
+
+.editor .pageHeader .pageCover img {
+  width: 100%;
+  height: 100%;
 }
 
 .editor .pageHeader .pageHeader_notConver {
@@ -2169,26 +2183,33 @@ a:link, a:active, a:visited {
 }
 
 .editor .pageHeader .pageIcon {
-  width: 124px;
-  height: 124px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
   -webkit-transition: opacity 100ms ease-in 0s;
   transition: opacity 100ms ease-in 0s;
   opacity: 1;
-  font-size: 78px;
   position: relative;
   pointer-events: auto;
   cursor: default;
 }
 
+.editor .pageHeader .pageIcon .pageStringIcon {
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  font-size: 60px;
+}
+
 .editor .pageHeader .pageIcon .pageImgIcon {
-  width: 124px;
-  height: 124px;
+  width: 100%;
+  height: 100%;
 }
 
 .editor .pageHeader .comments {
