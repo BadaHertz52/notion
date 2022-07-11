@@ -1,7 +1,7 @@
 import React, { CSSProperties, Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { Block, blockSample, findBlock, IconType, Page } from '../modules/notion';
+import { Block, blockSample, findBlock, Page } from '../modules/notion';
 import EditableBlock from './EditableBlock';
-
+import IconPoup, { randomIcon } from './IconPoup';
 //icon
 import { BiMessageDetail } from 'react-icons/bi';
 import { BsFillEmojiSmileFill} from 'react-icons/bs';
@@ -9,7 +9,7 @@ import {GrDocumentText ,GrDocument} from 'react-icons/gr';import { MdInsertPhoto
 import { HiTemplate } from 'react-icons/hi';
 import CommandBlock from './CommandBlock';
 import { defaultFontFamily } from './TopBar';
-import IconPoup from './IconPoup';
+
 
 export type Command ={
   boolean:boolean,
