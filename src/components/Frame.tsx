@@ -16,10 +16,6 @@ export type Command ={
   command:string | null,
   targetBlock: Block |null
 };
-export type Emoji ={
-  label:string,
-  symbol:string 
-}
 type FrameProps ={
   targetPage:Page,
   firstBlocksId:string[]|null,
@@ -77,66 +73,6 @@ const Frame =({ targetPage,firstBlocksId,editBlock,changeBlockToPage,changePageT
   };
 
 
-  const emojis:Emoji[] =[
-    {label:"smile face", symbol:"😁"},
-    {label:"smile with heart  face", symbol:"🥰"},
-    {label:"angry face", symbol:"😠"},
-    {label:"crying face", symbol:"😭"},
-    {label:"redheart", symbol:"❤️"},
-    {label:"purpleheart", symbol:"💜"},
-    {label:"ban", symbol:"🚫"},
-    {label:"attention", symbol:"⚠️"},
-    {label:"pencile", symbol:"📝"},
-    {label:"clock", symbol:"⌚"},
-    {label:"phone", symbol:"📱"},
-    {label:"video game", symbol:"🎮"},
-    {label:"computer", symbol:"🖥️"},
-    {label:"player", symbol:"🙏"},
-    {label:"party", symbol:"🎉"},
-    {label:"present", symbol:"🎁"},
-    {label:"movie", symbol:"🎞️"},
-    {label:"coin", symbol:"🪙"},
-    {label:"money", symbol:"💵"},
-    {label:"card", symbol:"💳"},
-    {label:"calendar", symbol:"🗓️"},
-    {label:"folder", symbol:"📁"},
-    {label:"ligh bulb", symbol:"💡"},
-    {label:"broom", symbol:"🧹"},
-    {label:"unicon", symbol:"🦄"},
-    {label:"french fries", symbol:"🍟"},
-    {label:"cup cake", symbol:"🧁"},
-    {label:"apple", symbol:"🍎"},
-    {label:"ariplane", symbol:"✈️"},
-    {label:"car", symbol:"🚗"},
-    {label:"bus", symbol:"🚌"},
-    {label:"building", symbol:"🏢"},
-    {label:"home", symbol:"🏠"},
-    {label:"tent", symbol:"⛺"},
-    {label:"star", symbol:"⭐"},
-    {label:"sun", symbol:"☀️"},
-    {label:"rainbow", symbol:"🌈"},
-    {label:"rain", symbol:"🌧️"},
-    {label:"snowman", symbol:"☃️"},
-    {label:"cherry blossoms", symbol:"🌸"},
-  ];
-  const randomIcon =():string=>{
-    const icons  = emojis.map((emoji:Emoji)=> emoji.symbol);
-    const index = Math.floor(Math.random() * (3));
-    return icons[index]
-  };
-  const addRandomIcon =()=>{
-    const icon =randomIcon();
-    const newPageWithIcon:Page ={
-      ...newPage,
-      header:{
-        ...newPage.header,
-        icon: icon
-      }
-    };
-    editPage(page.id, newPageWithIcon);
-    setIcon(icon);
-    setPage(newPageWithIcon);
-  };
   const onClickEmpty =()=>{
     setPage(newPage);
     editPage(page.id ,newPage);
