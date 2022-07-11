@@ -59,6 +59,9 @@ type IconPoupProps ={
   page:Page,
   editPage: (pageId: string, newPage: Page) => void,
   style :CSSProperties |undefined,
+  setOpenIconPopup :Dispatch<SetStateAction<boolean>>,
+};
+const IconPopup =({page ,editPage,style,  setOpenIconPopup} :IconPoupProps)=>{
   const emoji ="emoji";
   const image="image";
   type Category = typeof emoji | typeof image;
