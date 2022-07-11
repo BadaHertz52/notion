@@ -43,7 +43,7 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
   command:null,
   targetBlock:null
   });
-  const [openIcon, setOpenIcon]=useState<boolean>(false);
+  const [openIconPopup, setOpenIconPopup]=useState<boolean>(false);
   const [iconStyle, setIconStyle]=useState<CSSProperties|undefined>(undefined);
   const [commandBlockPositon, setCBPositon]=useState<CSSProperties>();
   const frameInnerStyle:CSSProperties={
@@ -70,11 +70,12 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
   };
 
 
+
   const onClickEmpty =()=>{
     editPage(page.id ,newPage);
   };
   const onClickPageIcon =(event:React.MouseEvent)=>{
-    if(openIcon !==true){
+    if(openIconPopup !==true){
       const currentTarget =event.currentTarget;
       const domeRect = currentTarget.getClientRects()[0];
       setIconStyle({
@@ -82,9 +83,9 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
         top: domeRect.bottom +10,
         left:domeRect.left ,
       })
-      setOpenIcon(true);
+      setOpenIconPopup(true);
     }else{
-      setOpenIcon(false);
+      setOpenIconPopup(false);
     }
   };
   const onChangePageTitle =(event:React.ChangeEvent<HTMLInputElement>)=>{
@@ -236,7 +237,7 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
             }
             </div>
           </div>
-          {openIcon &&
+          {openIconPopup &&
             <IconPoup 
               page={page}
               style={iconStyle}
@@ -244,6 +245,7 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
               changePageIcon={changePageIcon}
               randomIcon ={randomIcon}
               editPage={editPage}
+              setOpenIconPopup={setOpenIconPopup}
             />
           }
           <div className="pageContent">
