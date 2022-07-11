@@ -255,6 +255,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
   const trashBtn =useRef<HTMLButtonElement>(null);
   const [target ,setTarget] =useState<HTMLElement|null>(null);
   const [targetItem,setTargetItem]=useState<listItem|null>(null);
+  const [targetPage, setTargetPage] =useState<Page|null>(null);
   const [openTrash, setOpenTrash]=useState<boolean>(false);
   const [openSideMoreMenu ,setOpenSideMoreMenu] =useState<boolean>(false);
   const [openPageMenu ,setOpenPageMenu] =useState<boolean>(false);
@@ -263,9 +264,6 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
   const [moreFnStyle, setMoreFnStyle] =useState<CSSProperties|undefined>(undefined);
   const [renameStyle, setRenameStyle]=useState<CSSProperties>();
   const [pageMenuStyle, setPageMenuStyle]=useState<CSSProperties>();
-  const [title, setTitle] =useState<string>(targetItem!==null? targetItem.title:"");
-  const [icon, setIcon] =useState<string |null>
-  (targetItem!==null? targetItem.icon:"");
   const recordIcon =user.userName.substring(0,1);
   const editTime =JSON.stringify(Date.now());
   const makeFavoriteList =(favorites:string[] |null):listItem[]|null=>{
@@ -329,13 +327,18 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
   }
   const changeTitle =(event:ChangeEvent<HTMLInputElement> )=>{
     const value = event.target.value;
-    setTitle(value);
-    if(targetItem !==null){
-      value !== targetItem.title &&
-      renamePage(value, null, null );
+    if(targetPage!==null && value !== targetPage.header.title){
+        const renamedPage:Page ={
+          ...targetPage,
+          header:{
+            ...targetPage.header,
+            title:  value,
+          },
+          editTime:editTime
+        };
+        editPage(renamedPage.id, renamedPage );
     };
   };
-
   const addNewSubPage =(item:listItem)=>{
     const targetPage = findPage(pagesId ,pages,item.id);
     const newPageBlock :Block ={
@@ -410,8 +413,6 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
     if(targetItem!==null && 
       target !==null &&
       target?.parentElement !==null){
-      setIcon(targetItem.icon);
-      setTitle(targetItem.title);
       const domRect =target.parentElement.getClientRects()[0];
       setRenameStyle({
         position:"absolute",
@@ -664,7 +665,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
       />
     </div>
     }
-    {openRename &&
+    {openRename && targetPage !==null &&
       <div 
         id='rename'
         style={renameStyle}
