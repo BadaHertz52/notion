@@ -2,6 +2,7 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import { BsEmojiSmile } from 'react-icons/bs';
 import { CSSProperties } from 'styled-components';
 import { IconType, Page } from '../modules/notion';
+import { detectRange } from './BlockFn';
 
 export type Emoji ={
   label:string,
@@ -92,7 +93,15 @@ const IconPopup =({page ,editPage,style,  setOpenIconPopup} :IconPoupProps)=>{
       const url = URL.createObjectURL(file);
       changePageIcon(url, "img");
     }
-  }
+  };
+
+  const inner =document.getElementById("inner");
+  inner?.addEventListener("click", (event:MouseEvent)=>{
+    const iconPopup =document.getElementById("iconPopup");
+    const iconPopupDomRect = iconPopup?.getClientRects()[0];
+    const isInIconPopup =detectRange(event, iconPopupDomRect);
+    !isInIconPopup && setOpenIconPopup(false);
+  })
   return(
     <div 
       id="iconPopup"
