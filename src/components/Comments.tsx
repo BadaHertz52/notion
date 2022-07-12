@@ -488,8 +488,36 @@ const ToolMore =({pageId, block,page, editBlock ,editPage, setCommentBlock ,setP
     if(block !==null){
       updateComments(pageId,block,comment,editTime,editBlock, setCommentBlock,"delete", null);
     }
-    if(page !==null){
-
+    if(page !==null  && comment !==null){
+      const pageComment = page.header.comments?.[0];
+      if(pageComment !==undefined){
+        if(pageComment.id === comment.id){
+          const editedPage:Page ={
+            ...page,
+            header: {
+              ...page.header,
+              comments:null 
+            },
+            editTime:editTime 
+          };
+          editPage !== null && editPage(pageId, editedPage);
+        }else{
+          const editedPageComment:BlockCommentType ={
+            ...pageComment,
+            subComments:pageComment.subComments !==null?  pageComment.subComments.filter((sub:CommentType)=> comment.id !== sub.id) : null,
+            subCommentsId:pageComment.subCommentsId !== null?  pageComment.subCommentsId.filter((sub:string)=> sub !== comment.id) : null,
+          };
+          setPageComments !==null && setPageComments([editedPageComment]);
+          const editedPage:Page ={
+            ...page,
+            header :{
+              ...page.header ,
+              comments: [editedPageComment]
+            }
+          };
+          editPage!==null && editPage(pageId, editedPage);
+        }
+      };
     }
   };
 
@@ -570,7 +598,6 @@ const CommentTool =({mainComment , comment,block, page ,pageId ,editBlock ,editP
   const openToolMore =(event: React.MouseEvent<HTMLButtonElement>)=>{
     setMoreOpen(true);
     const target = event.currentTarget ;
-    const editor =document.getElementsByClassName("editor")[0] as HTMLElement;
     const block_comments =document.getElementById("block_comments");  
     
     const position = target.getClientRects()[0] as DOMRect;
