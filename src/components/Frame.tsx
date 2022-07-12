@@ -269,7 +269,6 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
                   userName={userName}
                   editBlock={editBlock}
                   discardEdit={discardEdit}
-                  commentsStyle={undefined}
                   select={null}
                   />
                 )}

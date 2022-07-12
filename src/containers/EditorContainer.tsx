@@ -253,8 +253,11 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, ma
       )
       }
       {commentBlock !==null && openComment &&
+      <div 
+        id="block_comments"
+        style={commentsStyle}
+      >
         <Comments
-          commentsStyle={commentsStyle}
           userName={userName}
           block={commentBlock}
           pageId={page.id}
@@ -262,7 +265,8 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, ma
           editBlock={editBlock}
           select={null}
           discardEdit={discardEdit}
-        />              
+        />  
+      </div>            
       }
     </div>
   )

@@ -16,7 +16,6 @@ type CommentsProps={
   pageId: string,
   userName:string,
   editBlock :(pageId: string, block: Block) => void | null,
-  commentsStyle: CSSProperties | undefined ,
   select : null | typeof open | typeof resolve,
   discardEdit:boolean
 };
@@ -679,7 +678,7 @@ const Comment =({userName,comment, block,page, pageId, editBlock ,setCommentBloc
     </div>
   )
 };
-const Comments =({pageId,block,page, userName ,editBlock ,commentsStyle  ,select ,discardEdit}:CommentsProps)=>{
+const Comments =({pageId,block,page, userName ,editBlock  ,select ,discardEdit}:CommentsProps)=>{
   const [targetComments, setTargetComment]= useState<BlockCommentType[]| null>(null);
   const [resolveComments, setResolveComments]= useState<BlockCommentType[]| null>(null);
   const [openComments, setOpenComments]= useState<BlockCommentType[]| null>(null);
@@ -721,7 +720,6 @@ const Comments =({pageId,block,page, userName ,editBlock ,commentsStyle  ,select
     <>
     <div 
       className='comments'
-      style={commentsStyle}
     >
       {resolveComments !==null && resolveComments.length>0 && select==null &&
         <section className="commentType">

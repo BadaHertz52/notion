@@ -78,7 +78,6 @@ const AllComments=({page, userName, editBlock, showAllComments, setShowAllCommen
         targetCommentsBlocks.map((block:Block)=>
           <Comments
             key={`allComments_${block.id}`}
-            commentsStyle={undefined}
             pageId={pageId}
             page={null}
             userName={userName}
