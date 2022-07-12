@@ -44,7 +44,7 @@ type CommentInputProps={
   editBlock :(pageId: string, block: Block) => void |null,
   editPage: ((pageId: string, newPage: Page) => void )| null,
   commentBlock: Block|null,
-  setCommentBlock: Dispatch<SetStateAction<Block|null>> ,
+  setCommentBlock: (Dispatch<SetStateAction<Block|null>>)|null ,
   setPageComments: (Dispatch<SetStateAction<BlockCommentType[] | null>>)|null,
   setPopup:Dispatch<SetStateAction<PopupType>>| null,
   addOrEdit:"add"|"edit",
@@ -207,7 +207,7 @@ export const CommentInput =({userName, pageId, page ,blockComment, subComment,ed
         ...commentBlock,
         comments: blockComments
       };
-      setCommentBlock(editedBlock);
+      setCommentBlock!==null && setCommentBlock(editedBlock);
       editBlock(pageId,editedBlock);
     }
   };
