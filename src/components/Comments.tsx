@@ -304,18 +304,104 @@ export const CommentInput =({userName, pageId, page ,blockComment, subComment,ed
         updateBlock(blockComments);
       }
     }; 
+    const updatePageComment =(pageComment:BlockCommentType)=>{
+      if(page !==null){
+        const editedPage :Page ={
+          ...page,
+          header :{
+            ...page.header,
+            comments:[pageComment]
+          },
+          editTime:editTime
+        };
+        setPageComments !==null && setPageComments([pageComment]);
+        editPage !== null && editPage(pageId, editedPage);
+      }
+    } ;
+    const addPageComment =(page:Page)=>{
+      const newComment:BlockCommentType ={
+        id: `pageComment_${editTime}`,
+        userName: userName,
+        content: text,
+        editTime: editTime,
+        createTime: editTime,
+        type: "open" ,
+        subComments: null,
+        subCommentsId: null
+      };
+
+      updatePageComment(newComment);
+    };
+    const addPageSubComment=(page:Page , blockComment:BlockCommentType )=>{
+      const newSubComment :CommentType ={
+        id: `subComment_${editTime}`,
+        userName: userName,
+        content: text,
+        editTime: editTime,
+        createTime: editTime,
+      };
+
+      const pageComment:BlockCommentType ={
+        ...blockComment,
+        subComments: blockComment.subComments==null? [newSubComment]: blockComment.subComments?.concat(newSubComment),
+        subCommentsId: blockComment.subCommentsId ===null ? [newSubComment.id] : blockComment.subCommentsId.concat(newSubComment.id),
+      };
+
+      updatePageComment(pageComment);
+    };
+
+    const editPageComment =(page:Page)=>{
+      if(page.header.comments !==null){
+        const pageComments =page.header.comments[0];
+        const editedComment:BlockCommentType ={
+          ...pageComments,
+          content:text ,
+          editTime:editTime
+        };
+        updatePageComment(editedComment);
+      }
+    };
+
+    const editPageSubComment=(page:Page)=>{
+      if(page.header.comments !==null && editTargetComment!==null){
+        console.log("edi", editTargetComment)
+        const pageComment= page.header.comments[0];
+        const subIndex= pageComment.subCommentsId?.indexOf(editTargetComment.id);
+        if(subIndex !==undefined){
+          const editedSubComment:CommentType ={
+            ...editTargetComment,
+            content:text ,
+            editTime:editTime
+          };
+          pageComment.subComments?.splice(subIndex, 1, editedSubComment);
+          updatePageComment(pageComment);
+        }
+      }
+    };
     switch (addOrEdit) {
       case "add":
-        blockComment ==null?
-        addNewComment():
-        addSubComment();
+        if(page ==null){
+          blockComment ==null?
+          addNewComment():
+          addSubComment();
+        }else{
+          blockComment ==null ?
+          addPageComment(page):
+          addPageSubComment(page, blockComment);
+        }
         break;
       case "edit":
-        if(editTargetComment !==null && blockComment !==null){
-          editTargetComment.id === blockComment.id?
+        if(page ==null){
+          editTargetComment?.id === blockComment?.id?
           editBlockComment():
           editSubComment();
-        };
+
+        }else{
+          editTargetComment?.id === blockComment?.id ? 
+          editPageComment(page)
+          :
+          editPageSubComment(page);
+        }
         break;
       default:
         break;
@@ -401,8 +487,10 @@ const ToolMore =({pageId, block,page, editBlock ,editPage, setCommentBlock ,setP
     setMoreOpen(false);
     if(block !==null){
       updateComments(pageId,block,comment,editTime,editBlock, setCommentBlock,"delete", null);
-    };
+    }
+    if(page !==null){
 
+    }
   };
 
   const onClickEditComment =()=>{
