@@ -163,10 +163,6 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
   },[command.targetBlock])
 
   useEffect(()=>{
-    console.log("fistblocksId", firstBlocksId)
-  },[firstBlocksId]);
-
-  useEffect(()=>{
     const h1Blocks= document.querySelectorAll(".h1.block");
     const h2Blocks=document.querySelectorAll(".h2.block");
     const h3Blocks=document.querySelectorAll(".h3.block");
