@@ -10,7 +10,7 @@ import {GrDocumentText ,GrDocument} from 'react-icons/gr';import { MdInsertPhoto
 import { HiTemplate } from 'react-icons/hi';
 import CommandBlock from './CommandBlock';
 import { defaultFontFamily } from './TopBar';
-import Comments from './Comments';
+import Comments, { CommentInput } from './Comments';
 
 
 export type Command ={
@@ -49,6 +49,7 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
   targetBlock:null
   });
   const [openIconPopup, setOpenIconPopup]=useState<boolean>(false);
+  const [openPageCommentInput, setOpenPageCommentInput]=useState<boolean>(false);
   const [iconStyle, setIconStyle]=useState<CSSProperties|undefined>(undefined);
   const [commandBlockPositon, setCBPositon]=useState<CSSProperties>();
   const frameInnerStyle:CSSProperties={
@@ -234,9 +235,12 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
                     </button>
                   }
                   {page.header.comments==null &&
-                  <button className='decoComment'>
+                  <button 
+                    className='decoComment'
+                    onClick={()=>setOpenPageCommentInput(true)}
+                  >
                     <BiMessageDetail/>
-                    <span>Add Commnet</span>
+                    <span>Add Comment</span>
                   </button>
                   }
               </div>
@@ -250,13 +254,13 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
                     onChange={onChangePageTitle}
                   />
               </div>
-              {!newPageFram ?
-                page.header.comments!==null &&
+              {!newPageFram ? 
               <div 
                 className='pageComment'
                 style={frameInnerStyle}
               >
-                {page.header.comments.map((comment:BlockCommentType)=>
+                {page.header.comments!==null ?
+                  page.header.comments.map((comment:BlockCommentType)=>
                 <Comments 
                   key={`pageComment_${comment.id}`}
                   block={null}
@@ -268,7 +272,25 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
                   discardEdit={discardEdit}
                   select={null}
                   />
-                )}
+                  )
+                :
+                  openPageCommentInput &&
+                  <CommentInput
+                    page={page}
+                    pageId={page.id}
+                    userName={userName}
+                    blockComment={null}
+                    subComment={null}
+                    editBlock={editBlock}
+                    editPage={editPage}
+                    commentBlock={null}
+                    setCommentBlock={null}
+                    setPageComments ={null}
+                    setPopup={null}
+                    addOrEdit={"add"}
+                    setEdit={setOpenPageCommentInput}
+                  />
+              }
               </div>
 
               :
