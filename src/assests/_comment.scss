@@ -57,10 +57,22 @@
     }
   }
 }
-.pageContent .comments {
-  position: absolute;
-  @include popupMenu;
-}
+  #block_comments {
+    position: absolute;
+    height: fit-content;
+    z-index: 20;
+    .comments {
+      @include popupMenu;
+      width: 100%;
+      z-index: 20;
+    }
+  } 
+  .pageComment {
+    position: relative;
+    .comments{
+      position: relative;
+    }
+  }
 #commentsInner {
   position: relative;
 }
