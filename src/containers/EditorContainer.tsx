@@ -83,9 +83,8 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, ma
       });
     };
     if(openComment){
-      const editor =document.getElementsByClassName("editor")[0] as HTMLElement;
-      const commentsDoc= editor.getElementsByClassName("comments")[0] ;
-      if(commentsDoc !==undefined){
+      const commentsDoc= document.getElementById("block_comments") ;
+      if(commentsDoc !==null){
         const commentsDocDomRect= commentsDoc.getClientRects()[0];
         const isInComments =detectRange(event, commentsDocDomRect);
         if(!isInComments){
