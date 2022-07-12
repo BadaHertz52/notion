@@ -655,9 +655,9 @@ const Comment =({userName,comment, block,page, pageId, editBlock ,setCommentBloc
           discardEdit={discardEdit}
         />
       </div>
-      {block !==null &&
+      {comment.subComments !==null &&
       <div className='comment_comment'>
-        {comment.subComments?.map((comment:CommentType)=>
+        {comment.subComments.map((comment:CommentType)=>
         <CommentBlock
           key={`commentBlock_${comment.id}`} 
           userName={userName}
@@ -665,7 +665,7 @@ const Comment =({userName,comment, block,page, pageId, editBlock ,setCommentBloc
           mainComment={false}
           page={page}
           pageId={pageId}
-          block={block}
+          block={page !==null? null: block}
           editBlock={editBlock}
           setCommentBlock={setCommentBlock}
           moreOpen={moreOpen}
