@@ -181,6 +181,7 @@ export const CommentInput =({userName, pageId, page ,blockComment, subComment,ed
   useEffect(()=>{
     switch (addOrEdit) {
       case "add":
+        
         blockComment !==null && setEditTargetComment(blockComment); 
         break;
       case "edit":
@@ -476,16 +477,30 @@ const CommentTool =({mainComment , comment,block, page ,pageId ,editBlock ,setCo
     setMoreOpen(true);
     const target = event.currentTarget ;
     const editor =document.getElementsByClassName("editor")[0] as HTMLElement;
-    const editorDomRect =editor.getClientRects()[0] as DOMRect; 
-    const editorScrollTop =editor.scrollTop;
+    const block_comments =document.getElementById("block_comments");  
+    
     const position = target.getClientRects()[0] as DOMRect;
-    const style:CSSProperties ={
-      position:"absolute" ,
-      top: position.top+ editorScrollTop,
-      right:editorDomRect.width -position.left-8
-    };
+    if(block_comments !==null){
+      const block_commentsDomRect = block_comments.getClientRects()[0];
+      const style:CSSProperties ={
+        position:"absolute" ,
+        top: (position.top- block_commentsDomRect.top) ,
+        right:block_commentsDomRect.right - position.left + 5
+      };
+      setToolMoreStyle(style);
+    }else{
+      const pageComment =document.getElementsByClassName("pageComment")[0]; 
+      const pageCommentDomRect= pageComment.getClientRects()[0];
+      console.log(pageCommentDomRect, position)
+      const style:CSSProperties={
+        position:"absolute",
+        top: position.top - pageCommentDomRect.top,
+        right: pageCommentDomRect.right -position.left +5
+      };
+      setToolMoreStyle(style);
+    }
 
-    setToolMoreStyle(style);
+    
 
     sessionStorage.setItem("toolMoreItem", JSON.stringify(comment));
 
