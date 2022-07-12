@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { CSSProperties } from "styled-components";
-import { Block, Page } from "../modules/notion";
+import { Block, edit_page, Page } from "../modules/notion";
 import Comments from "./Comments";
 
 type AllCommentsProps={
@@ -83,6 +83,7 @@ const AllComments=({page, userName, editBlock, showAllComments, setShowAllCommen
             userName={userName}
             block={block}
             editBlock={editBlock}
+            editPage={null}
             select={select}
             discardEdit={discardEdit}
           />
