@@ -205,13 +205,16 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
               onClick={()=>setTargetPageId(path.id)}
               >
               {pagePath.indexOf(path)!==0 &&
-              <span className='pathSlash'>
+              <div className='pathSlash'>
                 /
-              </span> 
+              </div> 
               }
-              <span className='pageLink'>
-                <a href='path'>
-                  <span>
+              <div className='pageLink'>
+                <a 
+                  href='path'
+                  onClick={()=>setTargetPageId(path.id)}
+                >
+                  <div>
                     {path.icon !==null&&
                     (path.iconType==="string"? 
                       path.icon
@@ -223,12 +226,12 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
                         />
                     )
                     }
-                  </span>
-                  <span>
-                    {path.title}
-                  </span>
+                  </div>
+                  <div className='pathTitle'>
+                    <div>{path.title}</div>
+                  </div>
                 </a>
-                </span>
+              </div>
             </button>
             )
           }

@@ -83,9 +83,8 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, ma
       });
     };
     if(openComment){
-      const editor =document.getElementsByClassName("editor")[0] as HTMLElement;
-      const commentsDoc= editor.getElementsByClassName("comments")[0] ;
-      if(commentsDoc !==undefined){
+      const commentsDoc= document.getElementById("block_comments") ;
+      if(commentsDoc !==null){
         const commentsDocDomRect= commentsDoc.getClientRects()[0];
         const isInComments =detectRange(event, commentsDocDomRect);
         if(!isInComments){
@@ -184,6 +183,8 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, ma
         setCommentBlock ={setCommentBlock}
         smallText={smallText}
         fullWidth={fullWidth}
+        discardEdit={discardEdit}
+        userName={userName}
       />
       <BlockFn
         page={page}
@@ -236,12 +237,15 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, ma
           >
               <CommentInput
                 pageId={page.id}
+                page={null}
                 userName={userName}
                 editBlock={editBlock}
+                editPage={editPage}
                 blockComment={null}
                 subComment={null}
                 commentBlock={commentBlock}
                 setCommentBlock={setCommentBlock}
+                setPageComments={null}
                 setPopup={setPopup}
                 addOrEdit="add"
                 setEdit={null}
@@ -250,15 +254,21 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, ma
       )
       }
       {commentBlock !==null && openComment &&
+      <div 
+        id="block_comments"
+        style={commentsStyle}
+      >
         <Comments
-          commentsStyle={commentsStyle}
           userName={userName}
           block={commentBlock}
           pageId={page.id}
+          page={null}
           editBlock={editBlock}
+          editPage={editPage}
           select={null}
           discardEdit={discardEdit}
-        />              
+        />  
+      </div>            
       }
     </div>
   )

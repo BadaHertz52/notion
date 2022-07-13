@@ -1,7 +1,8 @@
 import React, { CSSProperties, Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { Block, blockSample, findBlock, Page } from '../modules/notion';
+import { Block, BlockCommentType, blockSample, CommentType, findBlock, Page } from '../modules/notion';
 import EditableBlock from './EditableBlock';
 import IconPoup, { randomIcon } from './IconPoup';
+import basicPageCover from '../assests/artificial-turf-g6e884a1d4_1920.jpg';
 //icon
 import { BiMessageDetail } from 'react-icons/bi';
 import { BsFillEmojiSmileFill} from 'react-icons/bs';
@@ -9,6 +10,7 @@ import {GrDocumentText ,GrDocument} from 'react-icons/gr';import { MdInsertPhoto
 import { HiTemplate } from 'react-icons/hi';
 import CommandBlock from './CommandBlock';
 import { defaultFontFamily } from './TopBar';
+import Comments, { CommentInput } from './Comments';
 
 
 export type Command ={
@@ -17,6 +19,7 @@ export type Command ={
   targetBlock: Block |null
 };
 type FrameProps ={
+  userName:string,
   page:Page,
   firstBlocksId:string[]|null,
   editBlock :(pageId: string, block: Block) => void,
@@ -33,32 +36,43 @@ type FrameProps ={
   setCommentBlock: Dispatch<SetStateAction<Block | null>>,
   smallText: boolean, 
   fullWidth: boolean, 
+  discardEdit:boolean,
 };
 
-const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth}:FrameProps)=>{
+const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit}:FrameProps)=>{
+  const innerWidth =window.innerWidth; 
+  const editTime =JSON.stringify(Date.now());
   const [newPageFram, setNewPageFrame]=useState<boolean>(false);
-  const [cover, setCover]=useState<ImageData|null>(page.header.cover);
   const [decoOpen ,setdecoOpen] =useState<boolean>(false);
   const [command, setCommand]=useState<Command>({boolean:false, 
   command:null,
   targetBlock:null
   });
   const [openIconPopup, setOpenIconPopup]=useState<boolean>(false);
+  const [openPageCommentInput, setOpenPageCommentInput]=useState<boolean>(false);
   const [iconStyle, setIconStyle]=useState<CSSProperties|undefined>(undefined);
   const [commandBlockPositon, setCBPositon]=useState<CSSProperties>();
   const frameInnerStyle:CSSProperties={
     fontFamily:defaultFontFamily ,
     fontSize: smallText? "14px": "16px",
-    width: fullWidth? "100%":'900px',
+    width: innerWidth >900?  fullWidth? "100%":'900px' : "100%",
   };
   const headerStyle: CSSProperties ={
     marginTop: page.header.cover !==null? "10px": "30px" ,
     
   };
   const headerBottomStyle :CSSProperties ={
-    marginTop: page.header.cover !==null ? "-39px" :"0",
     fontSize: smallText? "32px": "40px"
   };
+  const pageIconStyle :CSSProperties={
+    width: page.header.iconType=== "img"? 124 : 78,
+    height: page.header.iconType=== "img"? 124 : 78,
+    marginTop: page.header.cover ==null? 0 : (
+      page.header.iconType==="img"?
+      -62:
+      -39
+    )
+  }
   const newPage :Page ={
     ...page,
     header:{
@@ -97,7 +111,9 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
       header:{
         ...page.header,
         title:value 
-    }})
+    },
+    editTime:editTime
+  })
   };
 
   const addRandomIcon =()=>{
@@ -107,11 +123,23 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
       header:{
         ...page.header,
         icon: icon
-      }
+      },
+      editTime:editTime
     };
     editPage(page.id, newPageWithIcon);
   };
 
+  const onClickAddCover =()=>{
+    const editedPage:Page={
+      ...page,
+      header:{
+        ...page.header,
+        cover:basicPageCover
+      },
+      editTime:editTime
+    };
+    editPage(page.id, editedPage)
+  };
   useEffect(()=>{
     page.blocksId[0] ===undefined?
     setNewPageFrame(true):
@@ -136,10 +164,6 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
   },[command.targetBlock])
 
   useEffect(()=>{
-    console.log("fistblocksId", firstBlocksId)
-  },[firstBlocksId]);
-
-  useEffect(()=>{
     const h1Blocks= document.querySelectorAll(".h1.block");
     const h2Blocks=document.querySelectorAll(".h2.block");
     const h3Blocks=document.querySelectorAll(".h3.block");
@@ -151,7 +175,8 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
     changeFontSizeBySmallText(h1Blocks,3);
     changeFontSizeBySmallText(h2Blocks,2.5);
     changeFontSizeBySmallText(h3Blocks,2);
-  },[smallText])
+  },[smallText]);
+  
   return(
     <div className={newPageFram? "newPageFrame frame" :'frame'}>
         <div 
@@ -166,7 +191,7 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
           >
             {page.header.cover !== null &&        
               <div className='pageCover'>
-                {cover}
+                <img src={page.header.cover} alt="page cover " />
               </div>
             }
             <div className="pageHeader_notCover" style={headerBottomStyle}>
@@ -174,9 +199,12 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
                 <div 
                 className='pageIcon'
                 onClick={onClickPageIcon}
+                style={pageIconStyle}
                 >
                 {page.header.iconType ==="string"?
-                  page.header.icon
+                <div className='pageStringIcon'>
+                  {page.header.icon}
+                </div >
                 :
                   <img
                     className='pageImgIcon'
@@ -200,15 +228,19 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
                   {page.header.cover == null&&        
                     <button 
                       className='decoCover'
+                      onClick={onClickAddCover}
                     >
                       <MdInsertPhoto/>
                       <span>Add Cover</span>
                     </button>
                   }
                   {page.header.comments==null &&
-                  <button className='decoComment'>
+                  <button 
+                    className='decoComment'
+                    onClick={()=>setOpenPageCommentInput(true)}
+                  >
                     <BiMessageDetail/>
-                    <span>Add Commnet</span>
+                    <span>Add Comment</span>
                   </button>
                   }
               </div>
@@ -222,20 +254,51 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
                     onChange={onChangePageTitle}
                   />
               </div>
-              {!newPageFram ?
-                page.header.comments!==null &&
-              <div className='pageComment'>
-                {/* {page.header.comments.map((comment:CommentType)=>
-                <Comment 
-                  key={`pageComment_${page.header.comments?.indexOf(comment)}`}
-                  comment={comment} 
+              {!newPageFram ? 
+              <div 
+                className='pageComment'
+                style={frameInnerStyle}
+              >
+                {page.header.comments!==null ?
+                  page.header.comments.map((comment:BlockCommentType)=>
+                <Comments 
+                  key={`pageComment_${comment.id}`}
+                  block={null}
+                  page={page}
+                  pageId={page.id}
+                  userName={userName}
+                  editBlock={editBlock}
+                  editPage={editPage}
+                  discardEdit={discardEdit}
+                  select={null}
                   />
-                )} */}
+                  )
+                :
+                  openPageCommentInput &&
+                  <CommentInput
+                    page={page}
+                    pageId={page.id}
+                    userName={userName}
+                    blockComment={null}
+                    subComment={null}
+                    editBlock={editBlock}
+                    editPage={editPage}
+                    commentBlock={null}
+                    setCommentBlock={null}
+                    setPageComments ={null}
+                    setPopup={null}
+                    addOrEdit={"add"}
+                    setEdit={setOpenPageCommentInput}
+                  />
+              }
               </div>
 
               :
-                <div className='pageComment'>
-                  Press Enter to continue with an empty pagem or pick a templage
+                <div 
+                  className='pageComment'
+                  style={frameInnerStyle}
+                >
+                  Press Enter to continue with an empty page or pick a templage
                 </div>
             }
             </div>

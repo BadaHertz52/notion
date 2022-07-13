@@ -1,23 +1,22 @@
-
 import React, {  Dispatch, FormEvent,SetStateAction,useEffect,useState } from 'react';
 import { CSSProperties } from 'styled-components';
-import { Block, BlockCommentType, blockSample, CommentType } from '../modules/notion';
-import { BsFillArrowUpCircleFill, BsThreeDots } from 'react-icons/bs';
+import { Block, BlockCommentType, CommentType, Page } from '../modules/notion';
+import {  BsThreeDots } from 'react-icons/bs';
 import { HiOutlinePencil } from 'react-icons/hi';
 import { IoArrowUpCircleSharp, IoCheckmarkCircle, IoTrashOutline } from 'react-icons/io5';
 import Time from './Time';
 import { detectRange } from './BlockFn';
 import { PopupType } from '../containers/EditorContainer';
 import { IoMdCloseCircle } from 'react-icons/io';
-import { DiscardItemType } from '../containers/NotionRouter';
 const open="open";
 const resolve="resolve";
 type CommentsProps={
-  block:Block,
+  block:Block | null,
+  page:Page|null,
   pageId: string,
   userName:string,
-  editBlock :(pageId: string, block: Block) => void,
-  commentsStyle: CSSProperties | undefined ,
+  editBlock :(pageId: string, block: Block) => void | null,
+  editPage: ((pageId: string, newPage: Page) => void )| null,
   select : null | typeof open | typeof resolve,
   discardEdit:boolean
 };
@@ -25,9 +24,12 @@ type CommentProps ={
   userName: string,
   comment:BlockCommentType,
   pageId:string,
-  block:Block,
-  editBlock :(pageId: string, block: Block) => void,
-  setCommentBlock: Dispatch<SetStateAction<Block|null>>,
+  page:Page|null,
+  block:Block|null,
+  editBlock :(pageId: string, block: Block) => void ,
+  editPage: ((pageId: string, newPage: Page) => void )| null,
+  setCommentBlock: Dispatch<SetStateAction<Block|null>> ,
+  setPageComments: (Dispatch<SetStateAction<BlockCommentType[] | null>>)|null,
   moreOpen:boolean,
   setMoreOpen:Dispatch<SetStateAction<boolean>>,
   setToolMoreStyle:Dispatch<SetStateAction<CSSProperties | undefined>>,
@@ -36,11 +38,14 @@ type CommentProps ={
 type CommentInputProps={
   userName: string,
   pageId: string,
+  page:Page|null,
   blockComment:BlockCommentType|  null,
   subComment:CommentType |null,
-  editBlock :(pageId: string, block: Block) => void,
+  editBlock :(pageId: string, block: Block) => void |null,
+  editPage: ((pageId: string, newPage: Page) => void )| null,
   commentBlock: Block|null,
-  setCommentBlock: Dispatch<SetStateAction<Block|null>>,
+  setCommentBlock: (Dispatch<SetStateAction<Block|null>>)|null ,
+  setPageComments: (Dispatch<SetStateAction<BlockCommentType[] | null>>)|null,
   setPopup:Dispatch<SetStateAction<PopupType>>| null,
   addOrEdit:"add"|"edit",
   setEdit:Dispatch<SetStateAction<boolean>>|null,
@@ -48,11 +53,14 @@ type CommentInputProps={
 type CommentBlockProps ={
   comment: CommentType | BlockCommentType,
   mainComment:boolean,
-  block :Block,
+  block :Block|null,
+  page:Page|null,
   pageId: string,
   userName:string,
   editBlock:(pageId: string, block: Block) => void,
+  editPage: ((pageId: string, newPage: Page) => void )| null,
   setCommentBlock: Dispatch<SetStateAction<Block|null>>,
+  setPageComments: (Dispatch<SetStateAction<BlockCommentType[] | null>>)|null,
   moreOpen:boolean,
   setMoreOpen:Dispatch<SetStateAction<boolean>>,
   setToolMoreStyle:Dispatch<SetStateAction<CSSProperties | undefined>>,
@@ -63,10 +71,13 @@ type CommentBlockProps ={
 type CommentToolProps ={
   mainComment:boolean,
   comment: CommentType | BlockCommentType,
-  block:Block,
+  block:Block|null,
+  page:Page|null,
   pageId: string,
   editBlock: (pageId: string, block: Block) => void,
+  editPage: ((pageId: string, newPage: Page) => void )| null,
   setCommentBlock: Dispatch<SetStateAction<Block|null>>,
+  setPageComments: (Dispatch<SetStateAction<BlockCommentType[] | null>>)|null,
   moreOpen:boolean,
   setMoreOpen:Dispatch<SetStateAction<boolean>>,
   setToolMoreStyle:Dispatch<SetStateAction<CSSProperties | undefined>>
@@ -74,16 +85,15 @@ type CommentToolProps ={
 
 type ResolveBtnProps ={
   comment:BlockCommentType,
-  block:Block,
-  pageId: string,
-  editBlock:(pageId: string, block: Block) => void,
-  setCommentBlock: Dispatch<SetStateAction<Block|null>>,
 };
 type ToolMoreProps ={
   pageId:string,
+  page:Page|null,
   block:Block | null,
   editBlock:(pageId: string, block: Block) => void,
-  setCommentBlock: Dispatch<SetStateAction<Block|null>>
+  editPage: ((pageId: string, newPage: Page) => void) | null,
+  setCommentBlock: Dispatch<SetStateAction<Block|null>>,
+  setPageComments: (Dispatch<SetStateAction<BlockCommentType[] | null>>)|null,
   setMoreOpen: Dispatch<SetStateAction<boolean>>,
   toolMoreStyle:CSSProperties|undefined,
 };
@@ -166,7 +176,7 @@ const updateComments =(pageId: string, block:Block, comment:CommentType | BlockC
   };
 };
 
-export const CommentInput =({userName, pageId ,blockComment, subComment,editBlock, commentBlock, setCommentBlock ,setPopup, addOrEdit,setEdit}:CommentInputProps)=>{
+export const CommentInput =({userName, pageId, page ,blockComment, subComment,editBlock,editPage, commentBlock, setCommentBlock ,setPageComments,setPopup, addOrEdit,setEdit}:CommentInputProps)=>{
   const userNameFirstLetter =userName.substring(0,1).toUpperCase();
   const [submitStyle,setSubmitStyle] =useState<CSSProperties>({
     fill:"#a3a3a2;",
@@ -177,6 +187,7 @@ export const CommentInput =({userName, pageId ,blockComment, subComment,editBloc
   useEffect(()=>{
     switch (addOrEdit) {
       case "add":
+        
         blockComment !==null && setEditTargetComment(blockComment); 
         break;
       case "edit":
@@ -196,7 +207,7 @@ export const CommentInput =({userName, pageId ,blockComment, subComment,editBloc
         ...commentBlock,
         comments: blockComments
       };
-      setCommentBlock(editedBlock);
+      setCommentBlock!==null && setCommentBlock(editedBlock);
       editBlock(pageId,editedBlock);
     }
   };
@@ -293,18 +304,104 @@ export const CommentInput =({userName, pageId ,blockComment, subComment,editBloc
         updateBlock(blockComments);
       }
     }; 
+    const updatePageComment =(pageComment:BlockCommentType)=>{
+      if(page !==null){
+        const editedPage :Page ={
+          ...page,
+          header :{
+            ...page.header,
+            comments:[pageComment]
+          },
+          editTime:editTime
+        };
+        setPageComments !==null && setPageComments([pageComment]);
+        editPage !== null && editPage(pageId, editedPage);
+      }
+    } ;
+    const addPageComment =(page:Page)=>{
+      const newComment:BlockCommentType ={
+        id: `pageComment_${editTime}`,
+        userName: userName,
+        content: text,
+        editTime: editTime,
+        createTime: editTime,
+        type: "open" ,
+        subComments: null,
+        subCommentsId: null
+      };
+
+      updatePageComment(newComment);
+    };
+    const addPageSubComment=(page:Page , blockComment:BlockCommentType )=>{
+      const newSubComment :CommentType ={
+        id: `subComment_${editTime}`,
+        userName: userName,
+        content: text,
+        editTime: editTime,
+        createTime: editTime,
+      };
+
+      const pageComment:BlockCommentType ={
+        ...blockComment,
+        subComments: blockComment.subComments==null? [newSubComment]: blockComment.subComments?.concat(newSubComment),
+        subCommentsId: blockComment.subCommentsId ===null ? [newSubComment.id] : blockComment.subCommentsId.concat(newSubComment.id),
+      };
+
+      updatePageComment(pageComment);
+    };
+
+    const editPageComment =(page:Page)=>{
+      if(page.header.comments !==null){
+        const pageComments =page.header.comments[0];
+        const editedComment:BlockCommentType ={
+          ...pageComments,
+          content:text ,
+          editTime:editTime
+        };
+        updatePageComment(editedComment);
+      }
+    };
+
+    const editPageSubComment=(page:Page)=>{
+      if(page.header.comments !==null && editTargetComment!==null){
+        console.log("edi", editTargetComment)
+        const pageComment= page.header.comments[0];
+        const subIndex= pageComment.subCommentsId?.indexOf(editTargetComment.id);
+        if(subIndex !==undefined){
+          const editedSubComment:CommentType ={
+            ...editTargetComment,
+            content:text ,
+            editTime:editTime
+          };
+          pageComment.subComments?.splice(subIndex, 1, editedSubComment);
+          updatePageComment(pageComment);
+        }
+      }
+    };
     switch (addOrEdit) {
       case "add":
-        blockComment ==null?
-        addNewComment():
-        addSubComment();
+        if(page ==null){
+          blockComment ==null?
+          addNewComment():
+          addSubComment();
+        }else{
+          blockComment ==null ?
+          addPageComment(page):
+          addPageSubComment(page, blockComment);
+        }
         break;
       case "edit":
-        if(editTargetComment !==null && blockComment !==null){
-          editTargetComment.id === blockComment.id?
+        if(page ==null){
+          editTargetComment?.id === blockComment?.id?
           editBlockComment():
           editSubComment();
-        };
+
+        }else{
+          editTargetComment?.id === blockComment?.id ? 
+          editPageComment(page)
+          :
+          editPageSubComment(page);
+        }
         break;
       default:
         break;
@@ -381,7 +478,7 @@ export const CommentInput =({userName, pageId ,blockComment, subComment,editBloc
 };
 
 
-const ToolMore =({pageId, block, editBlock, setCommentBlock ,setMoreOpen ,toolMoreStyle}:ToolMoreProps)=>{
+const ToolMore =({pageId, block,page, editBlock ,editPage, setCommentBlock ,setPageComments,setMoreOpen ,toolMoreStyle}:ToolMoreProps)=>{
   const toolMoreItem = sessionStorage.getItem("toolMoreItem");
   const [comment, setComment] =useState<BlockCommentType | CommentType | null >(null);
   const editTime = JSON.stringify(Date.now());
@@ -390,8 +487,38 @@ const ToolMore =({pageId, block, editBlock, setCommentBlock ,setMoreOpen ,toolMo
     setMoreOpen(false);
     if(block !==null){
       updateComments(pageId,block,comment,editTime,editBlock, setCommentBlock,"delete", null);
-    };
-
+    }
+    if(page !==null  && comment !==null){
+      const pageComment = page.header.comments?.[0];
+      if(pageComment !==undefined){
+        if(pageComment.id === comment.id){
+          const editedPage:Page ={
+            ...page,
+            header: {
+              ...page.header,
+              comments:null 
+            },
+            editTime:editTime 
+          };
+          editPage !== null && editPage(pageId, editedPage);
+        }else{
+          const editedPageComment:BlockCommentType ={
+            ...pageComment,
+            subComments:pageComment.subComments !==null?  pageComment.subComments.filter((sub:CommentType)=> comment.id !== sub.id) : null,
+            subCommentsId:pageComment.subCommentsId !== null?  pageComment.subCommentsId.filter((sub:string)=> sub !== comment.id) : null,
+          };
+          setPageComments !==null && setPageComments([editedPageComment]);
+          const editedPage:Page ={
+            ...page,
+            header :{
+              ...page.header ,
+              comments: [editedPageComment]
+            }
+          };
+          editPage!==null && editPage(pageId, editedPage);
+        }
+      };
+    }
   };
 
   const onClickEditComment =()=>{
@@ -431,24 +558,30 @@ const ToolMore =({pageId, block, editBlock, setCommentBlock ,setMoreOpen ,toolMo
   )
 };
 
-const CommentTool =({mainComment , comment,block ,pageId ,editBlock ,setCommentBlock , moreOpen ,setMoreOpen ,setToolMoreStyle}:CommentToolProps)=>{
+const CommentTool =({mainComment , comment,block, page ,pageId ,editBlock ,editPage ,setCommentBlock ,setPageComments, moreOpen ,setMoreOpen ,setToolMoreStyle}:CommentToolProps)=>{
 
-  const ResolveBtn =({comment, block, editBlock, pageId}:ResolveBtnProps)=>{
+  const ResolveBtn =({comment}:ResolveBtnProps)=>{
     const changeToResolve =()=>{
       const newComment:BlockCommentType ={
         ...comment,
           type:"resolve",
       }; 
-      const comments = block.comments !==null ?[...block.comments] :[];
-      const commentIdes :string[] = comments?.map((comment:BlockCommentType)=> comment.id) as string[];
-      const index  = commentIdes.indexOf(comment.id);
-      comments.splice(index, 1, newComment);
-      const newBlock :Block={
-        ...block,
-        comments: comments
+      if(block!==null){
+        const comments = block.comments !==null ?[...block.comments] :[];
+        const commentIdes :string[] = comments?.map((comment:BlockCommentType)=> comment.id) as string[];
+        const index  = commentIdes.indexOf(comment.id);
+        comments.splice(index, 1, newComment);
+        const newBlock :Block={
+          ...block,
+          comments: comments
+        }
+        editBlock(pageId, newBlock);
+        setCommentBlock(newBlock);
       }
-      editBlock(pageId, newBlock);
-      setCommentBlock(newBlock);
+      if(page !==null){
+
+      }
+
     };
 
     return (
@@ -465,17 +598,30 @@ const CommentTool =({mainComment , comment,block ,pageId ,editBlock ,setCommentB
   const openToolMore =(event: React.MouseEvent<HTMLButtonElement>)=>{
     setMoreOpen(true);
     const target = event.currentTarget ;
-    const editor =document.getElementsByClassName("editor")[0] as HTMLElement;
-    const editorDomRect =editor.getClientRects()[0] as DOMRect; 
-    const editorScrollTop =editor.scrollTop;
+    const block_comments =document.getElementById("block_comments");  
+    
     const position = target.getClientRects()[0] as DOMRect;
-    const style:CSSProperties ={
-      position:"absolute" ,
-      top: position.top+ editorScrollTop,
-      right:editorDomRect.width -position.left-8
-    };
+    if(block_comments !==null){
+      const block_commentsDomRect = block_comments.getClientRects()[0];
+      const style:CSSProperties ={
+        position:"absolute" ,
+        top: (position.top- block_commentsDomRect.top) ,
+        right:block_commentsDomRect.right - position.left + 5
+      };
+      setToolMoreStyle(style);
+    }else{
+      const pageComment =document.getElementsByClassName("pageComment")[0]; 
+      const pageCommentDomRect= pageComment.getClientRects()[0];
+      console.log(pageCommentDomRect, position)
+      const style:CSSProperties={
+        position:"absolute",
+        top: position.top - pageCommentDomRect.top,
+        right: pageCommentDomRect.right -position.left +5
+      };
+      setToolMoreStyle(style);
+    }
 
-    setToolMoreStyle(style);
+    
 
     sessionStorage.setItem("toolMoreItem", JSON.stringify(comment));
 
@@ -496,10 +642,6 @@ const CommentTool =({mainComment , comment,block ,pageId ,editBlock ,setCommentB
       {mainComment &&
         <ResolveBtn
           comment ={comment as BlockCommentType}
-          block={block}
-          pageId={pageId}
-          editBlock={editBlock}
-          setCommentBlock={setCommentBlock}
         />
       }
       <button 
@@ -514,7 +656,7 @@ const CommentTool =({mainComment , comment,block ,pageId ,editBlock ,setCommentB
   )
 };
 
-const CommentBlock =({comment ,mainComment ,block  ,pageId, userName,editBlock ,setPopup ,setCommentBlock , moreOpen ,setMoreOpen ,setToolMoreStyle  ,discardEdit}:CommentBlockProps)=>{
+const CommentBlock =({comment ,mainComment ,block ,page ,pageId, userName,editBlock ,editPage,setPopup ,setCommentBlock ,setPageComments , moreOpen ,setMoreOpen ,setToolMoreStyle  ,discardEdit}:CommentBlockProps)=>{
   const firstLetter = comment.userName.substring(0,1).toUpperCase();
   const [edit, setEdit]=useState<boolean>(false);
   const editCommentItem= sessionStorage.getItem("editComment");
@@ -563,9 +705,12 @@ const CommentBlock =({comment ,mainComment ,block  ,pageId, userName,editBlock ,
         mainComment={mainComment }
         comment={comment}
         block={block}
+        page={page}
         pageId={pageId}
         editBlock={editBlock}
+        editPage={editPage}
         setCommentBlock={setCommentBlock}
+        setPageComments={setPageComments}
         moreOpen={moreOpen}
         setMoreOpen={setMoreOpen}
         setToolMoreStyle={setToolMoreStyle}
@@ -575,22 +720,27 @@ const CommentBlock =({comment ,mainComment ,block  ,pageId, userName,editBlock ,
     <section className='comment_block'>
       <div className='comment_block_line'>
       </div>
+      {block !==null &&
       <div className='comment_block_content'>
         {block.contents}
       </div>
+      }
     </section>
     }
     <section className='comment_content'>
       <div>
-      {(!mainComment && edit )?
+      { edit ?
         <CommentInput
           userName={userName}
           pageId={pageId}
-          blockComment={null}
-          subComment={comment as CommentType}
+          page={page}
+          blockComment={!mainComment? null: comment as BlockCommentType}
+          subComment={!mainComment?  comment as CommentType : null}
           editBlock={editBlock}
+          editPage={editPage}
           commentBlock={block}
           setCommentBlock={setCommentBlock}
+          setPageComments={setPageComments}
           setPopup={setPopup}
           addOrEdit="edit"
           setEdit={setEdit}
@@ -600,24 +750,11 @@ const CommentBlock =({comment ,mainComment ,block  ,pageId, userName,editBlock ,
         }
         </div>
     </section>
-    {mainComment && edit &&
-    <CommentInput
-      userName={userName}
-      pageId={pageId}
-      blockComment={comment as BlockCommentType}
-      subComment={null}
-      editBlock={editBlock}
-      commentBlock={block}
-      setCommentBlock={setCommentBlock}
-      setPopup={setPopup}
-      addOrEdit="edit"
-      setEdit={setEdit}
-    />
-    }
+
     </div>
   )
 }
-const Comment =({userName,comment, block, pageId, editBlock ,setCommentBlock ,moreOpen ,setMoreOpen ,setToolMoreStyle ,discardEdit}:CommentProps)=>{
+const Comment =({userName,comment, block,page, pageId, editBlock ,editPage ,setCommentBlock ,setPageComments ,moreOpen ,setMoreOpen ,setToolMoreStyle ,discardEdit}:CommentProps)=>{
 
   return(
     <div className='comment'>
@@ -627,9 +764,12 @@ const Comment =({userName,comment, block, pageId, editBlock ,setCommentBlock ,mo
           comment={comment}
           mainComment={true}
           block={block}
+          page={page}
           pageId={pageId}
           editBlock={editBlock}
+          editPage={editPage}
           setCommentBlock={setCommentBlock}
+          setPageComments={setPageComments}
           moreOpen={moreOpen}
           setMoreOpen={setMoreOpen}
           setToolMoreStyle={setToolMoreStyle}
@@ -637,17 +777,21 @@ const Comment =({userName,comment, block, pageId, editBlock ,setCommentBlock ,mo
           discardEdit={discardEdit}
         />
       </div>
+      {comment.subComments !==null &&
       <div className='comment_comment'>
-        {comment.subComments?.map((comment:CommentType)=>
+        {comment.subComments.map((comment:CommentType)=>
         <CommentBlock
           key={`commentBlock_${comment.id}`} 
           userName={userName}
           comment={comment}
           mainComment={false}
+          page={page}
           pageId={pageId}
-          block={block}
+          block={page !==null? null: block}
           editBlock={editBlock}
+          editPage={editPage}
           setCommentBlock={setCommentBlock}
+          setPageComments={setPageComments}
           moreOpen={moreOpen}
           setMoreOpen={setMoreOpen}
           setToolMoreStyle={setToolMoreStyle}
@@ -656,14 +800,18 @@ const Comment =({userName,comment, block, pageId, editBlock ,setCommentBlock ,mo
         />)
         }
       </div>
+      }
       <CommentInput
         userName={userName}
+        page={page}
         pageId={pageId}
         editBlock={editBlock}
+        editPage={editPage}
         blockComment={comment}
         subComment={null}
         commentBlock={block}
         setCommentBlock={setCommentBlock}
+        setPageComments={setPageComments}
         setPopup={null}
         addOrEdit="add"
         setEdit={null}
@@ -671,7 +819,7 @@ const Comment =({userName,comment, block, pageId, editBlock ,setCommentBlock ,mo
     </div>
   )
 };
-const Comments =({pageId,block, userName ,editBlock ,commentsStyle  ,select ,discardEdit}:CommentsProps)=>{
+const Comments =({pageId,block,page, userName ,editBlock ,editPage  ,select ,discardEdit}:CommentsProps)=>{
   const [targetComments, setTargetComment]= useState<BlockCommentType[]| null>(null);
   const [resolveComments, setResolveComments]= useState<BlockCommentType[]| null>(null);
   const [openComments, setOpenComments]= useState<BlockCommentType[]| null>(null);
@@ -679,6 +827,13 @@ const Comments =({pageId,block, userName ,editBlock ,commentsStyle  ,select ,dis
   const [moreOpen, setMoreOpen]= useState<boolean>(false);
   const [toolMoreStyle, setToolMoreStyle]=useState<CSSProperties|undefined>(undefined);
   const [commentBlock, setCommentBlock]=useState<Block|null>(block);
+  const [pageComments, setPageComments]=useState<BlockCommentType[]|null>(page !==null? page.header.comments : null);
+
+  const showComments =(what:"open" | "resolve")=>{
+    (what ==="open")?
+    setTargetComment(openComments):
+    setTargetComment(resolveComments)
+  };
 
   useEffect(()=>{
     if(commentBlock!==null){
@@ -691,23 +846,22 @@ const Comments =({pageId,block, userName ,editBlock ,commentsStyle  ,select ,dis
     }
   },[commentBlock]);
   useEffect(()=>{
+    if(page !==null){
+      setTargetComment(pageComments);
+    }
+  },[pageComments]);
+  useEffect(()=>{
     if(select !==null){
       select===open? 
       setTargetComment(openComments): 
       setTargetComment(resolveComments);
     }
   },[select, openComments, resolveComments]);
-  const showComments =(what:"open" | "resolve")=>{
-    (what ==="open")?
-    setTargetComment(openComments):
-    setTargetComment(resolveComments)
-  };
 
   return(
     <>
     <div 
       className='comments'
-      style={commentsStyle}
     >
       {resolveComments !==null && resolveComments.length>0 && select==null &&
         <section className="commentType">
@@ -727,7 +881,7 @@ const Comments =({pageId,block, userName ,editBlock ,commentsStyle  ,select ,dis
           </button>
         </section>
       }
-      {targetComments !==null && commentBlock !==null &&
+      {targetComments !==null && (commentBlock !==null || pageComments !==null) &&
         <section className='comments_comments'>
           {targetComments.map((comment:BlockCommentType)=>
             <Comment 
@@ -735,9 +889,12 @@ const Comments =({pageId,block, userName ,editBlock ,commentsStyle  ,select ,dis
               userName={userName}
               comment={comment}
               block={commentBlock}
+              page={page}
               pageId={pageId}
               editBlock={editBlock}
+              editPage={editPage}
               setCommentBlock={setCommentBlock}
+              setPageComments={setPageComments}
               moreOpen={moreOpen}
               setMoreOpen={setMoreOpen}
               setToolMoreStyle={setToolMoreStyle}
@@ -751,10 +908,13 @@ const Comments =({pageId,block, userName ,editBlock ,commentsStyle  ,select ,dis
     {moreOpen &&
         <ToolMore
           toolMoreStyle={toolMoreStyle}
+          page={page}
           pageId={pageId}
           block={commentBlock}
           editBlock={editBlock}
+          editPage={editPage}
           setCommentBlock={setCommentBlock}
+          setPageComments={setPageComments}
           setMoreOpen={setMoreOpen}
         />
         }

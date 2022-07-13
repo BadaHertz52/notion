@@ -108,7 +108,8 @@
     margin-right: 5px;
   }
   .pagePathes{
-    a, span{
+    display: flex;
+    a{
       text-align: center;
     }
     span{
@@ -117,12 +118,29 @@
   }
   .pagePath {
     font-size: 14px;
+    display: flex;
+    margin-right: 3px;
     .pageImgIcon{
       width:14px;
       height: 14px;
     }
   }
+  .pathSlash{
+    margin-right: 3px;
+  }
+  .pageLink a{
+    display: flex;
 
+  }
+  .pathTitle{
+    width: 90px;
+    div{
+      width: inherit;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
   .pageFun{
     position: relative;
     #pageMenu {
@@ -289,14 +307,18 @@
       font-family: inherit;
     }
   }
-  .pageHeader, 
-  .pageContent{
+  .pageHeader{
+    width: 100%;
+  }
+  .pageHeader_notCover, 
+  .pageContent {
     max-width: 100%;
     width: 100%;
     padding-left: calc(96px + env(safe-area-inset-left));
   }
   .pageTitle ,
-  .editableBlock {
+  .editableBlock,
+  .pageHeader .comments {
     padding-right: calc(96px + env(safe-area-inset-left));
   }
   .subBlocks .editableBlock{
@@ -310,6 +332,14 @@
     flex-direction: column;
     justify-content: space-evenly;
     margin-bottom: 30px;
+    .pageCover{
+      width: 100%;
+      height: 30vh;
+      img{
+        width: 100%;
+        height: 100%;
+      }
+    }
     .pageHeader_notConver{
       display: flex;
       flex-direction: column;
@@ -351,19 +381,23 @@
       }
     }
     .pageIcon{
-      width: 124px;
-      height: 124px;
       display: flex;
+      justify-content: center;
       align-items: center;
       transition: opacity 100ms ease-in 0s;
       opacity: 1;
-      font-size: 78px;
       position: relative;
       pointer-events: auto;
       cursor:default ;
+      .pageStringIcon{
+        text-align: center;
+        width: 100%;
+        height: 100%;
+        font-size:  60px;
+      }
       .pageImgIcon{
-        width:124px;
-        height:124px;
+        width:100%;
+        height:100%;
       }
     }
     .comments{
@@ -395,6 +429,10 @@
     }
     .pageTitle{
       font-size: inherit;
+      width: 100%;
+      input{
+        text-overflow: ellipsis;
+      }
     }
   }
   .pageContent_inner{
