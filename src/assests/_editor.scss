@@ -410,30 +410,7 @@
         height:100%;
       }
     }
-    .comments{
-      display: flex;
-      margin: 8px 0;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid $lightMud;
-      width: 100%;
-      &>div {
-        font-size: 14px;
-      }
-      .firstLetter {
-        width: 24px;
-        height: 24px;
-        box-sizing: border-box;
-        text-align: center;
-        border-radius: 50%;
-        border: 1px solid black;
-        margin-right: 5px;
-        span{
-          width: fit-content;
-          height: fit-content;
-          padding: 5px;
-          font-size: 14px;
-        }
-      }
+
       .commentContent{
       }
     }
@@ -471,7 +448,7 @@
     }
   }
   // --frame
-}
+
 
 .pageFun{
   width: 180PX;

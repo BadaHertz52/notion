@@ -1,5 +1,14 @@
 @import './common';
-
+.comments{
+  display: flex;
+  margin: 8px 0;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid $lightMud;
+  width: 100%;
+  &>div {
+    font-size: 14px;
+  }
+}
 .blockId_comments{
   .comments{
     display: none;
@@ -17,13 +26,17 @@
     display: none
   }
 }
+  
 .comment_header ,
-.commentInput .firstLetter,
-.commentBlock .firstLetter {
+.commentInput {
   height: 20px;
 }
-.commentBlock .firstLetter, .commentInput .firstLetter{
+.commentBlock .firstLetter, 
+.commentInput .firstLetter{
     display: flex;
+    width: 20px;
+    height: inherit;
+    box-sizing: border-box;
     align-items: center;
     border-radius: 50%;
     border :1px solid black;
@@ -31,19 +44,24 @@
     text-align: center;
     flex-grow: 0;
     flex-shrink: 0;
+    margin-right: 5px;
     div{
-      width: inherit;
-      height: inherit;
+      width: 20px;
+      height: 20px;
       font : {
         size:14px ;
         weight: initial;
       }
     }
-    width: 20px;
   }
-.comments {
-  z-index: 10;
-}
+  .comment {
+    padding: 5%;
+    border-top: 1px solid $lightMud;
+    z-index: 10;
+  }
+  .comment:first-child{
+    border-top: none;
+  }
 .pageHeader .comments{
   position: relative;
   width: 100%;
@@ -56,23 +74,29 @@
       margin-bottom: 6px;
     }
   }
-}
-  #block_comments {
-    position: absolute;
-    height: fit-content;
-    z-index: 20;
-    .comments {
-      @include popupMenu;
-      width: 100%;
-      z-index: 20;
-    }
-  } 
-  .pageComment {
-    position: relative;
-    .comments{
-      position: relative;
-    }
+  .comment{
+    padding:0;
   }
+}
+#block_comments {
+  position: absolute;
+  height: fit-content;
+  z-index: 20;
+  .comments {
+    @include popupMenu;
+    width: 100%;
+    z-index: 20;
+  }
+} 
+.pageComment {
+  position: relative;
+  .comments{
+    position: relative;
+  }
+  .comments .comment_block{
+    display: none;
+  }
+}
 #commentsInner {
   position: relative;
 }
@@ -85,18 +109,14 @@
     margin: 10px 5px; 
   }
 }
-.comment {
-  padding: 5%;
-  border-top: 1px solid $lightMud;
-  .commentInput{
-    padding: 0;
-    width: 100%;
-  }
-}
-.comment:first-child{
-  border-top: none;
-}
 .commentBlock{
+    display: flex;
+    flex-direction: column;
+    margin-top: 8px;
+    width: 100%;
+    &>div {
+      font-size: 14px;
+    }
 
   .comment_header {
     display: flex;
@@ -108,9 +128,6 @@
       flex-direction: row;
       font-size: 14px;
       height: inherit;
-      &> div{
-        height: inherit;
-      }
     }
     .userName{
       margin: 0 10px;
@@ -214,7 +231,7 @@
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: 24px;
+  padding: 0;
   form{
     display: flex;
     flex-grow: 1;
@@ -226,19 +243,22 @@
     }
     input[type="text"]{
       @include searchInput;
-      font-size: 14px;
       background-color: initial;
       border: none;
       padding: 0;
       height: 100%;
       width: 90%;
       margin: 0 2.5%;
+      font-size: 14px;
     }
     .commentText{
       &:focus{
         outline:  none;
       }
     }
+  }
+  .pageComment .commentInput form input {
+    font-size: 14px;
   }
 form button{
   svg{

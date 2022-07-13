@@ -695,6 +695,20 @@ a:link, a:active, a:visited {
   color: inherit;
 }
 
+.comments {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin: 8px 0;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #d6d6d6;
+  width: 100%;
+}
+
+.comments > div {
+  font-size: 14px;
+}
+
 .blockId_comments .comments {
   display: none;
 }
@@ -718,15 +732,19 @@ a:link, a:active, a:visited {
 }
 
 .comment_header,
-.commentInput .firstLetter,
-.commentBlock .firstLetter {
+.commentInput {
   height: 20px;
 }
 
-.commentBlock .firstLetter, .commentInput .firstLetter {
+.commentBlock .firstLetter,
+.commentInput .firstLetter {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  width: 20px;
+  height: inherit;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
@@ -739,18 +757,25 @@ a:link, a:active, a:visited {
           flex-grow: 0;
   -ms-flex-negative: 0;
       flex-shrink: 0;
-  width: 20px;
+  margin-right: 5px;
 }
 
-.commentBlock .firstLetter div, .commentInput .firstLetter div {
-  width: inherit;
-  height: inherit;
+.commentBlock .firstLetter div,
+.commentInput .firstLetter div {
+  width: 20px;
+  height: 20px;
   font-size: 14px;
   font-weight: initial;
 }
 
-.comments {
+.comment {
+  padding: 5%;
+  border-top: 1px solid #d6d6d6;
   z-index: 10;
+}
+
+.comment:first-child {
+  border-top: none;
 }
 
 .pageHeader .comments {
@@ -766,6 +791,10 @@ a:link, a:active, a:visited {
 
 .pageHeader .comments .commentBlock .comment_header {
   margin-bottom: 6px;
+}
+
+.pageHeader .comments .comment {
+  padding: 0;
 }
 
 #block_comments {
@@ -816,6 +845,10 @@ a:link, a:active, a:visited {
   position: relative;
 }
 
+.pageComment .comments .comment_block {
+  display: none;
+}
+
 #commentsInner {
   position: relative;
 }
@@ -833,18 +866,20 @@ a:link, a:active, a:visited {
   margin: 10px 5px;
 }
 
-.comment {
-  padding: 5%;
-  border-top: 1px solid #d6d6d6;
-}
-
-.comment .commentInput {
-  padding: 0;
+.commentBlock {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin-top: 8px;
   width: 100%;
 }
 
-.comment:first-child {
-  border-top: none;
+.commentBlock > div {
+  font-size: 14px;
 }
 
 .commentBlock .comment_header {
@@ -869,10 +904,6 @@ a:link, a:active, a:visited {
       -ms-flex-direction: row;
           flex-direction: row;
   font-size: 14px;
-  height: inherit;
-}
-
-.commentBlock .comment_header .information > div {
   height: inherit;
 }
 
@@ -1040,7 +1071,7 @@ a:link, a:active, a:visited {
       -ms-flex-direction: row;
           flex-direction: row;
   width: 100%;
-  height: 24px;
+  padding: 0;
 }
 
 .commentInput form {
@@ -1071,13 +1102,13 @@ a:link, a:active, a:visited {
   border: 1px solid #B9B8B6;
   -webkit-box-shadow: rgba(15, 15, 15, 0.162) 0px 0px 1px inset;
           box-shadow: rgba(15, 15, 15, 0.162) 0px 0px 1px inset;
-  font-size: 14px;
   background-color: initial;
   border: none;
   padding: 0;
   height: 100%;
   width: 90%;
   margin: 0 2.5%;
+  font-size: 14px;
 }
 
 .commentInput input[type="text"]::-webkit-input-placeholder {
@@ -1105,6 +1136,10 @@ a:link, a:active, a:visited {
 
 .commentInput .commentText:focus {
   outline: none;
+}
+
+.pageComment .commentInput form input {
+  font-size: 14px;
 }
 
 form button svg {
@@ -2294,64 +2329,28 @@ a:link, a:active, a:visited {
   height: 100%;
 }
 
-.editor .pageHeader .comments {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  margin: 8px 0;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #d6d6d6;
-  width: 100%;
-}
-
-.editor .pageHeader .comments > div {
-  font-size: 14px;
-}
-
-.editor .pageHeader .comments .firstLetter {
-  width: 24px;
-  height: 24px;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
-  text-align: center;
-  border-radius: 50%;
-  border: 1px solid black;
-  margin-right: 5px;
-}
-
-.editor .pageHeader .comments .firstLetter span {
-  width: -webkit-fit-content;
-  width: -moz-fit-content;
-  width: fit-content;
-  height: -webkit-fit-content;
-  height: -moz-fit-content;
-  height: fit-content;
-  padding: 5px;
-  font-size: 14px;
-}
-
-.editor .pageHeader .pageTitle {
+.editor .pageTitle {
   font-size: inherit;
   width: 100%;
 }
 
-.editor .pageHeader .pageTitle input {
+.editor .pageTitle input {
   text-overflow: ellipsis;
 }
 
-.editor .pageContent_inner {
+.pageContent_inner {
   position: relative;
 }
 
-.editor .newPageFrame {
+.newPageFrame {
   color: #B9B8B6;
 }
 
-.editor .newPageFrame span {
+.newPageFrame span {
   color: #B9B8B6;
 }
 
-.editor .newPageFrame .pageContent_inner {
+.newPageFrame .pageContent_inner {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -2368,13 +2367,13 @@ a:link, a:active, a:visited {
   font-size: 1rem;
 }
 
-.editor .newPageFrame .pageContent_inner button {
+.newPageFrame .pageContent_inner button {
   font-size: 1rem;
   display: block;
   margin: 10px;
 }
 
-.editor .newPageFrame .pageContent_inner button svg {
+.newPageFrame .pageContent_inner button svg {
   color: #a3a3a2;
   margin-right: 10px;
 }
