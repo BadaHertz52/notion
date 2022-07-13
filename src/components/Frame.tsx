@@ -1,8 +1,8 @@
 import React, { CSSProperties, Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { Block, BlockCommentType, blockSample, CommentType, findBlock, Page } from '../modules/notion';
+import { Block, BlockCommentType, blockSample,  findBlock, Page } from '../modules/notion';
 import EditableBlock from './EditableBlock';
 import IconPoup, { randomIcon } from './IconPoup';
-import basicPageCover from '../assests/artificial-turf-g6e884a1d4_1920.jpg';
+import basicPageCover from '../assests/img/artificial-turf-g6e884a1d4_1920.jpg';
 //icon
 import { BiMessageDetail } from 'react-icons/bi';
 import { BsFillEmojiSmileFill} from 'react-icons/bs';
