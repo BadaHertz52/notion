@@ -2,15 +2,17 @@ import React, { CSSProperties, Dispatch, SetStateAction, useEffect, useState } f
 import { Block, BlockCommentType, blockSample,  findBlock, Page } from '../modules/notion';
 import EditableBlock from './EditableBlock';
 import IconPoup, { randomIcon } from './IconPoup';
+import CommandBlock from './CommandBlock';
+import { defaultFontFamily } from './TopBar';
+import Comments, { CommentInput } from './Comments';
 import basicPageCover from '../assests/img/artificial-turf-g6e884a1d4_1920.jpg';
 //icon
 import { BiMessageDetail } from 'react-icons/bi';
 import { BsFillEmojiSmileFill} from 'react-icons/bs';
-import {GrDocumentText ,GrDocument} from 'react-icons/gr';import { MdInsertPhoto } from 'react-icons/md';
+import {GrDocumentText ,GrDocument} from 'react-icons/gr';
+import { MdInsertPhoto } from 'react-icons/md';
 import { HiTemplate } from 'react-icons/hi';
-import CommandBlock from './CommandBlock';
-import { defaultFontFamily } from './TopBar';
-import Comments, { CommentInput } from './Comments';
+
 
 
 export type Command ={
