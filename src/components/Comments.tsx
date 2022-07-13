@@ -1,4 +1,4 @@
-import React, {  Dispatch, FormEvent,SetStateAction,useEffect,useState } from 'react';
+import React, {  Dispatch, FormEvent,SetStateAction,useEffect,useRef,useState } from 'react';
 import { CSSProperties } from 'styled-components';
 import { Block, BlockCommentType, CommentType, Page } from '../modules/notion';
 import {  BsThreeDots } from 'react-icons/bs';
@@ -562,9 +562,11 @@ const CommentTool =({mainComment , comment,block, page ,pageId ,editBlock ,editP
 
   const ResolveBtn =({comment}:ResolveBtnProps)=>{
     const changeToResolve =()=>{
+      const editTime =JSON.stringify(Date.now());
       const newComment:BlockCommentType ={
         ...comment,
           type:"resolve",
+          editTime:editTime
       }; 
       if(block!==null){
         const comments = block.comments !==null ?[...block.comments] :[];
@@ -573,13 +575,31 @@ const CommentTool =({mainComment , comment,block, page ,pageId ,editBlock ,editP
         comments.splice(index, 1, newComment);
         const newBlock :Block={
           ...block,
-          comments: comments
+          comments: comments,
+          editTime:editTime,
         }
         editBlock(pageId, newBlock);
         setCommentBlock(newBlock);
       }
       if(page !==null){
-
+        const pageComment =page.header.comments?.[0];
+        if(pageComment !==undefined){
+          const editedPageComment:BlockCommentType ={
+            ...pageComment,
+            type:"resolve" ,
+            editTime:editTime
+          };
+          const editedPage:Page ={
+            ...page, 
+            header :{
+              ...page.header,
+              comments: [editedPageComment]
+            },
+            editTime:editTime
+          };
+          setPageComments !==null && setPageComments([editedPageComment]);
+          editPage !==null && editPage(pageId, editedPage)
+        }
       }
 
     };
@@ -829,27 +849,45 @@ const Comments =({pageId,block,page, userName ,editBlock ,editPage  ,select ,dis
   const [commentBlock, setCommentBlock]=useState<Block|null>(block);
   const [pageComments, setPageComments]=useState<BlockCommentType[]|null>(page !==null? page.header.comments : null);
 
+  const commentsRef =useRef<HTMLDivElement>(null);
+
   const showComments =(what:"open" | "resolve")=>{
     (what ==="open")?
     setTargetComment(openComments):
     setTargetComment(resolveComments)
   };
-
+  const updateOpenAndResolveComments =(comments:BlockCommentType[])=>{
+    setResolveComments(comments?.filter((comment:BlockCommentType)=> comment.type ==="resolve") );
+    setOpenComments( comments?.filter((comment:BlockCommentType)=> comment.type ==="open"));
+  };
   useEffect(()=>{
     if(commentBlock!==null){
       setTargetComment(commentBlock.comments);
       if(commentBlock.comments !==null){
-        setResolveComments(commentBlock.comments?.filter((comment:BlockCommentType)=> comment.type ==="resolve") );
-  
-        setOpenComments( commentBlock.comments?.filter((comment:BlockCommentType)=> comment.type ==="open"))
+        updateOpenAndResolveComments(commentBlock.comments)
       };
     }
   },[commentBlock]);
   useEffect(()=>{
     if(page !==null){
-      setTargetComment(pageComments);
+      console.log(pageComments)
+      if(pageComments !== null){
+        updateOpenAndResolveComments(pageComments);
+      }
     }
   },[pageComments]);
+  useEffect(()=>{
+    if(page !==null){
+      setTargetComment(openComments);
+        if(commentsRef.current !==null ){
+          (openComments===null || openComments[0]===undefined) ?
+            commentsRef.current.parentElement?.setAttribute("style", "display:none")
+            :
+            commentsRef.current.parentElement?.setAttribute("style", "display:block")
+        }
+    }
+
+  },[resolveComments])
   useEffect(()=>{
     if(select !==null){
       select===open? 
@@ -862,8 +900,9 @@ const Comments =({pageId,block,page, userName ,editBlock ,editPage  ,select ,dis
     <>
     <div 
       className='comments'
+      ref = {commentsRef}
     >
-      {resolveComments !==null && resolveComments.length>0 && select==null &&
+      {resolveComments !==null && resolveComments.length>0 && select==null && block !==null &&
         <section className="commentType">
           <button 
             id="openTypeBtn"
