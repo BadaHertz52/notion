@@ -330,8 +330,13 @@
   }
   //--addNewPage
 }
+#moreFn, 
+#sideBar_pageMenu{
+  z-index: 20;
+}
 #moreFn{
   @include popupMenu;
+  z-index: 20;
   width: 230px;
   button{
     padding:  3%; 
@@ -370,8 +375,6 @@
   }
 }
 #sideBar_pageMenu{
-  @include popupMenu;
-  z-index: 15;
   width: fit-content;
-  padding:3%;
+  padding:0;
 }
