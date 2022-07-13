@@ -132,8 +132,18 @@
     display: flex;
 
   }
+  .pathIcon{
+    width: 14px;
+    height: 14px;
+    text-align: center;
+  }
   .pathTitle{
     width: 90px;
+    height: 14px;
+    margin-left: 5px;
+    display: flex;
+    align-items: center;
+    text-align: center;
     div{
       width: inherit;
       overflow: hidden;

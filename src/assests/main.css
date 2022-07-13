@@ -1857,8 +1857,23 @@ a:link, a:active, a:visited {
   display: flex;
 }
 
+.editor .pathIcon {
+  width: 14px;
+  height: 14px;
+  text-align: center;
+}
+
 .editor .pathTitle {
   width: 90px;
+  height: 14px;
+  margin-left: 5px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-align: center;
 }
 
 .editor .pathTitle div {

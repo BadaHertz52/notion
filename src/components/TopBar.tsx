@@ -214,7 +214,7 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
                   href='path'
                   onClick={()=>setTargetPageId(path.id)}
                 >
-                  <div>
+                  <div className='pathIcon'>
                     {path.icon !==null&&
                     (path.iconType==="string"? 
                       path.icon
