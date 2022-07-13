@@ -1,4 +1,4 @@
-
+import catImg from '../assests/img/michael-sum-LEpfefQf4rU-unsplash.jpg' 
 //TYPE 
 export const text= "text" as const ;
 export const toggle ="toggle" as const  ;
@@ -295,9 +295,9 @@ const initialState :Notion ={
     {
     id: '12345',
     header : {
-      title:"welcome notion",
-      iconType:"string",
-      icon:'👋' ,
+      title:"welcome notion 🐱",
+      iconType:"img",
+      icon:catImg ,
       cover: null,
       comments:[{
         id:"comment_1",
@@ -459,7 +459,7 @@ const initialState :Notion ={
       subBlocksId:null ,
       parentBlocksId: null,
       type: page,
-      iconType:null,
+      iconType:"string",
       icon: "🌈" ,
       editTime: (Date.parse("2021-5-20-9:00")).toString(),
       createTime: (Date.parse("2021-5-19-20:00")).toString(),
@@ -738,7 +738,7 @@ const initialState :Notion ={
     header : {
       title:"notion3",
       iconType:"string",
-      icon:'👋' ,
+      icon:'🌞' ,
       cover: null,
       comments:  null,
     },
