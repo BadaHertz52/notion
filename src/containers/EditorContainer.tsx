@@ -7,7 +7,7 @@ import Frame from '../components/Frame';
 import PageMenu from '../components/PageMenu';
 import TopBar from '../components/TopBar';
 import { RootState } from '../modules';
-import notion, {  Block, Page,  change_to_sub, raise_block, listItem } from '../modules/notion';
+import  {  Block, Page,  change_to_sub, raise_block, listItem } from '../modules/notion';
 import { SideAppear } from '../modules/side';
 import { pathType } from './NotionRouter';
 
@@ -22,6 +22,7 @@ type EditorContainerProps ={
   sideAppear:SideAppear,
   page:Page,
   pages:Page[],
+  pagesId:string[],
   userName:string,
   firstlist:listItem[],
   isInTrash:boolean,
@@ -54,7 +55,7 @@ type EditorContainerProps ={
   discardEdit:boolean
 };
 
-const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, makePagePath,changeSide,addBlock,editBlock ,changeBlockToPage, changePageToBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId , showAllComments,  setShowAllComments , discardEdit}:EditorContainerProps)=>{
+const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isInTrash, makePagePath,changeSide,addBlock,editBlock ,changeBlockToPage, changePageToBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId , showAllComments,  setShowAllComments , discardEdit}:EditorContainerProps)=>{
   const dispatch =useDispatch();
   const user =useSelector((state:RootState)=>state.user);
   const changeToSub =(pageId: string, block: Block,  newParentBlockId: string)=> dispatch(change_to_sub(pageId, block, newParentBlockId));
@@ -189,6 +190,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, ma
       <BlockFn
         page={page}
         pages={pages}
+        pagesId={pagesId}
         firstlist={firstlist}
         userName={userName}
         addBlock={addBlock}
@@ -197,6 +199,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, ma
         changePageToBlock={changePageToBlock}
         deleteBlock={deleteBlock}
         addPage={addPage}
+        editPage={editPage}
         duplicatePage={duplicatePage}
         movePageToPage={movePageToPage}
         deletePage={deletePage}

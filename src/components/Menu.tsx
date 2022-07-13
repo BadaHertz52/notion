@@ -1,5 +1,5 @@
 import React, { ChangeEvent, Dispatch, SetStateAction, useState} from 'react';
-import { Block, findPage, listItem, Page } from '../modules/notion';
+import { Block,listItem, Page } from '../modules/notion';
 import CommandBlock from './CommandBlock';
 
 //icon
@@ -13,7 +13,7 @@ import { AiOutlineFormatPainter } from 'react-icons/ai';
 import { CSSProperties } from 'styled-components';
 import { Command } from './Frame';
 import ColorMenu from './ColorMenu';
-import { HiOutlineDuplicate } from 'react-icons/hi';
+import { HiOutlineDuplicate, HiOutlinePencilAlt } from 'react-icons/hi';
 import PageMenu from './PageMenu';
 import { popupComment, popupMoveToPage, PopupType } from '../containers/EditorContainer';
 import Time from './Time';
@@ -22,6 +22,7 @@ type MenuProps ={
   pages:Page[],
   firstlist:listItem[],
   page:Page,
+  block:Block,
   userName: string,
   setMenuOpen : Dispatch<SetStateAction<boolean>>,
   addBlock:(pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
@@ -37,11 +38,11 @@ type MenuProps ={
   popup:PopupType,
   setCommentBlock: React.Dispatch<React.SetStateAction<Block | null>>,
   setTargetPageId: Dispatch<SetStateAction<string>>,
+  setOpenRename:Dispatch<SetStateAction<boolean>>,
 };
 
-const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock,changeBlockToPage,changePageToBlock ,editBlock, deleteBlock ,addPage ,duplicatePage,deletePage,movePageToPage,setPopup ,popup ,setCommentBlock ,setTargetPageId}:MenuProps)=>{
-  const sessionItem = sessionStorage.getItem("blockFnTargetBlock") as string;
-  const block:Block= JSON.parse(sessionItem);
+const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,changeBlockToPage,changePageToBlock ,editBlock, deleteBlock ,addPage ,duplicatePage,deletePage,movePageToPage,setPopup ,popup ,setCommentBlock ,setTargetPageId ,setOpenRename}:MenuProps)=>{
+
   const blockFnElement = document.getElementById("blockFn") ;
   const [editBtns, setEditBtns]= useState<Element[]|null>(null);
   const [turnInto, setTurnInto]= useState<boolean>(false);
@@ -134,7 +135,10 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock,changeBlockTo
       };
     })
   };
-
+  const onClickRename =()=>{
+    setOpenRename(true);
+    setMenuOpen(false);
+  };
   return(
   <div 
     className="menu"
@@ -214,6 +218,17 @@ const Menu=({pages,firstlist, page, userName, setMenuOpen,addBlock,changeBlockTo
                     <span>Copy link to block</span>
                   </div>
                 </button>
+                {block.type === "page" && 
+                <button
+                  onClick={onClickRename}
+                >
+                  <div>
+                    <HiOutlinePencilAlt/>
+                    <span>Rename</span>
+                    <span>Ctrl+Shift+R</span>
+                  </div>
+                </button>
+                }
                 <button
                   className='underline menu_editBtn'
                   name="move to"
