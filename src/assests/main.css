@@ -340,7 +340,7 @@ a:link, a:active, a:visited {
   width: 18px;
   height: 18px;
   margin-right: 4px;
-  font-size: 17px;
+  font-size: 15px;
 }
 
 .todo.block svg,
@@ -349,6 +349,25 @@ a:link, a:active, a:visited {
   width: inherit;
   height: inherit;
   font-size: inherit;
+}
+
+.page.block .pageIcon, .page.block img {
+  width: 18px;
+  height: 18px;
+}
+
+.page.block .pageIcon span {
+  width: inherit;
+  height: inherit;
+}
+
+.page.block .blockContents {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 .todo.done.block path {
@@ -402,7 +421,6 @@ a:link, a:active, a:visited {
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
-  padding: 1% 0;
   text-align: left;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -2196,7 +2214,7 @@ a:link, a:active, a:visited {
   padding-left: calc(96px + env(safe-area-inset-left));
 }
 
-.editor .pageTitle,
+.editor .pageHeader .pageTitle,
 .editor .editableBlock,
 .editor .pageHeader .comments {
   padding-right: calc(96px + env(safe-area-inset-left));
