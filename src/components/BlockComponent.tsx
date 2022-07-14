@@ -73,7 +73,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
     :
     sessionStorage.removeItem("blockFnTargetBlock");
     if(domReact!==undefined){
-      const top =domReact.top +editor.scrollTop +5;
+      const top =domReact.top +editor.scrollTop ;
       const left = editableBlockDomRect.x - 45;
       const blockFnStyle =`top:${top}px; left:${left}px`;
       blockFn?.setAttribute("style",blockFnStyle);

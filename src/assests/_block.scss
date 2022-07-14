@@ -74,31 +74,27 @@
 .h1.block{
   margin-top: 32px;
   font : {
-    //size: 40px;
     weight:700;
   }
 }
 .h2.block{
   margin-top: 22.4px;
   font : {
-    //size: 24px;
     weight:600;
   }
 }
-.h3.block{
-  font : {
-    //size: 1rem;
-  }
-}
+
 .text.block{
   margin-top:2px;
+}
+.left , .blockContents , .blockFn {
+  height: 18px;
 }
 .todo.block, 
 .toggle.block ,
 .page.block {
   .left {
     width: 18px;
-    height: 18px;
     margin-right: 4px;
     font-size: 15px;
   }

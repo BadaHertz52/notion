@@ -334,11 +334,14 @@ a:link, a:active, a:visited {
   margin-top: 2px;
 }
 
+.left, .blockContents, .blockFn {
+  height: 18px;
+}
+
 .todo.block .left,
 .toggle.block .left,
 .page.block .left {
   width: 18px;
-  height: 18px;
   margin-right: 4px;
   font-size: 15px;
 }
