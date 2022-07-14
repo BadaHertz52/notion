@@ -124,7 +124,8 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
       ...page,
       header:{
         ...page.header,
-        icon: icon
+        icon: icon ,
+        iconType:"string"
       },
       editTime:editTime
     };

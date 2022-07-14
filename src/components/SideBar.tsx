@@ -19,6 +19,7 @@ import { MdPlayArrow } from 'react-icons/md';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { IoArrowRedoOutline } from 'react-icons/io5';
 import { GrDocumentText } from 'react-icons/gr';
+import PageIcon from './PageIcon';
 
 export const closePopup =(elementId:string ,setState:Dispatch<SetStateAction<boolean>> , event:MouseEvent)=>{
   const element = document.getElementById(elementId);
@@ -134,24 +135,11 @@ const ItemTemplate =({item,setTargetPageId ,onClickMoreBtn, addNewSubPage  }:Ite
         className='pageName'
             onClick={()=>{setTargetPageId(item.id) }}
       >
-        {item.icon !==null ?
-        <span>
-          {item.iconType==="string"?
-            item.icon
-          :
-            <img
-              className='pageImgIcon'
-              alt="pageImgIcon"
-              src={item.icon}
-            />
-          }
-          </span>
-          :
-          <span>
-            <GrDocumentText/>
-          </span>
-          }
-        <span>{item.title}</span>
+        <PageIcon
+          icon ={item.icon}
+          iconType={item.iconType}
+        />
+        <div>{item.title}</div>
       </button>
 
     </div>

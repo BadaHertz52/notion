@@ -100,12 +100,26 @@
     width: 18px;
     height: 18px;
     margin-right: 4px;
-    font-size: 17px;
+    font-size: 15px;
   }
   svg {
     width: inherit;
     height: inherit;
     font-size: inherit;
+  }
+}
+.page.block {
+  .pageIcon,img{
+    width: 18px;
+    height: 18px;
+  }
+  .pageIcon span{
+    width :inherit;
+    height: inherit;
+  }
+  .blockContents{
+    display: flex;
+    align-items: center;
   }
 }
 .todo.done.block{
@@ -151,7 +165,6 @@
 .blockContents{
   width: 100%;
   height: fit-content;
-  padding:1% 0;
   text-align: left;
   display: flex;
   align-items: flex-end;

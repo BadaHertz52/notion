@@ -3,8 +3,9 @@ import { Block, BlockCommentType, findBlock, Page,  } from '../modules/notion';
 import { Command } from './Frame';
 import BlockComponent, { BlockComment } from './BlockComponent';
 import { GoPrimitiveDot } from 'react-icons/go';
-import { GrCheckbox, GrCheckboxSelected, GrDocumentText } from 'react-icons/gr';
+import { GrCheckbox, GrCheckboxSelected } from 'react-icons/gr';
 import { MdPlayArrow } from 'react-icons/md';
+import PageIcon from './PageIcon';
 
 
 type EditableBlockProps ={
@@ -221,20 +222,10 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                 <div 
                   className='pageIcon left'
                 >
-                {block.iconType == null &&
-                  < GrDocumentText/>
-                }
-                {block.icon !==null &&
-                  (block.iconType ==="string"?
-                    block.icon
-                  :
-                    <img
-                      className="pageTypeBlockImgIcon"
-                      src={block.icon}
-                      alt="blockIconImg"
-                    />
-                  )
-                }
+                  <PageIcon
+                    icon={block.icon}
+                    iconType={block.iconType}
+                  />
                 </div>
               }
               <div 

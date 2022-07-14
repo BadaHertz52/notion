@@ -326,7 +326,7 @@
     width: 100%;
     padding-left: calc(96px + env(safe-area-inset-left));
   }
-  .pageTitle ,
+  .pageHeader .pageTitle ,
   .editableBlock,
   .pageHeader .comments {
     padding-right: calc(96px + env(safe-area-inset-left));
