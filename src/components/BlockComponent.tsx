@@ -65,6 +65,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
     const currentTarget =event.currentTarget as Element;
     const mainBlock= currentTarget.parentElement?.parentElement ;
     const domReact =mainBlock?.getClientRects()[0];
+    const frameDomRect =document.getElementsByClassName("frame")[0].getClientRects()[0];
     const editableBlockDomRect =document.getElementsByClassName("editableBlock")[0].getClientRects()[0] ; 
     const blockFn =document.getElementById("blockFn");
     blockFn?.classList.toggle("on");
@@ -74,7 +75,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
     sessionStorage.removeItem("blockFnTargetBlock");
     if(domReact!==undefined){
       const top =domReact.top +editor.scrollTop ;
-      const left = editableBlockDomRect.x - 45;
+      const left = editableBlockDomRect.x - frameDomRect.x - 45;
       const blockFnStyle =`top:${top}px; left:${left}px`;
       blockFn?.setAttribute("style",blockFnStyle);
     }
