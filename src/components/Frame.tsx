@@ -183,20 +183,6 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
     }
   },[command.targetBlock])
 
-  useEffect(()=>{
-    const h1Blocks= document.querySelectorAll(".h1.block");
-    const h2Blocks=document.querySelectorAll(".h2.block");
-    const h3Blocks=document.querySelectorAll(".h3.block");
-    const baseSize = smallText? 14 :16; 
-    const changeFontSizeBySmallText=(nodeList:NodeListOf<Element>, ratio:number)=>{
-      nodeList[0]!==undefined&&
-      nodeList.forEach((element:Element)=> element.setAttribute("style",`font-size: ${baseSize * ratio}px`));
-    };
-    changeFontSizeBySmallText(h1Blocks,3);
-    changeFontSizeBySmallText(h2Blocks,2.5);
-    changeFontSizeBySmallText(h3Blocks,2);
-  },[smallText]);
-  
   return(
     <div className={newPageFram? "newPageFrame frame" :'frame'}>
         <div 

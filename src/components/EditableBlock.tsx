@@ -16,6 +16,7 @@ type EditableBlockProps ={
   changeToSub: (pageId: string, block: Block, newParentBlockId: string) => void,
   raiseBlock: (pageId: string, block: Block) => void,
   deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
+  smallText:boolean,
   command:Command,
   setCommand:Dispatch<SetStateAction<Command>>,
   setTargetPageId: React.Dispatch<React.SetStateAction<string>> ,
@@ -27,11 +28,32 @@ export   type CommentOpenType ={
   targetId: string | null,
 };
 
-const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,command, setCommand ,setTargetPageId ,setOpenComment ,setCommentBlock 
+const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText ,command, setCommand ,setTargetPageId ,setOpenComment ,setCommentBlock 
 }:EditableBlockProps)=>{  
   const className = block.type !== "toggle" ?
   `${block.type} block ` :
   `${block.type} block ${block.subBlocksId!==null?'on' : ""}`;
+  const changeFontSizeBySmallText=(block:Block):CSSProperties=>{
+    const baseSize = smallText? 14 :16; 
+    let ratio =1;
+    switch (block.type) {
+      case "h1":
+        ratio =3;
+        break;
+      case "h2":
+        ratio=2.5;
+        break;
+      case "h3" :
+        ratio =2; 
+        break; 
+      default:
+        break;
+    }
+    const style :CSSProperties={
+      fontSize :`${baseSize * ratio}px`
+    };
+    return style 
+  };
   const blockComments = 
   block.comments==null? 
   false : 
@@ -172,6 +194,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
           <div 
             id={`block_${block.id}`}
             className={className} 
+            style={changeFontSizeBySmallText(block)}
           > 
 
             {block.type.includes("List") ?
@@ -274,6 +297,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                   changeToSub={changeToSub}
                   raiseBlock={raiseBlock}
                   deleteBlock={deleteBlock}
+                  smallText={smallText}
                   command={command}
                   setCommand={setCommand}
                   setOpenComment={setOpenComment}
