@@ -230,6 +230,10 @@ a:link, a:active, a:visited {
   color: inherit;
 }
 
+#block_commandBlock #commandBlock {
+  margin-top: 0;
+}
+
 #commandBlock {
   width: 320px;
   display: -webkit-box;
@@ -517,12 +521,10 @@ a:link, a:active, a:visited {
 }
 
 .h1.block {
-  margin-top: 32px;
   font-weight: 700;
 }
 
 .h2.block {
-  margin-top: 22.4px;
   font-weight: 600;
 }
 

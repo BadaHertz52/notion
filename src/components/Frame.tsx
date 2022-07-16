@@ -168,14 +168,16 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
 
   useEffect(()=>{
     if(command.targetBlock!==null){
-      const targetBlockContent =document.getElementById(`${command.targetBlock.id}_contents`);
+      const frame = document.getElementsByClassName("frame")[0];
+      const targetBlockContent =document.getElementById(`block_${command.targetBlock.id}`);
+      const frameDomRect= frame.getClientRects()[0];
       const position = targetBlockContent?.getClientRects()[0];
-      console.log("targetBlockContents", targetBlockContent, position);
-
       if(position !==undefined){
+        const heading =["h1", "h2" , "h3"]; 
+        const plus = !heading.includes(command.targetBlock.type) ? 24 : 0 
         const style :CSSProperties ={
           position:"absolute",
-          top: position.bottom,
+          top: position.bottom -frameDomRect.top + position.height + plus ,
           left:position.left
         };
         setCBPositon(style);
@@ -339,6 +341,7 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
                       changeToSub={changeToSub}
                       raiseBlock={raiseBlock}
                       deleteBlock={deleteBlock}
+                      smallText={smallText}
                       command={command}
                       setCommand={setCommand}
                       setTargetPageId={setTargetPageId}

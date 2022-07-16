@@ -1,4 +1,9 @@
 @import './common';
+#block_commandBlock {
+  #commandBlock{
+    margin-top: 0
+  }
+}
 #commandBlock{
   @include popupMenu;
   margin-top: 1rem;
