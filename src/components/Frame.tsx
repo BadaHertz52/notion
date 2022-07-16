@@ -12,6 +12,7 @@ import { BsFillEmojiSmileFill} from 'react-icons/bs';
 import {GrDocumentText ,GrDocument} from 'react-icons/gr';
 import { MdInsertPhoto } from 'react-icons/md';
 import { HiTemplate } from 'react-icons/hi';
+import { detectRange } from './BlockFn';
 
 
 
@@ -43,6 +44,7 @@ type FrameProps ={
 
 const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit}:FrameProps)=>{
   const innerWidth =window.innerWidth; 
+  const inner =document.getElementById("inner");
   const editTime =JSON.stringify(Date.now());
   const [newPageFram, setNewPageFrame]=useState<boolean>(false);
   const [decoOpen ,setdecoOpen] =useState<boolean>(false);
@@ -143,6 +145,21 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
     };
     editPage(page.id, editedPage)
   };
+  inner?.addEventListener("click",(event)=>{
+    
+    if(command.boolean){
+      const block_commandBlock =document.getElementById("block_commandBlock");
+      const commandDomRect =block_commandBlock?.getClientRects()[0];
+      if(commandDomRect !==undefined){
+        const isInnnerCommand = detectRange(event,commandDomRect); 
+        !isInnnerCommand && setCommand({
+          boolean:false,
+          command:null,
+          targetBlock:null
+        }) 
+      }
+    }
+  })
   useEffect(()=>{
     page.blocksId[0] ===undefined?
     setNewPageFrame(true):
