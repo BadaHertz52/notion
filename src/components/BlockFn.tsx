@@ -208,7 +208,10 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
         }
         {openRename && renameTargetPage !==null &&
         <Rename
+          currentPageId={page.id}
+          block={blockFnTargetBlock}
           page={renameTargetPage}
+          editBlock={editBlock}
           editPage={editPage}
           renameStyle={undefined}
           setOpenRename={setOpenRename}

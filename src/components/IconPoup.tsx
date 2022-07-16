@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { BsEmojiSmile } from 'react-icons/bs';
 import { CSSProperties } from 'styled-components';
-import { IconType, Page } from '../modules/notion';
+import { Block, IconType, Page } from '../modules/notion';
 import { detectRange } from './BlockFn';
 
 export type Emoji ={
@@ -57,26 +57,40 @@ export const randomIcon =():string=>{
 };
 
 type IconPoupProps ={
+  currentPageId:string |null,
+  block:Block|null,
   page:Page,
+  editBlock:(pageId: string, block: Block) => void,
   editPage: (pageId: string, newPage: Page) => void,
   style :CSSProperties |undefined,
   setOpenIconPopup :Dispatch<SetStateAction<boolean>>,
 };
-const IconPopup =({page ,editPage,style,  setOpenIconPopup} :IconPoupProps)=>{
+const IconPopup =({ currentPageId,block,page, editBlock ,editPage,style,  setOpenIconPopup} :IconPoupProps)=>{
   const emoji ="emoji";
   const image="image";
   type Category = typeof emoji | typeof image;
   const [category , setCategory] =useState<Category>(emoji);
 
   const changePageIcon =(icon:string|null ,iconType:IconType)=>{
+    const editTime = JSON.stringify(Date.now());
     editPage(page.id, {
       ...page,
       header :{
         ...page.header,
         iconType:iconType,
         icon: icon
-      }
+      },
+      editTime:editTime
     });
+    if(block !==null  && currentPageId !==null){
+      const editedBlock:Block ={
+        ...block,
+        iconType: iconType,
+        icon:icon,
+        editTime:editTime
+      };
+      editBlock(currentPageId, editedBlock)
+    }
     setOpenIconPopup(false);
   };
   const removeIcon =()=>{

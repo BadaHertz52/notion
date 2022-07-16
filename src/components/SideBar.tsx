@@ -627,7 +627,10 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
     }
     {openRename && targetPage !==null &&
       <Rename
+        currentPageId={null}
+        block={null}
         page={targetPage}
+        editBlock={editBlock}
         editPage={editPage}
         renameStyle={renameStyle}
         setOpenRename={setOpenRename}

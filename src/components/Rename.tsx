@@ -1,18 +1,20 @@
 import React, { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import { GrDocumentText } from "react-icons/gr";
 import { CSSProperties } from "styled-components";
-import { Page } from "../modules/notion";
+import { Block, Page } from "../modules/notion";
 import IconPoup from "./IconPoup";
 import { closePopup } from "./SideBar";
 type RenameProps = {
+  currentPageId:string|null,
+  block:Block|null,
   page:Page,
+  editBlock:(pageId: string, block: Block) => void,
   editPage: (pageId: string, newPage: Page) => void,
   renameStyle:CSSProperties|undefined,
   setOpenRename: Dispatch<SetStateAction<boolean>>,
 }
-const Rename =({page, editPage,renameStyle, setOpenRename}:RenameProps)=>{
+const Rename =({currentPageId,block ,page,editBlock ,editPage,renameStyle, setOpenRename}:RenameProps)=>{
   const inner =document.getElementById("inner");
-  const rename = document.getElementById("rename");
   const [iconPopupStyle, setIconPopupStyle]=useState<CSSProperties>();
   const [openIconPopup, setOpenIconPopup]=useState<boolean>(false);
   inner?.addEventListener('click', (event)=>{
@@ -21,7 +23,7 @@ const Rename =({page, editPage,renameStyle, setOpenRename}:RenameProps)=>{
     
   });
   const onClickRenameIcon =()=>{
-    setOpenIconPopup(true);
+    const rename = document.getElementById("rename");
     const renameDomRect = rename?.getClientRects()[0];
     if(renameDomRect !==undefined){
       setIconPopupStyle({
@@ -29,7 +31,8 @@ const Rename =({page, editPage,renameStyle, setOpenRename}:RenameProps)=>{
         top: renameDomRect.bottom,
         left :renameDomRect.left ,
       })
-    }
+    };
+    setOpenIconPopup(true);
   };
   const changeTitle =(event:ChangeEvent<HTMLInputElement> )=>{
     const value = event.target.value;
@@ -44,13 +47,22 @@ const Rename =({page, editPage,renameStyle, setOpenRename}:RenameProps)=>{
           editTime:editTime
         };
         editPage(renamedPage.id, renamedPage );
+        if(block!==null && currentPageId !==null){
+          const editedBlock:Block={
+            ...block,
+            contents:value,
+            editTime:editTime
+          };
+          editBlock(currentPageId, editedBlock);
+        }
     };
   };
   return(
-    <>
+    < div 
+      id='rename'
+      style={renameStyle}>
     <div 
-        id='rename'
-        style={renameStyle}
+      className="inner"
       >
           <button 
             className="rename_icon"
@@ -83,12 +95,15 @@ const Rename =({page, editPage,renameStyle, setOpenRename}:RenameProps)=>{
       {openIconPopup && 
           <IconPoup
             page={page}
+            currentPageId={currentPageId}
+            block= {block}
+            editBlock={editBlock}
             editPage={editPage}
-            style={iconPopupStyle}
+            style={undefined}
             setOpenIconPopup={setOpenIconPopup}
           />
       }
-    </>
+    </div>
   )
 };
 

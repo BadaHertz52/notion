@@ -308,8 +308,11 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
           </div>
           {openIconPopup &&
             <IconPoup 
+              currentPageId={page.id}
+              block={null}
               page={page}
               style={iconStyle}
+              editBlock={editBlock}
               editPage={editPage}
               setOpenIconPopup={setOpenIconPopup}
             />
