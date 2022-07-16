@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect} from 'react';
 import { FcTodoList } from 'react-icons/fc';
 import { IoIosList } from 'react-icons/io';
 import { IoDocumentTextOutline, IoTextOutline } from 'react-icons/io5';
@@ -22,7 +22,8 @@ type CommandBlockProp ={
 };
 
 const CommandBlock =({ page ,block , editTime , editBlock ,changeBlockToPage,changePageToBlock ,addPage,setCommand ,command}:CommandBlockProp)=>{
-  const [result, setResult]=useState<boolean>(true);
+  const commandBlock_inner =document.getElementById("commandBlock_inner");
+  const commandBlock_noResult =document.getElementById("commandBlock_noResult"); 
   const showResult =()=>{
     const btns = [...document.getElementsByClassName("command_btns")[0].getElementsByTagName("button")];
     const typeCommand = command.command?.slice(1);
@@ -36,7 +37,15 @@ const CommandBlock =({ page ,block , editTime , editBlock ,changeBlockToPage,cha
       }else{
         btn.setAttribute("class", "command_btn");
       };
-    }) 
+    });
+    const onBlocks = document.querySelectorAll(".command_btn.on");
+    if(onBlocks[0]===undefined){
+      commandBlock_inner?.setAttribute("style", "display:none");
+      commandBlock_noResult?.setAttribute("style", "display:block");
+    }else{
+      commandBlock_inner?.setAttribute("style", "display:block");
+      commandBlock_noResult?.setAttribute("style", "display:none");
+    }
   };
 
   const changeType=( type:string)=>{
@@ -58,7 +67,7 @@ const CommandBlock =({ page ,block , editTime , editBlock ,changeBlockToPage,cha
     setCommand({
       boolean:false, 
       command:null,
-      targetBlock:null 
+      targetBlock:null
     })
   };
 
@@ -69,7 +78,6 @@ const CommandBlock =({ page ,block , editTime , editBlock ,changeBlockToPage,cha
       <div 
         id='commandBlock'
       >
-        {result? 
           <div id='commandBlock_inner'>
           <div className='command basic_blocks'>
             <header className='command_header'>
@@ -130,7 +138,7 @@ const CommandBlock =({ page ,block , editTime , editBlock ,changeBlockToPage,cha
               <button 
               className="command_btn"
                 onClick={()=>changeType("h1")}
-                name='h1'
+                name='h1 heading 1'
               >
               <div className='command_btn_inner'>
                 <div className='command_btn_left headerType' >
@@ -148,7 +156,7 @@ const CommandBlock =({ page ,block , editTime , editBlock ,changeBlockToPage,cha
               <button 
               className="command_btn"
                 onClick={()=>changeType("h2")}
-                name='h2'
+                name='h2 heading 2'
               >
                 <div className='command_btn_inner'>
                   <div className='command_btn_left headerType'>
@@ -166,7 +174,7 @@ const CommandBlock =({ page ,block , editTime , editBlock ,changeBlockToPage,cha
               <button 
                 className="command_btn"
                 onClick={()=>changeType("h3")}
-                name="h3"
+                name="h3 heading 3"
               >
                 <div className='command_btn_inner'>
                   <div className='command_btn_left headerType'>
@@ -235,13 +243,12 @@ const CommandBlock =({ page ,block , editTime , editBlock ,changeBlockToPage,cha
             </div>
           </div>
           </div>
-        :
-          <div className='noResult'>
+          <div 
+            className='noResult'
+            id="commandBlock_noResult" 
+          >
             No results
           </div>
-        }
-
-
       </div>
   )
 };
