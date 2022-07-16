@@ -349,31 +349,7 @@
     color: $itemText
   }
 }
-#rename {
-  @include popupMenu;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-content: center;
-  box-sizing: border-box;
-  padding: 10px;
-  input, button{
-    border: 1px solid $lightMud;
-    border-radius: 1px;
-    font-size: 15px;
-    text-align: center;
-    padding:2px;
-    height: 2rem;
-    box-sizing: inherit;
-  }
-  .rename_icon {
-    width: 2rem;
-    border-right: none;
-  }
-  .rename_title{
-    width: calc(100% - 2rem) ;
-  }
-}
+
 #sideBar_pageMenu{
   width: fit-content;
   padding:0;
