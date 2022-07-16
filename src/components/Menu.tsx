@@ -220,6 +220,7 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
                 </button>
                 {block.type === "page" && 
                 <button
+                  className='menu_editBtn'
                   onClick={onClickRename}
                 >
                   <div>
