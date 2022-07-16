@@ -96,7 +96,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
           firstBlock: targetBlock.firstBlock,
           subBlocksId: targetBlock.subBlocksId
         } ;
-        const previouseBlockId : string|null = targetBlock.firstBlock ? null : targetBlock.id ;
+
   
         if((targetBlock.contents!== editedContents) || (targetBlock.subBlocksId!==null)){
           const editedBlock:Block ={
@@ -113,10 +113,10 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
             parentBlocksId:[targetBlock.id],
             firstBlock:false,
           };
-          addBlock(page.id, newSubToggleBlock, targetBlockIndex+1, previouseBlockId);
+          addBlock(page.id, newSubToggleBlock, targetBlockIndex+1, targetBlock.id);
   
         }else{
-          addBlock(page.id, newBlock,targetBlockIndex+1, previouseBlockId);
+          addBlock(page.id, newBlock,targetBlockIndex+1, targetBlock.id);
         };
       }else{
         // edite targetBlock 
