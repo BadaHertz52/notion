@@ -8,11 +8,12 @@ export const h1 ="h1" as const ;
 export const h2 ="h2" as const ;
 export const h3 ="h3" as const ;
 export const page ="page" as const ;
+export const img ="img" as const; 
 export const numberList ="numberList" as const;
 export const bulletList ="bulletList" as const ;
-export const blockTypes =[text, toggle, todo, todo_done, h1, h2, page, numberList, bulletList];
+export const blockTypes =[text, toggle, todo, todo_done,img, h1, h2, page, numberList, bulletList];
 
-export type BlockType= typeof text|typeof toggle|typeof todo |typeof todo_done|typeof h1|typeof h2|typeof h3 |typeof page |typeof numberList |typeof bulletList ;
+export type BlockType= typeof text|typeof toggle|typeof todo |typeof todo_done|typeof img|typeof h1|typeof h2|typeof h3 |typeof page |typeof numberList |typeof bulletList ;
 
 export const defaultColor :string ="initial" as const ;
 export const grey :string="#bdbdbd" as const ;
@@ -36,14 +37,18 @@ export type BlockStyle ={
   bgColor: BgColorType,
   fontWeight: "bold"|"initial",
   fontStyle: "italic" | "initial",
-  textDeco : "underline"|"line-through" | "none"
+  textDeco : "underline"|"line-through" | "none" ,
+  width: undefined | number,
+  height :undefined | number
 };
 export const basicBlockStyle:BlockStyle ={
   color: defaultColor,
   bgColor: bg_default,
   fontWeight:"initial",
   fontStyle:"initial",
-  textDeco:"none"
+  textDeco:"none",
+  width: undefined,
+  height :undefined
 };
 const userName= "amet";
 const editTime =JSON.stringify(Date.now());
@@ -324,11 +329,10 @@ const initialState :Notion ={
       editTime:Date.parse("2021-5-18-15:00").toString(),
       createTime: Date.parse("2021-5-18-1:00").toString(),
       style :{
+        ...basicBlockStyle,
         color: blue,
         bgColor: bg_default,
         fontWeight:"bold",
-        fontStyle:"initial",
-        textDeco:"none"
       },
       comments:[{
         id:"comment_text1",
@@ -367,10 +371,8 @@ const initialState :Notion ={
       editTime: (Date.parse("2021-5-18-16:01:00")).toString(),
       createTime: (Date.parse("2021-5-18-3:00")).toString(),
       style :{
-        color: defaultColor,
+        ...basicBlockStyle,
         bgColor: bg_yellow,
-        fontWeight:"initial",
-        fontStyle:"initial",
         textDeco:"underline"
       },
       comments:[{
@@ -478,11 +480,7 @@ const initialState :Notion ={
     editTime: (Date.parse("2021-6-1-1:00")).toString() ,   
     createTime: (Date.parse("2021-5-30-15:00")).toString(),
     style :{
-      color: defaultColor,
-      bgColor: bg_default,
-      fontWeight:"initial",
-      fontStyle:"initial",
-      textDeco:"none"
+      ...basicBlockStyle,
     },
     comments:null
   },
@@ -498,11 +496,7 @@ const initialState :Notion ={
     editTime: (Date.parse("2021-5-12-09:00")).toString(),
     createTime: (Date.parse("2021-5-12-08:50")).toString(),
     style :{
-      color: defaultColor,
-      bgColor: bg_default,
-      fontWeight:"initial",
-      fontStyle:"initial",
-      textDeco:"none"
+      ...basicBlockStyle
     },
     comments:[{
       id:"comment_sub1_2_1",
@@ -527,11 +521,7 @@ const initialState :Notion ={
     editTime: (Date.parse("2021-5-27-7:00")).toString(),
     createTime: (Date.parse("2021-5-27-7:00")).toString(),
     style :{
-      color: defaultColor,
-      bgColor: bg_default,
-      fontWeight:"initial",
-      fontStyle:"initial",
-      textDeco:"none"
+      ...basicBlockStyle
     },
     comments:null
   },
@@ -547,11 +537,7 @@ const initialState :Notion ={
     editTime: (Date.parse("2021-6-1-18:45")).toString(),
     createTime: (Date.parse("2021-6-1-18:45")).toString(),
     style :{
-      color: defaultColor,
-      bgColor: bg_default,
-      fontWeight:"initial",
-      fontStyle:"initial",
-      textDeco:"none"
+      ...basicBlockStyle
     },
     comments:null
   },
@@ -567,11 +553,8 @@ const initialState :Notion ={
     editTime: (Date.parse("2021-6-1-19:03")).toString(),
     createTime: (Date.parse("2021-6-1-19:03")).toString(),
     style :{
-      color: defaultColor,
+      ...basicBlockStyle,
       bgColor: bg_green,
-      fontWeight:"initial",
-      fontStyle:"initial",
-      textDeco:"underline"
     },
     comments:null
   },
@@ -587,11 +570,7 @@ const initialState :Notion ={
     editTime: (Date.parse("2021-6-1-19:03:50")).toString(),
     createTime: (Date.parse("2021-6-1-19:03:50")).toString(),
     style :{
-      color: defaultColor,
-      bgColor: bg_default,
-      fontWeight:"initial",
-      fontStyle:"initial",
-      textDeco:"none"
+      ...basicBlockStyle
     },
     comments:[{
       id:"comment_n2",
@@ -616,11 +595,7 @@ const initialState :Notion ={
     editTime: Date.parse("2021-6-1-19:12:13").toString(),
     createTime: Date.parse("2021-6-1-19:12:13").toString(),
     style :{
-      color: defaultColor,
-      bgColor: bg_default,
-      fontWeight:"initial",
-      fontStyle:"initial",
-      textDeco:"none"
+      ...basicBlockStyle
     },
     comments:null
   },
@@ -636,11 +611,7 @@ const initialState :Notion ={
     editTime: (Date.parse("2021-6-1-19:13:45")).toString(),
     createTime: (Date.parse("2021-6-1-19:13:45")).toString(),
     style :{
-      color: defaultColor,
-      bgColor: bg_default,
-      fontWeight:"initial",
-      fontStyle:"initial",
-      textDeco:"none"
+      ...basicBlockStyle
     },
     comments:null
   },
@@ -656,11 +627,7 @@ const initialState :Notion ={
     editTime: (Date.parse("2021-6-1-19:23")).toString(),
     createTime: (Date.parse("2021-6-1-19:23")).toString(),
     style :{
-      color: defaultColor,
-      bgColor: bg_default,
-      fontWeight:"initial",
-      fontStyle:"initial",
-      textDeco:"none"
+      ...basicBlockStyle
     },
     comments:null
   },
@@ -676,11 +643,7 @@ const initialState :Notion ={
     editTime: (Date.parse("2021-6-1-20:12" )).toString(),
     createTime: (Date.parse("2021-6-1-20:12" )).toString(),
     style :{
-      color: defaultColor,
-      bgColor: bg_default,
-      fontWeight:"initial",
-      fontStyle:"initial",
-      textDeco:"none"
+      ...basicBlockStyle
     },
     comments:null
   },
