@@ -249,6 +249,33 @@ const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBl
               </button>
             </div>
           </div>
+          <div className='command media_blocks'>
+            <header className='command_header'>
+              MEDIA
+            </header>
+            <div className='command_btns type'>
+              <button
+                  className="command_btn"
+                  onClick={()=>changeType("image")}
+                  name="image"
+                >
+                <div className='command_btn_inner'>
+                    <div className='command_btn_left'>
+                    <img
+                      src={imgIcon}
+                      alt="imgIcon"
+                    />
+                  </div>
+                  <div className='command_btn_right'>
+                    <header>Image</header>
+                    <div className='command_explanation'>
+                      Upload or embed width a link
+                    </div>
+                  </div>
+                </div>
+              </button>
+            </div>
+          </div>
           </div>
           <div 
             className='noResult'
