@@ -6,7 +6,7 @@ import { RiPlayList2Fill } from 'react-icons/ri';
 import { VscListOrdered } from 'react-icons/vsc';
 import { Command } from './Frame';
 import { Block, BlockType, blockTypes, Page } from "../modules/notion";
-//import { changeSubPage } from './PageMenu';
+import imgIcon from '../assests/img/vincent-van-gogh-ge1323790d_640.jpg'; 
 
 type CommandBlockProp ={
   page:Page,
