@@ -34,6 +34,7 @@ type BlockFnProp ={
   setMenuOpen:Dispatch<SetStateAction<boolean>>,
   setPopupStyle:Dispatch<SetStateAction<CSSProperties|undefined>>,
   setTargetPageId: Dispatch<SetStateAction<string>>,
+  setCommandTargetBlock:Dispatch<SetStateAction<Block|null>>
 };
 
 
@@ -76,10 +77,10 @@ export const detectRange =(event:MouseEvent| React.MouseEvent , targetArea:DOMRe
   return (inner_x && inner_y);
 };
 
-const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage, editBlock,changeBlockToPage,changePageToBlock, deleteBlock ,addPage,editPage, movePageToPage, deletePage ,setCommentBlock, popup, setPopup ,menuOpen,setMenuOpen ,setPopupStyle ,setTargetPageId}:BlockFnProp)=>{
+const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage, editBlock,changeBlockToPage,changePageToBlock, deleteBlock ,addPage,editPage, movePageToPage, deletePage ,setCommentBlock, popup, setPopup ,menuOpen,setMenuOpen ,setPopupStyle ,setTargetPageId ,setCommandTargetBlock}:BlockFnProp)=>{
   const inner =document.getElementById("inner");
   const [openRename, setOpenRename] =useState<boolean>(false);
-  const [openCommand, setOpenCommand] =useState<boolean>(false);
+
   const [blockFnTargetBlock, setBlockFnTargetBlock]=useState<Block|null>(null);
   const [renameTargetPage, setRenameTargetPage]=useState<Page|null>(null);
   useEffect(()=>{
@@ -92,12 +93,14 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
     const sessionItem = sessionStorage.getItem("blockFnTargetBlock") ;
     if(sessionItem !==null){
       const targetBlock= JSON.parse(sessionItem);
-      setBlockFnTargetBlock(targetBlock);
       const targetBlockIndex= page.blocksId.indexOf(targetBlock.id);
       const newBlock =makeNewBlock(page, targetBlock,"");
       addBlock(page.id, newBlock, targetBlockIndex+1, targetBlock.id);
-      setBlockFnTargetBlock(newBlock);
-      setOpenCommand(true);
+      setPopup({
+        popup:true,
+        what:"popupCommand"
+      });
+      setCommandTargetBlock(newBlock);
     }else{
       console.log("BlockFn-makeBlock error: there is no session item")
     }
@@ -210,17 +213,6 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
             setCommentBlock={setCommentBlock}
             setTargetPageId={setTargetPageId}
             setOpenRename= {setOpenRename}
-          />
-        }
-        {openCommand && blockFnTargetBlock!==null &&
-          <CommandBlock
-            page ={page}
-            block ={blockFnTargetBlock}
-            editBlock ={editBlock}
-            changeBlockToPage ={changeBlockToPage}
-            changePageToBlock ={changePageToBlock}
-            setCommand ={null}
-            command ={null}
           />
         }
         {openRename && renameTargetPage !==null &&
