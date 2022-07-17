@@ -4,12 +4,15 @@
     margin-top: 0
   }
 }
+#popupMenu #commandBlock{
+  margin-top: 0
+}
 #commandBlock{
   @include popupMenu;
   @include webkitScroll;
   margin-top: 1rem;
   &_inner {
-    height: 350px;
+    max-height: 350px;
     position: relative;
   }
   .command div{
