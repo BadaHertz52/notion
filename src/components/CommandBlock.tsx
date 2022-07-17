@@ -79,6 +79,8 @@ const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBl
       command:null,
       targetBlock:null
     })
+    setPopup !==null && setPopup({popup:false, what:null}) ;
+    setCommandTargetBlock !==null && setCommandTargetBlock(null);
   };
 
   useEffect(()=>{
