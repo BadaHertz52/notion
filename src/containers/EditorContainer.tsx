@@ -2,6 +2,7 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import {useDispatch, useSelector } from 'react-redux';
 import { CSSProperties } from 'styled-components';
 import BlockFn, { detectRange } from '../components/BlockFn';
+import CommandBlock from '../components/CommandBlock';
 import Comments, { CommentInput } from '../components/Comments';
 import Frame from '../components/Frame';
 import PageMenu from '../components/PageMenu';
@@ -119,7 +120,23 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isIn
   useEffect(()=>{
     setPagePath(makePagePath(page))
   },[page, page.header.icon, page.header.title]);
-
+  useEffect(()=>{
+    if(commandTargetBlock!==null){
+      const editor= document.getElementsByClassName("editor")[0];
+      const editorDomRect= editor.getClientRects()[0];
+      const blockDom = document.getElementById(`block_${commandTargetBlock.id}`);
+      const blockDomRect =blockDom?.getClientRects()[0];
+      if(blockDomRect!==undefined){
+        const style:CSSProperties ={
+          position:"absolute",
+          top : blockDomRect.bottom + blockDomRect.height + editor.scrollTop,
+          left :blockDomRect.left -editorDomRect.left
+        };
+        console.log(editorDomRect, editor.scrollTop, blockDomRect)
+        setPopupStyle(style);
+      };
+    }
+  },[commandTargetBlock])
   return(
     <div className='editor'>
       {isInTrash &&
@@ -214,13 +231,14 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isIn
         setMenuOpen={setMenuOpen}
         setPopupStyle={setPopupStyle}
         setTargetPageId={setTargetPageId}
+        setCommandTargetBlock={setCommandTargetBlock}
       />
-      {popup.popup && (
-        popup.what === popupMoveToPage ?
+      {popup.popup && 
           <div 
             id="popupMenu"
             style ={popupStyle}
           >
+            {popup.what==="popupMoveToPage" &&
             <PageMenu
               what="block"
               currentPage={page}
@@ -235,13 +253,9 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isIn
               setMenuOpen={setMenuOpen}
               setTargetPageId={setTargetPageId}
             /> 
-          </div>
-          :
-          <div 
-            id="popupMenu"
-            style={popupStyle}
-          >
-              <CommentInput
+            }
+            {popup.what ==="popupComment" &&
+                <CommentInput
                 pageId={page.id}
                 page={null}
                 userName={userName}
@@ -256,8 +270,21 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isIn
                 addOrEdit="add"
                 setEdit={null}
               />
+            }
+            {popup.what === "popupCommand" && commandTargetBlock !==null&&
+              <CommandBlock
+                page ={page}
+                block ={commandTargetBlock}
+                editBlock ={editBlock}
+                changeBlockToPage ={changeBlockToPage}
+                changePageToBlock ={changePageToBlock}
+                setPopup ={setPopup}
+                setCommandTargetBlock={setCommandTargetBlock}
+                setCommand ={null}
+                command ={null}
+              />
+            }
           </div>
-      )
       }
       {commentBlock !==null && openComment &&
       <div 
@@ -276,6 +303,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isIn
         />  
       </div>            
       }
+
     </div>
   )
 };
