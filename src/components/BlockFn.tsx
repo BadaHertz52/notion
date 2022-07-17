@@ -1,12 +1,13 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import Menu from './Menu';
-import {Block, findPage, listItem, makeNewBlock, Page} from '../modules/notion';
+import {Block, findPage, listItem, Page} from '../modules/notion';
+import { CSSProperties } from 'styled-components';
+import Rename from './Rename';
 
 import { AiOutlinePlus } from 'react-icons/ai';
 import { CgMenuGridO } from 'react-icons/cg';
 import { PopupType } from '../containers/EditorContainer';
-import { CSSProperties } from 'styled-components';
-import Rename from './Rename';
+
 
 type BlockFnProp ={
   pages:Page[],
@@ -89,9 +90,10 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
     const sessionItem = sessionStorage.getItem("blockFnTargetBlock") ;
     if(sessionItem !==null){
       const targetBlock= JSON.parse(sessionItem);
+      setBlockFnTargetBlock(targetBlock);
       const targetBlockIndex= page.blocksId.indexOf(targetBlock.id);
-      const newBlock =makeNewBlock(page, targetBlock,"");
-      addBlock(page.id, newBlock, targetBlockIndex+1, targetBlock.id);
+     // const newBlock =makeNewBlock(page, targetBlock,"");
+      //addBlock(page.id, newBlock, targetBlockIndex+1, targetBlock.id);
     }else{
       console.log("BlockFn-makeBlock error: there is no session item")
     }
