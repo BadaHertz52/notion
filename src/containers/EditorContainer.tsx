@@ -13,9 +13,10 @@ import { pathType } from './NotionRouter';
 
 export const popupMoveToPage= "popupMoveToPage" ;
 export const popupComment ="popupComment" ;
+export const popupCommand="popupCommand";
 export type PopupType ={
   popup: boolean,
-  what: typeof popupMoveToPage | typeof popupComment | null,
+  what: typeof popupMoveToPage | typeof popupComment | typeof popupCommand| null,
 };
 
 type EditorContainerProps ={
@@ -66,6 +67,8 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isIn
   const [commentBlock, setCommentBlock]=useState<Block|null>(null);
   const [commentsStyle, setCommentsStyle]= useState<CSSProperties>();
   const [menuOpen, setMenuOpen]= useState<boolean>(false);
+  const [commandTargetBlock, setCommandTargetBlock]=useState<Block|null>(null);
+  const [commandBlockStyle, setCommandBlockStyle]=useState<CSSProperties>(); 
   const [popup, setPopup]=useState<PopupType>({
     popup:false,
     what:null
