@@ -38,8 +38,8 @@ export type BlockStyle ={
   fontWeight: "bold"|"initial",
   fontStyle: "italic" | "initial",
   textDeco : "underline"|"line-through" | "none" ,
-  width: undefined | number,
-  height :undefined | number
+  width: undefined | string,
+  height :undefined | string
 };
 export const basicBlockStyle:BlockStyle ={
   color: defaultColor,
