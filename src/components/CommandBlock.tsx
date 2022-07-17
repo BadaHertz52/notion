@@ -11,40 +11,42 @@ import { Block, BlockType, blockTypes, Page } from "../modules/notion";
 type CommandBlockProp ={
   page:Page,
   block:Block,
-  editTime:string,
   editBlock :(pageId:string, block:Block)=>void,
   changeBlockToPage: (currentPageId: string, block: Block) => void,
   changePageToBlock:(currentPageId: string, block: Block) => void,
-  addPage:( newPage: Page) => void,
-  command:Command,
-  setCommand: Dispatch<SetStateAction<Command>> ,
-  
+  command:Command | null,
+  setCommand: Dispatch<SetStateAction<Command>> |null ,
 };
 
-const CommandBlock =({ page ,block , editTime , editBlock ,changeBlockToPage,changePageToBlock ,addPage,setCommand ,command}:CommandBlockProp)=>{
+const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBlock ,setCommand ,command}:CommandBlockProp)=>{
   const commandBlock_inner =document.getElementById("commandBlock_inner");
   const commandBlock_noResult =document.getElementById("commandBlock_noResult"); 
   const showResult =()=>{
-    const btns = [...document.getElementsByClassName("command_btns")[0].getElementsByTagName("button")];
-    const typeCommand = command.command?.slice(1);
-    typeCommand !==undefined &&
-    btns.forEach((btn:HTMLButtonElement)=>{
-      const name =btn.getAttribute("name");
-      if(name?.includes(typeCommand)){
-        btns.indexOf(btn)===0 ?
-        btn.setAttribute("class", "command_btn on first"):
-        btn.setAttribute("class", "command_btn on");
-      }else{
-        btn.setAttribute("class", "command_btn");
-      };
-    });
-    const onBlocks = document.querySelectorAll(".command_btn.on");
-    if(onBlocks[0]===undefined){
-      commandBlock_inner?.setAttribute("style", "display:none");
-      commandBlock_noResult?.setAttribute("style", "display:block");
+    const btns = [...document.getElementsByClassName("command_btn")];
+    if(command !==null){
+      const typeCommand = command.command?.slice(1);
+      typeCommand !==undefined &&
+      btns.forEach((btn:Element)=>{
+        const name =btn.getAttribute("name");
+        if(name?.includes(typeCommand)){
+          btns.indexOf(btn)===0 ?
+          btn.setAttribute("class", "command_btn on first"):
+          btn.setAttribute("class", "command_btn on");
+        }else{
+          btn.setAttribute("class", "command_btn");
+        };
+        const onBlocks = document.querySelectorAll(".command_btn.on");
+        if(onBlocks[0]===undefined){
+          commandBlock_inner?.setAttribute("style", "display:none");
+          commandBlock_noResult?.setAttribute("style", "display:block");
+        }else{
+          commandBlock_inner?.setAttribute("style", "display:block");
+          commandBlock_noResult?.setAttribute("style", "display:none");
+        }
+      });
     }else{
-      commandBlock_inner?.setAttribute("style", "display:block");
-      commandBlock_noResult?.setAttribute("style", "display:none");
+      btns.forEach((btn)=> btn.setAttribute("class", "command_btn on"));
+
     }
   };
 
@@ -56,15 +58,20 @@ const CommandBlock =({ page ,block , editTime , editBlock ,changeBlockToPage,cha
       }else{
         const newBlock:Block ={
           ...block,
-          editTime:editTime,
-          type:blockType
+          editTime:JSON.stringify(Date.now()),
+          type:blockType,
+          style:{
+            ...block.style,
+            width: blockType==="image"?  "50%": undefined,
+            height: blockType==="image"?  "50%": undefined,
+          }
         };
         block.type==="page"?
         changePageToBlock(page.id, newBlock):
         editBlock(page.id, newBlock);
       };
     };
-    setCommand({
+    setCommand !==null && setCommand({
       boolean:false, 
       command:null,
       targetBlock:null
@@ -72,8 +79,8 @@ const CommandBlock =({ page ,block , editTime , editBlock ,changeBlockToPage,cha
   };
 
   useEffect(()=>{
-    showResult();
-  },[command.command])
+      showResult();
+  },[command])
   return(
       <div 
         id='commandBlock'

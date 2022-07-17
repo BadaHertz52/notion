@@ -385,13 +385,11 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
                   key={`${command.targetBlock.id}_command`}
                   page={page}
                   block={command.targetBlock}
-                  editTime={JSON.stringify(Date.now())}
                   editBlock={editBlock}
                   changeBlockToPage={changeBlockToPage}
                   changePageToBlock={changePageToBlock}
                   command={command}
                   setCommand={setCommand}
-                  addPage={addPage}
                 />
               </div>
               }

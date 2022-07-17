@@ -48,7 +48,6 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
   const [turnInto, setTurnInto]= useState<boolean>(false);
   const [color, setColor]= useState<boolean>(false);
   const [turnInToPage ,setTurnIntoPage] = useState<boolean>(false);
-  const [command, setCommand]= useState<Command>({boolean:false, command:null, targetBlock:block});
   const menuStyle:CSSProperties ={
     position:"absolute" ,
     top: blockFnElement?.offsetHeight,
@@ -288,13 +287,11 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
             <CommandBlock
               page={page}
               block={block}
-              editTime={JSON.stringify(Date.now())}
               editBlock={editBlock}
               changeBlockToPage={changeBlockToPage}
               changePageToBlock={changePageToBlock}
-              command={command}
-              setCommand={setCommand}
-              addPage={addPage}
+              command={null}
+              setCommand={null}
             />
         }
         {color &&
