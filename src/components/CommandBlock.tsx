@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect} from 'react';
+import React, { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useState} from 'react';
 import { FcTodoList } from 'react-icons/fc';
 import { IoIosList } from 'react-icons/io';
 import { IoDocumentTextOutline, IoTextOutline } from 'react-icons/io5';
@@ -7,6 +7,7 @@ import { VscListOrdered } from 'react-icons/vsc';
 import { Command } from './Frame';
 import { Block, BlockType, blockTypes, Page } from "../modules/notion";
 import imgIcon from '../assests/img/vincent-van-gogh-ge1323790d_640.jpg'; 
+import { PopupType } from '../containers/EditorContainer';
 
 type CommandBlockProp ={
   page:Page,
@@ -16,9 +17,11 @@ type CommandBlockProp ={
   changePageToBlock:(currentPageId: string, block: Block) => void,
   command:Command | null,
   setCommand: Dispatch<SetStateAction<Command>> |null ,
+  setPopup:Dispatch<SetStateAction<PopupType>> |null,
+  setCommandTargetBlock :Dispatch<SetStateAction<Block|null>>|null,
 };
 
-const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBlock ,setCommand ,command}:CommandBlockProp)=>{
+const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBlock ,setCommand ,command ,setPopup, setCommandTargetBlock}:CommandBlockProp)=>{
   const commandBlock_inner =document.getElementById("commandBlock_inner");
   const commandBlock_noResult =document.getElementById("commandBlock_noResult"); 
   const showResult =()=>{

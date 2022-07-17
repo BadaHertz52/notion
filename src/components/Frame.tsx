@@ -390,6 +390,8 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
                   changePageToBlock={changePageToBlock}
                   command={command}
                   setCommand={setCommand}
+                  setCommandTargetBlock={null}
+                  setPopup={null}
                 />
               </div>
               }
