@@ -990,6 +990,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
     case CHANGE_BLOCK_TO_PAGE :
       const changedTypeBlock:Block ={
         ...action.block,
+        contents:action.block.contents===""? "untitle": action.block.contents,
         type:"page",
         subBlocksId:null,
         editTime:editTime
@@ -1024,7 +1025,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
       const newPage:Page ={
         id:action.block.id,
         header:{
-          title: action.block.contents,
+          title: action.block.contents ===""?"untitle" :action.block.contents,
           iconType: action.block.iconType,
           icon: action.block.icon,
           cover:null,
