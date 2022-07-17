@@ -44,6 +44,8 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
   fontWeight: block.style.fontWeight ,
   fontStyle: block.type !=="todo done"? block.style.fontStyle : "italic",
   textDecoration: block.type !=="todo done"? block.style.textDeco :"line-through",
+  width: block.style.width===undefined? "inherit" : `${block.style.width}px`,
+  height: block.style.height===undefined? "inherit" : `${block.style.height}px`,
   })
   };
   const giveFocusToContent =(event:React.MouseEvent)=>{
