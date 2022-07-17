@@ -1,12 +1,13 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import Menu from './Menu';
-import {Block, findPage, listItem, Page} from '../modules/notion';
+import {Block, findPage, listItem, makeNewBlock, Page} from '../modules/notion';
 import { CSSProperties } from 'styled-components';
 import Rename from './Rename';
 
 import { AiOutlinePlus } from 'react-icons/ai';
 import { CgMenuGridO } from 'react-icons/cg';
 import { PopupType } from '../containers/EditorContainer';
+import CommandBlock from './CommandBlock';
 
 
 type BlockFnProp ={
@@ -78,6 +79,7 @@ export const detectRange =(event:MouseEvent| React.MouseEvent , targetArea:DOMRe
 const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage, editBlock,changeBlockToPage,changePageToBlock, deleteBlock ,addPage,editPage, movePageToPage, deletePage ,setCommentBlock, popup, setPopup ,menuOpen,setMenuOpen ,setPopupStyle ,setTargetPageId}:BlockFnProp)=>{
   const inner =document.getElementById("inner");
   const [openRename, setOpenRename] =useState<boolean>(false);
+  const [openCommand, setOpenCommand] =useState<boolean>(false);
   const [blockFnTargetBlock, setBlockFnTargetBlock]=useState<Block|null>(null);
   const [renameTargetPage, setRenameTargetPage]=useState<Page|null>(null);
   useEffect(()=>{
@@ -92,8 +94,10 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
       const targetBlock= JSON.parse(sessionItem);
       setBlockFnTargetBlock(targetBlock);
       const targetBlockIndex= page.blocksId.indexOf(targetBlock.id);
-     // const newBlock =makeNewBlock(page, targetBlock,"");
-      //addBlock(page.id, newBlock, targetBlockIndex+1, targetBlock.id);
+      const newBlock =makeNewBlock(page, targetBlock,"");
+      addBlock(page.id, newBlock, targetBlockIndex+1, targetBlock.id);
+      setBlockFnTargetBlock(newBlock);
+      setOpenCommand(true);
     }else{
       console.log("BlockFn-makeBlock error: there is no session item")
     }
@@ -206,6 +210,17 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
             setCommentBlock={setCommentBlock}
             setTargetPageId={setTargetPageId}
             setOpenRename= {setOpenRename}
+          />
+        }
+        {openCommand && blockFnTargetBlock!==null &&
+          <CommandBlock
+            page ={page}
+            block ={blockFnTargetBlock}
+            editBlock ={editBlock}
+            changeBlockToPage ={changeBlockToPage}
+            changePageToBlock ={changePageToBlock}
+            setCommand ={null}
+            command ={null}
           />
         }
         {openRename && renameTargetPage !==null &&
