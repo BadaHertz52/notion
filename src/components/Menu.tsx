@@ -1,6 +1,12 @@
 import React, { ChangeEvent, Dispatch, SetStateAction, useState} from 'react';
 import { Block,listItem, Page } from '../modules/notion';
 import CommandBlock from './CommandBlock';
+import { CSSProperties } from 'styled-components';
+import ColorMenu from './ColorMenu';
+import { HiOutlineDuplicate, HiOutlinePencilAlt } from 'react-icons/hi';
+import PageMenu from './PageMenu';
+import { popupComment, popupMoveToPage, PopupType } from '../containers/EditorContainer';
+import Time from './Time';
 
 //icon
 import {BiCommentDetail} from 'react-icons/bi';
@@ -10,13 +16,7 @@ import {TiArrowSortedDown} from 'react-icons/ti';
 import {IoArrowRedoOutline} from 'react-icons/io5';
 import {RiDeleteBin6Line } from 'react-icons/ri';
 import { AiOutlineFormatPainter } from 'react-icons/ai';
-import { CSSProperties } from 'styled-components';
-import { Command } from './Frame';
-import ColorMenu from './ColorMenu';
-import { HiOutlineDuplicate, HiOutlinePencilAlt } from 'react-icons/hi';
-import PageMenu from './PageMenu';
-import { popupComment, popupMoveToPage, PopupType } from '../containers/EditorContainer';
-import Time from './Time';
+
 
 type MenuProps ={
   pages:Page[],
