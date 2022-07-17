@@ -24,6 +24,11 @@ type CommandBlockProp ={
 const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBlock ,setCommand ,command ,setPopup, setCommandTargetBlock}:CommandBlockProp)=>{
   const commandBlock_inner =document.getElementById("commandBlock_inner");
   const commandBlock_noResult =document.getElementById("commandBlock_noResult"); 
+  const [openTypeBtns, setOpenTypeBtns]=useState<boolean>(true);
+  const [openImgUpload, setOpenImgUpload]=useState<boolean>(false);
+  const upload="upload" ;
+  const embedLink ="embedLink"; 
+  const [loader, setLoader]=useState<typeof upload | typeof embedLink>(upload); 
   const showResult =()=>{
     const btns = [...document.getElementsByClassName("command_btn")];
     if(command !==null){
@@ -52,11 +57,11 @@ const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBl
 
     }
   };
-
   const changeType=( type:string)=>{
     const blockType:BlockType = blockTypes.filter((block_type)=> block_type === type)[0];
     if(block.type !== blockType){
       if(blockType==="page"){
+
         changeBlockToPage(page.id, block);
       }else{
         const newBlock:Block ={
@@ -82,7 +87,16 @@ const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBl
     setPopup !==null && setPopup({popup:false, what:null}) ;
     setCommandTargetBlock !==null && setCommandTargetBlock(null);
   };
+  const onClickImgType=()=>{
+    setOpenImgUpload(true);
+    setOpenTypeBtns(false);
+  };
+  const onChangeToUpload =(event:ChangeEvent<HTMLInputElement>)=>{
+  
+  };
+  const onSubmitEmbedLink=(event:FormEvent<HTMLFormElement>)=>{
 
+  };
   useEffect(()=>{
       showResult();
   },[command])
@@ -90,6 +104,8 @@ const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBl
       <div 
         id='commandBlock'
       >
+        {openTypeBtns &&
+        <>
           <div id='commandBlock_inner'>
           <div className='command basic_blocks'>
             <header className='command_header'>
@@ -261,7 +277,7 @@ const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBl
             <div className='command_btns type'>
               <button
                   className="command_btn"
-                  onClick={()=>changeType("image")}
+                  onClick={onClickImgType}
                   name="image"
                 >
                 <div className='command_btn_inner'>
@@ -288,6 +304,42 @@ const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBl
           >
             No results
           </div>
+        </>
+        }
+          {openImgUpload &&
+          <div id="imgUpload">
+              <div className="inner">
+                <div className='imgUpload_menu'>
+                  <button>
+                    Upload
+                  </button>
+                  <button>
+                    Embed link
+                  </button>
+                </div>
+                <div className='imgUpload_loader'>
+                  {loader === upload ?
+                    <input
+                      type="file"
+                      value="Or upload file"
+                      onChange={onChangeToUpload}
+                    />
+                :
+                  <form className='embedLink' onSubmit={onSubmitEmbedLink}> 
+                    <input
+                      type="text"
+                      placeholder='Paste the image link....'
+                    />
+                    <input
+                      type="submit"
+                      value="Embed image"
+                    />
+                  </form>
+                }
+                </div>
+              </div>
+          </div>
+          }
       </div>
   )
 };
