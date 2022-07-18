@@ -18,19 +18,18 @@ const Loader =({block, page, editBlock ,setOpenLoader ,setLoaderTargetBlock}:Loa
   const [loaderStyle, setLoaderStyle]=useState<CSSProperties>();
   const loader=block.type.slice(0, block.type.indexOf("media")-1);
   const [imgLoader, setImgLoader]=useState<imgLoaderType>(imgFile);
-  const [imageUrl, setImageUrl]=useState<string|null>(null);
   const onChangeImgFile =(event:ChangeEvent<HTMLInputElement>)=>{
     const file =event.target.files?.[0];
     if(file!==undefined){
       const url = URL.createObjectURL(file);
-      setImageUrl(url);
-      // const editedBlock :Block ={
-      //   ...block,
-      //   type:"image",
-      //   contents:url,
-      //   editTime:JSON.stringify(Date.now(),)
-      // };
-      // editBlock(page.id,editedBlock);
+      const editedBlock :Block ={
+        ...block,
+        type:"image media",
+        contents:url,
+        editTime:JSON.stringify(Date.now(),)
+      };
+      editBlock(page.id,editedBlock);
+      closeLoader();
     }else{
       console.log("can't find image file")
     }
@@ -95,16 +94,12 @@ const Loader =({block, page, editBlock ,setOpenLoader ,setLoaderTargetBlock}:Loa
               </label>
               <input
                 type="file"
+                accept='image/jpg , image/jpeg, imgae/png'
                 name="imgLoader"
                 id="imgLoader"
                 onChange={onChangeImgFile}
               />
-              {imageUrl!==null &&
-              <img
-              src={imageUrl}
-              alt="img"
-              />
-              }
+
             </>
           :
             <form className='embedLink' onSubmit={onSubmitEmbedLink}> 
