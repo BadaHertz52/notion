@@ -8,12 +8,13 @@ export const h1 ="h1" as const ;
 export const h2 ="h2" as const ;
 export const h3 ="h3" as const ;
 export const page ="page" as const ;
-export const image ="image" as const; 
+export const image ="image media" as const; 
+export const bookmark ="bookmark media" as const; 
 export const numberList ="numberList" as const;
 export const bulletList ="bulletList" as const ;
-export const blockTypes =[text, toggle, todo, todo_done,image, h1, h2, page, numberList, bulletList];
+export const blockTypes =[text, toggle, todo, todo_done,image, bookmark, h1, h2, page, numberList, bulletList];
 
-export type BlockType= typeof text|typeof toggle|typeof todo |typeof todo_done|typeof image|typeof h1|typeof h2|typeof h3 |typeof page |typeof numberList |typeof bulletList ;
+export type BlockType= typeof text|typeof toggle|typeof todo |typeof todo_done|typeof image|typeof bookmark |typeof h1|typeof h2|typeof h3 |typeof page |typeof numberList |typeof bulletList ;
 
 export const defaultColor :string ="initial" as const ;
 export const grey :string="#bdbdbd" as const ;
