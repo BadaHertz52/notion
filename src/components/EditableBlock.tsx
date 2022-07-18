@@ -4,7 +4,7 @@ import { Command } from './Frame';
 import BlockComponent, { BlockComment } from './BlockComponent';
 import { GoPrimitiveDot } from 'react-icons/go';
 import { GrCheckbox, GrCheckboxSelected } from 'react-icons/gr';
-import { MdPlayArrow } from 'react-icons/md';
+import { MdOutlineCollectionsBookmark, MdOutlinePhotoSizeSelectActual, MdPlayArrow } from 'react-icons/md';
 import PageIcon from './PageIcon';
 
 
@@ -22,13 +22,15 @@ type EditableBlockProps ={
   setTargetPageId: React.Dispatch<React.SetStateAction<string>> ,
   setOpenComment: Dispatch<SetStateAction<boolean>>,
   setCommentBlock: Dispatch<SetStateAction<Block | null>>,
+  setOpenLoader:Dispatch<SetStateAction<boolean>>,
+  setLoaderTargetBlock : Dispatch<SetStateAction<Block | null>>,
 };
 export   type CommentOpenType ={
   open:boolean,
   targetId: string | null,
 };
 
-const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText ,command, setCommand ,setTargetPageId ,setOpenComment ,setCommentBlock 
+const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText ,command, setCommand ,setTargetPageId ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock,
 }:EditableBlockProps)=>{  
   const className = block.type !== "toggle" ?
   `${block.type} block ` :
@@ -108,7 +110,11 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
     const toggleMainDoc = document.getElementById(`block_${blockId}`) ;
     target.classList.toggle("on");
     toggleMainDoc?.classList.toggle("on");
-    console.log(toggleMainDoc?.className);
+    
+  };
+  const onClickAddFileBtn =()=>{
+    setOpenLoader(true);
+    setLoaderTargetBlock(block);
   };
   const inner =document.getElementById("inner");
   inner?.addEventListener("click",updateBlock);
@@ -122,6 +128,10 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
           newBlockContentEditableDoc.focus();
         };
         sessionStorage.removeItem("newBlock");
+    };
+    if(block.type.includes("media") && block.contents===""){
+      setOpenLoader(true);
+      setLoaderTargetBlock(block);
     }
   },[]);
   
@@ -258,21 +268,43 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                 style={blockContentsStyle(block)}
                 onMouseOver={ giveFocusToContent}
               >
+              { block.type.includes("media") && block.contents===""?
+              <button 
+                className='addBlockFile'
+                onClick={onClickAddFileBtn}
+              >
+                <span
+                  className="addBlockFileIcon"
+                >
+                  {block.type ==="image media" &&
+                    <MdOutlinePhotoSizeSelectActual/>
+                  }
+                  {block.type ==="bookmark media" &&
+                    <MdOutlineCollectionsBookmark/>
+                  }
+                </span>
+                <span>
+                  Add a {block.type.slice(0, block.type.indexOf("media"))}
+                </span>
+                
+              </button>
+              :
               <BlockComponent
-                block={block} 
-                page={page}
-                addBlock={addBlock}
-                editBlock={editBlock}
-                changeToSub={changeToSub}
-                raiseBlock={raiseBlock}
-                deleteBlock={deleteBlock}
-                blockComments={blockComments}
-                command={command}
-                setCommand={setCommand}
-                onClickCommentBtn={onClickCommentBtn}
-                setTargetPageId={setTargetPageId}
-                setOpenComment={setOpenComment}
-              />
+              block={block} 
+              page={page}
+              addBlock={addBlock}
+              editBlock={editBlock}
+              changeToSub={changeToSub}
+              raiseBlock={raiseBlock}
+              deleteBlock={deleteBlock}
+              blockComments={blockComments}
+              command={command}
+              setCommand={setCommand}
+              onClickCommentBtn={onClickCommentBtn}
+              setTargetPageId={setTargetPageId}
+              setOpenComment={setOpenComment}
+            />
+              }
               </div>
               </div>
               {blockComments &&
@@ -305,6 +337,8 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                   setOpenComment={setOpenComment}
                   setCommentBlock={setCommentBlock}
                   setTargetPageId={setTargetPageId}
+                  setOpenLoader={setOpenLoader}
+                  setLoaderTargetBlock={setLoaderTargetBlock}
                 />
               )
               }
