@@ -40,7 +40,9 @@
         box-sizing: border-box;
       }
       input{
-        display: none;
+        position:absolute;
+        width:0;
+        height: 0;
       }
     }
   }
