@@ -13,6 +13,7 @@ import {GrDocumentText ,GrDocument} from 'react-icons/gr';
 import { MdInsertPhoto } from 'react-icons/md';
 import { HiTemplate } from 'react-icons/hi';
 import { detectRange } from './BlockFn';
+import Loader from './Loader';
 
 
 
@@ -54,9 +55,11 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
   });
   const [openIconPopup, setOpenIconPopup]=useState<boolean>(false);
   const [openPageCommentInput, setOpenPageCommentInput]=useState<boolean>(false);
+  const [openLoader, setOpenLoader]=useState<boolean>(false);
+  const [loaderTargetBlock, setLoaderTargetBlock]=useState<Block|null>(null);
   const [iconStyle, setIconStyle]=useState<CSSProperties|undefined>(undefined);
   const [commandBlockPositon, setCBPositon]=useState<CSSProperties>();
-  const frameInnerStyle:CSSProperties={
+  const frameStyle:CSSProperties={
     fontFamily:defaultFontFamily ,
     fontSize: smallText? "14px": "16px",
     width: innerWidth >900?  fullWidth? "100%":'900px' : "100%",
@@ -186,10 +189,13 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
   },[command.targetBlock])
 
   return(
-    <div className={newPageFram? "newPageFrame frame" :'frame'}>
+    <div 
+      className={newPageFram? "newPageFrame frame" :'frame'}
+      style={frameStyle}
+    >
         <div 
           className='frame_inner'
-          style={frameInnerStyle}
+          
         >
           <div 
             className='pageHeader'
@@ -265,7 +271,7 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
               {!newPageFram ? 
               <div 
                 className='pageComment'
-                style={frameInnerStyle}
+                style={frameStyle}
               >
                 {page.header.comments!==null ?
                   page.header.comments.map((comment:BlockCommentType)=>
@@ -304,7 +310,7 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
               :
                 <div 
                   className='pageComment'
-                  style={frameInnerStyle}
+                  style={frameStyle}
                 >
                   Press Enter to continue with an empty page or pick a templage
                 </div>
@@ -347,6 +353,8 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
                       setTargetPageId={setTargetPageId}
                       setOpenComment={setOpenComment}
                       setCommentBlock={setCommentBlock}
+                      setOpenLoader={setOpenLoader}
+                      setLoaderTargetBlock={setLoaderTargetBlock}
                     />
                   )
                 }
@@ -394,7 +402,16 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
                   setPopup={null}
                 />
               </div>
-              }
+          }
+          {openLoader && loaderTargetBlock !==null &&
+          <Loader
+            block={loaderTargetBlock}
+            page={page}
+            editBlock={editBlock}
+            setOpenLoader={setOpenLoader}
+            setLoaderTargetBlock={setLoaderTargetBlock}
+          />
+          }
     </div>
   )
 };
