@@ -1,0 +1,47 @@
+@import './common';
+#loader{
+  @include popupMenu;
+  font-size: inherit;
+  width: calc(100% - (96px * 2) +  40px);
+  div{
+    box-sizing: border-box;
+    font-size: inherit;
+  }
+  .inner{
+    height: fit-content;
+    font-size: inherit;
+  }
+  .innerPadding {
+    padding:10px;
+    width: 100%;
+  }
+  .imgLoader{
+    .menu{
+      border-bottom: 1px solid $itemHover;
+      width: 100%;
+      .innerPadding{
+        display: flex;
+        padding-bottom: 0;
+        button{
+          margin-left: 1rem;
+          padding-bottom: 10px;
+        }
+      }
+    }
+    .loaderForm{
+      width: 100%;
+      height: min-content;
+      label{
+        display: block;
+        width: 100%;
+        border:1px solid $itemHover;
+        text-align: center;
+        padding:6px;
+        box-sizing: border-box;
+      }
+      input{
+        display: none;
+      }
+    }
+  }
+}
