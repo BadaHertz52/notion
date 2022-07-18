@@ -1,6 +1,7 @@
 import React, { Dispatch, SetStateAction, useRef} from 'react';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import { IoChatboxOutline } from 'react-icons/io5';
+import { MdOutlineCollectionsBookmark, MdOutlinePhotoSizeSelectActual } from 'react-icons/md';
 import {  Block,BlockType,blockTypes,findBlock,makeNewBlock,Page, toggle } from '../modules/notion';
 import { Command } from './Frame';
 
@@ -17,7 +18,9 @@ type  BlockProps ={
   setCommand:Dispatch<SetStateAction<Command>>,
   onClickCommentBtn: (block: Block) => void,
   setOpenComment :Dispatch<SetStateAction<boolean>>,
-  setTargetPageId: React.Dispatch<React.SetStateAction<string>>
+  setTargetPageId: React.Dispatch<React.SetStateAction<string>>,
+  setOpenLoader:Dispatch<SetStateAction<boolean>>,
+  setLoaderTargetBlock : Dispatch<SetStateAction<Block | null>>,
 };
 type BlockCommentProps={
   block:Block,
@@ -48,7 +51,7 @@ export const BlockComment =({block , onClickCommentBtn}:BlockCommentProps)=>{
   )
 };
 
-const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,blockComments , command, setCommand  ,onClickCommentBtn ,setOpenComment ,setTargetPageId  }:BlockProps)=>{
+const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,blockComments , command, setCommand  ,onClickCommentBtn ,setOpenComment ,setTargetPageId ,setOpenLoader, setLoaderTargetBlock }:BlockProps)=>{
   const editTime =JSON.stringify(Date.now);
   const contentEditableRef= useRef<HTMLElement>(null);
   const findTargetBlock =(event:ContentEditableEvent|React.KeyboardEvent<HTMLDivElement>|React.MouseEvent):Block=>{
@@ -211,7 +214,11 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
   };
   const onClickBlockContents =()=>{
     block.type=== "page" &&setTargetPageId(block.id);
-  }
+  };
+  const onClickAddFileBtn =()=>{
+    setOpenLoader(true);
+    setLoaderTargetBlock(block);
+  };
   const BlockContentEditable=()=>{
     return(
       <>
@@ -253,6 +260,45 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
           <BlockContentEditable/>
         </button>
         :
+        (block.type.includes("media") ?
+        (block.contents===""?
+          <button 
+            className='addBlockFile'
+            onClick={onClickAddFileBtn}
+          >
+            <span
+              className="addBlockFileIcon"
+            >
+              {block.type ==="image media" &&
+                <MdOutlinePhotoSizeSelectActual/>
+              }
+              {block.type ==="bookmark media" &&
+                <MdOutlineCollectionsBookmark/>
+              }
+            </span>
+            <span>
+              Add a {block.type.slice(0, block.type.indexOf("media"))}
+            </span>
+            
+          </button>
+          :
+          <>
+            {block.type==="image media" &&
+            <img
+                id={`${block.id}_contents`}
+                src={block.contents}
+                alt="block_photo"
+                onMouseOver={showBlockFn}
+            />
+            }
+            {block.type==="bookmark media" &&
+            <div className='bookmark'>
+            
+            </div>
+            }
+          </>
+        )
+        :
         <div 
           id={`${block.id}_contents`}
           className="contents"
@@ -260,6 +306,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
         >
           <BlockContentEditable/>
         </div>
+        )
       )
       :
       <button 
