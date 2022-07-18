@@ -554,35 +554,6 @@ a:link, a:active, a:visited {
   outline: none;
 }
 
-.addBlockFile {
-  width: 100%;
-  padding: 12px;
-  background-color: #f2f1ee;
-  color: #8d8d8d;
-  cursor: pointer;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-.addBlockFile:hover {
-  background-color: #EDECE9;
-}
-
-.addBlockFile span {
-  margin-right: 6px;
-  text-align: center;
-  height: 1.2rem;
-  font-size: inherit;
-}
-
-.addBlockFile svg {
-  font-size: 1.2rem;
-}
-
 .h1.block {
   font-weight: 700;
 }
@@ -692,6 +663,39 @@ a:link, a:active, a:visited {
   -webkit-box-align: end;
       -ms-flex-align: end;
           align-items: flex-end;
+}
+
+.media_blockComponent {
+  width: 100%;
+}
+
+.addBlockFile {
+  width: 100%;
+  padding: 12px;
+  background-color: #f2f1ee;
+  color: #8d8d8d;
+  cursor: pointer;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.addBlockFile:hover {
+  background-color: #EDECE9;
+}
+
+.addBlockFile span {
+  margin-right: 6px;
+  text-align: center;
+  height: 1.2rem;
+  font-size: inherit;
+}
+
+.addBlockFile svg {
+  font-size: 1.2rem;
 }
 
 .contents input {
@@ -1603,10 +1607,6 @@ a:link, a:active, a:visited {
 
 #sideMenu #commandBlock .command_btn {
   display: block;
-}
-
-#sideMenu .media_blocks {
-  display: none;
 }
 
 .menu_color {
@@ -2981,7 +2981,9 @@ a:link, a:active, a:visited {
 }
 
 #loader .imgLoader .loaderForm input {
-  display: none;
+  position: absolute;
+  width: 0;
+  height: 0;
 }
 
 .edit_inform {
