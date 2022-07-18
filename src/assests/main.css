@@ -554,6 +554,35 @@ a:link, a:active, a:visited {
   outline: none;
 }
 
+.addBlockFile {
+  width: 100%;
+  padding: 12px;
+  background-color: #f2f1ee;
+  color: #8d8d8d;
+  cursor: pointer;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.addBlockFile:hover {
+  background-color: #EDECE9;
+}
+
+.addBlockFile span {
+  margin-right: 6px;
+  text-align: center;
+  height: 1.2rem;
+  font-size: inherit;
+}
+
+.addBlockFile svg {
+  font-size: 1.2rem;
+}
+
 .h1.block {
   font-weight: 700;
 }
@@ -1574,6 +1603,10 @@ a:link, a:active, a:visited {
 
 #sideMenu #commandBlock .command_btn {
   display: block;
+}
+
+#sideMenu .media_blocks {
+  display: none;
 }
 
 .menu_color {
@@ -2863,6 +2896,140 @@ a:link, a:active, a:visited {
   color: inherit;
 }
 
+#loader {
+  width: 320px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  background-color: #ffff;
+  margin: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  pointer-events: auto;
+  -webkit-transform: matrix(1, 0, 0, 1, 0, 0);
+          transform: matrix(1, 0, 0, 1, 0, 0);
+  z-index: 10;
+  border-radius: 8px;
+  -webkit-box-shadow: 0px 0px 23px -5px #ababab;
+  box-shadow: 0px 0px 23px -5px #ababab;
+  font-size: inherit;
+  width: calc(100% - (96px * 2) +  40px);
+}
+
+#loader::-webkit-scrollbar-thumb {
+  background: #D3D1CB;
+}
+
+#loader::-webkit-scrollbar-track {
+  background: #EDECE9;
+}
+
+#loader div {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  font-size: inherit;
+}
+
+#loader .inner {
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  font-size: inherit;
+}
+
+#loader .innerPadding {
+  padding: 10px;
+  width: 100%;
+}
+
+#loader .imgLoader .menu {
+  border-bottom: 1px solid #EDECE9;
+  width: 100%;
+}
+
+#loader .imgLoader .menu .innerPadding {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding-bottom: 0;
+}
+
+#loader .imgLoader .menu .innerPadding button {
+  margin-left: 1rem;
+  padding-bottom: 10px;
+}
+
+#loader .imgLoader .loaderForm {
+  width: 100%;
+  height: -webkit-min-content;
+  height: -moz-min-content;
+  height: min-content;
+}
+
+#loader .imgLoader .loaderForm label {
+  display: block;
+  width: 100%;
+  border: 1px solid #EDECE9;
+  text-align: center;
+  padding: 6px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+#loader .imgLoader .loaderForm input {
+  display: none;
+}
+
+.edit_inform {
+  border-top: 1px solid #B9B8B6;
+  font-size: 14px;
+  text-align: left;
+  color: #B9B8B6;
+  margin-bottom: 0;
+}
+
+.edit_inform p {
+  margin: 2px 0;
+}
+
+div {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  pointer-events: auto;
+}
+
+.pageLink:hover {
+  background-color: #EDECE9;
+}
+
+button {
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  padding-left: 1rem;
+}
+
+ul li,
+ol li {
+  padding-left: 10px;
+}
+
+a:link, a:active, a:visited {
+  text-decoration: none;
+  color: inherit;
+}
+
 .sideBar_close .frame,
 .sideBar_float .frame,
 .sideBar_floatHide .frame {
@@ -2960,7 +3127,7 @@ a:link, a:active, a:visited {
   display: block;
   width: 250px;
   height: 100%;
-  background-color: #F7F6F3;
+  background-color: #f2f1ee;
   -webkit-transition: -webkit-transform 2000ms cubic-bezier(0.4, 0, 0.2, 1);
   transition: -webkit-transform 2000ms cubic-bezier(0.4, 0, 0.2, 1);
   transition: transform 2000ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -3589,7 +3756,7 @@ a:link, a:active, a:visited {
 }
 
 #trash .page:hover {
-  background-color: #F7F6F3;
+  background-color: #f2f1ee;
 }
 
 #trash .page .btns button {

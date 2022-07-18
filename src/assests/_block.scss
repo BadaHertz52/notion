@@ -71,6 +71,27 @@
     outline: none;
   }
 }
+.addBlockFile{
+  width: 100%;
+  padding: 12px  ;
+  background-color: $pistachioshell;
+  color: $itemText;
+  cursor:pointer;
+  display: flex;
+  align-items: center;
+  &:hover{
+    background-color: $itemHover;
+  }
+  span {
+    margin-right: 6px;
+    text-align: center;
+    height: 1.2rem;
+    font-size: inherit;
+  }
+  svg{
+    font-size: 1.2rem;
+  }
+}
 .h1.block{
   font : {
     weight:700;
