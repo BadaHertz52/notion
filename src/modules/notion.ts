@@ -1,4 +1,5 @@
-import catImg from '../assests/img/michael-sum-LEpfefQf4rU-unsplash.jpg' 
+import catImg from '../assests/img/michael-sum-LEpfefQf4rU-unsplash.jpg' ;
+import imgBlockImg from '../assests/img/roses-gfcb7dbdd4_640.jpg';
 //TYPE 
 export const text= "text" as const ;
 export const toggle ="toggle" as const  ;
@@ -317,7 +318,7 @@ const initialState :Notion ={
         subCommentsId:null,
       }],
     },
-    firstBlocksId :["text", 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page1', 'page2' ,"numberList", "bulletList"],
+    firstBlocksId :["text",'img', 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page1', 'page2' ,"numberList", "bulletList"],
     blocks:[{
       id:"text",
       contents:"안녕", 
@@ -345,6 +346,21 @@ const initialState :Notion ={
         subComments:null,
         subCommentsId:null,
       },]
+    },
+    {
+      id:"img",
+      contents: imgBlockImg,
+      firstBlock:true,
+      subBlocksId:null, 
+      parentBlocksId: null,
+      type: image,
+      iconType:null,
+      icon:  null ,
+      editTime: (Date.parse("2021-5-18-16:00")).toString()
+      ,
+      createTime: (Date.parse("2021-5-18-2:00")).toString(),
+      style :basicBlockStyle,
+      comments: null
     },
     {
       id:"toggle",
@@ -650,7 +666,7 @@ const initialState :Notion ={
   },
 
     ],
-    blocksId:["text", 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page1', 'page2' , 'sub1_1' ,'sub1_2', 'sub2_1' ,"numberList" , "num1", "num2", "num3" , "bulletList", "b1", "b2"],
+    blocksId:["text",'img', 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page1', 'page2' , 'sub1_1' ,'sub1_2', 'sub2_1' ,"numberList" , "num1", "num2", "num3" , "bulletList", "b1", "b2"],
     subPagesId:['page1','page2'],
     parentsId: null,
     editTime :(Date.parse("2021-5-16-15:00")).toString(),
