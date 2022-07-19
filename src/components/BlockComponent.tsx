@@ -4,6 +4,7 @@ import { IoChatboxOutline } from 'react-icons/io5';
 import { MdOutlineCollectionsBookmark, MdOutlinePhotoSizeSelectActual } from 'react-icons/md';
 import {  Block,BlockType,blockTypes,findBlock,makeNewBlock,Page, toggle } from '../modules/notion';
 import { Command } from './Frame';
+import ImageContent from './ImageContent';
 
 type  BlockProps ={
   block:Block,
@@ -284,11 +285,10 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
           :
           <>
             {block.type==="image media" &&
-            <img
-                id={`${block.id}_contents`}
-                src={block.contents}
-                alt="block_photo"
-                onMouseOver={showBlockFn}
+            <ImageContent
+              block={block}
+              editBlock={editBlock}
+              showBlockFn={showBlockFn}
             />
             }
             {block.type==="bookmark media" &&
