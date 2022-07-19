@@ -9,63 +9,71 @@ type ImageContentProps={
   showBlockFn:(event: React.MouseEvent) => void,
 }
 const ImageContent =({pageId,block,editBlock , showBlockFn}:ImageContentProps)=>{
-  const targetImgContent =document.getElementById(`${block.id}_contents`);
+  const pageContent =document.getElementsByClassName('pageContent')[0] as HTMLElement;
   const previousClientX = useRef(0);
   const previousClientY = useRef(0);
-  const [draging ,setDraging]=useState<boolean>(false);
+  const drag =useRef<boolean>(false);
+  const left ="left";
+  const right ="right";
+  const bottom= "bottom";
+  type dragBtnName = typeof left| typeof right| typeof bottom;
+  const dragBtn= useRef<dragBtnName>(left);
   const [imageStyle ,setImageStyle] =useState<CSSProperties>();
-
-  const onMouseMove = (event:globalThis.MouseEvent)=>{
-    console.log("move" ,draging);
-    if(draging){
-        const changeX = event.clientX - previousClientX.current;
-        const changeY = event.clientX - previousClientX.current;
-        previousClientX.current =event.clientX;
-        previousClientY.current =event.clientY;
-        if( changeX !==0 || changeY!==0){
-          const imgDomRect = targetImgContent?.getClientRects()[0];
-          if(imgDomRect!==undefined){
-            const imgWidth =imgDomRect.width;
-            const imgHeight =imgDomRect.height;
-            const width =imgWidth - changeX;
-            const height =imgHeight - changeY;
-            const changedStyle ={
-              width:`${width}px` ,
-              height:`${height}px` 
-            };
-            setImageStyle(changedStyle)
-          }
+  const targetImgContent =document.getElementById(`${block.id}_contents`);
+  const onMouseMove =(event:globalThis.MouseEvent)=>{
+    if(drag.current){
+      const changeX = event.clientX - previousClientX.current;
+      const changeY = event.clientX - previousClientX.current;
+      previousClientX.current =event.clientX;
+      previousClientY.current =event.clientY;
+      if( changeX !==0 || changeY!==0){
+        const imgDomRect = targetImgContent?.getClientRects()[0];
+        if(imgDomRect!==undefined){
+          const imgWidth =imgDomRect.width;
+          const imgHeight =imgDomRect.height;
+          const width =dragBtn.current === right? 
+          imgWidth + changeX : 
+          imgWidth -changeX  ;
+          const height = dragBtn.current === left? imgHeight - changeY : imgHeight +changeY;
+          const changedStyle ={
+            width: dragBtn.current !== bottom? `${width}px` : block.style.width ,
+            height:`${height}px`,
+          };
+          setImageStyle(changedStyle);
         }
       }
+    }
   };
-  const onMouseDownSizeBtn= useCallback((event:MouseEvent<HTMLButtonElement>)=>{
-    console.log("click");
+  const onMouseDownSizeBtn=(event:MouseEvent<HTMLButtonElement>, btnName:dragBtnName)=>{
     previousClientX.current =event.clientX;
     previousClientY.current =event.clientY;
-    setDraging(true);
-  },[]);
+    drag.current=true; 
+    dragBtn.current =btnName;
+  };
   const onMouseUp=useCallback((event:globalThis.MouseEvent)=>{
+    if(drag.current){
       previousClientX.current =0;
       previousClientY.current =0;
-      console.log("up",draging)
-      if(imageStyle !==undefined){
+      drag.current=false;
+      const width = targetImgContent?.offsetWidth;
+      const height =targetImgContent?.offsetHeight; 
+      if(width !==undefined && height !==undefined){
         const editedBlock:Block ={
           ...block,
           style:{
             ...block.style,
-            width:imageStyle.width as string ,
-            height: imageStyle.height as string
+            width: `${width}px`  ,
+            height:`${height}px`
           },
           editTime:JSON.stringify(Date.now()),
         };
         editBlock(pageId, editedBlock)
       };
-      setDraging(false);
-  },[]);
-  
-      window.addEventListener("mousemove", (event)=> onMouseMove(event));
-      draging && window.addEventListener("mouseup", (event)=> onMouseUp(event))
+    }  
+  },[targetImgContent]);
 
+    pageContent?.addEventListener("mousemove", (event)=> onMouseMove(event));
+    pageContent?.addEventListener("mouseup", (event)=> onMouseUp(event))
   return(
     <div 
       className="imageContent"
@@ -75,25 +83,19 @@ const ImageContent =({pageId,block,editBlock , showBlockFn}:ImageContentProps)=>
       > 
       <button 
         className='sizeBtn length left'
-        onMouseDown={onMouseDownSizeBtn}
-      >
-        <span></span>
-      </button>
-      <button 
-        className='sizeBtn tranverse top'
-        onMouseDown={onMouseDownSizeBtn}
+        onMouseDown={(event)=>onMouseDownSizeBtn(event,left)}
       >
         <span></span>
       </button>
       <button 
         className='sizeBtn length right'
-        onMouseDown={onMouseDownSizeBtn}
+        onMouseDown={(event)=>onMouseDownSizeBtn(event, right)}
       >
         <span></span>
       </button>
       <button 
         className='sizeBtn tranverse bottom '
-        onMouseDown={onMouseDownSizeBtn}
+        onMouseDown={(event)=>onMouseDownSizeBtn(event, bottom)}
       >
         <span></span>
       </button>
