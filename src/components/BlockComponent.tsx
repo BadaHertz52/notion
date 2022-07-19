@@ -286,6 +286,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
           <>
             {block.type==="image media" &&
             <ImageContent
+              pageId={page.id}
               block={block}
               editBlock={editBlock}
               showBlockFn={showBlockFn}

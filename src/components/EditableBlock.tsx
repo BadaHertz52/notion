@@ -70,13 +70,14 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
   fontWeight: block.style.fontWeight ,
   fontStyle: block.type !=="todo done"? block.style.fontStyle : "italic",
   textDecoration: block.type !=="todo done"? block.style.textDeco :"line-through",
-  width: block.style.width===undefined? "inherit" : `${block.style.width}`,
-  height: block.style.height===undefined? "inherit" : `${block.style.height}`,
+  width: block.style.width===undefined? "inherit" : block.style.width,
+  height: block.style.height===undefined? "inherit" : block.style.height,
   })
   };
   const giveFocusToContent =(event:React.MouseEvent)=>{
   const currentTarget =event.currentTarget as HTMLElement;
   const contentEditable =currentTarget.getElementsByClassName("contentEditable")[0] as HTMLElement ;
+ 
   contentEditable.focus();
   };
   const onClickCommentBtn=(block:Block)=>{
@@ -157,7 +158,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
               className= "blockContents"
               ref={blockContentsRef}
               style={listStyle(block)}
-              onMouseOver={giveFocusToContent}
+              //onMouseOver={giveFocusToContent}
               >
               <div 
                 className='list_marker'
@@ -265,7 +266,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
               <div 
                 className='blockContents' 
                 style={blockContentsStyle(block)}
-                onMouseOver={ giveFocusToContent}
+                //onMouseOver={ giveFocusToContent}
               >
                 <BlockComponent
                 block={block} 

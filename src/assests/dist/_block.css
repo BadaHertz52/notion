@@ -1,0 +1,260 @@
+.edit_inform {
+  border-top: 1px solid #B9B8B6;
+  font-size: 14px;
+  text-align: left;
+  color: #B9B8B6;
+  margin-bottom: 0;
+}
+.edit_inform p {
+  margin: 2px 0;
+}
+
+div {
+  box-sizing: border-box;
+  pointer-events: auto;
+}
+
+.pageLink:hover {
+  background-color: #EDECE9;
+}
+
+button {
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  padding-left: 1rem;
+}
+ul li,
+ol li {
+  padding-left: 10px;
+}
+
+a:link, a:active, a:visited {
+  text-decoration: none;
+  color: inherit;
+}
+
+.editableBlock {
+  box-sizing: border-box;
+  position: relative;
+  width: 100%;
+  height: min-content;
+  margin-top: 1rem;
+  margin-bottom: 1px;
+  display: flex;
+  flex-direction: column;
+}
+
+.mainBlock {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.mainBlock .mainBlock_block {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  position: relative;
+}
+
+.subBlocks {
+  padding: 0;
+  padding-left: 20px;
+}
+
+[contenteditable] {
+  outline: 0px solid transparent;
+}
+
+.editableBlock,
+.blockFn button {
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.blockFn {
+  display: none;
+}
+
+.blockFn.on {
+  display: flex;
+  position: absolute;
+  padding-right: 5px;
+  z-index: 5;
+}
+.blockFn.on .blockFnIcon {
+  font-size: 1.2rem;
+  font-weight: bolder;
+}
+.blockFn.on .blockFnIcon svg {
+  color: #a3a3a2;
+}
+
+.blockFn button:hover,
+.toggle.block .left:hover {
+  background-color: #EDECE9;
+}
+
+.contentEditable {
+  font-size: inherit;
+}
+.contentEditable:focus-visible {
+  outline: none;
+}
+
+.h1.block {
+  font-weight: 700;
+}
+
+.h2.block {
+  font-weight: 600;
+}
+
+.text.block {
+  margin-top: 2px;
+}
+
+.left, .blockContents, .blockFn {
+  height: 18px;
+}
+
+.todo.block .left,
+.toggle.block .left,
+.page.block .left {
+  width: 18px;
+  margin-right: 4px;
+  font-size: 15px;
+}
+.todo.block svg,
+.toggle.block svg,
+.page.block svg {
+  width: inherit;
+  height: inherit;
+  font-size: inherit;
+}
+
+.page.block .pageIcon, .page.block img {
+  width: 18px;
+  height: 18px;
+}
+.page.block .pageIcon span {
+  width: inherit;
+  height: inherit;
+}
+.page.block .blockContents {
+  display: flex;
+  align-items: center;
+}
+
+.todo.done.block path {
+  stroke: grey;
+}
+
+.toggle.block button {
+  display: flex;
+  align-items: center;
+  color: #a3a3a2;
+}
+.toggle.block .subBlocks {
+  display: none;
+}
+
+.toggle.on.block .subBlocks {
+  display: block;
+}
+
+.list {
+  display: flex;
+}
+.list .list_marker {
+  padding-right: 8px;
+}
+.list .list_marker svg {
+  font-size: 11px;
+}
+
+.blockToggleBtn svg {
+  transform: rotate(0deg);
+}
+
+.blockToggleBtn.on svg {
+  transform: rotate(90deg);
+}
+
+.media_blockComponent {
+  width: 100%;
+  height: 100%;
+}
+
+.blockContents {
+  width: 100%;
+  height: fit-content;
+  text-align: left;
+  display: flex;
+  align-items: flex-end;
+}
+
+.addBlockFile {
+  width: 100%;
+  padding: 12px;
+  background-color: #f2f1ee;
+  color: #8d8d8d;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.addBlockFile:hover {
+  background-color: #EDECE9;
+}
+.addBlockFile span {
+  margin-right: 6px;
+  text-align: center;
+  height: 1.2rem;
+  font-size: inherit;
+}
+.addBlockFile svg {
+  font-size: 1.2rem;
+}
+
+.contents input {
+  border: none;
+  width: 100%;
+}
+.contents input:focus {
+  outline: none;
+}
+
+.contentEditable:focus:empty::after {
+  content: attr(placeholder);
+  color: #B9B8B6;
+}
+
+.contents.commentBtn {
+  color: inherit;
+  text-decoration: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  background-color: rgba(255, 212, 0, 0.14);
+  border-bottom: 2px solid rgba(255, 212, 0, 0.8);
+}
+.contents.commentBtn:hover {
+  background-color: rgba(255, 212, 0, 0.8);
+}
+
+.commentsBubble .commentBtn {
+  display: flex;
+  padding: 3px;
+}
+.commentsBubble .commentBtn:hover {
+  background-color: #EDECE9;
+}
+.commentsBubble .commentBtn svg, .commentsBubble .commentBtn span {
+  color: #a3a3a2;
+}
