@@ -16,7 +16,7 @@ const alarmEmoji="alarm_clock";
 const phoneEmoji="phone";
 const gameEmoji="video_game"; 
 const computerEmoji="desktop_computer";
-const prayerEmoji="prayer";
+const prayEmoji="pray";
 const tadaEmoji="tada";
 const giftEmoji="gift";
 const popcornEmoji="popcorn";
@@ -32,7 +32,7 @@ const friesEmoji="fries";
 const cakeEmoji="cake";
 const appleEmoji="apple";
 const carrotEmoji="carrot";
-const ariplaneEmoji="ariplane";
+const airplaneEmoji="airplane";
 const busEmoji="bus";
 const metroEmoji="metro";
 const houseEmoji="house_with_garden";
@@ -57,7 +57,7 @@ typeof smileEmoji
 |typeof phoneEmoji 
 |typeof gameEmoji 
 |typeof computerEmoji 
-|typeof prayerEmoji 
+|typeof prayEmoji 
 |typeof tadaEmoji 
 |typeof giftEmoji 
 |typeof popcornEmoji 
@@ -73,7 +73,7 @@ typeof smileEmoji
 |typeof cakeEmoji 
 |typeof appleEmoji 
 |typeof carrotEmoji 
-|typeof ariplaneEmoji 
+|typeof airplaneEmoji 
 |typeof busEmoji 
 |typeof metroEmoji 
 |typeof houseEmoji 
@@ -85,7 +85,7 @@ typeof smileEmoji
 |typeof snowmanEmoji 
 |typeof blossomEmoji
 ;
-export const emojis:Emoji[] =[smileEmoji,heartEyesEmoji , angryEmoji, sobEmoji , heartEmoji , purpleHeartEmoji, no_entry_signEmoji , warningEmoji , memoEmoji , alarmEmoji, phoneEmoji , gameEmoji , computerEmoji , prayerEmoji , tadaEmoji , giftEmoji , popcornEmoji , musicalNoteEmoji , dollarEmoji , creditCardEmoji , calendarEmoji , chartEmoji, bulbEmoji , shoppingTrolleyEmoji , bathEmoji, friesEmoji , cakeEmoji , appleEmoji , carrotEmoji , ariplaneEmoji , busEmoji , metroEmoji , houseEmoji , tentEmoji , starEmoji , sunnyEmoji, rainbowEmoji , rainEmoji, snowmanEmoji , blossomEmoji];
+export const emojis:Emoji[] =[smileEmoji,heartEyesEmoji , angryEmoji, sobEmoji , heartEmoji , purpleHeartEmoji, no_entry_signEmoji , warningEmoji , memoEmoji , alarmEmoji, phoneEmoji , gameEmoji , computerEmoji , prayEmoji , tadaEmoji , giftEmoji , popcornEmoji , musicalNoteEmoji , dollarEmoji , creditCardEmoji , calendarEmoji , chartEmoji, bulbEmoji , shoppingTrolleyEmoji , bathEmoji, friesEmoji , cakeEmoji , appleEmoji , carrotEmoji , airplaneEmoji , busEmoji , metroEmoji , houseEmoji , tentEmoji , starEmoji , sunnyEmoji, rainbowEmoji , rainEmoji, snowmanEmoji , blossomEmoji];
 
 export const randomIcon =():Emoji=>{
   const index = Math.floor(Math.random() * (3));
