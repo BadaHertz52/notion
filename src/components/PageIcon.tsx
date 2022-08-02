@@ -1,7 +1,7 @@
 import React from 'react';
 import { GrDocumentText } from 'react-icons/gr';
 import { CSSProperties } from 'styled-components';
-import { IconType } from '../modules/notion';
+import { emojiPath, IconType } from '../modules/notion';
 type PageItemProps={
   icon:string|null,
   iconType:IconType,
@@ -25,7 +25,7 @@ const PageIcon=({icon, iconType, style}:PageItemProps)=>{
           <img
             className='pageImgIcon'
             alt="pageImgIcon"
-            src={`https://raw.githubusercontent.com/BadaHertz52/notion/master/image/emoji/${icon}.png`}
+            src={`${emojiPath}${icon}.png`}
           />
         }
         </span>

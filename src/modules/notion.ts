@@ -1,6 +1,7 @@
 import catImg from '../assests/img/michael-sum-LEpfefQf4rU-unsplash.jpg' ;
 import imgBlockImg from '../assests/img/roses-gfcb7dbdd4_640.jpg';
 import { Emoji, emojis } from '../components/IconPoup';
+export const emojiPath ="https://raw.githubusercontent.com/BadaHertz52/notion/master/image/emoji/";
 //TYPE 
 export const text= "text" as const ;
 export const toggle ="toggle" as const  ;

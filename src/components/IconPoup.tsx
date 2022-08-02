@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { BsEmojiSmile } from 'react-icons/bs';
 import { CSSProperties } from 'styled-components';
-import { Block, IconType, Page } from '../modules/notion';
+import { Block, emojiPath, IconType, Page } from '../modules/notion';
 import { detectRange } from './BlockFn';
 const smileEmoji ="smile";
 const heartEyesEmoji ="heart_eyes"; 
@@ -209,7 +209,7 @@ const IconPopup =({ currentPageId,block,page, editBlock ,editPage,style,  setOpe
               >
               <img
                 alt={emoji}
-                src={`https://raw.githubusercontent.com/BadaHertz52/notion/master/image/emoji/${emoji}.png`}
+                src={`${emojiPath}${emoji}.png`}
               />
               </button>
               )
