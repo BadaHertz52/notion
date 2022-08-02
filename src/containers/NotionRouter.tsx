@@ -198,12 +198,48 @@ const NotionRouter =()=>{
 
   const onClickCloseEdit =()=>{
     discardEdit?.classList.remove("on");
-    
+  };
+  const changeTitle=(title:string)=>{
+    const titleHtml =document.querySelector("title");
+    if(titleHtml !==null){
+      titleHtml.innerText =title;
+    }else{
+      console.log("Can't find <title>")
+    }
+  };
+
+  const changeFavicon =(icon:string|null, iconType:IconType)=>{
+    const shortcutIcon =document.querySelector("link[rel='shortcut icon']") as HTMLLinkElement|null;
+    const changeHref=(href:string)=>shortcutIcon?.setAttribute("href",href);
+    if(shortcutIcon!==null){
+      switch (iconType) {
+        case null:
+          changeHref("./favicon.ico")
+          break;
+        case "img":
+          if(icon !==null){
+            changeHref(icon);
+          }
+          break;
+        case "string":
+          if(icon !==null){
+            const emojiHref=`data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>${icon}</text></svg>`
+            changeHref(emojiHref);
+          }
+          break;
+        default:
+          break;
+      }
+    }else{
+      console.log("Can't find shortcut icon")
+    }
   };
   useEffect(()=>{
     if(routePage!==null){
       const path =makeRoutePath(routePage);
       navigate(path);
+      changeTitle(routePage.header.title);
+      changeFavicon(routePage.header.icon, routePage.header.iconType);
     }
   },[routePage]);
   useEffect(()=>{
