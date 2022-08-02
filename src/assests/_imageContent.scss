@@ -1,0 +1,48 @@
+.imageContent{
+  width: 100%;
+  height: 100%;
+  position: relative;
+  .sizeBtn{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    span{
+      border: 1px solid white;
+      background-color: rgba(0, 0, 0, 0.295);
+      border-radius: 5px;
+    } 
+  }
+  .length {
+    width: 10px;
+    height: 100%;
+    span{
+      width: 5px;
+      height: 20%;
+    }
+  }
+  .tranverse{
+    width: 100%;
+    height: 10px;
+    span{
+      width: 20%;
+      height: 5px;
+    }
+  }
+  .left {
+    left : 10px;
+  }
+  .right{
+    right:10px;
+  }
+  .top {
+    top: 10px;
+  }
+  .bottom {
+    bottom:10px;
+  }
+  img{
+    width: 100%;
+    height: 100%;
+  }
+}

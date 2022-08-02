@@ -266,6 +266,7 @@ const NotionRouter =()=>{
                     userName={user.userName}
                     page={routePage}
                     pages={pages}
+                    pagesId={pagesId}
                     isInTrash={!notion.pagesId.includes(routePage.id)}
                     makePagePath={makePagePath}
                     setTargetPageId={setTargetPageId}

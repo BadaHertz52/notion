@@ -2,26 +2,29 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import {useDispatch, useSelector } from 'react-redux';
 import { CSSProperties } from 'styled-components';
 import BlockFn, { detectRange } from '../components/BlockFn';
+import CommandBlock from '../components/CommandBlock';
 import Comments, { CommentInput } from '../components/Comments';
 import Frame from '../components/Frame';
 import PageMenu from '../components/PageMenu';
 import TopBar from '../components/TopBar';
 import { RootState } from '../modules';
-import notion, {  Block, Page,  change_to_sub, raise_block, listItem } from '../modules/notion';
+import  {  Block, Page,  change_to_sub, raise_block, listItem } from '../modules/notion';
 import { SideAppear } from '../modules/side';
 import { pathType } from './NotionRouter';
 
 export const popupMoveToPage= "popupMoveToPage" ;
 export const popupComment ="popupComment" ;
+export const popupCommand="popupCommand";
 export type PopupType ={
   popup: boolean,
-  what: typeof popupMoveToPage | typeof popupComment | null,
+  what: typeof popupMoveToPage | typeof popupComment | typeof popupCommand| null,
 };
 
 type EditorContainerProps ={
   sideAppear:SideAppear,
   page:Page,
   pages:Page[],
+  pagesId:string[],
   userName:string,
   firstlist:listItem[],
   isInTrash:boolean,
@@ -54,7 +57,7 @@ type EditorContainerProps ={
   discardEdit:boolean
 };
 
-const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, makePagePath,changeSide,addBlock,editBlock ,changeBlockToPage, changePageToBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId , showAllComments,  setShowAllComments , discardEdit}:EditorContainerProps)=>{
+const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isInTrash, makePagePath,changeSide,addBlock,editBlock ,changeBlockToPage, changePageToBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId , showAllComments,  setShowAllComments , discardEdit}:EditorContainerProps)=>{
   const dispatch =useDispatch();
   const user =useSelector((state:RootState)=>state.user);
   const changeToSub =(pageId: string, block: Block,  newParentBlockId: string)=> dispatch(change_to_sub(pageId, block, newParentBlockId));
@@ -65,6 +68,8 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, ma
   const [commentBlock, setCommentBlock]=useState<Block|null>(null);
   const [commentsStyle, setCommentsStyle]= useState<CSSProperties>();
   const [menuOpen, setMenuOpen]= useState<boolean>(false);
+  const [commandTargetBlock, setCommandTargetBlock]=useState<Block|null>(null);
+  const [commandBlockStyle, setCommandBlockStyle]=useState<CSSProperties>(); 
   const [popup, setPopup]=useState<PopupType>({
     popup:false,
     what:null
@@ -83,9 +88,8 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, ma
       });
     };
     if(openComment){
-      const editor =document.getElementsByClassName("editor")[0] as HTMLElement;
-      const commentsDoc= editor.getElementsByClassName("comments")[0] ;
-      if(commentsDoc !==undefined){
+      const commentsDoc= document.getElementById("block_comments") ;
+      if(commentsDoc !==null){
         const commentsDocDomRect= commentsDoc.getClientRects()[0];
         const isInComments =detectRange(event, commentsDocDomRect);
         if(!isInComments){
@@ -116,7 +120,23 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, ma
   useEffect(()=>{
     setPagePath(makePagePath(page))
   },[page, page.header.icon, page.header.title]);
-
+  useEffect(()=>{
+    if(commandTargetBlock!==null){
+      const editor= document.getElementsByClassName("editor")[0];
+      const editorDomRect= editor.getClientRects()[0];
+      const blockDom = document.getElementById(`block_${commandTargetBlock.id}`);
+      const blockDomRect =blockDom?.getClientRects()[0];
+      if(blockDomRect!==undefined){
+        const style:CSSProperties ={
+          position:"absolute",
+          top : blockDomRect.bottom + blockDomRect.height + editor.scrollTop,
+          left :blockDomRect.left -editorDomRect.left
+        };
+        console.log(editorDomRect, editor.scrollTop, blockDomRect)
+        setPopupStyle(style);
+      };
+    }
+  },[commandTargetBlock])
   return(
     <div className='editor'>
       {isInTrash &&
@@ -184,10 +204,13 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, ma
         setCommentBlock ={setCommentBlock}
         smallText={smallText}
         fullWidth={fullWidth}
+        discardEdit={discardEdit}
+        userName={userName}
       />
       <BlockFn
         page={page}
         pages={pages}
+        pagesId={pagesId}
         firstlist={firstlist}
         userName={userName}
         addBlock={addBlock}
@@ -196,6 +219,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, ma
         changePageToBlock={changePageToBlock}
         deleteBlock={deleteBlock}
         addPage={addPage}
+        editPage={editPage}
         duplicatePage={duplicatePage}
         movePageToPage={movePageToPage}
         deletePage={deletePage}
@@ -207,13 +231,14 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, ma
         setMenuOpen={setMenuOpen}
         setPopupStyle={setPopupStyle}
         setTargetPageId={setTargetPageId}
+        setCommandTargetBlock={setCommandTargetBlock}
       />
-      {popup.popup && (
-        popup.what === popupMoveToPage ?
+      {popup.popup && 
           <div 
             id="popupMenu"
             style ={popupStyle}
           >
+            {popup.what==="popupMoveToPage" &&
             <PageMenu
               what="block"
               currentPage={page}
@@ -228,38 +253,57 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages,isInTrash, ma
               setMenuOpen={setMenuOpen}
               setTargetPageId={setTargetPageId}
             /> 
-          </div>
-          :
-          <div 
-            id="popupMenu"
-            style={popupStyle}
-          >
-              <CommentInput
+            }
+            {popup.what ==="popupComment" &&
+                <CommentInput
                 pageId={page.id}
+                page={null}
                 userName={userName}
                 editBlock={editBlock}
+                editPage={editPage}
                 blockComment={null}
                 subComment={null}
                 commentBlock={commentBlock}
                 setCommentBlock={setCommentBlock}
+                setPageComments={null}
                 setPopup={setPopup}
                 addOrEdit="add"
                 setEdit={null}
               />
+            }
+            {popup.what === "popupCommand" && commandTargetBlock !==null&&
+              <CommandBlock
+                page ={page}
+                block ={commandTargetBlock}
+                editBlock ={editBlock}
+                changeBlockToPage ={changeBlockToPage}
+                changePageToBlock ={changePageToBlock}
+                setPopup ={setPopup}
+                setCommandTargetBlock={setCommandTargetBlock}
+                setCommand ={null}
+                command ={null}
+              />
+            }
           </div>
-      )
       }
       {commentBlock !==null && openComment &&
+      <div 
+        id="block_comments"
+        style={commentsStyle}
+      >
         <Comments
-          commentsStyle={commentsStyle}
           userName={userName}
           block={commentBlock}
           pageId={page.id}
+          page={null}
           editBlock={editBlock}
+          editPage={editPage}
           select={null}
           discardEdit={discardEdit}
-        />              
+        />  
+      </div>            
       }
+
     </div>
   )
 };

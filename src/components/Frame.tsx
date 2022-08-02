@@ -1,15 +1,20 @@
 import React, { CSSProperties, Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { Block, blockSample, findBlock, Page } from '../modules/notion';
+import { Block, BlockCommentType, blockSample,  findBlock, Page } from '../modules/notion';
 import EditableBlock from './EditableBlock';
 import IconPoup, { randomIcon } from './IconPoup';
-import basicPageCover from '../assests/artificial-turf-g6e884a1d4_1920.jpg';
+import CommandBlock from './CommandBlock';
+import { defaultFontFamily } from './TopBar';
+import Comments, { CommentInput } from './Comments';
+import basicPageCover from '../assests/img/artificial-turf-g6e884a1d4_1920.jpg';
 //icon
 import { BiMessageDetail } from 'react-icons/bi';
 import { BsFillEmojiSmileFill} from 'react-icons/bs';
-import {GrDocumentText ,GrDocument} from 'react-icons/gr';import { MdInsertPhoto } from 'react-icons/md';
+import {GrDocumentText ,GrDocument} from 'react-icons/gr';
+import { MdInsertPhoto } from 'react-icons/md';
 import { HiTemplate } from 'react-icons/hi';
-import CommandBlock from './CommandBlock';
-import { defaultFontFamily } from './TopBar';
+import { detectRange } from './BlockFn';
+import Loader from './Loader';
+
 
 
 export type Command ={
@@ -18,6 +23,7 @@ export type Command ={
   targetBlock: Block |null
 };
 type FrameProps ={
+  userName:string,
   page:Page,
   firstBlocksId:string[]|null,
   editBlock :(pageId: string, block: Block) => void,
@@ -34,10 +40,12 @@ type FrameProps ={
   setCommentBlock: Dispatch<SetStateAction<Block | null>>,
   smallText: boolean, 
   fullWidth: boolean, 
+  discardEdit:boolean,
 };
 
-const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth}:FrameProps)=>{
+const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit}:FrameProps)=>{
   const innerWidth =window.innerWidth; 
+  const inner =document.getElementById("inner");
   const editTime =JSON.stringify(Date.now());
   const [newPageFram, setNewPageFrame]=useState<boolean>(false);
   const [decoOpen ,setdecoOpen] =useState<boolean>(false);
@@ -46,9 +54,12 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
   targetBlock:null
   });
   const [openIconPopup, setOpenIconPopup]=useState<boolean>(false);
+  const [openPageCommentInput, setOpenPageCommentInput]=useState<boolean>(false);
+  const [openLoader, setOpenLoader]=useState<boolean>(false);
+  const [loaderTargetBlock, setLoaderTargetBlock]=useState<Block|null>(null);
   const [iconStyle, setIconStyle]=useState<CSSProperties|undefined>(undefined);
   const [commandBlockPositon, setCBPositon]=useState<CSSProperties>();
-  const frameInnerStyle:CSSProperties={
+  const frameStyle:CSSProperties={
     fontFamily:defaultFontFamily ,
     fontSize: smallText? "14px": "16px",
     width: innerWidth >900?  fullWidth? "100%":'900px' : "100%",
@@ -118,7 +129,8 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
       ...page,
       header:{
         ...page.header,
-        icon: icon
+        icon: icon ,
+        iconType:"string"
       },
       editTime:editTime
     };
@@ -136,6 +148,21 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
     };
     editPage(page.id, editedPage)
   };
+  inner?.addEventListener("click",(event)=>{
+    
+    if(command.boolean){
+      const block_commandBlock =document.getElementById("block_commandBlock");
+      const commandDomRect =block_commandBlock?.getClientRects()[0];
+      if(commandDomRect !==undefined){
+        const isInnnerCommand = detectRange(event,commandDomRect); 
+        !isInnnerCommand && setCommand({
+          boolean:false,
+          command:null,
+          targetBlock:null
+        }) 
+      }
+    }
+  })
   useEffect(()=>{
     page.blocksId[0] ===undefined?
     setNewPageFrame(true):
@@ -144,14 +171,16 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
 
   useEffect(()=>{
     if(command.targetBlock!==null){
-      const targetBlockContent =document.getElementById(`${command.targetBlock.id}_contents`);
+      const frame = document.getElementsByClassName("frame")[0];
+      const targetBlockContent =document.getElementById(`block_${command.targetBlock.id}`);
+      const frameDomRect= frame.getClientRects()[0];
       const position = targetBlockContent?.getClientRects()[0];
-      console.log("targetBlockContents", targetBlockContent, position);
-
       if(position !==undefined){
+        const heading =["h1", "h2" , "h3"]; 
+        const plus = !heading.includes(command.targetBlock.type) ? 24 : 0 
         const style :CSSProperties ={
           position:"absolute",
-          top: position.bottom,
+          top: position.bottom -frameDomRect.top + position.height + plus ,
           left:position.left
         };
         setCBPositon(style);
@@ -159,29 +188,14 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
     }
   },[command.targetBlock])
 
-  useEffect(()=>{
-    console.log("fistblocksId", firstBlocksId)
-  },[firstBlocksId]);
-
-  useEffect(()=>{
-    const h1Blocks= document.querySelectorAll(".h1.block");
-    const h2Blocks=document.querySelectorAll(".h2.block");
-    const h3Blocks=document.querySelectorAll(".h3.block");
-    const baseSize = smallText? 14 :16; 
-    const changeFontSizeBySmallText=(nodeList:NodeListOf<Element>, ratio:number)=>{
-      nodeList[0]!==undefined&&
-      nodeList.forEach((element:Element)=> element.setAttribute("style",`font-size: ${baseSize * ratio}px`));
-    };
-    changeFontSizeBySmallText(h1Blocks,3);
-    changeFontSizeBySmallText(h2Blocks,2.5);
-    changeFontSizeBySmallText(h3Blocks,2);
-  },[smallText]);
-  
   return(
-    <div className={newPageFram? "newPageFrame frame" :'frame'}>
+    <div 
+      className={newPageFram? "newPageFrame frame" :'frame'}
+      style={frameStyle}
+    >
         <div 
           className='frame_inner'
-          style={frameInnerStyle}
+          
         >
           <div 
             className='pageHeader'
@@ -235,9 +249,12 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
                     </button>
                   }
                   {page.header.comments==null &&
-                  <button className='decoComment'>
+                  <button 
+                    className='decoComment'
+                    onClick={()=>setOpenPageCommentInput(true)}
+                  >
                     <BiMessageDetail/>
-                    <span>Add Commnet</span>
+                    <span>Add Comment</span>
                   </button>
                   }
               </div>
@@ -251,24 +268,49 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
                     onChange={onChangePageTitle}
                   />
               </div>
-              {!newPageFram ?
-                page.header.comments!==null &&
+              {!newPageFram ? 
               <div 
                 className='pageComment'
-                style={frameInnerStyle}
+                style={frameStyle}
               >
-                {/* {page.header.comments.map((comment:CommentType)=>
-                <Comment 
-                  key={`pageComment_${page.header.comments?.indexOf(comment)}`}
-                  comment={comment} 
+                {page.header.comments!==null ?
+                  page.header.comments.map((comment:BlockCommentType)=>
+                <Comments 
+                  key={`pageComment_${comment.id}`}
+                  block={null}
+                  page={page}
+                  pageId={page.id}
+                  userName={userName}
+                  editBlock={editBlock}
+                  editPage={editPage}
+                  discardEdit={discardEdit}
+                  select={null}
                   />
-                )} */}
+                  )
+                :
+                  openPageCommentInput &&
+                  <CommentInput
+                    page={page}
+                    pageId={page.id}
+                    userName={userName}
+                    blockComment={null}
+                    subComment={null}
+                    editBlock={editBlock}
+                    editPage={editPage}
+                    commentBlock={null}
+                    setCommentBlock={null}
+                    setPageComments ={null}
+                    setPopup={null}
+                    addOrEdit={"add"}
+                    setEdit={setOpenPageCommentInput}
+                  />
+              }
               </div>
 
               :
                 <div 
                   className='pageComment'
-                  style={frameInnerStyle}
+                  style={frameStyle}
                 >
                   Press Enter to continue with an empty page or pick a templage
                 </div>
@@ -277,8 +319,11 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
           </div>
           {openIconPopup &&
             <IconPoup 
+              currentPageId={page.id}
+              block={null}
               page={page}
               style={iconStyle}
+              editBlock={editBlock}
               editPage={editPage}
               setOpenIconPopup={setOpenIconPopup}
             />
@@ -302,11 +347,14 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
                       changeToSub={changeToSub}
                       raiseBlock={raiseBlock}
                       deleteBlock={deleteBlock}
+                      smallText={smallText}
                       command={command}
                       setCommand={setCommand}
                       setTargetPageId={setTargetPageId}
                       setOpenComment={setOpenComment}
                       setCommentBlock={setCommentBlock}
+                      setOpenLoader={setOpenLoader}
+                      setLoaderTargetBlock={setLoaderTargetBlock}
                     />
                   )
                 }
@@ -345,16 +393,25 @@ const Frame =({ page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock
                   key={`${command.targetBlock.id}_command`}
                   page={page}
                   block={command.targetBlock}
-                  editTime={JSON.stringify(Date.now())}
                   editBlock={editBlock}
                   changeBlockToPage={changeBlockToPage}
                   changePageToBlock={changePageToBlock}
                   command={command}
                   setCommand={setCommand}
-                  addPage={addPage}
+                  setCommandTargetBlock={null}
+                  setPopup={null}
                 />
               </div>
-              }
+          }
+          {openLoader && loaderTargetBlock !==null &&
+          <Loader
+            block={loaderTargetBlock}
+            page={page}
+            editBlock={editBlock}
+            setOpenLoader={setOpenLoader}
+            setLoaderTargetBlock={setLoaderTargetBlock}
+          />
+          }
     </div>
   )
 };

@@ -330,8 +330,13 @@
   }
   //--addNewPage
 }
+#moreFn, 
+#sideBar_pageMenu{
+  z-index: 20;
+}
 #moreFn{
   @include popupMenu;
+  z-index: 20;
   width: 230px;
   button{
     padding:  3%; 
@@ -344,29 +349,8 @@
     color: $itemText
   }
 }
-#rename {
-  @include popupMenu;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-content: center;
-  box-sizing: border-box;
-  padding: 10px;
-  input{
-    border: 1px solid $lightMud;
-    border-radius: 1px;
-    min-height: 27px;
-  }
-  .rename_icon {
-    width: 9%
-  }
-  .rename_title{
-    width: 81% ;
-  }
-}
+
 #sideBar_pageMenu{
-  @include popupMenu;
-  z-index: 15;
   width: fit-content;
-  padding:3%;
+  padding:0;
 }

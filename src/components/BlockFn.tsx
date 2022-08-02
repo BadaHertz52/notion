@@ -1,17 +1,18 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import Menu from './Menu';
-import {Block, change_page_to_block, CommentType, listItem, makeNewBlock, Page} from '../modules/notion';
+import {Block, findPage, listItem, makeNewBlock, Page} from '../modules/notion';
+import { CSSProperties } from 'styled-components';
+import Rename from './Rename';
 
 import { AiOutlinePlus } from 'react-icons/ai';
 import { CgMenuGridO } from 'react-icons/cg';
-import PageMenu from './PageMenu';
-import { CommentInput } from './Comments';
-import { popupComment, PopupType } from '../containers/EditorContainer';
-import { CSSProperties } from 'styled-components';
-import { IoFunnelSharp } from 'react-icons/io5';
+import { PopupType } from '../containers/EditorContainer';
+import CommandBlock from './CommandBlock';
+
 
 type BlockFnProp ={
   pages:Page[],
+  pagesId:string[],
   firstlist:listItem[],
   page:Page,
   userName:string,
@@ -21,6 +22,7 @@ type BlockFnProp ={
   changePageToBlock: (currentPageId: string, block: Block) => void
   deleteBlock :(pageId: string, block: Block ,isInMenu:boolean) => void,
   addPage : ( newPage:Page, )=>void,
+  editPage: (pageId: string, newPage: Page) => void,
   duplicatePage: (targetPageId: string) => void,
   deletePage : (pageId:string , )=>void,
   commentBlock: Block|null,
@@ -32,6 +34,7 @@ type BlockFnProp ={
   setMenuOpen:Dispatch<SetStateAction<boolean>>,
   setPopupStyle:Dispatch<SetStateAction<CSSProperties|undefined>>,
   setTargetPageId: Dispatch<SetStateAction<string>>,
+  setCommandTargetBlock:Dispatch<SetStateAction<Block|null>>
 };
 
 
@@ -74,9 +77,18 @@ export const detectRange =(event:MouseEvent| React.MouseEvent , targetArea:DOMRe
   return (inner_x && inner_y);
 };
 
-const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlock,changeBlockToPage,changePageToBlock, deleteBlock ,addPage, movePageToPage, deletePage ,commentBlock,setCommentBlock, popup, setPopup ,menuOpen,setMenuOpen ,setPopupStyle ,setTargetPageId}:BlockFnProp)=>{
+const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage, editBlock,changeBlockToPage,changePageToBlock, deleteBlock ,addPage,editPage, movePageToPage, deletePage ,setCommentBlock, popup, setPopup ,menuOpen,setMenuOpen ,setPopupStyle ,setTargetPageId ,setCommandTargetBlock}:BlockFnProp)=>{
   const inner =document.getElementById("inner");
+  const [openRename, setOpenRename] =useState<boolean>(false);
 
+  const [blockFnTargetBlock, setBlockFnTargetBlock]=useState<Block|null>(null);
+  const [renameTargetPage, setRenameTargetPage]=useState<Page|null>(null);
+  useEffect(()=>{
+    if(openRename && blockFnTargetBlock !==null){
+      const page =findPage(pagesId, pages, blockFnTargetBlock.id) as Page; 
+      setRenameTargetPage(page);
+    }
+  },[openRename])
   const makeBlock =()=>{
     const sessionItem = sessionStorage.getItem("blockFnTargetBlock") ;
     if(sessionItem !==null){
@@ -84,6 +96,11 @@ const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlo
       const targetBlockIndex= page.blocksId.indexOf(targetBlock.id);
       const newBlock =makeNewBlock(page, targetBlock,"");
       addBlock(page.id, newBlock, targetBlockIndex+1, targetBlock.id);
+      setPopup({
+        popup:true,
+        what:"popupCommand"
+      });
+      setCommandTargetBlock(newBlock);
     }else{
       console.log("BlockFn-makeBlock error: there is no session item")
     }
@@ -92,6 +109,8 @@ const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlo
   const openMenu=()=>{
     const sessionItem = sessionStorage.getItem("blockFnTargetBlock") ;
     if(sessionItem !==null){
+      const targetBlock = JSON.parse(sessionItem);
+      setBlockFnTargetBlock(targetBlock);
       setMenuOpen(!menuOpen);
       setPopup({
         popup:false,
@@ -172,9 +191,10 @@ const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlo
         >
           <CgMenuGridO/>
         </button>
-        {menuOpen &&
+        {menuOpen && blockFnTargetBlock !==null &&
           <Menu
             pages={pages}
+            block={blockFnTargetBlock}
             firstlist={firstlist}
             page={page}
             userName={userName}
@@ -192,7 +212,19 @@ const BlockFn =({pages,firstlist, page,userName, addBlock,duplicatePage, editBlo
             setPopup={setPopup}
             setCommentBlock={setCommentBlock}
             setTargetPageId={setTargetPageId}
+            setOpenRename= {setOpenRename}
           />
+        }
+        {openRename && renameTargetPage !==null &&
+        <Rename
+          currentPageId={page.id}
+          block={blockFnTargetBlock}
+          page={renameTargetPage}
+          editBlock={editBlock}
+          editPage={editPage}
+          renameStyle={undefined}
+          setOpenRename={setOpenRename}
+        />
         }
       </div>
     </div>

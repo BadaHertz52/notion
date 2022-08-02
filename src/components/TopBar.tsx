@@ -14,6 +14,7 @@ import { RiDeleteBin6Line } from 'react-icons/ri';
 import { IoArrowRedoOutline } from 'react-icons/io5';
 import { GrDocumentUpload } from 'react-icons/gr';
 import { CSSProperties } from 'styled-components';
+import PageIcon from './PageIcon';
 
 type TopBarProps ={
   firstlist:listItem[],
@@ -177,25 +178,16 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
               className="pagePath"
               onClick={()=>setTargetPageId(page.id)}
             >
-              <span>
-              {page.header.icon !==null&&
-                  (page.header.iconType==="string"? 
-                    page.header.icon
-                  :
-                      <img
-                        className='pageImgIcon'
-                        alt='pageIcon'
-                        src= {page.header.icon}
-                      />
-                  )
-                  }
-              </span>
-              <span>
+              <PageIcon
+                icon={page.header.icon}
+                iconType={page.header.iconType}
+              />
+              <div>
                 {page.header.title? 
                 page.header.title 
                 : 
                 ""}
-              </span>
+              </div>
             </button>
           :
             pagePath.map((path:pathType )=>
@@ -214,18 +206,11 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
                   href='path'
                   onClick={()=>setTargetPageId(path.id)}
                 >
-                  <div>
-                    {path.icon !==null&&
-                    (path.iconType==="string"? 
-                      path.icon
-                    :
-                        <img
-                          className='pageImgIcon'
-                          alt='pageImgIcon'
-                          src= {path.icon}
-                        />
-                    )
-                    }
+                  <div className='pathIcon'>
+                    <PageIcon
+                      icon={path.icon}
+                      iconType={path.iconType}
+                    />
                   </div>
                   <div className='pathTitle'>
                     <div>{path.title}</div>

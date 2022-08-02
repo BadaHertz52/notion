@@ -132,8 +132,18 @@
     display: flex;
 
   }
+  .pathIcon{
+    width: 14px;
+    height: 14px;
+    text-align: center;
+  }
   .pathTitle{
     width: 90px;
+    height: 14px;
+    margin-left: 5px;
+    display: flex;
+    align-items: center;
+    text-align: center;
     div{
       width: inherit;
       overflow: hidden;
@@ -311,13 +321,14 @@
     width: 100%;
   }
   .pageHeader_notCover, 
-  .pageContent{
+  .pageContent {
     max-width: 100%;
     width: 100%;
     padding-left: calc(96px + env(safe-area-inset-left));
   }
-  .pageTitle ,
-  .editableBlock {
+  .pageHeader .pageTitle ,
+  .editableBlock,
+  .pageHeader .comments {
     padding-right: calc(96px + env(safe-area-inset-left));
   }
   .subBlocks .editableBlock{
@@ -399,30 +410,7 @@
         height:100%;
       }
     }
-    .comments{
-      display: flex;
-      margin: 8px 0;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid $lightMud;
-      width: 100%;
-      &>div {
-        font-size: 14px;
-      }
-      .firstLetter {
-        width: 24px;
-        height: 24px;
-        box-sizing: border-box;
-        text-align: center;
-        border-radius: 50%;
-        border: 1px solid black;
-        margin-right: 5px;
-        span{
-          width: fit-content;
-          height: fit-content;
-          padding: 5px;
-          font-size: 14px;
-        }
-      }
+
       .commentContent{
       }
     }
@@ -460,7 +448,7 @@
     }
   }
   // --frame
-}
+
 
 .pageFun{
   width: 180PX;

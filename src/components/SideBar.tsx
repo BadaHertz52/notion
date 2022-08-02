@@ -1,7 +1,12 @@
-import React, { ChangeEvent, CSSProperties, Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import React, {  CSSProperties, Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { Block, blockSample, findPage, listItem, Notion, Page, pageSample } from '../modules/notion';
 import { detectRange } from './BlockFn';
 import { UserState } from '../modules/user';
+import { SideAppear } from '../modules/side';
+import Trash from './Trash';
+import Rename from './Rename';
+import Time from './Time';
+import PageMenu from './PageMenu';
 
 //react-icon
 import {FiCode ,FiChevronsLeft} from 'react-icons/fi';
@@ -11,14 +16,17 @@ import {BsFillTrash2Fill, BsPencilSquare, BsThreeDots} from 'react-icons/bs';
 import {IoIosSettings} from 'react-icons/io';
 import {HiDownload, HiOutlineDuplicate, HiTemplate} from 'react-icons/hi';
 import { MdPlayArrow } from 'react-icons/md';
-import Time from './Time';
-import PageMenu from './PageMenu';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { IoArrowRedoOutline } from 'react-icons/io5';
-import { SideAppear } from '../modules/side';
 import { GrDocumentText } from 'react-icons/gr';
-import Trash from './Trash';
-import IconPoup from './IconPoup';
+import PageIcon from './PageIcon';
+
+export const closePopup =(elementId:string ,setState:Dispatch<SetStateAction<boolean>> , event:MouseEvent)=>{
+  const element = document.getElementById(elementId);
+  const elementDomRect = element?.getClientRects()[0];
+  const isInElement = detectRange(event, elementDomRect);
+  !isInElement && setState(false);
+};
 
 type SideBarProps ={
   notion : Notion,
@@ -127,24 +135,11 @@ const ItemTemplate =({item,setTargetPageId ,onClickMoreBtn, addNewSubPage  }:Ite
         className='pageName'
             onClick={()=>{setTargetPageId(item.id) }}
       >
-        {item.icon !==null ?
-        <span>
-          {item.iconType==="string"?
-            item.icon
-          :
-            <img
-              className='pageImgIcon'
-              alt="pageImgIcon"
-              src={item.icon}
-            />
-          }
-          </span>
-          :
-          <span>
-            < GrDocumentText/>
-          </span>
-          }
-        <span>{item.title}</span>
+        <PageIcon
+          icon ={item.icon}
+          iconType={item.iconType}
+        />
+        <div>{item.title}</div>
       </button>
 
     </div>
@@ -264,10 +259,8 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
   const [moreFnStyle, setMoreFnStyle] =useState<CSSProperties|undefined>(undefined);
   const [renameStyle, setRenameStyle]=useState<CSSProperties>();
   const [pageMenuStyle, setPageMenuStyle]=useState<CSSProperties>();
-  const [iconPopupStyle, setIconPopupStyle]=useState<CSSProperties>();
-  const [openIconPopup, setOpenIconPopup]=useState<boolean>(false);
+
   const recordIcon =user.userName.substring(0,1);
-  const editTime =JSON.stringify(Date.now());
   const makeFavoriteList =(favorites:string[] |null):listItem[]|null=>{
     const list :listItem[]|null =favorites !==null? 
                                 favorites.map((id: string)=> {
@@ -302,20 +295,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
   const addNewPage=()=>{
     addPage(pageSample)
   };
-  const changeTitle =(event:ChangeEvent<HTMLInputElement> )=>{
-    const value = event.target.value;
-    if(targetPage!==null && value !== targetPage.header.title){
-        const renamedPage:Page ={
-          ...targetPage,
-          header:{
-            ...targetPage.header,
-            title:  value,
-          },
-          editTime:editTime
-        };
-        editPage(renamedPage.id, renamedPage );
-    };
-  };
+
   const addNewSubPage =(item:listItem)=>{
     const targetPage = findPage(pagesId ,pages,item.id);
     const newPageBlock :Block ={
@@ -337,18 +317,13 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
         left: position.right,
       });
   };
-  const closePopup =(elementId:string ,setState:Dispatch<SetStateAction<boolean>> , event:MouseEvent)=>{
-    const element = document.getElementById(elementId);
-    const elementDomRect = element?.getClientRects()[0];
-    const isInElement = detectRange(event, elementDomRect);
-    !isInElement && setState(false);
-  };
+
 
   inner?.addEventListener("click", (event)=>{
     openSideMoreMenu && closePopup("moreFn",setOpenSideMoreMenu, event );
     openPageMenu && closePopup("pageMenu", setOpenPageMenu, event);
     openRename && closePopup("rename", setOpenRename ,event);
-    openIconPopup && closePopup("iconPopup", setOpenIconPopup, event);
+
     openTrash && closePopup("trash",setOpenTrash, event );
   } );
 
@@ -414,18 +389,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
   const onMouseOutSideBar =()=>{
     sideAppear ==="float" && changeSide("floatHide"); 
   };
-  const onClickRenameIcon =()=>{
-    setOpenIconPopup(true);
-    const rename = document.getElementById("rename");
-    const renameDomRect = rename?.getClientRects()[0];
-    if(renameDomRect !==undefined){
-      setIconPopupStyle({
-        position:"absolute" ,
-        top: renameDomRect.bottom,
-        left :renameDomRect.left ,
-      })
-    }
-  }
+
   useEffect(()=>{
     if(targetItem!==null){
       const page =findPage(pagesId,pages, targetItem.id);
@@ -662,31 +626,14 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
     </div>
     }
     {openRename && targetPage !==null &&
-      <div 
-        id='rename'
-        style={renameStyle}
-      >
-          <button 
-            className="rename_icon"
-            onClick={onClickRenameIcon}
-          >
-            {targetPage.header.icon}
-          </button>
-          <input
-            className="rename_title"
-            onChange={changeTitle}
-            type="text"
-            value ={targetPage.header.title}
-          />
-      </div>
-    }
-    {openIconPopup && 
-    targetPage !==null &&
-      <IconPoup
+      <Rename
+        currentPageId={null}
+        block={null}
         page={targetPage}
+        editBlock={editBlock}
         editPage={editPage}
-        style={iconPopupStyle}
-        setOpenIconPopup={setOpenIconPopup}
+        renameStyle={renameStyle}
+        setOpenRename={setOpenRename}
       />
     }
     {openTrash && 

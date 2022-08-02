@@ -1,8 +1,10 @@
 import React, { Dispatch, SetStateAction, useRef} from 'react';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import { IoChatboxOutline } from 'react-icons/io5';
+import { MdOutlineCollectionsBookmark, MdOutlinePhotoSizeSelectActual } from 'react-icons/md';
 import {  Block,BlockType,blockTypes,findBlock,makeNewBlock,Page, toggle } from '../modules/notion';
 import { Command } from './Frame';
+import ImageContent from './ImageContent';
 
 type  BlockProps ={
   block:Block,
@@ -17,7 +19,9 @@ type  BlockProps ={
   setCommand:Dispatch<SetStateAction<Command>>,
   onClickCommentBtn: (block: Block) => void,
   setOpenComment :Dispatch<SetStateAction<boolean>>,
-  setTargetPageId: React.Dispatch<React.SetStateAction<string>>
+  setTargetPageId: React.Dispatch<React.SetStateAction<string>>,
+  setOpenLoader:Dispatch<SetStateAction<boolean>>,
+  setLoaderTargetBlock : Dispatch<SetStateAction<Block | null>>,
 };
 type BlockCommentProps={
   block:Block,
@@ -48,7 +52,7 @@ export const BlockComment =({block , onClickCommentBtn}:BlockCommentProps)=>{
   )
 };
 
-const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,blockComments , command, setCommand  ,onClickCommentBtn ,setOpenComment ,setTargetPageId  }:BlockProps)=>{
+const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,blockComments , command, setCommand  ,onClickCommentBtn ,setOpenComment ,setTargetPageId ,setOpenLoader, setLoaderTargetBlock }:BlockProps)=>{
   const editTime =JSON.stringify(Date.now);
   const contentEditableRef= useRef<HTMLElement>(null);
   const findTargetBlock =(event:ContentEditableEvent|React.KeyboardEvent<HTMLDivElement>|React.MouseEvent):Block=>{
@@ -65,6 +69,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
     const currentTarget =event.currentTarget as Element;
     const mainBlock= currentTarget.parentElement?.parentElement ;
     const domReact =mainBlock?.getClientRects()[0];
+    const frameDomRect =document.getElementsByClassName("frame")[0].getClientRects()[0];
     const editableBlockDomRect =document.getElementsByClassName("editableBlock")[0].getClientRects()[0] ; 
     const blockFn =document.getElementById("blockFn");
     blockFn?.classList.toggle("on");
@@ -73,8 +78,8 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
     :
     sessionStorage.removeItem("blockFnTargetBlock");
     if(domReact!==undefined){
-      const top =domReact.top +editor.scrollTop +5;
-      const left = editableBlockDomRect.x - 45;
+      const top =domReact.top +editor.scrollTop ;
+      const left = editableBlockDomRect.x - frameDomRect.x - 45;
       const blockFnStyle =`top:${top}px; left:${left}px`;
       blockFn?.setAttribute("style",blockFnStyle);
     }
@@ -95,7 +100,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
           firstBlock: targetBlock.firstBlock,
           subBlocksId: targetBlock.subBlocksId
         } ;
-        const previouseBlockId : string|null = targetBlock.firstBlock ? null : targetBlock.id ;
+
   
         if((targetBlock.contents!== editedContents) || (targetBlock.subBlocksId!==null)){
           const editedBlock:Block ={
@@ -112,10 +117,10 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
             parentBlocksId:[targetBlock.id],
             firstBlock:false,
           };
-          addBlock(page.id, newSubToggleBlock, targetBlockIndex+1, previouseBlockId);
+          addBlock(page.id, newSubToggleBlock, targetBlockIndex+1, targetBlock.id);
   
         }else{
-          addBlock(page.id, newBlock,targetBlockIndex+1, previouseBlockId);
+          addBlock(page.id, newBlock,targetBlockIndex+1, targetBlock.id);
         };
       }else{
         // edite targetBlock 
@@ -210,7 +215,11 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
   };
   const onClickBlockContents =()=>{
     block.type=== "page" &&setTargetPageId(block.id);
-  }
+  };
+  const onClickAddFileBtn =()=>{
+    setOpenLoader(true);
+    setLoaderTargetBlock(block);
+  };
   const BlockContentEditable=()=>{
     return(
       <>
@@ -252,6 +261,45 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
           <BlockContentEditable/>
         </button>
         :
+        (block.type.includes("media") ?
+        (block.contents===""?
+          <button 
+            className='addBlockFile'
+            onClick={onClickAddFileBtn}
+          >
+            <span
+              className="addBlockFileIcon"
+            >
+              {block.type ==="image media" &&
+                <MdOutlinePhotoSizeSelectActual/>
+              }
+              {block.type ==="bookmark media" &&
+                <MdOutlineCollectionsBookmark/>
+              }
+            </span>
+            <span>
+              Add a {block.type.slice(0, block.type.indexOf("media"))}
+            </span>
+            
+          </button>
+          :
+          <>
+            {block.type==="image media" &&
+            <ImageContent
+              pageId={page.id}
+              block={block}
+              editBlock={editBlock}
+              showBlockFn={showBlockFn}
+            />
+            }
+            {block.type==="bookmark media" &&
+            <div className='bookmark'>
+            
+            </div>
+            }
+          </>
+        )
+        :
         <div 
           id={`${block.id}_contents`}
           className="contents"
@@ -259,6 +307,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
         >
           <BlockContentEditable/>
         </div>
+        )
       )
       :
       <button 

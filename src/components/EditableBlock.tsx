@@ -3,8 +3,9 @@ import { Block, BlockCommentType, findBlock, Page,  } from '../modules/notion';
 import { Command } from './Frame';
 import BlockComponent, { BlockComment } from './BlockComponent';
 import { GoPrimitiveDot } from 'react-icons/go';
-import { GrCheckbox, GrCheckboxSelected, GrDocumentText } from 'react-icons/gr';
-import { MdPlayArrow } from 'react-icons/md';
+import { GrCheckbox, GrCheckboxSelected } from 'react-icons/gr';
+import {  MdPlayArrow } from 'react-icons/md';
+import PageIcon from './PageIcon';
 
 
 type EditableBlockProps ={
@@ -15,22 +16,46 @@ type EditableBlockProps ={
   changeToSub: (pageId: string, block: Block, newParentBlockId: string) => void,
   raiseBlock: (pageId: string, block: Block) => void,
   deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
+  smallText:boolean,
   command:Command,
   setCommand:Dispatch<SetStateAction<Command>>,
   setTargetPageId: React.Dispatch<React.SetStateAction<string>> ,
   setOpenComment: Dispatch<SetStateAction<boolean>>,
   setCommentBlock: Dispatch<SetStateAction<Block | null>>,
+  setOpenLoader:Dispatch<SetStateAction<boolean>>,
+  setLoaderTargetBlock : Dispatch<SetStateAction<Block | null>>,
 };
 export   type CommentOpenType ={
   open:boolean,
   targetId: string | null,
 };
 
-const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,command, setCommand ,setTargetPageId ,setOpenComment ,setCommentBlock 
+const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText ,command, setCommand ,setTargetPageId ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock,
 }:EditableBlockProps)=>{  
   const className = block.type !== "toggle" ?
   `${block.type} block ` :
   `${block.type} block ${block.subBlocksId!==null?'on' : ""}`;
+  const changeFontSizeBySmallText=(block:Block):CSSProperties=>{
+    const baseSize = smallText? 14 :16; 
+    let ratio =1;
+    switch (block.type) {
+      case "h1":
+        ratio =3;
+        break;
+      case "h2":
+        ratio=2.5;
+        break;
+      case "h3" :
+        ratio =2; 
+        break; 
+      default:
+        break;
+    }
+    const style :CSSProperties={
+      fontSize :`${baseSize * ratio}px`
+    };
+    return style 
+  };
   const blockComments = 
   block.comments==null? 
   false : 
@@ -45,11 +70,14 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
   fontWeight: block.style.fontWeight ,
   fontStyle: block.type !=="todo done"? block.style.fontStyle : "italic",
   textDecoration: block.type !=="todo done"? block.style.textDeco :"line-through",
+  width: block.style.width===undefined? "inherit" : block.style.width,
+  height: block.style.height===undefined? "inherit" : block.style.height,
   })
   };
   const giveFocusToContent =(event:React.MouseEvent)=>{
   const currentTarget =event.currentTarget as HTMLElement;
   const contentEditable =currentTarget.getElementsByClassName("contentEditable")[0] as HTMLElement ;
+ 
   contentEditable.focus();
   };
   const onClickCommentBtn=(block:Block)=>{
@@ -83,8 +111,9 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
     const toggleMainDoc = document.getElementById(`block_${blockId}`) ;
     target.classList.toggle("on");
     toggleMainDoc?.classList.toggle("on");
-    console.log(toggleMainDoc?.className);
+    
   };
+
   const inner =document.getElementById("inner");
   inner?.addEventListener("click",updateBlock);
   inner?.addEventListener("keyup",updateBlock);
@@ -97,6 +126,10 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
           newBlockContentEditableDoc.focus();
         };
         sessionStorage.removeItem("newBlock");
+    };
+    if(block.type.includes("media") && block.contents===""){
+      setOpenLoader(true);
+      setLoaderTargetBlock(block);
     }
   },[]);
   
@@ -125,7 +158,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
               className= "blockContents"
               ref={blockContentsRef}
               style={listStyle(block)}
-              onMouseOver={giveFocusToContent}
+              //onMouseOver={giveFocusToContent}
               >
               <div 
                 className='list_marker'
@@ -150,6 +183,8 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                 onClickCommentBtn={onClickCommentBtn}
                 setOpenComment={setOpenComment}
                 setTargetPageId={setTargetPageId}
+                setOpenLoader={setOpenLoader}
+                setLoaderTargetBlock={setLoaderTargetBlock}
               />
             </div>
             </div>
@@ -171,6 +206,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
           <div 
             id={`block_${block.id}`}
             className={className} 
+            style={changeFontSizeBySmallText(block)}
           > 
 
             {block.type.includes("List") ?
@@ -221,28 +257,18 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                 <div 
                   className='pageIcon left'
                 >
-                {block.iconType == null &&
-                  < GrDocumentText/>
-                }
-                {block.icon !==null &&
-                  (block.iconType ==="string"?
-                    block.icon
-                  :
-                    <img
-                      className="pageTypeBlockImgIcon"
-                      src={block.icon}
-                      alt="blockIconImg"
-                    />
-                  )
-                }
+                  <PageIcon
+                    icon={block.icon}
+                    iconType={block.iconType}
+                  />
                 </div>
               }
               <div 
                 className='blockContents' 
                 style={blockContentsStyle(block)}
-                onMouseOver={ giveFocusToContent}
+                //onMouseOver={ giveFocusToContent}
               >
-              <BlockComponent
+                <BlockComponent
                 block={block} 
                 page={page}
                 addBlock={addBlock}
@@ -256,7 +282,9 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                 onClickCommentBtn={onClickCommentBtn}
                 setTargetPageId={setTargetPageId}
                 setOpenComment={setOpenComment}
-              />
+                setOpenLoader={setOpenLoader}
+                setLoaderTargetBlock={setLoaderTargetBlock}
+                />
               </div>
               </div>
               {blockComments &&
@@ -283,11 +311,14 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                   changeToSub={changeToSub}
                   raiseBlock={raiseBlock}
                   deleteBlock={deleteBlock}
+                  smallText={smallText}
                   command={command}
                   setCommand={setCommand}
                   setOpenComment={setOpenComment}
                   setCommentBlock={setCommentBlock}
                   setTargetPageId={setTargetPageId}
+                  setOpenLoader={setOpenLoader}
+                  setLoaderTargetBlock={setLoaderTargetBlock}
                 />
               )
               }
