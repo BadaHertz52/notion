@@ -14,6 +14,7 @@ import { MdInsertPhoto } from 'react-icons/md';
 import { HiTemplate } from 'react-icons/hi';
 import { detectRange } from './BlockFn';
 import Loader from './Loader';
+import PageIcon from './PageIcon';
 
 
 
@@ -72,12 +73,12 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
     fontSize: smallText? "32px": "40px"
   };
   const pageIconStyle :CSSProperties={
-    width: page.header.iconType=== "img"? 124 : 78,
-    height: page.header.iconType=== "img"? 124 : 78,
+    width: page.header.iconType=== null? 78 :124,
+    height: page.header.iconType=== null? 78 : 124,
     marginTop: page.header.cover ==null? 0 : (
-      page.header.iconType==="img"?
-      -62:
-      -39
+      page.header.iconType===null?
+      -39:
+      -62
     )
   }
   const newPage :Page ={
@@ -99,14 +100,19 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
     if(openIconPopup !==true){
       const frame =document.getElementsByClassName("frame")[0];
       const frameDomRect =frame.getClientRects()[0];
-      const currentTarget =event.currentTarget;
-      const domeRect = currentTarget.getClientRects()[0];
-      setIconStyle({
-        position: "absolute",
-        top: domeRect.bottom + 24,
-        left:domeRect.left - frameDomRect.left ,
-      })
-      setOpenIconPopup(true);
+      const currentTarget =event.currentTarget ;
+      if(currentTarget.firstElementChild!==null){
+        const domeRect = currentTarget.firstElementChild.getClientRects()[0];
+        setIconStyle({
+          position: "absolute",
+          top: domeRect.bottom + 24,
+          left:domeRect.left - frameDomRect.left ,
+        })
+        setOpenIconPopup(true);
+      }else{
+        console.log("Can't find currentTarget")
+      }
+
     }else{
       setOpenIconPopup(false);
     }
@@ -130,7 +136,7 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
       header:{
         ...page.header,
         icon: icon ,
-        iconType:"string"
+        iconType:"emoji"
       },
       editTime:editTime
     };
@@ -208,26 +214,18 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
                 <img src={page.header.cover} alt="page cover " />
               </div>
             }
-            <div className="pageHeader_notCover" style={headerBottomStyle}>
-              { page.header.icon !==null &&
-                <div 
-                className='pageIcon'
+            <div className="pageHeader_notCover" style={headerBottomStyle}
+            >
+              <div
                 onClick={onClickPageIcon}
-                style={pageIconStyle}
-                >
-                {page.header.iconType ==="string"?
-                <div className='pageStringIcon'>
-                  {page.header.icon}
-                </div >
-                :
-                  <img
-                    className='pageImgIcon'
-                    alt="pageImgIcon"
-                    src={page.header.icon}
-                  />
-                }
-                </div>
-              }
+              >
+                <PageIcon
+                  icon={page.header.icon}
+                  iconType={page.header.iconType}
+                  style={pageIconStyle}
+                />
+              </div>
+
               {decoOpen &&
                 <div className='deco'>
                   {page.header.icon ==null &&

@@ -181,6 +181,7 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
               <PageIcon
                 icon={page.header.icon}
                 iconType={page.header.iconType}
+                style={undefined}
               />
               <div>
                 {page.header.title? 
@@ -210,6 +211,7 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
                     <PageIcon
                       icon={path.icon}
                       iconType={path.iconType}
+                      style={undefined}
                     />
                   </div>
                   <div className='pathTitle'>

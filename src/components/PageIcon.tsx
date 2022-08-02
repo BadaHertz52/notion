@@ -1,34 +1,39 @@
-import { type } from '@testing-library/user-event/dist/type';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { GrDocumentText } from 'react-icons/gr';
-import { pathType } from '../containers/NotionRouter';
+import { CSSProperties } from 'styled-components';
 import { IconType } from '../modules/notion';
-import { itemType } from './BlockComponent';
 type PageItemProps={
   icon:string|null,
-  iconType:IconType
+  iconType:IconType,
+  style:CSSProperties|undefined
 }
-const PageIcon=({icon, iconType}:PageItemProps)=>{
-
+const PageIcon=({icon, iconType, style}:PageItemProps)=>{
   return(
-    <div className="pageIcon">
+    <div 
+      className="pageIcon"
+      style={style}
+    >
       {icon !==null ?
-        <span>
-          {iconType==="string"?
-            icon
-          :
-            <img
-              className='pageImgIcon'
-              alt="pageImgIcon"
-              src={icon}
-            />
-          }
-          </span>
-          :
-          <span>
-            <GrDocumentText/>
-          </span>
+      <span>
+        {iconType==="img" ?
+          <img
+            className='pageImgIcon'
+            alt="pageImgIcon"
+            src={icon}
+          />
+        :
+          <img
+            className='pageImgIcon'
+            alt="pageImgIcon"
+            src={`../assets/img/emoji/${icon}.png`}
+          />
         }
+        </span>
+    :
+        <span>
+          <GrDocumentText/>
+        </span>
+    }
     </div>
   )
 };

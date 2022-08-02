@@ -259,7 +259,8 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                 >
                   <PageIcon
                     icon={block.icon}
-                    iconType={block.iconType}
+                    iconType={block.iconType} 
+                    style={undefined}
                   />
                 </div>
               }

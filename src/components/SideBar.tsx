@@ -138,6 +138,7 @@ const ItemTemplate =({item,setTargetPageId ,onClickMoreBtn, addNewSubPage  }:Ite
         <PageIcon
           icon ={item.icon}
           iconType={item.iconType}
+          style={undefined}
         />
         <div>{item.title}</div>
       </button>

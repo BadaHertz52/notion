@@ -3,6 +3,7 @@ import { GrDocumentText } from "react-icons/gr";
 import { CSSProperties } from "styled-components";
 import { Block, Page } from "../modules/notion";
 import IconPoup from "./IconPoup";
+import PageIcon from "./PageIcon";
 import { closePopup } from "./SideBar";
 type RenameProps = {
   currentPageId:string|null,
@@ -68,22 +69,11 @@ const Rename =({currentPageId,block ,page,editBlock ,editPage,renameStyle, setOp
             className="rename_icon"
             onClick={onClickRenameIcon}
           >
-            {page.header.iconType===null &&
-              <div>
-                <GrDocumentText/>
-              </div>
-            }
-            {page.header.iconType ==="string" ?
-            <div>
-              {page.header.icon}
-            </div>
-            :
-            page.header.icon !==null&& 
-            <img
-              src={page.header.icon}
-              alt="page icon"
+            <PageIcon
+              icon={page.header.icon}
+              iconType={page.header.iconType}
+              style={undefined}
             />
-            }
           </button>
           <input
             className="rename_title"
