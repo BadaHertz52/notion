@@ -1,5 +1,6 @@
 import catImg from '../assests/img/michael-sum-LEpfefQf4rU-unsplash.jpg' ;
 import imgBlockImg from '../assests/img/roses-gfcb7dbdd4_640.jpg';
+import { Emoji, emojis } from '../components/IconPoup';
 //TYPE 
 export const text= "text" as const ;
 export const toggle ="toggle" as const  ;
@@ -56,8 +57,8 @@ const userName= "amet";
 const editTime =JSON.stringify(Date.now());
 
 const img ="img";
-const string="string";
-export type IconType = typeof img| typeof string |null ;
+const emoji ="emoji";
+export type IconType = typeof img|typeof emoji |null ;
 
 export type CommentType ={
   id: string,
@@ -79,7 +80,7 @@ export type Block ={
   parentBlocksId: string[]|null,
   type: BlockType ,
   iconType:IconType,
-  icon: string | null ,
+  icon: string|Emoji| null ,
   editTime: string ,
   createTime:string,
   style :BlockStyle,
@@ -118,12 +119,13 @@ export function makeNewBlock(page:Page, targetBlock:Block|null, newBlockContents
     comments:null
   };
   return newBlock
-}
+};
+
 export type listItem = {
   id: string;
   title: string ;
   iconType:IconType,
-  icon: string | null;
+  icon: string|Emoji| null;
   subPagesId: string[]|null;
   parentsId:string[]|null;
   editTime:string,
@@ -135,7 +137,7 @@ export type Page ={
   header : {
     title: string ,
     iconType: IconType,
-    icon: string |null,
+    icon: string|Emoji |null,
     cover: string |null,
     comments: BlockCommentType[]| null,
   }
@@ -478,8 +480,8 @@ const initialState :Notion ={
       subBlocksId:null ,
       parentBlocksId: null,
       type: page,
-      iconType:"string",
-      icon: "🌈" ,
+      iconType:"emoji",
+      icon: emojis[3] ,
       editTime: (Date.parse("2021-5-20-9:00")).toString(),
       createTime: (Date.parse("2021-5-19-20:00")).toString(),
 
@@ -688,8 +690,8 @@ const initialState :Notion ={
     id:"page2",
     header:{
       ...pageSample.header,
-      iconType:"string",
-      icon:"🌈",
+      iconType:"emoji",
+      icon:emojis[8],
       title:"page2"
     },
     editTime: JSON.stringify(Date.parse("2021-5-20-9:00")),
@@ -700,8 +702,8 @@ const initialState :Notion ={
     id: '1234',
     header : {
       title:"notion2",
-      iconType:"string",
-      icon:'👋' ,
+      iconType:"emoji",
+      icon:emojis[2],
       cover: null,
       comments:  null,
     },
@@ -717,8 +719,8 @@ const initialState :Notion ={
     id: '123',
     header : {
       title:"notion3",
-      iconType:"string",
-      icon:'🌞' ,
+      iconType:"emoji",
+      icon:emojis[10] ,
       cover: null,
       comments:  null,
     },

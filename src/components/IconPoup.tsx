@@ -3,57 +3,93 @@ import { BsEmojiSmile } from 'react-icons/bs';
 import { CSSProperties } from 'styled-components';
 import { Block, IconType, Page } from '../modules/notion';
 import { detectRange } from './BlockFn';
+const smileEmoji ="smile";
+const heartEyesEmoji ="heart_eyes"; 
+const angryEmoji = "angry";
+const sobEmoji ="sob"; 
+const heartEmoji="heart"; 
+const purpleHeartEmoji="purple_heart";
+const no_entry_signEmoji="no_entry_sign";
+const warningEmoji ="warning"; 
+const memoEmoji ="memo"; 
+const alarmEmoji="alarm_clock";
+const phoneEmoji="phone";
+const gameEmoji="video_game"; 
+const computerEmoji="desktop_computer";
+const prayerEmoji="prayer";
+const tadaEmoji="tada";
+const giftEmoji="gift";
+const popcornEmoji="popcorn";
+const musicalNoteEmoji="musical_note";
+const dollarEmoji="dollar";
+const creditCardEmoji="credit_card";
+const calendarEmoji="calendar";
+const chartEmoji="chart_with_upwards_trend";
+const bulbEmoji="bulb";
+const shoppingTrolleyEmoji="shopping_trolley";
+const bathEmoji="bath";
+const friesEmoji="fries";
+const cakeEmoji="cake";
+const appleEmoji="apple";
+const carrotEmoji="carrot";
+const ariplaneEmoji="ariplane";
+const busEmoji="bus";
+const metroEmoji="metro";
+const houseEmoji="house_with_garden";
+const tentEmoji="tent";
+const starEmoji="star";
+const sunnyEmoji="sunny";
+const rainbowEmoji="rainbow";
+const rainEmoji="rain_cloud";
+const snowmanEmoji="snowman";
+const blossomEmoji="cherry_blossom";
+export type Emoji=
+typeof smileEmoji
+|typeof heartEyesEmoji 
+|typeof angryEmoji
+|typeof sobEmoji 
+|typeof heartEmoji 
+|typeof purpleHeartEmoji
+|typeof no_entry_signEmoji 
+|typeof warningEmoji 
+|typeof memoEmoji 
+|typeof alarmEmoji
+|typeof phoneEmoji 
+|typeof gameEmoji 
+|typeof computerEmoji 
+|typeof prayerEmoji 
+|typeof tadaEmoji 
+|typeof giftEmoji 
+|typeof popcornEmoji 
+|typeof musicalNoteEmoji 
+|typeof dollarEmoji 
+|typeof creditCardEmoji 
+|typeof calendarEmoji 
+|typeof chartEmoji
+|typeof bulbEmoji 
+|typeof shoppingTrolleyEmoji 
+|typeof bathEmoji
+|typeof friesEmoji 
+|typeof cakeEmoji 
+|typeof appleEmoji 
+|typeof carrotEmoji 
+|typeof ariplaneEmoji 
+|typeof busEmoji 
+|typeof metroEmoji 
+|typeof houseEmoji 
+|typeof tentEmoji 
+|typeof starEmoji 
+|typeof sunnyEmoji
+|typeof rainbowEmoji 
+|typeof rainEmoji
+|typeof snowmanEmoji 
+|typeof blossomEmoji
+;
+export const emojis:Emoji[] =[smileEmoji,heartEyesEmoji , angryEmoji, sobEmoji , heartEmoji , purpleHeartEmoji, no_entry_signEmoji , warningEmoji , memoEmoji , alarmEmoji, phoneEmoji , gameEmoji , computerEmoji , prayerEmoji , tadaEmoji , giftEmoji , popcornEmoji , musicalNoteEmoji , dollarEmoji , creditCardEmoji , calendarEmoji , chartEmoji, bulbEmoji , shoppingTrolleyEmoji , bathEmoji, friesEmoji , cakeEmoji , appleEmoji , carrotEmoji , ariplaneEmoji , busEmoji , metroEmoji , houseEmoji , tentEmoji , starEmoji , sunnyEmoji, rainbowEmoji , rainEmoji, snowmanEmoji , blossomEmoji];
 
-export type Emoji ={
-  label:string,
-  symbol:string 
-};
-export const emojis:Emoji[] =[
-  {label:"smile face", symbol:"😁"},
-  {label:"smile with heart  face", symbol:"🥰"},
-  {label:"angry face", symbol:"😠"},
-  {label:"crying face", symbol:"😭"},
-  {label:"redheart", symbol:"❤️"},
-  {label:"purpleheart", symbol:"💜"},
-  {label:"ban", symbol:"🚫"},
-  {label:"attention", symbol:"⚠️"},
-  {label:"pencile", symbol:"📝"},
-  {label:"clock", symbol:"⌚"},
-  {label:"phone", symbol:"📱"},
-  {label:"video game", symbol:"🎮"},
-  {label:"computer", symbol:"🖥️"},
-  {label:"player", symbol:"🙏"},
-  {label:"party", symbol:"🎉"},
-  {label:"present", symbol:"🎁"},
-  {label:"movie", symbol:"🎞️"},
-  {label:"coin", symbol:"🪙"},
-  {label:"money", symbol:"💵"},
-  {label:"card", symbol:"💳"},
-  {label:"calendar", symbol:"🗓️"},
-  {label:"folder", symbol:"📁"},
-  {label:"ligh bulb", symbol:"💡"},
-  {label:"broom", symbol:"🧹"},
-  {label:"unicon", symbol:"🦄"},
-  {label:"french fries", symbol:"🍟"},
-  {label:"cup cake", symbol:"🧁"},
-  {label:"apple", symbol:"🍎"},
-  {label:"ariplane", symbol:"✈️"},
-  {label:"car", symbol:"🚗"},
-  {label:"bus", symbol:"🚌"},
-  {label:"building", symbol:"🏢"},
-  {label:"home", symbol:"🏠"},
-  {label:"tent", symbol:"⛺"},
-  {label:"star", symbol:"⭐"},
-  {label:"sun", symbol:"☀️"},
-  {label:"rainbow", symbol:"🌈"},
-  {label:"rain", symbol:"🌧️"},
-  {label:"snowman", symbol:"☃️"},
-  {label:"cherry blossoms", symbol:"🌸"},
-];
-export const randomIcon =():string=>{
-  const icons  = emojis.map((emoji:Emoji)=> emoji.symbol);
+export const randomIcon =():Emoji=>{
   const index = Math.floor(Math.random() * (3));
-  return icons[index]
+  return emojis[index]
 };
 
 type IconPoupProps ={
@@ -71,7 +107,7 @@ const IconPopup =({ currentPageId,block,page, editBlock ,editPage,style,  setOpe
   type Category = typeof emoji | typeof image;
   const [category , setCategory] =useState<Category>(emoji);
 
-  const changePageIcon =(icon:string|null ,iconType:IconType)=>{
+  const changePageIcon =(icon:string|Emoji|null ,iconType:IconType)=>{
     const editTime = JSON.stringify(Date.now());
     editPage(page.id, {
       ...page,
@@ -98,7 +134,7 @@ const IconPopup =({ currentPageId,block,page, editBlock ,editPage,style,  setOpe
   };
 
   const onClickRandom =()=>{
-    changePageIcon(randomIcon(), "string");
+    changePageIcon(randomIcon(), "emoji");
   };
 
   const onChangeImgIcon=(event:React.ChangeEvent<HTMLInputElement>)=>{
@@ -169,15 +205,12 @@ const IconPopup =({ currentPageId,block,page, editBlock ,editPage,style,  setOpe
             emojis.map((emoji:Emoji)=>
               <button
                 className='emojiBtn'
-                onClick={()=>changePageIcon(emoji.symbol, "string")}
+                onClick={()=>changePageIcon(emoji, "emoji")}
               >
-              <span
-                className="emoji"
-                aria-label={emoji.label ? emoji.label : ""}
-                aria-hidden={emoji.label ? "false" : "true"}
-              >
-                {emoji.symbol}
-              </span>
+              <img
+                alt={emoji}
+                src={`../assets/img/emoji/${emoji}.png`}
+              />
               </button>
               )
         :
