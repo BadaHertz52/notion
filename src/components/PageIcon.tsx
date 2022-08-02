@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { GrDocumentText } from 'react-icons/gr';
 import { CSSProperties } from 'styled-components';
 import { IconType } from '../modules/notion';
