@@ -2077,14 +2077,14 @@ a:link, a:active, a:visited {
   background-color: black;
 }
 #iconPopup .emojiBtn {
-  font-size: 20px;
-  width: -webkit-fit-content;
-  width: -moz-fit-content;
-  width: fit-content;
-  height: -webkit-fit-content;
-  height: -moz-fit-content;
-  height: fit-content;
-  padding: 1px;
+  width: 25px;
+  height: 25px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+#iconPopup .emojiBtn img {
+  width: 100%;
+  height: 100%;
 }
 #iconPopup .body {
   text-align: center;
@@ -3154,6 +3154,10 @@ a:link, a:active, a:visited {
 #rename > .inner .rename_icon {
   width: 2rem;
   border-right: none;
+}
+#rename > .inner .rename_icon .pageImgIcon {
+  width: 1.2rem;
+  height: 1.2rem;
 }
 #rename > .inner .rename_title {
   width: calc(100% - 2rem);
