@@ -209,7 +209,7 @@ const IconPopup =({ currentPageId,block,page, editBlock ,editPage,style,  setOpe
               >
               <img
                 alt={emoji}
-                src={`../assets/img/emoji/${emoji}.png`}
+                src={`https://raw.githubusercontent.com/BadaHertz52/notion/master/image/emoji/${emoji}.png`}
               />
               </button>
               )

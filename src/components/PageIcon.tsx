@@ -25,7 +25,7 @@ const PageIcon=({icon, iconType, style}:PageItemProps)=>{
           <img
             className='pageImgIcon'
             alt="pageImgIcon"
-            src={`../assets/img/emoji/${icon}.png`}
+            src={`https://raw.githubusercontent.com/BadaHertz52/notion/master/image/emoji/${icon}.png`}
           />
         }
         </span>
