@@ -69,7 +69,6 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isIn
   const [commentsStyle, setCommentsStyle]= useState<CSSProperties>();
   const [menuOpen, setMenuOpen]= useState<boolean>(false);
   const [commandTargetBlock, setCommandTargetBlock]=useState<Block|null>(null);
-  const [commandBlockStyle, setCommandBlockStyle]=useState<CSSProperties>(); 
   const [popup, setPopup]=useState<PopupType>({
     popup:false,
     what:null
