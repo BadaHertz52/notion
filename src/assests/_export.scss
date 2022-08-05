@@ -7,7 +7,25 @@
     left: 0;
     width: 320px;
     height: 220px;
-    padding:1rem;
+    padding:2rem 1.5rem;
     box-sizing: border-box;
+  }
+  .selects{
+    width: 100%;
+  }
+  .select{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    width: 100%;
+    position:relative;
+  }
+  .btns{
+    display: flex;
+    justify-content: end;
+    button{
+      margin-left: 1rem;
+    }
+
   }
 }
