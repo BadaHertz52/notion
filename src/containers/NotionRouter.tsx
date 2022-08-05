@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {  Route, Routes, useNavigate} from 'react-router-dom';
 import AllComments from '../components/AllComments';
+import Export from '../components/Export';
 import QuickFindBord from '../components/QuickFindBord';
 import { RootState } from '../modules';
 import { add_block, add_page, Block, change_block_to_page, change_page_to_block, change_to_sub, clean_trash, delete_block, delete_page, duplicate_page, edit_block, edit_page,  emojiPath,  findPage,  IconType,  listItem,  move_page_to_page, Page, pageSample, raise_block, restore_page, } from '../modules/notion';
@@ -51,8 +52,7 @@ const NotionRouter =()=>{
   const [showAllComments,setShowAllComments]=useState<boolean>(false);
   const [discard_edit, setDiscardEdit]=useState<boolean>(false);
   const discardEdit =document.getElementById("discardEdit");
-
-
+  const [openExport ,setOpenExport]=useState<boolean>(false);
     //---action.function 
     //--block
   const editBlock = (pageId:string, block:Block)=> {dispatch(edit_block(pageId, block ));
@@ -328,6 +328,7 @@ const NotionRouter =()=>{
                     showAllComments={showAllComments}
                     setShowAllComments={setShowAllComments}
                     discardEdit={discard_edit}
+                    setOpenExport={setOpenExport}
                     />
                   } 
           />
@@ -396,6 +397,12 @@ const NotionRouter =()=>{
 
           </div>
         </div>
+        {openExport && routePage !==null &&
+        <Export
+          page={routePage}
+          setOpenExport={setOpenExport}
+        />
+        }
     </div>
   )
 };

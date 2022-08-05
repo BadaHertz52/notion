@@ -1,0 +1,13 @@
+@import './common';
+#export {
+  @include popup;
+  display: flex;
+  .inner{
+    top:0;
+    left: 0;
+    width: 320px;
+    height: 220px;
+    padding:1rem;
+    box-sizing: border-box;
+  }
+}

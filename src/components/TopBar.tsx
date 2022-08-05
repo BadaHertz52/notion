@@ -44,10 +44,11 @@ type TopBarProps ={
   smallText:boolean,
   setSmallText:Dispatch<SetStateAction<boolean>>,
   fullWidth:boolean,
-  setFullWidth:Dispatch<SetStateAction<boolean>>
+  setFullWidth:Dispatch<SetStateAction<boolean>>,
+  setOpenExport :Dispatch<SetStateAction<boolean>>,
 };
 export const defaultFontFamily ='ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"' ;
-const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock, editBlock ,changeBlockToPage ,deleteBlock ,addPage,deletePage, movePageToPage, changeSide ,addFavorites,removeFavorites ,setTargetPageId  , showAllComments, setShowAllComments ,smallText, setSmallText ,fullWidth, setFullWidth}:TopBarProps)=>{
+const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock, editBlock ,changeBlockToPage ,deleteBlock ,addPage,deletePage, movePageToPage, changeSide ,addFavorites,removeFavorites ,setTargetPageId  , showAllComments, setShowAllComments ,smallText, setSmallText ,fullWidth, setFullWidth ,setOpenExport}:TopBarProps)=>{
   const [title, setTitle]= useState<string>("");
   const [openPageMoreFun, setOpenPageMoreFun] =useState<boolean>(false);
   const [openPageMenu, setOpenPageMenu]=useState<boolean>(false);
@@ -363,7 +364,9 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
                       Move to
                     </span>
                   </button>
-                  <button>
+                  <button
+                    onClick={()=>{setOpenExport(true); setOpenPageMoreFun(false)}}
+                  >
                     <GrDocumentUpload/>
                     <div>
                       <span className='label'>Export</span>

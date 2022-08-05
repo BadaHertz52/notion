@@ -1893,6 +1893,9 @@ a:link, a:active, a:visited {
   background-color: rgba(0, 0, 0, 0.53);
   width: 100vw;
   height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 300;
 }
 .discardEdit.on .inner {
@@ -1909,8 +1912,6 @@ a:link, a:active, a:visited {
   box-shadow: rgba(15, 15, 15, 0.039) 0px 0px 0px 1px;
 }
 .discardEdit.on .inner {
-  top: calc(50% - 102px);
-  left: calc(50% - 168px);
   width: 336px;
   height: 204px;
   padding: 24px 32px;
@@ -1951,6 +1952,83 @@ a:link, a:active, a:visited {
 }
 .discardEdit.on .btns button:nth-child(2):hover {
   background-color: #EDECE9;
+}
+
+.edit_inform {
+  border-top: 1px solid #B9B8B6;
+  font-size: 14px;
+  text-align: left;
+  color: #B9B8B6;
+  margin-bottom: 0;
+}
+.edit_inform p {
+  margin: 2px 0;
+}
+
+div {
+  box-sizing: border-box;
+  pointer-events: auto;
+}
+
+.pageLink:hover {
+  background-color: #EDECE9;
+}
+
+button {
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  padding-left: 1rem;
+}
+ul li,
+ol li {
+  padding-left: 10px;
+}
+
+a:link, a:active, a:visited {
+  text-decoration: none;
+  color: inherit;
+}
+
+#export {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.53);
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+#export .inner {
+  background-color: white;
+  border-radius: 2px;
+  position: relative;
+  top: 90px;
+  left: 12.5%;
+  width: 75%;
+  max-height: 80vh;
+  max-width: 600px;
+  z-index: 15;
+  overflow: hidden;
+  box-shadow: rgba(15, 15, 15, 0.039) 0px 0px 0px 1px;
+}
+#export .inner {
+  top: 0;
+  left: 0;
+  width: 320px;
+  height: 220px;
+  padding: 1rem;
+  box-sizing: border-box;
 }
 
 .edit_inform {
@@ -2922,6 +3000,9 @@ a:link, a:active, a:visited {
   background-color: rgba(0, 0, 0, 0.53);
   width: 100vw;
   height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 #quickFindBord .inner {
   background-color: white;

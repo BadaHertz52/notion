@@ -54,10 +54,11 @@ type EditorContainerProps ={
   setTargetPageId:Dispatch<SetStateAction<string>>,
   showAllComments:boolean,
   setShowAllComments:Dispatch<SetStateAction<boolean>>,
-  discardEdit:boolean
+  discardEdit:boolean,
+  setOpenExport :Dispatch<SetStateAction<boolean>>,
 };
 
-const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isInTrash, makePagePath,changeSide,addBlock,editBlock ,changeBlockToPage, changePageToBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId , showAllComments,  setShowAllComments , discardEdit}:EditorContainerProps)=>{
+const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isInTrash, makePagePath,changeSide,addBlock,editBlock ,changeBlockToPage, changePageToBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId , showAllComments,  setShowAllComments , discardEdit , setOpenExport}:EditorContainerProps)=>{
   const dispatch =useDispatch();
   const user =useSelector((state:RootState)=>state.user);
   const changeToSub =(pageId: string, block: Block,  newParentBlockId: string)=> dispatch(change_to_sub(pageId, block, newParentBlockId));
@@ -185,6 +186,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isIn
       setSmallText={setSmallText}
       fullWidth={fullWidth}
       setFullWidth={setFullWidth}
+      setOpenExport={setOpenExport}
       />
       <Frame
         page={page}
