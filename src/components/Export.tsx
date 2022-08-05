@@ -72,36 +72,34 @@ const Export =({page,setOpenExport}:ExportProps)=>{
               </option>
             </select>
           </div>
-          <div className="select">
+          <div className="select switch">
             <div className="select_label">
               Include subpages
             </div>
             <button 
               onClick={onClickSwitchBtn}
+              className='switchBtn'
             >
-              <label className='switchBtn'>
                 <span 
                   id="includeSubPagesSlider"
                   className="slider"
                   >
                   </span>
-              </label>
             </button>
           </div>
-          <div className="select">
+          <div className="select switch">
             <div className="select_label">
               Create folders for subPages
             </div>
             <button 
+              className='switchBtn'
               onClick={onClickSwitchBtn}
             >
-              <label className='switchBtn'>
                 <span 
                   id="createSubPageFolderSlider"
                   className="slider"
                   >
                   </span>
-              </label>
             </button>
           </div>
         </div>
