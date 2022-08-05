@@ -31,6 +31,7 @@
   overflow-y: scroll;
   display: flex;
   flex-direction: column;
+  align-items:center;
   @include webkitScroll;
   position: relative;
   //isInTrash
@@ -456,11 +457,9 @@
   justify-content: space-around;
   button{
     color:inherit;
-    font-size: 1rem;
-  }
-  button:first-child {
     font-size: 14px;
   }
+
   .favoriteBtn.on{
     svg{
       fill: rgb(246, 192, 80);
