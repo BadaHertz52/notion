@@ -231,49 +231,6 @@
       button:first-child{
         padding-bottom: 10px;
       }
-      .switchBtn{
-        position: relative;
-        width: 30px;
-        height: 15px;
-        input{
-          opacity: 0;
-          width: 0;
-          height: 0;
-        }
-        .slider{
-          position:absolute;
-          cursor:pointer;
-          top:0;
-          left:0;
-          right: 0;
-          bottom: 0;
-          border-radius: 34px;
-          background-color: #ccc;
-          -webkit-transition: 0.4s;
-          transition:0.4s;
-        }
-        .slider::before{
-          position:absolute;
-          content:"";
-          height: 12px;
-          width: 12px;
-          bottom: 1.5px;
-          left: 4px;
-          border-radius: 50%;
-          background-color: white;
-          -webkit-transition: 0.4s;
-          transition:0.4s;
-        }
-        .slider.on{
-          background-color:$turkeyBlue ;
-          box-shadow: 0 0 1px $turkeyBlue;
-        }
-        .slider.on:before {
-          -webkit-transform: translateX(10px);
-          -ms-transform: translateX(10px);
-          transform: translateX(10px);
-        }
-      }
     }
     .function{
       display: flex;
@@ -411,9 +368,6 @@
         height:100%;
       }
     }
-
-      .commentContent{
-      }
     }
     .pageTitle{
       font-size: inherit;
