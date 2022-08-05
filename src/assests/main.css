@@ -1434,6 +1434,7 @@ a:link, a:active, a:visited {
   overflow-y: scroll;
   display: flex;
   flex-direction: column;
+  align-items: center;
   position: relative;
 }
 .editor::-webkit-scrollbar {
@@ -1874,9 +1875,6 @@ a:link, a:active, a:visited {
 }
 .pageFun button {
   color: inherit;
-  font-size: 1rem;
-}
-.pageFun button:first-child {
   font-size: 14px;
 }
 .pageFun .favoriteBtn.on svg {
