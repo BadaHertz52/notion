@@ -54,6 +54,9 @@ $turkeyBlue :rgb(46, 170, 220);
   background-color: rgba(0, 0, 0, 0.53);
   width: 100vw;
   height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   .inner{
     background-color: #ffff;
     border-radius:2px;

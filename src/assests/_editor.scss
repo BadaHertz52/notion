@@ -475,9 +475,7 @@
   display: block;
   @include popup;
   z-index: 300;
-  .inner{
-    top: calc(50% - 102px) ;
-    left: calc(50% - 168px);
+  .inner{ 
     width: 336px;
     height: 204px;
     padding: 24px 32px;
