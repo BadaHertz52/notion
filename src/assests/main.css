@@ -2228,6 +2228,11 @@ a:link, a:active, a:visited {
   align-items: center;
   justify-content: center;
   display: flex;
+  z-index: 3;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 #export .inner {
   background-color: white;
@@ -2246,7 +2251,6 @@ a:link, a:active, a:visited {
   top: 0;
   left: 0;
   width: 320px;
-  height: 220px;
   padding: 2rem 1.5rem;
   box-sizing: border-box;
 }
@@ -2259,6 +2263,65 @@ a:link, a:active, a:visited {
   margin-bottom: 1rem;
   width: 100%;
   position: relative;
+  font-size: 14px;
+  line-height: 1.5;
+}
+#export .select select {
+  border: none;
+}
+#export .select button {
+  color: rgb(55, 53, 47);
+}
+#export .select_label, #export .btns button {
+  color: rgb(141, 141, 141);
+}
+#export .select_form {
+  position: relative;
+}
+#export .select_form > button {
+  display: flex;
+  align-items: center;
+}
+#export .select_form > button svg {
+  color: rgb(141, 141, 141);
+  font-size: 1rem;
+}
+#export .options {
+  display: none;
+}
+#export .options.on {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: calc(100% + 5px);
+  right: 0;
+  background-color: white;
+  border-radius: 3px;
+  box-shadow: rgba(15, 15, 15, 0.05) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 3px 6px, rgba(15, 15, 15, 0.2) 0px 9px 24px;
+  z-index: 10;
+  padding: 6px 5px;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  box-sizing: border-box;
+}
+#export .options.on button {
+  padding: 8px 0;
+  padding-left: 8px;
+  width: 100%;
+  text-align: left;
+  transition: background-color 20ms ease-in 0s;
+  border-radius: 3px;
+}
+#export .options.on button:hover {
+  background-color: #EDECE9;
+}
+#export .options.on:nth-child(1) {
+  width: 120px;
+}
+#export .options.on:nth-child(2) {
+  width: 180px;
 }
 #export .btns {
   display: flex;
@@ -2266,6 +2329,12 @@ a:link, a:active, a:visited {
 }
 #export .btns button {
   margin-left: 1rem;
+  padding: 6px;
+}
+#export .btns button:hover {
+  background-color: rgb(46, 170, 220);
+  color: white;
+  font-weight: 600;
 }
 
 .switchBtn {
@@ -3722,4 +3791,5 @@ a:link, a:active, a:visited {
   height: 100vh;
   display: flex;
   overflow-y: hidden;
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
 }/*# sourceMappingURL=main.css.map */
