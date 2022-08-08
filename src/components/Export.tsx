@@ -69,6 +69,9 @@ const Export =({page,setOpenExport}:ExportProps)=>{
               display:flex;
               align-items:centet;
             }
+            ${content === "No files or images" &&
+            'img, .pageCover, .pageIcon, .media, .pageImgIcon{display:none}'
+          }
           </style>
         </head>
         <body>
