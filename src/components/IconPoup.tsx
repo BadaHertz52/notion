@@ -140,8 +140,13 @@ const IconPopup =({ currentPageId,block,page, editBlock ,editPage,style,  setOpe
   const onChangeImgIcon=(event:React.ChangeEvent<HTMLInputElement>)=>{
     const file = event.target.files?.[0];
     if(file !==undefined){
-      const url = URL.createObjectURL(file);
-      changePageIcon(url, "img");
+      const reader = new FileReader();
+      reader.onload =function(){
+        const result = reader.result as string;
+        changePageIcon(result, "img");
+        console.log("result", result);
+      };
+      reader.readAsDataURL(file);
     }
   };
 

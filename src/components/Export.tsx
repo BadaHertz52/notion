@@ -53,7 +53,7 @@ const Export =({page,setOpenExport}:ExportProps)=>{
         const frame =document.getElementsByClassName("frame")[0];
         const frameHtml = frame.outerHTML;
         const styleTag= [...document.querySelectorAll("style")];
-        const styleCode= styleTag.map((e:Element)=> e.outerHTML);
+        const styleCode= styleTag[1].outerHTML;
         
         const htmlDocument =
         `<!DOCTYPE html>
@@ -64,6 +64,12 @@ const Export =({page,setOpenExport}:ExportProps)=>{
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <title>${page.header.title}</title>
           ${styleCode}
+          <style>
+            body{
+              display:flex;
+              align-items:centet;
+            }
+          </style>
         </head>
         <body>
           ${frameHtml}

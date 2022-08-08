@@ -97,6 +97,7 @@
     }
   }
   #imageIconInput{
-    display: none;
+    position: absolute;
+    top:-99999px;
   }
 }

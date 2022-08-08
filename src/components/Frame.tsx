@@ -1,3 +1,4 @@
+import '../assests/frame.css';
 import React, { CSSProperties, Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Block, BlockCommentType, blockSample,  findBlock, Page } from '../modules/notion';
 import EditableBlock from './EditableBlock';
@@ -5,7 +6,7 @@ import IconPoup, { randomIcon } from './IconPoup';
 import CommandBlock from './CommandBlock';
 import { defaultFontFamily } from './TopBar';
 import Comments, { CommentInput } from './Comments';
-import basicPageCover from '../assests/img/artificial-turf-g6e884a1d4_1920.jpg';
+
 //icon
 import { BiMessageDetail } from 'react-icons/bi';
 import { BsFillEmojiSmileFill} from 'react-icons/bs';
@@ -43,6 +44,7 @@ type FrameProps ={
   fullWidth: boolean, 
   discardEdit:boolean,
 };
+const basicPageCover ='https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assests/img/artificial-turf-g6e884a1d4_1920.jpg';;
 
 const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit}:FrameProps)=>{
   const innerWidth =window.innerWidth; 

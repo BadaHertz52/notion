@@ -12,33 +12,27 @@ type LoaderProps={
 const Loader =({block, page, editBlock ,setOpenLoader ,setLoaderTargetBlock}:LoaderProps)=>{
   const inner =document.getElementById("inner");
   const loaderHtml =document.getElementById("loader");
-  const imgFile ="imgFile";
-  const embedLink ="embedLink";
-  type imgLoaderType =typeof imgFile| typeof embedLink;
   const [loaderStyle, setLoaderStyle]=useState<CSSProperties>();
   const loader=block.type.slice(0, block.type.indexOf("media")-1);
-  const [imgLoader, setImgLoader]=useState<imgLoaderType>(imgFile);
   const onChangeImgFile =(event:ChangeEvent<HTMLInputElement>)=>{
     const file =event.target.files?.[0];
     if(file!==undefined){
-      const url = URL.createObjectURL(file);
-      const editedBlock :Block ={
-        ...block,
-        type:"image media",
-        contents:url,
-        editTime:JSON.stringify(Date.now(),)
+      const reader = new FileReader();
+      reader.onload= function(){
+        const result = reader.result as string;
+        const editedBlock :Block ={
+          ...block,
+          type:"image media",
+          contents:result,
+          editTime:JSON.stringify(Date.now(),)
+        };
+        editBlock(page.id,editedBlock);
+        closeLoader();
       };
-      editBlock(page.id,editedBlock);
-      closeLoader();
+      reader.readAsDataURL(file);
     }else{
       console.log("can't find image file")
     }
-  };
-  const onChangeEmbedLink =(event:ChangeEvent<HTMLInputElement>)=>{
-
-  };
-  const onSubmitEmbedLink =(event:FormEvent<HTMLFormElement>)=>{
-
   };
   function closeLoader(){
     setOpenLoader(false);
@@ -74,7 +68,6 @@ const Loader =({block, page, editBlock ,setOpenLoader ,setLoaderTargetBlock}:Loa
     style={loaderStyle}
   >
     <div className="inner">
-      {loader ==="image" &&
         <div className='imgLoader'>
           <div className='menu'>
             <div className=' innerPadding'>
@@ -87,8 +80,6 @@ const Loader =({block, page, editBlock ,setOpenLoader ,setLoaderTargetBlock}:Loa
             </div>
           </div>
           <div className='loaderForm innerPadding'>
-            {imgLoader === imgFile ?
-            <>
               <label htmlFor="imgLoader">
                 Or upload file
               </label>
@@ -99,24 +90,8 @@ const Loader =({block, page, editBlock ,setOpenLoader ,setLoaderTargetBlock}:Loa
                 id="imgLoader"
                 onChange={onChangeImgFile}
               />
-
-            </>
-          :
-            <form className='embedLink' onSubmit={onSubmitEmbedLink}> 
-              <input
-                type="text"
-                placeholder='Paste the image link....'
-                onChange={onChangeEmbedLink}
-              />
-              <input
-                type="submit"
-                value="Embed image"
-              />
-            </form>
-          }
           </div>
         </div>
-      }
     </div>
   </div>
   )
