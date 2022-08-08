@@ -42,6 +42,24 @@ const Export =({page,setOpenExport}:ExportProps)=>{
       span.classList.toggle("on");
     };
   };
+  function exportHtml(htmlDocument:string){
+
+    const blob = new Blob([htmlDocument], {type:"text/html"});
+    const url = URL.createObjectURL(blob);
+    const exportHtml =document.getElementById("export");
+    const  exportA = document.createElement("a");
+    exportA.href =url;
+    exportA.download =`${page.header.title}.${format}`;
+    exportHtml?.appendChild(exportA);
+    exportA.click();
+    exportA.remove();
+  };
+  function convertPdf(htmlDocument:string){
+    const printWindow = window.open('', '', 'height=400,width=800');
+    printWindow?.document.write(htmlDocument);
+    printWindow?.document.close();
+    printWindow?.print();
+  };
   const onClickExportBtn=()=>{
     const includeSubpagesSlider =document.getElementById("includeSubPagesSlider");
     const createSubPageFolderSlider =document.getElementById("createSubPageFolderSlider");
@@ -50,6 +68,7 @@ const Export =({page,setOpenExport}:ExportProps)=>{
       ){
         const includeSubPage :boolean=  includeSubpagesSlider.classList.contains("on");
         const createSubPageFolder :boolean =createSubPageFolderSlider.classList.contains("on");
+
         const frame =document.getElementsByClassName("frame")[0];
         const frameHtml = frame.outerHTML;
         const styleTag= [...document.querySelectorAll("style")];
@@ -78,15 +97,19 @@ const Export =({page,setOpenExport}:ExportProps)=>{
           ${frameHtml}
         </body>
         </html>`;
-        const blob = new Blob([htmlDocument], {type:"text/html"});
-        const url = URL.createObjectURL(blob);
-        const exportHtml =document.getElementById("export");
-        const  exportA = document.createElement("a");
-        exportA.href =url;
-        exportA.download =`${page.header.title}.${format ==="Markdown"? "md": format}`;
-        exportHtml?.appendChild(exportA);
-        exportA.click();
-      
+
+        switch (format) {
+          case html:
+            exportHtml(htmlDocument);
+            break;
+          case pdf:
+            convertPdf(htmlDocument);
+            break;
+          case markdown:
+            break;
+          default:
+            break;
+        }
       }
   };
   useEffect(()=>{
