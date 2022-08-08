@@ -515,6 +515,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
             </button>
           </div>
       </div>
+      {/* <a href="https://icons8.com/icon/11732/페이지-개요">페이지 개요 icon by Icons8</a> */}
       <div className= "addNewPageBtn">
         <button
           onClick={addNewPage}
