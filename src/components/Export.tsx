@@ -1,7 +1,7 @@
-import React, { ChangeEvent, Dispatch, MouseEvent, SetStateAction, useState } from "react";
-import { BsWhatsapp } from "react-icons/bs";
+import React, { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { Page } from "../modules/notion";
+
 type ExportProps={
   page:Page,
   setOpenExport:Dispatch<SetStateAction<boolean>>,
@@ -50,9 +50,42 @@ const Export =({page,setOpenExport}:ExportProps)=>{
       ){
         const includeSubPage :boolean=  includeSubpagesSlider.classList.contains("on");
         const createSubPageFolder :boolean =createSubPageFolderSlider.classList.contains("on");
-        console.log("onclick export", format,content, includeSubPage, createSubPageFolder);
+        const frame =document.getElementsByClassName("frame")[0];
+        const frameHtml = frame.outerHTML;
+        const styleTag= [...document.querySelectorAll("style")];
+        const styleCode= styleTag.map((e:Element)=> e.outerHTML);
+        
+        const htmlDocument =
+        `<!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8" />
+          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <title>${page.header.title}</title>
+          ${styleCode}
+        </head>
+        <body>
+          ${frameHtml}
+        </body>
+        </html>`;
+        const blob = new Blob([htmlDocument], {type:"text/html"});
+        const url = URL.createObjectURL(blob);
+        const exportHtml =document.getElementById("export");
+        const  exportA = document.createElement("a");
+        exportA.href =url;
+        exportA.download =`${page.header.title}.${format ==="Markdown"? "md": format}`;
+        exportHtml?.appendChild(exportA);
+        exportA.click();
+      
       }
   };
+  useEffect(()=>{
+    const aTags=document.querySelectorAll("a");
+    if(aTags[0]!==undefined){
+      aTags.forEach((a:Element)=> a.remove());
+    }
+  },[])
   return(
     <div 
       id="export"
