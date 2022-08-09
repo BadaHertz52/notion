@@ -1,3 +1,4 @@
+import { NodeHtmlMarkdown } from "node-html-markdown";
 import React, { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { Page } from "../modules/notion";
@@ -42,9 +43,8 @@ const Export =({page,setOpenExport}:ExportProps)=>{
       span.classList.toggle("on");
     };
   };
-  function exportHtml(htmlDocument:string){
-
-    const blob = new Blob([htmlDocument], {type:"text/html"});
+  function exportDocument (text:string, type:string, format:Format){
+    const blob = new Blob([text], {type:type});
     const url = URL.createObjectURL(blob);
     const exportHtml =document.getElementById("export");
     const  exportA = document.createElement("a");
@@ -53,13 +53,14 @@ const Export =({page,setOpenExport}:ExportProps)=>{
     exportHtml?.appendChild(exportA);
     exportA.click();
     exportA.remove();
-  };
+  }
   function convertPdf(htmlDocument:string){
     const printWindow = window.open('', '', 'height=400,width=800');
     printWindow?.document.write(htmlDocument);
     printWindow?.document.close();
     printWindow?.print();
   };
+
   const onClickExportBtn=()=>{
     const includeSubpagesSlider =document.getElementById("includeSubPagesSlider");
     const createSubPageFolderSlider =document.getElementById("createSubPageFolderSlider");
@@ -100,12 +101,14 @@ const Export =({page,setOpenExport}:ExportProps)=>{
 
         switch (format) {
           case html:
-            exportHtml(htmlDocument);
+            exportDocument(htmlDocument, "text/html",format);
             break;
           case pdf:
             convertPdf(htmlDocument);
             break;
           case markdown:
+            const markdownText = NodeHtmlMarkdown.translate(htmlDocument);
+            exportDocument(markdownText,"text/markdown", format);
             break;
           default:
             break;
