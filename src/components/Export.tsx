@@ -117,16 +117,15 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
           </head>
           <body>
             ${frameHtml}
-            ${includeSubPage && page.subPagesId&& getSubPageFrame(page.subPagesId)}
           </body>
           </html>`;
           return html;
         }
         const currentPageFrameHtml = convertHtml(page, frame.outerHTML);
 
-        function getSubPageFrame(subPagesId:string[]){
+        function getSubPageFrameHtml(subPagesId:string[]){
           const subPages = subPagesId.map((id:string)=> findPage(pagesId,pages,id));
-          const subPageFrames= subPages.map((subPage:Page)=>{
+          const subPageFrameHtmls= subPages.map((subPage:Page)=>{
           const frameComponent = 
             <Frame
               page={subPage}
@@ -149,21 +148,19 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
               discardEdit={discardEdit}
             />;
             const subPageFrame = ReactDOMServer.renderToString(frameComponent);
-            return subPageFrame;
-            
+            const subPageHtml =convertHtml(subPage, subPageFrame);
+            return subPageHtml;
             }
           );
-          const subPageHtml = subPageFrames.join("");
-            //console.log("subpaehtml", subPageHtml);
-          return subPageHtml;
+          return subPageFrameHtmls;
         };
-        if(includeSubPage && page.subPagesId!==null){
-          getSubPageFrame(page.subPagesId);
-        }
+
         switch (format) {
           case html:
             exportDocument(currentPageFrameHtml, "text/html",format);
-            
+            if(includeSubPage && page.subPagesId!==null){
+              getSubPageFrameHtml(page.subPagesId).forEach((html)=>exportDocument(html, "text/html", format));
+            }
             break;
           case pdf:
             convertPdf(currentPageFrameHtml);
