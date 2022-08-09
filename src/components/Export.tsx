@@ -1,13 +1,33 @@
 import { NodeHtmlMarkdown } from "node-html-markdown";
 import React, { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
-import { Page } from "../modules/notion";
-
+import { Block, findPage, Page } from "../modules/notion";
+import Frame from "./Frame";
+import ReactDOMServer from 'react-dom/server';
 type ExportProps={
   page:Page,
+  pagesId:string[],
+  pages:Page[],
   setOpenExport:Dispatch<SetStateAction<boolean>>,
+  //for frame
+  userName:string,
+  editBlock :(pageId: string, block: Block) => void,
+  addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
+  changeBlockToPage: (currentPageId: string, block: Block) => void,
+  changePageToBlock:(currentPageId: string, block: Block) => void,
+  changeToSub: (pageId: string, block: Block, newParentBlockId: string) => void,
+  raiseBlock: (pageId: string, block: Block) => void,
+  deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
+  addPage :(newPage:Page ,)=>void,
+  editPage :(pageId:string,newPage:Page ,)=>void,
+  setTargetPageId: React.Dispatch<React.SetStateAction<string>>,
+  setOpenComment: Dispatch<SetStateAction<boolean>>,
+  setCommentBlock: Dispatch<SetStateAction<Block | null>>,
+  smallText: boolean, 
+  fullWidth: boolean, 
+  discardEdit:boolean,
 }
-const Export =({page,setOpenExport}:ExportProps)=>{
+const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,changeBlockToPage,changePageToBlock,changeToSub,raiseBlock,deleteBlock,addPage,editPage,setTargetPageId,setOpenComment,setCommentBlock,smallText,fullWidth,discardEdit}:ExportProps)=>{
   const html ="HTML";
   const pdf="PDF";
   const markdown="Markdown";
@@ -17,6 +37,7 @@ const Export =({page,setOpenExport}:ExportProps)=>{
   type Content = typeof everything| typeof noFileImage;
   const [format, setFormat]=useState<Format>(html);
   const [content, setContent]=useState<Content>(everything);
+  const [subPageFrameString, setSubPageFrameString] =useState<string|null>(null);
   const openOptions=(event:MouseEvent)=>{
     const currentTarget =event.currentTarget;
     const targetOptions =currentTarget.nextElementSibling;

@@ -52,21 +52,29 @@ type EditorContainerProps ={
 
   changeSide: (appear: SideAppear) => void,
   setTargetPageId:Dispatch<SetStateAction<string>>,
+  openComment :boolean,
+  setOpenComment: Dispatch<SetStateAction<boolean>>,
+  commentBlock :Block|null,
+  setCommentBlock:Dispatch<SetStateAction<Block|null>>,
+  smallText:boolean,
+  setSmallText:Dispatch<SetStateAction<boolean>>,
+  
+  fullWidth:boolean,
+  setFullWidth:Dispatch<SetStateAction<boolean>>,
   showAllComments:boolean,
   setShowAllComments:Dispatch<SetStateAction<boolean>>,
   discardEdit:boolean,
   setOpenExport :Dispatch<SetStateAction<boolean>>,
 };
 
-const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isInTrash, makePagePath,changeSide,addBlock,editBlock ,changeBlockToPage, changePageToBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId , showAllComments,  setShowAllComments , discardEdit , setOpenExport}:EditorContainerProps)=>{
+const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isInTrash, makePagePath,changeSide,addBlock,editBlock ,changeBlockToPage, changePageToBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId ,openComment,setOpenComment,commentBlock,setCommentBlock,smallText,setSmallText,fullWidth,setFullWidth,showAllComments,  setShowAllComments , discardEdit , setOpenExport}:EditorContainerProps)=>{
   const dispatch =useDispatch();
   const user =useSelector((state:RootState)=>state.user);
   const changeToSub =(pageId: string, block: Block,  newParentBlockId: string)=> dispatch(change_to_sub(pageId, block, newParentBlockId));
   const raiseBlock =(pageId: string, block: Block) =>dispatch((raise_block(pageId, block)));
   const inner =document.getElementById("inner");
   const [pagePath, setPagePath]=useState<pathType[]|null>(null);
-  const [openComment, setOpenComment]=useState<boolean>(false);
-  const [commentBlock, setCommentBlock]=useState<Block|null>(null);
+
   const [commentsStyle, setCommentsStyle]= useState<CSSProperties>();
   const [menuOpen, setMenuOpen]= useState<boolean>(false);
   const [commandTargetBlock, setCommandTargetBlock]=useState<Block|null>(null);
@@ -75,8 +83,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isIn
     what:null
   });
   const [popupStyle, setPopupStyle]=useState<CSSProperties |undefined>(undefined); 
-  const [smallText, setSmallText]=useState<boolean>(false);
-  const [fullWidth, setFullWidth]=useState<boolean>(false);
+
   const closePopup=(event: MouseEvent)=>{
     if(popup.popup){
       const popupMenu =document.getElementById("popupMenu");

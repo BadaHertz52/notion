@@ -53,6 +53,10 @@ const NotionRouter =()=>{
   const [discard_edit, setDiscardEdit]=useState<boolean>(false);
   const discardEdit =document.getElementById("discardEdit");
   const [openExport ,setOpenExport]=useState<boolean>(false);
+  const [openComment, setOpenComment]=useState<boolean>(false);
+  const [commentBlock, setCommentBlock]=useState<Block|null>(null);
+  const [smallText, setSmallText]=useState<boolean>(false);
+  const [fullWidth, setFullWidth]=useState<boolean>(false);
     //---action.function 
     //--block
   const editBlock = (pageId:string, block:Block)=> {dispatch(edit_block(pageId, block ));
@@ -329,6 +333,14 @@ const NotionRouter =()=>{
                     setShowAllComments={setShowAllComments}
                     discardEdit={discard_edit}
                     setOpenExport={setOpenExport}
+                    openComment={openComment}
+                    setOpenComment={setOpenComment}
+                    commentBlock={commentBlock}
+                    setCommentBlock={setCommentBlock}
+                    smallText={smallText}
+                    setSmallText={setSmallText}
+                    fullWidth={fullWidth}
+                    setFullWidth={setFullWidth}
                     />
                   } 
           />
@@ -400,7 +412,25 @@ const NotionRouter =()=>{
         {openExport && routePage !==null &&
         <Export
           page={routePage}
+          pagesId={pagesId}
+          pages={pages}
           setOpenExport={setOpenExport}
+          addBlock={addBlock}
+          editBlock={editBlock}
+          changeBlockToPage={changeBlockToPage}
+          changePageToBlock={changePageToBlock}
+          changeToSub={changeToSub}
+          raiseBlock={raiseBlock}
+          deleteBlock={deleteBlock}
+          addPage={addPage}
+          editPage={editPage}
+          setTargetPageId={setTargetPageId}
+          setOpenComment={setOpenComment}
+          setCommentBlock ={setCommentBlock}
+          smallText={smallText}
+          fullWidth={fullWidth}
+          discardEdit={discard_edit}
+          userName={user.userName}
         />
         }
     </div>
