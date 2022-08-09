@@ -74,6 +74,7 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
     exportHtml?.appendChild(exportA);
     exportA.click();
     exportA.remove();
+    window.URL.revokeObjectURL(url);
   }
   function convertPdf(htmlDocument:string){
     const printWindow = window.open('', '', 'height=400,width=800');
