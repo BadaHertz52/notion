@@ -13,7 +13,6 @@ const Loader =({block, page, editBlock ,setOpenLoader ,setLoaderTargetBlock}:Loa
   const inner =document.getElementById("inner");
   const loaderHtml =document.getElementById("loader");
   const [loaderStyle, setLoaderStyle]=useState<CSSProperties>();
-  const loader=block.type.slice(0, block.type.indexOf("media")-1);
   const onChangeImgFile =(event:ChangeEvent<HTMLInputElement>)=>{
     const file =event.target.files?.[0];
     if(file!==undefined){
