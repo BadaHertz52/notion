@@ -89,52 +89,93 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
     if( includeSubpagesSlider !==null &&
         createSubPageFolderSlider !==null 
       ){
-        const includeSubPage :boolean=  includeSubpagesSlider.classList.contains("on");
-        const createSubPageFolder :boolean =createSubPageFolderSlider.classList.contains("on");
-
         const frame =document.getElementsByClassName("frame")[0];
-        const frameHtml = frame.outerHTML;
         const styleTag= [...document.querySelectorAll("style")];
         const styleCode= styleTag[1].outerHTML;
-        
-        const htmlDocument =
-        `<!DOCTYPE html>
-        <html lang="en">
-        <head>
-          <meta charset="UTF-8" />
-          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <title>${page.header.title}</title>
-          ${styleCode}
-          <style>
-            body{
-              display:flex;
-              align-items:centet;
+        const includeSubPage :boolean=  includeSubpagesSlider.classList.contains("on");
+        const createSubPageFolder :boolean =createSubPageFolderSlider.classList.contains("on");
+        const convertHtml =(page:Page, frameHtml:string)=>{
+          const html =`
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8" />
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>${page.header.title}</title>
+            ${styleCode}
+            <style>
+              body{
+                display:flex;
+                flex-direction:column;
+                align-items:center;
+              }
+              ${content === "No files or images" &&
+              'img, .pageCover, .pageIcon, .media, .pageImgIcon{display:none}'
             }
-            ${content === "No files or images" &&
-            'img, .pageCover, .pageIcon, .media, .pageImgIcon{display:none}'
-          }
-          </style>
-        </head>
-        <body>
-          ${frameHtml}
-        </body>
-        </html>`;
+            </style>
+          </head>
+          <body>
+            ${frameHtml}
+            ${includeSubPage && page.subPagesId&& getSubPageFrame(page.subPagesId)}
+          </body>
+          </html>`;
+          return html;
+        }
+        const currentPageFrameHtml = convertHtml(page, frame.outerHTML);
 
+        function getSubPageFrame(subPagesId:string[]){
+          const subPages = subPagesId.map((id:string)=> findPage(pagesId,pages,id));
+          const subPageFrames= subPages.map((subPage:Page)=>{
+          const frameComponent = 
+            <Frame
+              page={subPage}
+              userName={userName}
+              firstBlocksId={subPage.firstBlocksId}
+              addBlock={addBlock}
+              editBlock={editBlock}
+              changeBlockToPage={changeBlockToPage}
+              changePageToBlock={changePageToBlock}
+              changeToSub={changeToSub}
+              raiseBlock={raiseBlock}
+              deleteBlock={deleteBlock}
+              addPage={addPage}
+              editPage={editPage}
+              setTargetPageId={setTargetPageId}
+              setOpenComment={setOpenComment}
+              setCommentBlock ={setCommentBlock}
+              smallText={smallText}
+              fullWidth={fullWidth}
+              discardEdit={discardEdit}
+            />;
+            const subPageFrame = ReactDOMServer.renderToString(frameComponent);
+            return subPageFrame;
+            
+            }
+          );
+          const subPageHtml = subPageFrames.join("");
+            //console.log("subpaehtml", subPageHtml);
+          return subPageHtml;
+        };
+        if(includeSubPage && page.subPagesId!==null){
+          getSubPageFrame(page.subPagesId);
+        }
         switch (format) {
           case html:
-            exportDocument(htmlDocument, "text/html",format);
+            exportDocument(currentPageFrameHtml, "text/html",format);
+            
             break;
           case pdf:
-            convertPdf(htmlDocument);
+            convertPdf(currentPageFrameHtml);
             break;
           case markdown:
-            const markdownText = NodeHtmlMarkdown.translate(htmlDocument);
+            const markdownText = NodeHtmlMarkdown.translate(currentPageFrameHtml);
             exportDocument(markdownText,"text/markdown", format);
             break;
           default:
             break;
-        }
+        };
+
       }
   };
   useEffect(()=>{
