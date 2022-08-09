@@ -160,14 +160,22 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
             exportDocument(currentPageFrameHtml, "text/html",format);
             if(includeSubPage && page.subPagesId!==null){
               getSubPageFrameHtml(page.subPagesId).forEach((html)=>exportDocument(html, "text/html", format));
-            }
+            };
             break;
           case pdf:
             convertPdf(currentPageFrameHtml);
+            if(includeSubPage && page.subPagesId!==null){
+              getSubPageFrameHtml(page.subPagesId).forEach((html)=>convertPdf(html));
+            };
             break;
           case markdown:
             const markdownText = NodeHtmlMarkdown.translate(currentPageFrameHtml);
             exportDocument(markdownText,"text/markdown", format);
+            if(includeSubPage && page.subPagesId!==null){
+              getSubPageFrameHtml(page.subPagesId).forEach((html)=>{
+                const subPageMarkdownText = NodeHtmlMarkdown.translate(html);
+                exportDocument(subPageMarkdownText, "text/markdown", format)});
+            };
             break;
           default:
             break;
