@@ -38,6 +38,7 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
   const [format, setFormat]=useState<Format>(html);
   const [content, setContent]=useState<Content>(everything);
   const [subPageFrameString, setSubPageFrameString] =useState<string|null>(null);
+  const exportHtml =document.getElementById("export");
   const openOptions=(event:MouseEvent)=>{
     const currentTarget =event.currentTarget;
     const targetOptions =currentTarget.nextElementSibling;
@@ -64,16 +65,16 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
       span.classList.toggle("on");
     };
   };
-  function exportDocument (text:string, type:string, format:Format){
-    const blob = new Blob([text], {type:type});
+  function exportDocument (targetPageTitle:string,targetHtml:string, type:string, format:Format){
+    const blob = new Blob([targetHtml], {type:type});
     const url = URL.createObjectURL(blob);
-    const exportHtml =document.getElementById("export");
-    const  exportA = document.createElement("a");
-    exportA.href =url;
-    exportA.download =`${page.header.title}.${format}`;
-    exportHtml?.appendChild(exportA);
-    exportA.click();
-    exportA.remove();
+    const  a = document.createElement("a");
+    const extension =format.toLowerCase();
+    a.href =url;
+    a.download =`${targetPageTitle}.${extension}`;
+    exportHtml?.appendChild(a);
+    a.click();
+    a.remove();
     window.URL.revokeObjectURL(url);
   }
   function convertPdf(htmlDocument:string){
