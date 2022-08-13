@@ -135,7 +135,7 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
         const styleCode= styleTag[1].outerHTML;
         const includeSubPage :boolean=  includeSubpagesSlider.classList.contains("on");
         const createSubPageFolder :boolean =createSubPageFolderSlider.classList.contains("on");
-        const convertHtml =(page:Page, frameHtml:string)=>{
+        const convertHtml =(title:string, frameHtml:string)=>{
           const html =`
           <!DOCTYPE html>
           <html lang="en">
@@ -143,7 +143,7 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
             <meta charset="UTF-8" />
             <meta http-equiv="X-UA-Compatible" content="IE=edge" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-            <title>${page.header.title}</title>
+            <title>${title}</title>
             ${styleCode}
             <style>
               body{
@@ -162,8 +162,6 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
           </html>`;
           return html;
         }
-        const currentPageFrameHtml = convertHtml(page, frame.outerHTML);
-
         const currentPageFrameHtml = convertHtml(page.header.title, frame.outerHTML);
         type GetSubPageFrameReturn ={
           element:JSX.Element,
