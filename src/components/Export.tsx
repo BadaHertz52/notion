@@ -151,7 +151,7 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
                 flex-direction:column;
                 align-items:center;
               }
-              ${content === "No files or images" &&
+              ${content === noFileImage &&
               'img, .pageCover, .pageIcon, .media, .pageImgIcon{display:none}'
             }
             </style>
