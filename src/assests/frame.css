@@ -985,4 +985,8 @@ form button svg {
 .newPageFrame .pageContent_inner button svg {
   color: #a3a3a2;
   margin-right: 10px;
+}
+
+.subFrame {
+  width: 100vw;
 }/*# sourceMappingURL=frame.css.map */
