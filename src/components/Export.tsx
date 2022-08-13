@@ -130,7 +130,7 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
     if( includeSubpagesSlider !==null &&
         createSubPageFolderSlider !==null 
       ){
-        const frame =document.getElementsByClassName("frame")[0];
+        const frame =document.getElementsByClassName("frame")[0] as HTMLElement;
         const styleTag= [...document.querySelectorAll("style")];
         const styleCode= styleTag[1].outerHTML;
         const includeSubPage :boolean=  includeSubpagesSlider.classList.contains("on");
@@ -164,43 +164,58 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
         }
         const currentPageFrameHtml = convertHtml(page, frame.outerHTML);
 
-        function getSubPageFrameHtml(subPagesId:string[]){
+        const currentPageFrameHtml = convertHtml(page.header.title, frame.outerHTML);
+        type GetSubPageFrameReturn ={
+          element:JSX.Element,
+          title:string,
+        }
+        function getSubPageFrame(subPagesId:string[]):GetSubPageFrameReturn[]{
           const subPages = subPagesId.map((id:string)=> findPage(pagesId,pages,id));
-          const subPageFrameHtmls= subPages.map((subPage:Page)=>{
-          const frameComponent = 
-            <Frame
-              page={subPage}
-              userName={userName}
-              firstBlocksId={subPage.firstBlocksId}
-              addBlock={addBlock}
-              editBlock={editBlock}
-              changeBlockToPage={changeBlockToPage}
-              changePageToBlock={changePageToBlock}
-              changeToSub={changeToSub}
-              raiseBlock={raiseBlock}
-              deleteBlock={deleteBlock}
-              addPage={addPage}
-              editPage={editPage}
-              setTargetPageId={setTargetPageId}
-              setOpenComment={setOpenComment}
-              setCommentBlock ={setCommentBlock}
-              smallText={smallText}
-              fullWidth={fullWidth}
-              discardEdit={discardEdit}
-            />;
-            const subPageFrame = ReactDOMServer.renderToString(frameComponent);
-            const subPageHtml =convertHtml(subPage, subPageFrame);
-            return subPageHtml;
-            }
-          );
-          return subPageFrameHtmls;
+          const subPageFrames= subPages.map((subPage:Page)=>{
+            const frameComponent = 
+              <Frame
+                page={subPage}
+                userName={userName}
+                firstBlocksId={subPage.firstBlocksId}
+                addBlock={addBlock}
+                editBlock={editBlock}
+                changeBlockToPage={changeBlockToPage}
+                changePageToBlock={changePageToBlock}
+                changeToSub={changeToSub}
+                raiseBlock={raiseBlock}
+                deleteBlock={deleteBlock}
+                addPage={addPage}
+                editPage={editPage}
+                setTargetPageId={setTargetPageId}
+                setOpenComment={setOpenComment}
+                setCommentBlock ={setCommentBlock}
+                smallText={smallText}
+                fullWidth={fullWidth}
+                discardEdit={discardEdit}
+              />;
+              return { element:frameComponent, title:subPage.header.title};
+          });
+          return subPageFrames;
+        };
+        type GetSubPageFrameHtmlReturn ={
+          html:string,
+          title:string
+        }
+        function getSubPageFrameHtml(subPagesId:string[]):GetSubPageFrameHtmlReturn[]{
+            const subPageFrames = getSubPageFrame(subPagesId).map(({element,title}:GetSubPageFrameReturn)=>(
+              {frameHtml:ReactDOMServer.renderToString(element),
+              title:title
+              }));
+            const subPageHtmls = subPageFrames.map(({frameHtml, title}:{frameHtml:string, title:string}) => ({ html:convertHtml(title, frameHtml), title: title}
+            ));
+            return subPageHtmls;
         };
 
         switch (format) {
           case html:
             exportDocument(currentPageFrameHtml, "text/html",format);
             if(includeSubPage && page.subPagesId!==null){
-              getSubPageFrameHtml(page.subPagesId).forEach((html)=>exportDocument(html, "text/html", format));
+              getSubPageFrameHtml(page.subPagesId).forEach(({html, title}:GetSubPageFrameHtmlReturn)=>exportDocument(title,html, "text/html", format));
             };
             break;
           case pdf:
@@ -213,7 +228,7 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
             const markdownText = NodeHtmlMarkdown.translate(currentPageFrameHtml);
             exportDocument(markdownText,"text/markdown", format);
             if(includeSubPage && page.subPagesId!==null){
-              getSubPageFrameHtml(page.subPagesId).forEach((html)=>{
+              getSubPageFrameHtml(page.subPagesId).forEach(({html, title}:GetSubPageFrameHtmlReturn)=>{
                 const subPageMarkdownText = NodeHtmlMarkdown.translate(html);
                 exportDocument(subPageMarkdownText, "text/markdown", format)});
             };
