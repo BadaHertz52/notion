@@ -217,7 +217,7 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
             };
             break;
           case pdf:
-            convertPdf(frame,page);
+            convertPdf(frame,page.header.title);
             //printPdf(currentPageFrameHtml);
             // if(includeSubPage && page.subPagesId!==null){
             //   getSubPageFrameHtml(page.subPagesId).forEach((html)=>printPdf(html));
