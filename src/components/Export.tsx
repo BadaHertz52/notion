@@ -209,6 +209,17 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
             return subPageHtmls;
         };
 
+        function convertSubPageToPdf(subPageId:string[]){
+          const makeFrameElement=(jsx:JSX.Element, title:string)=>{
+            const subFrame = document.createElement("div");
+            subFrame.className="editor subFrame";
+            const subFrmaeHtml = ReactDOMServer.renderToString(jsx);
+            subFrame.innerHTML =subFrmaeHtml;
+            root?.appendChild(subFrame);
+            convertPdf(subFrame,title );
+          };
+          getSubPageFrame(subPageId).forEach(({jsx,title}:GetSubPageFrameReturn)=> makeFrameElement(jsx, title))
+        };
         switch (format) {
           case html:
             exportDocument(page.header.title,currentPageFrameHtml, "text/html",format);
@@ -219,9 +230,10 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
           case pdf:
             convertPdf(frame,page.header.title);
             //printPdf(currentPageFrameHtml);
-            // if(includeSubPage && page.subPagesId!==null){
-            //   getSubPageFrameHtml(page.subPagesId).forEach((html)=>printPdf(html));
-            // };
+            if(includeSubPage && page.subPagesId!==null){
+              //getSubPageFrameHtml(page.subPagesId).forEach((html)=>printPdf(html));
+              convertSubPageToPdf(page.subPagesId);
+            };
             break;
           case markdown:
             const markdownText = NodeHtmlMarkdown.translate(currentPageFrameHtml);
