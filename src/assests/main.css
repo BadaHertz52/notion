@@ -3334,6 +3334,15 @@ a:link, a:active, a:visited {
   display: none;
 }
 
+body {
+  min-width: -webkit-min-content;
+  min-width: -moz-min-content;
+  min-width: min-content;
+  min-height: -webkit-min-content;
+  min-height: -moz-min-content;
+  min-height: min-content;
+}
+
 #inner {
   width: 100vw;
   height: 100vh;
