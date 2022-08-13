@@ -31,6 +31,7 @@ type ExportProps={
   discardEdit:boolean,
 }
 const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,changeBlockToPage,changePageToBlock,changeToSub,raiseBlock,deleteBlock,addPage,editPage,setTargetPageId,setOpenComment,setCommentBlock,smallText,fullWidth,discardEdit}:ExportProps)=>{
+  const root =document.getElementById("root");
   const html ="HTML";
   const pdf="PDF";
   const markdown="Markdown";
@@ -87,9 +88,8 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
     printWindow?.print();
     printWindow?.close();
   };
-  function convertPdf(frame:HTMLElement, page:Page){
+  function convertPdf(frame:HTMLElement, title:string){
     const frameCopy = frame.cloneNode(true);
-    const root =document.getElementById("root");
     const printFrame =document.createElement("div");
     printFrame.id ="printFrame";
     const frameHeight =frame.scrollHeight;
@@ -120,7 +120,7 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
         doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight , "","FAST");
         heightLeft -= pageHeight;
     };
-      doc.save(`${page.header.title}.pdf`);
+      doc.save(`${title}.pdf`);
       printFrame.remove();
     })
   };
