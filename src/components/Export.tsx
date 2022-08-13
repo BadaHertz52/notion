@@ -4,6 +4,9 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import { Block, findPage, Page } from "../modules/notion";
 import Frame from "./Frame";
 import ReactDOMServer from 'react-dom/server';
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+
 type ExportProps={
   page:Page,
   pagesId:string[],
@@ -77,13 +80,50 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
     a.remove();
     window.URL.revokeObjectURL(url);
   }
-  function convertPdf(htmlDocument:string){
+  function printPdf(targetHtml:string){
     const printWindow = window.open('', '', 'height=400,width=800');
-    printWindow?.document.write(htmlDocument);
+    printWindow?.document.write(targetHtml);
     printWindow?.document.close();
     printWindow?.print();
+    printWindow?.close();
   };
+  function convertPdf(frame:HTMLElement, page:Page){
+    const frameCopy = frame.cloneNode(true);
+    const root =document.getElementById("root");
+    const printFrame =document.createElement("div");
+    printFrame.id ="printFrame";
+    const frameHeight =frame.scrollHeight;
+    printFrame.setAttribute("style","position:absolute; left:-99999999px");
+    printFrame.append(frameCopy);
+    root?.append(printFrame);
+    html2canvas(printFrame, {
+      width:window.innerWidth,
+      height:frameHeight,
+      useCORS:true,
+    }).then(function(canvas){
+      const imgData = canvas.toDataURL('image/png');
+      const a = document.createElement("a");
+      a.href = imgData;
+      exportHtml?.append(a);
+      const imgWidth= 210;
+      const pageHeight = imgWidth * 1.414;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width ; 
+      let heightLeft =imgHeight;
+      const doc =new jsPDF("p","mm", "a4");
+      let position =0;
 
+      doc.addImage(imgData, "PNG", 0 , position, imgWidth , imgHeight, "","FAST");
+      heightLeft -=pageHeight;
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight ;
+        doc.addPage();
+        doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight , "","FAST");
+        heightLeft -= pageHeight;
+    };
+      doc.save(`${page.header.title}.pdf`);
+      printFrame.remove();
+    })
+  };
   const onClickExportBtn=()=>{
     const includeSubpagesSlider =document.getElementById("includeSubPagesSlider");
     const createSubPageFolderSlider =document.getElementById("createSubPageFolderSlider");
