@@ -164,7 +164,7 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
         }
         const currentPageFrameHtml = convertHtml(page.header.title, frame.outerHTML);
         type GetSubPageFrameReturn ={
-          element:JSX.Element,
+          jsx:JSX.Element,
           title:string,
         }
         function getSubPageFrame(subPagesId:string[]):GetSubPageFrameReturn[]{
@@ -191,7 +191,7 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
                 fullWidth={fullWidth}
                 discardEdit={discardEdit}
               />;
-              return { element:frameComponent, title:subPage.header.title};
+              return { jsx:frameComponent, title:subPage.header.title};
           });
           return subPageFrames;
         };
@@ -200,8 +200,8 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
           title:string
         }
         function getSubPageFrameHtml(subPagesId:string[]):GetSubPageFrameHtmlReturn[]{
-            const subPageFrames = getSubPageFrame(subPagesId).map(({element,title}:GetSubPageFrameReturn)=>(
-              {frameHtml:ReactDOMServer.renderToString(element),
+            const subPageFrames = getSubPageFrame(subPagesId).map(({jsx,title}:GetSubPageFrameReturn)=>(
+              {frameHtml:ReactDOMServer.renderToString(jsx),
               title:title
               }));
             const subPageHtmls = subPageFrames.map(({frameHtml, title}:{frameHtml:string, title:string}) => ({ html:convertHtml(title, frameHtml), title: title}
