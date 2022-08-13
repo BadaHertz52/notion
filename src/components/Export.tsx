@@ -211,24 +211,25 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
 
         switch (format) {
           case html:
-            exportDocument(currentPageFrameHtml, "text/html",format);
+            exportDocument(page.header.title,currentPageFrameHtml, "text/html",format);
             if(includeSubPage && page.subPagesId!==null){
               getSubPageFrameHtml(page.subPagesId).forEach(({html, title}:GetSubPageFrameHtmlReturn)=>exportDocument(title,html, "text/html", format));
             };
             break;
           case pdf:
-            convertPdf(currentPageFrameHtml);
-            if(includeSubPage && page.subPagesId!==null){
-              getSubPageFrameHtml(page.subPagesId).forEach((html)=>convertPdf(html));
-            };
+            convertPdf(frame,page);
+            //printPdf(currentPageFrameHtml);
+            // if(includeSubPage && page.subPagesId!==null){
+            //   getSubPageFrameHtml(page.subPagesId).forEach((html)=>printPdf(html));
+            // };
             break;
           case markdown:
             const markdownText = NodeHtmlMarkdown.translate(currentPageFrameHtml);
-            exportDocument(markdownText,"text/markdown", format);
+            exportDocument(page.header.title,markdownText,"text/markdown", format);
             if(includeSubPage && page.subPagesId!==null){
               getSubPageFrameHtml(page.subPagesId).forEach(({html, title}:GetSubPageFrameHtmlReturn)=>{
                 const subPageMarkdownText = NodeHtmlMarkdown.translate(html);
-                exportDocument(subPageMarkdownText, "text/markdown", format)});
+                exportDocument(title,subPageMarkdownText, "text/markdown", format)});
             };
             break;
           default:
