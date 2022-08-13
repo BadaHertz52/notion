@@ -682,6 +682,23 @@ const initialState :Notion ={
       ...pageSample.header,
       title:"page page page"
     },
+    blocks:[{
+      id:"img",
+      contents: imgBlockImg,
+      firstBlock:true,
+      subBlocksId:null, 
+      parentBlocksId: null,
+      type: image,
+      iconType:null,
+      icon:  null ,
+      editTime: (Date.parse("2021-5-18-16:00")).toString()
+      ,
+      createTime: (Date.parse("2021-5-18-2:00")).toString(),
+      style :basicBlockStyle,
+      comments: null
+    }],
+    blocksId:["img"],
+    firstBlocksId:["img"],
     editTime: (Date.parse("2021-5-20-21:00")).toString(),
     createTime: (Date.parse("2021-5-20-21:00")).toString(),
     parentsId:['12345']
