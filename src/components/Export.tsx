@@ -122,6 +122,7 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
     };
       doc.save(`${title}.pdf`);
       printFrame.remove();
+      frame.classList.contains("subFrame") && frame.remove();
     })
   };
   const onClickExportBtn=()=>{
