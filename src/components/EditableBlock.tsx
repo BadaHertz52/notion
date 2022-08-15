@@ -74,12 +74,6 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
   height: block.style.height===undefined? "inherit" : block.style.height,
   })
   };
-  const giveFocusToContent =(event:React.MouseEvent)=>{
-  const currentTarget =event.currentTarget as HTMLElement;
-  const contentEditable =currentTarget.getElementsByClassName("contentEditable")[0] as HTMLElement ;
- 
-  contentEditable.focus();
-  };
   const onClickCommentBtn=(block:Block)=>{
     setOpenComment(true); 
     setCommentBlock(block);
@@ -158,7 +152,6 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
               className= "blockContents"
               ref={blockContentsRef}
               style={listStyle(block)}
-              //onMouseOver={giveFocusToContent}
               >
               <div 
                 className='list_marker'
