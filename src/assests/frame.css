@@ -1020,4 +1020,25 @@ form button svg {
 
 .subFrame {
   width: 100vw;
+}
+
+@media screen and (max-width: 767px) {
+  .pageHeader {
+    margin-bottom: 5px;
+  }
+  .pageHeader .pageCover {
+    height: 100px;
+  }
+  .pageHeader_notCover,
+.pageContent {
+    padding-left: 2rem;
+  }
+  .pageHeader .pageTitle,
+.editableBlock,
+.pageHeader .comments {
+    padding-right: 2rem;
+  }
+  .editableBlock {
+    margin-top: 5px;
+  }
 }/*# sourceMappingURL=frame.css.map */
