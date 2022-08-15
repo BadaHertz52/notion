@@ -49,7 +49,6 @@
 div {
   box-sizing: border-box;
   pointer-events: auto;
-  text-overflow: ellipsis;
 }
 div::-webkit-scrollbar {
   background: transparent;
@@ -141,7 +140,6 @@ a:link, a:active, a:visited {
 div {
   box-sizing: border-box;
   pointer-events: auto;
-  text-overflow: ellipsis;
 }
 div::-webkit-scrollbar {
   background: transparent;
@@ -459,7 +457,6 @@ a:link, a:active, a:visited {
 div {
   box-sizing: border-box;
   pointer-events: auto;
-  text-overflow: ellipsis;
 }
 div::-webkit-scrollbar {
   background: transparent;
@@ -991,7 +988,6 @@ form button svg {
   width: 100%;
 }
 .pageHeader .pageTitle input {
-  text-overflow: ellipsis;
   font-weight: bold;
 }
 
