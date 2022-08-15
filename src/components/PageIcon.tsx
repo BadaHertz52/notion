@@ -1,5 +1,4 @@
 import React from 'react';
-import { GrDocumentText } from 'react-icons/gr';
 import { CSSProperties } from 'styled-components';
 import { emojiPath, IconType } from '../modules/notion';
 import  pageDefultImg from '../assests/img/icons8-페이지-개요-100.png'
