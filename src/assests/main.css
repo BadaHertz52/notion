@@ -1472,6 +1472,9 @@ a:link, a:active, a:visited {
   font-size: 14px;
   color: rgb(55, 53, 47);
 }
+.editor .topbar > div {
+  width: 50%;
+}
 .editor .topbar > div:first-child {
   display: flex;
   align-items: center;
@@ -1505,6 +1508,7 @@ a:link, a:active, a:visited {
 }
 .editor .pagePathes {
   display: flex;
+  width: calc(100% - (1rem + 16px));
 }
 .editor .pagePathes a {
   text-align: center;
@@ -1513,6 +1517,9 @@ a:link, a:active, a:visited {
   margin-right: 5px;
 }
 .editor .pagePath {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
   font-size: 14px;
   display: flex;
   margin-right: 3px;
@@ -1533,7 +1540,9 @@ a:link, a:active, a:visited {
   text-align: center;
 }
 .editor .pathTitle {
-  width: 90px;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
   height: 14px;
   margin-left: 5px;
   display: flex;
@@ -1541,13 +1550,19 @@ a:link, a:active, a:visited {
   text-align: center;
 }
 .editor .pathTitle div {
-  width: inherit;
+  width: 100%;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  word-break: keep-all;
 }
 .editor .pageFun {
   position: relative;
+  display: flex;
+  justify-content: flex-end;
+}
+.editor .pageFun > button {
+  margin-left: 10px;
 }
 .editor .pageFun #pageMenu {
   position: absolute;
@@ -1758,6 +1773,11 @@ a:link, a:active, a:visited {
   background-color: #EDECE9;
 }
 
+@media screen and (max-width: 768px) {
+  .editor .pathTitle {
+    min-width: 0;
+  }
+}
 .switchBtn {
   position: relative;
   width: 30px;
@@ -1809,7 +1829,6 @@ a:link, a:active, a:visited {
 div {
   box-sizing: border-box;
   pointer-events: auto;
-  text-overflow: ellipsis;
 }
 div::-webkit-scrollbar {
   background: transparent;
@@ -2021,7 +2040,6 @@ a:link, a:active, a:visited {
 div {
   box-sizing: border-box;
   pointer-events: auto;
-  text-overflow: ellipsis;
 }
 div::-webkit-scrollbar {
   background: transparent;
@@ -2283,7 +2301,6 @@ a:link, a:active, a:visited {
 div {
   box-sizing: border-box;
   pointer-events: auto;
-  text-overflow: ellipsis;
 }
 div::-webkit-scrollbar {
   background: transparent;
@@ -2443,7 +2460,6 @@ a:link, a:active, a:visited {
 div {
   box-sizing: border-box;
   pointer-events: auto;
-  text-overflow: ellipsis;
 }
 div::-webkit-scrollbar {
   background: transparent;
@@ -2941,7 +2957,6 @@ a:link, a:active, a:visited {
 div {
   box-sizing: border-box;
   pointer-events: auto;
-  text-overflow: ellipsis;
 }
 div::-webkit-scrollbar {
   background: transparent;
@@ -3137,7 +3152,6 @@ a:link, a:active, a:visited {
 div {
   box-sizing: border-box;
   pointer-events: auto;
-  text-overflow: ellipsis;
 }
 div::-webkit-scrollbar {
   background: transparent;
