@@ -1302,6 +1302,22 @@ a:link, a:active, a:visited {
 }
 #pageMenu .page_inner {
   display: flex;
+  height: 1rem;
+}
+#pageMenu .page_inner > div {
+  height: inherit;
+}
+#pageMenu .pageIcon {
+  width: 1rem;
+  margin-right: 12px;
+}
+#pageMenu .pageIcon img {
+  width: 100%;
+  height: 100%;
+}
+#pageMenu .pageTitle {
+  line-height: 1rem;
+  text-align: center;
 }
 #pageMenu #new_sub_page {
   width: 100%;

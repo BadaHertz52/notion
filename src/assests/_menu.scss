@@ -138,7 +138,23 @@
     padding: 5px 0;
     &_inner{
       display: flex;
+      height: 1rem;
+      & >div {
+        height: inherit;
+      }
     }
+  }
+  .pageIcon {
+    width: 1rem;
+    margin-right: 12px;
+    img{
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .pageTitle{
+    line-height: 1rem;
+    text-align: center;
   }
   #new_sub_page{
     width: 100%;

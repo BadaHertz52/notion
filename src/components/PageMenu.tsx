@@ -2,6 +2,7 @@ import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } fro
 import { AiOutlinePlus } from 'react-icons/ai';
 import { GrDocumentText } from 'react-icons/gr';
 import {  basicBlockStyle, Block,  listItem, makeNewBlock, Page, pageSample } from '../modules/notion';
+import PageIcon from './PageIcon';
 
 type PageMenuProps ={
   what:"page"|"block",
@@ -74,9 +75,8 @@ const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock,changeBlockToP
       default:
         break;
     }
-
-
   };
+
   const PageButton =({item}:PageButtonProps)=>{
     return(
       <button
@@ -84,15 +84,16 @@ const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock,changeBlockToP
         onClick={()=>onClickToMove(item.id)}
       >
         <div className='page_inner'>
-          <span>
-            {item.icon == null?   
-            < GrDocumentText/>
-            : 
-            item.icon}
-          </span>
-          <span>
-            {item.title}
-          </span>
+          <PageIcon
+            icon={item.icon}
+            iconType={item.iconType}
+            style={undefined}
+          />
+          <div className='pageTitle'>
+            <span>
+                {item.title}
+            </span>
+          </div>
         </div>
       </button>
     )
