@@ -4,8 +4,6 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import { Block, findPage, Page } from "../modules/notion";
 import Frame from "./Frame";
 import ReactDOMServer from 'react-dom/server';
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
 
 type ExportProps={
   page:Page,
@@ -31,7 +29,6 @@ type ExportProps={
   discardEdit:boolean,
 }
 const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,changeBlockToPage,changePageToBlock,changeToSub,raiseBlock,deleteBlock,addPage,editPage,setTargetPageId,setOpenComment,setCommentBlock,smallText,fullWidth,discardEdit}:ExportProps)=>{
-  const root =document.getElementById("root");
   const html ="HTML";
   const pdf="PDF";
   const markdown="Markdown";
@@ -88,42 +85,6 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
     printWindow?.print();
     printWindow?.close();
   };
-  function convertPdf(frame:HTMLElement, title:string){
-    const frameCopy = frame.cloneNode(true);
-    const printFrame =document.createElement("div");
-    printFrame.id ="printFrame";
-    const frameHeight =frame.scrollHeight;
-    printFrame.setAttribute("style","position:absolute; left:-99999999px");
-    printFrame.append(frameCopy);
-    root?.append(printFrame);
-    html2canvas(printFrame, {
-      width:window.innerWidth,
-      height:frameHeight,
-      useCORS:true,
-    }).then(function(canvas){
-      const imgData = canvas.toDataURL('image/png');
-      const a = document.createElement("a");
-      a.href = imgData;
-      exportHtml?.append(a);
-      const imgWidth= 210;
-      const pageHeight = imgWidth * 1.414;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width ; 
-      let heightLeft =imgHeight;
-      const doc =new jsPDF("p","mm", "a4");
-      let position =0;
-
-      doc.addImage(imgData, "PNG", 0 , position, imgWidth , imgHeight, "","FAST");
-      heightLeft -=pageHeight;
-      while (heightLeft >= 0) {
-        position = heightLeft - imgHeight ;
-        doc.addPage();
-        doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight , "","FAST");
-        heightLeft -= pageHeight;
-    };
-      doc.save(`${title}.pdf`);
-      printFrame.remove();
-      frame.classList.contains("subFrame") && frame.remove();
-    })
   };
   const onClickExportBtn=()=>{
     const includeSubpagesSlider =document.getElementById("includeSubPagesSlider");
@@ -210,17 +171,6 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
             return subPageHtmls;
         };
 
-        function convertSubPageToPdf(subPageId:string[]){
-          const makeFrameElement=(jsx:JSX.Element, title:string)=>{
-            const subFrame = document.createElement("div");
-            subFrame.className="editor subFrame";
-            const subFrmaeHtml = ReactDOMServer.renderToString(jsx);
-            subFrame.innerHTML =subFrmaeHtml;
-            root?.appendChild(subFrame);
-            convertPdf(subFrame,title );
-          };
-          getSubPageFrame(subPageId).forEach(({jsx,title}:GetSubPageFrameReturn)=> makeFrameElement(jsx, title))
-        };
         switch (format) {
           case html:
             exportDocument(page.header.title,currentPageFrameHtml, "text/html",format);
@@ -229,11 +179,9 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
             };
             break;
           case pdf:
-            convertPdf(frame,page.header.title);
-            //printPdf(currentPageFrameHtml);
+            printPdf(currentPageFrameHtml);
             if(includeSubPage && page.subPagesId!==null){
-              //getSubPageFrameHtml(page.subPagesId).forEach((html)=>printPdf(html));
-              convertSubPageToPdf(page.subPagesId);
+              convertSubPageFrameIntoHtml(page.subPagesId).forEach(({html,title}:ConvertSubPageFrameIntoHtmlReturn)=>printPdf(html));
             };
             break;
           case markdown:
