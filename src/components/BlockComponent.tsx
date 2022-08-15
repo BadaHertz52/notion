@@ -63,23 +63,22 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
     const targetBlock = findBlock(page, blockId).BLOCK;
     return targetBlock;
   };
-  const editor =document.getElementsByClassName("editor")[0] as HTMLElement ;
 
   const showBlockFn=(event: React.MouseEvent)=>{
     const currentTarget =event.currentTarget as Element;
     const mainBlock= currentTarget.parentElement?.parentElement ;
-    const domReact =mainBlock?.getClientRects()[0];
-    const frameDomRect =document.getElementsByClassName("frame")[0].getClientRects()[0];
-    const editableBlockDomRect =document.getElementsByClassName("editableBlock")[0].getClientRects()[0] ; 
+    const domRect =mainBlock?.getClientRects()[0];
     const blockFn =document.getElementById("blockFn");
     blockFn?.classList.toggle("on");
     blockFn?.classList.contains("on")?
     sessionStorage.setItem("blockFnTargetBlock", JSON.stringify(block))
     :
     sessionStorage.removeItem("blockFnTargetBlock");
-    if(domReact!==undefined){
-      const top =domReact.top +editor.scrollTop ;
-      const left = editableBlockDomRect.x - frameDomRect.x - 45;
+    if(domRect!==undefined){
+      const editor =document.getElementsByClassName("editor")[0];
+      const editorDomRect =editor.getClientRects()[0];
+      const top =domRect.top +editor.scrollTop ;
+      const left = domRect.x - editorDomRect.x - 45;
       const blockFnStyle =`top:${top}px; left:${left}px`;
       blockFn?.setAttribute("style",blockFnStyle);
     }
