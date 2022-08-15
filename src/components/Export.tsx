@@ -126,7 +126,7 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
           </body>
           </html>`;
           return html;
-        }
+        };
         const currentPageFrameHtml = convertHtml(page.header.title, frame.outerHTML);
         type GetSubPageFrameReturn ={
           jsx:JSX.Element,
@@ -160,11 +160,11 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
           });
           return subPageFrames;
         };
-        type GetSubPageFrameHtmlReturn ={
+        type ConvertSubPageFrameIntoHtmlReturn ={
           html:string,
           title:string
         }
-        function getSubPageFrameHtml(subPagesId:string[]):GetSubPageFrameHtmlReturn[]{
+        function convertSubPageFrameIntoHtml(subPagesId:string[]):ConvertSubPageFrameIntoHtmlReturn[]{
             const subPageFrames = getSubPageFrame(subPagesId).map(({jsx,title}:GetSubPageFrameReturn)=>(
               {frameHtml:ReactDOMServer.renderToString(jsx),
               title:title
@@ -178,7 +178,7 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
           case html:
             exportDocument(page.header.title,currentPageFrameHtml, "text/html",format);
             if(includeSubPage && page.subPagesId!==null){
-              getSubPageFrameHtml(page.subPagesId).forEach(({html, title}:GetSubPageFrameHtmlReturn)=>exportDocument(title,html, "text/html", format));
+              convertSubPageFrameIntoHtml(page.subPagesId).forEach(({html, title}:ConvertSubPageFrameIntoHtmlReturn)=>exportDocument(title,html, "text/html", format));
             };
             break;
           case pdf:
@@ -191,7 +191,7 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
             const markdownText = NodeHtmlMarkdown.translate(currentPageFrameHtml);
             exportDocument(page.header.title,markdownText,"text/markdown", format);
             if(includeSubPage && page.subPagesId!==null){
-              getSubPageFrameHtml(page.subPagesId).forEach(({html, title}:GetSubPageFrameHtmlReturn)=>{
+              convertSubPageFrameIntoHtml(page.subPagesId).forEach(({html, title}:ConvertSubPageFrameIntoHtmlReturn)=>{
                 const subPageMarkdownText = NodeHtmlMarkdown.translate(html);
                 exportDocument(title,subPageMarkdownText, "text/markdown", format)});
             };
