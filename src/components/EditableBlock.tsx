@@ -40,13 +40,19 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
     let ratio =1;
     switch (block.type) {
       case "h1":
-        ratio =3;
+        window.innerWidth>= 768?
+          ratio =3:
+          ratio =2 ;
         break;
       case "h2":
-        ratio=2.5;
+        window.innerWidth >= 768?
+        ratio=2.5:
+        ratio =1.5
         break;
       case "h3" :
-        ratio =2; 
+        window.innerWidth >= 768?
+        ratio =2:
+        ratio= 1.2 
         break; 
       default:
         break;
