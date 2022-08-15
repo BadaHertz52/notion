@@ -2,7 +2,7 @@
 
 #trash{
   @include popupMenu;
-  width: 414px;
+  width: 400px;
   min-width: 180px;
   max-width: calc(100vw - 24px);
   min-height: fit-content;
@@ -63,5 +63,11 @@
     margin-top: 10px;
     color:$lightMud;
     text-align: center;
+  }
+}
+
+@media screen and (max-width:767) {
+  #trash{
+    width:  80%;
   }
 }

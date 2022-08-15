@@ -383,7 +383,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
       setTrashStyle({
         position:"absolute",
         top: domRect.top - 100,
-        left: domRect.right,
+        left: window.innerWidth >=768? domRect.right : window.innerWidth * 0.1
       })
     }
   }

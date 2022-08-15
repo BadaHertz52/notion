@@ -3010,7 +3010,7 @@ a:link, a:active, a:visited {
   z-index: 10;
   border-radius: 8px;
   box-shadow: 0px 0px 23px -5px #ababab;
-  width: 414px;
+  width: 400px;
   min-width: 180px;
   max-width: calc(100vw - 24px);
   min-height: -webkit-fit-content;
@@ -3101,6 +3101,11 @@ a:link, a:active, a:visited {
   text-align: center;
 }
 
+@media screen and (max-width: 767) {
+  #trash {
+    width: 80%;
+  }
+}
 .switchBtn {
   position: relative;
   width: 30px;
