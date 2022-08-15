@@ -15,6 +15,7 @@ import { IoArrowRedoOutline } from 'react-icons/io5';
 import { GrDocumentUpload } from 'react-icons/gr';
 import { CSSProperties } from 'styled-components';
 import PageIcon from './PageIcon';
+import { detectRange } from './BlockFn';
 
 type TopBarProps ={
   firstlist:listItem[],
@@ -49,11 +50,19 @@ type TopBarProps ={
 };
 export const defaultFontFamily ='ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"' ;
 const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock, editBlock ,changeBlockToPage ,deleteBlock ,addPage,deletePage, movePageToPage, changeSide ,addFavorites,removeFavorites ,setTargetPageId  , showAllComments, setShowAllComments ,smallText, setSmallText ,fullWidth, setFullWidth ,setOpenExport}:TopBarProps)=>{
+  const inner =document.getElementById("inner");
   const [title, setTitle]= useState<string>("");
   const [openPageMoreFun, setOpenPageMoreFun] =useState<boolean>(false);
   const [openPageMenu, setOpenPageMenu]=useState<boolean>(false);
   const pageInFavorites = favorites?.includes(page.id); 
-
+  inner?.addEventListener("click", function(event:MouseEvent){
+    if(openPageMenu){
+      const pageMenu = document.getElementById("pageMenu");
+      const pageMenuDomRect =pageMenu?.getClientRects()[0]; 
+      const isInnnerMenu =detectRange(event, pageMenuDomRect);
+      !isInnnerMenu && setOpenPageMenu(false);
+    }
+  }) 
   useEffect(()=>{
     if(sideAppear ==="float"){
       setTitle("Lock sideBar open")
