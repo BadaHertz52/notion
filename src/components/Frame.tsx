@@ -72,15 +72,17 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
     
   };
   const headerBottomStyle :CSSProperties ={
-    fontSize: smallText? "32px": "40px"
+    fontSize:smallText? (innerWidth >= 768 ? "32px" : "24px"): ( innerWidth >= 768?  "40px" : "32px" )
   };
+  const size = page.header.iconType=== null? (innerWidth>= 768? 72 : 48) :( innerWidth>= 768? 124: 72);
   const pageIconStyle :CSSProperties={
-    width: page.header.iconType=== null? 78 :124,
-    height: page.header.iconType=== null? 78 : 124,
+    width: size,
+    height: size,
     marginTop: page.header.cover ==null? 0 : (
       page.header.iconType===null?
-      -39:
-      -62
+        (innerWidth >= 768?
+      -39  : - 16):
+      (innerWidth >= 768?  -62 : -16)
     )
   }
   const newPage :Page ={
