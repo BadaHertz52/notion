@@ -71,15 +71,10 @@
     outline: none;
   }
 }
-.h1.block{
-  font : {
-    weight:700;
-  }
-}
-.h2.block{
-  font : {
-    weight:600;
-  }
+.h1 .mainBlock .contentEditable, 
+.h2 .mainBlock .contentEditable,
+.h3 .mainBlock .contentEditable{
+  font-weight: 500;
 }
 
 .text.block{
