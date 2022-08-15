@@ -51,6 +51,17 @@ div {
   pointer-events: auto;
   text-overflow: ellipsis;
 }
+div::-webkit-scrollbar {
+  background: transparent;
+  width: 10px;
+  height: 10px;
+}
+div::-webkit-scrollbar-thumb {
+  background-color: #D3D1CB;
+}
+div::-webkit-scrollbar-track {
+  background-color: #edece9;
+}
 
 .pageLink:hover {
   background-color: #EDECE9;
@@ -131,6 +142,17 @@ div {
   box-sizing: border-box;
   pointer-events: auto;
   text-overflow: ellipsis;
+}
+div::-webkit-scrollbar {
+  background: transparent;
+  width: 10px;
+  height: 10px;
+}
+div::-webkit-scrollbar-thumb {
+  background-color: #D3D1CB;
+}
+div::-webkit-scrollbar-track {
+  background-color: #edece9;
 }
 
 .pageLink:hover {
@@ -440,6 +462,17 @@ div {
   box-sizing: border-box;
   pointer-events: auto;
   text-overflow: ellipsis;
+}
+div::-webkit-scrollbar {
+  background: transparent;
+  width: 10px;
+  height: 10px;
+}
+div::-webkit-scrollbar-thumb {
+  background-color: #D3D1CB;
+}
+div::-webkit-scrollbar-track {
+  background-color: #edece9;
 }
 
 .pageLink:hover {

@@ -178,6 +178,7 @@ div {
   box-sizing: border-box;
   pointer-events: auto;
   text-overflow: ellipsis;
+  @include webkitScroll
 }
 .pageLink {
   &:hover{
