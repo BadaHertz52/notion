@@ -49,6 +49,7 @@
 div {
   box-sizing: border-box;
   pointer-events: auto;
+  text-overflow: ellipsis;
 }
 
 .pageLink:hover {
@@ -129,6 +130,7 @@ a:link, a:active, a:visited {
 div {
   box-sizing: border-box;
   pointer-events: auto;
+  text-overflow: ellipsis;
 }
 
 .pageLink:hover {
@@ -437,6 +439,7 @@ a:link, a:active, a:visited {
 div {
   box-sizing: border-box;
   pointer-events: auto;
+  text-overflow: ellipsis;
 }
 
 .pageLink:hover {
