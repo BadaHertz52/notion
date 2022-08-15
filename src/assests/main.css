@@ -1618,6 +1618,9 @@ a:link, a:active, a:visited {
   font-size: 12px;
   color: rgb(141, 141, 141);
 }
+.editor #pageMenu #new_sub_page {
+  display: none;
+}
 
 .pageFun {
   width: 180PX;
