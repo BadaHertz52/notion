@@ -1,10 +1,9 @@
-import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import React, { Dispatch, SetStateAction,  useRef, useState } from "react";
 import { findPage, Page } from "../modules/notion";
 
 //icon
 import {AiOutlineCheck } from "react-icons/ai";
 import {  BsChevronDown, BsSearch } from "react-icons/bs";
-import { GrDocumentText } from "react-icons/gr";
 import { detectRange } from "./BlockFn";
 import Result, { makeResultType, resultType } from "./Result";
 

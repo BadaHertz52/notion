@@ -1,10 +1,12 @@
 import React from 'react';
 import { GrDocumentText } from 'react-icons/gr';
-import { findPage, Page } from '../modules/notion';
+import { findPage, IconType, Page } from '../modules/notion';
+import PageIcon from './PageIcon';
 export type resultType ={
   id:string,
   title:string,
   icon:string|null,
+  iconType:IconType,
   createTime:string,
   editTime:string,
   path:string |null,
@@ -37,6 +39,7 @@ export function makeResultType (page:Page ,
     id: page.id,
     title: page.header.title,
     icon: page.header.icon,
+    iconType:page.header.iconType,
     createTime: page.createTime,
     editTime: page.editTime,
     path: page.parentsId !==null? makePath(page.parentsId , pagesId, pages ,trashParentPagesId, trashParentPages):null
@@ -47,12 +50,11 @@ const Result =({item}:ResultProps)=>{
     <div 
     className="result"
     >
-      <div className="pageIcon">
-        {item.icon !==null ?
-        item.icon:
-        < GrDocumentText/>
-        }
-      </div>
+      <PageIcon
+        icon={item.icon}
+        iconType={item.iconType}
+        style={undefined}
+      />
       <div>
         <div className="pageTitle">
           {item.title}
