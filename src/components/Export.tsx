@@ -83,8 +83,11 @@ const Export =({page,pagesId,pages,setOpenExport, userName,editBlock,addBlock,ch
     printWindow?.document.write(targetHtml);
     printWindow?.document.close();
     printWindow?.print();
-    printWindow?.close();
-  };
+    if(printWindow!==null){
+      printWindow.onload =function(){
+        printWindow.close();
+      }
+    }
   };
   const onClickExportBtn=()=>{
     const includeSubpagesSlider =document.getElementById("includeSubPagesSlider");
