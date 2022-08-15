@@ -55,6 +55,8 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
   const [openPageMoreFun, setOpenPageMoreFun] =useState<boolean>(false);
   const [openPageMenu, setOpenPageMenu]=useState<boolean>(false);
   const pageInFavorites = favorites?.includes(page.id); 
+  const [pagePathTitleStyle, setPagePathTitleStyle]=useState<CSSProperties|undefined>(undefined);
+
   inner?.addEventListener("click", function(event:MouseEvent){
     if(openPageMenu){
       const pageMenu = document.getElementById("pageMenu");
@@ -69,6 +71,14 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
     }
     if(sideAppear ==="close"){
       setTitle("Float sideBar ")
+    }
+    if(pagePath!==null){
+      const pagePathesWidth = (window.innerWidth - 26)* 0.5 - (16*2 +14) ;
+      const width =pagePathesWidth * (1/pagePath.length);
+      setPagePathTitleStyle({
+        width:"fit-content",
+        maxWidth: `${width}px`
+      })
     }
   },[]);
   const onClickSideBarBtn =(event:React.MouseEvent)=>{
@@ -224,7 +234,9 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
                       style={undefined}
                     />
                   </div>
-                  <div className='pathTitle'>
+                  <div className='pathTitle'
+                  style={pagePathTitleStyle}
+                  >
                     <div>{path.title}</div>
                   </div>
                 </a>
