@@ -163,7 +163,24 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
       });
       sessionStorage.removeItem("popupStyle")
     }
-  },[popup])
+  },[popup]);
+  useEffect(()=>{
+    const innerHeight =window.innerHeight;
+    const inner =document.getElementById("inner");
+    if(menuOpen){
+      if(inner !==null){
+        if(inner.offsetHeight > innerHeight){
+          inner.setAttribute("style","overflow-y:scroll")
+        }else{
+          inner.setAttribute("style","overflow-y:initial")
+        }
+      }
+    }else{
+      if(inner !==null){
+        inner.setAttribute("style", "overflow-y:initial");
+      }
+    }
+  },[menuOpen])
   return (
   <>
     <div 
