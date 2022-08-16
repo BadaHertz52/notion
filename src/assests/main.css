@@ -89,14 +89,6 @@ a:link, a:active, a:visited {
   color: inherit;
 }
 
-.allComments {
-  transform: translateX(500PX);
-}
-
-.allComments.on {
-  transform: translateX(0);
-}
-
 #allComments {
   position: absolute;
   top: 0;
@@ -108,9 +100,9 @@ a:link, a:active, a:visited {
   flex-shrink: 0;
   z-index: 100;
   border-left: 1px solid rgba(15, 15, 15, 0.1);
-  transition: transform 3000ms ease;
-  width: 480px;
+  transition: transform 2500ms ease;
   height: 100vh;
+  width: 385px;
   pointer-events: none;
 }
 #allComments .pageFun {
@@ -127,13 +119,25 @@ a:link, a:active, a:visited {
   justify-content: space-between;
   padding: 0 5%;
   font-size: 13px;
+  box-sizing: border-box;
 }
 #allComments .allComments_header span {
   font-weight: 600;
 }
 #allComments .comments {
+  width: 100%;
   position: relative;
   pointer-events: auto;
+}
+#allComments .comments_comments {
+  width: inherit;
+}
+#allComments .comment_header .information, #allComments .comment_header .tool {
+  max-width: 50%;
+}
+#allComments .comment_header .information {
+  flex-shrink: 1;
+  flex-grow: 1;
 }
 #allComments .commentsTypeBtn {
   pointer-events: auto;
@@ -189,6 +193,12 @@ a:link, a:active, a:visited {
   background-color: rgba(55, 53, 47, 0.03);
 }
 
+@media screen and (max-width: 385px) {
+  #allComments {
+    width: 100%;
+    border-left: none;
+  }
+}
 .switchBtn {
   position: relative;
   width: 30px;
@@ -617,6 +627,13 @@ a:link, a:active, a:visited {
   font-size: 14px;
 }
 
+.comment,
+.main_comment,
+.comment_comment,
+.commentBlock {
+  width: inherit;
+}
+
 .blockId_comments .comments {
   display: none;
 }
@@ -749,6 +766,7 @@ a:link, a:active, a:visited {
   font-size: 14px;
 }
 .commentBlock .comment_header {
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -786,6 +804,9 @@ a:link, a:active, a:visited {
   height: 20px;
 }
 .commentBlock .comment_header .tool button {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
   color: #a3a3a2;
   height: 100%;
   box-sizing: border-box;
@@ -1413,10 +1434,10 @@ a:link, a:active, a:visited {
 }
 
 .editor {
+  width: 100vw;
   flex-grow: 1;
   flex-shrink: 1;
   height: 100%;
-  overflow-y: scroll;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1434,6 +1455,7 @@ a:link, a:active, a:visited {
   background-color: #edece9;
 }
 .editor .isInTrash {
+  z-index: 20;
   position: absolute;
   align-items: center;
   justify-items: center;
@@ -1471,11 +1493,12 @@ a:link, a:active, a:visited {
   align-items: center;
   font-size: 14px;
   color: rgb(55, 53, 47);
+  z-index: 100;
 }
 .editor .topbar > div {
   width: 50%;
 }
-.editor .topbar > div:first-child {
+.editor .topbar .topbar_left {
   display: flex;
   align-items: center;
 }
@@ -1517,9 +1540,7 @@ a:link, a:active, a:visited {
   margin-right: 5px;
 }
 .editor .pagePath {
-  width: -webkit-fit-content;
-  width: -moz-fit-content;
-  width: fit-content;
+  width: inherit;
   font-size: 14px;
   display: flex;
   margin-right: 3px;
@@ -1530,6 +1551,9 @@ a:link, a:active, a:visited {
 }
 .editor .pathSlash {
   margin-right: 3px;
+}
+.editor .pageLink {
+  width: 100%;
 }
 .editor .pageLink a {
   display: flex;
@@ -3101,9 +3125,10 @@ a:link, a:active, a:visited {
   text-align: center;
 }
 
-@media screen and (max-width: 767) {
+@media screen and (max-width: 767px) {
   #trash {
-    width: 80%;
+    width: 60%;
+    left: 20%;
   }
 }
 .switchBtn {
