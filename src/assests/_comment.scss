@@ -9,6 +9,12 @@
     font-size: 14px;
   }
 }
+.comment,
+.main_comment,
+.comment_comment,
+.commentBlock {
+  width: inherit;
+}
 .blockId_comments{
   .comments{
     display: none;
@@ -119,6 +125,7 @@
     }
 
   .comment_header {
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -154,6 +161,7 @@
       border-radius: 2px;
       height: 20px;
       button{
+        width: fit-content;
         color:$itemSvg;
         height:100% ;
         box-sizing: border-box;

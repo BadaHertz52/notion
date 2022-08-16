@@ -1,14 +1,9 @@
 @import './common';
-.allComments {
-  transform:translateX(500PX);
-}
-.allComments.on{
-  transform: translateX(0);
-}
+
 #allComments{
   position: absolute;
   top:0;
-  right:0;
+  right: 0;
   display: flex;
   padding-top:45px;
   flex-direction: column;
@@ -16,9 +11,9 @@
   flex-shrink: 0;
   z-index: 100;
   border-left: 1px solid rgba(15 ,15,15,0.1);
-  transition: transform 3000ms ease;
-  width: 480px;
+  transition: transform 2500ms ease;
   height: 100vh;
+  width: 385px;
   pointer-events: none;
   .pageFun {
     height: 45px;
@@ -34,13 +29,27 @@
     justify-content: space-between;
     padding:0 5%;
     font-size: 13px;
+    box-sizing: border-box;
     span{
       font-weight: 600;
     }
   }
   .comments{
+    width: 100%;
     position: relative;
     pointer-events: auto;
+  }
+  .comments_comments {
+    width: inherit;
+  }
+  .comment_header{
+    .information, .tool{
+      max-width: 50%;
+    }
+    .information{
+      flex-shrink: 1;
+      flex-grow: 1;
+    }
   }
   .commentsTypeBtn {
     pointer-events: auto;
@@ -79,5 +88,12 @@
     &:hover{
       background-color: rgba(55, 53, 47, 0.03);
     }
+  }
+}
+
+@media screen and (max-width:385px) {
+  #allComments{
+    width: 100%;
+    border-left: none;
   }
 }

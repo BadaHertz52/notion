@@ -121,7 +121,7 @@
     }
   }
   .pagePath {
-    width: fit-content;
+    width: inherit;
     font-size: 14px;
     display: flex;
     margin-right: 3px;
@@ -129,11 +129,14 @@
       width:14px;
       height: 14px;
     }
+
   }
   .pathSlash{
     margin-right: 3px;
   }
-
+  .pageLink{
+    width:100%;
+  }
   .pageLink a{
     display: flex;
 
