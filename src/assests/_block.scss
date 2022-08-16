@@ -71,6 +71,10 @@
     outline: none;
   }
 }
+.contentEditable:empty::after{
+  content: attr(placeholder);
+  color: $mud;
+}
 .h1 .mainBlock .contentEditable, 
 .h2 .mainBlock .contentEditable,
 .h3 .mainBlock .contentEditable{
@@ -196,10 +200,6 @@
   &:focus{
     outline: none
   }
-}
-.contentEditable:focus:empty::after{
-  content: attr(placeholder);
-  color: $mud;
 }
 .contents.commentBtn {
   color:inherit;

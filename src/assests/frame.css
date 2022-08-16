@@ -250,6 +250,11 @@ a:link, a:active, a:visited {
   outline: none;
 }
 
+.contentEditable:empty::after {
+  content: attr(placeholder);
+  color: #B9B8B6;
+}
+
 .h1 .mainBlock .contentEditable,
 .h2 .mainBlock .contentEditable,
 .h3 .mainBlock .contentEditable {
@@ -376,11 +381,6 @@ a:link, a:active, a:visited {
 }
 .contents input:focus {
   outline: none;
-}
-
-.contentEditable:focus:empty::after {
-  content: attr(placeholder);
-  color: #B9B8B6;
 }
 
 .contents.commentBtn {
