@@ -66,7 +66,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
 
   const showBlockFn=(event: React.MouseEvent)=>{
     const currentTarget =event.currentTarget as Element;
-    const mainBlock= currentTarget.parentElement?.parentElement ;
+    const mainBlock= currentTarget.parentElement?.parentElement?.parentElement ;
     const domRect =mainBlock?.getClientRects()[0];
     const blockFn =document.getElementById("blockFn");
     blockFn?.classList.toggle("on");
@@ -249,13 +249,13 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
     <div
       onClick={onClickBlockContents}
       className ={`${block.type}_blockComponent`}
+      onMouseOver={showBlockFn}
     >
       {!blockComments ?
       ( block.type==="page"?
         <button 
           className="contents pageTitle"
           id={`${block.id}_contents`}
-          onMouseOver={showBlockFn}
         >
           <BlockContentEditable/>
         </button>
@@ -288,7 +288,6 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
               pageId={page.id}
               block={block}
               editBlock={editBlock}
-              showBlockFn={showBlockFn}
             />
             }
           </>
@@ -297,7 +296,6 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
         <div 
           id={`${block.id}_contents`}
           className="contents"
-          onMouseOver={showBlockFn}
         >
           <BlockContentEditable/>
         </div>
@@ -307,7 +305,6 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
       <button 
         id={`${block.id}_contents`}
         className="contents commentBtn"
-        onMouseOver={showBlockFn}
         onClick={()=>{!command.boolean && onClickCommentBtn(block)}}
       >
         <BlockContentEditable/>

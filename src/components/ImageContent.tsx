@@ -6,9 +6,8 @@ type ImageContentProps={
   pageId:string,
   block:Block,
   editBlock:(pageId:string, block:Block)=>void,
-  showBlockFn:(event: React.MouseEvent) => void,
 }
-const ImageContent =({pageId,block,editBlock , showBlockFn}:ImageContentProps)=>{
+const ImageContent =({pageId,block,editBlock}:ImageContentProps)=>{
   const pageContent =document.getElementsByClassName('pageContent')[0] as HTMLElement;
   const previousClientX = useRef(0);
   const previousClientY = useRef(0);
@@ -78,7 +77,6 @@ const ImageContent =({pageId,block,editBlock , showBlockFn}:ImageContentProps)=>
     <div 
       className="imageContent"
       id={`${block.id}_contents`}
-      onMouseOver={showBlockFn}
       style={imageStyle}
       > 
       <button 
