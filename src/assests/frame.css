@@ -524,6 +524,7 @@ a:link, a:active, a:visited {
 .comment,
 .main_comment,
 .comment_comment,
+.comments_comments,
 .commentBlock {
   width: inherit;
 }
@@ -575,6 +576,7 @@ a:link, a:active, a:visited {
   padding: 5%;
   border-top: 1px solid #d6d6d6;
   z-index: 10;
+  box-sizing: border-box;
 }
 
 .comment:first-child {

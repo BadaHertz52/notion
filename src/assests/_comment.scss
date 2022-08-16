@@ -12,6 +12,7 @@
 .comment,
 .main_comment,
 .comment_comment,
+.comments_comments,
 .commentBlock {
   width: inherit;
 }
@@ -60,11 +61,12 @@
       }
     }
   }
-  .comment {
-    padding: 5%;
-    border-top: 1px solid $lightMud;
-    z-index: 10;
-  }
+.comment {
+  padding: 5%;
+  border-top: 1px solid $lightMud;
+  z-index: 10;
+  box-sizing: border-box;
+}
   .comment:first-child{
     border-top: none;
   }
