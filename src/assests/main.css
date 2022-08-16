@@ -1493,7 +1493,7 @@ a:link, a:active, a:visited {
   align-items: center;
   font-size: 14px;
   color: rgb(55, 53, 47);
-  z-index: 100;
+  z-index: 5;
 }
 .editor .topbar > div {
   width: 50%;
