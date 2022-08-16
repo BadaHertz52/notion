@@ -55,32 +55,7 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
   const [openPageMoreFun, setOpenPageMoreFun] =useState<boolean>(false);
   const [openPageMenu, setOpenPageMenu]=useState<boolean>(false);
   const pageInFavorites = favorites?.includes(page.id); 
-  const [pagePathTitleStyle, setPagePathTitleStyle]=useState<CSSProperties|undefined>(undefined);
 
-  inner?.addEventListener("click", function(event:MouseEvent){
-    if(openPageMenu){
-      const pageMenu = document.getElementById("pageMenu");
-      const pageMenuDomRect =pageMenu?.getClientRects()[0]; 
-      const isInnnerMenu =detectRange(event, pageMenuDomRect);
-      !isInnnerMenu && setOpenPageMenu(false);
-    }
-  }) 
-  useEffect(()=>{
-    if(sideAppear ==="float"){
-      setTitle("Lock sideBar open")
-    }
-    if(sideAppear ==="close"){
-      setTitle("Float sideBar ")
-    }
-    if(pagePath!==null){
-      const pagePathesWidth = (window.innerWidth - 26)* 0.5 - (16*2 +14) ;
-      const width =pagePathesWidth * (1/pagePath.length);
-      setPagePathTitleStyle({
-        width:"fit-content",
-        maxWidth: `${width}px`
-      })
-    }
-  },[]);
   const onClickSideBarBtn =(event:React.MouseEvent)=>{
     const target =event.target as HTMLElement;
     const targetTag =target.tagName.toLowerCase();
@@ -88,7 +63,6 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
     if(showAllComments && width <1000 ){
       setShowAllComments(false);
     };
-    
     switch (targetTag) {
       case "button":
         target.id ==="sideBarBtn" && changeSide("lock");
@@ -169,11 +143,29 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
     setOpenPageMoreFun(false);
     setOpenPageMenu(!openPageMenu);
   };
+
+  useEffect(()=>{
+    if(sideAppear ==="float"){
+      setTitle("Lock sideBar open")
+    }
+    if(sideAppear ==="close"){
+      setTitle("Float sideBar ")
+    }
+  },[]);
+
+  inner?.addEventListener("click", function(event:MouseEvent){
+    if(openPageMenu){
+      const pageMenu = document.getElementById("pageMenu");
+      const pageMenuDomRect =pageMenu?.getClientRects()[0]; 
+      const isInnnerMenu =detectRange(event, pageMenuDomRect);
+      !isInnnerMenu && setOpenPageMenu(false);
+    }
+  });
   return(
     <div 
       className="topbar"
     >
-      <div>
+      <div className='topbar_left'>
         {sideAppear !=="lock" &&
           <button 
             id="sideBarBtn"
@@ -235,7 +227,6 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
                     />
                   </div>
                   <div className='pathTitle'
-                  style={pagePathTitleStyle}
                   >
                     <div>{path.title}</div>
                   </div>
