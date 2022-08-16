@@ -63,10 +63,11 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
   const [loaderTargetBlock, setLoaderTargetBlock]=useState<Block|null>(null);
   const [iconStyle, setIconStyle]=useState<CSSProperties|undefined>(undefined);
   const [commandBlockPositon, setCBPositon]=useState<CSSProperties>();
+  const maxWidth = innerWidth -60
   const frameInnerStyle:CSSProperties={
     fontFamily:defaultFontFamily ,
     fontSize: smallText? "14px": "16px",
-    width: innerWidth >900?  fullWidth? "100%":'900px' : "100%",
+    width: fullWidth?  `${maxWidth}px`: ( innerWidth>900?  '900px' : "75%") ,
   };
   const headerStyle: CSSProperties ={
     marginTop: page.header.cover !==null? "10px": "30px" ,
