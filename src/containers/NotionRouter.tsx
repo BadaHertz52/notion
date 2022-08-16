@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {  Route, Routes, useNavigate} from 'react-router-dom';
+import { CSSProperties } from 'styled-components';
 import AllComments from '../components/AllComments';
 import Export from '../components/Export';
 import QuickFindBord from '../components/QuickFindBord';
@@ -57,6 +58,8 @@ const NotionRouter =()=>{
   const [commentBlock, setCommentBlock]=useState<Block|null>(null);
   const [smallText, setSmallText]=useState<boolean>(false);
   const [fullWidth, setFullWidth]=useState<boolean>(false);
+  const [allCommentStyle, setAllCommentStyle]=useState<CSSProperties>({transform:"translateX(0)"});
+
     //---action.function 
     //--block
   const editBlock = (pageId:string, block:Block)=> {dispatch(edit_block(pageId, block ));
@@ -331,6 +334,7 @@ const NotionRouter =()=>{
 
                     showAllComments={showAllComments}
                     setShowAllComments={setShowAllComments}
+                    setAllCommentsStyle={setAllCommentStyle}
                     discardEdit={discard_edit}
                     setOpenExport={setOpenExport}
                     openComment={openComment}
@@ -362,7 +366,7 @@ const NotionRouter =()=>{
         </div>
       }
        {/* ----editor */}
-      {routePage !==null &&
+      {routePage !==null && showAllComments &&
         <AllComments
           page={routePage}
           userName={user.userName}
@@ -371,6 +375,7 @@ const NotionRouter =()=>{
           showAllComments={showAllComments}
           setShowAllComments={setShowAllComments}
           discardEdit={discard_edit}
+          style={allCommentStyle}
         />
       }
       {openQF &&

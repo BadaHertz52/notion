@@ -12,47 +12,18 @@ type AllCommentsProps={
   showAllComments:boolean,
   setShowAllComments:Dispatch<SetStateAction<boolean>>,
   discardEdit:boolean,
+  style:CSSProperties,
 }
-const AllComments=({page, userName, editBlock, showAllComments, setShowAllComments ,discardEdit}:AllCommentsProps)=>{
+const AllComments=({page, userName, editBlock, showAllComments, setShowAllComments ,discardEdit , style}:AllCommentsProps)=>{
   const pageId= page.id;
   const [targetCommentsBlocks, setTargetCommentsBlocks] =useState<Block[]|null>(null);
   const open ="open";
   const resolve="resolve" ;
   const [select, setSelect]=useState<typeof open| typeof resolve>(open);
 
-  const offStyle :CSSProperties ={transform:"translateX(0)"};
-  const [style, setStyle]=useState<CSSProperties>(offStyle);
+  const [allCommentsStyle, setAllCommentsStyle]=useState<CSSProperties>({transform:"translateX(0)"});
 
-  const changeStyle=()=>{
-    const innerWidth =window.innerWidth;
-    const topbar_left =document.querySelector(".topbar_left");
-    const pagePath =document.querySelectorAll(".pagePath");
-    const changePathWidth=(topbarLeftWidth:number)=>{
-      const width :number =((topbarLeftWidth -32) / pagePath.length);
-      pagePath.forEach((e:Element)=> e.setAttribute("style",`width:${width}px`));
-    };
-    if(showAllComments){
-      setStyle(offStyle);
-      if(innerWidth >= 385){
-        const newWidth =innerWidth -(12+385+5);
-        topbar_left?.setAttribute("style", `width: ${newWidth}px`);
-        changePathWidth(newWidth);
-        
-      }else{
-        topbar_left!==null &&
-        changePathWidth(topbar_left.clientWidth);
-      }
-    }else{
-      setStyle({transform:`translateX(${innerWidth}px)`});
-      topbar_left?.setAttribute("style", "width:50%");
-      changePathWidth( window.innerWidth -26);
-    }
-  }
-  useEffect(()=>{ 
-    changeStyle();
-  },[showAllComments]);
-  
-  window.onresize= changeStyle;
+
   const openSelect =(event:React.MouseEvent)=>{
     const target =event.currentTarget;
     const typesDoc = target.parentElement;
@@ -72,11 +43,12 @@ const AllComments=({page, userName, editBlock, showAllComments, setShowAllCommen
       const allComments =document.querySelector(".allComments.on");
       allComments?.setAttribute("style", "transform:translateX(0)")
     }
-  },[showAllComments])
+  },[showAllComments]);
+
   return(
   <div 
     id="allComments"
-    style ={style}
+    style ={allCommentsStyle}
   >
     <div className='inner'>
       <div className='allComments_header'>

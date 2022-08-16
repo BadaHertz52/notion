@@ -42,6 +42,7 @@ type TopBarProps ={
   setTargetPageId:Dispatch<SetStateAction<string>>,
   showAllComments:boolean,
   setShowAllComments:Dispatch<SetStateAction<boolean>>,
+  setAllCommentsStyle:Dispatch<SetStateAction<CSSProperties>>,
   smallText:boolean,
   setSmallText:Dispatch<SetStateAction<boolean>>,
   fullWidth:boolean,
@@ -49,7 +50,7 @@ type TopBarProps ={
   setOpenExport :Dispatch<SetStateAction<boolean>>,
 };
 export const defaultFontFamily ='ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"' ;
-const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock, editBlock ,changeBlockToPage ,deleteBlock ,addPage,deletePage, movePageToPage, changeSide ,addFavorites,removeFavorites ,setTargetPageId  , showAllComments, setShowAllComments ,smallText, setSmallText ,fullWidth, setFullWidth ,setOpenExport}:TopBarProps)=>{
+const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock, editBlock ,changeBlockToPage ,deleteBlock ,addPage,deletePage, movePageToPage, changeSide ,addFavorites,removeFavorites ,setTargetPageId  , showAllComments, setShowAllComments ,setAllCommentsStyle , smallText, setSmallText ,fullWidth, setFullWidth ,setOpenExport}:TopBarProps)=>{
   const inner =document.getElementById("inner");
   const [title, setTitle]= useState<string>("");
   const [openPageMoreFun, setOpenPageMoreFun] =useState<boolean>(false);
@@ -90,6 +91,7 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
   }
   const onClickViewAllComments=()=>{
     setShowAllComments(!showAllComments)
+    //changeAllCommentAndTopBarStyle()
   };
   const defaultStyle ="default";
   const serif ="serif"; 
@@ -143,6 +145,36 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
     setOpenPageMoreFun(false);
     setOpenPageMenu(!openPageMenu);
   };
+  
+  function changeAllCommentAndTopBarStyle(){
+    const innerWidth =window.innerWidth;
+    const topbar_left =document.querySelector(".topbar_left");
+    const pageFun =document.querySelector(".pageFun");
+    const pagePath =document.querySelectorAll(".pagePath");
+    const changePathWidth=(topbarLeftWidth:number)=>{
+      const width :number =((topbarLeftWidth -32) / pagePath.length);
+      pagePath.forEach((e:Element)=> e.setAttribute("style",`max-width:${width}px`));
+    };
+    if(showAllComments){
+      setAllCommentsStyle({transform:"translateX(0)"});
+      if(innerWidth >= 385){
+        const newWidth =innerWidth -(12+385+5);
+        topbar_left?.setAttribute("style", `width: ${newWidth}px`);
+        pageFun?.setAttribute("style", "width:385px");
+        changePathWidth(newWidth);
+      }else{
+        changePathWidth(innerWidth * 0.5);
+        topbar_left?.setAttribute("style", "width:50%");
+        pageFun?.setAttribute("style", "width:50%");
+      }
+    }else{
+      setAllCommentsStyle({transform:`translateX(${innerWidth}px)`});
+      topbar_left?.setAttribute("style", "width:50%");
+      changePathWidth( (innerWidth * 0.5) -26);
+    };
+    console.log("show", showAllComments, innerWidth)
+  }
+  window.onresize= changeAllCommentAndTopBarStyle;
 
   useEffect(()=>{
     if(sideAppear ==="float"){
