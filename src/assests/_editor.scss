@@ -123,7 +123,7 @@
     }
   }
   .pagePath {
-    width: inherit;
+    width: fit-content;
     font-size: 14px;
     display: flex;
     margin-right: 3px;
@@ -167,8 +167,12 @@
     position: relative;
     display: flex;
     justify-content:flex-end;
+    padding-right: 10px;
     & >button {
       margin-left: 10px;
+    }
+    & >button:first-child{
+      margin-left: 0;
     }
     #pageMenu {
       position:absolute;

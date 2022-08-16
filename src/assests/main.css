@@ -1540,7 +1540,9 @@ a:link, a:active, a:visited {
   margin-right: 5px;
 }
 .editor .pagePath {
-  width: inherit;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
   font-size: 14px;
   display: flex;
   margin-right: 3px;
@@ -1584,9 +1586,13 @@ a:link, a:active, a:visited {
   position: relative;
   display: flex;
   justify-content: flex-end;
+  padding-right: 10px;
 }
 .editor .pageFun > button {
   margin-left: 10px;
+}
+.editor .pageFun > button:first-child {
+  margin-left: 0;
 }
 .editor .pageFun #pageMenu {
   position: absolute;
