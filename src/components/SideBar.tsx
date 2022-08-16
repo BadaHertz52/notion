@@ -376,17 +376,21 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
       })
     }
   };
-  const onClickTrashBtn=(event:React.MouseEvent)=>{
-    setOpenTrash(true);
+  const changeTrashStyle =()=>{
     if(trashBtn.current){
       const domRect =trashBtn.current.getClientRects()[0];
       setTrashStyle({
         position:"absolute",
         top: domRect.top - 100,
-        left: window.innerWidth >=768? domRect.right : window.innerWidth * 0.1
+        left: window.innerWidth >=768? domRect.right + 50 : window.innerWidth * 0.2
       })
     }
-  }
+  };
+  window.onresize =changeTrashStyle;
+  const onClickTrashBtn=(event:React.MouseEvent)=>{
+    setOpenTrash(true);
+    changeTrashStyle();
+  };
   const onMouseOutSideBar =()=>{
     sideAppear ==="float" && changeSide("floatHide"); 
   };
@@ -396,7 +400,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
       const page =findPage(pagesId,pages, targetItem.id);
       setTargetPage(page);
     }
-  },[targetItem])
+  },[targetItem]);
   return(
   <div
   onMouseLeave={onMouseOutSideBar}
