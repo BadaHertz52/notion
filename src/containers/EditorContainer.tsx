@@ -109,25 +109,35 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isIn
   };
   inner?.addEventListener("click",(event)=>closePopup(event));
 
-  useEffect(()=>{
+  function changeCommentStyle(){
     if(commentBlock !==null){
       const blockDoc = document.getElementById(`block_${commentBlock.id}`);
       const editor =document.getElementsByClassName("editor")[0] as HTMLElement;
+      const editableBlock =document.getElementsByClassName("editableBlock")[0];
+      const editableBlockDomRect= editableBlock.getClientRects()[0];
       const position =blockDoc?.getClientRects()[0]
-      if(position !== undefined){
+      if(position !== undefined &&  editableBlock){
+        const editorDomRect =editor.getClientRects()[0];
+        const padding = window.getComputedStyle(editableBlock,null).getPropertyValue("padding-right");
+        const pxIndex =padding.indexOf("px");
+        const paddingValue =Number(padding.slice(0,pxIndex));
         const style :CSSProperties ={
           position:"absolute",
           top: position.bottom +editor.scrollTop,
-          left: position.left,
-          width:position.width
+          left:editableBlockDomRect.x - editorDomRect.x,
+          width:editableBlock.clientWidth - paddingValue
         };
         setCommentsStyle(style);
       } 
     }
+  };
+  useEffect(()=>{
+    changeCommentStyle();
   },[commentBlock]);
   useEffect(()=>{
     setPagePath(makePagePath(page))
   },[page, page.header.icon, page.header.title]);
+
   useEffect(()=>{
     if(commandTargetBlock!==null){
       const editor= document.getElementsByClassName("editor")[0];
@@ -143,7 +153,10 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isIn
         setPopupStyle(style);
       };
     }
-  },[commandTargetBlock])
+  },[commandTargetBlock]);
+  
+  window.onresize =changeCommentStyle;
+
   return(
     <div className='editor'>
       {isInTrash &&
