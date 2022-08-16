@@ -521,6 +521,13 @@ a:link, a:active, a:visited {
   font-size: 14px;
 }
 
+.comment,
+.main_comment,
+.comment_comment,
+.commentBlock {
+  width: inherit;
+}
+
 .blockId_comments .comments {
   display: none;
 }
@@ -653,6 +660,7 @@ a:link, a:active, a:visited {
   font-size: 14px;
 }
 .commentBlock .comment_header {
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -690,6 +698,9 @@ a:link, a:active, a:visited {
   height: 20px;
 }
 .commentBlock .comment_header .tool button {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
   color: #a3a3a2;
   height: 100%;
   box-sizing: border-box;
@@ -883,6 +894,7 @@ form button svg {
 }
 
 .frame {
+  overflow-y: scroll;
   width: 100%;
   height: calc(100% - 45px);
   flex-grow: 1;

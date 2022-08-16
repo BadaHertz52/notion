@@ -3,6 +3,7 @@
   @import './comment';
   //frame ----
   .frame {
+    overflow-y: scroll;
     width: 100%;
     height: calc(100% - 45px);
     flex-grow: 1;
