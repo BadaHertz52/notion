@@ -63,7 +63,7 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
   const [loaderTargetBlock, setLoaderTargetBlock]=useState<Block|null>(null);
   const [iconStyle, setIconStyle]=useState<CSSProperties|undefined>(undefined);
   const [commandBlockPositon, setCBPositon]=useState<CSSProperties>();
-  const frameStyle:CSSProperties={
+  const frameInnerStyle:CSSProperties={
     fontFamily:defaultFontFamily ,
     fontSize: smallText? "14px": "16px",
     width: innerWidth >900?  fullWidth? "100%":'900px' : "100%",
@@ -202,11 +202,11 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
   return(
     <div 
       className={newPageFram? "newPageFrame frame" :'frame'}
-      style={frameStyle}
+
     >
         <div 
           className='frame_inner'
-          
+          style={frameInnerStyle}
         >
           <div 
             className='pageHeader'
@@ -273,7 +273,7 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
               {!newPageFram ? 
               <div 
                 className='pageComment'
-                style={frameStyle}
+                style={frameInnerStyle}
               >
                 {page.header.comments!==null ?
                   page.header.comments.map((comment:BlockCommentType)=>
@@ -312,7 +312,7 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
               :
                 <div 
                   className='pageComment'
-                  style={frameStyle}
+                  style={frameInnerStyle}
                 >
                   Press Enter to continue with an empty page or pick a templage
                 </div>
