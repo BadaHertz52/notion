@@ -12,6 +12,7 @@
     justify-content: center;
   }
   .frame_inner {
+    width: 100%;
     div, input, button{
       font-family: inherit;
     }
@@ -119,6 +120,7 @@
   }
   .pageContent_inner{
     position: relative;
+    width: 100%;
   }
   .newPageFrame{
     color: $mud;

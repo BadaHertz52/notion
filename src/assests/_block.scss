@@ -11,6 +11,13 @@
   }
   display: flex;
   flex-direction: column;
+  div{
+    width: 100%;
+  }
+  .list_marker ,
+  .commentsBubble{
+    width: fit-content;
+  }
 }
 .mainBlock{
   display: flex;
@@ -64,6 +71,10 @@
   }
 }
 .contentEditable {
+  width:100%;
+  white-space: normal;
+  word-break:break-all;
+  overflow: hidden;
   font : {
     size: inherit
   }

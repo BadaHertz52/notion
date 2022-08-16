@@ -192,6 +192,15 @@ a:link, a:active, a:visited {
   display: flex;
   flex-direction: column;
 }
+.editableBlock div {
+  width: 100%;
+}
+.editableBlock .list_marker,
+.editableBlock .commentsBubble {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+}
 
 .mainBlock {
   display: flex;
@@ -244,6 +253,10 @@ a:link, a:active, a:visited {
 }
 
 .contentEditable {
+  width: 100%;
+  white-space: normal;
+  word-break: break-all;
+  overflow: hidden;
   font-size: inherit;
 }
 .contentEditable:focus-visible {
@@ -879,6 +892,9 @@ form button svg {
   justify-content: center;
 }
 
+.frame_inner {
+  width: 100%;
+}
 .frame_inner div, .frame_inner input, .frame_inner button {
   font-family: inherit;
 }
@@ -993,6 +1009,7 @@ form button svg {
 
 .pageContent_inner {
   position: relative;
+  width: 100%;
 }
 
 .newPageFrame {
