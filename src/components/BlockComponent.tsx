@@ -291,11 +291,6 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
               showBlockFn={showBlockFn}
             />
             }
-            {block.type==="bookmark media" &&
-            <div className='bookmark'>
-            
-            </div>
-            }
           </>
         )
         :
