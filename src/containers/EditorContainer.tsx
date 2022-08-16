@@ -139,7 +139,6 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isIn
           top : blockDomRect.bottom + blockDomRect.height + editor.scrollTop,
           left :blockDomRect.left -editorDomRect.left
         };
-        console.log(editorDomRect, editor.scrollTop, blockDomRect)
         setPopupStyle(style);
       };
     }
@@ -239,7 +238,6 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isIn
         setMenuOpen={setMenuOpen}
         setPopupStyle={setPopupStyle}
         setTargetPageId={setTargetPageId}
-        setCommandTargetBlock={setCommandTargetBlock}
       />
       {popup.popup && 
           <div 

@@ -34,7 +34,6 @@ type BlockFnProp ={
   setMenuOpen:Dispatch<SetStateAction<boolean>>,
   setPopupStyle:Dispatch<SetStateAction<CSSProperties|undefined>>,
   setTargetPageId: Dispatch<SetStateAction<string>>,
-  setCommandTargetBlock:Dispatch<SetStateAction<Block|null>>
 };
 
 
@@ -77,7 +76,7 @@ export const detectRange =(event:MouseEvent| React.MouseEvent , targetArea:DOMRe
   return (inner_x && inner_y);
 };
 
-const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage, editBlock,changeBlockToPage,changePageToBlock, deleteBlock ,addPage,editPage, movePageToPage, deletePage ,setCommentBlock, popup, setPopup ,menuOpen,setMenuOpen ,setPopupStyle ,setTargetPageId ,setCommandTargetBlock}:BlockFnProp)=>{
+const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage, editBlock,changeBlockToPage,changePageToBlock, deleteBlock ,addPage,editPage, movePageToPage, deletePage ,setCommentBlock, popup, setPopup ,menuOpen,setMenuOpen ,setPopupStyle ,setTargetPageId }:BlockFnProp)=>{
   const inner =document.getElementById("inner");
   const [openRename, setOpenRename] =useState<boolean>(false);
 
@@ -96,11 +95,6 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
       const targetBlockIndex= page.blocksId.indexOf(targetBlock.id);
       const newBlock =makeNewBlock(page, targetBlock,"");
       addBlock(page.id, newBlock, targetBlockIndex+1, targetBlock.id);
-      setPopup({
-        popup:true,
-        what:"popupCommand"
-      });
-      setCommandTargetBlock(newBlock);
     }else{
       console.log("BlockFn-makeBlock error: there is no session item")
     }
