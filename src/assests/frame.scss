@@ -58,12 +58,6 @@
     &> div{
       position: relative;
     }
-    input{
-      width: 100%;
-      outline: none;
-      border: none;
-      font-size: inherit;
-    }
     .deco{
       display: flex;
       flex-wrap: wrap;
@@ -112,10 +106,9 @@
     }
     .pageTitle{
       font-size: inherit;
+      font-weight: bold;
       width: 100%;
-      input{
-        font-weight: bold;
-      }
+      word-break: break-all;
     }
   }
   .pageContent_inner{

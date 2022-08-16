@@ -945,12 +945,6 @@ form button svg {
 .pageHeader > div {
   position: relative;
 }
-.pageHeader input {
-  width: 100%;
-  outline: none;
-  border: none;
-  font-size: inherit;
-}
 .pageHeader .deco {
   display: flex;
   flex-wrap: wrap;
@@ -1001,10 +995,9 @@ form button svg {
 }
 .pageHeader .pageTitle {
   font-size: inherit;
-  width: 100%;
-}
-.pageHeader .pageTitle input {
   font-weight: bold;
+  width: 100%;
+  word-break: break-all;
 }
 
 .pageContent_inner {

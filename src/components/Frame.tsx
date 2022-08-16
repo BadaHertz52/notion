@@ -16,6 +16,7 @@ import { HiTemplate } from 'react-icons/hi';
 import { detectRange } from './BlockFn';
 import Loader from './Loader';
 import PageIcon from './PageIcon';
+import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 
 
 
@@ -121,7 +122,7 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
       setOpenIconPopup(false);
     }
   };
-  const onChangePageTitle =(event:React.ChangeEvent<HTMLInputElement>)=>{
+  const onChangePageTitle =(event:ContentEditableEvent)=>{
     const value =event.target.value; 
     editPage(page.id,{
       ...page, 
@@ -264,11 +265,10 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
               <div 
                 className='pageTitle'
               >
-                <input 
-                    type="text" 
-                    value={page.header.title}
-                    onChange={onChangePageTitle}
-                  />
+                <ContentEditable
+                  html={page.header.title}
+                  onChange={onChangePageTitle}
+                />
               </div>
               {!newPageFram ? 
               <div 
