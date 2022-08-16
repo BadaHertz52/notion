@@ -362,7 +362,7 @@ const NotionRouter =()=>{
         </div>
       }
        {/* ----editor */}
-      {routePage !==null && showAllComments &&
+      {routePage !==null &&
         <AllComments
           page={routePage}
           userName={user.userName}
