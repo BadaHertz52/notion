@@ -172,7 +172,6 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
       topbar_left?.setAttribute("style", "width:50%");
       changePathWidth( (innerWidth * 0.5) -26);
     };
-    console.log("show", showAllComments, innerWidth)
   }
   window.onresize= changeAllCommentAndTopBarStyle;
 
