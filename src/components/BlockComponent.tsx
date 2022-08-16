@@ -248,7 +248,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
   return(
     <div
       onClick={onClickBlockContents}
-      className ={`${block.type}_blockComponent`}
+      className ={`${block.type}_blockComponent blockComponent`}
       onMouseOver={showBlockFn}
     >
       {!blockComments ?

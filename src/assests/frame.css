@@ -35,15 +35,18 @@
   transform: translateX(10px);
 }
 
+#inner .edit_inform {
+  color: rgb(112, 112, 112);
+}
+
 .edit_inform {
   border-top: 1px solid #B9B8B6;
-  font-size: 14px;
+  font-size: 12px;
   text-align: left;
-  color: #B9B8B6;
   margin-bottom: 0;
 }
 .edit_inform p {
-  margin: 2px 0;
+  margin: 10px 0 0 10px;
 }
 
 div {
@@ -126,15 +129,18 @@ a:link, a:active, a:visited {
   transform: translateX(10px);
 }
 
+#inner .edit_inform {
+  color: rgb(112, 112, 112);
+}
+
 .edit_inform {
   border-top: 1px solid #B9B8B6;
-  font-size: 14px;
+  font-size: 12px;
   text-align: left;
-  color: #B9B8B6;
   margin-bottom: 0;
 }
 .edit_inform p {
-  margin: 2px 0;
+  margin: 10px 0 0 10px;
 }
 
 div {
@@ -456,15 +462,18 @@ a:link, a:active, a:visited {
   transform: translateX(10px);
 }
 
+#inner .edit_inform {
+  color: rgb(112, 112, 112);
+}
+
 .edit_inform {
   border-top: 1px solid #B9B8B6;
-  font-size: 14px;
+  font-size: 12px;
   text-align: left;
-  color: #B9B8B6;
   margin-bottom: 0;
 }
 .edit_inform p {
-  margin: 2px 0;
+  margin: 10px 0 0 10px;
 }
 
 div {
@@ -893,6 +902,12 @@ form button svg {
   color: rgb(141, 141, 141);
   font-size: 13px;
   border-top: 1px solid #d6d6d6;
+}
+
+#inner .blockComponent,
+#inner .contents,
+#inner .contentEditable {
+  color: inherit;
 }
 
 .frame {

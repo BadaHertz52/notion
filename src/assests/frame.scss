@@ -1,6 +1,13 @@
   @import './common';
   @import './block';
   @import './comment';
+  #inner {
+    .blockComponent ,
+    .contents,
+    .contentEditable{
+      color:inherit
+    }
+  }
   //frame ----
   .frame {
     overflow-y: scroll;

@@ -9,6 +9,7 @@ $commentHover: rgba(255, 212, 0, 0.8);
 $comment:rgba(255,212,0,0.14);
 $darkgrey:rgb(112, 112, 112);
 $turkeyBlue :rgb(46, 170, 220);
+$black :rgb(55,54,47);
 @mixin initialBtn {
   border:none;
   background-color:transparent;
@@ -164,14 +165,16 @@ $turkeyBlue :rgb(46, 170, 220);
     }
   }
 };
+#inner .edit_inform{
+  color: $darkgrey
+}
 .edit_inform{
   border-top:  1px solid $mud;
-  font-size: 14px;
+  font-size: 12px;
   text-align: left;
-  color: $mud;
   margin-bottom: 0;
   p {
-    margin: 2px 0;
+    margin : 10px 0 0 10px
   }
 }
 div {
