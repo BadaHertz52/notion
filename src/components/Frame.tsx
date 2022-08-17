@@ -1,6 +1,6 @@
 import '../assests/frame.css';
-import React, { CSSProperties, Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { Block, BlockCommentType, blockSample,  findBlock, Page } from '../modules/notion';
+import React, { CSSProperties, Dispatch, MouseEventHandler, SetStateAction, useEffect, useState } from 'react';
+import { Block, BlockCommentType, blockSample,  findBlock, makeNewBlock, Page } from '../modules/notion';
 import EditableBlock from './EditableBlock';
 import IconPoup, { randomIcon } from './IconPoup';
 import CommandBlock from './CommandBlock';
@@ -160,6 +160,41 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
     };
     editPage(page.id, editedPage)
   };
+  const pageContent = document.querySelector(".pageContent") as HTMLElement|null;
+
+  pageContent?.addEventListener("click", (event:MouseEvent)=>{onClickPageContentBottom(event)});
+
+  const onClickPageContentBottom =(event:MouseEvent)=>{
+    const clientX = event.clientX;
+    const clientY = event.clientY;
+
+    if(pageContent !== null){
+      const pageContentDomRect =pageContent.getClientRects()[0];
+      const pageContentPadding = getComputedStyle(pageContent, null).getPropertyValue("padding-bottom");
+      const padding = Number(pageContentPadding.slice(0, pageContentPadding.indexOf(
+        "px")));
+
+      const conditionX = (clientX >= pageContentDomRect.x)&& (clientX <= pageContentDomRect.right); 
+
+      const conditionY = (clientY >= (pageContentDomRect.bottom - padding)) && (clientY <= pageContentDomRect.bottom );
+  
+      const isInner =conditionX && conditionY;
+      if(isInner){
+        if(page.firstBlocksId){
+          const lastBlockId = page.firstBlocksId[page.firstBlocksId.length -1];
+          const lastBlockIndex = page.blocksId.indexOf(lastBlockId);
+          const lastBlock =page.blocks[lastBlockIndex];
+          const newBlock  =makeNewBlock(page, lastBlock ,""); 
+          addBlock(page.id, newBlock, page.blocks.length-1, null);
+        }else{
+          const newBlock = makeNewBlock(page, null,"");
+          addBlock(page.id, newBlock,0,null);
+        }
+  
+      }
+    } 
+
+  }
   inner?.addEventListener("click",(event)=>{
     
     if(command.boolean){
@@ -331,7 +366,9 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
               setOpenIconPopup={setOpenIconPopup}
             />
           }
-          <div className="pageContent">
+          <div 
+            className="pageContent"
+          >
             {!newPageFram?
             <div 
               className='pageContent_inner'
