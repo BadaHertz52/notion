@@ -1,6 +1,7 @@
 @import './common';
 .menu {
   font-weight: initial;
+  position: absolute;
 }
 
 #mainMenu,
@@ -50,12 +51,20 @@
     }
   }
 }
+
 #sideMenu  {
+  display: block;
+  position:absolute;
+  z-index:10;
   &>div{
     width: 250px;
   }
   .noResult{
     display: none;
+  }
+  .menu_color,
+  #commandBlock{
+    background-color: initial;
   }
   #commandBlock {
     margin-top: 0;
@@ -106,6 +115,7 @@
 
 #pageMenu {
   @include popupMenu;
+  background-color: initial;
   width: fit-content;
   .inner{
     width: 100%;
@@ -179,5 +189,14 @@
 #moveTo_pageMenu{
   #pageSugested, #new_sub_page {
     display: none;
+  }
+}
+
+@media screen and (max-width:425px){
+  #mainMenu , #sideMenu{
+    width: 200px;
+  }
+  #sideMenu >div{
+    width: 100%;
   }
 }

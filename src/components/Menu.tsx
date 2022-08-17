@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Dispatch, SetStateAction, useState} from 'react';
+import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState} from 'react';
 import { Block,listItem, Page } from '../modules/notion';
 import CommandBlock from './CommandBlock';
 import { CSSProperties } from 'styled-components';
@@ -48,23 +48,43 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
   const [turnInto, setTurnInto]= useState<boolean>(false);
   const [color, setColor]= useState<boolean>(false);
   const [turnInToPage ,setTurnIntoPage] = useState<boolean>(false);
-  const menuStyle:CSSProperties ={
-    position:"absolute" ,
-    top: blockFnElement?.offsetHeight,
-    left:'3rem',
-  }
-  const sideMenuStyle :CSSProperties= {
-    display:"block" ,
-    position:"absolute" ,
-    top: '-10px',
-    left: 240 *0.88 ,
-    zIndex:2
+  const [menuStyle , setMenuStyle]= useState<CSSProperties>(changeMenuStyle());
+  const [sideMenuStyle, setSideMenuStyle]=useState<CSSProperties|undefined>(undefined);
+
+  function changeMenuStyle (){
+    const innerWidth =window.innerWidth;
+    const style :CSSProperties = {
+      top: blockFnElement?.offsetHeight,
+      left: innerWidth > 425 ?'3rem' : '1rem',
+    };
+    return style
   };
+  function changeSideMenuStyle(){
+    const mainMenu= document.getElementById("mainMenu");
+    const innerWidth= window.innerWidth;
+    if(mainMenu !==null ){
+      const left =(mainMenu?.clientWidth)* 0.88;
+      const style :CSSProperties= {
+        top: innerWidth >=425? '-10px' :
+        "10px",
+        left: innerWidth>= 425? left : `${mainMenu.clientWidth * (innerWidth >=375 ? 0.5: 0.3)}px`,
+      };
+      setSideMenuStyle(style);
+    }
+  };
+  window.onresize =()=>{
+    const style =changeMenuStyle();
+    setMenuStyle(style);
+    changeSideMenuStyle();
+  };
+  useEffect(()=>{
+    if(turnInToPage|| turnInto||color){
+      changeSideMenuStyle();
+    }
+  },[turnInToPage, turnInto, color]);
+
   const popupStyle = blockFnElement?.getAttribute("style");
 
-  };
-  };
-  };
   const onClickMoveTo=()=>{
     setMenuOpen(false);
     sessionStorage.setItem("popupStyle", JSON.stringify(popupStyle));

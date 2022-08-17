@@ -1109,6 +1109,7 @@ a:link, a:active, a:visited {
 
 .menu {
   font-weight: initial;
+  position: absolute;
 }
 
 #mainMenu,
@@ -1249,11 +1250,20 @@ a:link, a:active, a:visited {
   transform: rotate(-90deg);
 }
 
+#sideMenu {
+  display: block;
+  position: absolute;
+  z-index: 10;
+}
 #sideMenu > div {
   width: 250px;
 }
 #sideMenu .noResult {
   display: none;
+}
+#sideMenu .menu_color,
+#sideMenu #commandBlock {
+  background-color: initial;
 }
 #sideMenu #commandBlock {
   margin-top: 0;
@@ -1329,6 +1339,7 @@ a:link, a:active, a:visited {
   z-index: 10;
   border-radius: 8px;
   box-shadow: 0px 0px 23px -5px #ababab;
+  background-color: initial;
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
@@ -1429,6 +1440,14 @@ a:link, a:active, a:visited {
   display: none;
 }
 
+@media screen and (max-width: 425px) {
+  #mainMenu, #sideMenu {
+    width: 200px;
+  }
+  #sideMenu > div {
+    width: 100%;
+  }
+}
 .editor.nonePage {
   width: 100%;
   display: flex;
