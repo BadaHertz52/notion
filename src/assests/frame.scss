@@ -12,7 +12,7 @@
   .frame {
     overflow-y: scroll;
     width: 100%;
-    height: calc(100% - 45px);
+    height: 100%;
     flex-grow: 1;
     flex-shrink: 1;
     z-index: inherit;
@@ -21,6 +21,7 @@
   }
   .frame_inner {
     width: 100%;
+    height: 100%;
     div, input, button{
       font-family: inherit;
     }
@@ -118,6 +119,10 @@
       width: 100%;
       word-break: break-all;
     }
+  }
+  .pageContent{
+    height: fit-content;
+    padding-bottom: 50px;
   }
   .pageContent_inner{
     position: relative;

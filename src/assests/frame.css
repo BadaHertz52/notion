@@ -913,7 +913,7 @@ form button svg {
 .frame {
   overflow-y: scroll;
   width: 100%;
-  height: calc(100% - 45px);
+  height: 100%;
   flex-grow: 1;
   flex-shrink: 1;
   z-index: inherit;
@@ -923,6 +923,7 @@ form button svg {
 
 .frame_inner {
   width: 100%;
+  height: 100%;
 }
 .frame_inner div, .frame_inner input, .frame_inner button {
   font-family: inherit;
@@ -1027,6 +1028,13 @@ form button svg {
   font-weight: bold;
   width: 100%;
   word-break: break-all;
+}
+
+.pageContent {
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  padding-bottom: 50px;
 }
 
 .pageContent_inner {
