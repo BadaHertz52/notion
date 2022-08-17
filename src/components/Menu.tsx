@@ -62,25 +62,8 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
   };
   const popupStyle = blockFnElement?.getAttribute("style");
 
-  const recoveryMenuState=()=>{
-    turnInto &&setTurnInto(false);
-    turnInToPage && setTurnIntoPage(false);
-    color && setColor(false);
-    popup.popup && setPopup({
-      popup:false,
-      what: null
-    })
   };
-  const showTurnInto =()=>{
-    setTurnInto(true);
   };
-  const showColorMenu =()=>{
-    setColor(true);
-    recoveryMenuState();
-  };
-  const showPageMenu =()=>{
-    setTurnIntoPage(true);
-    recoveryMenuState();
   };
   const onClickMoveTo=()=>{
     setMenuOpen(false);
@@ -182,7 +165,7 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
                 </button>
                 <button
                   className='menu_editBtn'
-                  onMouseOver={showTurnInto}
+                  onMouseOver={()=>setTurnInto(true)}
                   name="turn into"
                 >
                   <div>
@@ -196,7 +179,7 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
                 <button
                   className='menu_editBtn'
                   name ="turn into page in"
-                  onMouseOver={showPageMenu}
+                  onMouseOver={()=>setTurnIntoPage(true)}
                 >
                   <div>
                     <MdOutlineRestorePage/>
@@ -256,7 +239,7 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
                 <button 
                   name='color'
                   className='underline menu_editBtn'
-                  onMouseOver={showColorMenu}
+                  onMouseOver={()=>setColor(true)}
                 >
                   <div>
                     <AiOutlineFormatPainter/>
