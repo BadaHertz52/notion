@@ -121,11 +121,12 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isIn
         const padding = window.getComputedStyle(editableBlock,null).getPropertyValue("padding-right");
         const pxIndex =padding.indexOf("px");
         const paddingValue =Number(padding.slice(0,pxIndex));
+        const innerWidth =window.innerWidth;
         const style :CSSProperties ={
           position:"absolute",
           top: position.bottom +editor.scrollTop,
-          left:editableBlockDomRect.x - editorDomRect.x,
-          width:editableBlock.clientWidth - paddingValue
+          left: innerWidth >=425? editableBlockDomRect.x - editorDomRect.x : innerWidth * 0.1 ,
+          width:innerWidth>=425? editableBlock.clientWidth - paddingValue : innerWidth*0.8
         };
         setCommentsStyle(style);
       } 
