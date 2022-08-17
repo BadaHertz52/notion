@@ -166,6 +166,7 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
                 <button
                   className='menu_editBtn'
                   onMouseOver={()=>setTurnInto(true)}
+                  onMouseOut={()=>setTurnInto(false)}
                   name="turn into"
                 >
                   <div>
@@ -180,6 +181,7 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
                   className='menu_editBtn'
                   name ="turn into page in"
                   onMouseOver={()=>setTurnIntoPage(true)}
+                  onMouseOut={()=>setTurnIntoPage(false)}
                 >
                   <div>
                     <MdOutlineRestorePage/>
@@ -240,6 +242,7 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
                   name='color'
                   className='underline menu_editBtn'
                   onMouseOver={()=>setColor(true)}
+                  onMouseOut={()=>setColor(false)}
                 >
                   <div>
                     <AiOutlineFormatPainter/>
