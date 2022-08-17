@@ -202,7 +202,7 @@ export const add_block =(pageId:string, block:Block ,newBlockIndex:number ,previ
   pageId:pageId,
   block:block,
   newBlockIndex :newBlockIndex,
-  previousBlockId:previousBlockId // enter시에 기준이 된 block이 subBlock 일 경우 넣어주기 , subBlock 으로 추가시 첫번째 sub 으로 되는지, 다음 sub 인지 결정 
+  previousBlockId:previousBlockId // 블록과 블록 사이에 새로운 블록을 만드는 경우에 필요
 });
 export const edit_block =(pageId:string, block:Block)=> ({
   type:EDIT_BLOCK ,
