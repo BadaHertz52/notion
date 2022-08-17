@@ -44,23 +44,31 @@ const Loader =({block, page, editBlock ,setOpenLoader ,setLoaderTargetBlock}:Loa
         !isInnerLoader && closeLoader();
     }
   })
-  useEffect(()=>{
+  function changeLoaderStyle(){
     const blockDom = document.getElementById(`block_${block.id}`);
-    const editableBlockInner =blockDom?.parentElement;
-    const editabelBlockInnerDomRect =editableBlockInner?.getClientRects()[0];
     const blockDomRect = blockDom?.getClientRects()[0];
     const frame =document.getElementsByClassName("frame")[0];
     const frameDomRect =frame.getClientRects()[0];
-    if(blockDomRect!==undefined && editabelBlockInnerDomRect!==undefined){
-      const style:CSSProperties={
+    const frameInner =document.querySelector(".frame_inner");
+    console.log("blocdonw",blockDom)
+    if(blockDomRect!==undefined && frameDomRect!==undefined  &&  
+    frameInner !==null ){
+        const style:CSSProperties={
         position:"absolute",
-        top:blockDomRect.bottom - frameDomRect.top + blockDomRect.height +20,
-        left: blockDomRect.left -frameDomRect.left -20,
+        top:blockDomRect.bottom - frameDomRect.top + blockDomRect.height +10 ,
+        left: blockDomRect.x -frameDomRect.x +((frameDomRect.width -frameInner.clientWidth) *0.5) ,
+        width: blockDomRect.width
       };
       setLoaderStyle(style);
     };
-    
-  },[])
+  }
+  useEffect(()=>{
+    changeLoaderStyle();
+  },[]);
+
+  window.onresize=()=>{
+    changeLoaderStyle();
+  }
   return (
   <div 
     id="loader"
@@ -73,9 +81,9 @@ const Loader =({block, page, editBlock ,setOpenLoader ,setLoaderTargetBlock}:Loa
               <button>
                 Upload
               </button>
-              <button>
+              {/* <button>
                 Embed link
-              </button>
+              </button> */}
             </div>
           </div>
           <div className='loaderForm innerPadding'>

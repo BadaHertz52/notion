@@ -419,6 +419,7 @@ const NotionRouter =()=>{
           page={routePage}
           pagesId={pagesId}
           pages={pages}
+          firstlist={firstlist}
           setOpenExport={setOpenExport}
           addBlock={addBlock}
           editBlock={editBlock}
@@ -429,6 +430,11 @@ const NotionRouter =()=>{
           deleteBlock={deleteBlock}
           addPage={addPage}
           editPage={editPage}
+          duplicatePage={duplicatePage}
+          deletePage={deletePage}
+          movePageToPage={movePageToPage}
+          commentBlock={commentBlock}
+          openComment={openComment}
           setTargetPageId={setTargetPageId}
           setOpenComment={setOpenComment}
           setCommentBlock ={setCommentBlock}

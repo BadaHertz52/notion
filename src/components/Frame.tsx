@@ -1,6 +1,6 @@
 import '../assests/frame.css';
 import React, { CSSProperties, Dispatch, MouseEventHandler, SetStateAction, useEffect, useState } from 'react';
-import { Block, BlockCommentType, blockSample,  findBlock, makeNewBlock, Page } from '../modules/notion';
+import { Block, BlockCommentType, blockSample,  findBlock, listItem, makeNewBlock, Page } from '../modules/notion';
 import EditableBlock from './EditableBlock';
 import IconPoup, { randomIcon } from './IconPoup';
 import CommandBlock from './CommandBlock';
@@ -13,10 +13,12 @@ import { BsFillEmojiSmileFill} from 'react-icons/bs';
 import {GrDocumentText ,GrDocument} from 'react-icons/gr';
 import { MdInsertPhoto } from 'react-icons/md';
 import { HiTemplate } from 'react-icons/hi';
-import { detectRange } from './BlockFn';
+import BlockFn, { detectRange } from './BlockFn';
 import Loader from './Loader';
 import PageIcon from './PageIcon';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
+import PageMenu from './PageMenu';
+import { PopupType } from '../containers/EditorContainer';
 
 
 
@@ -28,6 +30,9 @@ export type Command ={
 type FrameProps ={
   userName:string,
   page:Page,
+  pages:Page[],
+  pagesId:string[],
+  firstlist:listItem[],
   firstBlocksId:string[]|null,
   editBlock :(pageId: string, block: Block) => void,
   addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
@@ -38,6 +43,11 @@ type FrameProps ={
   deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
   addPage :(newPage:Page ,)=>void,
   editPage :(pageId:string,newPage:Page ,)=>void,
+  duplicatePage:(targetPageId: string) => void,
+  movePageToPage:(targetPageId: string, destinationPageId: string) => void,
+  deletePage: (pageId: string) => void,
+  commentBlock: Block | null,
+  openComment :boolean, 
   setTargetPageId: React.Dispatch<React.SetStateAction<string>>,
   setOpenComment: Dispatch<SetStateAction<boolean>>,
   setCommentBlock: Dispatch<SetStateAction<Block | null>>,
@@ -47,7 +57,7 @@ type FrameProps ={
 };
 const basicPageCover ='https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assests/img/artificial-turf-g6e884a1d4_1920.jpg';;
 
-const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit}:FrameProps)=>{
+const Frame =({ userName,page,firstBlocksId, pagesId, pages, firstlist,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,deletePage,commentBlock,openComment ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit}:FrameProps)=>{
   const innerWidth =window.innerWidth; 
   const inner =document.getElementById("inner");
   const editTime =JSON.stringify(Date.now());
@@ -63,6 +73,40 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
   const [loaderTargetBlock, setLoaderTargetBlock]=useState<Block|null>(null);
   const [iconStyle, setIconStyle]=useState<CSSProperties|undefined>(undefined);
   const [commandBlockPositon, setCBPositon]=useState<CSSProperties>();
+
+  const [commentsStyle, setCommentsStyle]= useState<CSSProperties>();
+  const [menuOpen, setMenuOpen]= useState<boolean>(false);
+  const [commandTargetBlock, setCommandTargetBlock]=useState<Block|null>(null);
+  const [popup, setPopup]=useState<PopupType>({
+    popup:false,
+    what:null
+  });
+  const [popupStyle, setPopupStyle]=useState<CSSProperties |undefined>(undefined); 
+
+  const closePopup=(event: MouseEvent)=>{
+    if(popup.popup){
+      const popupMenu =document.getElementById("popupMenu");
+      const popupMenuDomRect= popupMenu?.getClientRects()[0];
+      const isInPopupMenu =detectRange(event, popupMenuDomRect);
+      !isInPopupMenu && setPopup({
+        popup:false,
+        what:null
+      });
+    };
+    if(openComment){
+      const commentsDoc= document.getElementById("block_comments") ;
+      if(commentsDoc !==null){
+        const commentsDocDomRect= commentsDoc.getClientRects()[0];
+        const isInComments =detectRange(event, commentsDocDomRect);
+        if(!isInComments){
+          setCommentBlock(null);
+          setOpenComment(false); 
+        }
+      }
+    }
+  };
+  inner?.addEventListener("click",(event)=>closePopup(event));
+
   const maxWidth = innerWidth -60
   const frameInnerStyle:CSSProperties={
     fontFamily:defaultFontFamily ,
@@ -97,6 +141,29 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
     firstBlocksId:[blockSample.id]
   };
 
+  function changeCommentStyle(){
+    if(commentBlock !==null){
+      const blockDoc = document.getElementById(`block_${commentBlock.id}`);
+      const editor =document.getElementsByClassName("editor")[0] as HTMLElement;
+      const editableBlock =document.getElementsByClassName("editableBlock")[0];
+      const editableBlockDomRect= editableBlock.getClientRects()[0];
+      const position =blockDoc?.getClientRects()[0]
+      if(position !== undefined &&  editableBlock){
+        const editorDomRect =editor.getClientRects()[0];
+        const padding = window.getComputedStyle(editableBlock,null).getPropertyValue("padding-right");
+        const pxIndex =padding.indexOf("px");
+        const paddingValue =Number(padding.slice(0,pxIndex));
+        const innerWidth =window.innerWidth;
+        const style :CSSProperties ={
+          position:"absolute",
+          top: position.bottom +editor.scrollTop,
+          left: innerWidth >=425? editableBlockDomRect.x - editorDomRect.x : innerWidth * 0.1 ,
+          width:innerWidth>=425? editableBlock.clientWidth - paddingValue : innerWidth*0.8
+        };
+        setCommentsStyle(style);
+      } 
+    }
+  };
 
 
   const onClickEmpty =()=>{
@@ -233,12 +300,35 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
         setCBPositon(style);
       }
     }
-  },[command.targetBlock])
+  },[command.targetBlock]);
+
+  useEffect(()=>{
+    changeCommentStyle();
+  },[commentBlock]);
+
+  useEffect(()=>{
+    if(commandTargetBlock!==null){
+      const editor= document.getElementsByClassName("editor")[0];
+      const editorDomRect= editor.getClientRects()[0];
+      const blockDom = document.getElementById(`block_${commandTargetBlock.id}`);
+      const blockDomRect =blockDom?.getClientRects()[0];
+      if(blockDomRect!==undefined){
+        const style:CSSProperties ={
+          position:"absolute",
+          top : blockDomRect.bottom + blockDomRect.height + editor.scrollTop,
+          left :blockDomRect.left -editorDomRect.left
+        };
+        setPopupStyle(style);
+      };
+    }
+  },[commandTargetBlock]);
+  
+  window.onresize =changeCommentStyle;
+
 
   return(
     <div 
       className={newPageFram? "newPageFrame frame" :'frame'}
-
     >
         <div 
           className='frame_inner'
@@ -452,6 +542,101 @@ const Frame =({ userName,page,firstBlocksId,editBlock,changeBlockToPage,changePa
             setLoaderTargetBlock={setLoaderTargetBlock}
           />
           }
+      <BlockFn
+        page={page}
+        pages={pages}
+        pagesId={pagesId}
+        firstlist={firstlist}
+        userName={userName}
+        addBlock={addBlock}
+        editBlock={editBlock}
+        changeBlockToPage={changeBlockToPage}
+        changePageToBlock={changePageToBlock}
+        deleteBlock={deleteBlock}
+        addPage={addPage}
+        editPage={editPage}
+        duplicatePage={duplicatePage}
+        movePageToPage={movePageToPage}
+        deletePage={deletePage}
+        commentBlock={commentBlock}
+        setCommentBlock={setCommentBlock}
+        popup={popup}
+        setPopup={setPopup}
+        menuOpen={menuOpen}
+        setMenuOpen={setMenuOpen}
+        setPopupStyle={setPopupStyle}
+        setTargetPageId={setTargetPageId}
+      />
+      {popup.popup && 
+          <div 
+            id="popupMenu"
+            style ={popupStyle}
+          >
+            {popup.what==="popupMoveToPage" &&
+            <PageMenu
+              what="block"
+              currentPage={page}
+              pages={pages}
+              firstlist={firstlist}
+              deleteBlock={deleteBlock}
+              addBlock={addBlock}
+              editBlock={editBlock}
+              changeBlockToPage={changeBlockToPage}
+              addPage={addPage}
+              movePageToPage={movePageToPage}
+              setMenuOpen={setMenuOpen}
+              setTargetPageId={setTargetPageId}
+            /> 
+            }
+            {popup.what ==="popupComment" &&
+                <CommentInput
+                pageId={page.id}
+                page={null}
+                userName={userName}
+                editBlock={editBlock}
+                editPage={editPage}
+                blockComment={null}
+                subComment={null}
+                commentBlock={commentBlock}
+                setCommentBlock={setCommentBlock}
+                setPageComments={null}
+                setPopup={setPopup}
+                addOrEdit="add"
+                setEdit={null}
+              />
+            }
+            {popup.what === "popupCommand" && commandTargetBlock !==null&&
+              <CommandBlock
+                page ={page}
+                block ={commandTargetBlock}
+                editBlock ={editBlock}
+                changeBlockToPage ={changeBlockToPage}
+                changePageToBlock ={changePageToBlock}
+                setPopup ={setPopup}
+                setCommandTargetBlock={setCommandTargetBlock}
+                setCommand ={null}
+                command ={null}
+              />
+            }
+          </div>
+      }
+      {commentBlock !==null && openComment &&
+      <div 
+        id="block_comments"
+        style={commentsStyle}
+      >
+        <Comments
+          userName={userName}
+          block={commentBlock}
+          pageId={page.id}
+          page={null}
+          editBlock={editBlock}
+          editPage={editPage}
+          select={null}
+          discardEdit={discardEdit}
+        />  
+      </div>            
+      }
     </div>
   )
 };
