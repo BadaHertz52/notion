@@ -2430,7 +2430,6 @@ a:link, a:active, a:visited {
   border-radius: 8px;
   box-shadow: 0px 0px 23px -5px #ababab;
   font-size: inherit;
-  width: calc(100% - 192px + 40px);
 }
 #loader::-webkit-scrollbar-thumb {
   background: #D3D1CB;
@@ -2446,15 +2445,24 @@ a:link, a:active, a:visited {
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
+  min-height: 100px;
   font-size: inherit;
+  position: relative;
 }
 #loader .innerPadding {
   padding: 10px;
   width: 100%;
 }
+#loader .imgLoader {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  min-height: 100px;
+}
 #loader .imgLoader .menu {
   border-bottom: 1px solid #EDECE9;
   width: 100%;
+  position: relative;
 }
 #loader .imgLoader .menu .innerPadding {
   display: flex;
@@ -2466,9 +2474,7 @@ a:link, a:active, a:visited {
 }
 #loader .imgLoader .loaderForm {
   width: 100%;
-  height: -webkit-min-content;
-  height: -moz-min-content;
-  height: min-content;
+  height: 50px;
 }
 #loader .imgLoader .loaderForm label {
   display: block;
@@ -2477,6 +2483,9 @@ a:link, a:active, a:visited {
   text-align: center;
   padding: 6px;
   box-sizing: border-box;
+}
+#loader .imgLoader .loaderForm label:hover {
+  background-color: #EDECE9;
 }
 #loader .imgLoader .loaderForm input {
   position: absolute;
