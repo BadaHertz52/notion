@@ -1253,7 +1253,7 @@ a:link, a:active, a:visited {
 #sideMenu {
   display: block;
   position: absolute;
-  z-index: 10;
+  z-index: 20;
 }
 #sideMenu > div {
   width: 250px;
@@ -1286,7 +1286,6 @@ a:link, a:active, a:visited {
   border-radius: 8px;
   box-shadow: 0px 0px 23px -5px #ababab;
   overflow-y: scroll;
-  z-index: 10;
   height: 380px;
   color: initial;
   font-weight: initial;
@@ -1440,7 +1439,7 @@ a:link, a:active, a:visited {
   display: none;
 }
 
-@media screen and (max-width: 425px) {
+@media screen and (max-width: 767px) {
   #mainMenu, #sideMenu {
     width: 200px;
   }

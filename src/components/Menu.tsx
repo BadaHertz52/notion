@@ -55,7 +55,7 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
     const innerWidth =window.innerWidth;
     const style :CSSProperties = {
       top: blockFnElement?.offsetHeight,
-      left: innerWidth > 425 ?'3rem' : '1rem',
+      left: innerWidth >767 ?'3rem' : '1rem',
     };
     return style
   };
@@ -63,11 +63,11 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
     const mainMenu= document.getElementById("mainMenu");
     const innerWidth= window.innerWidth;
     if(mainMenu !==null ){
-      const left =(mainMenu?.clientWidth)* 0.88;
+      const left =(mainMenu?.clientWidth)* 0.7;
       const style :CSSProperties= {
-        top: innerWidth >=425? '-10px' :
+        top: innerWidth >767? '-10px' :
         "10px",
-        left: innerWidth>= 425? left : `${mainMenu.clientWidth * (innerWidth >=375 ? 0.5: 0.3)}px`,
+        left: innerWidth> 767? left : `${mainMenu.clientWidth * (innerWidth >=375 ? 0.5: 0.3)}px`,
       };
       setSideMenuStyle(style);
     }

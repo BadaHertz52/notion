@@ -55,7 +55,7 @@
 #sideMenu  {
   display: block;
   position:absolute;
-  z-index:10;
+  z-index:20;
   &>div{
     width: 250px;
   }
@@ -76,7 +76,6 @@
 .menu_color{
   @include popupMenu;
   overflow-y: scroll;
-  z-index: 10;
   height: 380px;
   color: initial;
   font-weight: initial;
@@ -192,7 +191,7 @@
   }
 }
 
-@media screen and (max-width:425px){
+@media screen and (max-width:767px){
   #mainMenu , #sideMenu{
     width: 200px;
   }
