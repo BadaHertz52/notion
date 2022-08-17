@@ -85,6 +85,26 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
 
   const popupStyle = blockFnElement?.getAttribute("style");
 
+  const recoveryMenuState=()=>{
+    turnInto &&setTurnInto(false);
+    turnInToPage && setTurnIntoPage(false);
+    color && setColor(false);
+    popup.popup && setPopup({
+      popup:false,
+      what: null
+    })
+  };
+  const showTurnInto =()=>{
+    setTurnInto(true);
+  };
+  const showColorMenu =()=>{
+    setColor(true);
+    recoveryMenuState();
+  };
+  const showPageMenu =()=>{
+    setTurnIntoPage(true);
+    recoveryMenuState();
+  };
   const onClickMoveTo=()=>{
     setMenuOpen(false);
     sessionStorage.setItem("popupStyle", JSON.stringify(popupStyle));
@@ -185,8 +205,7 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
                 </button>
                 <button
                   className='menu_editBtn'
-                  onMouseOver={()=>setTurnInto(true)}
-                  onMouseOut={()=>setTurnInto(false)}
+                  onMouseOver={showTurnInto}
                   name="turn into"
                 >
                   <div>
@@ -200,8 +219,7 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
                 <button
                   className='menu_editBtn'
                   name ="turn into page in"
-                  onMouseOver={()=>setTurnIntoPage(true)}
-                  onMouseOut={()=>setTurnIntoPage(false)}
+                  onMouseOver={showPageMenu}
                 >
                   <div>
                     <MdOutlineRestorePage/>
@@ -261,8 +279,7 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
                 <button 
                   name='color'
                   className='underline menu_editBtn'
-                  onMouseOver={()=>setColor(true)}
-                  onMouseOut={()=>setColor(false)}
+                  onMouseOver={showColorMenu}
                 >
                   <div>
                     <AiOutlineFormatPainter/>
