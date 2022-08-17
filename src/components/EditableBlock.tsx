@@ -135,6 +135,28 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
   
   const ListSub = ()=>{
     const blockContentsRef= useRef<HTMLDivElement>(null);
+    const getListMarker=(subBlock:Block)=>{
+      let listmarker :string ="";
+      if(subBlocks !==undefined){
+       // const alphabetArr = Array.from({ length: 26 }, (v, i) => String.fromCharCode(i + 65));
+        const numberArr = Array.from({length:9}, (v,i)=>i+1); 
+        const subBlockIndex= block.subBlocksId?.indexOf(subBlock.id) as number; 
+        if(subBlockIndex === 0){
+          listmarker="1";
+        }else{
+          const previousSubBlock = subBlocks[subBlockIndex -1] ;
+          if(previousSubBlock.type==="numberList"){
+            const slicedSubBlocks = subBlocks.slice(0, subBlockIndex); // 0~ previousblock 까지
+            const filteredSubBlocks =slicedSubBlocks.filter((block:Block)=> block.type="numberList");
+            listmarker  = numberArr[filteredSubBlocks.length].toString();
+          }else{
+            listmarker = "1"
+          }
+        }
+
+      };
+      return listmarker;
+    };
     const listStyle =(block:Block):CSSProperties=>{
       return({
         textDecoration:"none",
@@ -159,15 +181,17 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
               ref={blockContentsRef}
               style={listStyle(block)}
               >
+              {block.type.includes("List")&&
               <div 
                 className='list_marker'
               >
-                {className.includes("number")? 
-                `${subBlocks.indexOf(block)+1}.`
+                {block.type.includes("number")? 
+                `${getListMarker(block)}.`
                 :
                 <GoPrimitiveDot/> 
                 }
               </div>
+              }
               <BlockComponent 
                 block={block} 
                 page={page}
