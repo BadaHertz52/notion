@@ -8,8 +8,8 @@ type ImageContentProps={
   editBlock:(pageId:string, block:Block)=>void,
 }
 const ImageContent =({pageId,block,editBlock}:ImageContentProps)=>{
-  const pageContent =document.getElementsByClassName('pageContent')[0] as HTMLElement;
-  const previousClientX = useRef(0);
+  const imageContent =document.getElementById(`${block.id}_contents`) ;
+  const previousClientX =useRef(0);
   const previousClientY = useRef(0);
   const drag =useRef<boolean>(false);
   const left ="left";
@@ -47,7 +47,6 @@ const ImageContent =({pageId,block,editBlock}:ImageContentProps)=>{
     previousClientX.current =event.clientX;
     previousClientY.current =event.clientY;
     drag.current=true; 
-    dragBtn.current =btnName;
   };
   const onMouseUp=useCallback((event:globalThis.MouseEvent)=>{
     if(drag.current){
@@ -71,8 +70,8 @@ const ImageContent =({pageId,block,editBlock}:ImageContentProps)=>{
     }  
   },[targetImgContent]);
 
-    pageContent?.addEventListener("mousemove", (event)=> onMouseMove(event));
-    pageContent?.addEventListener("mouseup", (event)=> onMouseUp(event))
+    imageContent?.addEventListener("mousemove", (event)=> onMouseMove(event));
+    imageContent?.addEventListener("mouseup", (event)=> onMouseUp(event))
   return(
     <div 
       className="imageContent"
