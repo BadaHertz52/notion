@@ -63,6 +63,7 @@ const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBl
           ...block,
           editTime:JSON.stringify(Date.now()),
           type:blockType,
+          contents:blockType ==="image media"? "": block.contents
         };
         block.type==="page"?
         changePageToBlock(page.id, newBlock):
