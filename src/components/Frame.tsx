@@ -312,16 +312,16 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
           editTime:editTime
         };
         //edit parent block
-        const {parentBlock} =findParentBlock(page,pointBlock);
+        const {parentBlock, parentBlockIndex} =findParentBlock(page,pointBlock);
+
         if(parentBlock.subBlocksId!==null){
           const parentBlockSubBlocksId =[...parentBlock.subBlocksId];
           if(parentBlockSubBlocksId.includes(newTargetBlock.id)){
             const targetBlockSubIndex= parentBlockSubBlocksId.indexOf(newTargetBlock.id);
             parentBlockSubBlocksId.splice(targetBlockSubIndex,1);
           };
-          const subBlocksIndex= parentBlockSubBlocksId?.indexOf(pointBlock.id);
-          parentBlockSubBlocksId.splice(subBlocksIndex, 0, newTargetBlock.id);
-          console.log("subblockinde", subBlocksIndex,parentBlockSubBlocksId);
+          const subBlockIndex= parentBlockSubBlocksId.indexOf(pointBlock.id);
+          parentBlockSubBlocksId.splice(subBlockIndex, 0, newTargetBlock.id);
           const newParentBlock:Block ={
             ...parentBlock,
             subBlocksId:parentBlockSubBlocksId,
@@ -364,6 +364,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
         }else{
           const targetBlockParentBlock:Block = findParentBlock(page, targetBlock).parentBlock;
           if(targetBlockParentBlock.id !== parentBlock.id){
+            console.log("targetblockp ==pointp?", targetBlockParentBlock, parentBlock)
             const subBlocksId =targetBlockParentBlock.subBlocksId;
             if(subBlocksId!==null){
               const subBlockIndex= subBlocksId.indexOf(targetBlock.id);
@@ -378,20 +379,19 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
           };
       }
       };
-      console.log("oage uf", firstBlocksId);
-      const newPage :Page ={
-        ...page,
-        blocks:blocks,
-        blocksId:blocksId,
-        firstBlocksId:firstBlocksId,
-        editTime:editTime
-      };
-      editPage(page.id, newPage);
-      setFirstBlocksId(firstBlocksId);
+      if(page.firstBlocksId !== firstBlocksId){
+        const newPage :Page ={
+          ...page,
+          firstBlocksId:firstBlocksId,
+          editTime:editTime
+        };
+        editPage(page.id, newPage);
+        setFirstBlocksId(firstBlocksId);
+      }
     };
   }
   const onMouseUpToMoveBlock=()=>{
-    console.log("piont", pointBlockToMoveBlock.current)
+    console.log("piont", pointBlockToMoveBlock.current, moveTargetBlock.current);
     if(moveBlock){
       changeBlockPosition();
       moveBlock.current=false;

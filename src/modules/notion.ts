@@ -546,7 +546,7 @@ const initialState :Notion ={
     comments:null
   },
   {
-    id:"numlist",
+    id:"numberList",
     contents:"", 
     firstBlock:true,
     subBlocksId:["num1", "num2", "num3"],
@@ -802,7 +802,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
 
   const editBlockData =(index:number ,block:Block)=>{
     targetPage?.blocks.splice(index,1,block);
-    console.log("editBlockData", block, targetPage);
+    console.log("editBlockData",  block, targetPage.blocks);
   };
   //subBlock 추가 시 parentBlock update
   const updateParentBlock =(subBlock:Block , previousBlockId:string|null)=>{

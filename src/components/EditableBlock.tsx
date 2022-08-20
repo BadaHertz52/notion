@@ -37,6 +37,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
   const className = block.type !== "toggle" ?
   `${block.type} block ` :
   `${block.type} block ${block.subBlocksId!==null?'on' : ""}`;
+  const subBlocks =  block.subBlocksId?.map((id:string)=>findBlock(page, id).BLOCK);
   const changeFontSizeBySmallText=(block:Block):CSSProperties=>{
     const baseSize = smallText? 14 :16; 
     let ratio =1;
@@ -70,7 +71,6 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
   (block.comments.filter((comment:BlockCommentType)=>  comment.type ==="open" )[0] ===undefined? 
   false:  
   true );
-  const subBlocks =  block.subBlocksId?.map((id:string)=>findBlock(page, id).BLOCK)
   const blockContentsStyle =(block:Block):CSSProperties =>{
   return ({
   color: block.type !=="todo done" ? block.style.color: "grey",
@@ -82,12 +82,12 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
   height: block.style.height===undefined? "inherit" : block.style.height,
   })
   };
-  const onMouseDownToMoveBlock=()=>{
-    moveTargetBlock.current =block;
+  const onMouseDownToMoveBlock=(targetBlock:Block)=>{
+    moveTargetBlock.current =targetBlock;
   };
-  const onMouseOverToMoveBlock=(event:MouseEvent<HTMLDivElement>)=>{
+  const onMouseOverToMoveBlock=(event:MouseEvent<HTMLDivElement>, targetBlock:Block)=>{
     if(moveBlock.current){
-      pointBlockToMoveBlock.current = block;
+      pointBlockToMoveBlock.current = targetBlock;
       event.currentTarget.classList.add("on");
     }
   };
@@ -153,16 +153,19 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
     const blockContentsRef= useRef<HTMLDivElement>(null);
     const getListMarker=(subBlock:Block)=>{
       let listmarker :string ="";
-      if(subBlocks !==undefined){
+      const listSubBlocksId = block.subBlocksId;
+
+      if(listSubBlocksId !==null){
+        const listSubBlocks = listSubBlocksId.map((id:string)=> findBlock(page, id).BLOCK);
        // const alphabetArr = Array.from({ length: 26 }, (v, i) => String.fromCharCode(i + 65));
         const numberArr = Array.from({length:9}, (v,i)=>i+1); 
-        const subBlockIndex= block.subBlocksId?.indexOf(subBlock.id) as number; 
+        const subBlockIndex= listSubBlocksId.indexOf(subBlock.id) as number; 
         if(subBlockIndex === 0){
           listmarker="1";
         }else{
-          const previousSubBlock = subBlocks[subBlockIndex -1] ;
+          const previousSubBlock = listSubBlocks[subBlockIndex -1] ;
           if(previousSubBlock.type==="numberList"){
-            const slicedSubBlocks = subBlocks.slice(0, subBlockIndex); // 0~ previousblock 까지
+            const slicedSubBlocks = listSubBlocks.slice(0, subBlockIndex); // 0~ previousblock 까지
             const filteredSubBlocks =slicedSubBlocks.filter((block:Block)=> block.type="numberList");
             listmarker  = numberArr[filteredSubBlocks.length].toString();
           }else{
@@ -189,7 +192,8 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
           <div 
             className='list mainBlock'
             key={`listItem_${subBlocks.indexOf(block)}`}
-            onMouseOver={(event)=>onMouseOverToMoveBlock(event)}
+            onMouseDown={()=>onMouseDownToMoveBlock(block)}
+            onMouseOver={(event)=>onMouseOverToMoveBlock(event, block)}
             onMouseLeave={(event)=>onMouseLeaveToMoveBlock(event)}
           >
             <div className='mainBlock_block'>
@@ -244,7 +248,6 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
   return(
       <div 
         className="editableBlock"
-        onMouseDown={onMouseDownToMoveBlock}
       >
         <div className='editableBlockInner'>
           <div 
@@ -259,7 +262,8 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
             <>
             <div 
               className="mainBlock"
-              onMouseOver={(event)=>onMouseOverToMoveBlock(event)}
+              onMouseDown={()=>onMouseDownToMoveBlock(block)}
+              onMouseOver={(event)=>onMouseOverToMoveBlock(event, block)}
               onMouseLeave={(event)=>onMouseLeaveToMoveBlock(event)}
             >
               <div className='mainBlock_block'>
