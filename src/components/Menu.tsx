@@ -52,9 +52,19 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
   const [sideMenuStyle, setSideMenuStyle]=useState<CSSProperties|undefined>(undefined);
 
   function changeMenuStyle (){
+    const menu = document.querySelector(".menu");
+    const menuHeight =menu? menu.clientHeight: 400;
     const innerWidth =window.innerWidth;
-    const style :CSSProperties = {
-      top: blockFnElement?.offsetHeight,
+    const innerHeight =window.innerHeight;
+    const top = blockFnElement?.getClientRects()[0].top as number;
+    const overHeight = ( top + menuHeight ) >= innerHeight
+    const style :CSSProperties =
+    overHeight? {
+      bottom:  blockFnElement?.offsetHeight,
+      left: innerWidth >767 ?'3rem' : '1rem',
+    } :
+    {
+      top:  blockFnElement?.offsetHeight,
       left: innerWidth >767 ?'3rem' : '1rem',
     };
     return style
