@@ -145,7 +145,6 @@ const Export =({page,pagesId,pages,firstlist ,setOpenExport, userName,editBlock,
               <Frame
                 page={subPage}
                 userName={userName}
-                firstBlocksId={subPage.firstBlocksId}
                 pages={pages}
                 pagesId={pagesId}
                 firstlist={firstlist}

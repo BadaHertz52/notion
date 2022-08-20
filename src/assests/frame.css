@@ -220,6 +220,10 @@ a:link, a:active, a:visited {
   position: relative;
 }
 
+.mainBlock.on {
+  border-top: 1px solid rgb(46, 170, 220);
+}
+
 .subBlocks {
   padding: 0;
   padding-left: 20px;

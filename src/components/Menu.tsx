@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState} from 'react';
+import React, { ChangeEvent, Dispatch, MutableRefObject, SetStateAction, useEffect, useState} from 'react';
 import { Block,listItem, Page } from '../modules/notion';
 import CommandBlock from './CommandBlock';
 import { CSSProperties } from 'styled-components';
@@ -32,7 +32,6 @@ type MenuProps ={
   deleteBlock :(pageId: string, block: Block ,isInMenu:boolean) => void,
   addPage : ( newPage:Page, )=>void,
   duplicatePage: (targetPageId: string) => void,
-  deletePage : (pageId:string , )=>void,
   movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
   setPopup :Dispatch<SetStateAction<PopupType>> ,
   popup:PopupType,
@@ -41,7 +40,7 @@ type MenuProps ={
   setOpenRename:Dispatch<SetStateAction<boolean>>,
 };
 
-const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,changeBlockToPage,changePageToBlock ,editBlock, deleteBlock ,addPage ,duplicatePage,deletePage,movePageToPage,setPopup ,popup ,setCommentBlock ,setTargetPageId ,setOpenRename}:MenuProps)=>{
+const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,changeBlockToPage,changePageToBlock ,editBlock, deleteBlock ,addPage ,duplicatePage,movePageToPage ,setPopup ,popup ,setCommentBlock ,setTargetPageId ,setOpenRename}:MenuProps)=>{
 
   const blockFnElement = document.getElementById("blockFn") ;
   const [editBtns, setEditBtns]= useState<Element[]|null>(null);
@@ -50,7 +49,6 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
   const [turnInToPage ,setTurnIntoPage] = useState<boolean>(false);
   const [menuStyle , setMenuStyle]= useState<CSSProperties>(changeMenuStyle());
   const [sideMenuStyle, setSideMenuStyle]=useState<CSSProperties|undefined>(undefined);
-
   function changeMenuStyle (){
     const menu = document.querySelector(".menu");
     const menuHeight =menu? menu.clientHeight: 400;

@@ -1,6 +1,6 @@
 import '../assests/frame.css';
-import React, { CSSProperties, Dispatch, MouseEventHandler, SetStateAction, useEffect, useState } from 'react';
-import { Block, BlockCommentType, blockSample,  findBlock, listItem, makeNewBlock, Page } from '../modules/notion';
+import React, { CSSProperties, Dispatch, MouseEventHandler, SetStateAction, useEffect, useRef, useState } from 'react';
+import { Block, BlockCommentType, blockSample,  findBlock, findParentBlock, listItem, makeNewBlock, Page } from '../modules/notion';
 import EditableBlock from './EditableBlock';
 import IconPoup, { randomIcon } from './IconPoup';
 import CommandBlock from './CommandBlock';
@@ -33,7 +33,6 @@ type FrameProps ={
   pages:Page[],
   pagesId:string[],
   firstlist:listItem[],
-  firstBlocksId:string[]|null,
   editBlock :(pageId: string, block: Block) => void,
   addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
   changeBlockToPage: (currentPageId: string, block: Block) => void,
@@ -57,10 +56,11 @@ type FrameProps ={
 };
 const basicPageCover ='https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assests/img/artificial-turf-g6e884a1d4_1920.jpg';;
 
-const Frame =({ userName,page,firstBlocksId, pagesId, pages, firstlist,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,deletePage,commentBlock,openComment ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit}:FrameProps)=>{
+const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,deletePage,commentBlock,openComment ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit}:FrameProps)=>{
   const innerWidth =window.innerWidth; 
   const inner =document.getElementById("inner");
   const editTime =JSON.stringify(Date.now());
+  const [firstBlocksId, setFirstBlocksId]=useState<string[]|null>(page.firstBlocksId);
   const [newPageFram, setNewPageFrame]=useState<boolean>(false);
   const [decoOpen ,setdecoOpen] =useState<boolean>(false);
   const [command, setCommand]=useState<Command>({boolean:false, 
@@ -82,7 +82,9 @@ const Frame =({ userName,page,firstBlocksId, pagesId, pages, firstlist,editBlock
     what:null
   });
   const [popupStyle, setPopupStyle]=useState<CSSProperties |undefined>(undefined); 
-
+  const moveTargetBlock= useRef<Block|null>(null);
+  const moveBlock =useRef<boolean>(false);
+  const pointBlockToMoveBlock =useRef<Block|null>(null);
   const closePopup=(event: MouseEvent)=>{
     if(popup.popup){
       const popupMenu =document.getElementById("popupMenu");
@@ -231,6 +233,176 @@ const Frame =({ userName,page,firstBlocksId, pagesId, pages, firstlist,editBlock
 
   pageContent?.addEventListener("click", (event:MouseEvent)=>{onClickPageContentBottom(event)});
 
+  const onMouseMoveToMoveBlock=()=>{
+    if(moveTargetBlock.current!==null){
+        moveBlock.current=true
+    };
+  };
+  const changeBlockPosition =()=>{
+    if(pointBlockToMoveBlock.current!==null && moveTargetBlock.current!==null){
+      //editblock
+        const editTime =JSON.stringify(Date.now());
+        const blocksId =[...page.blocksId];
+        const blocks=[...page.blocks];
+        const firstBlocksId =page.firstBlocksId ?  [...page.firstBlocksId] : null
+        const pointBlock =pointBlockToMoveBlock.current;
+        const targetBlock :Block ={
+          ...moveTargetBlock.current,
+          editTime:editTime,
+        };
+        const deleteParentBlocksIdFromSubBlock =(targetBlock:Block, parentBlockId:string)=>{
+          if(targetBlock.subBlocksId!==null){
+            targetBlock.subBlocksId.forEach((id:string)=>{
+              const subBlocksIndex= blocksId.indexOf(id);
+              const subBlock = blocks[subBlocksIndex];
+              const editedSubBlock:Block ={
+                ...subBlock,
+                parentBlocksId: subBlock.parentBlocksId !== null ? subBlock.parentBlocksId.filter((id:string)=> id !== parentBlockId) : null,
+                editTime:editTime
+              };
+              editBlock(page.id, editedSubBlock);
+              subBlock.subBlocksId!==null && deleteParentBlocksIdFromSubBlock(subBlock, parentBlockId);
+            } )
+          }
+      
+        };
+      if(pointBlock.firstBlock){
+        const pointBlock_firstBlockIndex= firstBlocksId?.indexOf(pointBlock.id) as number;
+        if(targetBlock.firstBlock){
+          if(firstBlocksId!==null ){
+            const firstBlockIndex = firstBlocksId.indexOf(targetBlock.id);
+            firstBlocksId.splice(firstBlockIndex,1);
+            firstBlocksId.splice(pointBlock_firstBlockIndex,0,targetBlock.id);
+            console.log("fist", firstBlocksId);
+          };
+        }else{
+          const editedTargetBlock:Block ={
+            ...moveTargetBlock.current,
+            parentBlocksId:null,
+            firstBlock:true,
+            editTime:editTime,
+          };
+          //edit editedTargetBlock's parentBlock
+          const {parentBlock} = findParentBlock(page, editedTargetBlock);
+          if(parentBlock.subBlocksId!==null){
+            const editedParentBlock:Block ={
+              ...parentBlock,
+              subBlocksId: parentBlock.subBlocksId.filter((id:string)=> id !== editedTargetBlock.id),
+              editTime:editTime,
+            };
+            editBlock(page.id, editedParentBlock);
+          };
+
+          if(editedTargetBlock.subBlocksId!==null){
+            deleteParentBlocksIdFromSubBlock(editedTargetBlock, parentBlock.id);
+          };
+
+          editBlock(page.id, editedTargetBlock);
+          //add firtstBlocks
+          if(firstBlocksId!==null){
+            firstBlocksId.splice(pointBlock_firstBlockIndex,0, editedTargetBlock.id);
+          }
+        }
+      }else{
+        //case2. pointBlock is subBlock
+        const newTargetBlock:Block={
+          ...targetBlock,
+          firstBlock:false,
+          parentBlocksId:pointBlock.parentBlocksId,
+          editTime:editTime
+        };
+        //edit parent block
+        const {parentBlock} =findParentBlock(page,pointBlock);
+        if(parentBlock.subBlocksId!==null){
+          const parentBlockSubBlocksId =[...parentBlock.subBlocksId];
+          if(parentBlockSubBlocksId.includes(newTargetBlock.id)){
+            const targetBlockSubIndex= parentBlockSubBlocksId.indexOf(newTargetBlock.id);
+            parentBlockSubBlocksId.splice(targetBlockSubIndex,1);
+          };
+          const subBlocksIndex= parentBlockSubBlocksId?.indexOf(pointBlock.id);
+          parentBlockSubBlocksId.splice(subBlocksIndex, 0, newTargetBlock.id);
+          console.log("subblockinde", subBlocksIndex,parentBlockSubBlocksId);
+          const newParentBlock:Block ={
+            ...parentBlock,
+            subBlocksId:parentBlockSubBlocksId,
+            editTime:editTime
+          };
+          editBlock(page.id ,newParentBlock);
+        };
+
+        const addParentBlockToSubBlock=(targetBlock:Block)=>{ 
+          if(targetBlock.subBlocksId!==null){
+            targetBlock.subBlocksId.forEach((id:string)=>{
+              const subBlockIndex = blocksId.indexOf(id);
+              const subBlock =blocks[subBlockIndex];
+              if(targetBlock.parentBlocksId !== null){
+                const newSubBlock:Block ={
+                  ...subBlock,
+                  parentBlocksId : subBlock.parentBlocksId!==null? targetBlock.parentBlocksId.concat(targetBlock.id) : null
+                };
+                editBlock(page.id, newSubBlock);
+              };
+              subBlock.subBlocksId!==null && addParentBlockToSubBlock(subBlock);
+            })
+          };
+        };
+        
+        if(newTargetBlock.subBlocksId!==null && newTargetBlock.parentBlocksId!==null){
+          if(targetBlock.parentBlocksId!==null){
+            targetBlock.parentBlocksId[targetBlock.parentBlocksId.length-1] !== newTargetBlock.parentBlocksId[newTargetBlock.parentBlocksId.length-1] && addParentBlockToSubBlock(newTargetBlock);
+          }else{
+            addParentBlockToSubBlock(newTargetBlock);
+          }
+        };
+
+        if(targetBlock.firstBlock && firstBlocksId!==null){
+          const firstBlocksIdIndex= firstBlocksId?.indexOf(targetBlock.id);
+          firstBlocksId.splice(firstBlocksIdIndex,1);
+
+          editBlock(page.id, newTargetBlock);
+
+        }else{
+          const targetBlockParentBlock:Block = findParentBlock(page, targetBlock).parentBlock;
+          if(targetBlockParentBlock.id !== parentBlock.id){
+            const subBlocksId =targetBlockParentBlock.subBlocksId;
+            if(subBlocksId!==null){
+              const subBlockIndex= subBlocksId.indexOf(targetBlock.id);
+              subBlocksId.splice(subBlockIndex,1);
+              const newTargetBlockParent :Block ={
+                ...targetBlockParentBlock,
+                subBlocksId: subBlocksId,
+                editTime:editTime
+              };
+              editBlock(page.id, newTargetBlockParent);
+            }
+          };
+      }
+      };
+      console.log("oage uf", firstBlocksId);
+      const newPage :Page ={
+        ...page,
+        blocks:blocks,
+        blocksId:blocksId,
+        firstBlocksId:firstBlocksId,
+        editTime:editTime
+      };
+      editPage(page.id, newPage);
+      setFirstBlocksId(firstBlocksId);
+    };
+  }
+  const onMouseUpToMoveBlock=()=>{
+    console.log("piont", pointBlockToMoveBlock.current)
+    if(moveBlock){
+      changeBlockPosition();
+      moveBlock.current=false;
+      moveTargetBlock.current = null;
+      pointBlockToMoveBlock.current =null;
+      const mainBlockOn =document.querySelector(".mainBlock.on");
+      mainBlockOn?.classList.remove("on");
+      const editableBlockOn =document.querySelector(".editabelBlock.on");
+      editableBlockOn?.classList.remove("on");
+    }
+  };
   const onClickPageContentBottom =(event:MouseEvent)=>{
     const clientX = event.clientX;
     const clientY = event.clientY;
@@ -463,6 +635,8 @@ const Frame =({ userName,page,firstBlocksId, pagesId, pages, firstlist,editBlock
             <div 
               className='pageContent_inner'
               id="pageContent_inner"
+              onMouseMove={onMouseMoveToMoveBlock}
+              onMouseUp={onMouseUpToMoveBlock}
               >
               {firstBlocksId!==null &&
                 firstBlocksId.map((id:string)=> findBlock(page,id).BLOCK)
@@ -478,6 +652,9 @@ const Frame =({ userName,page,firstBlocksId, pagesId, pages, firstlist,editBlock
                       raiseBlock={raiseBlock}
                       deleteBlock={deleteBlock}
                       smallText={smallText}
+                      moveBlock={moveBlock}
+                      moveTargetBlock={moveTargetBlock}
+                      pointBlockToMoveBlock={pointBlockToMoveBlock}
                       command={command}
                       setCommand={setCommand}
                       setTargetPageId={setTargetPageId}
@@ -557,9 +734,9 @@ const Frame =({ userName,page,firstBlocksId, pagesId, pages, firstlist,editBlock
         editPage={editPage}
         duplicatePage={duplicatePage}
         movePageToPage={movePageToPage}
-        deletePage={deletePage}
         commentBlock={commentBlock}
         setCommentBlock={setCommentBlock}
+        moveTargetBlock={moveTargetBlock}
         popup={popup}
         setPopup={setPopup}
         menuOpen={menuOpen}

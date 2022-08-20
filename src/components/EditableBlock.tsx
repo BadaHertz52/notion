@@ -1,4 +1,4 @@
-import React, { CSSProperties, Dispatch, SetStateAction, useEffect, useRef} from 'react';
+import React, { CSSProperties, Dispatch, MouseEvent, MutableRefObject, SetStateAction, useEffect, useRef} from 'react';
 import { Block, BlockCommentType, findBlock, Page,  } from '../modules/notion';
 import { Command } from './Frame';
 import BlockComponent, { BlockComment } from './BlockComponent';
@@ -6,7 +6,6 @@ import { GoPrimitiveDot } from 'react-icons/go';
 import { GrCheckbox, GrCheckboxSelected } from 'react-icons/gr';
 import {  MdPlayArrow } from 'react-icons/md';
 import PageIcon from './PageIcon';
-
 
 type EditableBlockProps ={
   page:Page,
@@ -17,6 +16,9 @@ type EditableBlockProps ={
   raiseBlock: (pageId: string, block: Block) => void,
   deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
   smallText:boolean,
+  moveBlock:MutableRefObject<boolean>,
+  moveTargetBlock :MutableRefObject<Block | null>,
+  pointBlockToMoveBlock:MutableRefObject<Block | null>,
   command:Command,
   setCommand:Dispatch<SetStateAction<Command>>,
   setTargetPageId: React.Dispatch<React.SetStateAction<string>> ,
@@ -30,7 +32,7 @@ export   type CommentOpenType ={
   targetId: string | null,
 };
 
-const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText ,command, setCommand ,setTargetPageId ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock,
+const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText, moveBlock ,moveTargetBlock, pointBlockToMoveBlock ,command, setCommand ,setTargetPageId ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock,
 }:EditableBlockProps)=>{  
   const className = block.type !== "toggle" ?
   `${block.type} block ` :
@@ -79,6 +81,20 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
   width: block.style.width===undefined? "inherit" : block.style.width,
   height: block.style.height===undefined? "inherit" : block.style.height,
   })
+  };
+  const onMouseDownToMoveBlock=()=>{
+    moveTargetBlock.current =block;
+  };
+  const onMouseOverToMoveBlock=(event:MouseEvent<HTMLDivElement>)=>{
+    if(moveBlock.current){
+      pointBlockToMoveBlock.current = block;
+      event.currentTarget.classList.add("on");
+    }
+  };
+  const onMouseLeaveToMoveBlock=(event:MouseEvent<HTMLDivElement>)=>{
+    if(moveBlock.current && pointBlockToMoveBlock.current?.id=== block.id){
+      event.currentTarget.classList.remove("on");
+    }
   };
   const onClickCommentBtn=(block:Block)=>{
     setOpenComment(true); 
@@ -173,6 +189,8 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
           <div 
             className='list mainBlock'
             key={`listItem_${subBlocks.indexOf(block)}`}
+            onMouseOver={(event)=>onMouseOverToMoveBlock(event)}
+            onMouseLeave={(event)=>onMouseLeaveToMoveBlock(event)}
           >
             <div className='mainBlock_block'>
             <div 
@@ -224,7 +242,10 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
     )
   };
   return(
-      <div className="editableBlock">
+      <div 
+        className="editableBlock"
+        onMouseDown={onMouseDownToMoveBlock}
+      >
         <div className='editableBlockInner'>
           <div 
             id={`block_${block.id}`}
@@ -238,6 +259,8 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
             <>
             <div 
               className="mainBlock"
+              onMouseOver={(event)=>onMouseOverToMoveBlock(event)}
+              onMouseLeave={(event)=>onMouseLeaveToMoveBlock(event)}
             >
               <div className='mainBlock_block'>
               {block.type ==="todo" &&
@@ -336,6 +359,9 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                   raiseBlock={raiseBlock}
                   deleteBlock={deleteBlock}
                   smallText={smallText}
+                  moveBlock={moveBlock}
+                  moveTargetBlock={moveTargetBlock}
+                  pointBlockToMoveBlock={pointBlockToMoveBlock}
                   command={command}
                   setCommand={setCommand}
                   setOpenComment={setOpenComment}

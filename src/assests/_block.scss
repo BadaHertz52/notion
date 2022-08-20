@@ -19,6 +19,7 @@
     width: fit-content;
   }
 }
+
 .mainBlock{
   display: flex;
   justify-content: space-between;
@@ -30,7 +31,9 @@
   }
   width: 100%;
 }
-
+.mainBlock.on{
+  border-top:  1px solid $turkeyBlue;
+}
 .subBlocks{
   padding:0;
   padding-left: 20px;

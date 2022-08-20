@@ -138,7 +138,6 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isIn
         pagesId={pagesId}
         pages={pages}
         firstlist={firstlist}
-        firstBlocksId={page.firstBlocksId}
         addBlock={addBlock}
         editBlock={editBlock}
         changeBlockToPage={changeBlockToPage}

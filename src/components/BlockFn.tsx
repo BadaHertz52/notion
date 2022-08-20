@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, MutableRefObject, SetStateAction, useEffect, useState } from 'react';
 import Menu from './Menu';
 import {Block, findPage, listItem, makeNewBlock, Page} from '../modules/notion';
 import { CSSProperties } from 'styled-components';
@@ -7,8 +7,6 @@ import Rename from './Rename';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { CgMenuGridO } from 'react-icons/cg';
 import { PopupType } from '../containers/EditorContainer';
-import CommandBlock from './CommandBlock';
-
 
 type BlockFnProp ={
   pages:Page[],
@@ -24,9 +22,9 @@ type BlockFnProp ={
   addPage : ( newPage:Page, )=>void,
   editPage: (pageId: string, newPage: Page) => void,
   duplicatePage: (targetPageId: string) => void,
-  deletePage : (pageId:string , )=>void,
   commentBlock: Block|null,
   movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
+  moveTargetBlock :MutableRefObject<Block | null>,
   setCommentBlock: Dispatch<SetStateAction<Block|null>>,
   popup:PopupType,
   setPopup: Dispatch<SetStateAction<PopupType>>,
@@ -76,7 +74,7 @@ export const detectRange =(event:MouseEvent| React.MouseEvent , targetArea:DOMRe
   return (inner_x && inner_y);
 };
 
-const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage, editBlock,changeBlockToPage,changePageToBlock, deleteBlock ,addPage,editPage, movePageToPage, deletePage ,setCommentBlock, popup, setPopup ,menuOpen,setMenuOpen ,setPopupStyle ,setTargetPageId }:BlockFnProp)=>{
+const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage, editBlock,changeBlockToPage,changePageToBlock, deleteBlock ,addPage,editPage, movePageToPage,  moveTargetBlock,setCommentBlock, popup, setPopup ,menuOpen,setMenuOpen ,setPopupStyle ,setTargetPageId }:BlockFnProp)=>{
   const inner =document.getElementById("inner");
   const [openRename, setOpenRename] =useState<boolean>(false);
 
@@ -99,12 +97,20 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
       console.log("BlockFn-makeBlock error: there is no session item")
     }
   };
-
-  const openMenu=()=>{
+  const onMouseDown=()=>{
     const sessionItem = sessionStorage.getItem("blockFnTargetBlock") ;
-    if(sessionItem !==null){
+    if( sessionItem!==null){
       const targetBlock = JSON.parse(sessionItem);
       setBlockFnTargetBlock(targetBlock);
+
+      if(moveTargetBlock.current=== null){
+        moveTargetBlock.current = targetBlock
+      };
+
+    }
+  };
+  const openMenu=()=>{
+    if(blockFnTargetBlock!==null){
       setMenuOpen(!menuOpen);
       setPopup({
         popup:false,
@@ -195,7 +201,10 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
           <AiOutlinePlus/>
         </button>
       </div>
-      <div className='blockFnIcon'> 
+      <div 
+        className='blockFnIcon'
+        onMouseDown={onMouseDown}
+      > 
         <button
           onClick={openMenu}
           title ="Click to open menu"
@@ -218,7 +227,6 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
             addPage={addPage}
             duplicatePage={duplicatePage}
             movePageToPage={movePageToPage}
-            deletePage={deletePage}
             popup={popup}
             setPopup={setPopup}
             setCommentBlock={setCommentBlock}
