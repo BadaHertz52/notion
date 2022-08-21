@@ -82,9 +82,6 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
   height: block.style.height===undefined? "inherit" : block.style.height,
   })
   };
-  const onMouseDownToMoveBlock=(targetBlock:Block)=>{
-    setMoveTargetBlock(targetBlock);
-  };
   const onMouseOverToMoveBlock=(event:MouseEvent<HTMLDivElement>, targetBlock:Block)=>{
     if(moveBlock.current){
       pointBlockToMoveBlock.current = targetBlock;
@@ -192,7 +189,6 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
           <div 
             className='list mainBlock'
             key={`listItem_${subBlocks.indexOf(block)}`}
-            onMouseDown={()=>onMouseDownToMoveBlock(block)}
             onMouseOver={(event)=>onMouseOverToMoveBlock(event, block)}
             onMouseLeave={(event)=>onMouseLeaveToMoveBlock(event)}
           >
@@ -262,7 +258,6 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
             <>
             <div 
               className="mainBlock"
-              onMouseDown={()=>onMouseDownToMoveBlock(block)}
               onMouseOver={(event)=>onMouseOverToMoveBlock(event, block)}
               onMouseLeave={(event)=>onMouseLeaveToMoveBlock(event)}
             >
