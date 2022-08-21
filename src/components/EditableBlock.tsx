@@ -7,7 +7,7 @@ import { GrCheckbox, GrCheckboxSelected } from 'react-icons/gr';
 import {  MdPlayArrow } from 'react-icons/md';
 import PageIcon from './PageIcon';
 
-type EditableBlockProps ={
+export type EditableBlockProps ={
   page:Page,
   block:Block,
   editBlock :(pageId: string, block: Block) => void,
@@ -17,7 +17,7 @@ type EditableBlockProps ={
   deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
   smallText:boolean,
   moveBlock:MutableRefObject<boolean>,
-  moveTargetBlock :MutableRefObject<Block | null>,
+  setMoveTargetBlock :Dispatch<SetStateAction<Block | null>>,
   pointBlockToMoveBlock:MutableRefObject<Block | null>,
   command:Command,
   setCommand:Dispatch<SetStateAction<Command>>,
@@ -31,40 +31,40 @@ export   type CommentOpenType ={
   open:boolean,
   targetId: string | null,
 };
-
-const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText, moveBlock ,moveTargetBlock, pointBlockToMoveBlock ,command, setCommand ,setTargetPageId ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock,
+export const changeFontSizeBySmallText=(block:Block, smallText:boolean):CSSProperties=>{
+  const baseSize = smallText? 14 :16; 
+  let ratio =1;
+  switch (block.type) {
+    case "h1":
+      window.innerWidth>= 768?
+        ratio =3:
+        ratio =2 ;
+      break;
+    case "h2":
+      window.innerWidth >= 768?
+      ratio=2.5:
+      ratio =1.5
+      break;
+    case "h3" :
+      window.innerWidth >= 768?
+      ratio =2:
+      ratio= 1.2 
+      break; 
+    default:
+      break;
+  }
+  const style :CSSProperties={
+    fontSize :`${baseSize * ratio}px`
+  };
+  return style 
+};
+const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText, moveBlock ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand ,setTargetPageId ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock,
 }:EditableBlockProps)=>{  
   const className = block.type !== "toggle" ?
   `${block.type} block ` :
   `${block.type} block ${block.subBlocksId!==null?'on' : ""}`;
   const subBlocks =  block.subBlocksId?.map((id:string)=>findBlock(page, id).BLOCK);
-  const changeFontSizeBySmallText=(block:Block):CSSProperties=>{
-    const baseSize = smallText? 14 :16; 
-    let ratio =1;
-    switch (block.type) {
-      case "h1":
-        window.innerWidth>= 768?
-          ratio =3:
-          ratio =2 ;
-        break;
-      case "h2":
-        window.innerWidth >= 768?
-        ratio=2.5:
-        ratio =1.5
-        break;
-      case "h3" :
-        window.innerWidth >= 768?
-        ratio =2:
-        ratio= 1.2 
-        break; 
-      default:
-        break;
-    }
-    const style :CSSProperties={
-      fontSize :`${baseSize * ratio}px`
-    };
-    return style 
-  };
+
   const blockComments = 
   block.comments==null? 
   false : 
@@ -83,7 +83,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
   })
   };
   const onMouseDownToMoveBlock=(targetBlock:Block)=>{
-    moveTargetBlock.current =targetBlock;
+    setMoveTargetBlock(targetBlock);
   };
   const onMouseOverToMoveBlock=(event:MouseEvent<HTMLDivElement>, targetBlock:Block)=>{
     if(moveBlock.current){
@@ -253,7 +253,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
           <div 
             id={`block_${block.id}`}
             className={className} 
-            style={changeFontSizeBySmallText(block)}
+            style={changeFontSizeBySmallText(block, smallText)}
           > 
 
             {block.type.includes("List") ?
@@ -364,7 +364,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                   deleteBlock={deleteBlock}
                   smallText={smallText}
                   moveBlock={moveBlock}
-                  moveTargetBlock={moveTargetBlock}
+                  setMoveTargetBlock={setMoveTargetBlock}
                   pointBlockToMoveBlock={pointBlockToMoveBlock}
                   command={command}
                   setCommand={setCommand}

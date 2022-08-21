@@ -221,7 +221,7 @@ a:link, a:active, a:visited {
 }
 
 .mainBlock.on {
-  border-top: 1px solid rgb(46, 170, 220);
+  border-top: 5px solid #8ae2ff;
 }
 
 .subBlocks {
@@ -1070,6 +1070,10 @@ form button svg {
 
 .subFrame {
   width: 100vw;
+}
+
+#moveTargetBlock {
+  opacity: 0.3;
 }
 
 @media screen and (max-width: 767px) {

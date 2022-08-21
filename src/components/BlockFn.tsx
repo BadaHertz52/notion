@@ -24,7 +24,8 @@ type BlockFnProp ={
   duplicatePage: (targetPageId: string) => void,
   commentBlock: Block|null,
   movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
-  moveTargetBlock :MutableRefObject<Block | null>,
+  setMoveTargetBlock :Dispatch<SetStateAction<Block| null>>,
+  moveTargetBlock:Block|null,
   setCommentBlock: Dispatch<SetStateAction<Block|null>>,
   popup:PopupType,
   setPopup: Dispatch<SetStateAction<PopupType>>,
@@ -74,7 +75,7 @@ export const detectRange =(event:MouseEvent| React.MouseEvent , targetArea:DOMRe
   return (inner_x && inner_y);
 };
 
-const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage, editBlock,changeBlockToPage,changePageToBlock, deleteBlock ,addPage,editPage, movePageToPage,  moveTargetBlock,setCommentBlock, popup, setPopup ,menuOpen,setMenuOpen ,setPopupStyle ,setTargetPageId }:BlockFnProp)=>{
+const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage, editBlock,changeBlockToPage,changePageToBlock, deleteBlock ,addPage,editPage, movePageToPage,  setMoveTargetBlock,moveTargetBlock, setCommentBlock, popup, setPopup ,menuOpen,setMenuOpen ,setPopupStyle ,setTargetPageId }:BlockFnProp)=>{
   const inner =document.getElementById("inner");
   const [openRename, setOpenRename] =useState<boolean>(false);
 
@@ -103,8 +104,8 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
       const targetBlock = JSON.parse(sessionItem);
       setBlockFnTargetBlock(targetBlock);
 
-      if(moveTargetBlock.current=== null){
-        moveTargetBlock.current = targetBlock
+      if(moveTargetBlock=== null){
+        setMoveTargetBlock(targetBlock)
       };
 
     }

@@ -1,11 +1,19 @@
 import '../assests/frame.css';
-import React, { CSSProperties, Dispatch, MouseEventHandler, SetStateAction, useEffect, useRef, useState } from 'react';
+import React, { CSSProperties, Dispatch,  MouseEvent,  SetStateAction, useEffect, useRef, useState } from 'react';
+import ReactDOMServer from 'react-dom/server';
 import { Block, BlockCommentType, blockSample,  findBlock, findParentBlock, listItem, makeNewBlock, Page } from '../modules/notion';
-import EditableBlock from './EditableBlock';
+import EditableBlock, { changeFontSizeBySmallText } from './EditableBlock';
 import IconPoup, { randomIcon } from './IconPoup';
 import CommandBlock from './CommandBlock';
 import { defaultFontFamily } from './TopBar';
 import Comments, { CommentInput } from './Comments';
+import BlockFn, { detectRange } from './BlockFn';
+import Loader from './Loader';
+import PageIcon from './PageIcon';
+import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
+import PageMenu from './PageMenu';
+import { PopupType } from '../containers/EditorContainer';
+import {EditableBlockProps} from './EditableBlock';
 
 //icon
 import { BiMessageDetail } from 'react-icons/bi';
@@ -13,14 +21,6 @@ import { BsFillEmojiSmileFill} from 'react-icons/bs';
 import {GrDocumentText ,GrDocument} from 'react-icons/gr';
 import { MdInsertPhoto } from 'react-icons/md';
 import { HiTemplate } from 'react-icons/hi';
-import BlockFn, { detectRange } from './BlockFn';
-import Loader from './Loader';
-import PageIcon from './PageIcon';
-import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
-import PageMenu from './PageMenu';
-import { PopupType } from '../containers/EditorContainer';
-
-
 
 export type Command ={
   boolean:boolean,
@@ -56,6 +56,69 @@ type FrameProps ={
 };
 const basicPageCover ='https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assests/img/artificial-turf-g6e884a1d4_1920.jpg';;
 
+const MoveTargetBlock=({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText, moveBlock  ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand ,setTargetPageId ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock,
+}:EditableBlockProps)=>{
+
+  return(
+    <div 
+      id="moveTargetBlock" 
+    >
+      {(block.type.includes("List")&& !block.firstBlock)?
+      (<div className='eidtableBlock'>
+          <div className='editableBlockInner'>
+            <div 
+            id={`block_${block.id}`}
+            className={`${block.type} block`}
+            style={changeFontSizeBySmallText(block, smallText)}
+            >
+              <div  className="mainBlock">
+                <div className='mainBlock_block'>
+                  <div 
+                    id={block.id}
+                    className="blockComponent"
+                  >
+                    <div 
+                      className={`${block.type}_blockComponent blockComponent`}
+                    >
+                      <div 
+                        className='contentEditable'
+                      >
+                        {block.contents !==""? block.contents : "type '/' for commmands"}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+      ):
+      <EditableBlock
+        key={block.id}
+        page={page}
+        block={block}
+        addBlock={addBlock}
+        editBlock={editBlock}
+        changeToSub={changeToSub}
+        raiseBlock={raiseBlock}
+        deleteBlock={deleteBlock}
+        smallText={smallText}
+        moveBlock={moveBlock}
+        setMoveTargetBlock={setMoveTargetBlock}
+        pointBlockToMoveBlock={pointBlockToMoveBlock}
+        command={command}
+        setCommand={setCommand}
+        setTargetPageId={setTargetPageId}
+        setOpenComment={setOpenComment}
+        setCommentBlock={setCommentBlock}
+        setOpenLoader={setOpenLoader}
+        setLoaderTargetBlock={setLoaderTargetBlock}
+      />
+      }
+    </div>
+  )
+}
+
 const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,deletePage,commentBlock,openComment ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit}:FrameProps)=>{
   const innerWidth =window.innerWidth; 
   const inner =document.getElementById("inner");
@@ -82,10 +145,10 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
     what:null
   });
   const [popupStyle, setPopupStyle]=useState<CSSProperties |undefined>(undefined); 
-  const moveTargetBlock= useRef<Block|null>(null);
+  const [moveTargetBlock, setMoveTargetBlock]=useState<Block|null>(null);
   const moveBlock =useRef<boolean>(false);
   const pointBlockToMoveBlock =useRef<Block|null>(null);
-  const closePopup=(event: MouseEvent)=>{
+  const closePopup=(event:globalThis.MouseEvent)=>{
     if(popup.popup){
       const popupMenu =document.getElementById("popupMenu");
       const popupMenuDomRect= popupMenu?.getClientRects()[0];
@@ -231,23 +294,22 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
   };
   const pageContent = document.querySelector(".pageContent") as HTMLElement|null;
 
-  pageContent?.addEventListener("click", (event:MouseEvent)=>{onClickPageContentBottom(event)});
+  pageContent?.addEventListener("click", (event:globalThis.MouseEvent)=>{onClickPageContentBottom(event)});
 
   const onMouseMoveToMoveBlock=()=>{
-    if(moveTargetBlock.current!==null){
+    if(moveTargetBlock!==null){
         moveBlock.current=true
     };
   };
   const changeBlockPosition =()=>{
-    if(pointBlockToMoveBlock.current!==null && moveTargetBlock.current!==null){
+    if(pointBlockToMoveBlock.current!==null && moveTargetBlock!==null){
       //editblock
         const editTime =JSON.stringify(Date.now());
         const blocksId =[...page.blocksId];
         const blocks=[...page.blocks];
-        const firstBlocksId =page.firstBlocksId ?  [...page.firstBlocksId] : null
         const pointBlock =pointBlockToMoveBlock.current;
         const targetBlock :Block ={
-          ...moveTargetBlock.current,
+          ...moveTargetBlock,
           editTime:editTime,
         };
         const deleteParentBlocksIdFromSubBlock =(targetBlock:Block, parentBlockId:string)=>{
@@ -273,17 +335,16 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
             const firstBlockIndex = firstBlocksId.indexOf(targetBlock.id);
             firstBlocksId.splice(firstBlockIndex,1);
             firstBlocksId.splice(pointBlock_firstBlockIndex,0,targetBlock.id);
-            console.log("fist", firstBlocksId);
           };
         }else{
           const editedTargetBlock:Block ={
-            ...moveTargetBlock.current,
+            ...moveTargetBlock,
             parentBlocksId:null,
             firstBlock:true,
-            editTime:editTime,
+            editTime:editTime
           };
           //edit editedTargetBlock's parentBlock
-          const {parentBlock} = findParentBlock(page, moveTargetBlock.current);
+          const {parentBlock} = findParentBlock(page, moveTargetBlock);
           if(parentBlock.subBlocksId!==null){
             const editedParentBlock:Block ={
               ...parentBlock,
@@ -364,7 +425,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
         }else{
           const targetBlockParentBlock:Block = findParentBlock(page, targetBlock).parentBlock;
           if(targetBlockParentBlock.id !== parentBlock.id){
-            console.log("targetblockp ==pointp?", targetBlockParentBlock, parentBlock)
             const subBlocksId =targetBlockParentBlock.subBlocksId;
             if(subBlocksId!==null){
               const subBlockIndex= subBlocksId.indexOf(targetBlock.id);
@@ -379,7 +439,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
           };
       }
       };
-      if(page.firstBlocksId !== firstBlocksId){
         const newPage :Page ={
           ...page,
           firstBlocksId:firstBlocksId,
@@ -387,15 +446,13 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
         };
         editPage(page.id, newPage);
         setFirstBlocksId(firstBlocksId);
-      }
     };
   }
   const onMouseUpToMoveBlock=()=>{
-    console.log("piont", pointBlockToMoveBlock.current, moveTargetBlock.current);
     if(moveBlock){
       changeBlockPosition();
       moveBlock.current=false;
-      moveTargetBlock.current = null;
+      setMoveTargetBlock(null);
       pointBlockToMoveBlock.current =null;
       const mainBlockOn =document.querySelector(".mainBlock.on");
       mainBlockOn?.classList.remove("on");
@@ -403,7 +460,21 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
       editableBlockOn?.classList.remove("on");
     }
   };
-  const onClickPageContentBottom =(event:MouseEvent)=>{
+
+  const showMoveTargetBlock=(event:MouseEvent<HTMLDivElement>)=>{
+    if(moveTargetBlock!==null && moveBlock.current ){
+      const editor =document.querySelector(".editor");
+      const x =event.clientX;
+      const y =event.clientY;
+      const moveTargetBlockHtml =document.getElementById("moveTargetBlock");
+      if(moveTargetBlockHtml!==null && editor !==null){
+        moveTargetBlockHtml.setAttribute(
+          "style",`position:absolute; top:${y + editor.scrollTop + 5}px; left:${x+ 5}px`
+        )
+      }
+    };
+  };
+  const onClickPageContentBottom =(event:globalThis.MouseEvent)=>{
     const clientX = event.clientX;
     const clientY = event.clientY;
 
@@ -505,6 +576,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
         <div 
           className='frame_inner'
           style={frameInnerStyle}
+          onMouseMove={showMoveTargetBlock}
         >
           <div 
             className='pageHeader'
@@ -653,7 +725,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
                       deleteBlock={deleteBlock}
                       smallText={smallText}
                       moveBlock={moveBlock}
-                      moveTargetBlock={moveTargetBlock}
+                      setMoveTargetBlock={setMoveTargetBlock}
                       pointBlockToMoveBlock={pointBlockToMoveBlock}
                       command={command}
                       setCommand={setCommand}
@@ -737,6 +809,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
         commentBlock={commentBlock}
         setCommentBlock={setCommentBlock}
         moveTargetBlock={moveTargetBlock}
+        setMoveTargetBlock={setMoveTargetBlock}
         popup={popup}
         setPopup={setPopup}
         menuOpen={menuOpen}
@@ -813,6 +886,30 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
           discardEdit={discardEdit}
         />  
       </div>            
+      }
+      {moveTargetBlock!==null &&
+        <MoveTargetBlock
+          key={moveTargetBlock.id}
+          page={page}
+          block={moveTargetBlock}
+          addBlock={addBlock}
+          editBlock={editBlock}
+          changeToSub={changeToSub}
+          raiseBlock={raiseBlock}
+          deleteBlock={deleteBlock}
+          smallText={smallText}
+          moveBlock={moveBlock}
+          setMoveTargetBlock={setMoveTargetBlock}
+          pointBlockToMoveBlock={pointBlockToMoveBlock}
+          command={command}
+          setCommand={setCommand}
+          setTargetPageId={setTargetPageId}
+          setOpenComment={setOpenComment}
+          setCommentBlock={setCommentBlock}
+          setOpenLoader={setOpenLoader}
+          setLoaderTargetBlock={setLoaderTargetBlock}
+
+        />
       }
     </div>
   )
