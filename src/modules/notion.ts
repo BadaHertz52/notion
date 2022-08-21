@@ -1172,7 +1172,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
             const {previousBlockInDoc , previousBlockInDocIndex}=findPreviousBlockInDoc(targetPage, action.block);
             //result1. block 위치가 한단계 앞으로  :block이 subBlock인 경우 
             //ressult2. block contents가 이전 block에 합쳐지고 block아 삭제되는 경우 
-            
+            console.log("previousBlockInDoc" , previousBlockInDoc)
             const combineContents=()=>{
               const editedPreBlockInDoc :Block ={
                 ...previousBlockInDoc,
@@ -1188,7 +1188,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
             if(targetBlock.parentBlocksId!==null){
               //targetBlock이 subBlock 이면
               //previoust block은 targetBlock의 parentBlock이거나 다른 subBlock인 경우 밖에 없음
-              const {parentBlock} =findParentBlock(targetPage, targetBlock);
+              const {parentBlock, parentBlockIndex} =findParentBlock(targetPage, targetBlock);
               const subBlocksId =parentBlock.subBlocksId as string[];
               const length =subBlocksId.length ;
               const lastSubBlockId= subBlocksId[length -1];
@@ -1197,17 +1197,60 @@ export default function notion (state:Notion =initialState , action :NotionActio
 
               if((previousBlockInDoc.id === parentBlock.id)|| conditon2){
                 //block -pull 
+                console.log("pull", "editarget");
                 raiseSubBlock(targetPage, action.block, false);
-
                 const editedTargetBlock :Block ={
                   ...targetBlock,
                   parentBlocksId:parentBlock.parentBlocksId,
                   firstBlock:parentBlock.firstBlock,
                   editTime:editTime
                 };
-                console.log("pull", "editarget");
-                editBlockData(blockIndex, editedTargetBlock);
+                const targetBlockIndexInSubBlocks =subBlocksId.indexOf(targetBlock.id);
+                if(targetBlockIndexInSubBlocks < subBlocksId.length-1){
+                  const newSubBlocksId = subBlocksId.slice(0,targetBlockIndexInSubBlocks);
+                  const otherSubBlocksId =subBlocksId.slice(targetBlockIndexInSubBlocks+1);
 
+                  const editedTargetBlock2:Block ={
+                    ...editedTargetBlock,
+                    subBlocksId:otherSubBlocksId
+                  };
+                  editBlockData(blockIndex, editedTargetBlock2);
+                  //edit parentBlock
+                  const editedParentBlock2 :Block ={
+                    ...parentBlock,
+                    subBlocksId:newSubBlocksId,
+                    editTime:editTime
+                  };
+                  editBlockData(parentBlockIndex, editedParentBlock2);
+                  // change subBlock's parentBlocksId
+                  const changeParentBlockId=(id:string)=>{
+                    const {BLOCK, index}= findBlock(targetPage,id);
+                    if(BLOCK.parentBlocksId!==null){
+                      const sub_parentBlocksId =[...BLOCK.parentBlocksId];
+                      const previousBlockInDocIndexInParentBlocks =sub_parentBlocksId.indexOf(previousBlockInDoc.id);
+                      sub_parentBlocksId.splice(previousBlockInDocIndexInParentBlocks,1,targetBlock.id);
+                      const newSubBlock :Block ={
+                        ...BLOCK,
+                        parentBlocksId: sub_parentBlocksId,
+                        editTime:editTime
+                      };
+                      editBlockData(index, newSubBlock);
+                      BLOCK.subBlocksId!== null && BLOCK.subBlocksId.forEach((id:string)=> changeParentBlockId(id));
+                    }
+                  };
+                  otherSubBlocksId.forEach((id:string)=> changeParentBlockId(id));
+                }else{
+                  editBlockData(blockIndex, editedTargetBlock);
+                  subBlocksId.splice(targetBlockIndexInSubBlocks,1);
+                  const editedParentBlock:Block ={
+                    ...parentBlock,
+                    subBlocksId: subBlocksId,
+                    editTime:editTime
+                  };
+                  editBlockData(parentBlockIndex, editedParentBlock);
+                }
+
+                //edit fristBlock
                 if(parentBlock.firstBlock){
                   const firstIndex= targetPage.firstBlocksId.indexOf(parentBlock.id);
                   targetPage.firstBlocksId.splice(firstIndex+1,0, targetBlock.id);
@@ -1247,7 +1290,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
               raiseSubBlock(targetPage, action.block, true);
               updateNewParentAndFirstBlocksIdAfterRaise(targetPage, action.block);
               combineContents();
-            };
+            }
           };
         console.log("raiseBlock", pages[pageIndex]);
       return {
