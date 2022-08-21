@@ -362,7 +362,11 @@ const initialState :Notion ={
       editTime: (Date.parse("2021-5-18-16:00")).toString()
       ,
       createTime: (Date.parse("2021-5-18-2:00")).toString(),
-      style :basicBlockStyle,
+      style :{
+        ...basicBlockStyle,
+        width:"222px",
+        height:"auto"
+      },
       comments: null
     },
     {
