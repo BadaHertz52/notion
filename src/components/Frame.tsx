@@ -283,7 +283,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
             editTime:editTime,
           };
           //edit editedTargetBlock's parentBlock
-          const {parentBlock} = findParentBlock(page, editedTargetBlock);
+          const {parentBlock} = findParentBlock(page, moveTargetBlock.current);
           if(parentBlock.subBlocksId!==null){
             const editedParentBlock:Block ={
               ...parentBlock,
