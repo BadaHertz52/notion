@@ -161,6 +161,8 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
         what:null
       });
     };
+  };
+  const closeComments=(event:globalThis.MouseEvent)=>{
     if(openComment && commentBlock!==null){
       const commentsDoc= document.getElementById("block_comments") ;
       const commentBtn =document.getElementById(`${commentBlock.id}_contents`);
@@ -169,13 +171,14 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
         const commentBtnDomRect =commentBtn.getClientRects()[0];
         const isInComments =detectRange(event, commentsDocDomRect);
         const isInCommentsBtn =detectRange(event, commentBtnDomRect);
+        console.log("clse comment", isInComments , isInCommentsBtn);
         if(!isInComments &&!isInCommentsBtn){
           setCommentBlock(null);
           setOpenComment(false); 
         }
       }
     }
-  };
+  }
   const closeMenu =(event:globalThis.MouseEvent| MouseEvent)=>{
     const mainMenu =document.getElementById("mainMenu");
     const sideMenu =document.getElementById("sideMenu")?.firstElementChild;
@@ -195,6 +198,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
   inner?.addEventListener("click", (event:globalThis.MouseEvent)=>{
     menuOpen &&closeMenu(event);
     popup.popup && closePopup(event);
+    openComment && commentBlock!==null && closeComments(event);
   });
 
 

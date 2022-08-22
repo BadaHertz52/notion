@@ -656,7 +656,6 @@ const CommentTool =({mainComment , comment,block, page ,pageId ,editBlock ,editP
   }
     
   );
-  
   return(
     <div className="tool">
       {mainComment &&
