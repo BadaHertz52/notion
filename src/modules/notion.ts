@@ -832,6 +832,70 @@ export const findPage =(pagesId: string[] ,pages:Page[] ,pageId:string):Page|Tra
   const PAGE :Page|TrashPage = pages[index];
   return PAGE
 };
+  
+  /**
+   * 페이지 상의 block(=@param block)의 앞에 있는 block(=previousBlockInDoc)를 찾는 함수
+   * @param page 현재 페이지
+   * @param block  previousBlock의 기준이 되는 block
+   * @returns  block의 앞에 있는 previousBlock과 previsousBlockIndex(=page.blocksId.indexOf(previsousBlock.id))
+   */
+  export const findPreviousBlockInDoc=(page:Page, block:Block):{previousBlockInDoc:Block,
+    previousBlockInDocIndex: number}=>{
+      let previousBlockInDoc =blockSample;
+      let previousBlockIndex =0;
+      const findLastSubBLOCK=(targetBlock:Block)=>{
+        if(targetBlock.subBlocksId!==null){
+          const lastSubBlockId= targetBlock.subBlocksId[targetBlock.subBlocksId.length-1];
+          console.log("targetBLock", targetBlock, lastSubBlockId);
+          const {BLOCK,index} = findBlock(page,lastSubBlockId);
+          if(BLOCK.subBlocksId==null){
+            previousBlockInDoc =BLOCK;
+            previousBlockIndex= index;
+          }else{
+            findLastSubBLOCK(BLOCK);
+          }
+        }
+      };
+      if(page.firstBlocksId!==null){
+        if(block.firstBlock){
+          const blockIndexAsFirstBlock= page.firstBlocksId.indexOf(block.id);
+          const previousFirstBlockId= page.firstBlocksId[blockIndexAsFirstBlock-1];
+          const {BLOCK,index} =findBlock(page, previousFirstBlockId);
+          const previousFirstBlock =BLOCK;
+          const previousFirstBlockIndex =index;
+          if(previousFirstBlock.subBlocksId===null){
+            previousBlockInDoc = previousFirstBlock;
+            previousBlockIndex =previousFirstBlockIndex;
+          }else{
+  
+            findLastSubBLOCK(previousFirstBlock);
+          }
+        };
+        if(!block.firstBlock){
+          const {parentBlock, parentBlockIndex} =findParentBlock(page, block);
+          if(parentBlock.subBlocksId!==null){
+            const blockIndexAsSubBlock = parentBlock.subBlocksId.indexOf(block.id);
+            if(blockIndexAsSubBlock === 0){
+              previousBlockInDoc =parentBlock;
+              previousBlockIndex =parentBlockIndex;
+            }else{
+              const previousSubBlockId= parentBlock.subBlocksId[blockIndexAsSubBlock-1];
+              const {BLOCK, index}= findBlock(page, previousSubBlockId);
+              const previousSubBlock =BLOCK;
+              if(previousSubBlock.subBlocksId==null){
+                previousBlockInDoc =previousSubBlock;
+                previousBlockIndex =index;
+              }else{
+                findLastSubBLOCK(previousSubBlock);
+              }
+            }
+          }
+        };
+      };
+      return {previousBlockInDoc:previousBlockInDoc,
+              previousBlockInDocIndex: previousBlockIndex        
+      }
+    }
 export default function notion (state:Notion =initialState , action :NotionAction) :Notion{
   const pagesId = [...state.pagesId];
   const firstPagesId=[...state.firstPagesId];
@@ -885,70 +949,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
       console.log("can't find parentBlocks of this block")
     }
   };
-  
-  /**
-   * 페이지 상의 block(=@param block)의 앞에 있는 block(=previousBlockInDoc)를 찾는 함수
-   * @param page 현재 페이지
-   * @param block  previousBlock의 기준이 되는 block
-   * @returns  block의 앞에 있는 previousBlock과 previsousBlockIndex(=page.blocksId.indexOf(previsousBlock.id))
-   */
-  const findPreviousBlockInDoc=(page:Page, block:Block):{previousBlockInDoc:Block,
-  previousBlockInDocIndex: number}=>{
-    let previousBlockInDoc =blockSample;
-    let previousBlockIndex =0;
-    const findLastSubBLOCK=(targetBlock:Block)=>{
-      if(targetBlock.subBlocksId!==null){
-        const lastSubBlockId= targetBlock.subBlocksId[targetBlock.subBlocksId.length-1];
-        console.log("targetBLock", targetBlock, lastSubBlockId);
-        const {BLOCK,index} = findBlock(page,lastSubBlockId);
-        if(BLOCK.subBlocksId==null){
-          previousBlockInDoc =BLOCK;
-          previousBlockIndex= index;
-        }else{
-          findLastSubBLOCK(BLOCK);
-        }
-      }
-    };
-    if(page.firstBlocksId!==null){
-      if(block.firstBlock){
-        const blockIndexAsFirstBlock= page.firstBlocksId.indexOf(block.id);
-        const previousFirstBlockId= page.firstBlocksId[blockIndexAsFirstBlock-1];
-        const {BLOCK,index} =findBlock(page, previousFirstBlockId);
-        const previousFirstBlock =BLOCK;
-        const previousFirstBlockIndex =index;
-        if(previousFirstBlock.subBlocksId===null){
-          previousBlockInDoc = previousFirstBlock;
-          previousBlockIndex =previousFirstBlockIndex;
-        }else{
 
-          findLastSubBLOCK(previousFirstBlock);
-        }
-      };
-      if(!block.firstBlock){
-        const {parentBlock, parentBlockIndex} =findParentBlock(page, block);
-        if(parentBlock.subBlocksId!==null){
-          const blockIndexAsSubBlock = parentBlock.subBlocksId.indexOf(block.id);
-          if(blockIndexAsSubBlock === 0){
-            previousBlockInDoc =parentBlock;
-            previousBlockIndex =parentBlockIndex;
-          }else{
-            const previousSubBlockId= parentBlock.subBlocksId[blockIndexAsSubBlock-1];
-            const {BLOCK, index}= findBlock(page, previousSubBlockId);
-            const previousSubBlock =BLOCK;
-            if(previousSubBlock.subBlocksId==null){
-              previousBlockInDoc =previousSubBlock;
-              previousBlockIndex =index;
-            }else{
-              findLastSubBLOCK(previousSubBlock);
-            }
-          }
-        }
-      };
-    };
-    return {previousBlockInDoc:previousBlockInDoc,
-            previousBlockInDocIndex: previousBlockIndex        
-    }
-  }
 /**
  * block.firstBlock== true인 block이 삭제될 경우, page의 firstBlocksId 수정하는 함수
  * @param page 현재 페이지
