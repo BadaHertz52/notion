@@ -1,4 +1,4 @@
-import React, { Dispatch, MutableRefObject, SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, MutableRefObject, SetStateAction, useEffect, useRef, useState } from 'react';
 import Menu from './Menu';
 import {Block, findPage, listItem, makeNewBlock, Page} from '../modules/notion';
 import { CSSProperties } from 'styled-components';
@@ -98,25 +98,27 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
       console.log("BlockFn-makeBlock error: there is no session item")
     }
   };
-  const onMouseDown=()=>{
+  const onMouseDownMenu=()=>{
+    console.log("down")
     const sessionItem = sessionStorage.getItem("blockFnTargetBlock") ;
-    if( sessionItem!==null){
+    if(sessionItem!==null){
+      const targetBlock = JSON.parse(sessionItem);
+      moveTargetBlock==null && setMoveTargetBlock(targetBlock)
+    } ;
+  };
+  const onClickMenu=()=>{
+    moveTargetBlock!==null&& setMoveTargetBlock(null);
+    const sessionItem = sessionStorage.getItem("blockFnTargetBlock") ;
+    menuOpen && setMenuOpen(false); 
+    popup.popup && setPopup({
+      popup:false,
+      what:null
+    })
+    if(sessionItem!==null && !menuOpen){
       const targetBlock = JSON.parse(sessionItem);
       setBlockFnTargetBlock(targetBlock);
-
-      if(moveTargetBlock=== null){
-        setMoveTargetBlock(targetBlock)
-      };
-
-    }
-  };
-  const openMenu=()=>{
-    if(blockFnTargetBlock!==null){
-      setMenuOpen(!menuOpen);
-      setPopup({
-        popup:false,
-        what:null
-      })
+      setMenuOpen(true);
+      sessionStorage.remove("blockFnTargetBlock");
     }else{
       console.log("BlockFn-openMenu error: there is no session item")
     } ;
@@ -204,10 +206,10 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
       </div>
       <div 
         className='blockFnIcon'
-        onMouseDown={onMouseDown}
       > 
         <button
-          onClick={openMenu}
+          onClick={onClickMenu}
+          onMouseDown={onMouseDownMenu}
           title ="Click to open menu"
         >
           <CgMenuGridO/>
