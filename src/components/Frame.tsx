@@ -56,7 +56,7 @@ type FrameProps ={
 };
 const basicPageCover ='https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assests/img/artificial-turf-g6e884a1d4_1920.jpg';;
 
-const MoveTargetBlock=({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText, moveBlock  ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand ,setTargetPageId ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock,
+const MoveTargetBlock=({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText, moveBlock  ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand ,setTargetPageId ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock, closeMenu
 }:EditableBlockProps)=>{
 
   return(
@@ -113,6 +113,7 @@ const MoveTargetBlock=({ page, block , editBlock, addBlock,changeToSub ,raiseBlo
         setCommentBlock={setCommentBlock}
         setOpenLoader={setOpenLoader}
         setLoaderTargetBlock={setLoaderTargetBlock}
+        closeMenu={closeMenu}
       />
       }
     </div>
@@ -170,7 +171,27 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
       }
     }
   };
-  inner?.addEventListener("click",(event)=>closePopup(event));
+  const closeMenu =(event:globalThis.MouseEvent| MouseEvent)=>{
+    const mainMenu =document.getElementById("mainMenu");
+    const sideMenu =document.getElementById("sideMenu")?.firstElementChild;
+    const mainMenuArea =mainMenu?.getClientRects()[0] ;
+    const sideMenuArea =sideMenu?.getClientRects()[0] ;
+
+    const isInrMain = detectRange(event, mainMenuArea);
+    const isInSide =detectRange(event, sideMenuArea );
+
+    if(sideMenuArea !==undefined){
+      (isInrMain || isInSide) ? setMenuOpen(true) :setMenuOpen(false);
+    }else{
+      isInrMain ? setMenuOpen(true) : setMenuOpen(false);
+    }
+  };
+  
+  inner?.addEventListener("click", (event:globalThis.MouseEvent)=>{
+    menuOpen &&closeMenu(event);
+    popup.popup && closePopup(event);
+  });
+
 
   const maxWidth = innerWidth -60
   const frameInnerStyle:CSSProperties={
@@ -734,6 +755,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
                       setCommentBlock={setCommentBlock}
                       setOpenLoader={setOpenLoader}
                       setLoaderTargetBlock={setLoaderTargetBlock}
+                      closeMenu={closeMenu}
                     />
                   )
                 }
@@ -908,6 +930,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
           setCommentBlock={setCommentBlock}
           setOpenLoader={setOpenLoader}
           setLoaderTargetBlock={setLoaderTargetBlock}
+          closeMenu={closeMenu}
 
         />
       }

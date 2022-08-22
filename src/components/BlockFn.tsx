@@ -124,40 +124,6 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
     } ;
   };
 
-  const closeMenu =(event:MouseEvent)=>{
-    const mainMenu =document.getElementById("mainMenu");
-    const sideMenu =document.getElementById("sideMenu")?.firstElementChild;
-    const mainMenuArea =mainMenu?.getClientRects()[0] ;
-    const sideMenuArea =sideMenu?.getClientRects()[0] ;
-
-    const isInrMain = detectRange(event, mainMenuArea);
-    const isInSide =detectRange(event, sideMenuArea );
-
-    if(sideMenuArea !==undefined){
-      (isInrMain || isInSide) ? setMenuOpen(true) :setMenuOpen(false);
-    }else{
-      isInrMain ? setMenuOpen(true) : setMenuOpen(false);
-    }
-  };
-  const closePopup =(event:MouseEvent)=>{
-    const popupMenu =document.getElementById("popupMenu");
-    const popupMenuArea =popupMenu?.getClientRects()[0];
-    const isInPopupMenu =detectRange(event, popupMenuArea);
-    if(!isInPopupMenu){
-
-      setPopup({
-        popup:false,
-        what: null
-      });
-    }
-
-  };
-
-  inner?.addEventListener("click", (event:MouseEvent)=>{
-      menuOpen &&closeMenu(event);
-      popup.popup && closePopup(event);
-    });
-
   useEffect(()=>{
     const popupStyleItem =sessionStorage.getItem("popupStyle");
     if(popup && popupStyleItem !==null){

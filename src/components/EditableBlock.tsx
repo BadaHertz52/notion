@@ -26,6 +26,7 @@ export type EditableBlockProps ={
   setCommentBlock: Dispatch<SetStateAction<Block | null>>,
   setOpenLoader:Dispatch<SetStateAction<boolean>>,
   setLoaderTargetBlock : Dispatch<SetStateAction<Block | null>>,
+  closeMenu:(event: globalThis.MouseEvent |MouseEvent) => void,
 };
 export   type CommentOpenType ={
   open:boolean,
@@ -58,7 +59,7 @@ export const changeFontSizeBySmallText=(block:Block, smallText:boolean):CSSPrope
   };
   return style 
 };
-const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText, moveBlock ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand ,setTargetPageId ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock,
+const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText, moveBlock ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand ,setTargetPageId ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock,closeMenu
 }:EditableBlockProps)=>{  
   const className = block.type !== "toggle" ?
   `${block.type} block ` :
@@ -226,6 +227,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                 setTargetPageId={setTargetPageId}
                 setOpenLoader={setOpenLoader}
                 setLoaderTargetBlock={setLoaderTargetBlock}
+                closeMenu={closeMenu}
               />
             </div>
             </div>
@@ -330,6 +332,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                 setOpenComment={setOpenComment}
                 setOpenLoader={setOpenLoader}
                 setLoaderTargetBlock={setLoaderTargetBlock}
+                closeMenu={closeMenu}
                 />
               </div>
               </div>
@@ -368,6 +371,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                   setTargetPageId={setTargetPageId}
                   setOpenLoader={setOpenLoader}
                   setLoaderTargetBlock={setLoaderTargetBlock}
+                  closeMenu={closeMenu}
                 />
               )
               }
