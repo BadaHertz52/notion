@@ -163,7 +163,6 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
         const text =event.currentTarget.innerText;
         const cursor = document.getSelection();
         const offset =cursor?.anchorOffset;
-        console.log("offset", offset, text==="" ,targetBlock.contents);
         if(offset===0 && text===""){
           deleteBlock(page.id, targetBlock, false);
         }
