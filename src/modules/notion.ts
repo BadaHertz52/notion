@@ -74,6 +74,7 @@ export type BlockCommentType = CommentType &{
   subCommentsId : string[] |null,
 };
 export type Block ={
+  /** 새로 만들어진 block.id 는 `${page.id}_${number}_${editTime}` 형식 */
   id:string,
   contents:string, 
   firstBlock:boolean,
@@ -121,7 +122,9 @@ export function makeNewBlock(page:Page, targetBlock:Block|null, newBlockContents
   };
   return newBlock
 };
-
+/**
+ * path,page list 등 page의 block date를 제외한 page에 대한 간략한 정보를 담은 type
+ */
 export type listItem = {
   id: string;
   title: string ;
@@ -134,7 +137,7 @@ export type listItem = {
 };
 
 export type Page ={
-  id:string ,  // 형식 : comment_현재 시간 
+  id:string , 
   header : {
     title: string ,
     iconType: IconType,
@@ -150,6 +153,9 @@ export type Page ={
   editTime: string,
   createTime:string,
 };
+/**
+ * 삭제된 page가 보여있는 trash에서의 page type
+ */
 type TrashPage =Page &{
   subPages:Page[]|null
 };
@@ -208,32 +214,48 @@ export const add_block =(pageId:string, block:Block ,newBlockIndex:number ,previ
 export const edit_block =(pageId:string, block:Block)=> ({
   type:EDIT_BLOCK ,
   pageId:pageId,
+  /**수정된 block*/
   block:block,
 });
 export const change_block_to_page=(currentPageId: string, block:Block)=>({
   type:CHANGE_BLOCK_TO_PAGE,
   pageId: currentPageId,
+  /** page type 으로 변경된 block */
   block:block,
 });
 export const change_page_to_block=(currentPageId: string, block:Block)=>({
   type:CHANGE_PAGE_TO_BLOCK,
   pageId: currentPageId,
+  /** page type 에서 다른 blockType 으로 변경된 block */
   block:block,
 });
 export const delete_block =(pageId:string, block:Block, isInMenu:boolean)=> ({
   type:DELETE_BLOCK ,
   pageId:pageId,
+  /** 삭제될 block */
   block:block,
+  /** block 삭제가 menu의 delete 로 이루어진 경우  */
   isInMenu:isInMenu
 });
-
+/**
+ * block을 화면상에서 앞에 위치한 block의 subBlock으로 변경하는 액션함수 
+ * @param pageId  : 현재 페이지의 id
+ * @param block : subBlock 으로 변경될 block
+ * @param newParentBlockId : subBlock이 될 block의 새로운 parentBlock의 id
+ * @returns 
+ */
 export const change_to_sub =(pageId:string, block:Block ,newParentBlockId:string)=> ({
   type:CHANGE_TO_SUB_BLOCK ,
   pageId:pageId,
   block:block,
   newParentBlockId:newParentBlockId
 });
-
+/**
+ * block이 삭제되거나 block의 content 맨앞에서 backspace 를 누르는 경우, block의 내용이 화면상에서 block의 앞에 위치한 이전 상의 block의 내용과 합쳐지거나, 위치가 앞으로 당겨지도록 하는 액션 함수 
+ * @param pageId 현재 페이지의 id
+ * @param block  내용이 합쳐지거나 앞으로 당겨질 block
+ * @returns 
+ */
 export const raise_block =(pageId:string, block:Block)=>({
   type:RAISE_BLOCK,
   pageId:pageId,
@@ -246,6 +268,7 @@ export const add_page =( newPage:Page)=>({
   newPage: newPage,
   block:null
 });
+
 export const duplicate_page=(targetPageId:string )=>({
   type:DUPLICATE_PAGE,
   pageId:targetPageId,
@@ -257,6 +280,12 @@ export const edit_page =(pageId:string, newPage:Page )=>({
   newPage: newPage,
   block:null
 });
+/**
+ * 페이지를 다른 페이지의 블록(blockType :page)으로 변경하는 액션함수
+ * @param targetPageId 옮겨지는 페이지
+ * @param destinationPageId 페이지가 옮겨질 페이지
+ * @returns 
+ */
 export const move_page_to_page =(targetPageId:string, destinationPageId:string, )=>({
   type: MOVE_PAGE_TO_PAGE,
   pageId: targetPageId, 
@@ -269,6 +298,11 @@ export const delete_page =(pageId:string)=>(
   pageId: pageId,
   block:null
 });
+/**
+ * 삭제되어 trash에 저장된 page를 다시 notion.pages로 복구하는 액션함수
+ * @param pageId 
+ * @returns 
+ */
 export const restore_page=(pageId:string)=>(
   {
     type:RESTORE_PAGE,
@@ -276,6 +310,7 @@ export const restore_page=(pageId:string)=>(
     block:null
   }
 )
+/** trash의 data를 삭제하는 액션함수 */
 export const clean_trash =(pageId:string)=>({
   type: CLEAN_TRASH,
   pageId:pageId,
@@ -761,7 +796,12 @@ const initialState :Notion ={
     pages:null
   }
 };
-
+/**
+ * block.id로 block을 찾을 수 있는 함수
+ * @param page 찾을 block이 존재하는 페이지
+ * @param blockId 찾을 block의 아이디
+ * @returns index: block의 page.blocks에서의 index, BLOCK: 찾는 block
+ */
 export function findBlock( page:Page,blockId: string):{index: number ,BLOCK:Block} {
   const index = page.blocksId.indexOf(blockId) as number;
   const block:Block = page.blocks[index];
@@ -771,6 +811,12 @@ export function findBlock( page:Page,blockId: string):{index: number ,BLOCK:Bloc
     BLOCK:block,
   }
 };
+/**
+ * subBlock 의 바로 윗대의 parentBlock를 찾는 함수
+ * @param page subBlock이 존재하는 page
+ * @param subBlock  parentBlock을 찾는데 기준이 되는 subBlock
+ * @returns parentBlockIndex: parentBlock의 page.blocks에서의 index, parentBloc: 찾고자 한 parentBlock
+ */
 export function findParentBlock ( page:Page, subBlock:Block) : { parentBlockIndex:number, parentBlock:Block} {
   const parentBlocksId =subBlock.parentBlocksId  as string[];
   const last:number =parentBlocksId.length-1;
@@ -1008,12 +1054,13 @@ export default function notion (state:Notion =initialState , action :NotionActio
   switch (action.type) {
     case ADD_BLOCK:
       if(action.newBlockIndex===0){
+        // 새로운 블럭이 page 의 첫번째 블럭인 경우
         targetPage.blocks =[action.block];
         targetPage.blocksId=[action.block.id];
       }else{
         targetPage.blocks?.splice(action.newBlockIndex, 0, action.block);
         targetPage.blocksId?.splice(action.newBlockIndex, 0, action.block.id);
-      }
+      };
 
       if(action.block.firstBlock){
         if(targetPage.firstBlocksId!==null){
@@ -1036,7 +1083,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
       };
 
       if(action.block.subBlocksId!==null && action.previousBlockId!==null){
-        // subBlock을 가지는 블록을 기준을  그 다음 블록으로 만들어진 경우  
+        // subBlock을 가지는 블록을 기준으로 그 다음 블록으로 만들어진 경우  
         const previousBlock = findBlock(targetPage, action.previousBlockId).BLOCK;
         previousBlock.subBlocksId =null;
 
@@ -1047,9 +1094,10 @@ export default function notion (state:Notion =initialState , action :NotionActio
           BLOCK.parentBlocksId?.splice(parentIndex,1, action.block.id);
         })
       };
-
+      //새롱 만들어진 block 에 포거스를 두기 위해 
       sessionStorage.setItem("newBlock", action.block.id);
       if(action.block.type ==="page"){
+        // 만들어진 블록의 type 이 page 인 경우 
         const newPage:Page ={
           ...pageSample,
           id:action.block.id,
@@ -1067,7 +1115,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
           };
           editPage(editedParentPage);
         }
-      }
+      };
       console.log( "addBlock", targetPage)
       return {
         pages:pages,
