@@ -1,4 +1,4 @@
-import React, { Dispatch, MutableRefObject, SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, MutableRefObject, SetStateAction, useEffect, useRef, useState } from 'react';
 import Menu from './Menu';
 import {Block, findPage, listItem, makeNewBlock, Page} from '../modules/notion';
 import { CSSProperties } from 'styled-components';
@@ -98,63 +98,31 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
       console.log("BlockFn-makeBlock error: there is no session item")
     }
   };
-  const onMouseDown=()=>{
+  const onMouseDownMenu=()=>{
+    console.log("down")
     const sessionItem = sessionStorage.getItem("blockFnTargetBlock") ;
-    if( sessionItem!==null){
+    if(sessionItem!==null){
+      const targetBlock = JSON.parse(sessionItem);
+      moveTargetBlock==null && setMoveTargetBlock(targetBlock)
+    } ;
+  };
+  const onClickMenu=()=>{
+    moveTargetBlock!==null&& setMoveTargetBlock(null);
+    const sessionItem = sessionStorage.getItem("blockFnTargetBlock") ;
+    menuOpen && setMenuOpen(false); 
+    popup.popup && setPopup({
+      popup:false,
+      what:null
+    })
+    if(sessionItem!==null && !menuOpen){
       const targetBlock = JSON.parse(sessionItem);
       setBlockFnTargetBlock(targetBlock);
-
-      if(moveTargetBlock=== null){
-        setMoveTargetBlock(targetBlock)
-      };
-
-    }
-  };
-  const openMenu=()=>{
-    if(blockFnTargetBlock!==null){
-      setMenuOpen(!menuOpen);
-      setPopup({
-        popup:false,
-        what:null
-      })
+      setMenuOpen(true);
+      sessionStorage.remove("blockFnTargetBlock");
     }else{
       console.log("BlockFn-openMenu error: there is no session item")
     } ;
   };
-
-  const closeMenu =(event:MouseEvent)=>{
-    const mainMenu =document.getElementById("mainMenu");
-    const sideMenu =document.getElementById("sideMenu")?.firstElementChild;
-    const mainMenuArea =mainMenu?.getClientRects()[0] ;
-    const sideMenuArea =sideMenu?.getClientRects()[0] ;
-
-    const isInrMain = detectRange(event, mainMenuArea);
-    const isInSide =detectRange(event, sideMenuArea );
-
-    if(sideMenuArea !==undefined){
-      (isInrMain || isInSide) ? setMenuOpen(true) :setMenuOpen(false);
-    }else{
-      isInrMain ? setMenuOpen(true) : setMenuOpen(false);
-    }
-  };
-  const closePopup =(event:MouseEvent)=>{
-    const popupMenu =document.getElementById("popupMenu");
-    const popupMenuArea =popupMenu?.getClientRects()[0];
-    const isInPopupMenu =detectRange(event, popupMenuArea);
-    if(!isInPopupMenu){
-
-      setPopup({
-        popup:false,
-        what: null
-      });
-    }
-
-  };
-
-  inner?.addEventListener("click", (event:MouseEvent)=>{
-      menuOpen &&closeMenu(event);
-      popup.popup && closePopup(event);
-    });
 
   useEffect(()=>{
     const popupStyleItem =sessionStorage.getItem("popupStyle");
@@ -204,10 +172,10 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
       </div>
       <div 
         className='blockFnIcon'
-        onMouseDown={onMouseDown}
       > 
         <button
-          onClick={openMenu}
+          onClick={onClickMenu}
+          onMouseDown={onMouseDownMenu}
           title ="Click to open menu"
         >
           <CgMenuGridO/>

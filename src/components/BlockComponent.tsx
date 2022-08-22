@@ -22,6 +22,7 @@ type  BlockProps ={
   setTargetPageId: React.Dispatch<React.SetStateAction<string>>,
   setOpenLoader:Dispatch<SetStateAction<boolean>>,
   setLoaderTargetBlock : Dispatch<SetStateAction<Block | null>>,
+  closeMenu: (event: globalThis.MouseEvent| MouseEvent) => void
 };
 type BlockCommentProps={
   block:Block,
@@ -52,10 +53,10 @@ export const BlockComment =({block , onClickCommentBtn}:BlockCommentProps)=>{
   )
 };
 
-const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,blockComments , command, setCommand  ,onClickCommentBtn ,setOpenComment ,setTargetPageId ,setOpenLoader, setLoaderTargetBlock }:BlockProps)=>{
+const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,blockComments , command, setCommand  ,onClickCommentBtn ,setOpenComment ,setTargetPageId ,setOpenLoader, setLoaderTargetBlock ,closeMenu }:BlockProps)=>{
   const editTime =JSON.stringify(Date.now);
   const contentEditableRef= useRef<HTMLElement>(null);
-  const findTargetBlock =(event:ContentEditableEvent|React.KeyboardEvent<HTMLDivElement>|React.MouseEvent):Block=>{
+  const findTargetBlock =(event:ContentEditableEvent|React.KeyboardEvent<HTMLDivElement>|MouseEvent):Block=>{
     const target =event.currentTarget.parentElement as HTMLElement;
     const targetId= target.id;
     const end =targetId.indexOf("_contents");
@@ -64,7 +65,8 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
     return targetBlock;
   };
 
-  const showBlockFn=(event: React.MouseEvent)=>{
+  const showBlockFn=(event: MouseEvent)=>{
+    closeMenu(event)
     const currentTarget =event.currentTarget as Element;
     const mainBlock= currentTarget.parentElement?.parentElement?.parentElement ;
     const domRect =mainBlock?.getClientRects()[0];

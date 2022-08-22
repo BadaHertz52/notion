@@ -55,15 +55,18 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
     const innerWidth =window.innerWidth;
     const innerHeight =window.innerHeight;
     const top = blockFnElement?.getClientRects()[0].top as number;
-    const overHeight = ( top + menuHeight ) >= innerHeight
-    const style :CSSProperties =
-    overHeight? {
-      bottom:  blockFnElement?.offsetHeight,
-      left: innerWidth >767 ?'3rem' : '1rem',
-    } :
-    {
-      top:  blockFnElement?.offsetHeight,
-      left: innerWidth >767 ?'3rem' : '1rem',
+    const overHeight = ( top + menuHeight ) >= innerHeight;
+    let style:CSSProperties ={};
+    if(blockFnElement!==null){
+      style =
+      overHeight? {
+        bottom: (blockFnElement.offsetHeight) *0.5 ,
+        left: innerWidth >767 ?'3rem' : '0.5rem',
+      } :
+      {
+        top:  (blockFnElement.offsetHeight) *0.5 ,
+        left: innerWidth >767 ?'3rem' : '1rem',
+      };
     };
     return style
   };
