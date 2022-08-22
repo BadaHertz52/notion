@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useRef} from 'react';
+import React, { Dispatch, MouseEvent, SetStateAction, useRef} from 'react';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import { IoChatboxOutline } from 'react-icons/io5';
 import { MdOutlineCollectionsBookmark, MdOutlinePhotoSizeSelectActual } from 'react-icons/md';
@@ -218,6 +218,11 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
     setOpenLoader(true);
     setLoaderTargetBlock(block);
   };
+  const onClickContentsCommentBtn=(event:MouseEvent<HTMLButtonElement> ,block:Block)=>{
+    !command.boolean && onClickCommentBtn(block);
+    
+  };
+
   const BlockContentEditable=()=>{
     return(
       <>
@@ -304,7 +309,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
       <button 
         id={`${block.id}_contents`}
         className="contents commentBtn"
-        onClick={()=>{!command.boolean && onClickCommentBtn(block)}}
+        onClick={(event)=>onClickContentsCommentBtn(event, block)}
       >
         <BlockContentEditable/>
       </button>

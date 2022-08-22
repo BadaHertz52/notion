@@ -22,6 +22,7 @@ export type EditableBlockProps ={
   command:Command,
   setCommand:Dispatch<SetStateAction<Command>>,
   setTargetPageId: React.Dispatch<React.SetStateAction<string>> ,
+  openComment: boolean,
   setOpenComment: Dispatch<SetStateAction<boolean>>,
   setCommentBlock: Dispatch<SetStateAction<Block | null>>,
   setOpenLoader:Dispatch<SetStateAction<boolean>>,
@@ -58,7 +59,7 @@ export const changeFontSizeBySmallText=(block:Block, smallText:boolean):CSSPrope
   };
   return style 
 };
-const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText, moveBlock ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand ,setTargetPageId ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock,
+const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText, moveBlock ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand ,setTargetPageId , openComment ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock,
 }:EditableBlockProps)=>{  
   const className = block.type !== "toggle" ?
   `${block.type} block ` :
@@ -94,8 +95,10 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
     }
   };
   const onClickCommentBtn=(block:Block)=>{
-    setOpenComment(true); 
-    setCommentBlock(block);
+    if(!openComment){
+      setOpenComment(true); 
+      setCommentBlock(block);
+    }
   };
   const updateBlock=()=>{
     const item = sessionStorage.getItem("itemsTobeEdited");
@@ -363,6 +366,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                   pointBlockToMoveBlock={pointBlockToMoveBlock}
                   command={command}
                   setCommand={setCommand}
+                  openComment={openComment}
                   setOpenComment={setOpenComment}
                   setCommentBlock={setCommentBlock}
                   setTargetPageId={setTargetPageId}

@@ -49,6 +49,7 @@ type FrameProps ={
   openComment :boolean, 
   setTargetPageId: React.Dispatch<React.SetStateAction<string>>,
   setOpenComment: Dispatch<SetStateAction<boolean>>,
+
   setCommentBlock: Dispatch<SetStateAction<Block | null>>,
   smallText: boolean, 
   fullWidth: boolean, 
@@ -56,7 +57,7 @@ type FrameProps ={
 };
 const basicPageCover ='https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assests/img/artificial-turf-g6e884a1d4_1920.jpg';;
 
-const MoveTargetBlock=({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText, moveBlock  ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand ,setTargetPageId ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock,
+const MoveTargetBlock=({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText, moveBlock  ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand ,setTargetPageId ,openComment, setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock,
 }:EditableBlockProps)=>{
 
   return(
@@ -109,6 +110,7 @@ const MoveTargetBlock=({ page, block , editBlock, addBlock,changeToSub ,raiseBlo
         command={command}
         setCommand={setCommand}
         setTargetPageId={setTargetPageId}
+        openComment={openComment}
         setOpenComment={setOpenComment}
         setCommentBlock={setCommentBlock}
         setOpenLoader={setOpenLoader}
@@ -158,12 +160,15 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
         what:null
       });
     };
-    if(openComment){
+    if(openComment && commentBlock!==null){
       const commentsDoc= document.getElementById("block_comments") ;
-      if(commentsDoc !==null){
+      const commentBtn =document.getElementById(`${commentBlock.id}_contents`);
+      if(commentsDoc !==null && commentBtn!==null){
         const commentsDocDomRect= commentsDoc.getClientRects()[0];
+        const commentBtnDomRect =commentBtn.getClientRects()[0];
         const isInComments =detectRange(event, commentsDocDomRect);
-        if(!isInComments){
+        const isInCommentsBtn =detectRange(event, commentBtnDomRect);
+        if(!isInComments &&!isInCommentsBtn){
           setCommentBlock(null);
           setOpenComment(false); 
         }
@@ -730,6 +735,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
                       command={command}
                       setCommand={setCommand}
                       setTargetPageId={setTargetPageId}
+                      openComment={openComment}
                       setOpenComment={setOpenComment}
                       setCommentBlock={setCommentBlock}
                       setOpenLoader={setOpenLoader}
@@ -904,6 +910,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
           command={command}
           setCommand={setCommand}
           setTargetPageId={setTargetPageId}
+          openComment={openComment}
           setOpenComment={setOpenComment}
           setCommentBlock={setCommentBlock}
           setOpenLoader={setOpenLoader}
