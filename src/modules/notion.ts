@@ -202,7 +202,8 @@ export const add_block =(pageId:string, block:Block ,newBlockIndex:number ,previ
   pageId:pageId,
   block:block,
   newBlockIndex :newBlockIndex,
-  previousBlockId:previousBlockId // 블록과 블록 사이에 새로운 블록을 만드는 경우에 필요
+  /**블록과 블록 사이에 새로운 블록을 만드는 경우에 필요함 */
+  previousBlockId:previousBlockId 
 });
 export const edit_block =(pageId:string, block:Block)=> ({
   type:EDIT_BLOCK ,
@@ -770,7 +771,6 @@ export function findBlock( page:Page,blockId: string):{index: number ,BLOCK:Bloc
     BLOCK:block,
   }
 };
-
 export function findParentBlock ( page:Page, subBlock:Block) : { parentBlockIndex:number, parentBlock:Block} {
   const parentBlocksId =subBlock.parentBlocksId  as string[];
   const last:number =parentBlocksId.length-1;
@@ -808,7 +808,11 @@ export default function notion (state:Notion =initialState , action :NotionActio
     targetPage?.blocks.splice(index,1,block);
     console.log("editBlockData",  block, targetPage.blocks);
   };
-  //subBlock 추가 시 parentBlock update
+  /**
+   * subBlock 추가 시에 subBlock의 parentBlock을 수정 하는 함수 (parentBlock.subBlocksId 수정)
+   * @param subBlock  추가 되는 subBlock
+   * @param previousBlockId 추가 되는 subBlock의 parentBlock.subBlocksId의 index를 설정하기 위한 param ,추가 되는 subBlock 앞에 이미 다른 subBlock이 있는 경우면 앞에 있는 subBlock = previoustBlock
+   */
   const updateParentBlock =(subBlock:Block , previousBlockId:string|null)=>{
     if(subBlock.parentBlocksId!==null ){
       //find parentBlock
@@ -899,8 +903,13 @@ export default function notion (state:Notion =initialState , action :NotionActio
             previousBlockInDocIndex: previousBlockIndex        
     }
   }
+/**
+ * block.firstBlock== true인 block이 삭제될 경우, page의 firstBlocksId 수정하는 함수
+ * @param page 현재 페이지
+ * @param block 삭제될 block
+ */
   const editFirstBlocksId=(page:Page, block:Block)=>{
-    if(block.firstBlock !==null && page.firstBlocksId!==null){
+    if(block.firstBlock && page.firstBlocksId!==null){
       const firstIndex:number= page.firstBlocksId.indexOf(block.id) as number;
       if( block.subBlocksId!==null){
         if(firstIndex ===0){
@@ -919,7 +928,12 @@ export default function notion (state:Notion =initialState , action :NotionActio
         page.firstBlocksId.splice(firstIndex,1);
       };};
   };
-
+  /**
+   * block이 삭제되거나, 한단계 올려지거나, 이전 block과 합쳐지게 되는 경우에 subBlock의 parentBlocksId 를 수정하는 함수 
+   * @param page  현재 페이지
+   * @param block  삭제,올려지거나 이전 블럭과 합쳐지는 블록
+   * @param blockDelete  raise되는 이유가 블럭의 삭제때문인지 여부 
+   */
   const raiseSubBlock =(page:Page,block :Block, blockDelete:boolean)=>{
     if(block.subBlocksId !==null  ){
     // 가정 설명 : 삭제 시 , 삭제되는 block 이 firstBlock 이면 subBlock 은 firstBlock 이 되고 아니면 화면상 이전 블록의 subBlock이 됨
@@ -945,10 +959,13 @@ export default function notion (state:Notion =initialState , action :NotionActio
     //block 삭제와 page firstBlockId 수정은 따로 (sub=sub에서도 실행하기 때문에 sub만 수정 )
     };
   };
+  /**
+   * raiseBlock으로 이전 block과 내용이 합쳐져 해당 block이 삭제된 경우, 해당 block의 subBlocks의 parentsBlocksId를 수정하고 subBlocks가 firstBlock이 된 경우 page.firstBlocksId를 수정하는 함수
+   * @param page 현재 페이지
+   * @param block   삭제된 block, 수정된 subBlocks의 parentBlock
+   */
   const updateNewParentAndFirstBlocksIdAfterRaise= (page:Page, block:Block)=>{
-    //block 삭제시subBlock이 땡겨질 경우 적용 
     const subBlocksId =block.subBlocksId;
-
     if(subBlocksId !==null && block.parentBlocksId!==null){
       const {parentBlock ,parentBlockIndex} =findParentBlock(page, block);
       let parentSubsId =parentBlock.subBlocksId as string[];
@@ -973,6 +990,11 @@ export default function notion (state:Notion =initialState , action :NotionActio
     };
     editFirstBlocksId(page, block);
   };
+  /**
+   * page에서 block 의 data를 삭제하는 함수
+   * @param page :현재 페이지
+   * @param block :삭제 대상인 block
+   */
   const deleteBlockData =(page:Page, block:Block)=>{
     const index = page.blocksId.indexOf(block.id);
     if(block.firstBlock && page.firstBlocksId !==null){
