@@ -430,10 +430,8 @@ const templateBlocks = day.map((d:string)=> {
   if(day.indexOf(d)%2 ===0){
     returnBlock =returnTemplateBlock(d, day.indexOf(d) )
   }else{
-    returnBlock ={
-      ...blockSample,
-      contents:"   "
-    }
+    returnBlock =blockSample;
+
   };
   return returnBlock
 });
