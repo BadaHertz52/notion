@@ -31,7 +31,7 @@ export const bg_yellow:string ="#fff9c4" as const;
 export const bg_green:string ="#ebffd7" as const;
 export const bg_blue :string ="#e3f2fd" as const;
 export const bg_pink : string ="#fce4ec" as const;
-
+const blockBgColor =[bg_blue, bg_green,bg_yellow,  bg_pink, bg_grey, bg_yellow, bg_blue];
 
 export type ColorType = typeof defaultColor|typeof grey|typeof orange| typeof green| typeof blue| typeof red ;
 export type BgColorType = typeof bg_default| typeof bg_grey|typeof bg_yellow| typeof bg_green| typeof bg_blue| typeof bg_pink ;
@@ -374,12 +374,72 @@ ReturnType <typeof add_template>|
 ReturnType <typeof cancle_edit_template>|
 ReturnType <typeof delete_template>
 ;
-
+const todoList =['6AM :🎽 runing', '9AM:🏥physical checkup', '😊 Webtoon re-enactment' ,'8PM: 🛒Buying food ingredients in mart - sale', '6PM :🍴 dinner appointment with friend', 'Dry cleaning at the dry cleaner','house cleaning'];
+const returnTemplateSubBlock =(day:string, index:number)=>{
+  const templateBlock :Block ={
+    id:`templateSub_${day}`,
+    contents:todoList[index],
+    firstBlock:true,
+    subBlocksId:null,
+    parentBlocksId:[`templateBlock_${day}`],
+    type:todo,
+    iconType:null,
+    icon:null,
+    editTime:editTime,
+    createTime:JSON.stringify(Date.now()),
+    style :basicBlockStyle,
+    comments:null
+  };
+  return templateBlock
+};
+const returnTemplateBlock=(day:string, index:number)=>{
+  const templateBlock :Block ={
+    id:`templateBlock_${day}`,
+    contents:`${day}`,
+    firstBlock:true,
+    subBlocksId:[`templateSub_${day}`] ,
+    parentBlocksId: null,
+    type:h2,
+    iconType:null,
+    icon:null,
+    editTime:editTime,
+    createTime:JSON.stringify(Date.now()),
+    style :{
+      ...basicBlockStyle,
+      bgColor:blockBgColor[index]
+    } , 
+    comments:null
+  };
+  return templateBlock
+};
+const day =["Mon", "The", "Wed", "Thr", "Fri", "Sat", "Sun"];
+const templateBlocks = day.map((d:string)=> returnTemplateBlock(d, day.indexOf(d) ));
+const templateBlocksId =day.map((d:string)=> `templateBlock_${d}`);
+const templateSubBlocks =day.map((d:string)=> returnTemplateSubBlock(d, day.indexOf(d)));
+const templateSubBlocksId =day.map((d:string)=>`templateSub_${d}`);
 //reducer
+const template1 :Page ={
+  id:"template1", 
+  type:template,
+  header : {
+    title: "To Do List ",
+    iconType :"emoji",
+    icon: emojis[13],
+    cover: null,
+    comments:  null,
+  },
+  firstBlocksId :templateBlocksId,
+  blocks :  [...templateBlocks, ...templateSubBlocks], 
+  blocksId :  [...templateBlocksId, ...templateSubBlocksId], 
+  subPagesId: null,
+  parentsId:  null ,
+  editTime:Date.parse("2022-8-23-15:00").toString(),
+  createTime:Date.parse("2022-8-23-12:00").toString(),
+}
 const initialState :Notion ={
-  pagesId:['12345','page1','page2' ,'1234', '123' ],
+  pagesId:['12345','page1','page2' ,'1234', '123' ,'template1' ],
   firstPagesId :['12345' ,'1234', '123'],
-  templatesId:null,
+  templatesId:['template1'],
   pages:[
     {
     id: '12345',
@@ -566,7 +626,7 @@ const initialState :Notion ={
       parentBlocksId: null,
       type: page,
       iconType:"emoji",
-      icon: emojis[3] ,
+      icon: emoji[10] ,
       editTime: (Date.parse("2021-5-20-9:00")).toString(),
       createTime: (Date.parse("2021-5-19-20:00")).toString(),
 
@@ -835,7 +895,8 @@ const initialState :Notion ={
     parentsId:null,
     editTime:JSON.stringify(Date.parse("2021-5-13-15:00")),
     createTime:JSON.stringify(Date.parse("2021-5-13-15:00")),
-  }
+  },
+  template1
 ],
   trash:{
     pagesId:null,
