@@ -457,11 +457,29 @@ const template1 :Page ={
   parentsId:  null ,
   editTime:Date.parse("2022-8-23-15:00").toString(),
   createTime:Date.parse("2022-8-23-12:00").toString(),
-}
+};
+const template2 :Page ={
+  id:"template2", 
+  type:template,
+  header : {
+    title: "To Do List2 ",
+    iconType :"emoji",
+    icon: emojis[19],
+    cover: null,
+    comments:  null,
+  },
+  firstBlocksId :templateBlocksId,
+  blocks :  [...templateBlocks, ...templateSubBlocks], 
+  blocksId :  [...templateBlocksId, ...templateSubBlocksId], 
+  subPagesId: null,
+  parentsId:  null ,
+  editTime:Date.parse("2022-8-23-15:00").toString(),
+  createTime:Date.parse("2022-8-23-12:00").toString(),
+};
 const initialState :Notion ={
-  pagesId:['12345','page1','page2' ,'1234', '123' ,'template1' ],
+  pagesId:['12345','page1','page2' ,'1234', '123' ,'template1', 'template2'],
   firstPagesId :['12345' ,'1234', '123'],
-  templatesId:['template1'],
+  templatesId:['template1', 'template2'],
   pages:[
     {
     id: '12345',
@@ -918,7 +936,8 @@ const initialState :Notion ={
     editTime:JSON.stringify(Date.parse("2021-5-13-15:00")),
     createTime:JSON.stringify(Date.parse("2021-5-13-15:00")),
   },
-  template1
+  template1,
+  template2
 ],
   trash:{
     pagesId:null,
