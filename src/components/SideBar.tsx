@@ -2,7 +2,6 @@ import React, {  CSSProperties, Dispatch, SetStateAction, useEffect, useRef, use
 import { Block, blockSample, findPage, listItem, Notion, Page, pageSample } from '../modules/notion';
 import { detectRange } from './BlockFn';
 import { UserState } from '../modules/user';
-import { SideAppear } from '../modules/side';
 import Trash from './Trash';
 import Rename from './Rename';
 import Time from './Time';
@@ -18,8 +17,8 @@ import {HiDownload, HiOutlineDuplicate, HiTemplate} from 'react-icons/hi';
 import { MdPlayArrow } from 'react-icons/md';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { IoArrowRedoOutline } from 'react-icons/io5';
-import { GrDocumentText } from 'react-icons/gr';
 import PageIcon from './PageIcon';
+import { SideBarContainerProp } from '../containers/SideBarContainer';
 
 export const closePopup =(elementId:string ,setState:Dispatch<SetStateAction<boolean>> , event:MouseEvent)=>{
   const element = document.getElementById(elementId);
@@ -28,30 +27,9 @@ export const closePopup =(elementId:string ,setState:Dispatch<SetStateAction<boo
   !isInElement && setState(false);
 };
 
-type SideBarProps ={
+type SideBarProps = SideBarContainerProp & {
   notion : Notion,
-  user:UserState,
-  sideAppear:SideAppear,
-  editBlock :(pageId: string, block: Block) => void,
-  addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
-  deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
-  changeBlockToPage: (currentPageId: string, block: Block) => void,
-
-  addPage : ( newPage:Page, )=>void,
-  duplicatePage: (targetPageId: string) => void,
-  editPage : (pageId:string , newPage:Page, )=>void,
-  deletePage : (pageId:string , )=>void,
-  movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
-
-  addFavorites: (itemId: string) => void,
-  removeFavorites: (itemId: string) => void,
-  cleanTrash: (itemId: string) => void,
-  restorePage: (pageId: string) => void
-  changeSide: (appear: SideAppear) => void,
-
-  setTargetPageId: Dispatch<SetStateAction<string>>,
-
-  setOpenQF: Dispatch<React.SetStateAction<boolean>>
+  user:UserState
 };
 
 type ItemTemplageProp ={
@@ -228,7 +206,7 @@ const ListTemplate =({notion,targetList ,setTargetPageId , onClickMoreBtn, addNe
   )
 };
 
-const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,changeBlockToPage,addPage ,duplicatePage,editPage,deletePage,movePageToPage, cleanTrash, restorePage, addFavorites, removeFavorites, changeSide,setTargetPageId ,setOpenQF
+const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,changeBlockToPage,addPage ,duplicatePage,editPage,deletePage,movePageToPage, cleanTrash, restorePage, addFavorites, removeFavorites, changeSide,setTargetPageId ,setOpenQF 
 }:SideBarProps)=>{
   const inner =document.getElementById("inner");
   const pages =notion.pages;

@@ -1,11 +1,7 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import {useDispatch, useSelector } from 'react-redux';
 import { CSSProperties } from 'styled-components';
-import BlockFn, { detectRange } from '../components/BlockFn';
-import CommandBlock from '../components/CommandBlock';
-import Comments, { CommentInput } from '../components/Comments';
 import Frame from '../components/Frame';
-import PageMenu from '../components/PageMenu';
 import TopBar from '../components/TopBar';
 import { RootState } from '../modules';
 import  {  Block, Page,  change_to_sub, raise_block, listItem } from '../modules/notion';
@@ -19,23 +15,12 @@ export type PopupType ={
   popup: boolean,
   what: typeof popupMoveToPage | typeof popupComment | typeof popupCommand| null,
 };
-
-type EditorContainerProps ={
-  sideAppear:SideAppear,
-  page:Page,
-  pages:Page[],
-  pagesId:string[],
-  userName:string,
-  firstlist:listItem[],
-  isInTrash:boolean,
-  //pagePath : pathType[]|null,
-  makePagePath: (page: Page) => pathType[] | null,
+export type NotionActionProps ={
   editBlock :(pageId: string, block: Block) => void,
   changeBlockToPage: (currentPageId: string, block: Block) => void,
-  changePageToBlock:(currentPageId: string, block: Block) => void,
+
   addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
-  changeToSub: (pageId: string, block: Block, newParentBlockId: string) => void,
-  raiseBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
+
   deleteBlock: (pageId: string, block: Block , isInMenu:boolean) => void,
   
   addPage : ( newPage:Page, )=>void
@@ -43,14 +28,32 @@ type EditorContainerProps ={
   deletePage : (pageId:string )=>void,
   duplicatePage: (targetPageId: string) => void,
   movePageToPage: (targetPageId: string, destinationPageId: string) => void,
-
   restorePage: (pageId: string) => void,
+
   cleanTrash: (pageId: string) => void,
 
   addFavorites: (itemId: string) => void,
   removeFavorites: (itemId: string) => void,
 
   changeSide: (appear: SideAppear) => void,
+}
+type EditorContainerProps = NotionActionProps &{
+  pages:Page[],
+  pagesId:string[],
+  userName:string,
+  firstlist:listItem[],
+  sideAppear:SideAppear,
+  page:Page,
+
+  changeToSub: (pageId: string, block: Block, newParentBlockId: string) => void,
+  raiseBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
+  isInTrash:boolean,
+
+  changePageToBlock:(currentPageId: string, block: Block) => void,
+
+  makePagePath: (page: Page) => pathType[] | null,
+  
+
   setTargetPageId:Dispatch<SetStateAction<string>>,
   openComment :boolean,
   setOpenComment: Dispatch<SetStateAction<boolean>>,
@@ -149,7 +152,6 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isIn
         editPage={editPage}
         duplicatePage={duplicatePage}
         movePageToPage={movePageToPage}
-        deletePage={deletePage}
         commentBlock={commentBlock}
         openComment={openComment}
         setTargetPageId={setTargetPageId}
@@ -158,10 +160,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isIn
         smallText={smallText}
         fullWidth={fullWidth}
         discardEdit={discardEdit}
-
       />
-
-
     </div>
   )
 };

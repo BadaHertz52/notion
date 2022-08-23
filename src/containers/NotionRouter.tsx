@@ -20,6 +20,7 @@ export type pathType={
 export   type DiscardItemType ={
   discard:boolean
 }
+
 const NotionRouter =()=>{
   const navigate= useNavigate();
   const dispatch =useDispatch();
@@ -271,13 +272,11 @@ const NotionRouter =()=>{
       id="inner"
       className='sideBar_lock'
     >
-      <SideBarContainer 
+      <SideBarContainer  
         sideAppear ={sideAppear}
         setTargetPageId={setTargetPageId}
         addBlock={addBlock}
         editBlock={editBlock}
-        changeToSub={changeToSub}
-        raiseBlock={raiseBlock}
         deleteBlock={deleteBlock}
         changeBlockToPage={changeBlockToPage}
         
@@ -420,6 +419,7 @@ const NotionRouter =()=>{
           pagesId={pagesId}
           pages={pages}
           firstlist={firstlist}
+          userName={user.userName}
           setOpenExport={setOpenExport}
           addBlock={addBlock}
           editBlock={editBlock}
@@ -441,7 +441,7 @@ const NotionRouter =()=>{
           smallText={smallText}
           fullWidth={fullWidth}
           discardEdit={discard_edit}
-          userName={user.userName}
+
         />
         }
     </div>

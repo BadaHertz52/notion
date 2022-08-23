@@ -1,6 +1,5 @@
 import '../assests/frame.css';
 import React, { CSSProperties, Dispatch,  MouseEvent,  SetStateAction, useEffect, useRef, useState } from 'react';
-import ReactDOMServer from 'react-dom/server';
 import { Block, BlockCommentType, blockSample,  findBlock, findParentBlock, listItem, makeNewBlock, Page } from '../modules/notion';
 import EditableBlock, { changeFontSizeBySmallText } from './EditableBlock';
 import IconPoup, { randomIcon } from './IconPoup';
@@ -27,7 +26,7 @@ export type Command ={
   command:string | null,
   targetBlock: Block |null
 };
-type FrameProps ={
+export type FrameProps ={
   userName:string,
   page:Page,
   pages:Page[],
@@ -44,7 +43,6 @@ type FrameProps ={
   editPage :(pageId:string,newPage:Page ,)=>void,
   duplicatePage:(targetPageId: string) => void,
   movePageToPage:(targetPageId: string, destinationPageId: string) => void,
-  deletePage: (pageId: string) => void,
   commentBlock: Block | null,
   openComment :boolean, 
   setTargetPageId: React.Dispatch<React.SetStateAction<string>>,
@@ -122,7 +120,7 @@ const MoveTargetBlock=({ page, block , editBlock, addBlock,changeToSub ,raiseBlo
   )
 }
 
-const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,deletePage,commentBlock,openComment ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit}:FrameProps)=>{
+const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,commentBlock,openComment ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit}:FrameProps)=>{
   const innerWidth =window.innerWidth; 
   const inner =document.getElementById("inner");
   const editTime =JSON.stringify(Date.now());
