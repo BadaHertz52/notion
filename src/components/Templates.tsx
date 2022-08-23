@@ -11,7 +11,7 @@ type TemplatesProps = Template_Frame_SAME_Props &{
 };
 const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage , addTemplate, cancleEditTemplate, deleteTemplate,commentBlock,openComment ,setTargetPageId , openTemplates ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit}:TemplatesProps)=>{
   const templates = templatesId !==null ? templatesId.map((id:string)=> findPage(pagesId, pages, id))  :null;
-  const [template, setTemplate]= useState<Page|null>(null);
+  const [template, setTemplate]= useState<Page|null>(templates==null? null : templates[0]);
   const cancleEdit =()=>{
 
   };
@@ -19,12 +19,26 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
 
   };
   return(
-    <div id="template"
+    <div id="templates"
       onClick={(event)=>onClickTemplate(event)}
     >
       <div className="inner">
         <div id="template">
-          {template!==null &&
+
+          {template!==null ?
+            <>
+              <div className='templateTopBar'>
+                <PageIcon
+                  icon={template.header.icon}
+                  iconType={template.header.iconType}
+                  style={undefined}
+                />
+                <div className='pageTitle'>
+                  <span>
+                      {template.header.title}
+                  </span>
+                </div>
+              </div>
             <Frame
               page={template}
               userName={userName}
@@ -51,28 +65,44 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
               smallText={smallText}
               fullWidth={fullWidth}
               discardEdit={discardEdit}
-          /> 
+            /> 
+            </>
+            :
+            <div>
+              No template
+            </div>
           }
 
         </div>
-        <div id="templateList">
-          {templates!==null ?
-          templates.map((template:Page)=>
-            <button className='template'>
-              <PageIcon
-                icon={template.header.icon}
-                iconType={template.header.iconType}
-                style={undefined}
-              />
-              <div className='pageTitle'>
-                <span>
-                    {template.header.title}
-                </span>
-              </div>
+        <div id="templates_side">
+          <button className='useTemplateBtn'>
+            Use this template
           </button>
-          )
-        :
-        "No template"}
+
+          <div className='templateList'>
+            {templates!==null ?
+            templates.map((template:Page)=>
+              <button className='item'>
+                <PageIcon
+                  icon={template.header.icon}
+                  iconType={template.header.iconType}
+                  style={undefined}
+                />
+                <div className='pageTitle'>
+                  <span>
+                      {template.header.title}
+                  </span>
+                </div>
+            </button>
+            )
+            :
+            "No template"}
+        
+          </div>
+          <button className='makeTemplateBtn'>
+            Make New Template
+          </button>
+
         </div>
       </div>
     </div>
