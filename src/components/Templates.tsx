@@ -1,4 +1,4 @@
-import React, { MouseEvent, useState } from 'react';
+import React, { Dispatch, MouseEvent, SetStateAction, useState } from 'react';
 import { findPage, Page } from '../modules/notion';
 import Frame, { Template_Frame_SAME_Props } from './Frame';
 import PageIcon from './PageIcon';
@@ -13,11 +13,19 @@ type TemplatesProps = Template_Frame_SAME_Props &{
 const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage , addTemplate,cancleEditTemplate, deleteTemplate,commentBlock,openComment ,setTargetPageId , openTemplates ,setOpenTemplates ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit}:TemplatesProps)=>{
   const templates = templatesId !==null ? templatesId.map((id:string)=> findPage(pagesId, pages, id))  :null;
   const [template, setTemplate]= useState<Page|null>(templates==null? null : templates[0]);
-  const cancleEdit =()=>{
-
-  };
   const onClickTemplate=(event:MouseEvent<HTMLDivElement>)=>{
 
+  };
+
+  const onClickUseBtn=()=>{
+    if(template!==null){
+      const newPage :Page ={
+        ...template,
+        id: JSON.stringify(Date.now())
+      };
+      addPage(newPage);
+      setOpenTemplates(false);
+    }
   };
   return(
     <div id="templates"
@@ -76,7 +84,10 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
 
         </div>
         <div id="templates_side">
-          <button className='useTemplateBtn'>
+          <button 
+            className='useTemplateBtn'
+            onClick={onClickUseBtn}
+          >
             Use this template
           </button>
 
