@@ -135,9 +135,11 @@ export type listItem = {
   editTime:string,
   createTime:string,
 };
-
+const template ="template";
+type pageType = typeof page| typeof template;
 export type Page ={
   id:string , 
+  type:pageType,
   header : {
     title: string ,
     iconType: IconType,
@@ -161,6 +163,7 @@ type TrashPage =Page &{
 };
 export const  pageSample:Page ={
   id:editTime, 
+  type:page,
   header : {
     title: "untitle",
     iconType :null,
@@ -178,7 +181,8 @@ export const  pageSample:Page ={
 };
 export type Notion={ 
   pagesId :string [],
-  firstPagesId: string[]
+  firstPagesId: string[],
+  templatesId: string[]|null,
   pages: Page[],
   trash:{
     pagesId:string[]|null,
@@ -193,7 +197,7 @@ const CHANGE_BLOCK_TO_PAGE="notion/CHANGE_BLOCK_TO_PAGE" as const;
 const CHANGE_PAGE_TO_BLOCK="notion/CHANGE_PAGE_TO_BLOCK" as const;
 const DELETE_BLOCK ="notion/DELETE_BLOCK" as const;
 const CHANGE_TO_SUB_BLOCK="notion/CHANGE_TO_SUB_BLOCK" as const;
-const RAISE_BLOCK="notion/RAISE_BLOCK" as const; //cancle tab
+const RAISE_BLOCK="notion/RAISE_BLOCK" as const; 
 
 const ADD_PAGE ="notion/ADD_PAGE" as const;
 const DUPLICATE_PAGE ="notion/DUPLICATE_PAGE" as const;
@@ -202,6 +206,9 @@ const MOVE_PAGE_TO_PAGE ="notion/MOVE_PAGE_TO_PAGE" as const;
 const DELETE_PAGE ="notion/DELETE_PAGE" as const;
 const RESTORE_PAGE ="notion/RESTORE_PAGE" as const ;
 const CLEAN_TRASH ="notion/CLEAN_TRASH" as const ;
+
+const ADD_TEMPLATE="notion/ADD_TEMPLATE" as const;
+const DELETE_TEMPLATE="notion/DELETE_TEMPLATE" as const ;
 
 export const add_block =(pageId:string, block:Block ,newBlockIndex:number ,previousBlockId:string|null)=> ({
   type:ADD_BLOCK ,
@@ -315,7 +322,13 @@ export const clean_trash =(pageId:string)=>({
   type: CLEAN_TRASH,
   pageId:pageId,
   block:null,
-})
+});
+
+export const add_template=(newTemplate:Page)=>({
+  type:ADD_TEMPLATE,
+  newTemplate:newTemplate
+});
+
 type NotionAction = 
 ReturnType<typeof add_block> | 
 ReturnType<typeof edit_block> | 
@@ -337,9 +350,11 @@ ReturnType <typeof clean_trash>
 const initialState :Notion ={
   pagesId:['12345','page1','page2' ,'1234', '123' ],
   firstPagesId :['12345' ,'1234', '123'],
+  templatesId:null,
   pages:[
     {
     id: '12345',
+    type:page,
     header : {
       title:"welcome notion 🐱",
       iconType:"img",
@@ -758,6 +773,7 @@ const initialState :Notion ={
   },
   {
     id: '1234',
+    type:page,
     header : {
       title:"notion2",
       iconType:"emoji",
@@ -775,6 +791,7 @@ const initialState :Notion ={
   },
   {
     id: '123',
+    type:page,
     header : {
       title:"notion3",
       iconType:"emoji",
@@ -899,6 +916,7 @@ export const findPage =(pagesId: string[] ,pages:Page[] ,pageId:string):Page|Tra
 export default function notion (state:Notion =initialState , action :NotionAction) :Notion{
   const pagesId = [...state.pagesId];
   const firstPagesId=[...state.firstPagesId];
+  const templatesId =state.templatesId ==null? null: [...state.templatesId];
   const pages =[...state.pages];
   let trash = {
     pagesId:state.trash.pagesId? [...state.trash.pagesId] :null,
@@ -1121,6 +1139,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
       return {
         pages:pages,
         firstPagesId:firstPagesId,
+        templatesId:templatesId,
         pagesId:pagesId,
         trash:trash
       }; 
@@ -1130,6 +1149,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
       return {
         pages:pages,
         firstPagesId:firstPagesId,
+        templatesId:templatesId,
         pagesId:pagesId,
         trash:trash
       };
@@ -1191,6 +1211,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
       return {
         pages:pages,
         firstPagesId:firstPagesId,
+        templatesId:templatesId,
         pagesId:pagesId,
         trash:trash
       };
@@ -1215,6 +1236,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
       return {
         pages:pages,
         firstPagesId:firstPagesId,
+        templatesId:templatesId,
         pagesId:pagesId,
         trash:trash
       };
@@ -1260,6 +1282,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
       return {
         pages:pages,
         firstPagesId:firstPagesId,
+        templatesId:templatesId,
         pagesId:pagesId,
         trash:trash
       }; 
@@ -1397,6 +1420,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
       return {
         pages:pages,
         firstPagesId:firstPagesId,
+        templatesId:templatesId,
         pagesId:pagesId,
         trash:trash
       }; ;
@@ -1469,6 +1493,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
       return {
         pages:pages,
         firstPagesId:firstPagesId,
+        templatesId:templatesId,
         pagesId:pagesId,
         trash:trash
       };
@@ -1517,6 +1542,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
       return{
         pages:pages,
         firstPagesId:firstPagesId,
+        templatesId:templatesId,
         pagesId:pagesId,
         trash:trash
       }
@@ -1544,6 +1570,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
       return{
         pages:pages,
         firstPagesId:firstPagesId,
+        templatesId:templatesId,
         pagesId:pagesId,
         trash:trash
       };
@@ -1598,6 +1625,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
       return{
         pages:pages,
         firstPagesId:firstPagesId,
+        templatesId:templatesId,
         pagesId:pagesId,
         trash:trash
       };
@@ -1658,6 +1686,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
       return{
         pages:pages,
         firstPagesId:firstPagesId,
+        templatesId:templatesId,
         pagesId:pagesId,
         trash:trash
       };
@@ -1688,6 +1717,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
         pages:pages,
         pagesId:pagesId,
         firstPagesId:firstPagesId,
+        templatesId:templatesId,
         trash: (trashPages?.[0] !==undefined && trashPagesId?.[0] !==undefined)
         ? 
         {
