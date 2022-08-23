@@ -26,9 +26,8 @@ export type Command ={
   command:string | null,
   targetBlock: Block |null
 };
-export type FrameProps ={
+export type Template_Frame_SAME_Props ={
   userName:string,
-  page:Page,
   pages:Page[],
   pagesId:string[],
   firstlist:listItem[],
@@ -52,6 +51,9 @@ export type FrameProps ={
   smallText: boolean, 
   fullWidth: boolean, 
   discardEdit:boolean,
+};
+type FrameProps = Template_Frame_SAME_Props &{
+  page:Page,
 };
 const basicPageCover ='https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assests/img/artificial-turf-g6e884a1d4_1920.jpg';;
 
