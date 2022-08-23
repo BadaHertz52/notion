@@ -89,7 +89,6 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
         blockFn?.setAttribute("style",blockFnStyle);
       }else{
         const templateDomRect =template.getClientRects()[0];
-        console.log("block", block.id, "mainBlock", mainBlock, domRect, templateDomRect);
           const top = domRect.top - templateDomRect.top ;
           const left =domRect.x - templateDomRect.x -45;
           blockFn?.setAttribute("style", `top:${top}px; left:${left}px`);
