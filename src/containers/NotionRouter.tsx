@@ -431,7 +431,6 @@ const NotionRouter =()=>{
           addPage={addPage}
           editPage={editPage}
           duplicatePage={duplicatePage}
-          deletePage={deletePage}
           movePageToPage={movePageToPage}
           commentBlock={commentBlock}
           openComment={openComment}

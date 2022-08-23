@@ -52,7 +52,7 @@ export type Template_Frame_SAME_Props ={
   fullWidth: boolean, 
   discardEdit:boolean,
 };
-type FrameProps = Template_Frame_SAME_Props &{
+export type FrameProps = Template_Frame_SAME_Props &{
   page:Page,
 };
 const basicPageCover ='https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assests/img/artificial-turf-g6e884a1d4_1920.jpg';;

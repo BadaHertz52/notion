@@ -2,39 +2,13 @@ import { NodeHtmlMarkdown } from "node-html-markdown";
 import React, { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { Block, findPage, listItem, Page } from "../modules/notion";
-import Frame from "./Frame";
+import Frame, { FrameProps } from "./Frame";
 import ReactDOMServer from 'react-dom/server';
 
-type ExportProps={
-  page:Page,
-  pagesId:string[],
-  pages:Page[],
-  setOpenExport:Dispatch<SetStateAction<boolean>>,
-  //for frame
-  userName:string,
-  firstlist:listItem[],
-  editBlock :(pageId: string, block: Block) => void,
-  addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
-  changeBlockToPage: (currentPageId: string, block: Block) => void,
-  changePageToBlock:(currentPageId: string, block: Block) => void,
-  changeToSub: (pageId: string, block: Block, newParentBlockId: string) => void,
-  raiseBlock: (pageId: string, block: Block) => void,
-  deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
-  addPage :(newPage:Page ,)=>void,
-  editPage :(pageId:string,newPage:Page ,)=>void,
-  duplicatePage:(targetPageId: string) => void,
-  movePageToPage:(targetPageId: string, destinationPageId: string) => void,
-  deletePage: (pageId: string) => void,
-  commentBlock: Block | null,
-  openComment :boolean, 
-  setTargetPageId: React.Dispatch<React.SetStateAction<string>>,
-  setOpenComment: Dispatch<SetStateAction<boolean>>,
-  setCommentBlock: Dispatch<SetStateAction<Block | null>>,
-  smallText: boolean, 
-  fullWidth: boolean, 
-  discardEdit:boolean,
+type ExportProps= FrameProps &{
+  setOpenExport:Dispatch<SetStateAction<boolean>>
 }
-const Export =({page,pagesId,pages,firstlist ,setOpenExport, userName,editBlock,addBlock,changeBlockToPage,changePageToBlock,changeToSub,raiseBlock,deleteBlock,addPage,editPage, duplicatePage ,deletePage,movePageToPage,commentBlock,openComment ,setTargetPageId,setOpenComment,setCommentBlock,smallText,fullWidth,discardEdit}:ExportProps)=>{
+const Export =({page,pagesId,pages,firstlist ,setOpenExport, userName,editBlock,addBlock,changeBlockToPage,changePageToBlock,changeToSub,raiseBlock,deleteBlock,addPage,editPage, duplicatePage ,movePageToPage,commentBlock,openComment ,setTargetPageId,setOpenComment,setCommentBlock,smallText,fullWidth,discardEdit}:ExportProps)=>{
   const html ="HTML";
   const pdf="PDF";
   const markdown="Markdown";
@@ -159,7 +133,6 @@ const Export =({page,pagesId,pages,firstlist ,setOpenExport, userName,editBlock,
                 editPage={editPage}
                 duplicatePage={duplicatePage}
                 movePageToPage={movePageToPage}
-                deletePage={deletePage}
                 commentBlock={commentBlock}
                 openComment={openComment}
                 setTargetPageId={setTargetPageId}
