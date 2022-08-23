@@ -356,6 +356,7 @@ const NotionRouter =()=>{
                     setSmallText={setSmallText}
                     fullWidth={fullWidth}
                     setFullWidth={setFullWidth}
+                    openTemplates={openTemplates}
                     />
                   } 
           />
@@ -452,6 +453,7 @@ const NotionRouter =()=>{
           smallText={smallText}
           fullWidth={fullWidth}
           discardEdit={discard_edit}
+          openTemplates
 
         />
         }
@@ -480,10 +482,12 @@ const NotionRouter =()=>{
             openComment={openComment}
             setTargetPageId={setTargetPageId}
             setOpenComment={setOpenComment}
+            openTemplates={openTemplates}
             setCommentBlock ={setCommentBlock}
             smallText={smallText}
             fullWidth={fullWidth}
             discardEdit={discard_edit}
+            
           />
         }
     </div>

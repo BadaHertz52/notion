@@ -46,7 +46,7 @@ export type Template_Frame_SAME_Props ={
   openComment :boolean, 
   setTargetPageId: React.Dispatch<React.SetStateAction<string>>,
   setOpenComment: Dispatch<SetStateAction<boolean>>,
-
+  openTemplates:boolean,
   setCommentBlock: Dispatch<SetStateAction<Block | null>>,
   smallText: boolean, 
   fullWidth: boolean, 
@@ -54,6 +54,7 @@ export type Template_Frame_SAME_Props ={
 };
 export type FrameProps = Template_Frame_SAME_Props &{
   page:Page,
+
 };
 const basicPageCover ='https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assests/img/artificial-turf-g6e884a1d4_1920.jpg';;
 
@@ -122,7 +123,7 @@ const MoveTargetBlock=({ page, block , editBlock, addBlock,changeToSub ,raiseBlo
   )
 }
 
-const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,commentBlock,openComment ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit}:FrameProps)=>{
+const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,commentBlock,openComment ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit, openTemplates}:FrameProps)=>{
   const innerWidth =window.innerWidth; 
   const inner =document.getElementById("inner");
   const editTime =JSON.stringify(Date.now());
@@ -201,12 +202,12 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
     openComment && commentBlock!==null && closeComments(event);
   });
 
-
+  
   const maxWidth = innerWidth -60
   const frameInnerStyle:CSSProperties={
     fontFamily:defaultFontFamily ,
-    fontSize: smallText? "14px": "16px",
-    width: fullWidth?  `${maxWidth}px`: ( innerWidth>900?  '900px' : "75%") ,
+    fontSize: openTemplates? "14px": ( smallText? "14px": "16px"),
+    width: openTemplates? "100%": (fullWidth?  `${maxWidth}px`: ( innerWidth>900?  '900px' : "75%") ) ,
   };
   const headerStyle: CSSProperties ={
     marginTop: page.header.cover !==null? "10px": "30px" ,

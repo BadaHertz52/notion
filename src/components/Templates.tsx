@@ -9,7 +9,7 @@ type TemplatesProps = Template_Frame_SAME_Props &{
   cancleEditTemplate: (templateId: string) => void,
   deleteTemplate: (templateId: string) => void,
 };
-const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage , addTemplate, cancleEditTemplate, deleteTemplate,commentBlock,openComment ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit}:TemplatesProps)=>{
+const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage , addTemplate, cancleEditTemplate, deleteTemplate,commentBlock,openComment ,setTargetPageId , openTemplates ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit}:TemplatesProps)=>{
   const templates = templatesId !==null ? templatesId.map((id:string)=> findPage(pagesId, pages, id))  :null;
   const [template, setTemplate]= useState<Page|null>(null);
   const cancleEdit =()=>{
@@ -46,6 +46,7 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
               openComment={openComment}
               setTargetPageId={setTargetPageId}
               setOpenComment={setOpenComment}
+              openTemplates={openTemplates}
               setCommentBlock ={setCommentBlock}
               smallText={smallText}
               fullWidth={fullWidth}

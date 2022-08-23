@@ -69,9 +69,10 @@ type EditorContainerProps = NotionActionProps &{
   setAllCommentsStyle:Dispatch<SetStateAction<CSSProperties>>,
   discardEdit:boolean,
   setOpenExport :Dispatch<SetStateAction<boolean>>,
+  openTemplates: boolean
 };
 
-const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isInTrash, makePagePath,changeSide,addBlock,editBlock ,changeBlockToPage, changePageToBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId ,openComment,setOpenComment,commentBlock,setCommentBlock,smallText,setSmallText,fullWidth,setFullWidth,showAllComments,  setShowAllComments , setAllCommentsStyle,discardEdit , setOpenExport}:EditorContainerProps)=>{
+const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isInTrash, makePagePath,changeSide,addBlock,editBlock ,changeBlockToPage, changePageToBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId ,openComment,setOpenComment,commentBlock,setCommentBlock,smallText,setSmallText,fullWidth,setFullWidth,showAllComments,  setShowAllComments , setAllCommentsStyle,discardEdit , setOpenExport, openTemplates}:EditorContainerProps)=>{
   const dispatch =useDispatch();
   const user =useSelector((state:RootState)=>state.user);
   const changeToSub =(pageId: string, block: Block,  newParentBlockId: string)=> dispatch(change_to_sub(pageId, block, newParentBlockId));
@@ -160,6 +161,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isIn
         smallText={smallText}
         fullWidth={fullWidth}
         discardEdit={discardEdit}
+        openTemplates={openTemplates}
       />
     </div>
   )
