@@ -208,6 +208,7 @@ const RESTORE_PAGE ="notion/RESTORE_PAGE" as const ;
 const CLEAN_TRASH ="notion/CLEAN_TRASH" as const ;
 
 const ADD_TEMPLATE="notion/ADD_TEMPLATE" as const;
+const CANCLE_EDIT_TEMPLATE="notino/CANCLE_EDIT_TEMPLATE" as const; 
 const DELETE_TEMPLATE="notion/DELETE_TEMPLATE" as const ;
 
 export const add_block =(pageId:string, block:Block ,newBlockIndex:number ,previousBlockId:string|null)=> ({
@@ -323,12 +324,37 @@ export const clean_trash =(pageId:string)=>({
   pageId:pageId,
   block:null,
 });
-
-export const add_template=(newTemplate:Page)=>({
+/**
+ * 새로운 template 을 만드는 액션함수
+ * @param 
+ * @returns 
+ */
+export const add_template=( template:Page)=>({
   type:ADD_TEMPLATE,
-  newTemplate:newTemplate
+  pageId:template.id,
+  template:template,
+  block:null
 });
-
+/**
+ * template의 수정이 있고, 사용자가 수정되기 이전의 template을 저장하기 원하는 경우  template의 date를 이전 상태로 복구하는 액션함수
+ * @param templateId 복구대상인 template의 id
+ * @returns 
+ */
+export const cancle_edit_template=(templateId: string )=>({
+  type:CANCLE_EDIT_TEMPLATE,
+  pageId:templateId,
+  block:null
+});
+/**
+ * template를 삭제하는 액션 함수
+ * @param templateId 삭제대상인 template의 id
+ * @returns 
+ */
+export const delete_template =(templateId:string)=>({
+  type:DELETE_TEMPLATE,
+  pageId:templateId,
+  block:null
+})
 type NotionAction = 
 ReturnType<typeof add_block> | 
 ReturnType<typeof edit_block> | 
@@ -343,7 +369,10 @@ ReturnType<typeof edit_page> |
 ReturnType<typeof move_page_to_page> | 
 ReturnType <typeof delete_page>|
 ReturnType <typeof restore_page>|
-ReturnType <typeof clean_trash>
+ReturnType <typeof clean_trash>|
+ReturnType <typeof add_template>|
+ReturnType <typeof cancle_edit_template>|
+ReturnType <typeof delete_template>
 ;
 
 //reducer
@@ -1190,6 +1219,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
       }
       const newPage:Page ={
         id:action.block.id,
+        type:page,
         header:{
           title: action.block.contents ===""?"untitle" :action.block.contents,
           iconType: action.block.iconType,
@@ -1467,6 +1497,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
       return {
         pages:pages,
         firstPagesId:firstPagesId,
+        templatesId:templatesId,
         pagesId:pagesId,
         trash:trash
       };
@@ -1745,7 +1776,54 @@ export default function notion (state:Notion =initialState , action :NotionActio
       return{
         ...state,
         trash:cleanedTrash
-      }
+      };
+
+    case ADD_TEMPLATE:
+      const newTemplate :Page ={
+        ...pageSample,
+        type:template
+      };
+      pages.push(newTemplate);
+      pagesId.push(newTemplate.id);
+
+      return{
+        pages:pages,
+        firstPagesId:firstPagesId,
+        templatesId:templatesId!==null? templatesId.concat(newTemplate.id):[newTemplate.id],
+        pagesId:pagesId,
+        trash:trash
+      };
+
+    case CANCLE_EDIT_TEMPLATE:
+      const sessionItem= sessionStorage.getItem(`template_${action.pageId}`);
+      if(sessionItem !==null){
+        const originTemplate :Page = JSON.parse(sessionItem);
+        const templateIndexInPages = pagesId.indexOf(originTemplate.id);
+        pages.splice(templateIndexInPages,1, originTemplate);
+        sessionStorage.removeItem(`template_${action.pageId}`);
+      };
+      return{
+        pages:pages,
+        firstPagesId:firstPagesId,
+        templatesId:templatesId,
+        pagesId:pagesId,
+        trash:trash
+      };
+      case DELETE_TEMPLATE:
+        const templateIndexInPages = pagesId.indexOf(`${action.pageId}`);
+        pages.splice(templateIndexInPages,1);
+        pagesId.splice(templateIndexInPages,1);
+        if(templatesId!==null){
+          const templageIndexInTemplates =templatesId?.indexOf(`${action.pageId}`);
+          templatesId.splice(templageIndexInTemplates);
+        };
+      return{
+        pages:pages,
+        firstPagesId:firstPagesId,
+        templatesId:templatesId !==null?(templatesId[0]===undefined? null : templatesId)   : templatesId,
+        pagesId:pagesId,
+        trash:trash
+      };
     default:
       return state;
   }
