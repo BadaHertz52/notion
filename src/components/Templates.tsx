@@ -82,7 +82,10 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
           <div className='templateList'>
             {templates!==null ?
             templates.map((template:Page)=>
-              <button className='item'>
+              <button 
+                className='item'
+                onClick={()=>setTemplate(template)}
+              >
                 <PageIcon
                   icon={template.header.icon}
                   iconType={template.header.iconType}
