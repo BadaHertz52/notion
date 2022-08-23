@@ -1789,6 +1789,7 @@ a:link, a:active, a:visited {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 10;
   z-index: 300;
 }
 .discardEdit.on .inner {
@@ -1956,6 +1957,7 @@ a:link, a:active, a:visited {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 10;
   display: flex;
   z-index: 3;
   -webkit-user-select: none;
@@ -3105,6 +3107,8 @@ a:link, a:active, a:visited {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 10;
+  z-index: 10;
 }
 #templates .inner {
   background-color: white;
@@ -3549,6 +3553,7 @@ a:link, a:active, a:visited {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 10;
 }
 #quickFindBord .inner {
   background-color: white;

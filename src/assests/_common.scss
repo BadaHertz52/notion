@@ -98,6 +98,7 @@ $black :rgb(55,54,47);
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 10;
   .inner{
     background-color: #ffff;
     border-radius:3px;
