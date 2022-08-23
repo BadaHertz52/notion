@@ -474,7 +474,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
           </div>
         </div>
         <div className="fun2">
-            <button>
+            <button onClick={()=> setOpenTemplates(true)}>
               <div className="itemInner">
                 <HiTemplate/>
                 <span>Templates</span>
