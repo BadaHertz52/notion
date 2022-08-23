@@ -69,22 +69,32 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
 
   const showBlockFn=(event: MouseEvent)=>{
     closeMenu(event)
-    const currentTarget =event.currentTarget as Element;
-    const mainBlock= currentTarget.parentElement?.parentElement?.parentElement ;
+    const blockHtml =document.getElementById(`block_${block.id}`) as HTMLElement;
+    const mainBlock= blockHtml.querySelector('.mainBlock');
     const domRect =mainBlock?.getClientRects()[0];
-    const blockFn =document.getElementById("blockFn");
+    const editor = document.getElementsByClassName("editor")[0] ;
+    const template =document.getElementById("template");
+    const blockFn =template ==null? editor.querySelector(".blockFn"): template.querySelector('.blockFn');
     blockFn?.classList.toggle("on");
     blockFn?.classList.contains("on")?
     sessionStorage.setItem("blockFnTargetBlock", JSON.stringify(block))
     :
     sessionStorage.removeItem("blockFnTargetBlock");
     if(domRect!==undefined){
-      const editor =document.getElementsByClassName("editor")[0];
-      const editorDomRect =editor.getClientRects()[0];
-      const top =domRect.top +editor.scrollTop ;
-      const left = domRect.x - editorDomRect.x - 45;
-      const blockFnStyle =`top:${top}px; left:${left}px`;
-      blockFn?.setAttribute("style",blockFnStyle);
+      if(template==null){
+        const editorDomRect =editor.getClientRects()[0];
+        const top =domRect.top +editor.scrollTop ;
+        const left = domRect.x - editorDomRect.x - 45;
+        const blockFnStyle =`top:${top}px; left:${left}px`;
+        blockFn?.setAttribute("style",blockFnStyle);
+      }else{
+        const templateDomRect =template.getClientRects()[0];
+        console.log("block", block.id, "mainBlock", mainBlock, domRect, templateDomRect);
+          const top = domRect.top - templateDomRect.top ;
+          const left =domRect.x - templateDomRect.x -45;
+          blockFn?.setAttribute("style", `top:${top}px; left:${left}px`);
+      }
+
     }
   };
   const onChangeContents=(event:ContentEditableEvent)=>{
