@@ -85,10 +85,15 @@
     outline: none;
   }
 }
-.contentEditable:empty::after{
-  content: attr(placeholder);
-  color: $mud;
+.contentEditable:empty{
+  &:hover, &:focus{
+    &::after{
+      content: attr(placeholder);
+      color: $mud;
+    }
+  }
 }
+
 .h1 .mainBlock .contentEditable, 
 .h2 .mainBlock .contentEditable,
 .h3 .mainBlock .contentEditable{
