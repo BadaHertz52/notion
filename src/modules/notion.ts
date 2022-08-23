@@ -1,3 +1,4 @@
+import { GoDiffAdded } from 'react-icons/go';
 import { Emoji, emojis } from '../components/IconPoup';
 export const emojiPath ="https://raw.githubusercontent.com/BadaHertz52/notion/master/image/emoji/";
 const catImg = 'https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assests/img/michael-sum-LEpfefQf4rU-unsplash.jpg' ;
@@ -31,7 +32,6 @@ export const bg_yellow:string ="#fff9c4" as const;
 export const bg_green:string ="#ebffd7" as const;
 export const bg_blue :string ="#e3f2fd" as const;
 export const bg_pink : string ="#fce4ec" as const;
-const blockBgColor =[bg_blue, bg_green,bg_yellow,  bg_pink, bg_grey, bg_yellow, bg_blue];
 
 export type ColorType = typeof defaultColor|typeof grey|typeof orange| typeof green| typeof blue| typeof red ;
 export type BgColorType = typeof bg_default| typeof bg_grey|typeof bg_yellow| typeof bg_green| typeof bg_blue| typeof bg_pink ;
@@ -374,11 +374,23 @@ ReturnType <typeof add_template>|
 ReturnType <typeof cancle_edit_template>|
 ReturnType <typeof delete_template>
 ;
-const todoList =['6AM :🎽 runing', '9AM:🏥physical checkup', '😊 Webtoon re-enactment' ,'8PM: 🛒Buying food ingredients in mart - sale', '6PM :🍴 dinner appointment with friend', 'Dry cleaning at the dry cleaner','house cleaning'];
+
+const day =["Mon","", "Ths","", "Wed","", "Thr","", "Fri","", "Sat","","Sun"];
+const blockBgColor =[bg_blue,"", bg_green,"",bg_yellow,"",  bg_pink,"", bg_grey, "",bg_yellow, "",bg_blue];
+const todoList =[
+  '6AM :🎽 runing',
+  '9AM:🏥physical checkup',
+  '😊 Webtoon re-enactment',
+  '8PM: 🛒Buying food ingredients in mart - sale',
+  '6PM :🍴 dinner appointment with friend',
+  'Dry cleaning at the dry cleaner',
+  'house cleaning'];
+
 const returnTemplateSubBlock =(day:string, index:number)=>{
+  const num = index /2 ;
   const templateBlock :Block ={
     id:`templateSub_${day}`,
-    contents:todoList[index],
+    contents:todoList[num],
     firstBlock:true,
     subBlocksId:null,
     parentBlocksId:[`templateBlock_${day}`],
@@ -392,6 +404,7 @@ const returnTemplateSubBlock =(day:string, index:number)=>{
   };
   return templateBlock
 };
+
 const returnTemplateBlock=(day:string, index:number)=>{
   const templateBlock :Block ={
     id:`templateBlock_${day}`,
@@ -399,7 +412,7 @@ const returnTemplateBlock=(day:string, index:number)=>{
     firstBlock:true,
     subBlocksId:[`templateSub_${day}`] ,
     parentBlocksId: null,
-    type:h2,
+    type:h3,
     iconType:null,
     icon:null,
     editTime:editTime,
@@ -412,9 +425,20 @@ const returnTemplateBlock=(day:string, index:number)=>{
   };
   return templateBlock
 };
-const day =["Mon", "The", "Wed", "Thr", "Fri", "Sat", "Sun"];
-const templateBlocks = day.map((d:string)=> returnTemplateBlock(d, day.indexOf(d) ));
-const templateBlocksId =day.map((d:string)=> `templateBlock_${d}`);
+const templateBlocks = day.map((d:string)=> {
+  let returnBlock:Block
+  if(day.indexOf(d)%2 ===0){
+    returnBlock =returnTemplateBlock(d, day.indexOf(d) )
+  }else{
+    returnBlock ={
+      ...blockSample,
+      contents:"   "
+    }
+  };
+  return returnBlock
+});
+
+const templateBlocksId =templateBlocks.map((block:Block)=> block.id);
 const templateSubBlocks =day.map((d:string)=> returnTemplateSubBlock(d, day.indexOf(d)));
 const templateSubBlocksId =day.map((d:string)=>`templateSub_${d}`);
 //reducer
