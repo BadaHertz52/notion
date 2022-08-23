@@ -111,7 +111,12 @@
   }
 
 }
-
+#sideMenu #pageMenu{
+  .inner{
+    width: 100%;
+    height: fit-content
+  }
+}
 #pageMenu {
   @include popupMenu;
   background-color: initial;
@@ -120,6 +125,8 @@
     width: 100%;
     box-sizing: border-box;
     padding: 10px 0;
+    display: flex;
+    flex-direction: column
   }
   .search{
     input{

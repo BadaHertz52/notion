@@ -1325,6 +1325,13 @@ a:link, a:active, a:visited {
   margin-left: 5px;
 }
 
+#sideMenu #pageMenu .inner {
+  width: 100%;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+}
+
 #pageMenu {
   width: 320px;
   display: flex;
@@ -1353,6 +1360,8 @@ a:link, a:active, a:visited {
   width: 100%;
   box-sizing: border-box;
   padding: 10px 0;
+  display: flex;
+  flex-direction: column;
 }
 #pageMenu .search input {
   width: 90%;
