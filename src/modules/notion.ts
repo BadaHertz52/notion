@@ -1897,13 +1897,17 @@ export default function notion (state:Notion =initialState , action :NotionActio
       };
 
     case CANCLE_EDIT_TEMPLATE:
-      const sessionItem= sessionStorage.getItem(`template_${action.pageId}`);
-      if(sessionItem !==null){
-        const originTemplate :Page = JSON.parse(sessionItem);
-        const templateIndexInPages = pagesId.indexOf(originTemplate.id);
-        pages.splice(templateIndexInPages,1, originTemplate);
-        sessionStorage.removeItem(`template_${action.pageId}`);
+      const restorePage=(item:string)=>{
+        const sessionItem= sessionStorage.getItem(item);
+        if(sessionItem!==null){
+          const originTemplate :Page = JSON.parse(sessionItem);
+          const templateIndexInPages = pagesId.indexOf(originTemplate.id);
+          pages.splice(templateIndexInPages,1, originTemplate);
+          sessionStorage.removeItem(item);
+        }
       };
+      restorePage("originTemplate");
+      restorePage("originMoveTargetPage")
       return{
         pages:pages,
         firstPagesId:firstPagesId,
