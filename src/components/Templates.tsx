@@ -56,6 +56,12 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
       }
     }
   };
+  const closeTemplate=()=>{
+    template!==null&&
+    sessionStorage.removeItem(`template_${template.id}`);
+    setOpenAlert(false);
+    setOpenTemplates(false);
+  };
   return(
     <div id="templates"
       onClick={(event)=>onClickTemplate(event)}
