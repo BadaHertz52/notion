@@ -25,7 +25,7 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
       const isInInner = isInX&& isInY;
       if(!isInInner){
         if(template!==null){
-          const item =sessionStorage.getItem(`template_${template.id}`);
+          const item =sessionStorage.getItem('originTemplate');
             item ===null? 
             setOpenTemplates(false): 
             setOpenAlert(true);
@@ -48,7 +48,7 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
   };
   const showOtherTemplate=(otherTemplate:Page)=>{
     if(template!==null){
-      const item =sessionStorage.getItem(`template_${template.id}`);
+      const item =sessionStorage.getItem("originTemplate");
       if(item==null){
         setTemplate(otherTemplate);
       }else{
@@ -58,13 +58,13 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
   };
   const closeTemplate=()=>{
     template!==null&&
-    sessionStorage.removeItem(`template_${template.id}`);
+    sessionStorage.removeItem("originTemplate");
     setOpenAlert(false);
     setOpenTemplates(false);
   };
   const onClickDiscardBtn=()=>{
     if(template!==null){
-      const item =sessionStorage.getItem(`template_${template.id}`);
+      const item =sessionStorage.getItem("originTemplate");
       if(item !==null){
         cancleEditTemplate(template.id);
         closeTemplate();
