@@ -229,16 +229,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
       (innerWidth >= 768?  -62 : -16)
     )
   }
-  const newPage :Page ={
-    ...page,
-    header:{
-      ...page.header,
-    },
-    blocks:[blockSample],
-    blocksId:[blockSample.id],
-    firstBlocksId:[blockSample.id]
-  };
-
   function changeCommentStyle(){
     if(commentBlock !==null){
       const blockDoc = document.getElementById(`block_${commentBlock.id}`);
@@ -263,11 +253,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
     }
   };
 
-
-  const onClickEmpty =()=>{
-    setTemplateItem(templateHtml,page);
-    editPage(page.id ,newPage);
-  };
   const onClickPageIcon =(event:React.MouseEvent)=>{
     if(openIconPopup !==true){
       const frame =document.getElementsByClassName("frame")[0];
@@ -545,7 +530,40 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
       }
     } 
 
-  }  
+  };
+  //new Frame
+  const newPage :Page ={
+    ...page,
+    header:{
+      ...page.header,
+    },
+    blocks:[blockSample],
+    blocksId:[blockSample.id],
+    firstBlocksId:[blockSample.id],
+    editTime:editTime
+  };
+  const onClickEmptyWithIconBtn=()=>{
+    const icon =randomIcon();
+    const newPageWithIcon:Page ={
+      ...newPage,
+      header:{
+        ...page.header,
+        icon: icon ,
+        iconType:"emoji"
+      }
+    };
+    setTemplateItem(templateHtml,page);
+    editPage(page.id, newPageWithIcon);
+    setFirstBlocksId(newPageWithIcon.firstBlocksId);
+  };
+  const onClickEmpty =()=>{
+    setTemplateItem(templateHtml,page);
+    editPage(page.id ,newPage);
+    setFirstBlocksId
+    (newPage.firstBlocksId);
+  };
+
+  // edit block using sessionstorage
   const updateBlock=()=>{
     const item = sessionStorage.getItem("itemsTobeEdited");
     const cursorElement =document.getSelection()?.anchorNode?.parentElement;
@@ -821,7 +839,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
             :
             <div className='pageContent_inner'>
               <button
-                onClick={addRandomIcon}
+                onClick={onClickEmptyWithIconBtn}
               >
                 <GrDocumentText/>
                 <span>Empty with icon</span>
