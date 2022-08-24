@@ -73,7 +73,12 @@ button {
   border: none;
   background-color: transparent;
   padding: 0;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   cursor: pointer;
+  transition: background-color 20ms ease-in 0s;
 }
 
 ul,
@@ -167,7 +172,12 @@ button {
   border: none;
   background-color: transparent;
   padding: 0;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   cursor: pointer;
+  transition: background-color 20ms ease-in 0s;
 }
 
 ul,
@@ -504,7 +514,12 @@ button {
   border: none;
   background-color: transparent;
   padding: 0;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   cursor: pointer;
+  transition: background-color 20ms ease-in 0s;
 }
 
 ul,

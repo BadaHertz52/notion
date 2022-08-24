@@ -1,6 +1,6 @@
 @import './common';
 
-#templates{
+#templates , #templatesAlert{
   @include popup;
   .inner{
     top:0;
@@ -130,4 +130,45 @@
 
   }
 }
+#templatesAlert{
+  z-index: 20;
+  .inner{
+    width: 380px;
+    height: 200px;
+    padding: 24px 32px;
+    font-size: 1rem;
+    margin: 0 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    div ,button{
+      width: 100%;
+    }
+    div{
+      margin-bottom: 8px;
+      text-align: center;
+      line-height: 1.5;
+    }
+    button{
+      height: 2rem;
+      font-size: 14px;
+      white-space: nowrap;
+      padding: 0 12px;
+      line-height: 1.2;
+      border: 1px solid rgba(55,53,47,0.16);
+      margin-top: 8px;
+    }
+    .saveBtn:hover{
+      background-color: rgb(225,225,225);
+    }
+    .discardBtn{
+      color:rgb(235, 87, 87);
+      border:1px solid rgba(235,87,87,0.5);
+      &:hover{
+        background-color: rgba(235,87,87,0.1);
+      }
+    }
+  }
 
+}

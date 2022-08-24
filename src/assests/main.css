@@ -73,7 +73,12 @@ button {
   border: none;
   background-color: transparent;
   padding: 0;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   cursor: pointer;
+  transition: background-color 20ms ease-in 0s;
 }
 
 ul,
@@ -277,7 +282,12 @@ button {
   border: none;
   background-color: transparent;
   padding: 0;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   cursor: pointer;
+  transition: background-color 20ms ease-in 0s;
 }
 
 ul,
@@ -515,7 +525,12 @@ button {
   border: none;
   background-color: transparent;
   padding: 0;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   cursor: pointer;
+  transition: background-color 20ms ease-in 0s;
 }
 
 ul,
@@ -609,7 +624,12 @@ button {
   border: none;
   background-color: transparent;
   padding: 0;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   cursor: pointer;
+  transition: background-color 20ms ease-in 0s;
 }
 
 ul,
@@ -1088,7 +1108,12 @@ button {
   border: none;
   background-color: transparent;
   padding: 0;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   cursor: pointer;
+  transition: background-color 20ms ease-in 0s;
 }
 
 ul,
@@ -1928,7 +1953,12 @@ button {
   border: none;
   background-color: transparent;
   padding: 0;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   cursor: pointer;
+  transition: background-color 20ms ease-in 0s;
 }
 
 ul,
@@ -2143,7 +2173,12 @@ button {
   border: none;
   background-color: transparent;
   padding: 0;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   cursor: pointer;
+  transition: background-color 20ms ease-in 0s;
 }
 
 ul,
@@ -2407,7 +2442,12 @@ button {
   border: none;
   background-color: transparent;
   padding: 0;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   cursor: pointer;
+  transition: background-color 20ms ease-in 0s;
 }
 
 ul,
@@ -2578,7 +2618,12 @@ button {
   border: none;
   background-color: transparent;
   padding: 0;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   cursor: pointer;
+  transition: background-color 20ms ease-in 0s;
 }
 
 ul,
@@ -3078,7 +3123,12 @@ button {
   border: none;
   background-color: transparent;
   padding: 0;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   cursor: pointer;
+  transition: background-color 20ms ease-in 0s;
 }
 
 ul,
@@ -3097,7 +3147,7 @@ a:link, a:active, a:visited {
   color: inherit;
 }
 
-#templates {
+#templates, #templatesAlert {
   position: absolute;
   top: 0;
   left: 0;
@@ -3108,9 +3158,8 @@ a:link, a:active, a:visited {
   align-items: center;
   justify-content: center;
   z-index: 10;
-  z-index: 10;
 }
-#templates .inner {
+#templates .inner, #templatesAlert .inner {
   background-color: white;
   border-radius: 3px;
   position: relative;
@@ -3123,7 +3172,7 @@ a:link, a:active, a:visited {
   overflow: hidden;
   box-shadow: rgba(15, 15, 15, 0.039) 0px 0px 0px 1px;
 }
-#templates .inner {
+#templates .inner, #templatesAlert .inner {
   top: 0;
   left: 0;
   width: 85vw;
@@ -3245,6 +3294,48 @@ a:link, a:active, a:visited {
   text-align: left;
   color: rgba(55, 53, 47, 0.65);
 }
+#templatesAlert {
+  z-index: 20;
+}
+#templatesAlert .inner {
+  width: 380px;
+  height: 200px;
+  padding: 24px 32px;
+  font-size: 1rem;
+  margin: 0 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+#templatesAlert .inner div, #templatesAlert .inner button {
+  width: 100%;
+}
+#templatesAlert .inner div {
+  margin-bottom: 8px;
+  text-align: center;
+  line-height: 1.5;
+}
+#templatesAlert .inner button {
+  height: 2rem;
+  font-size: 14px;
+  white-space: nowrap;
+  padding: 0 12px;
+  line-height: 1.2;
+  border: 1px solid rgba(55, 53, 47, 0.16);
+  margin-top: 8px;
+}
+#templatesAlert .inner .saveBtn:hover {
+  background-color: rgb(225, 225, 225);
+}
+#templatesAlert .inner .discardBtn {
+  color: rgb(235, 87, 87);
+  border: 1px solid rgba(235, 87, 87, 0.5);
+}
+#templatesAlert .inner .discardBtn:hover {
+  background-color: rgba(235, 87, 87, 0.1);
+}
+
 .switchBtn {
   position: relative;
   width: 30px;
@@ -3320,7 +3411,12 @@ button {
   border: none;
   background-color: transparent;
   padding: 0;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   cursor: pointer;
+  transition: background-color 20ms ease-in 0s;
 }
 
 ul,
@@ -3524,7 +3620,12 @@ button {
   border: none;
   background-color: transparent;
   padding: 0;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   cursor: pointer;
+  transition: background-color 20ms ease-in 0s;
 }
 
 ul,

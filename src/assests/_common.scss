@@ -191,7 +191,9 @@ div {
 
 button {
   @include initialBtn;
+  user-select: none;
   cursor: pointer;
+  transition: background-color 20ms ease-in 0s;
 }
 ul,
 ol{
