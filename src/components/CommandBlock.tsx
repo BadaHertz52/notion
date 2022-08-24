@@ -9,6 +9,7 @@ import { Block, BlockType, Page } from "../modules/notion";
 import { PopupType } from '../containers/EditorContainer';
 import imgIcon from '../assests/img/vincent-van-gogh-ge1323790d_640.jpg'; 
 import bookmarkIcon from '../assests/img/folder-g047ba9133_640.jpg';
+import { setTemplateItem } from './BlockComponent';
 
 type CommandBlockProp ={
   page:Page,
@@ -54,6 +55,8 @@ const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBl
     }
   };
   const changeType=( blockType:BlockType)=>{
+    const templateHtml= document.getElementById("template");
+    setTemplateItem(templateHtml, page);
     if(block.type !== blockType){
       if(blockType==="page"){
 

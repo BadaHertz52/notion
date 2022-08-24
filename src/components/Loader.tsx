@@ -1,6 +1,7 @@
 import React, { ChangeEvent, Dispatch, FormEvent,  SetStateAction,  useEffect,  useState } from 'react';
 import { CSSProperties } from 'styled-components';
 import { Block, Page } from '../modules/notion';
+import { setTemplateItem } from './BlockComponent';
 import { detectRange } from './BlockFn';
 type LoaderProps={
   block:Block,
@@ -25,6 +26,8 @@ const Loader =({block, page, editBlock ,setOpenLoader ,setLoaderTargetBlock}:Loa
           contents:result,
           editTime:JSON.stringify(Date.now(),)
         };
+        const templateHtml =document.getElementById("template");
+        setTemplateItem(templateHtml,page);
         editBlock(page.id,editedBlock);
         closeLoader();
       };

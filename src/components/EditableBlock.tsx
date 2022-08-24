@@ -1,7 +1,7 @@
 import React, { CSSProperties, Dispatch, MouseEvent, MutableRefObject, SetStateAction, useEffect, useRef} from 'react';
 import { Block, BlockCommentType, findBlock, Page,  } from '../modules/notion';
 import { Command } from './Frame';
-import BlockComponent, { BlockComment } from './BlockComponent';
+import BlockComponent, { BlockComment, setTemplateItem } from './BlockComponent';
 import { GoPrimitiveDot } from 'react-icons/go';
 import { GrCheckbox, GrCheckboxSelected } from 'react-icons/gr';
 import {  MdPlayArrow } from 'react-icons/md';
@@ -28,6 +28,7 @@ export type EditableBlockProps ={
   setOpenLoader:Dispatch<SetStateAction<boolean>>,
   setLoaderTargetBlock : Dispatch<SetStateAction<Block | null>>,
   closeMenu:(event: globalThis.MouseEvent |MouseEvent) => void,
+  templateHtml: HTMLElement | null
 };
 export   type CommentOpenType ={
   open:boolean,
@@ -61,7 +62,7 @@ export const changeFontSizeBySmallText=(block:Block, smallText:boolean):CSSPrope
   return style 
 };
 
-const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText, moveBlock ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand , openComment, setTargetPageId ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock,closeMenu
+const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText, moveBlock ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand , openComment, setTargetPageId ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock,closeMenu ,templateHtml
 
 }:EditableBlockProps)=>{  
   const className = block.type !== "toggle" ?
@@ -111,6 +112,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
       const  targetBlock:Block = JSON.parse(item);
       const condition = className ==="contentEditable" && cursorElement!==undefined && cursorElement!==null && cursorElement.parentElement?.id ===`${targetBlock.id}_contents`;
         if(!condition){
+        setTemplateItem(templateHtml,page);
         editBlock(page.id, targetBlock);
         sessionStorage.removeItem("itemsTobeEdited");
         }
@@ -122,6 +124,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
       type : block.type ==="todo" ? "todo done" : "todo",
       editTime:JSON.stringify(Date.now())
     };
+    setTemplateItem(templateHtml,page);
     editBlock(page.id, editedTobo);
   };
   const onClickToggle=(event:React.MouseEvent)=>{
@@ -233,6 +236,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                 setOpenLoader={setOpenLoader}
                 setLoaderTargetBlock={setLoaderTargetBlock}
                 closeMenu={closeMenu}
+                templateHtml={templateHtml}
               />
             </div>
             </div>
@@ -338,6 +342,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                 setOpenLoader={setOpenLoader}
                 setLoaderTargetBlock={setLoaderTargetBlock}
                 closeMenu={closeMenu}
+                templateHtml= {templateHtml}
                 />
               </div>
               </div>
@@ -378,6 +383,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                   setOpenLoader={setOpenLoader}
                   setLoaderTargetBlock={setLoaderTargetBlock}
                   closeMenu={closeMenu}
+                  templateHtml={templateHtml}
                 />
               )
               }

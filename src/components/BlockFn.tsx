@@ -7,6 +7,7 @@ import Rename from './Rename';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { CgMenuGridO } from 'react-icons/cg';
 import { PopupType } from '../containers/EditorContainer';
+import { setTemplateItem } from './BlockComponent';
 
 type BlockFnProp ={
   pages:Page[],
@@ -88,6 +89,8 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
     }
   },[openRename])
   const makeBlock =()=>{
+    const templateHtml= document.getElementById("template");
+    setTemplateItem(templateHtml, page);
     const sessionItem = sessionStorage.getItem("blockFnTargetBlock") ;
     if(sessionItem !==null){
       const targetBlock= JSON.parse(sessionItem);

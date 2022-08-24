@@ -16,6 +16,7 @@ import {TiArrowSortedDown} from 'react-icons/ti';
 import {IoArrowRedoOutline} from 'react-icons/io5';
 import {RiDeleteBin6Line } from 'react-icons/ri';
 import { AiOutlineFormatPainter } from 'react-icons/ai';
+import { setTemplateItem } from './BlockComponent';
 
 
 type MenuProps ={
@@ -49,6 +50,7 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
   const [turnInToPage ,setTurnIntoPage] = useState<boolean>(false);
   const [menuStyle , setMenuStyle]= useState<CSSProperties>(changeMenuStyle());
   const [sideMenuStyle, setSideMenuStyle]=useState<CSSProperties|undefined>(undefined);
+  const templateHtml= document.getElementById("template");
   function changeMenuStyle (){
     const menu = document.querySelector(".menu");
     const menuHeight =menu? menu.clientHeight: 400;
@@ -134,11 +136,13 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
     })
   };
   const removeBlock =()=>{
+    setTemplateItem(templateHtml,page);
     deleteBlock(page.id, block , true);
     setMenuOpen(false);
   };
 
   const duplicateBlock=()=>{
+    setTemplateItem(templateHtml,page);
     const blockIndex= page.blocksId.indexOf(block.id);
     const previousBlockId = page.blocksId[blockIndex-1];
     const editTime =JSON.stringify(Date.now());
@@ -149,6 +153,8 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
       editTime:editTime,
     } ;
     addBlock(page.id , newBlock,  blockIndex+1, block.parentBlocksId ===null? null : previousBlockId);
+
+    setTemplateItem(templateHtml, page);
     if(block.type==="page"){
       duplicatePage(block.id);
     };

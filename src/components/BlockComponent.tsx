@@ -5,7 +5,15 @@ import { MdOutlineCollectionsBookmark, MdOutlinePhotoSizeSelectActual } from 're
 import {  Block,BlockType,blockTypes,findBlock,findParentBlock,findPreviousBlockInDoc,makeNewBlock,Page, toggle } from '../modules/notion';
 import { Command } from './Frame';
 import ImageContent from './ImageContent';
-
+export   const setTemplateItem=(templateHtml:HTMLElement|null, page:Page)=>{
+  if(templateHtml!==null){
+    const templateItem= sessionStorage.getItem("origintTemplate");
+    if(!templateItem){
+      const originTemplate= JSON.stringify(page);
+      sessionStorage.setItem("originTemplate", originTemplate);
+    }
+  };
+};
 type  BlockProps ={
   block:Block,
   page:Page,
@@ -22,7 +30,8 @@ type  BlockProps ={
   setTargetPageId: React.Dispatch<React.SetStateAction<string>>,
   setOpenLoader:Dispatch<SetStateAction<boolean>>,
   setLoaderTargetBlock : Dispatch<SetStateAction<Block | null>>,
-  closeMenu: (event: globalThis.MouseEvent| MouseEvent) => void
+  closeMenu: (event: globalThis.MouseEvent| MouseEvent) => void,
+  templateHtml:HTMLElement|null,
 };
 type BlockCommentProps={
   block:Block,
@@ -53,7 +62,7 @@ export const BlockComment =({block , onClickCommentBtn}:BlockCommentProps)=>{
   )
 };
 
-const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,blockComments , command, setCommand  ,onClickCommentBtn ,setOpenComment ,setTargetPageId ,setOpenLoader, setLoaderTargetBlock ,closeMenu }:BlockProps)=>{
+const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,blockComments , command, setCommand  ,onClickCommentBtn ,setOpenComment ,setTargetPageId ,setOpenLoader, setLoaderTargetBlock ,closeMenu ,templateHtml }:BlockProps)=>{
   const editTime =JSON.stringify(Date.now);
   const contentEditableRef= useRef<HTMLElement>(null);
   const possibleBlocks = page.blocks.filter((block:Block)=> block.type !=="image media" && block.type !=="page");
@@ -73,22 +82,21 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
     const mainBlock= blockHtml.querySelector('.mainBlock');
     const domRect =mainBlock?.getClientRects()[0];
     const editor = document.getElementsByClassName("editor")[0] ;
-    const template =document.getElementById("template");
-    const blockFn =template ==null? editor.querySelector(".blockFn"): template.querySelector('.blockFn');
+    const blockFn =templateHtml ==null? editor.querySelector(".blockFn"): templateHtml.querySelector('.blockFn');
     blockFn?.classList.toggle("on");
     blockFn?.classList.contains("on")?
     sessionStorage.setItem("blockFnTargetBlock", JSON.stringify(block))
     :
     sessionStorage.removeItem("blockFnTargetBlock");
     if(domRect!==undefined){
-      if(template==null){
+      if(templateHtml==null){
         const editorDomRect =editor.getClientRects()[0];
         const top =domRect.top +editor.scrollTop ;
         const left = domRect.x - editorDomRect.x - 45;
         const blockFnStyle =`top:${top}px; left:${left}px`;
         blockFn?.setAttribute("style",blockFnStyle);
       }else{
-        const templateDomRect =template.getClientRects()[0];
+        const templateDomRect =templateHtml.getClientRects()[0];
           const top = domRect.top - templateDomRect.top ;
           const left =domRect.x - templateDomRect.x -45;
           blockFn?.setAttribute("style", `top:${top}px; left:${left}px`);
@@ -96,7 +104,9 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
 
     }
   };
+
   const onChangeContents=(event:ContentEditableEvent)=>{
+    setTemplateItem(templateHtml, page);
     const value =event.target.value;
     const targetBlock= findTargetBlock(event);
     const targetBlockIndex= page.blocksId.indexOf(targetBlock.id);
@@ -180,6 +190,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
     switch (code) {
       case "tab":
         event.preventDefault();
+        setTemplateItem(templateHtml, page);
           const targetEditableDoc = document.getElementById(`block_${targetBlock.id}`)?.parentElement?.parentElement as HTMLElement ;
           const previousEditableDoc = targetEditableDoc.previousElementSibling as HTMLElement ;  
           const previousBlockDoc= previousEditableDoc.firstChild?.firstChild as HTMLElement;
@@ -187,6 +198,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
           changeToSub(page.id, targetBlock,previousBlockId );
         break;
       case "backspace":
+        setTemplateItem(templateHtml, page);
         const text =event.currentTarget.innerText;
         const cursor = document.getSelection();
         const offset =cursor?.anchorOffset;
@@ -329,6 +341,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
     };
   };
   function commandChange (event:React.ChangeEvent<HTMLInputElement>){
+    setTemplateItem(templateHtml, page);
     const value = event.target.value;
     const trueOrFale = value.startsWith("/");
     if(trueOrFale){
@@ -361,7 +374,8 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
       setCommand({
         boolean:false, 
         command:null 
-        ,targetBlock:null})
+        ,targetBlock:null});
+        setTemplateItem(templateHtml, page);
     }
   };
   const onClickBlockContents =()=>{
@@ -442,7 +456,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
           <>
             {block.type==="image media" &&
             <ImageContent
-              pageId={page.id}
+              page={page}
               block={block}
               editBlock={editBlock}
             />

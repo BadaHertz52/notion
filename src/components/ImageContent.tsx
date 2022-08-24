@@ -1,13 +1,14 @@
 import React, { MouseEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { CSSProperties } from 'styled-components';
-import { Block } from '../modules/notion';
+import { Block, Page } from '../modules/notion';
+import { setTemplateItem } from './BlockComponent';
 
 type ImageContentProps={
-  pageId:string,
+  page:Page,
   block:Block,
   editBlock:(pageId:string, block:Block)=>void,
 }
-const ImageContent =({pageId,block,editBlock}:ImageContentProps)=>{
+const ImageContent =({page,block,editBlock}:ImageContentProps)=>{
   const imageContent =document.getElementById(`${block.id}_contents`) ;
   const previousClientX =useRef(0);
   const previousClientY = useRef(0);
@@ -65,7 +66,9 @@ const ImageContent =({pageId,block,editBlock}:ImageContentProps)=>{
           },
           editTime:JSON.stringify(Date.now()),
         };
-        editBlock(pageId, editedBlock)
+        const templateHtml =document.getElementById("template");
+        setTemplateItem(templateHtml,page);
+        editBlock(page.id, editedBlock)
       };
     }  
   },[targetImgContent]);

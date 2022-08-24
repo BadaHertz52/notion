@@ -20,6 +20,7 @@ import { BsFillEmojiSmileFill} from 'react-icons/bs';
 import {GrDocumentText ,GrDocument} from 'react-icons/gr';
 import { MdInsertPhoto } from 'react-icons/md';
 import { HiTemplate } from 'react-icons/hi';
+import { setTemplateItem } from './BlockComponent';
 
 export type Command ={
   boolean:boolean,
@@ -58,9 +59,8 @@ export type FrameProps = Template_Frame_SAME_Props &{
 };
 const basicPageCover ='https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assests/img/artificial-turf-g6e884a1d4_1920.jpg';;
 
-const MoveTargetBlock=({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText, moveBlock  ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand ,setTargetPageId ,openComment ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock, closeMenu
+const MoveTargetBlock=({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText, moveBlock  ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand ,setTargetPageId ,openComment ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock, closeMenu,templateHtml
 }:EditableBlockProps)=>{
-
   return(
     <div 
       id="moveTargetBlock" 
@@ -117,6 +117,7 @@ const MoveTargetBlock=({ page, block , editBlock, addBlock,changeToSub ,raiseBlo
         setOpenLoader={setOpenLoader}
         setLoaderTargetBlock={setLoaderTargetBlock}
         closeMenu={closeMenu}
+        templateHtml={templateHtml}
       />
       }
     </div>
@@ -126,6 +127,7 @@ const MoveTargetBlock=({ page, block , editBlock, addBlock,changeToSub ,raiseBlo
 const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,commentBlock,openComment ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit, openTemplates}:FrameProps)=>{
   const innerWidth =window.innerWidth; 
   const inner =document.getElementById("inner");
+  const templateHtml =document.getElementById("template");
   const editTime =JSON.stringify(Date.now());
   const [firstBlocksId, setFirstBlocksId]=useState<string[]|null>(page.firstBlocksId);
   const [newPageFram, setNewPageFrame]=useState<boolean>(false);
@@ -263,6 +265,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
 
 
   const onClickEmpty =()=>{
+    setTemplateItem(templateHtml,page);
     editPage(page.id ,newPage);
   };
   const onClickPageIcon =(event:React.MouseEvent)=>{
@@ -288,6 +291,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
   };
   const onChangePageTitle =(event:ContentEditableEvent)=>{
     const value =event.target.value; 
+    setTemplateItem(templateHtml,page);
     editPage(page.id,{
       ...page, 
       header:{
@@ -309,6 +313,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
       },
       editTime:editTime
     };
+    setTemplateItem(templateHtml,page);
     editPage(page.id, newPageWithIcon);
   };
 
@@ -321,6 +326,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
       },
       editTime:editTime
     };
+    setTemplateItem(templateHtml,page);
     editPage(page.id, editedPage)
   };
   const pageContent = document.querySelector(".pageContent") as HTMLElement|null;
@@ -334,6 +340,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
   };
   const changeBlockPosition =()=>{
     if(pointBlockToMoveBlock.current!==null && moveTargetBlock!==null){
+      setTemplateItem(templateHtml,page);
       //editblock
         const editTime =JSON.stringify(Date.now());
         const blocksId =[...page.blocksId];
@@ -388,7 +395,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
           if(editedTargetBlock.subBlocksId!==null){
             deleteParentBlocksIdFromSubBlock(editedTargetBlock, parentBlock.id);
           };
-
           editBlock(page.id, editedTargetBlock);
           //add firtstBlocks
           if(firstBlocksId!==null){
@@ -475,10 +481,12 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
           firstBlocksId:firstBlocksId,
           editTime:editTime
         };
+        setTemplateItem(templateHtml,page);
         editPage(page.id, newPage);
         setFirstBlocksId(firstBlocksId);
     };
-  }
+  };
+  
   const onMouseUpToMoveBlock=()=>{
     if(moveBlock){
       changeBlockPosition();
@@ -527,9 +535,11 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
           const lastBlock =page.blocks[lastBlockIndex];
           const newBlock  =makeNewBlock(page, lastBlock ,""); 
           addBlock(page.id, newBlock, page.blocks.length-1, null);
+          setTemplateItem(templateHtml,page);
         }else{
           const newBlock = makeNewBlock(page, null,"");
           addBlock(page.id, newBlock,0,null);
+          setTemplateItem(templateHtml,page);
         }
   
       }
@@ -706,6 +716,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
                     setPopup={null}
                     addOrEdit={"add"}
                     setEdit={setOpenPageCommentInput}
+                    templateHtml={templateHtml}
                   />
               }
               </div>
@@ -767,6 +778,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
                       setOpenLoader={setOpenLoader}
                       setLoaderTargetBlock={setLoaderTargetBlock}
                       closeMenu={closeMenu}
+                      templateHtml={templateHtml}
                     />
                   )
                 }
@@ -886,6 +898,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
                 setPopup={setPopup}
                 addOrEdit="add"
                 setEdit={null}
+                templateHtml={templateHtml}
               />
             }
             {popup.what === "popupCommand" && commandTargetBlock !==null&&
@@ -943,7 +956,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
           setOpenLoader={setOpenLoader}
           setLoaderTargetBlock={setLoaderTargetBlock}
           closeMenu={closeMenu}
-
+          templateHtml={templateHtml}
         />
       }
     </div>

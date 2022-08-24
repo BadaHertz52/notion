@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { BgColorType, bg_blue, bg_default, bg_green, bg_grey, bg_yellow, bg_pink, Block, blue, ColorType, defaultColor, green, grey, orange, Page, red } from '../modules/notion';
+import { setTemplateItem } from './BlockComponent';
 
 type StyleColorInformProps ={
   color:ColorType | undefined,
@@ -13,6 +14,7 @@ type ColorInformProps ={
   page:Page,
   block:Block,
   editBlock:(pageId: string, block: Block) => void,
+  templateHtml:HTMLElement|null,
 };
 const StyleColorInform =styled.span`
   color:${(props:StyleColorInformProps) =>props.color !== undefined? props.color: "initial"};
@@ -24,9 +26,10 @@ const StyleColorInform =styled.span`
   border-radius: 20%;
 `; 
 
-const ColorInform=({color ,background, colorName ,page, block ,editBlock}:ColorInformProps)=>{
+const ColorInform=({color ,background, colorName ,page, block ,editBlock, templateHtml}:ColorInformProps)=>{
   const changeColor =()=>{
     if(color ===undefined && background !== undefined ){
+      setTemplateItem(templateHtml,page);
       ///change backgournd color
       const newBlock :Block ={
         ...block,
@@ -79,7 +82,7 @@ type ColorMenuProps = {
   editBlock : (pageId: string, block: Block) => void,
 };
 const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
-
+  const templateHtml=document.getElementById("template");
   return(
     <div className="menu_color"  >
       <section className="color_colors">
@@ -92,6 +95,7 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             page={page}
             block={block}
             editBlock={editBlock}
+            templateHtml={templateHtml}
           />
           <ColorInform
             colorName='Grey'
@@ -100,6 +104,7 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             page={page}
             block={block}
             editBlock={editBlock}
+            templateHtml={templateHtml}
           />
           <ColorInform
             colorName='Orange'
@@ -108,6 +113,7 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             background ={undefined}
             block={block}
             editBlock={editBlock}
+            templateHtml={templateHtml}
           />
           <ColorInform
             colorName='Green'
@@ -116,6 +122,7 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             background ={undefined}
             block={block}
             editBlock={editBlock}
+            templateHtml={templateHtml}
           />
           <ColorInform
             colorName='Blue'
@@ -124,6 +131,7 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             background={undefined}
             block={block}
             editBlock={editBlock}
+            templateHtml={templateHtml}
           /> 
           <ColorInform
             colorName='Red'
@@ -132,6 +140,7 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             background={undefined}
             block={block}
             editBlock={editBlock}
+            templateHtml={templateHtml}
           />
         </div>
       </section>
@@ -145,6 +154,7 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             background={bg_default}
             block={block}
             editBlock={editBlock}
+            templateHtml={templateHtml}
           />
           <ColorInform
             colorName='Grey'
@@ -153,6 +163,7 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             background={bg_grey}
             block={block}
             editBlock={editBlock}
+            templateHtml={templateHtml}
           />
           <ColorInform
             colorName='Yellow'
@@ -161,6 +172,7 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             background={bg_yellow}
             block={block}
             editBlock={editBlock}
+            templateHtml={templateHtml}
             />
           <ColorInform
             colorName='Green'
@@ -169,6 +181,7 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             background={bg_green}
             block={block}
             editBlock={editBlock}
+            templateHtml={templateHtml}
           />
           <ColorInform
             colorName='Blue'
@@ -177,6 +190,7 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             background={bg_blue}
             block={block}
             editBlock={editBlock}
+            templateHtml={templateHtml}
           />
           <ColorInform
             colorName='Pink'
@@ -185,6 +199,7 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             background={bg_pink}
             block={block}
             editBlock={editBlock}
+            templateHtml={templateHtml}
           />
         </div>
       </section>

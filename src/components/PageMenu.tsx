@@ -2,6 +2,7 @@ import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } fro
 import { AiOutlinePlus } from 'react-icons/ai';
 import { GrDocumentText } from 'react-icons/gr';
 import {  basicBlockStyle, Block,  listItem, makeNewBlock, Page, pageSample } from '../modules/notion';
+import { setTemplateItem } from './BlockComponent';
 import PageIcon from './PageIcon';
 
 type PageMenuProps ={
@@ -34,8 +35,9 @@ const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock,changeBlockToP
       setBlock(block);
     };
   },[sessionItem]);
-
+  const templateHtml= document.getElementById("template");
   const moveBlockToPage =(destinationPageId:string ,block:Block)=>{
+    setTemplateItem(templateHtml, currentPage);
     // 기존 페이지에서 블록 삭제
       deleteBlock(currentPage.id, block, true);
       // 블록을 다른 페이지로 이동
@@ -48,7 +50,11 @@ const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock,changeBlockToP
       const moveTargetPage = pages.filter((page:Page)=> page.id === destinationPageId)[0];
       const firstBlockId =moveTargetPage.blocksId[0];
       const blocksIdLength = moveTargetPage.blocksId.length; 
-
+      //set origin moveTargetPage
+      if(templateHtml!==null){
+        const item= JSON.stringify(moveTargetPage);
+        sessionStorage.setItem("originMoveTargetPage", item);
+      }
       if(blocksIdLength===1 && firstBlockId.includes("blockSample")){
         addBlock(destinationPageId, newBlock, 0 , null);
       }else{  
@@ -57,7 +63,7 @@ const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock,changeBlockToP
       if(block.type==="page"){
         movePageToPage(block.id,destinationPageId)
       };
-    
+      
     // close Menu and recovery Menu state
     setMenuOpen !==null && setMenuOpen(false);
   };
@@ -116,6 +122,7 @@ const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock,changeBlockToP
   };
   const makeNewSubPage =()=>{
     if(block !==null){
+      setTemplateItem(templateHtml,currentPage);
       changeBlockToPage(currentPage.id, block);
     } 
   };

@@ -2,6 +2,7 @@ import React, { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import { GrDocumentText } from "react-icons/gr";
 import { CSSProperties } from "styled-components";
 import { Block, Page } from "../modules/notion";
+import { setTemplateItem } from "./BlockComponent";
 import IconPoup from "./IconPoup";
 import PageIcon from "./PageIcon";
 import { closePopup } from "./SideBar";
@@ -39,6 +40,8 @@ const Rename =({currentPageId,block ,page,editBlock ,editPage,renameStyle, setOp
     const value = event.target.value;
     const editTime =JSON.stringify(Date.now());
     if( value !== page.header.title){
+      const templateHtml =document.getElementById("template");
+      setTemplateItem(templateHtml,page);
         const renamedPage:Page ={
           ...page,
           header:{
