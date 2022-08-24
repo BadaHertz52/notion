@@ -584,11 +584,22 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
     setTemplateHtml(document.getElementById("template")):
     setTemplateHtml(null);
   },[openTemplates]);
+
   useEffect(()=>{
-    page.blocksId[0] ===undefined?
+    console.log("render blocksId", firstBlocksId?.[0]);
+    firstBlocksId?.[0] ===undefined?
     setNewPageFrame(true):
     setNewPageFrame(false);
-  },[page]);
+  },[firstBlocksId]);
+  useEffect(()=>{
+    if(!newPageFram && firstBlocksId?.[0]!==undefined){
+      const newFirstBlockHtml = document.getElementById(`${firstBlocksId[0]}_contents`);
+      const contenteditableHtml =newFirstBlockHtml?.firstElementChild as HTMLElement|null|undefined ;
+      if(contenteditableHtml!==null && contenteditableHtml!==undefined){
+        contenteditableHtml.focus();
+      }
+    } 
+  },[newPageFram]);
   useEffect(()=>{
     if(command.targetBlock!==null){
       const frame = document.getElementsByClassName("frame")[0];
