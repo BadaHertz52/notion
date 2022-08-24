@@ -154,8 +154,13 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
             contents: value,
             editTime:editTime,
           };
-          targetBlock.contents !== value &&
-          sessionStorage.setItem("itemsTobeEdited", JSON.stringify(editedBlock));
+          if(targetBlock.contents !== value){
+            const item={
+              pageId: page.id,
+              block: editedBlock
+            };
+            sessionStorage.setItem("itemsTobeEdited", JSON.stringify(item));
+          }
         };
       };
     }

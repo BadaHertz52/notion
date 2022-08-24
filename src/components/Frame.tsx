@@ -127,7 +127,7 @@ const MoveTargetBlock=({ page, block , editBlock, addBlock,changeToSub ,raiseBlo
 const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,commentBlock,openComment ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit, openTemplates}:FrameProps)=>{
   const innerWidth =window.innerWidth; 
   const inner =document.getElementById("inner");
-  const templateHtml =document.getElementById("template");
+  const [templateHtml,setTemplateHtml]=useState<HTMLElement|null>(null);
   const editTime =JSON.stringify(Date.now());
   const [firstBlocksId, setFirstBlocksId]=useState<string[]|null>(page.firstBlocksId);
   const [newPageFram, setNewPageFrame]=useState<boolean>(false);
@@ -545,9 +545,27 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
       }
     } 
 
-  }
+  }  
+  const updateBlock=()=>{
+    const item = sessionStorage.getItem("itemsTobeEdited");
+    const cursorElement =document.getSelection()?.anchorNode?.parentElement;
+    const className =cursorElement?.className ;
+    if(item!==null){
+      const  itemObjet= JSON.parse(item);
+      const targetBlock =itemObjet.block;
+      const pageId = itemObjet.pageId;
+      const condition = className ==="contentEditable" && cursorElement!==undefined && cursorElement!==null && cursorElement.parentElement?.id ===`${targetBlock.id}_contents`;
+        if(!condition ){
+          console.log("frame pageiD" ,pageId);
+          editBlock(pageId, targetBlock);
+
+          sessionStorage.removeItem("itemsTobeEdited");
+        }
+    }
+  };
+  inner?.addEventListener("keyup",updateBlock);
   inner?.addEventListener("click",(event)=>{
-    
+    updateBlock();
     if(command.boolean){
       const block_commandBlock =document.getElementById("block_commandBlock");
       const commandDomRect =block_commandBlock?.getClientRects()[0];
@@ -562,11 +580,15 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
     }
   })
   useEffect(()=>{
+    openTemplates?
+    setTemplateHtml(document.getElementById("template")):
+    setTemplateHtml(null);
+  },[openTemplates]);
+  useEffect(()=>{
     page.blocksId[0] ===undefined?
     setNewPageFrame(true):
     setNewPageFrame(false);
   },[page]);
-
   useEffect(()=>{
     if(command.targetBlock!==null){
       const frame = document.getElementsByClassName("frame")[0];

@@ -104,20 +104,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
       setCommentBlock(block);
     }
   };
-  const updateBlock=()=>{
-    const item = sessionStorage.getItem("itemsTobeEdited");
-    const cursorElement =document.getSelection()?.anchorNode?.parentElement;
-    const className =cursorElement?.className ;
-    if(item!==null){
-      const  targetBlock:Block = JSON.parse(item);
-      const condition = className ==="contentEditable" && cursorElement!==undefined && cursorElement!==null && cursorElement.parentElement?.id ===`${targetBlock.id}_contents`;
-        if(!condition){
-        setTemplateItem(templateHtml,page);
-        editBlock(page.id, targetBlock);
-        sessionStorage.removeItem("itemsTobeEdited");
-        }
-    }
-  };
+
   const onClickTodoBtn =()=>{
     const editedTobo :Block ={
       ...block,
@@ -136,9 +123,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
     
   };
 
-  const inner =document.getElementById("inner");
-  inner?.addEventListener("click",updateBlock);
-  inner?.addEventListener("keyup",updateBlock);
+
   useEffect(()=>{
     const newBlockItem= sessionStorage.getItem("newBlock");
     if(newBlockItem!==null){
