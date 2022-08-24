@@ -13,6 +13,7 @@ type TemplatesProps = Template_Frame_SAME_Props &{
 const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage , addTemplate,cancleEditTemplate, deleteTemplate,commentBlock,openComment ,setTargetPageId , openTemplates ,setOpenTemplates ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit}:TemplatesProps)=>{
   const templates = templatesId !==null ? templatesId.map((id:string)=> findPage(pagesId, pages, id))  :null;
   const [template, setTemplate]= useState<Page|null>(templates==null? null : templates[0]);
+  const [openAlert, setOpenAlert]=useState<boolean>(false);
   const onClickTemplate=(event:MouseEvent<HTMLDivElement>)=>{
 
   };
@@ -121,6 +122,28 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
         </div>
       </div>
     </div>
+    {openAlert&&
+    <div id="templatesAlert">
+      <div className="inner">
+        <div>
+          The template has been modified. Do you want to save the edits?
+        </div>
+        <button 
+          className='saveBtn'
+          onClick={closeTemplate}
+        >
+          Save
+        </button>
+        <button 
+          className='discardBtn'
+          onClick={onClickDiscardBtn}
+        >
+          Discard edit
+        </button>
+      </div>
+    </div>
+    }
+  </>
   )
 };
 
