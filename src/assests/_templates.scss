@@ -127,7 +127,25 @@
     }
   }
   .makeTemplateBtn{
-
+    height: 48px;
+    border-top: 1px solid $mud;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color:$mud; 
+    font : {
+      size: 14px;
+      weight:bold;
+    }
+    svg{
+      margin-right: 8px;
+      font : {
+        size: 1rem
+      }
+    }
+    &:hover{
+      color:$darkgrey;
+    }
   }
 }
 #templatesAlert{

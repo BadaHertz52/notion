@@ -1,5 +1,6 @@
 import React, { Dispatch, MouseEvent, SetStateAction, useState } from 'react';
-import { findPage, Page } from '../modules/notion';
+import { AiOutlinePlus } from 'react-icons/ai';
+import { findPage, Page, pageSample } from '../modules/notion';
 import Frame, { Template_Frame_SAME_Props } from './Frame';
 import PageIcon from './PageIcon';
 
@@ -69,6 +70,20 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
         cancleEditTemplate(template.id);
         closeTemplate();
       }};
+  };
+
+  const onClickMakeTemplateBtn=()=>{
+    const newTemplate:Page={
+      ...pageSample,
+      header: {
+        ...pageSample.header,
+        title:"new template"
+      },
+      type:"template"
+    };
+    addPage(newTemplate);
+    setOpenTemplates(false);
+    setTargetPageId(newTemplate.id);
   };
   return(
     <>
@@ -158,8 +173,12 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
             "No template"}
         
           </div>
-          <button className='makeTemplateBtn'>
-            Make New Template
+          <button     
+            className='makeTemplateBtn'
+            onClick={onClickMakeTemplateBtn}
+          >
+            <AiOutlinePlus/>
+            <span>Make New Template</span>
           </button>
 
         </div>
