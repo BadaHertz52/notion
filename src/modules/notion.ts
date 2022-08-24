@@ -1696,6 +1696,9 @@ export default function notion (state:Notion =initialState , action :NotionActio
           };
           parentPage.blocks.splice(blockIndex,1,editedPageBlock);
         };
+        const pageIndex =pagesId.indexOf(newPage.id);
+        pages.splice(pageIndex,1,newPage)
+
         console.log("edit page",pages);
       };
       editPage(action.newPage);
