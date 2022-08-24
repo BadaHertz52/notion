@@ -357,6 +357,7 @@ const NotionRouter =()=>{
                     fullWidth={fullWidth}
                     setFullWidth={setFullWidth}
                     openTemplates={openTemplates}
+                    setOpenTemplates={setOpenTemplates}
                     />
                   } 
           />
@@ -453,8 +454,8 @@ const NotionRouter =()=>{
           smallText={smallText}
           fullWidth={fullWidth}
           discardEdit={discard_edit}
-          openTemplates
-
+          openTemplates ={openTemplates}
+          setOpenTemplates={setOpenTemplates}
         />
         }
         {openTemplates &&
@@ -478,9 +479,10 @@ const NotionRouter =()=>{
             addTemplate={addTemplate}
             cancleEditTemplate ={cancleEditTemplate}
             deleteTemplate ={deleteTemplate}
+            setRoutePage={setRoutePage}
+            setTargetPageId={setTargetPageId}
             commentBlock={commentBlock}
             openComment={openComment}
-            setTargetPageId={setTargetPageId}
             setOpenComment={setOpenComment}
             openTemplates={openTemplates}
             setOpenTemplates={setOpenTemplates}

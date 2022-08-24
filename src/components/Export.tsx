@@ -8,7 +8,7 @@ import ReactDOMServer from 'react-dom/server';
 type ExportProps= FrameProps &{
   setOpenExport:Dispatch<SetStateAction<boolean>>
 }
-const Export =({page,pagesId,pages,firstlist ,setOpenExport, userName,editBlock,addBlock,changeBlockToPage,changePageToBlock,changeToSub,raiseBlock,deleteBlock,addPage,editPage, duplicatePage ,movePageToPage,commentBlock,openComment ,setTargetPageId,setOpenComment,setCommentBlock,smallText,fullWidth,discardEdit, openTemplates}:ExportProps)=>{
+const Export =({page,pagesId,pages,firstlist ,setOpenExport, userName,editBlock,addBlock,changeBlockToPage,changePageToBlock,changeToSub,raiseBlock,deleteBlock,addPage,editPage, duplicatePage ,movePageToPage ,commentBlock,openComment ,setTargetPageId,setOpenComment,setCommentBlock,smallText,fullWidth,discardEdit, openTemplates , setOpenTemplates}:ExportProps)=>{
   const html ="HTML";
   const pdf="PDF";
   const markdown="Markdown";
@@ -142,6 +142,7 @@ const Export =({page,pagesId,pages,firstlist ,setOpenExport, userName,editBlock,
                 fullWidth={fullWidth}
                 discardEdit={discardEdit}
                 openTemplates={openTemplates}
+                setOpenTemplates={setOpenTemplates}
               />;
               return { jsx:frameComponent, title:subPage.header.title};
           });

@@ -9,9 +9,10 @@ type TemplatesProps = Template_Frame_SAME_Props &{
   addTemplate: (template: Page) => void,
   cancleEditTemplate: (templateId: string) => void,
   deleteTemplate: (templateId: string) => void,
+  setRoutePage:Dispatch<SetStateAction<Page|null>>,
   setOpenTemplates: Dispatch<SetStateAction<boolean>>
 };
-const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage , addTemplate,cancleEditTemplate, deleteTemplate,commentBlock,openComment ,setTargetPageId , openTemplates ,setOpenTemplates ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit}:TemplatesProps)=>{
+const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage , addTemplate,cancleEditTemplate, deleteTemplate, setRoutePage ,setTargetPageId,commentBlock,openComment , openTemplates ,setOpenTemplates ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit }:TemplatesProps)=>{
   const templates = templatesId !==null ? templatesId.map((id:string)=> findPage(pagesId, pages, id))  :null;
   const [template, setTemplate]= useState<Page|null>(templates==null? null : templates[0]);
   const [openAlert, setOpenAlert]=useState<boolean>(false);
@@ -38,12 +39,24 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
   };
 
   const onClickUseBtn=()=>{
+    const targetPageId =sessionStorage.getItem("targetPageId");
     if(template!==null){
       const newPage :Page ={
         ...template,
         id: JSON.stringify(Date.now())
       };
-      addPage(newPage);
+      if(targetPageId==null){
+        addPage(newPage);
+      }else{
+        const editedPage:Page ={
+          ...template ,
+          id: targetPageId,
+          editTime:JSON.stringify(Date.now())
+        };
+        sessionStorage.removeItem("targetPageId");
+        editPage(targetPageId, editedPage);
+        setRoutePage(editedPage)
+      };
       setOpenTemplates(false);
     }
   };
@@ -81,9 +94,9 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
       },
       type:"template"
     };
-    addPage(newTemplate);
+    addTemplate(newTemplate);
     setOpenTemplates(false);
-    setTargetPageId(newTemplate.id);
+    setRoutePage(newTemplate);
   };
   return(
     <>
@@ -128,11 +141,12 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
               openComment={openComment}
               setTargetPageId={setTargetPageId}
               setOpenComment={setOpenComment}
-              openTemplates={openTemplates}
               setCommentBlock ={setCommentBlock}
               smallText={smallText}
               fullWidth={fullWidth}
               discardEdit={discardEdit}
+              openTemplates={openTemplates}
+              setOpenTemplates={setOpenTemplates}
             /> 
             </>
             :

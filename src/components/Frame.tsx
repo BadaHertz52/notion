@@ -43,11 +43,12 @@ export type Template_Frame_SAME_Props ={
   editPage :(pageId:string,newPage:Page ,)=>void,
   duplicatePage:(targetPageId: string) => void,
   movePageToPage:(targetPageId: string, destinationPageId: string) => void,
+  setTargetPageId: React.Dispatch<React.SetStateAction<string>>,
   commentBlock: Block | null,
   openComment :boolean, 
-  setTargetPageId: React.Dispatch<React.SetStateAction<string>>,
   setOpenComment: Dispatch<SetStateAction<boolean>>,
   openTemplates:boolean,
+  setOpenTemplates: React.Dispatch<React.SetStateAction<boolean>>
   setCommentBlock: Dispatch<SetStateAction<Block | null>>,
   smallText: boolean, 
   fullWidth: boolean, 
@@ -59,7 +60,7 @@ export type FrameProps = Template_Frame_SAME_Props &{
 };
 const basicPageCover ='https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assests/img/artificial-turf-g6e884a1d4_1920.jpg';;
 
-const MoveTargetBlock=({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText, moveBlock  ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand ,setTargetPageId ,openComment ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock, closeMenu,templateHtml
+const MoveTargetBlock=({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText, moveBlock  ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand ,setTargetPageId ,openComment ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock, closeMenu,templateHtml ,
 }:EditableBlockProps)=>{
   return(
     <div 
@@ -124,7 +125,7 @@ const MoveTargetBlock=({ page, block , editBlock, addBlock,changeToSub ,raiseBlo
   )
 }
 
-const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,commentBlock,openComment ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit, openTemplates}:FrameProps)=>{
+const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,commentBlock,openComment ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit, openTemplates,  setOpenTemplates}:FrameProps)=>{
   const innerWidth =window.innerWidth; 
   const inner =document.getElementById("inner");
   const [templateHtml,setTemplateHtml]=useState<HTMLElement|null>(null);
@@ -563,6 +564,10 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
     (newPage.firstBlocksId);
   };
 
+  const onClickTemplateBtn=()=>{
+    setOpenTemplates(true);
+    sessionStorage.setItem("targetPageId",page.id);
+  };
   // edit block using sessionstorage
   const updateBlock=()=>{
     const item = sessionStorage.getItem("itemsTobeEdited");
@@ -596,19 +601,23 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
         }) 
       }
     }
-  })
+  });
   useEffect(()=>{
     openTemplates?
     setTemplateHtml(document.getElementById("template")):
     setTemplateHtml(null);
   },[openTemplates]);
-
   useEffect(()=>{
-    console.log("render blocksId", firstBlocksId?.[0]);
+    console.log("change page", page.id);
+    setFirstBlocksId(page.firstBlocksId);
+  },[page])
+  useEffect(()=>{
+    console.log("render blocksId", firstBlocksId?.[0], page);
     firstBlocksId?.[0] ===undefined?
     setNewPageFrame(true):
     setNewPageFrame(false);
   },[firstBlocksId]);
+
   useEffect(()=>{
     if(!newPageFram && firstBlocksId?.[0]!==undefined){
       const newFirstBlockHtml = document.getElementById(`${firstBlocksId[0]}_contents`);
@@ -850,7 +859,9 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
                 <GrDocument/>
                 <span>Empty</span>
               </button>
-              <button>
+              <button
+                onClick={onClickTemplateBtn}
+              >
                 <HiTemplate/>
                 <span>Templates</span>
               </button>
