@@ -120,10 +120,9 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
         const newBlock:Block ={
           ...makeNewBlock(page, targetBlock, newBlockContents),
           firstBlock: targetBlock.firstBlock,
-          subBlocksId: targetBlock.subBlocksId
+          subBlocksId: targetBlock.subBlocksId,
+          parentBlocksId:targetBlock.parentBlocksId
         } ;
-
-  
         if((targetBlock.contents!== editedContents) || (targetBlock.subBlocksId!==null)){
           const editedBlock:Block ={
             ...targetBlock,

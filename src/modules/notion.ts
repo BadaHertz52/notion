@@ -391,7 +391,7 @@ const returnTemplateSubBlock =(day:string, index:number)=>{
   const templateBlock :Block ={
     id:`templateSub_${day}`,
     contents:todoList[num],
-    firstBlock:true,
+    firstBlock:false,
     subBlocksId:null,
     parentBlocksId:[`templateBlock_${day}`],
     type:todo,
