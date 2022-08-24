@@ -62,7 +62,16 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
     setOpenAlert(false);
     setOpenTemplates(false);
   };
+  const onClickDiscardBtn=()=>{
+    if(template!==null){
+      const item =sessionStorage.getItem(`template_${template.id}`);
+      if(item !==null){
+        cancleEditTemplate(template.id);
+        closeTemplate();
+      }};
+  };
   return(
+    <>
     <div id="templates"
       onClick={(event)=>onClickTemplate(event)}
     >
