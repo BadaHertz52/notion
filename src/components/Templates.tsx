@@ -169,7 +169,8 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
     <div id="templatesAlert">
       <div className="inner">
         <div>
-          The template has been modified. Do you want to save the edits?
+          The template has been modified. <br/> 
+          Do you want to save the edits?
         </div>
         <button 
           className='saveBtn'
