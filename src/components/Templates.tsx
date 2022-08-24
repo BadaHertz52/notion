@@ -15,7 +15,25 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
   const [template, setTemplate]= useState<Page|null>(templates==null? null : templates[0]);
   const [openAlert, setOpenAlert]=useState<boolean>(false);
   const onClickTemplate=(event:MouseEvent<HTMLDivElement>)=>{
-
+    const templateInner =event.currentTarget.firstElementChild;
+    if(templateInner!==null){
+      const templateInnerDomRect =templateInner.getClientRects()[0];
+      const clientX = event.clientX;
+      const clientY =event.clientY;
+      const isInX = (clientX >= templateInnerDomRect.left)&&(clientX <= templateInnerDomRect.right);
+      const isInY =(clientY >= templateInnerDomRect.top)&&(clientY<= templateInnerDomRect.bottom);
+      const isInInner = isInX&& isInY;
+      if(!isInInner){
+        if(template!==null){
+          const item =sessionStorage.getItem(`template_${template.id}`);
+            item ===null? 
+            setOpenTemplates(false): 
+            setOpenAlert(true);
+        }else{
+          setOpenTemplates(false);
+        }
+      }
+    }
   };
 
   const onClickUseBtn=()=>{
