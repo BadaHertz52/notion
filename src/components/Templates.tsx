@@ -46,6 +46,16 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
       setOpenTemplates(false);
     }
   };
+  const showOtherTemplate=(otherTemplate:Page)=>{
+    if(template!==null){
+      const item =sessionStorage.getItem(`template_${template.id}`);
+      if(item==null){
+        setTemplate(otherTemplate);
+      }else{
+        setOpenAlert(true);
+      }
+    }
+  };
   return(
     <div id="templates"
       onClick={(event)=>onClickTemplate(event)}
@@ -115,7 +125,7 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
             templates.map((template:Page)=>
               <button 
                 className='item'
-                onClick={()=>setTemplate(template)}
+                onClick={()=>showOtherTemplate(template)}
               >
                 <PageIcon
                   icon={template.header.icon}
