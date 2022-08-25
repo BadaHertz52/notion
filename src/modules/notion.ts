@@ -666,7 +666,7 @@ const initialState :Notion ={
       parentBlocksId: null,
       type: page,
       iconType:"emoji",
-      icon: emoji[10] ,
+      icon: emojis[8] ,
       editTime: (Date.parse("2021-5-20-9:00")).toString(),
       createTime: (Date.parse("2021-5-19-20:00")).toString(),
 
