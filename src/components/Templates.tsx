@@ -140,6 +140,7 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
               commentBlock={commentBlock}
               openComment={openComment}
               setTargetPageId={setTargetPageId}
+              setRoutePage={setRoutePage}
               setOpenComment={setOpenComment}
               setCommentBlock ={setCommentBlock}
               smallText={smallText}

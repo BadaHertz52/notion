@@ -55,6 +55,7 @@ type EditorContainerProps = NotionActionProps &{
   
 
   setTargetPageId:Dispatch<SetStateAction<string>>,
+  setRoutePage: React.Dispatch<React.SetStateAction<Page | null>>,
   openComment :boolean,
   setOpenComment: Dispatch<SetStateAction<boolean>>,
   commentBlock :Block|null,
@@ -73,7 +74,7 @@ type EditorContainerProps = NotionActionProps &{
   setOpenTemplates: React.Dispatch<React.SetStateAction<boolean>>
 };
 
-const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isInTrash, makePagePath,changeSide,addBlock,editBlock ,changeBlockToPage, changePageToBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId ,openComment,setOpenComment,commentBlock,setCommentBlock,smallText,setSmallText,fullWidth,setFullWidth,showAllComments,  setShowAllComments , setAllCommentsStyle,discardEdit , setOpenExport, openTemplates, setOpenTemplates}:EditorContainerProps)=>{
+const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isInTrash, makePagePath,changeSide,addBlock,editBlock ,changeBlockToPage, changePageToBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId, setRoutePage ,openComment,setOpenComment,commentBlock,setCommentBlock,smallText,setSmallText,fullWidth,setFullWidth,showAllComments,  setShowAllComments , setAllCommentsStyle,discardEdit , setOpenExport, openTemplates, setOpenTemplates}:EditorContainerProps)=>{
   const dispatch =useDispatch();
   const user =useSelector((state:RootState)=>state.user);
   const changeToSub =(pageId: string, block: Block,  newParentBlockId: string)=> dispatch(change_to_sub(pageId, block, newParentBlockId));
@@ -157,6 +158,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isIn
         commentBlock={commentBlock}
         openComment={openComment}
         setTargetPageId={setTargetPageId}
+        setRoutePage={setRoutePage}
         setOpenComment={setOpenComment}
         setCommentBlock ={setCommentBlock}
         smallText={smallText}

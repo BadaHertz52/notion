@@ -320,7 +320,6 @@ const NotionRouter =()=>{
                     pagesId={pagesId}
                     isInTrash={!notion.pagesId.includes(routePage.id)}
                     makePagePath={makePagePath}
-                    setTargetPageId={setTargetPageId}
                     addBlock={addBlock}
                     editBlock={editBlock}
                     changeBlockToPage={changeBlockToPage}
@@ -343,6 +342,8 @@ const NotionRouter =()=>{
                     removeFavorites={removeFavorites}
                     changeSide={changeSide}
 
+                    setTargetPageId={setTargetPageId}
+                    setRoutePage={setRoutePage}
                     showAllComments={showAllComments}
                     setShowAllComments={setShowAllComments}
                     setAllCommentsStyle={setAllCommentStyle}
@@ -449,6 +450,7 @@ const NotionRouter =()=>{
           commentBlock={commentBlock}
           openComment={openComment}
           setTargetPageId={setTargetPageId}
+          setRoutePage={setRoutePage}
           setOpenComment={setOpenComment}
           setCommentBlock ={setCommentBlock}
           smallText={smallText}
