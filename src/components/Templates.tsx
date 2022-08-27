@@ -1,5 +1,5 @@
 import React, { Dispatch, MouseEvent, SetStateAction, useState } from 'react';
-import { AiOutlineExpandAlt, AiOutlinePlus } from 'react-icons/ai';
+import { AiOutlineExpandAlt, AiOutlinePlus, AiOutlineShrink } from 'react-icons/ai';
 import { BsTrash } from 'react-icons/bs';
 import { findPage, Page, pageSample } from '../modules/notion';
 import Frame, { Template_Frame_SAME_Props } from './Frame';
@@ -18,6 +18,8 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
   const [template, setTemplate]= useState<Page|null>(templates==null? null : templates[0]);
   const [openEditAlert, setOpenEditAlert]=useState<boolean>(false);
   const [openDeleteAlert, setOpenDeleteAlert]=useState<boolean>(false);
+  const [expand ,setExpand]=useState<boolean>(false);
+
   const onClickTemplate=(event:MouseEvent<HTMLDivElement>)=>{
     const templateInner =event.currentTarget.firstElementChild;
     if(templateInner!==null){
@@ -103,14 +105,18 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
 
   const onClickDeleteTemplateBtn=()=>{
     template!==null && deleteTemplate(template.id);
-  }
+  };
+
   return(
     <>
     <div id="templates"
       onClick={(event)=>onClickTemplate(event)}
     >
       <div className="inner">
-        <div id="template">
+        <div 
+          id="template"
+          className={expand? "expand":""}
+        >
 
           {template!==null ?
             <>
@@ -129,10 +135,15 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
                 </div>
                 <div className="templateTool">
                   <button 
-                    className="templateEdit"
-                    aria-label='expand template to edit'
+                    className="expandBtn"
+                    aria-label={expand?"revert  the template to original size":'expand the template size'}
+                    onClick={()=>setExpand(!expand)}
                   >
+                    {expand?
+                    <AiOutlineShrink/>
+                    :
                     <AiOutlineExpandAlt/>
+                    }
                   </button>
                   <button 
                     className='templateDelete'
@@ -180,7 +191,10 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
           }
 
         </div>
-        <div id="templates_side">
+        <div 
+          id="templates_side"
+          className={expand? "off":""}
+        >
           <button 
             className='useTemplateBtn'
             onClick={onClickUseBtn}
