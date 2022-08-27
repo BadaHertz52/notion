@@ -14,15 +14,12 @@ type AllCommentsProps={
   discardEdit:boolean,
   style:CSSProperties,
 }
-const AllComments=({page, userName, editBlock, showAllComments, setShowAllComments ,discardEdit , style}:AllCommentsProps)=>{
+const AllComments=({page, userName, editBlock, showAllComments, setShowAllComments,discardEdit , style}:AllCommentsProps)=>{
   const pageId= page.id;
   const [targetCommentsBlocks, setTargetCommentsBlocks] =useState<Block[]|null>(null);
   const open ="open";
   const resolve="resolve" ;
   const [select, setSelect]=useState<typeof open| typeof resolve>(open);
-
-  const [allCommentsStyle, setAllCommentsStyle]=useState<CSSProperties>({transform:"translateX(0)"});
-
 
   const openSelect =(event:React.MouseEvent)=>{
     const target =event.currentTarget;
@@ -34,21 +31,11 @@ const AllComments=({page, userName, editBlock, showAllComments, setShowAllCommen
     const blocks= page.blocks.filter((block:Block)=> block.comments !==null && block.comments); 
     setTargetCommentsBlocks(blocks);
   },[page]);
-  useEffect(()=>{
-    if(!showAllComments){
-      const onAllComments =document.querySelector(".allComments");
-      onAllComments?.setAttribute("style",  `transform:translateX(${window.innerWidth}px)`
-      )
-    }else{
-      const allComments =document.querySelector(".allComments.on");
-      allComments?.setAttribute("style", "transform:translateX(0)")
-    }
-  },[showAllComments]);
 
   return(
   <div 
     id="allComments"
-    style ={allCommentsStyle}
+    style={style}
   >
     <div className='inner'>
       <div className='allComments_header'>

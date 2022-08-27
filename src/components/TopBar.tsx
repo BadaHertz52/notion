@@ -91,7 +91,7 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
   }
   const onClickViewAllComments=()=>{
     setShowAllComments(!showAllComments)
-    //changeAllCommentAndTopBarStyle()
+    changeAllCommentAndTopBarStyle()
   };
   const defaultStyle ="default";
   const serif ="serif"; 
@@ -156,7 +156,6 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
       pagePath.forEach((e:Element)=> e.setAttribute("style",`max-width:${width}px`));
     };
     if(showAllComments){
-      setAllCommentsStyle({transform:"translateX(0)"});
       if(innerWidth >= 385){
         const newWidth =innerWidth -(12+385+5);
         topbar_left?.setAttribute("style", `width: ${newWidth}px`);
@@ -168,7 +167,6 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
         pageFun?.setAttribute("style", "width:50%");
       }
     }else{
-      setAllCommentsStyle({transform:`translateX(${innerWidth}px)`});
       topbar_left?.setAttribute("style", "width:50%");
       changePathWidth( (innerWidth * 0.5) -26);
     };
@@ -275,6 +273,7 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
           Share
         </button>
         <button
+          id="allCommentsBtn"
           title='View all comments'
           onClick={onClickViewAllComments}
         >

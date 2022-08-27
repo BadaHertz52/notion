@@ -54,6 +54,7 @@ const NotionRouter =()=>{
   const [routePage, setRoutePage]=useState<Page|null>(firstPage!==undefined? firstPage: null);
   const [openQF, setOpenQF]=useState<boolean>(false);
   const [showAllComments,setShowAllComments]=useState<boolean>(false);
+  const [allCommentsStyle, setAllCommentsStyle]=useState<CSSProperties>({transform:`translateX(${window.innerWidth}px)`});
   const [discard_edit, setDiscardEdit]=useState<boolean>(false);
   const discardEdit =document.getElementById("discardEdit");
   const [openExport ,setOpenExport]=useState<boolean>(false);
@@ -61,7 +62,6 @@ const NotionRouter =()=>{
   const [commentBlock, setCommentBlock]=useState<Block|null>(null);
   const [smallText, setSmallText]=useState<boolean>(false);
   const [fullWidth, setFullWidth]=useState<boolean>(false);
-  const [allCommentStyle, setAllCommentStyle]=useState<CSSProperties>({transform:"translateX(0)"});
   const [openTemplates, setOpenTemplates]=useState<boolean>(false);
     //---action.function 
     //--block
@@ -278,6 +278,18 @@ const NotionRouter =()=>{
     }
     
   },[targetPageId]);
+  useEffect(()=>{
+    console.log("show", showAllComments);
+    if(showAllComments){
+      setAllCommentsStyle({transform:`translateX(0)`});
+    }else{
+      const allCommentsHtml =document.getElementById("allComments");
+      const width =allCommentsHtml?.clientWidth;
+      width !==undefined && 
+      setAllCommentsStyle({transform:`translateX(${width + 50 }px)`});
+      console.log("widht", width);
+    }
+  },[showAllComments])
   return(
     <div 
       id="inner"
@@ -346,7 +358,7 @@ const NotionRouter =()=>{
                     setRoutePage={setRoutePage}
                     showAllComments={showAllComments}
                     setShowAllComments={setShowAllComments}
-                    setAllCommentsStyle={setAllCommentStyle}
+                    setAllCommentsStyle={setAllCommentsStyle}
                     discardEdit={discard_edit}
                     setOpenExport={setOpenExport}
                     openComment={openComment}
@@ -380,7 +392,7 @@ const NotionRouter =()=>{
         </div>
       }
        {/* ----editor */}
-      {routePage !==null && showAllComments &&
+      {routePage !==null &&
         <AllComments
           page={routePage}
           userName={user.userName}
@@ -389,7 +401,7 @@ const NotionRouter =()=>{
           showAllComments={showAllComments}
           setShowAllComments={setShowAllComments}
           discardEdit={discard_edit}
-          style={allCommentStyle}
+          style={allCommentsStyle}
         />
       }
       {openQF &&
