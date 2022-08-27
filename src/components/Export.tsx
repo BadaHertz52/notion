@@ -1,7 +1,7 @@
 import { NodeHtmlMarkdown } from "node-html-markdown";
 import React, { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
-import { Block, findPage, listItem, Page } from "../modules/notion";
+import {  findPage,Page } from "../modules/notion";
 import Frame, { FrameProps } from "./Frame";
 import ReactDOMServer from 'react-dom/server';
 
@@ -19,7 +19,6 @@ const Export =({page,pagesId,pages,firstlist ,setOpenExport, userName,editBlock,
   type Content = typeof everything| typeof noFileImage;
   const [format, setFormat]=useState<Format>(html);
   const [content, setContent]=useState<Content>(everything);
-  const [subPageFrameString, setSubPageFrameString] =useState<string|null>(null);
   const exportHtml =document.getElementById("export");
   const openOptions=(event:MouseEvent)=>{
     const currentTarget =event.currentTarget;
@@ -80,7 +79,6 @@ const Export =({page,pagesId,pages,firstlist ,setOpenExport, userName,editBlock,
         const styleTag= [...document.querySelectorAll("style")];
         const styleCode= styleTag[1].outerHTML;
         const includeSubPage :boolean=  includeSubpagesSlider.classList.contains("on");
-        const createSubPageFolder :boolean =createSubPageFolderSlider.classList.contains("on");
         const convertHtml =(title:string, frameHtml:string)=>{
           const html =`
           <!DOCTYPE html>
@@ -255,21 +253,6 @@ const Export =({page,pagesId,pages,firstlist ,setOpenExport, userName,editBlock,
             >
                 <span 
                   id="includeSubPagesSlider"
-                  className="slider"
-                  >
-                  </span>
-            </button>
-          </div>
-          <div className="select switch">
-            <div className="select_label">
-              Create folders for subPages
-            </div>
-            <button 
-              className='switchBtn'
-              onClick={onClickSwitchBtn}
-            >
-                <span 
-                  id="createSubPageFolderSlider"
                   className="slider"
                   >
                   </span>

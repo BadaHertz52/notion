@@ -1,4 +1,4 @@
-import React, { Dispatch, MutableRefObject, SetStateAction, useEffect, useRef, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect,  useState } from 'react';
 import Menu from './Menu';
 import {Block, findPage, listItem, makeNewBlock, Page} from '../modules/notion';
 import { CSSProperties } from 'styled-components';
@@ -77,7 +77,6 @@ export const detectRange =(event:MouseEvent| React.MouseEvent , targetArea:DOMRe
 };
 
 const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage, editBlock,changeBlockToPage,changePageToBlock, deleteBlock ,addPage,editPage, movePageToPage,  setMoveTargetBlock,moveTargetBlock, setCommentBlock, popup, setPopup ,menuOpen,setMenuOpen ,setPopupStyle ,setTargetPageId }:BlockFnProp)=>{
-  const inner =document.getElementById("inner");
   const [openRename, setOpenRename] =useState<boolean>(false);
 
   const [blockFnTargetBlock, setBlockFnTargetBlock]=useState<Block|null>(null);
@@ -102,7 +101,6 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
     }
   };
   const onMouseDownMenu=()=>{
-    console.log("down")
     const sessionItem = sessionStorage.getItem("blockFnTargetBlock") ;
     if(sessionItem!==null){
       const targetBlock = JSON.parse(sessionItem);

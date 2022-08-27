@@ -281,11 +281,6 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
           <BiMessageDetail/>
         </button>
         <button
-          title="View all updates"
-        >
-          <AiOutlineClockCircle/>
-        </button>
-        <button
           title="Pin this page in your sidebar"
           className={pageInFavorites?"favoriteBtn on" : "favoriteBtn"}
           onClick={addOrRemoveFavorite}

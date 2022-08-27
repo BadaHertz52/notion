@@ -480,12 +480,6 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
                 <span>Templates</span>
               </div>
             </button>
-            <button>
-              <div className="itemInner">
-                <HiDownload/>
-                <span>Import</span>
-              </div>
-            </button>
             <button
               onClick={onClickTrashBtn}
               ref={trashBtn}
