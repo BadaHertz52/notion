@@ -2,6 +2,7 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { CSSProperties } from "styled-components";
 import { Block, Page } from "../modules/notion";
+import { detectRange } from "./BlockFn";
 import Comments from "./Comments";
 
 type AllCommentsProps={
@@ -15,6 +16,21 @@ type AllCommentsProps={
   style:CSSProperties,
 }
 const AllComments=({page, userName, editBlock, showAllComments, setShowAllComments,discardEdit , style}:AllCommentsProps)=>{
+  const inner =document.getElementById("inner");
+  inner?.addEventListener("click",(event)=>{
+    if(showAllComments){
+      const allCommentsHtml =document.querySelector("#allComments");
+      const allCommentsHtmlDomRect = allCommentsHtml?.getClientRects()[0];
+      if(allCommentsHtmlDomRect!==undefined){
+        const isInAllComments= detectRange(event, allCommentsHtmlDomRect);
+        console.log("is",isInAllComments);
+        if(! isInAllComments){
+          setShowAllComments(false);
+        }
+      }
+
+    };
+  })
   const pageId= page.id;
   const [targetCommentsBlocks, setTargetCommentsBlocks] =useState<Block[]|null>(null);
   const open ="open";
