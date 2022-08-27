@@ -15,7 +15,7 @@ type TemplatesProps = Template_Frame_SAME_Props &{
 const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage , addTemplate,cancleEditTemplate, deleteTemplate, setRoutePage ,setTargetPageId,commentBlock,openComment , openTemplates ,setOpenTemplates ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit }:TemplatesProps)=>{
   const templates = templatesId !==null ? templatesId.map((id:string)=> findPage(pagesId, pages, id))  :null;
   const [template, setTemplate]= useState<Page|null>(templates==null? null : templates[0]);
-  const [openAlert, setOpenAlert]=useState<boolean>(false);
+  const [openEditAlert, setOpenEditAlert]=useState<boolean>(false);
   const onClickTemplate=(event:MouseEvent<HTMLDivElement>)=>{
     const templateInner =event.currentTarget.firstElementChild;
     if(templateInner!==null){
@@ -30,7 +30,7 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
           const item =sessionStorage.getItem('originTemplate');
             item ===null? 
             setOpenTemplates(false): 
-            setOpenAlert(true);
+            setOpenEditAlert(true);
         }else{
           setOpenTemplates(false);
         }
@@ -66,14 +66,14 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
       if(item==null){
         setTemplate(otherTemplate);
       }else{
-        setOpenAlert(true);
+        setOpenEditAlert(true);
       }
     }
   };
   const closeTemplate=()=>{
     template!==null&&
     sessionStorage.removeItem("originTemplate");
-    setOpenAlert(false);
+    setOpenEditAlert(false);
     setOpenTemplates(false);
   };
   const onClickDiscardBtn=()=>{
@@ -199,7 +199,8 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
         </div>
       </div>
     </div>
-    <div id="templatesAlert">
+    {openEditAlert&&
+    <div  className="templatesAlert">
       <div className="inner">
         <div>
           The template has been modified. <br/> 
