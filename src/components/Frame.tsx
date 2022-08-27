@@ -592,9 +592,11 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
     if(command.boolean){
       const block_commandBlock =document.getElementById("block_commandBlock");
       const commandDomRect =block_commandBlock?.getClientRects()[0];
-      if(commandDomRect !==undefined){
+      const commandInputHtml =document.getElementById("commandInput");
+      if(commandDomRect !==undefined 
+        && commandInputHtml!==null){
         const isInnnerCommand = detectRange(event,commandDomRect); 
-        !isInnnerCommand && setCommand({
+        (!isInnnerCommand&& (event.target !== commandInputHtml)) && setCommand({
           boolean:false,
           command:null,
           targetBlock:null
