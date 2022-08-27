@@ -375,7 +375,7 @@ ReturnType <typeof cancle_edit_template>|
 ReturnType <typeof delete_template>
 ;
 
-const day =["Mon","", "Ths","", "Wed","", "Thr","", "Fri","", "Sat","","Sun"];
+const day =["Mon","1", "Ths","2", "Wed","3", "Thr","4", "Fri","5", "Sat","6","Sun"];
 const blockBgColor =[bg_blue,"", bg_green,"",bg_yellow,"",  bg_pink,"", bg_grey, "",bg_yellow, "",bg_blue];
 const todoList =[
   '6AM :🎽 runing',
@@ -430,7 +430,10 @@ const templateBlocks = day.map((d:string)=> {
   if(day.indexOf(d)%2 ===0){
     returnBlock =returnTemplateBlock(d, day.indexOf(d) )
   }else{
-    returnBlock =blockSample;
+    returnBlock ={
+      ...blockSample,
+      id:`empty${d}_${JSON.stringify(Date.now())}`
+    };
 
   };
   return returnBlock
