@@ -3182,6 +3182,10 @@ a:link, a:active, a:visited {
   max-height: none;
 }
 
+#template.expand {
+  width: 100%;
+}
+
 #template {
   width: calc(100% - 240px);
   display: flex;
@@ -3196,33 +3200,34 @@ a:link, a:active, a:visited {
   align-items: center;
   padding: 8px 12px;
 }
-#template .pageIcon {
+#template .templateTopBar .pageIcon {
   margin-left: 5px;
   width: 18px;
   height: 18px;
 }
-#template .pageIcon .pageImgIcon {
+#template .templateTopBar .pageIcon .pageImgIcon {
   width: 100%;
   height: 100%;
 }
-#template .templateInform {
-  display: flex;
-  width: calc(100% - 48px);
-}
-#template .pageTitle {
+#template .templateTopBar .pageTitle {
+  height: 18px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: calc(100% - 30px);
-  height: 18px;
   text-align: center;
   padding-left: 5px;
+}
+#template .templateInform {
+  display: flex;
+  width: calc(100% - 48px);
 }
 #template .templateTool {
   width: 48px;
   height: 18px;
 }
 #template .templateTool button {
+  position: relative;
   width: 1rem;
   font-size: 18px;
   font-weight: bolder;
@@ -3231,6 +3236,25 @@ a:link, a:active, a:visited {
 }
 #template .templateTool button:hover {
   color: rgb(55, 54, 47);
+}
+#template .templateTool .bubble {
+  display: none;
+}
+#template .templateTool button:hover .bubble {
+  display: block;
+  position: absolute;
+  top: 105%;
+  right: 0;
+  font-size: 12px;
+  font-weight: normal;
+  background-color: #EDECE9;
+  padding: 4px;
+}
+#template .templateTool button:hover .bubble:first-child {
+  width: 200px;
+}
+#template .templateTool button:hover .bubble:last-child {
+  width: 150px;
 }
 #template .frame {
   height: calc(100% - 48px);
@@ -3331,6 +3355,10 @@ a:link, a:active, a:visited {
   color: rgb(112, 112, 112);
 }
 
+#templates_side.off {
+  display: none;
+}
+
 .templatesAlert {
   z-index: 20;
 }
@@ -3362,14 +3390,14 @@ a:link, a:active, a:visited {
   border: 1px solid rgba(55, 53, 47, 0.16);
   margin-top: 8px;
 }
-.templatesAlert .inner .saveBtn:hover, .templatesAlert .inner .deleteTemplateBtn:hover {
+.templatesAlert .saveBtn:hover, .templatesAlert .deleteTemplateBtn:hover {
   background-color: rgb(225, 225, 225);
 }
-.templatesAlert .inner .discardBtn, .templatesAlert .inner .cancleBtn {
+.templatesAlert .discardBtn, .templatesAlert .cancleBtn {
   color: rgb(235, 87, 87);
   border: 1px solid rgba(235, 87, 87, 0.5);
 }
-.templatesAlert .inner .discardBtn:hover, .templatesAlert .inner .cancleBtn:hover {
+.templatesAlert .discardBtn:hover, .templatesAlert .cancleBtn:hover {
   background-color: rgba(235, 87, 87, 0.1);
 }
 

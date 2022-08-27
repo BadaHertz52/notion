@@ -144,6 +144,12 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
                     :
                     <AiOutlineExpandAlt/>
                     }
+                    <div className='bubble'>
+                    {expand?
+                    "Revert to original size":
+                    'Expand  size'
+                    }
+                    </div>
                   </button>
                   <button 
                     className='templateDelete'
@@ -151,6 +157,9 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
                     onClick ={()=>setOpenDeleteAlert(true)}
                   >
                     <BsTrash/>
+                    <div className='bubble'>
+                      Delete template
+                    </div>
                   </button>
                 </div>
               </div>

@@ -68,6 +68,27 @@
         color:$black;
       }
     }
+    .bubble{
+      display: none;
+    }
+    button:hover{
+      .bubble{
+        display: block;
+        position:absolute;
+        top:105%;
+        right: 0;
+        font-size: 12px;
+        font-weight: normal;
+        background-color:$itemHover;
+        padding: 4px;
+      }
+      .bubble:first-child{
+        width: 200px;
+      }
+      .bubble:last-child{
+        width: 150px;
+      }
+    }
   }
   .frame{
     height: calc(100% - 48px);
