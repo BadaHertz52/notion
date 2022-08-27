@@ -629,23 +629,23 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
     } 
   },[newPageFram]);
   useEffect(()=>{
-    if(command.targetBlock!==null){
-      const frame = document.getElementsByClassName("frame")[0];
-      const targetBlockContent =document.getElementById(`block_${command.targetBlock.id}`);
-      const frameDomRect= frame.getClientRects()[0];
-      const position = targetBlockContent?.getClientRects()[0];
-      if(position !==undefined){
-        const heading =["h1", "h2" , "h3"]; 
-        const plus = !heading.includes(command.targetBlock.type) ? 24 : 0 
+    if(command.boolean && command.targetBlock!==null){
+      const frame =openTemplates? document.getElementById("template"): document.querySelector(".frame");
+      const commandInput =document.getElementById("commandInput");
+      const frameDomRect= frame?.getClientRects()[0];
+      const commandInputDomRect = commandInput?.getClientRects()[0];
+      if(frameDomRect!==undefined &&commandInputDomRect !==undefined){
+        const multiple = command.targetBlock.type==="h1"? 1 : 1.5
+        const plus = openTemplates? 0 : (commandInputDomRect.height)* multiple;
         const style :CSSProperties ={
           position:"absolute",
-          top: position.bottom -frameDomRect.top + position.height + plus ,
-          left:position.left
+          top:commandInputDomRect.bottom -frameDomRect.top + 14 + plus  ,
+          left: commandInputDomRect.left -frameDomRect.left  
         };
         setCBPositon(style);
       }
     }
-  },[command.targetBlock]);
+  },[command.boolean ,command.targetBlock]);
 
   useEffect(()=>{
     changeCommentStyle();
