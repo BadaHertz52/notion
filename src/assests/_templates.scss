@@ -1,6 +1,6 @@
 @import './common';
 
-#templates , #templatesAlert{
+#templates , .templatesAlert{
   @include popup;
   .inner{
     top:0;

@@ -199,7 +199,6 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
         </div>
       </div>
     </div>
-    {openAlert&&
     <div id="templatesAlert">
       <div className="inner">
         <div>
