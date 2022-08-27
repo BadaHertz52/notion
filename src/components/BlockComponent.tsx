@@ -1,4 +1,4 @@
-import React, { Dispatch, MouseEvent, SetStateAction, useRef} from 'react';
+import React, { Dispatch, MouseEvent, SetStateAction, useEffect, useRef} from 'react';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import { IoChatboxOutline } from 'react-icons/io5';
 import { MdOutlineCollectionsBookmark, MdOutlinePhotoSizeSelectActual } from 'react-icons/md';
@@ -348,6 +348,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
     setTemplateItem(templateHtml, page);
     const value = event.target.value;
     const trueOrFale = value.startsWith("/");
+    console.log("commandChange", value);
     if(trueOrFale){
       setCommand({
         boolean: true , 
@@ -366,6 +367,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
   function commandKeyUp(event:React.KeyboardEvent<HTMLInputElement>){
     const code= event.code;
     const firstOn =document.querySelector(".command_btn.on.first");
+    console.log("code", code);
     if(code ==="Enter" && command.targetBlock!==null  ){
       const name = firstOn?.getAttribute("name") as string ;
       const blockType:BlockType = blockTypes.filter((type)=> name.includes(type))[0];
@@ -395,6 +397,14 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
   };
 
   const BlockContentEditable=()=>{
+    useEffect(()=>{
+      if(command.boolean){
+        const commentInputHtml =document.getElementById("commandInput");
+        if(commentInputHtml!==null){
+          commentInputHtml.focus();
+        }
+      }
+    },[command.boolean])
     return(
       <>
       {!command.command || (command.targetBlock !==null && command.targetBlock.id !== block.id) ? 
@@ -411,6 +421,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
             type="text"
             tabIndex={-1}
             value={command.command}
+            id="commandInput"
             className='contentEditable'
             onChange={commandChange}
             onKeyUp={commandKeyUp}
