@@ -3147,7 +3147,7 @@ a:link, a:active, a:visited {
   color: inherit;
 }
 
-#templates, #templatesAlert {
+#templates, .templatesAlert {
   position: absolute;
   top: 0;
   left: 0;
@@ -3159,7 +3159,7 @@ a:link, a:active, a:visited {
   justify-content: center;
   z-index: 10;
 }
-#templates .inner, #templatesAlert .inner {
+#templates .inner, .templatesAlert .inner {
   background-color: white;
   border-radius: 3px;
   position: relative;
@@ -3172,7 +3172,7 @@ a:link, a:active, a:visited {
   overflow: hidden;
   box-shadow: rgba(15, 15, 15, 0.039) 0px 0px 0px 1px;
 }
-#templates .inner, #templatesAlert .inner {
+#templates .inner, .templatesAlert .inner {
   top: 0;
   left: 0;
   width: 85vw;
@@ -3192,26 +3192,45 @@ a:link, a:active, a:visited {
   width: 100%;
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   align-items: center;
   padding: 8px 12px;
 }
-#template .templateTopBar .pageIcon {
+#template .pageIcon {
   margin-left: 5px;
-  width: 17.64px;
-  height: 17.64px;
+  width: 18px;
+  height: 18px;
 }
-#template .templateTopBar .pageIcon .pageImgIcon {
+#template .pageIcon .pageImgIcon {
   width: 100%;
   height: 100%;
 }
-#template .templateTopBar .pageTitle {
+#template .templateInform {
+  display: flex;
+  width: calc(100% - 48px);
+}
+#template .pageTitle {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: calc(100% - 30px);
-  height: 17.64px;
+  height: 18px;
   text-align: center;
   padding-left: 5px;
+}
+#template .templateTool {
+  width: 48px;
+  height: 18px;
+}
+#template .templateTool button {
+  width: 1rem;
+  font-size: 18px;
+  font-weight: bolder;
+  margin-right: 8px;
+  color: #B9B8B6;
+}
+#template .templateTool button:hover {
+  color: rgb(55, 54, 47);
 }
 #template .frame {
   height: calc(100% - 48px);
@@ -3312,10 +3331,10 @@ a:link, a:active, a:visited {
   color: rgb(112, 112, 112);
 }
 
-#templatesAlert {
+.templatesAlert {
   z-index: 20;
 }
-#templatesAlert .inner {
+.templatesAlert .inner {
   width: 380px;
   height: 200px;
   padding: 24px 32px;
@@ -3326,15 +3345,15 @@ a:link, a:active, a:visited {
   justify-content: center;
   align-items: center;
 }
-#templatesAlert .inner div, #templatesAlert .inner button {
+.templatesAlert .inner div, .templatesAlert .inner button {
   width: 100%;
 }
-#templatesAlert .inner div {
+.templatesAlert .inner div {
   margin-bottom: 8px;
   text-align: center;
   line-height: 1.5;
 }
-#templatesAlert .inner button {
+.templatesAlert .inner button {
   height: 2rem;
   font-size: 14px;
   white-space: nowrap;
@@ -3343,14 +3362,14 @@ a:link, a:active, a:visited {
   border: 1px solid rgba(55, 53, 47, 0.16);
   margin-top: 8px;
 }
-#templatesAlert .inner .saveBtn:hover {
+.templatesAlert .inner .saveBtn:hover, .templatesAlert .inner .deleteTemplateBtn:hover {
   background-color: rgb(225, 225, 225);
 }
-#templatesAlert .inner .discardBtn {
+.templatesAlert .inner .discardBtn, .templatesAlert .inner .cancleBtn {
   color: rgb(235, 87, 87);
   border: 1px solid rgba(235, 87, 87, 0.5);
 }
-#templatesAlert .inner .discardBtn:hover {
+.templatesAlert .inner .discardBtn:hover, .templatesAlert .inner .cancleBtn:hover {
   background-color: rgba(235, 87, 87, 0.1);
 }
 

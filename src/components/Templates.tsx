@@ -1,5 +1,6 @@
 import React, { Dispatch, MouseEvent, SetStateAction, useState } from 'react';
-import { AiOutlinePlus } from 'react-icons/ai';
+import { AiOutlineExpandAlt, AiOutlinePlus } from 'react-icons/ai';
+import { BsTrash } from 'react-icons/bs';
 import { findPage, Page, pageSample } from '../modules/notion';
 import Frame, { Template_Frame_SAME_Props } from './Frame';
 import PageIcon from './PageIcon';
@@ -16,6 +17,7 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
   const templates = templatesId !==null ? templatesId.map((id:string)=> findPage(pagesId, pages, id))  :null;
   const [template, setTemplate]= useState<Page|null>(templates==null? null : templates[0]);
   const [openEditAlert, setOpenEditAlert]=useState<boolean>(false);
+  const [openDeleteAlert, setOpenDeleteAlert]=useState<boolean>(false);
   const onClickTemplate=(event:MouseEvent<HTMLDivElement>)=>{
     const templateInner =event.currentTarget.firstElementChild;
     if(templateInner!==null){
@@ -98,6 +100,10 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
     setOpenTemplates(false);
     setRoutePage(newTemplate);
   };
+
+  const onClickDeleteTemplateBtn=()=>{
+    template!==null && deleteTemplate(template.id);
+  }
   return(
     <>
     <div id="templates"
@@ -109,6 +115,7 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
           {template!==null ?
             <>
               <div className='templateTopBar'>
+                <div className='templateInform'>
                 <PageIcon
                   icon={template.header.icon}
                   iconType={template.header.iconType}
@@ -118,6 +125,22 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
                   <span>
                       {template.header.title}
                   </span>
+                </div>
+                </div>
+                <div className="templateTool">
+                  <button 
+                    className="templateEdit"
+                    aria-label='expand template to edit'
+                  >
+                    <AiOutlineExpandAlt/>
+                  </button>
+                  <button 
+                    className='templateDelete'
+                    aria-label='delete template'
+                    onClick ={()=>setOpenDeleteAlert(true)}
+                  >
+                    <BsTrash/>
+                  </button>
                 </div>
               </div>
             <Frame
@@ -217,6 +240,27 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
           onClick={onClickDiscardBtn}
         >
           Discard edit
+        </button>
+      </div>
+    </div>
+    }
+    {openDeleteAlert &&
+    <div className="templatesAlert">
+      <div className="inner">
+        <div>
+          Do you want to delete this template?
+        </div>
+        <button 
+          className='deleteTemplateBtn'
+          onClick={onClickDeleteTemplateBtn}
+        >
+          Delete
+        </button>
+        <button 
+          className='cancleBtn'
+          onClick={()=>setOpenDeleteAlert(false)}
+        >
+          Cancle
         </button>
       </div>
     </div>
