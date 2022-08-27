@@ -34,21 +34,20 @@ const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBl
       btns.forEach((btn:Element)=>{
         const name =btn.getAttribute("name");
         if(name?.includes(typeCommand)){
-          btns.indexOf(btn)===0 ?
-          btn.setAttribute("class", "command_btn on first"):
           btn.setAttribute("class", "command_btn on");
         }else{
           btn.setAttribute("class", "command_btn");
         };
-        const onBlocks = document.querySelectorAll(".command_btn.on");
+      });
+      const onBlocks = document.querySelectorAll(".command_btn.on");
         if(onBlocks[0]===undefined){
           commandBlock_inner?.setAttribute("style", "display:none");
           commandBlock_noResult?.setAttribute("style", "display:block");
         }else{
+          onBlocks[0].classList.add("first");
           commandBlock_inner?.setAttribute("style", "display:block");
           commandBlock_noResult?.setAttribute("style", "display:none");
         }
-      });
     }else{
       btns.forEach((btn)=> btn.setAttribute("class", "command_btn on"));
 
