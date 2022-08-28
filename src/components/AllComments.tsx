@@ -1,7 +1,7 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { CSSProperties } from "styled-components";
-import { Block, Page } from "../modules/notion";
+import { Block, BlockCommentType, blockSample, Page } from "../modules/notion";
 import { detectRange } from "./BlockFn";
 import Comments from "./Comments";
 
@@ -31,21 +31,42 @@ const AllComments=({page, userName, editBlock, showAllComments, setShowAllCommen
     };
   })
   const pageId= page.id;
-  const [targetCommentsBlocks, setTargetCommentsBlocks] =useState<Block[]|null>(null);
+  const commentsBlocks= page.blocks.filter((block:Block)=> block.comments !==null && block.comments); 
+  const targetCommentsBlocks :Block[]|null =commentsBlocks[0]!==undefined? commentsBlocks: null;
+  const allComments = targetCommentsBlocks?.map((block:Block)=>block.comments);
   const open ="open";
   const resolve="resolve" ;
   const [select, setSelect]=useState<typeof open| typeof resolve>(open);
-
-  const openSelect =(event:React.MouseEvent)=>{
+  const [result, setResult]=useState<boolean>(true);
+  const openSelect =(event:MouseEvent)=>{
     const target =event.currentTarget;
     const typesDoc = target.parentElement;
     typesDoc?.classList.toggle("open");
-
+  };
+  const closeSelect= (event:MouseEvent)=>{
+    const target =event.currentTarget.parentElement?.previousElementSibling;
+    if(target !==undefined && target!==null){
+      target.parentElement?.classList.remove("open");
+    }
   };
   useEffect(()=>{
-    const blocks= page.blocks.filter((block:Block)=> block.comments !==null && block.comments); 
-    setTargetCommentsBlocks(blocks);
-  },[page]);
+    if(allComments !== undefined){
+      let resultComments:BlockCommentType[] =[];
+      allComments.forEach((comments:BlockCommentType[]|null)=>{
+        if(comments !==null){
+          const seletedComments= comments.filter((c:BlockCommentType)=> c.type=== select);
+          console.log(select,"///", seletedComments);
+          seletedComments[0]!==undefined && seletedComments.forEach(c => resultComments.push(c));
+        };
+        
+      });
+      if(resultComments[0]===undefined){
+        setResult(false);
+      }else{
+        setResult(true);
+      };
+    };
+  },[select]);
 
   return(
   <div 
@@ -67,29 +88,30 @@ const AllComments=({page, userName, editBlock, showAllComments, setShowAllCommen
             className="types"
           >
             <button
-              onClick={()=>setSelect(open)}
+              onClick={(event)=>{setSelect(open); closeSelect(event) }}
             >
               Open Comments
             </button>
             <button
-              onClick={()=>setSelect(resolve)}
+              onClick={(event)=>{setSelect(resolve); closeSelect(event)}}
             >
               Resolved Comments
             </button>
           </div>
         </div>
       </div>
-      {targetCommentsBlocks==null?
-        <div>
+      {(targetCommentsBlocks==null || !result)?
+        <div className="noResult">
+          <div>
+            <p>
+              No {select=== open? "Open": "Resolved"}  comments yet
+            </p>
+            <p> 
+              {select=== open? "Open": "Resolved"} comments on this page
+              will appear here
+            </p>
+          </div>
           {/*icon*/}
-          <p>
-            No {select=== open? "Open": "Resolved"}  comments yet
-          </p>
-          <p> 
-            {select=== open? "Open": "Resolved"} comments on this page
-            will appear here
-          </p>
-          
         </div>
         :
         targetCommentsBlocks.map((block:Block)=>

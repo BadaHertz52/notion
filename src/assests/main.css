@@ -136,6 +136,8 @@ a:link, a:active, a:visited {
   width: 100%;
   position: relative;
   pointer-events: auto;
+  padding: 0;
+  margin: 0;
 }
 #allComments .comments_comments {
   width: inherit;
@@ -199,6 +201,32 @@ a:link, a:active, a:visited {
 }
 #allComments .comment:hover {
   background-color: rgba(55, 53, 47, 0.03);
+}
+#allComments .noResult {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  position: relative;
+}
+#allComments .noResult > div {
+  width: 100%;
+  position: absolute;
+  top: 30%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  color: #B9B8B6;
+  font-weight: bold;
+}
+#allComments .noResult p {
+  width: 90%;
+  text-align: center;
+}
+#allComments .noResult p:first-child {
+  font-size: 1.5rem;
+}
+#allComments .noResult p:last-child {
+  font-size: 14px;
 }
 
 @media screen and (max-width: 385px) {
