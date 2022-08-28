@@ -280,12 +280,16 @@ const NotionRouter =()=>{
 
   useEffect(()=>{
     if(showAllComments){
-      setAllCommentsStyle({transform:`translateX(0)`});
+      setAllCommentsStyle({
+        transform:`translateX(0)`,
+      });
     }else{
       const allCommentsHtml =document.getElementById("allComments");
       const width =allCommentsHtml?.clientWidth;
       width !==undefined && 
-      setAllCommentsStyle({transform:`translateX(${width + 50 }px)`});
+      setAllCommentsStyle({
+        transform:`translateX(${width + 50 }px)`,
+      });
     }
   },[showAllComments])
   return(
