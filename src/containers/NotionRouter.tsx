@@ -21,6 +21,10 @@ export type pathType={
 export   type DiscardItemType ={
   discard:boolean
 }
+export const defaultFontFamily ='ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"' ;
+export const serifFontFamily ='Lyon-Text, Georgia, ui-serif, serif';
+export const monoFontFamily ='iawriter-mono, Nitti, Menlo, Courier, monospace'; 
+export type fontStyleType =typeof serifFontFamily| typeof monoFontFamily|typeof defaultFontFamily;
 
 const NotionRouter =()=>{
   const navigate= useNavigate();
@@ -63,6 +67,7 @@ const NotionRouter =()=>{
   const [smallText, setSmallText]=useState<boolean>(false);
   const [fullWidth, setFullWidth]=useState<boolean>(false);
   const [openTemplates, setOpenTemplates]=useState<boolean>(false);
+  const [fontStyle, setFontStyle]=useState<fontStyleType>(defaultFontFamily);
     //---action.function 
     //--block
   const editBlock = (pageId:string, block:Block)=> {dispatch(edit_block(pageId, block ));
@@ -374,6 +379,8 @@ const NotionRouter =()=>{
                     setFullWidth={setFullWidth}
                     openTemplates={openTemplates}
                     setOpenTemplates={setOpenTemplates}
+                    fontStyle={fontStyle}
+                    setFontStyle={setFontStyle}
                     />
                   } 
           />
@@ -473,6 +480,7 @@ const NotionRouter =()=>{
           discardEdit={discard_edit}
           openTemplates ={openTemplates}
           setOpenTemplates={setOpenTemplates}
+          fontStyle={fontStyle}
         />
         }
         {openTemplates &&
@@ -507,6 +515,7 @@ const NotionRouter =()=>{
             smallText={smallText}
             fullWidth={fullWidth}
             discardEdit={discard_edit}
+            fontStyle={fontStyle}
             
           />
         }

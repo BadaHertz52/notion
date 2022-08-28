@@ -4,7 +4,6 @@ import { Block, BlockCommentType, blockSample,  findBlock, findParentBlock, list
 import EditableBlock, { changeFontSizeBySmallText } from './EditableBlock';
 import IconPoup, { randomIcon } from './IconPoup';
 import CommandBlock from './CommandBlock';
-import { defaultFontFamily } from './TopBar';
 import Comments, { CommentInput } from './Comments';
 import BlockFn, { detectRange } from './BlockFn';
 import Loader from './Loader';
@@ -21,6 +20,7 @@ import {GrDocumentText ,GrDocument} from 'react-icons/gr';
 import { MdInsertPhoto } from 'react-icons/md';
 import { HiTemplate } from 'react-icons/hi';
 import { setTemplateItem } from './BlockComponent';
+import { fontStyleType } from '../containers/NotionRouter';
 
 export type Command ={
   boolean:boolean,
@@ -54,6 +54,7 @@ export type Template_Frame_SAME_Props ={
   smallText: boolean, 
   fullWidth: boolean, 
   discardEdit:boolean,
+  fontStyle: fontStyleType
 };
 export type FrameProps = Template_Frame_SAME_Props &{
   page:Page,
@@ -126,7 +127,7 @@ const MoveTargetBlock=({ page, block , editBlock, addBlock,changeToSub ,raiseBlo
   )
 }
 
-const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,commentBlock,openComment, setRoutePage ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit, openTemplates,  setOpenTemplates}:FrameProps)=>{
+const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,commentBlock,openComment, setRoutePage ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit, openTemplates,  setOpenTemplates, fontStyle}:FrameProps)=>{
   const innerWidth =window.innerWidth; 
   const inner =document.getElementById("inner");
   const [templateHtml,setTemplateHtml]=useState<HTMLElement|null>(null);
@@ -208,7 +209,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
   
   const maxWidth = innerWidth -60
   const frameInnerStyle:CSSProperties={
-    fontFamily:defaultFontFamily ,
+    fontFamily:fontStyle ,
     fontSize: openTemplates? "14px": ( smallText? "14px": "16px"),
     width: openTemplates? "100%": (fullWidth?  `${maxWidth}px`: ( innerWidth>900?  '900px' : "75%") ) ,
   };
