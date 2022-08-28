@@ -314,6 +314,7 @@ const NotionRouter =()=>{
 
         setOpenQF={setOpenQF}
         setOpenTemplates={setOpenTemplates}
+        showAllComments={showAllComments}
       />
       {/* editor------ */}
       {routePage!== null?

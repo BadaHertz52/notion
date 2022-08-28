@@ -206,7 +206,7 @@ const ListTemplate =({notion,targetList ,setTargetPageId , onClickMoreBtn, addNe
   )
 };
 
-const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,changeBlockToPage,addPage ,duplicatePage,editPage,deletePage,movePageToPage, cleanTrash, restorePage, addFavorites, removeFavorites, changeSide,setTargetPageId ,setOpenQF ,setOpenTemplates
+const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,changeBlockToPage,addPage ,duplicatePage,editPage,deletePage,movePageToPage, cleanTrash, restorePage, addFavorites, removeFavorites, changeSide,setTargetPageId ,setOpenQF ,setOpenTemplates ,showAllComments
 }:SideBarProps)=>{
   const inner =document.getElementById("inner");
   const pages =notion.pages;
@@ -364,7 +364,13 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
       })
     }
   };
-  window.onresize =changeTrashStyle;
+
+  window.onresize =()=>{
+    if(window.innerWidth <800 && sideAppear==="lock" && showAllComments){
+      changeSide("close");
+    }
+    changeTrashStyle();
+  }
   const onClickTrashBtn=(event:React.MouseEvent)=>{
     setOpenTrash(true);
     changeTrashStyle();
@@ -379,6 +385,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
       setTargetPage(page);
     }
   },[targetItem,pages,pagesId]);
+
   return(
   <div
   onMouseLeave={onMouseOutSideBar}

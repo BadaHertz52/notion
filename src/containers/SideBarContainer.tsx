@@ -9,9 +9,10 @@ export type SideBarContainerProp = NotionActionProps &{
   sideAppear:SideAppear,
   setTargetPageId: Dispatch<SetStateAction<string>>,
   setOpenQF: Dispatch<SetStateAction<boolean>>,
-  setOpenTemplates :Dispatch<SetStateAction<boolean>>
+  setOpenTemplates :Dispatch<SetStateAction<boolean>>,
+  showAllComments:boolean,
 };
-const SideBarContainer =({sideAppear,addBlock,editBlock,deleteBlock,changeBlockToPage,addPage,duplicatePage,editPage,deletePage,movePageToPage,restorePage, cleanTrash, addFavorites, removeFavorites, changeSide,setTargetPageId ,setOpenQF ,setOpenTemplates  }:SideBarContainerProp)=>{
+const SideBarContainer =({sideAppear,addBlock,editBlock,deleteBlock,changeBlockToPage,addPage,duplicatePage,editPage,deletePage,movePageToPage,restorePage, cleanTrash, addFavorites, removeFavorites, changeSide,setTargetPageId ,setOpenQF ,setOpenTemplates, showAllComments  }:SideBarContainerProp)=>{
   const notion =useSelector((state:RootState)=> state.notion);
   
   const user = useSelector((state:RootState)=> state.user);
@@ -39,6 +40,7 @@ const SideBarContainer =({sideAppear,addBlock,editBlock,deleteBlock,changeBlockT
     setTargetPageId={setTargetPageId}
     setOpenQF={setOpenQF}
     setOpenTemplates={setOpenTemplates}
+    showAllComments={showAllComments}
     />
   )
 };
