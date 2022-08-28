@@ -1,6 +1,6 @@
 import '../assests/frame.css';
 import React, { CSSProperties, Dispatch,  MouseEvent,  SetStateAction, useEffect, useRef, useState } from 'react';
-import { Block, BlockCommentType, blockSample,  findBlock, findParentBlock, listItem, makeNewBlock, Page } from '../modules/notion';
+import { Block, BlockCommentType, blockSample,  findBlock, findParentBlock, listItem, Page } from '../modules/notion';
 import EditableBlock, { changeFontSizeBySmallText } from './EditableBlock';
 import IconPoup, { randomIcon } from './IconPoup';
 import CommandBlock from './CommandBlock';
