@@ -41,11 +41,12 @@ const initialState ={
 export default function user (state:UserState =initialState, action:UserAction):UserState{
   switch (action.type) {
     case ADD_FAVORITES :
+      const favorites =state.favorites !==null? 
+      state.favorites.concat(action.itemId) : 
+      [action.itemId];
       return {
         ...state,
-        favorites: state.favorites !==null? 
-        state.favorites.concat(action.itemId) : 
-        [...action.itemId]
+        favorites: favorites
       }
         ;
     case REMOVE_FAVORITES :
