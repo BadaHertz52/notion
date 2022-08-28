@@ -8,7 +8,6 @@ import { Command } from './Frame';
 import { Block, BlockType, Page } from "../modules/notion";
 import { PopupType } from '../containers/EditorContainer';
 import imgIcon from '../assests/img/vincent-van-gogh-ge1323790d_640.jpg'; 
-import bookmarkIcon from '../assests/img/folder-g047ba9133_640.jpg';
 import { setTemplateItem } from './BlockComponent';
 
 type CommandBlockProp ={
@@ -276,26 +275,6 @@ const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBl
                     <header>Image</header>
                     <div className='command_explanation'>
                       Upload or embed width a link
-                    </div>
-                  </div>
-                </div>
-              </button>
-              <button
-                  className="command_btn"
-                  onClick={()=>changeType("bookmark media")}
-                  name="bookmark"
-                >
-                <div className='command_btn_inner'>
-                    <div className='command_btn_left'>
-                      <img
-                        src={bookmarkIcon}
-                        alt="bookmarkIcon"
-                      />
-                  </div>
-                  <div className='command_btn_right'>
-                    <header>Web bookmark</header>
-                    <div className='command_explanation'>
-                      Save a linke as a visual bookmark
                     </div>
                   </div>
                 </div>

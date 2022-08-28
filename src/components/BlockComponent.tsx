@@ -451,9 +451,6 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
                 {block.type ==="image media" &&
                   <MdOutlinePhotoSizeSelectActual/>
                 }
-                {block.type ==="bookmark media" &&
-                  <MdOutlineCollectionsBookmark/>
-                }
               </span>
               <span>
                 Add a {block.type.slice(0, block.type.indexOf("media"))}
