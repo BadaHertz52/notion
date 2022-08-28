@@ -1503,7 +1503,6 @@ a:link, a:active, a:visited {
 }
 
 .editor {
-  width: 100vw;
   flex-grow: 1;
   flex-shrink: 1;
   height: 100%;
@@ -1551,10 +1550,11 @@ a:link, a:active, a:visited {
   font-size: 13px;
 }
 .editor .topbar {
-  width: 100%;
+  width: calc(100% - 28px);
   height: 45px;
   padding-left: 12px;
-  padding-right: 14px;
+  padding-right: 16px;
+  box-sizing: border-box;
   flex-grow: 0;
   flex-shrink: 0;
   display: flex;
@@ -4019,17 +4019,13 @@ a:link, a:active, a:visited {
 }
 
 body {
-  min-width: -webkit-min-content;
-  min-width: -moz-min-content;
-  min-width: min-content;
-  min-height: -webkit-min-content;
-  min-height: -moz-min-content;
-  min-height: min-content;
+  overflow-x: hidden;
 }
 
 #inner {
   width: 100vw;
   height: 100vh;
+  overflow-x: hidden;
   display: flex;
   color: rgb(55, 54, 47);
   font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";

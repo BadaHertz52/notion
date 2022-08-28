@@ -24,7 +24,6 @@
   }
 }
 .editor {
-  width: 100vw;
   flex-grow: 1;
   flex-shrink: 1;
   height: 100%;
@@ -63,12 +62,13 @@
   }
   // topbar ---
   .topbar {
-    width:100%;
+    width:calc(100% - 28px);
     height: 45px ;
     padding: {
       left: 12px;
-      right: 14px;
-    }
+      right: 16px;
+    };
+    box-sizing: border-box;
     flex-grow: 0;
     flex-shrink: 0;
     display: flex;

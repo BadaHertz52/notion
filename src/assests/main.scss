@@ -12,8 +12,7 @@
 @import './rename';
 @import './result';
 body{
-  min-width: min-content;
-  min-height:min-content
+  overflow-x:hidden ;
 }
 #inner {
   width: 100vw;
