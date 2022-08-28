@@ -139,11 +139,9 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isIn
       changeSide={changeSide}
 
       addBlock={addBlock}
-      editBlock={editBlock}
       deleteBlock={deleteBlock}
       changeBlockToPage={changeBlockToPage}
       
-      addPage={addPage}
       deletePage={deletePage}
       movePageToPage={movePageToPage}
 
@@ -153,7 +151,6 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isIn
       setTargetPageId={setTargetPageId}
       showAllComments={showAllComments}
       setShowAllComments={setShowAllComments}
-      setAllCommentsStyle={setAllCommentsStyle}
       smallText={smallText}
       setSmallText={setSmallText}
       fullWidth={fullWidth}

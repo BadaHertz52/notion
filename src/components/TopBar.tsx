@@ -27,11 +27,9 @@ type TopBarProps ={
   pagePath: pathType[] |null ,
 
   addBlock:(pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
-  editBlock: (pageId: string, block: Block) => void,
   deleteBlock: (pageId: string, block: Block, isInMenu: boolean) => void,
   changeBlockToPage: (currentPageId: string, block: Block) => void,
 
-  addPage: (newPage: Page) => void
   deletePage: (pageId: string) => void,
   movePageToPage: (targetPageId: string, destinationPageId: string) => void,
 
@@ -42,7 +40,6 @@ type TopBarProps ={
   setTargetPageId:Dispatch<SetStateAction<string>>,
   showAllComments:boolean,
   setShowAllComments:Dispatch<SetStateAction<boolean>>,
-  setAllCommentsStyle:Dispatch<SetStateAction<CSSProperties>>,
   smallText:boolean,
   setSmallText:Dispatch<SetStateAction<boolean>>,
   fullWidth:boolean,
@@ -51,7 +48,7 @@ type TopBarProps ={
   setFontStyle:Dispatch<SetStateAction<fontStyleType>>
 };
 
-const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock, editBlock ,changeBlockToPage ,deleteBlock ,addPage,deletePage, movePageToPage, changeSide ,addFavorites,removeFavorites ,setTargetPageId  , showAllComments, setShowAllComments ,setAllCommentsStyle , smallText, setSmallText ,fullWidth, setFullWidth ,setOpenExport, setFontStyle}:TopBarProps)=>{
+const TopBar =({ firstlist,favorites,sideAppear,page , pages,pagePath, addBlock, changeBlockToPage ,deleteBlock ,deletePage, movePageToPage, changeSide ,addFavorites,removeFavorites ,setTargetPageId  , showAllComments, setShowAllComments , smallText, setSmallText ,fullWidth, setFullWidth ,setOpenExport, setFontStyle}:TopBarProps)=>{
   const inner =document.getElementById("inner");
   const [title, setTitle]= useState<string>("");
   const [openPageMoreFun, setOpenPageMoreFun] =useState<boolean>(false);
