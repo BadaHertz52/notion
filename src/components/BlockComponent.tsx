@@ -430,64 +430,64 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
       className ={`${block.type}_blockComponent blockComponent`}
       onMouseOver={showBlockFn}
     >
-      {!blockComments ?
-      ( block.type==="page"?
+      {block.type === "page" ?
         <button 
           className="contents pageTitle"
           id={`${block.id}_contents`}
         >
-          <BlockContentEditable/>
+        <BlockContentEditable/>
         </button>
-        :
-        (block.type.includes("media") ?
-        (block.contents===""?
-          <button 
-            className='addBlockFile'
-            onClick={onClickAddFileBtn}
-          >
-            <span
-              className="addBlockFileIcon"
-            >
-              {block.type ==="image media" &&
-                <MdOutlinePhotoSizeSelectActual/>
-              }
-              {block.type ==="bookmark media" &&
-                <MdOutlineCollectionsBookmark/>
-              }
-            </span>
-            <span>
-              Add a {block.type.slice(0, block.type.indexOf("media"))}
-            </span>
-            
-          </button>
-          :
-          <>
-            {block.type==="image media" &&
-            <ImageContent
-              page={page}
-              block={block}
-              editBlock={editBlock}
-            />
-            }
-          </>
-        )
-        :
-        <div 
-          id={`${block.id}_contents`}
-          className="contents"
-        >
-          <BlockContentEditable/>
-        </div>
-        )
-      )
       :
-      <button 
+        (!block.comments ?
+          (block.type.includes("media") ?
+          (block.contents===""?
+            <button 
+              className='addBlockFile'
+              onClick={onClickAddFileBtn}
+            >
+              <span
+                className="addBlockFileIcon"
+              >
+                {block.type ==="image media" &&
+                  <MdOutlinePhotoSizeSelectActual/>
+                }
+                {block.type ==="bookmark media" &&
+                  <MdOutlineCollectionsBookmark/>
+                }
+              </span>
+              <span>
+                Add a {block.type.slice(0, block.type.indexOf("media"))}
+              </span>
+              
+            </button>
+            :
+            <>
+              {block.type==="image media" &&
+              <ImageContent
+                page={page}
+                block={block}
+                editBlock={editBlock}
+              />
+              }
+            </>
+          )
+          :
+          <div 
+            id={`${block.id}_contents`}
+            className="contents"
+          >
+            <BlockContentEditable/>
+          </div>
+          )
+        :
+        <button 
         id={`${block.id}_contents`}
         className="contents commentBtn"
         onClick={(event)=>onClickContentsCommentBtn(event, block)}
       >
         <BlockContentEditable/>
       </button>
+        )
       }
     </div>
   )
