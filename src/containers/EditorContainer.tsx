@@ -77,17 +77,36 @@ type EditorContainerProps = NotionActionProps &{
 const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isInTrash, makePagePath,changeSide,addBlock,editBlock ,changeBlockToPage, changePageToBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId, setRoutePage ,openComment,setOpenComment,commentBlock,setCommentBlock,smallText,setSmallText,fullWidth,setFullWidth,showAllComments,  setShowAllComments , setAllCommentsStyle,discardEdit , setOpenExport, openTemplates, setOpenTemplates}:EditorContainerProps)=>{
   const dispatch =useDispatch();
   const user =useSelector((state:RootState)=>state.user);
+  const [editorStyle, setEditorStyle]=useState<CSSProperties|undefined>(undefined);
   const changeToSub =(pageId: string, block: Block,  newParentBlockId: string)=> dispatch(change_to_sub(pageId, block, newParentBlockId));
   const raiseBlock =(pageId: string, block: Block) =>dispatch((raise_block(pageId, block)));
   const [pagePath, setPagePath]=useState<pathType[]|null>(null);
 
+  useEffect(()=>{
+    if(sideAppear==="lock"){
+      const sideBarHtml = document.querySelector(".sideBar");
+      const sideBarWidth =sideBarHtml?.clientWidth;
+      if(sideBarWidth!==undefined){
+        setEditorStyle({
+          width:`calc(100vw - ${sideBarWidth}px)`
+        })
+      }
+    }else{
+      setEditorStyle({
+        width:"100vw"
+      })
+    }
+  },[sideAppear])
 
   useEffect(()=>{
     setPagePath(makePagePath(page))
   },[page, page.header.icon, page.header.title, makePagePath]);
 
   return(
-    <div className='editor'>
+    <div 
+      className='editor'
+      style={editorStyle}
+    >
       {isInTrash &&
       <div className='isInTrash'>
         <div>
