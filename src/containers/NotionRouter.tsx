@@ -256,7 +256,7 @@ const NotionRouter =()=>{
       changeTitle(routePage.header.title);
       changeFavicon(routePage.header.icon, routePage.header.iconType);
     }
-  },[routePage, navigate]);
+  },[routePage]);
   useEffect(()=>{
     //url 변경시 
     const lastSlash =hash.lastIndexOf("/");
