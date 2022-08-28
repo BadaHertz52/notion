@@ -86,7 +86,7 @@ const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBl
 
   useEffect(()=>{
       showResult();
-  },[command])
+  },[command]);
   return(
       <div 
         id='commandBlock'

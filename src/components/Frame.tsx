@@ -176,7 +176,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
         const commentBtnDomRect =commentBtn.getClientRects()[0];
         const isInComments =detectRange(event, commentsDocDomRect);
         const isInCommentsBtn =detectRange(event, commentBtnDomRect);
-        console.log("clse comment", isInComments , isInCommentsBtn);
         if(!isInComments &&!isInCommentsBtn){
           setCommentBlock(null);
           setOpenComment(false); 
@@ -316,10 +315,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
     setTemplateItem(templateHtml,page);
     editPage(page.id, editedPage)
   };
-  const pageContent = document.querySelector(".pageContent") as HTMLElement|null;
-
-  pageContent?.addEventListener("click", (event:globalThis.MouseEvent)=>{onClickPageContentBottom(event)});
-
   const onMouseMoveToMoveBlock=()=>{
     if(moveTargetBlock!==null){
         moveBlock.current=true
@@ -397,7 +392,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
           editTime:editTime
         };
         //edit parent block
-        const {parentBlock, parentBlockIndex} =findParentBlock(page,pointBlock);
+        const parentBlock=findParentBlock(page,pointBlock).parentBlock;
 
         if(parentBlock.subBlocksId!==null){
           const parentBlockSubBlocksId =[...parentBlock.subBlocksId];
@@ -500,7 +495,8 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
       }
     };
   };
-  const onClickPageContentBottom =(event:globalThis.MouseEvent)=>{
+  const onClickPageContentBottom =(event:MouseEvent)=>{
+    const pageContent =event.currentTarget
     const clientX = event.clientX;
     const clientY = event.clientY;
 
@@ -516,19 +512,16 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
   
       const isInner =conditionX && conditionY;
       if(isInner){
+        const newBlock:Block={
+          ...blockSample,
+          firstBlock:true
+        };
         if(page.firstBlocksId){
-          const lastBlockId = page.firstBlocksId[page.firstBlocksId.length -1];
-          const lastBlockIndex = page.blocksId.indexOf(lastBlockId);
-          const lastBlock =page.blocks[lastBlockIndex];
-          const newBlock  =makeNewBlock(page, lastBlock ,""); 
-          addBlock(page.id, newBlock, page.blocks.length-1, null);
-          setTemplateItem(templateHtml,page);
+          addBlock(page.id, newBlock, page.blocks.length, null);
         }else{
-          const newBlock = makeNewBlock(page, null,"");
           addBlock(page.id, newBlock,0,null);
-          setTemplateItem(templateHtml,page);
-        }
-  
+        };
+        setTemplateItem(templateHtml,page);
       }
     } 
 
@@ -579,9 +572,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
       const pageId = itemObjet.pageId;
       const condition = className ==="contentEditable" && cursorElement!==undefined && cursorElement!==null && cursorElement.parentElement?.id ===`${targetBlock.id}_contents`;
         if(!condition ){
-          console.log("frame pageiD" ,pageId);
           editBlock(pageId, targetBlock);
-
           sessionStorage.removeItem("itemsTobeEdited");
         }
     }
@@ -609,11 +600,12 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
     setTemplateHtml(document.getElementById("template")):
     setTemplateHtml(null);
   },[openTemplates]);
+
   useEffect(()=>{
     setFirstBlocksId(page.firstBlocksId); 
   },[page])
+
   useEffect(()=>{
-    console.log("render blocksId", firstBlocksId?.[0], page);
     firstBlocksId?.[0] ===undefined?
     setNewPageFrame(true):
     setNewPageFrame(false);
@@ -627,7 +619,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
         contenteditableHtml.focus();
       }
     } 
-  },[newPageFram]);
+  },[newPageFram, firstBlocksId]);
   useEffect(()=>{
     if(command.boolean && command.targetBlock!==null){
       const frame =openTemplates? document.getElementById("template"): document.querySelector(".frame");
@@ -645,7 +637,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
         setCBPositon(style);
       }
     }
-  },[command.boolean ,command.targetBlock]);
+  },[command.boolean ,command.targetBlock, openTemplates]);
 
   useEffect(()=>{
     changeCommentStyle();
@@ -805,6 +797,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
           }
           <div 
             className="pageContent"
+            onClick={onClickPageContentBottom}
           >
             {!newPageFram?
             <div 
@@ -938,9 +931,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
               firstlist={firstlist}
               deleteBlock={deleteBlock}
               addBlock={addBlock}
-              editBlock={editBlock}
               changeBlockToPage={changeBlockToPage}
-              addPage={addPage}
               movePageToPage={movePageToPage}
               setMenuOpen={setMenuOpen}
               setTargetPageId={setTargetPageId}

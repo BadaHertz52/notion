@@ -144,7 +144,6 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId ,setTargetPageId, c
 
     if(innerDomRect !==undefined){
       const isInBord =detectRange(event, innerDomRect);
-      console.log(isInBord)
       !isInBord && 
       setOpenQF(false)
     }

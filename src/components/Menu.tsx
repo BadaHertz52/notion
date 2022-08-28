@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Dispatch, MutableRefObject, SetStateAction, useEffect, useState} from 'react';
+import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState} from 'react';
 import { Block,listItem, Page } from '../modules/notion';
 import CommandBlock from './CommandBlock';
 import { CSSProperties } from 'styled-components';
@@ -350,10 +350,8 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
             pages={pages}
             firstlist={firstlist}   
             addBlock={addBlock}
-            editBlock={editBlock}
             changeBlockToPage={changeBlockToPage}
             deleteBlock={deleteBlock}
-            addPage={addPage}
             movePageToPage={movePageToPage}
             setMenuOpen={setMenuOpen}
             setTargetPageId={setTargetPageId}

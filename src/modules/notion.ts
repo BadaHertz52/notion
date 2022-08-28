@@ -1,4 +1,3 @@
-import { GoDiffAdded } from 'react-icons/go';
 import { Emoji, emojis } from '../components/IconPoup';
 export const emojiPath ="https://raw.githubusercontent.com/BadaHertz52/notion/master/image/emoji/";
 const catImg = 'https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assests/img/michael-sum-LEpfefQf4rU-unsplash.jpg' ;

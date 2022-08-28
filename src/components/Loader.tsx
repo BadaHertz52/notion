@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Dispatch, FormEvent,  SetStateAction,  useEffect,  useState } from 'react';
+import React, { ChangeEvent, Dispatch,  SetStateAction,  useEffect,  useState } from 'react';
 import { CSSProperties } from 'styled-components';
 import { Block, Page } from '../modules/notion';
 import { setTemplateItem } from './BlockComponent';
@@ -13,7 +13,7 @@ type LoaderProps={
 const Loader =({block, page, editBlock ,setOpenLoader ,setLoaderTargetBlock}:LoaderProps)=>{
   const inner =document.getElementById("inner");
   const loaderHtml =document.getElementById("loader");
-  const [loaderStyle, setLoaderStyle]=useState<CSSProperties>();
+  const [loaderStyle, setLoaderStyle]=useState<CSSProperties|undefined>(undefined);
   const onChangeImgFile =(event:ChangeEvent<HTMLInputElement>)=>{
     const file =event.target.files?.[0];
     if(file!==undefined){
@@ -53,7 +53,6 @@ const Loader =({block, page, editBlock ,setOpenLoader ,setLoaderTargetBlock}:Loa
     const frame =document.getElementsByClassName("frame")[0];
     const frameDomRect =frame.getClientRects()[0];
     const frameInner =document.querySelector(".frame_inner");
-    console.log("blocdonw",blockDom)
     if(blockDomRect!==undefined && frameDomRect!==undefined  &&  
     frameInner !==null ){
         const style:CSSProperties={
@@ -66,8 +65,9 @@ const Loader =({block, page, editBlock ,setOpenLoader ,setLoaderTargetBlock}:Loa
     };
   }
   useEffect(()=>{
+    loaderStyle===undefined &&
     changeLoaderStyle();
-  },[]);
+  },[loaderStyle]);
 
   window.onresize=()=>{
     changeLoaderStyle();

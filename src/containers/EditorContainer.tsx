@@ -84,7 +84,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isIn
 
   useEffect(()=>{
     setPagePath(makePagePath(page))
-  },[page, page.header.icon, page.header.title]);
+  },[page, page.header.icon, page.header.title, makePagePath]);
 
   return(
     <div className='editor'>

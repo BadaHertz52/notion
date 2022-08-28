@@ -112,7 +112,6 @@ const NotionRouter =()=>{
         }else{
           setTargetPageId(user.favorites[0])
         };
-        console.log(targetPageId)
       }else{
         openOtherFirstPage();
       }
@@ -257,7 +256,7 @@ const NotionRouter =()=>{
       changeTitle(routePage.header.title);
       changeFavicon(routePage.header.icon, routePage.header.iconType);
     }
-  },[routePage]);
+  },[routePage, navigate]);
   useEffect(()=>{
     //url 변경시 
     const lastSlash =hash.lastIndexOf("/");
@@ -277,9 +276,9 @@ const NotionRouter =()=>{
       changeSide("lock")
     }
     
-  },[targetPageId]);
+  },[targetPageId, notion.pagesId]);
+
   useEffect(()=>{
-    console.log("show", showAllComments);
     if(showAllComments){
       setAllCommentsStyle({transform:`translateX(0)`});
     }else{
@@ -287,7 +286,6 @@ const NotionRouter =()=>{
       const width =allCommentsHtml?.clientWidth;
       width !==undefined && 
       setAllCommentsStyle({transform:`translateX(${width + 50 }px)`});
-      console.log("widht", width);
     }
   },[showAllComments])
   return(

@@ -13,7 +13,7 @@ import {AiOutlineClockCircle,  AiOutlinePlus, AiOutlineStar} from 'react-icons/a
 import {BiSearchAlt2} from 'react-icons/bi';
 import {BsFillTrash2Fill, BsPencilSquare, BsThreeDots} from 'react-icons/bs';
 import {IoIosSettings} from 'react-icons/io';
-import {HiDownload, HiOutlineDuplicate, HiTemplate} from 'react-icons/hi';
+import { HiOutlineDuplicate, HiTemplate} from 'react-icons/hi';
 import { MdPlayArrow } from 'react-icons/md';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { IoArrowRedoOutline } from 'react-icons/io5';
@@ -378,7 +378,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
       const page =findPage(pagesId,pages, targetItem.id);
       setTargetPage(page);
     }
-  },[targetItem]);
+  },[targetItem,pages,pagesId]);
   return(
   <div
   onMouseLeave={onMouseOutSideBar}
@@ -595,8 +595,6 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
         addBlock={addBlock}
         deleteBlock={deleteBlock}
         changeBlockToPage={changeBlockToPage}
-        editBlock={editBlock}
-        addPage={addPage}
         movePageToPage={movePageToPage}
         setMenuOpen={setOpenSideMoreMenu}
         setTargetPageId={setTargetPageId}

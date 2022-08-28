@@ -3,7 +3,6 @@ import {  useSelector } from 'react-redux';
 import SideBar from '../components/SideBar';
 import { RootState } from '../modules';
 import { SideAppear } from '../modules/side';
-
 import { NotionActionProps } from './EditorContainer';
 
 export type SideBarContainerProp = NotionActionProps &{

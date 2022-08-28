@@ -1,5 +1,4 @@
 import React, { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
-import { GrDocumentText } from "react-icons/gr";
 import { CSSProperties } from "styled-components";
 import { Block, Page } from "../modules/notion";
 import { setTemplateItem } from "./BlockComponent";
@@ -17,7 +16,6 @@ type RenameProps = {
 }
 const Rename =({currentPageId,block ,page,editBlock ,editPage,renameStyle, setOpenRename}:RenameProps)=>{
   const inner =document.getElementById("inner");
-  const [iconPopupStyle, setIconPopupStyle]=useState<CSSProperties>();
   const [openIconPopup, setOpenIconPopup]=useState<boolean>(false);
   inner?.addEventListener('click', (event)=>{
     openIconPopup && closePopup("iconPopup", setOpenIconPopup, event);
@@ -25,15 +23,6 @@ const Rename =({currentPageId,block ,page,editBlock ,editPage,renameStyle, setOp
     
   });
   const onClickRenameIcon =()=>{
-    const rename = document.getElementById("rename");
-    const renameDomRect = rename?.getClientRects()[0];
-    if(renameDomRect !==undefined){
-      setIconPopupStyle({
-        position:"absolute" ,
-        top: renameDomRect.bottom,
-        left :renameDomRect.left ,
-      })
-    };
     setOpenIconPopup(true);
   };
   const changeTitle =(event:ChangeEvent<HTMLInputElement> )=>{

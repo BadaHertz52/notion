@@ -138,7 +138,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
       setOpenLoader(true);
       setLoaderTargetBlock(block);
     }
-  },[]);
+  },[block,setLoaderTargetBlock,setOpenLoader]);
   
   const ListSub = ()=>{
     const blockContentsRef= useRef<HTMLDivElement>(null);

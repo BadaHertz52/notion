@@ -190,7 +190,6 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
           console.log(`Can't find .${targetBlock.id}_contents html`);
         };
     };
-    console.log("code", code);
     switch (code) {
       case "tab":
         event.preventDefault();
@@ -256,7 +255,6 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
          * @param firstBlock : 기준이 되는 블록
          */
         const findNextBlockOfFirstBlock=(firstBlock:Block)=>{
-          console.log("find next of firstblock");
           if(page.firstBlocksId!==null){
             if(firstBlock.subBlocksId===null){
               const blockIndexAsFirstBlock = page.firstBlocksId.indexOf(firstBlock.id);
@@ -293,13 +291,11 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
               if(parentBlock.subBlocksId!==null){
                 const blockIndexAsSubBlock = parentBlock.subBlocksId.indexOf(block.id);
                 if(blockIndexAsSubBlock === parentBlock.subBlocksId.length-1){
-                  console.log("lastsubblock", parentBlock.firstBlock);
                   if(parentBlock.firstBlock && page.firstBlocksId !==null){
                     const parentBlockIndexAsFirst = page.firstBlocksId.indexOf(parentBlock.id);
                     if(parentBlockIndexAsFirst < page.firstBlocksId.length){
                       for (let i =1 ; i < page.firstBlocksId.length - parentBlockIndexAsFirst; i++) {
                         const nextBlockId = page.firstBlocksId[parentBlockIndexAsFirst +i];
-                        console.log("possible", nextBlockId, possibleBlocksId.includes(nextBlockId))
                         if(possibleBlocksId.includes(nextBlockId)){
                           setNextHtmlId(nextBlockId);
                           i= page.firstBlocksId.length-1;
@@ -307,13 +303,11 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
                       }
                     };
                   }else{
-                    console.log("grand parent");
                     findNextBlockByParent(parentBlock);
                   }
                 }else{
                   for (let i = 1; i < parentBlock.subBlocksId.length-blockIndexAsSubBlock; i++) {
                     const nextBlockId = parentBlock.subBlocksId[blockIndexAsSubBlock+i];
-                    console.log("possible",possibleBlocksId.includes(nextBlockId) , nextBlockId, i);
                     if(possibleBlocksId.includes(nextBlockId)){
                       setNextHtmlId(nextBlockId);
                       i =parentBlock.subBlocksId.length;
@@ -348,7 +342,6 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
     setTemplateItem(templateHtml, page);
     const value = event.target.value;
     const trueOrFale = value.startsWith("/");
-    console.log("commandChange", value);
     if(trueOrFale){
       setCommand({
         boolean: true , 
@@ -367,7 +360,6 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
   function commandKeyUp(event:React.KeyboardEvent<HTMLInputElement>){
     const code= event.code;
     const firstOn =document.querySelector(".command_btn.on.first");
-    console.log("code", code);
     if(code ==="Enter" && command.targetBlock!==null  ){
       const name = firstOn?.getAttribute("name") as string ;
       const blockType:BlockType = blockTypes.filter((type)=> name.includes(type))[0];
@@ -397,6 +389,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
   };
 
   const BlockContentEditable=()=>{
+
     useEffect(()=>{
       if(command.boolean){
         const commentInputHtml =document.getElementById("commandInput");
@@ -404,7 +397,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
           commentInputHtml.focus();
         }
       }
-    },[command.boolean])
+    },[]);
     return(
       <>
       {!command.command || (command.targetBlock !==null && command.targetBlock.id !== block.id) ? 

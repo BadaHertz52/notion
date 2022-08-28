@@ -7,7 +7,7 @@ import PageMenu from './PageMenu';
 
 import { AiOutlineMenu} from 'react-icons/ai';
 import { FiChevronsLeft } from 'react-icons/fi';
-import { AiFillStar, AiOutlineClockCircle, AiOutlineStar } from "react-icons/ai";
+import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { BiMessageDetail } from "react-icons/bi";
 import { BsThreeDots } from "react-icons/bs";
 import { RiDeleteBin6Line } from 'react-icons/ri';
@@ -180,7 +180,7 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
     if(sideAppear ==="close"){
       setTitle("Float sideBar ")
     }
-  },[]);
+  },[sideAppear]);
 
   inner?.addEventListener("click", function(event:MouseEvent){
     if(openPageMenu){
@@ -421,10 +421,8 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
           firstlist={firstlist}
           pages={pages}
           addBlock={addBlock}
-          editBlock={editBlock}
           changeBlockToPage={changeBlockToPage}
           deleteBlock={deleteBlock}
-          addPage={addPage}
           movePageToPage={movePageToPage}
           setMenuOpen={setOpenPageMenu}
           setTargetPageId={setTargetPageId}

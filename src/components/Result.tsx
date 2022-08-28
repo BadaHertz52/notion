@@ -1,5 +1,4 @@
 import React from 'react';
-import { GrDocumentText } from 'react-icons/gr';
 import { findPage, IconType, Page } from '../modules/notion';
 import PageIcon from './PageIcon';
 export type resultType ={
@@ -34,7 +33,6 @@ export  function makePath (parentsId:string[], pagesId:string[],pages:Page[], tr
 };
 export function makeResultType (page:Page ,
   pagesId:string[], pages:Page[] ,trashParentPagesId:string[]|null, trashParentPages:Page[]|null):resultType{
-    console.log("mr", page)
   return {
     id: page.id,
     title: page.header.title,

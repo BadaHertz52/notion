@@ -1,7 +1,6 @@
 import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
-import { GrDocumentText } from 'react-icons/gr';
-import {  basicBlockStyle, Block,  listItem, makeNewBlock, Page, pageSample } from '../modules/notion';
+import { Block,  listItem,  Page} from '../modules/notion';
 import { setTemplateItem } from './BlockComponent';
 import PageIcon from './PageIcon';
 
@@ -13,14 +12,12 @@ type PageMenuProps ={
   deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
   changeBlockToPage: (currentPageId: string, block: Block) => void
   addBlock:(pageId: string, block: Block, nextBlockIndex: number, previousBlockId: string | null) => void,
-  editBlock: (pageId: string, block: Block) => void,
   setMenuOpen:Dispatch<SetStateAction<boolean>> |null,
-  addPage:( newPage: Page) => void,
   movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
-    setTargetPageId: Dispatch<SetStateAction<string>>,
+  setTargetPageId: Dispatch<SetStateAction<string>>,
 };
 
-const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock,changeBlockToPage, addBlock, editBlock,addPage , movePageToPage ,setMenuOpen ,setTargetPageId}:PageMenuProps)=>{
+const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock,changeBlockToPage, addBlock, movePageToPage ,setMenuOpen ,setTargetPageId}:PageMenuProps)=>{
 
   type PageButtonProps={
     item: listItem
@@ -34,7 +31,7 @@ const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock,changeBlockToP
       const block:Block= JSON.parse(sessionItem);
       setBlock(block);
     };
-  },[sessionItem]);
+  },[sessionItem, what]);
   const templateHtml= document.getElementById("template");
   const moveBlockToPage =(destinationPageId:string ,block:Block)=>{
     setTemplateItem(templateHtml, currentPage);

@@ -90,7 +90,6 @@ const Trash=({style,trashPages, trashPagesId ,pages,pagesId, restorePage, cleanT
         const lastSlash = path.lastIndexOf("/");
         const currentPageId = path.slice(lastSlash+1);
         const filteredTrashPages = trashPages?.filter((page:Page)=> page.parentsId?.includes(currentPageId));
-        console.log(filteredTrashPages);
         filteringTargetList = filteredTrashPages!==undefined 
                               ?
                               (filteredTrashPages[0]!==undefined
@@ -107,7 +106,7 @@ const Trash=({style,trashPages, trashPagesId ,pages,pagesId, restorePage, cleanT
     };
     setTrashList(filteringTargetList);
     filteringTargetList!==undefined && setResult(filteringTargetList)
-  },[sort]);
+  },[sort,pagesId,trashPages, trashPagesId]);
 
   return(
     <div 

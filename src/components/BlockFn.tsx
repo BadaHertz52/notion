@@ -81,12 +81,7 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
 
   const [blockFnTargetBlock, setBlockFnTargetBlock]=useState<Block|null>(null);
   const [renameTargetPage, setRenameTargetPage]=useState<Page|null>(null);
-  useEffect(()=>{
-    if(openRename && blockFnTargetBlock !==null){
-      const page =findPage(pagesId, pages, blockFnTargetBlock.id) as Page; 
-      setRenameTargetPage(page);
-    }
-  },[openRename])
+
   const makeBlock =()=>{
     const templateHtml= document.getElementById("template");
     setTemplateItem(templateHtml, page);
@@ -124,10 +119,16 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
       console.log("BlockFn-openMenu error: there is no session item")
     } ;
   };
+  useEffect(()=>{
+    if(openRename && blockFnTargetBlock !==null){
+      const page =findPage(pagesId, pages, blockFnTargetBlock.id) as Page; 
+      setRenameTargetPage(page);
+    }
+  },[openRename, blockFnTargetBlock, pagesId, pages]);
 
   useEffect(()=>{
     const popupStyleItem =sessionStorage.getItem("popupStyle");
-    if(popup && popupStyleItem !==null){
+    if(popup.popup && popupStyleItem !==null){
       const firstPoint= popupStyleItem.indexOf("px;");
       const secondPosint =popupStyleItem.indexOf("left:");
       const lastPosint =popupStyleItem.lastIndexOf("px");
@@ -139,7 +140,8 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
       });
       sessionStorage.removeItem("popupStyle")
     }
-  },[popup]);
+  },[popup.popup, setPopupStyle]);
+
   useEffect(()=>{
     const innerHeight =window.innerHeight;
     const inner =document.getElementById("inner");

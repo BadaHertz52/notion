@@ -148,7 +148,6 @@ const IconPopup =({ currentPageId,block,page, editBlock ,editPage,style,  setOpe
       reader.onload =function(){
         const result = reader.result as string;
         changePageIcon(result, "img");
-        console.log("result", result);
       };
       reader.readAsDataURL(file);
     }

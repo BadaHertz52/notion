@@ -376,7 +376,6 @@ export const CommentInput =({userName, pageId, page ,blockComment, subComment,ed
 
     const editPageSubComment=(page:Page)=>{
       if(page.header.comments !==null && editTargetComment!==null){
-        console.log("edi", editTargetComment)
         const pageComment= page.header.comments[0];
         const subIndex= pageComment.subCommentsId?.indexOf(editTargetComment.id);
         if(subIndex !==undefined){
@@ -698,7 +697,7 @@ const CommentBlock =({comment ,mainComment ,block ,page ,pageId, userName,editBl
     if(editCommentItem !==null){
     comment.id === editCommentItem && setEdit(true);
     }
-  },[editCommentItem]);
+  },[editCommentItem, comment.id]);
 
   useEffect(()=>{
     if(discardEdit){
@@ -708,7 +707,7 @@ const CommentBlock =({comment ,mainComment ,block ,page ,pageId, userName,editBl
   },[discardEdit]);
   useEffect(()=>{
     !edit && editCommentItem !==null && sessionStorage.removeItem("editComment");
-  },[edit]);
+  },[edit, editCommentItem]);
   return (
     <div 
     className='commentBlock'
@@ -888,12 +887,11 @@ const Comments =({pageId,block,page, userName ,editBlock ,editPage  ,select ,dis
   },[commentBlock]);
   useEffect(()=>{
     if(page !==null){
-      console.log(pageComments)
       if(pageComments !== null){
         updateOpenAndResolveComments(pageComments);
       }
     }
-  },[pageComments]);
+  },[pageComments, page]);
   useEffect(()=>{
     if(page !==null){
       setTargetComment(openComments);

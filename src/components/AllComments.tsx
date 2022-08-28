@@ -23,7 +23,6 @@ const AllComments=({page, userName, editBlock, showAllComments, setShowAllCommen
       const allCommentsHtmlDomRect = allCommentsHtml?.getClientRects()[0];
       if(allCommentsHtmlDomRect!==undefined){
         const isInAllComments= detectRange(event, allCommentsHtmlDomRect);
-        console.log("is",isInAllComments);
         if(! isInAllComments){
           setShowAllComments(false);
         }
