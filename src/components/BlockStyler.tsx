@@ -12,9 +12,10 @@ type BlockStylerProps = MenuAndBlockStylerCommonProps& {
   selection:selectionType,
   setSelection:Dispatch<SetStateAction<selectionType|null>>,
   openTemplates: boolean,
-  setPopupStyle:Dispatch<React.SetStateAction<React.CSSProperties | undefined>>
+  setPopupStyle:Dispatch<React.SetStateAction<React.CSSProperties | undefined>>,
+  setCommandTargetBlock: React.Dispatch<React.SetStateAction<Block | null>>
 }
-const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage,popup,setPopup, setCommentBlock,setTargetPageId,selection,setSelection, openTemplates, setPopupStyle}:BlockStylerProps)=>{
+const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage,popup,setPopup, setCommentBlock,setTargetPageId,selection,setSelection, openTemplates, setPopupStyle, setCommandTargetBlock}:BlockStylerProps)=>{
   const block =selection.block;
   const bold="bold";
   const initial="initial";

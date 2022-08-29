@@ -810,7 +810,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
             {!newPageFram?
             <div 
               className='pageContent_inner'
-              id="pageContent_inner"
               onMouseMove={onMouseMoveToMoveBlock}
               onMouseUp={onMouseUpToMoveBlock}
               >
@@ -1042,6 +1041,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
           setPopupStyle={setPopupStyle}
           setCommentBlock={setCommentBlock}
           setTargetPageId={setTargetPageId}
+          setCommandTargetBlock ={setCommandTargetBlock}
           selection={selection}
           setSelection={setSelection}
           openTemplates={openTemplates}
