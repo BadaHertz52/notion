@@ -17,32 +17,32 @@ import {IoArrowRedoOutline} from 'react-icons/io5';
 import {RiDeleteBin6Line } from 'react-icons/ri';
 import { AiOutlineFormatPainter } from 'react-icons/ai';
 import { setTemplateItem } from './BlockComponent';
-
-
-export type MenuProps ={
+export type MenuAndBlockStylerCommonProps={
   pages:Page[],
   firstlist:listItem[],
   page:Page,
   block:Block,
   userName: string,
-  setMenuOpen : Dispatch<SetStateAction<boolean>>
-  |null,
   addBlock:(pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
   editBlock : (pageId: string, block: Block) => void,
   changeBlockToPage: (currentPageId: string, block: Block) => void,
   changePageToBlock:(currentPageId: string, block: Block) => void,
   deleteBlock :(pageId: string, block: Block ,isInMenu:boolean) => void,
-  addPage : ( newPage:Page, )=>void,
   duplicatePage: (targetPageId: string) => void,
   movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
   setPopup :Dispatch<SetStateAction<PopupType>> ,
   popup:PopupType,
   setCommentBlock: React.Dispatch<React.SetStateAction<Block | null>>,
   setTargetPageId: Dispatch<SetStateAction<string>>,
+}
+
+type MenuProps
+=MenuAndBlockStylerCommonProps& {
+  setOpenMenu : Dispatch<SetStateAction<boolean>>,
   setOpenRename:Dispatch<SetStateAction<boolean>>|null,
 };
 
-const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,changeBlockToPage,changePageToBlock ,editBlock, deleteBlock ,addPage ,duplicatePage,movePageToPage ,setPopup ,popup ,setCommentBlock ,setTargetPageId ,setOpenRename}:MenuProps)=>{
+const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,changeBlockToPage,changePageToBlock ,editBlock, deleteBlock ,duplicatePage,movePageToPage ,setPopup ,popup ,setCommentBlock ,setTargetPageId ,setOpenRename}:MenuProps)=>{
 
   const blockFnElement = document.getElementById("blockFn") ;
   const [editBtns, setEditBtns]= useState<Element[]|null>(null);
@@ -120,7 +120,7 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
     recoveryMenuState();
   };
   const onClickMoveTo=()=>{
-    setMenuOpen !== null && setMenuOpen(false);
+    setOpenMenu(false);
     sessionStorage.setItem("popupStyle", JSON.stringify(popupStyle));
     setPopup({
       popup:true,
@@ -129,7 +129,7 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
   };
   const onOpenCommentInput=()=>{
     setCommentBlock(block);
-    setMenuOpen !== null && setMenuOpen(false);
+    setOpenMenu(false);
     sessionStorage.setItem("popupStyle", JSON.stringify(popupStyle));
     setPopup({
       popup:true,
@@ -139,7 +139,7 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
   const removeBlock =()=>{
     setTemplateItem(templateHtml,page);
     deleteBlock(page.id, block , true);
-    setMenuOpen !== null && setMenuOpen(false);
+    setOpenMenu(false);
   };
 
   const duplicateBlock=()=>{
@@ -159,7 +159,7 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
     if(block.type==="page"){
       duplicatePage(block.id);
     };
-    setMenuOpen !== null && setMenuOpen(false);
+    setOpenMenu(false);
   };
   const onSetEditBtns=()=>{
     setEditBtns([...document.getElementsByClassName("menu_editBtn")]);
@@ -176,8 +176,8 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
     })
   };
   const onClickRename =()=>{
-    setOpenRename !==null && setOpenRename(true);
-    setMenuOpen !== null &&setMenuOpen(false);
+   setOpenRename!==null&&  setOpenRename(true);
+    setOpenMenu(false);
   };
   return(
   <div 
@@ -355,7 +355,7 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
             changeBlockToPage={changeBlockToPage}
             deleteBlock={deleteBlock}
             movePageToPage={movePageToPage}
-            setMenuOpen={setMenuOpen}
+            setOpenMenu={setOpenMenu}
             setTargetPageId={setTargetPageId}
           />
         }

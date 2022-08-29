@@ -417,7 +417,7 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages,pagePath, addBlock,
           changeBlockToPage={changeBlockToPage}
           deleteBlock={deleteBlock}
           movePageToPage={movePageToPage}
-          setMenuOpen={setOpenPageMenu}
+          setOpenMenu={setOpenPageMenu}
           setTargetPageId={setTargetPageId}
         />
         }

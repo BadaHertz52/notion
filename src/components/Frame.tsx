@@ -152,7 +152,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
   const [iconStyle, setIconStyle]=useState<CSSProperties|undefined>(undefined);
   const [commandBlockPositon, setCBPositon]=useState<CSSProperties>();
   const [commentsStyle, setCommentsStyle]= useState<CSSProperties>();
-  const [menuOpen, setMenuOpen]= useState<boolean>(false);
+  const [menuOpen, setOpenMenu]= useState<boolean>(false);
   const [commandTargetBlock, setCommandTargetBlock]=useState<Block|null>(null);
   const [popup, setPopup]=useState<PopupType>({
     popup:false,
@@ -201,9 +201,9 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
     const isInSide =detectRange(event, sideMenuArea );
 
     if(sideMenuArea !==undefined){
-      (isInrMain || isInSide) ? setMenuOpen(true) :setMenuOpen(false);
+      (isInrMain || isInSide) ? setOpenMenu(true) :setOpenMenu(false);
     }else{
-      isInrMain ? setMenuOpen(true) : setMenuOpen(false);
+      isInrMain ? setOpenMenu(true) : setOpenMenu(false);
     }
   };
   
@@ -923,7 +923,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
         popup={popup}
         setPopup={setPopup}
         menuOpen={menuOpen}
-        setMenuOpen={setMenuOpen}
+        setOpenMenu={setOpenMenu}
         setPopupStyle={setPopupStyle}
         setTargetPageId={setTargetPageId}
       />
@@ -942,7 +942,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
               addBlock={addBlock}
               changeBlockToPage={changeBlockToPage}
               movePageToPage={movePageToPage}
-              setMenuOpen={setMenuOpen}
+              setOpenMenu={setOpenMenu}
               setTargetPageId={setTargetPageId}
             /> 
             }
@@ -1035,15 +1035,12 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
           changeBlockToPage={changeBlockToPage}
           changePageToBlock={changePageToBlock}
           deleteBlock={deleteBlock}
-          addPage={addPage}
           duplicatePage={duplicatePage}
           movePageToPage={movePageToPage}
           popup={popup}
           setPopup={setPopup}
-          setMenuOpen={null}
           setCommentBlock={setCommentBlock}
           setTargetPageId={setTargetPageId}
-          setOpenRename= {null}
           selection={selection}
           setSelection={setSelection}
           openTemplates={openTemplates}

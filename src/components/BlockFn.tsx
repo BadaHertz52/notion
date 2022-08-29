@@ -31,7 +31,7 @@ type BlockFnProp ={
   popup:PopupType,
   setPopup: Dispatch<SetStateAction<PopupType>>,
   menuOpen:boolean,
-  setMenuOpen:Dispatch<SetStateAction<boolean>>,
+  setOpenMenu:Dispatch<SetStateAction<boolean>>,
   setPopupStyle:Dispatch<SetStateAction<CSSProperties|undefined>>,
   setTargetPageId: Dispatch<SetStateAction<string>>,
 };
@@ -76,7 +76,7 @@ export const detectRange =(event:MouseEvent| React.MouseEvent , targetArea:DOMRe
   return (inner_x && inner_y);
 };
 
-const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage, editBlock,changeBlockToPage,changePageToBlock, deleteBlock ,addPage,editPage, movePageToPage,  setMoveTargetBlock,moveTargetBlock, setCommentBlock, popup, setPopup ,menuOpen,setMenuOpen ,setPopupStyle ,setTargetPageId }:BlockFnProp)=>{
+const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage, editBlock,changeBlockToPage,changePageToBlock, deleteBlock ,addPage,editPage, movePageToPage,  setMoveTargetBlock,moveTargetBlock, setCommentBlock, popup, setPopup ,menuOpen,setOpenMenu ,setPopupStyle ,setTargetPageId }:BlockFnProp)=>{
   const [openRename, setOpenRename] =useState<boolean>(false);
 
   const [blockFnTargetBlock, setBlockFnTargetBlock]=useState<Block|null>(null);
@@ -105,7 +105,7 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
   const onClickMenu=()=>{
     moveTargetBlock!==null&& setMoveTargetBlock(null);
     const sessionItem = sessionStorage.getItem("blockFnTargetBlock") ;
-    menuOpen && setMenuOpen(false); 
+    menuOpen && setOpenMenu(false); 
     popup.popup && setPopup({
       popup:false,
       what:null
@@ -113,7 +113,7 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
     if(sessionItem!==null && !menuOpen){
       const targetBlock = JSON.parse(sessionItem);
       setBlockFnTargetBlock(targetBlock);
-      setMenuOpen(true);
+      setOpenMenu(true);
       sessionStorage.remove("blockFnTargetBlock");
     }else{
       console.log("BlockFn-openMenu error: there is no session item")
@@ -189,7 +189,7 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
             firstlist={firstlist}
             page={page}
             userName={userName}
-            setMenuOpen={setMenuOpen}
+            setOpenMenu={setOpenMenu}
             addBlock={addBlock}
             editBlock={editBlock}
             changeBlockToPage={changeBlockToPage}

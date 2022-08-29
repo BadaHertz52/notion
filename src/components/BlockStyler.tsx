@@ -6,15 +6,17 @@ import { CSSProperties } from 'styled-components';
 import ColorMenu from './ColorMenu';
 import CommandBlock from './CommandBlock';
 import { selectionType } from './Frame';
-import Menu, { MenuProps } from './Menu';
-import { Block } from '../modules/notion';
+import Menu, { MenuAndBlockStylerCommonProps } from './Menu';
+import { Block} from '../modules/notion';
 
-type BlockStylerProps = MenuProps & {
+type BlockStylerProps = MenuAndBlockStylerCommonProps& {
+  changeBlockToPage: (currentPageId: string, block: Block) => void,
+
   selection:selectionType,
   setSelection:Dispatch<SetStateAction<selectionType|null>>,
   openTemplates: boolean
 }
-const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,addPage,duplicatePage,movePageToPage,popup,setPopup, setMenuOpen, setOpenRename,setCommentBlock,setTargetPageId,selection,setSelection, openTemplates}:BlockStylerProps)=>{
+const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage,popup,setPopup, setCommentBlock,setTargetPageId,selection,setSelection, openTemplates}:BlockStylerProps)=>{
   const block =selection.block;
   const bold="bold";
   const initial="initial";

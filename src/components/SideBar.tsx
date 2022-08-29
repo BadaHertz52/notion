@@ -603,7 +603,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
         deleteBlock={deleteBlock}
         changeBlockToPage={changeBlockToPage}
         movePageToPage={movePageToPage}
-        setMenuOpen={setOpenSideMoreMenu}
+        setOpenMenu={setOpenSideMoreMenu}
         setTargetPageId={setTargetPageId}
       />
     </div>

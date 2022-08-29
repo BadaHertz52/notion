@@ -12,12 +12,12 @@ type PageMenuProps ={
   deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
   changeBlockToPage: (currentPageId: string, block: Block) => void
   addBlock:(pageId: string, block: Block, nextBlockIndex: number, previousBlockId: string | null) => void,
-  setMenuOpen:Dispatch<SetStateAction<boolean>> |null,
+  setOpenMenu:Dispatch<SetStateAction<boolean>> |null,
   movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
   setTargetPageId: Dispatch<SetStateAction<string>>,
 };
 
-const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock,changeBlockToPage, addBlock, movePageToPage ,setMenuOpen ,setTargetPageId}:PageMenuProps)=>{
+const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock,changeBlockToPage, addBlock, movePageToPage ,setOpenMenu ,setTargetPageId}:PageMenuProps)=>{
 
   type PageButtonProps={
     item: listItem
@@ -62,7 +62,7 @@ const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock,changeBlockToP
       };
       
     // close Menu and recovery Menu state
-    setMenuOpen !==null && setMenuOpen(false);
+    setOpenMenu !==null && setOpenMenu(false);
   };
   const onClickToMove =(id:string)=>{
     switch (what) {
