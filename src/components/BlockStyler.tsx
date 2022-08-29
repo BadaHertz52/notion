@@ -7,8 +7,9 @@ import Menu, { MenuProps } from './Menu';
 type BlockStylerProps = MenuProps & {
   selection:selectionType,
   setSelection:Dispatch<SetStateAction<selectionType|null>>,
+  openTemplates: boolean
 }
-const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,addPage,duplicatePage,movePageToPage,popup,setPopup, setMenuOpen, setOpenRename,setCommentBlock,setTargetPageId,selection,setSelection}:BlockStylerProps)=>{
+const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,addPage,duplicatePage,movePageToPage,popup,setPopup, setMenuOpen, setOpenRename,setCommentBlock,setTargetPageId,selection,setSelection, openTemplates}:BlockStylerProps)=>{
   const bold="bold";
   const initial="initial";
   const italic= "italic";

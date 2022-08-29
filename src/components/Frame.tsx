@@ -1046,6 +1046,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
           setOpenRename= {null}
           selection={selection}
           setSelection={setSelection}
+          openTemplates={openTemplates}
         />
       }
     </div>
