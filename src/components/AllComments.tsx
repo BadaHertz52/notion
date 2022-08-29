@@ -55,7 +55,6 @@ const AllComments=({page, userName, editBlock, showAllComments, setShowAllCommen
       allComments.forEach((comments:BlockCommentType[]|null)=>{
         if(comments !==null){
           const seletedComments= comments.filter((c:BlockCommentType)=> c.type=== select);
-          console.log(select,"///", seletedComments);
           seletedComments[0]!==undefined && seletedComments.forEach(c => resultComments.push(c));
         };
         
