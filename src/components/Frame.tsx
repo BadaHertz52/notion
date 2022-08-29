@@ -21,6 +21,7 @@ import { MdInsertPhoto } from 'react-icons/md';
 import { HiTemplate } from 'react-icons/hi';
 import { setTemplateItem } from './BlockComponent';
 import { fontStyleType } from '../containers/NotionRouter';
+import BlockStyler from './BlockStyler';
 
 export type Command ={
   boolean:boolean,
@@ -150,7 +151,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
   const [loaderTargetBlock, setLoaderTargetBlock]=useState<Block|null>(null);
   const [iconStyle, setIconStyle]=useState<CSSProperties|undefined>(undefined);
   const [commandBlockPositon, setCBPositon]=useState<CSSProperties>();
-
   const [commentsStyle, setCommentsStyle]= useState<CSSProperties>();
   const [menuOpen, setMenuOpen]= useState<boolean>(false);
   const [commandTargetBlock, setCommandTargetBlock]=useState<Block|null>(null);
@@ -1020,6 +1020,31 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
           setLoaderTargetBlock={setLoaderTargetBlock}
           closeMenu={closeMenu}
           templateHtml={templateHtml}
+          setSelection={setSelection}
+        />
+      }
+      {selection !==null &&
+        <BlockStyler
+          pages={pages}
+          firstlist={firstlist}
+          userName={userName}
+          page={page}
+          block={selection.block}
+          addBlock={addBlock}
+          editBlock={editBlock}
+          changeBlockToPage={changeBlockToPage}
+          changePageToBlock={changePageToBlock}
+          deleteBlock={deleteBlock}
+          addPage={addPage}
+          duplicatePage={duplicatePage}
+          movePageToPage={movePageToPage}
+          popup={popup}
+          setPopup={setPopup}
+          setMenuOpen={null}
+          setCommentBlock={setCommentBlock}
+          setTargetPageId={setTargetPageId}
+          setOpenRename= {null}
+          selection={selection}
           setSelection={setSelection}
         />
       }
