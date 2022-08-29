@@ -80,9 +80,6 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
   return ({
   color: block.type !=="todo done" ? block.style.color: "grey",
   backgroundColor :block.style.bgColor,
-  fontWeight: block.style.fontWeight ,
-  fontStyle: block.type !=="todo done"? block.style.fontStyle : "italic",
-  textDecoration: block.type !=="todo done"? block.style.textDeco :"line-through",
   width: block.style.width===undefined? "inherit" : block.style.width,
   height: block.style.height===undefined? "inherit" : block.style.height,
   })

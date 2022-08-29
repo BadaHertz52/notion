@@ -38,18 +38,12 @@ export type BgColorType = typeof bg_default| typeof bg_grey|typeof bg_yellow| ty
 export type BlockStyle ={
   color: ColorType,
   bgColor: BgColorType,
-  fontWeight: "bold"|"initial",
-  fontStyle: "italic" | "initial",
-  textDeco : "underline"|"line-through" | "none" ,
   width: undefined | string,
   height :undefined | string
 };
 export const basicBlockStyle:BlockStyle ={
   color: defaultColor,
   bgColor: bg_default,
-  fontWeight:"initial",
-  fontStyle:"initial",
-  textDeco:"none",
   width: undefined,
   height :undefined
 };
@@ -519,7 +513,6 @@ const initialState :Notion ={
         ...basicBlockStyle,
         color: blue,
         bgColor: bg_default,
-        fontWeight:"bold",
       },
       comments:[{
         id:"comment_text1",
@@ -579,7 +572,6 @@ const initialState :Notion ={
       style :{
         ...basicBlockStyle,
         bgColor: bg_yellow,
-        textDeco:"underline"
       },
       comments:[{
         id:"comment_todo1",
