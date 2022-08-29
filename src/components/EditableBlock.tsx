@@ -1,6 +1,6 @@
 import React, { CSSProperties, Dispatch, MouseEvent, MutableRefObject, SetStateAction, useEffect, useRef} from 'react';
 import { Block, BlockCommentType, findBlock, Page,  } from '../modules/notion';
-import { Command } from './Frame';
+import { Command, selectionType } from './Frame';
 import BlockComponent, { BlockComment, setTemplateItem } from './BlockComponent';
 import { GoPrimitiveDot } from 'react-icons/go';
 import { GrCheckbox, GrCheckboxSelected } from 'react-icons/gr';
@@ -28,7 +28,8 @@ export type EditableBlockProps ={
   setOpenLoader:Dispatch<SetStateAction<boolean>>,
   setLoaderTargetBlock : Dispatch<SetStateAction<Block | null>>,
   closeMenu:(event: globalThis.MouseEvent |MouseEvent) => void,
-  templateHtml: HTMLElement | null
+  templateHtml: HTMLElement | null,
+  setSelection:Dispatch<SetStateAction<selectionType|null>>
 };
 export   type CommentOpenType ={
   open:boolean,
@@ -62,7 +63,7 @@ export const changeFontSizeBySmallText=(block:Block, smallText:boolean):CSSPrope
   return style 
 };
 
-const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText, moveBlock ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand , openComment, setTargetPageId ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock,closeMenu ,templateHtml
+const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText, moveBlock ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand , openComment, setTargetPageId ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock,closeMenu ,templateHtml ,setSelection
 
 }:EditableBlockProps)=>{  
   const className = block.type !== "toggle" ?
@@ -219,6 +220,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                 setLoaderTargetBlock={setLoaderTargetBlock}
                 closeMenu={closeMenu}
                 templateHtml={templateHtml}
+                setSelection={setSelection}
               />
             </div>
             </div>
@@ -325,6 +327,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                 setLoaderTargetBlock={setLoaderTargetBlock}
                 closeMenu={closeMenu}
                 templateHtml= {templateHtml}
+                setSelection={setSelection}
                 />
               </div>
               </div>
@@ -366,6 +369,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                   setLoaderTargetBlock={setLoaderTargetBlock}
                   closeMenu={closeMenu}
                   templateHtml={templateHtml}
+                  setSelection={setSelection}
                 />
               )
               }

@@ -60,9 +60,13 @@ export type FrameProps = Template_Frame_SAME_Props &{
   page:Page,
 
 };
+export type selectionType={
+  block:Block,
+  selectedContent:string
+}
 const basicPageCover ='https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assests/img/artificial-turf-g6e884a1d4_1920.jpg';;
 
-const MoveTargetBlock=({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText, moveBlock  ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand ,setTargetPageId  ,openComment ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock, closeMenu,templateHtml ,
+const MoveTargetBlock=({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText, moveBlock  ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand ,setTargetPageId  ,openComment ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock, closeMenu,templateHtml ,setSelection
 }:EditableBlockProps)=>{
   return(
     <div 
@@ -121,6 +125,7 @@ const MoveTargetBlock=({ page, block , editBlock, addBlock,changeToSub ,raiseBlo
         setLoaderTargetBlock={setLoaderTargetBlock}
         closeMenu={closeMenu}
         templateHtml={templateHtml}
+        setSelection={setSelection}
       />
       }
     </div>
@@ -157,6 +162,8 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
   const [moveTargetBlock, setMoveTargetBlock]=useState<Block|null>(null);
   const moveBlock =useRef<boolean>(false);
   const pointBlockToMoveBlock =useRef<Block|null>(null);
+
+  const [selection, setSelection]=useState<selectionType|null>(null);
   const closePopup=(event:globalThis.MouseEvent)=>{
     if(popup.popup){
       const popupMenu =document.getElementById("popupMenu");
@@ -834,6 +841,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
                       setLoaderTargetBlock={setLoaderTargetBlock}
                       closeMenu={closeMenu}
                       templateHtml={templateHtml}
+                      setSelection={setSelection}
                     />
                   )
                 }
@@ -1012,6 +1020,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
           setLoaderTargetBlock={setLoaderTargetBlock}
           closeMenu={closeMenu}
           templateHtml={templateHtml}
+          setSelection={setSelection}
         />
       }
     </div>

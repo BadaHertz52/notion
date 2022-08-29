@@ -1,9 +1,9 @@
-import React, { Dispatch, MouseEvent, SetStateAction, useEffect, useRef} from 'react';
+import React, { Dispatch, MouseEvent, SetStateAction, SyntheticEvent, useEffect, useRef} from 'react';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import { IoChatboxOutline } from 'react-icons/io5';
-import { MdOutlineCollectionsBookmark, MdOutlinePhotoSizeSelectActual } from 'react-icons/md';
+import { MdOutlinePhotoSizeSelectActual } from 'react-icons/md';
 import {  Block,BlockType,blockTypes,findBlock,findParentBlock,findPreviousBlockInDoc,makeNewBlock,Page, toggle } from '../modules/notion';
-import { Command } from './Frame';
+import { Command, selectionType } from './Frame';
 import ImageContent from './ImageContent';
 export   const setTemplateItem=(templateHtml:HTMLElement|null, page:Page)=>{
   if(templateHtml!==null){
@@ -14,7 +14,7 @@ export   const setTemplateItem=(templateHtml:HTMLElement|null, page:Page)=>{
     }
   };
 };
-type  BlockProps ={
+type  BlockComponentProps ={
   block:Block,
   page:Page,
   editBlock :(pageId: string, block: Block) => void,
@@ -32,6 +32,7 @@ type  BlockProps ={
   setLoaderTargetBlock : Dispatch<SetStateAction<Block | null>>,
   closeMenu: (event: globalThis.MouseEvent| MouseEvent) => void,
   templateHtml:HTMLElement|null,
+  setSelection:Dispatch<SetStateAction<selectionType|null>>
 };
 type BlockCommentProps={
   block:Block,
@@ -62,13 +63,15 @@ export const BlockComment =({block , onClickCommentBtn}:BlockCommentProps)=>{
   )
 };
 
-const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,blockComments , command, setCommand  ,onClickCommentBtn ,setOpenComment ,setTargetPageId ,setOpenLoader, setLoaderTargetBlock ,closeMenu ,templateHtml }:BlockProps)=>{
+const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,blockComments , command, setCommand  ,onClickCommentBtn ,setOpenComment ,setTargetPageId ,setOpenLoader, setLoaderTargetBlock ,closeMenu ,templateHtml, setSelection }:BlockComponentProps)=>{
   const editTime =JSON.stringify(Date.now);
   const contentEditableRef= useRef<HTMLElement>(null);
   const possibleBlocks = page.blocks.filter((block:Block)=> block.type !=="image media" && block.type !=="page");
   const possibleBlocksId = possibleBlocks.map((block:Block)=> block.id );
-  const findTargetBlock =(event:ContentEditableEvent|React.KeyboardEvent<HTMLDivElement>|MouseEvent):Block=>{
+
+  const findTargetBlock =(event:ContentEditableEvent|React.KeyboardEvent<HTMLDivElement>|MouseEvent| SyntheticEvent<HTMLDivElement>):Block=>{
     const target =event.currentTarget.parentElement as HTMLElement;
+    console.log("target", target);
     const targetId= target.id;
     const end =targetId.indexOf("_contents");
     const blockId = targetId.slice(0, end);
@@ -338,6 +341,16 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
         break;
     };
   };
+  const onSelectContents =(event:SyntheticEvent<HTMLDivElement>)=>{
+    const targetBlock = findTargetBlock(event)
+    const selectedContent =window.getSelection()?.getRangeAt(0).toString();
+    if(selectedContent!==undefined){
+      setSelection({
+        block:targetBlock,
+        selectedContent:selectedContent
+      });
+    }
+  };
   function commandChange (event:React.ChangeEvent<HTMLInputElement>){
     setTemplateItem(templateHtml, page);
     const value = event.target.value;
@@ -408,6 +421,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
           innerRef={contentEditableRef}
           onChange={(event)=> onChangeContents(event )}
           onKeyDown={(event)=> onKeyDownContents(event)}
+          onSelect={(event)=>onSelectContents(event)}
         /> 
         :
           <input
