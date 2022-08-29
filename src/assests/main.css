@@ -349,7 +349,7 @@ a:link, a:active, a:visited {
   border-radius: 8px;
   box-shadow: 0px 0px 23px -5px #ababab;
   height: 32px;
-  border-radius: 3px;
+  border-radius: 5px;
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
@@ -377,17 +377,47 @@ a:link, a:active, a:visited {
   font-size: 14px;
   line-height: 1.2;
 }
+#blockStyler .btn:hover {
+  background-color: #EDECE9;
+}
 #blockStyler .typeBtn #commandBlock {
   display: none;
 }
 #blockStyler .typeBtn.on #commandBlock {
   display: flex;
 }
+#blockStyler .linkBtn .linkLoader {
+  display: none;
+}
+#blockStyler .linkBtn svg:first-child {
+  margin-right: 4px;
+}
+#blockStyler .linkBtn.on .linkLoader {
+  display: flex;
+}
+#blockStyler .commentBtn svg:first-child {
+  margin-right: 4px;
+}
 #blockStyler .styles {
   display: flex;
 }
+#blockStyler .boldBtn {
+  font-weight: bolder;
+}
+#blockStyler .italicBtn {
+  font-style: italic;
+}
+#blockStyler .underlineBtn {
+  text-decoration: underline;
+}
+#blockStyler .lineThroughBtn {
+  text-decoration: line-through;
+}
 #blockStyler .colorBtn .menu_color {
   display: none;
+}
+#blockStyler .colorBtn .btn {
+  font-weight: bolder;
 }
 #blockStyler .colorBtn.on .menu_color {
   display: flex;
@@ -397,6 +427,10 @@ a:link, a:active, a:visited {
 }
 #blockStyler .menuBtn.on .menu {
   display: flex;
+}
+#blockStyler .arrowDown {
+  color: #B9B8B6;
+  margin-left: 3px;
 }
 
 .switchBtn {

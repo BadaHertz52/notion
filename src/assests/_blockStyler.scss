@@ -3,7 +3,7 @@
   position: absolute;
   @include popupMenu;
   height: 32px;
-  border-radius: 3px ;
+  border-radius: 5px ;
   width: fit-content;
   .inner{
     position: relative;
@@ -21,6 +21,9 @@
     align-items: center;
     font-size: 14px;
     line-height: 1.2;
+    &:hover{
+      background-color: $itemHover;
+    }
   }
   .typeBtn{
     #commandBlock{
@@ -32,16 +35,45 @@
       display: flex;
     }
   }
-  .commentsBtn{
-
+  .linkBtn{
+    .linkLoader{
+      display: none;
+    }
+    svg:first-child{
+      margin-right: 4px;
+    }
+  }
+  .linkBtn.on{
+    .linkLoader{
+      display: flex;
+    }
+  }
+  .commentBtn{
+    svg:first-child{
+      margin-right: 4px;
+    }
   }
   .styles{
     display: flex;
-
+  }
+  .boldBtn{
+    font-weight: bolder;
+  }
+  .italicBtn{
+    font-style: italic;
+  }
+  .underlineBtn{
+    text-decoration: underline;
+  }
+  .lineThroughBtn{
+    text-decoration: line-through;
   }
   .colorBtn{
     .menu_color{
       display: none;
+    }
+    .btn{
+      font-weight: bolder;
     }
   }
   .colorBtn.on{
@@ -58,5 +90,9 @@
     .menu{
       display: flex;
     }
+  }
+  .arrowDown{
+    color:$mud;
+    margin-left: 3px;
   }
 }
