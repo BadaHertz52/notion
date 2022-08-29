@@ -195,7 +195,6 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
             changeBlockToPage={changeBlockToPage}
             changePageToBlock={changePageToBlock}
             deleteBlock={deleteBlock}
-            addPage={addPage}
             duplicatePage={duplicatePage}
             movePageToPage={movePageToPage}
             popup={popup}
