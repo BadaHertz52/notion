@@ -71,7 +71,6 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
 
   const findTargetBlock =(event:ContentEditableEvent|React.KeyboardEvent<HTMLDivElement>|MouseEvent| SyntheticEvent<HTMLDivElement>):Block=>{
     const target =event.currentTarget.parentElement as HTMLElement;
-    console.log("target", target);
     const targetId= target.id;
     const end =targetId.indexOf("_contents");
     const blockId = targetId.slice(0, end);
