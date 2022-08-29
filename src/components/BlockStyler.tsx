@@ -1,22 +1,20 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch,SetStateAction, useEffect, useState } from 'react';
 import { BsChatLeftText, BsThreeDots } from 'react-icons/bs';
 import { IoIosArrowDown } from 'react-icons/io';
 import {ImArrowUpRight2} from 'react-icons/im';
 import { CSSProperties } from 'styled-components';
 import ColorMenu from './ColorMenu';
-import CommandBlock from './CommandBlock';
 import { selectionType } from './Frame';
 import Menu, { MenuAndBlockStylerCommonProps } from './Menu';
 import { Block} from '../modules/notion';
 
 type BlockStylerProps = MenuAndBlockStylerCommonProps& {
-  changeBlockToPage: (currentPageId: string, block: Block) => void,
-
   selection:selectionType,
   setSelection:Dispatch<SetStateAction<selectionType|null>>,
-  openTemplates: boolean
+  openTemplates: boolean,
+  setPopupStyle:Dispatch<React.SetStateAction<React.CSSProperties | undefined>>
 }
-const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage,popup,setPopup, setCommentBlock,setTargetPageId,selection,setSelection, openTemplates}:BlockStylerProps)=>{
+const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage,popup,setPopup, setCommentBlock,setTargetPageId,selection,setSelection, openTemplates, setPopupStyle}:BlockStylerProps)=>{
   const block =selection.block;
   const bold="bold";
   const initial="initial";
@@ -56,7 +54,9 @@ const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, chang
   const mainBlockHtml =document.getElementById(`block_${block.id}`)?.firstElementChild;
   const frameHtml = openTemplates?document.querySelector("#template")?.firstElementChild : document.querySelector('.frame');
   const [blockStylerStyle,setBlockStylerStyle]=useState<CSSProperties|undefined>(undefined);
-
+  const [openLink, setOpenLink]=useState<boolean>(false);
+  const [openMenu, setOpenMenu]=useState<boolean>(false);
+  const [openColor, setOpenColor]=useState<boolean>(false);
   const changeBlockStylerStyle=()=>{
     if(mainBlockHtml!==null && mainBlockHtml!==undefined && frameHtml!==undefined && frameHtml!==null){
       const blockDomRect= mainBlockHtml.getClientRects()[0];
@@ -69,50 +69,51 @@ const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, chang
       })
     }
   };
+  const onClickTypeBtn=()=>{
+    setPopup({
+      popup:true,
+      what:"popupCommand"
+    });
+    setPopupStyle(blockStylerStyle);
+  };
+  const onClickCommentBtn=()=>{
+    setPopup({
+      popup:true,
+      what:"popupComment"
+    });
+    setPopupStyle(blockStylerStyle)
+  };
   window.onresize=()=>changeBlockStylerStyle
 
   useEffect(()=>{
     changeBlockStylerStyle();
   },[mainBlockHtml, frameHtml]);
   return(
+    <>
     <div 
       id="blockStyler"
       style={blockStylerStyle}
     >
       <div className='inner'>
-        <div className='typeBtn'>
-          <button className='blockType btn'>
-            {blockType(block)}
-            <IoIosArrowDown className='arrowDown'/>
-          </button>
-          <CommandBlock
-            page ={page}
-            block={selection.block}
-            editBlock={editBlock}
-            changeBlockToPage={changeBlockToPage}
-            changePageToBlock={changePageToBlock}
-            setCommand ={null}
-            command ={null}
-            setPopup ={null}
-            setCommandTargetBlock ={null}
-          />
-        </div>
-        <div className='linkBtn'>
-          <button className='btn'>
-            <ImArrowUpRight2/>
-            Link
-            <IoIosArrowDown className='arrowDown'/>
-          </button>
-          <div className='linkLoader'>
-
-          </div>
-        </div>
-        <div className='commentBtn'>
-          <button className='btn'>
+        <button 
+          className='typeBtn btn'
+          onClick={onClickTypeBtn}
+        >
+          {blockType(block)}
+          <IoIosArrowDown className='arrowDown'/>
+        </button>
+        <button className='linkBtn btn'>
+          <ImArrowUpRight2/>
+          Link
+          <IoIosArrowDown className='arrowDown'/>
+        </button>
+        <button 
+          className='commentBtn btn'
+          onClick={onClickCommentBtn}
+        >
             <BsChatLeftText/>
             Comment
-          </button>
-        </div>
+        </button>
         <div className='styles'>
           <button className='boldBtn btn'>
             B
@@ -127,46 +128,51 @@ const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, chang
             S
           </button>
         </div>
-        <div className='colorBtn'>
-          <button className='btn'>
+        <button className='colorBtn btn'>
             A
             <IoIosArrowDown className='arrowDown'/>
-          </button>
-          <ColorMenu
+        </button>
+        <button className='menuBtn btn'>
+            <BsThreeDots/>
+        </button>
+      </div>
+    </div>
+    {openLink &&
+      <div className='linkLoader'>
+
+      </div>
+    }
+      {openColor &&
+            <ColorMenu
             page={page}
             block={selection.block}
             editBlock={editBlock}
             selection={selection}
           />
-        </div>
-        <div className='menuBtn'>
-          <button className='btn'> 
-            <BsThreeDots/>
-          </button>
-          <Menu
-            pages={pages}
-            firstlist={firstlist}
-            page={page}
-            block={selection.block}
-            userName={userName}
-            setMenuOpen={setMenuOpen}
-            addBlock={addBlock}
-            editBlock={editBlock}
-            changeBlockToPage={changeBlockToPage}
-            changePageToBlock={changePageToBlock}
-            deleteBlock={deleteBlock}
-            addPage={addPage}
-            duplicatePage={duplicatePage}
-            movePageToPage={movePageToPage}
-            popup={popup}
-            setPopup={setPopup}
-            setCommentBlock={setCommentBlock}
-            setTargetPageId={setTargetPageId}
-            setOpenRename= {setOpenRename}
-          />
-        </div>
-      </div>
-    </div>
+      }
+      {openMenu&&
+        <Menu
+          pages={pages}
+          firstlist={firstlist}
+          page={page}
+          block={selection.block}
+          userName={userName}
+          setOpenMenu={setOpenMenu}
+          addBlock={addBlock}
+          editBlock={editBlock}
+          changeBlockToPage={changeBlockToPage}
+          changePageToBlock={changePageToBlock}
+          deleteBlock={deleteBlock}
+          duplicatePage={duplicatePage}
+          movePageToPage={movePageToPage}
+          popup={popup}
+          setPopup={setPopup}
+          setCommentBlock={setCommentBlock}
+          setTargetPageId={setTargetPageId}
+          setOpenRename= {null}
+        />
+      }
+    </>
   )
 };
 

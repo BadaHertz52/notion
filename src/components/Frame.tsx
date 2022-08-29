@@ -1039,6 +1039,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
           movePageToPage={movePageToPage}
           popup={popup}
           setPopup={setPopup}
+          setPopupStyle={setPopupStyle}
           setCommentBlock={setCommentBlock}
           setTargetPageId={setTargetPageId}
           selection={selection}
