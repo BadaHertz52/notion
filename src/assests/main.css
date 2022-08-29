@@ -415,6 +415,11 @@ a:link, a:active, a:visited {
   margin-left: 3px;
 }
 
+#blockStylerMenu {
+  position: absolute;
+  z-index: 30;
+}
+
 .switchBtn {
   position: relative;
   width: 30px;
