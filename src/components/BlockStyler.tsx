@@ -43,9 +43,9 @@ const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, chang
     case "text":
       return "Text";
     case "todo":
-      return "To-doolist";
+      return "To-do list";
     case "todo done":
-      return "To-doolist";
+      return "To-do list";
     case "toggle":
       return "Toggle list";
     default:
