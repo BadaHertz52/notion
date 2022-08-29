@@ -380,20 +380,15 @@ a:link, a:active, a:visited {
 #blockStyler .btn:hover {
   background-color: #EDECE9;
 }
-#blockStyler .typeBtn #commandBlock {
-  display: none;
-}
-#blockStyler .typeBtn.on #commandBlock {
+#blockStyler #commandBlock {
   display: flex;
-}
-#blockStyler .linkBtn .linkLoader {
-  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 50;
 }
 #blockStyler .linkBtn svg:first-child {
   margin-right: 4px;
-}
-#blockStyler .linkBtn.on .linkLoader {
-  display: flex;
 }
 #blockStyler .commentBtn svg:first-child {
   margin-right: 4px;
@@ -413,20 +408,8 @@ a:link, a:active, a:visited {
 #blockStyler .lineThroughBtn {
   text-decoration: line-through;
 }
-#blockStyler .colorBtn .menu_color {
-  display: none;
-}
 #blockStyler .colorBtn .btn {
   font-weight: bolder;
-}
-#blockStyler .colorBtn.on .menu_color {
-  display: flex;
-}
-#blockStyler .menuBtn .menu {
-  display: none;
-}
-#blockStyler .menuBtn.on .menu {
-  display: flex;
 }
 #blockStyler .arrowDown {
   color: #B9B8B6;

@@ -25,27 +25,16 @@
       background-color: $itemHover;
     }
   }
-  .typeBtn{
-    #commandBlock{
-      display: none;
-    }
-  }
-  .typeBtn.on{
-    #commandBlock{
-      display: flex;
-    }
+  #commandBlock{
+    display: flex;
+    position: absolute;
+    top:100%;
+    left: 0;
+    z-index: 50;
   }
   .linkBtn{
-    .linkLoader{
-      display: none;
-    }
     svg:first-child{
       margin-right: 4px;
-    }
-  }
-  .linkBtn.on{
-    .linkLoader{
-      display: flex;
     }
   }
   .commentBtn{
@@ -69,27 +58,11 @@
     text-decoration: line-through;
   }
   .colorBtn{
-    .menu_color{
-      display: none;
-    }
     .btn{
       font-weight: bolder;
     }
   }
-  .colorBtn.on{
-    .menu_color{
-      display: flex;
-    }
-  }
   .menuBtn{
-    .menu{
-      display: none;
-    }
-  }
-  .menuBtn.on{
-    .menu{
-      display: flex;
-    }
   }
   .arrowDown{
     color:$mud;
