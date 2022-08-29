@@ -22,10 +22,35 @@ const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, chang
   const underline="underline";
   const lineThrough="line-through";
   const none="none";
-
   type fontWeightType =typeof bold|typeof initial;
   type fontStyleType= typeof italic| typeof initial;
   type textDecoType= typeof underline| typeof lineThrough | typeof none; 
+  const blockType=(block:Block)=> 
+  {switch (block.type) {
+    case "bulletList":
+      return "Bullted list";
+    case "h1":
+      return "Heading 1";
+    case "h2":
+      return "Heading 2";
+    case "h3":
+      return "Heading 3";
+    case "numberList":
+      return "Number list";
+    case "page":
+      return "Page";
+    case "text":
+      return "Text";
+    case "todo":
+      return "To-doolist";
+    case "todo done":
+      return "To-doolist";
+    case "toggle":
+      return "Toggle list";
+    default:
+      break;
+  }
+}
   const mainBlockHtml =document.getElementById(`block_${block.id}`)?.firstElementChild;
   const frameHtml = openTemplates?document.querySelector("#template")?.firstElementChild : document.querySelector('.frame');
   const [blockStylerStyle,setBlockStylerStyle]=useState<CSSProperties|undefined>(undefined);
@@ -54,8 +79,8 @@ const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, chang
     >
       <div className='inner'>
         <div className='typeBtn'>
-            {selection.block.type}
           <button className='blockType btn'>
+            {blockType(block)}
             <IoIosArrowDown className='arrowDown'/>
           </button>
           <CommandBlock

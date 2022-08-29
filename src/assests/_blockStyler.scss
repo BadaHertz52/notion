@@ -1,0 +1,62 @@
+@import './common';
+#blockStyler{
+  position: absolute;
+  @include popupMenu;
+  height: 32px;
+  border-radius: 3px ;
+  width: fit-content;
+  .inner{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+  }
+  .btn{
+    width: 100%;
+    height: 100%;
+    padding:0 8px;
+    transition: backgroundColor 20ms ease-in 0s;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    line-height: 1.2;
+  }
+  .typeBtn{
+    #commandBlock{
+      display: none;
+    }
+  }
+  .typeBtn.on{
+    #commandBlock{
+      display: flex;
+    }
+  }
+  .commentsBtn{
+
+  }
+  .styles{
+    display: flex;
+
+  }
+  .colorBtn{
+    .menu_color{
+      display: none;
+    }
+  }
+  .colorBtn.on{
+    .menu_color{
+      display: flex;
+    }
+  }
+  .menuBtn{
+    .menu{
+      display: none;
+    }
+  }
+  .menuBtn.on{
+    .menu{
+      display: flex;
+    }
+  }
+}
