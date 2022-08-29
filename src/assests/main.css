@@ -521,6 +521,7 @@ a:link, a:active, a:visited {
 
 #popupMenu #commandBlock {
   margin-top: 0;
+  z-index: 30;
 }
 
 #commandBlock {
@@ -560,10 +561,10 @@ a:link, a:active, a:visited {
   position: relative;
 }
 #commandBlock .command div {
-  z-index: 5;
+  z-index: 30;
 }
 #commandBlock .command div button {
-  z-index: 5;
+  z-index: 30;
 }
 #commandBlock .command > header {
   padding: 0 14px;
@@ -1380,6 +1381,7 @@ a:link, a:active, a:visited {
   position: absolute;
   font-size: 14px;
   padding: 3px;
+  z-index: 30;
 }
 #popupMenu .commentInput {
   width: 300px;
