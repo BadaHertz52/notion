@@ -9,6 +9,9 @@
     }
   }
   //frame ----
+  .frame.stop{
+    overflow-y:hidden;
+  }
   .frame {
     width: 100%;
     height:100%;

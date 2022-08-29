@@ -164,6 +164,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
   const pointBlockToMoveBlock =useRef<Block|null>(null);
 
   const [selection, setSelection]=useState<selectionType|null>(null);
+  const frameRef= useRef<HTMLDivElement>(null);
   const closePopup=(event:globalThis.MouseEvent)=>{
     if(popup.popup){
       const popupMenu =document.getElementById("popupMenu");
@@ -669,11 +670,20 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
   },[commandTargetBlock]);
   
   window.onresize =changeCommentStyle;
-
+  useEffect(()=>{
+    if(popup.popup ||command.command|| openLoader|| openComment|| moveTargetBlock||selection){
+      !frameRef.current?.classList.contains("stop") &&
+      frameRef.current?.classList.add("stop");
+    }else{
+      frameRef.current?.classList.contains("stop") &&
+      frameRef.current?.classList.remove("stop");
+    }
+  },[popup.popup, command.command, openLoader, openComment, moveTargetBlock,selection])
 
   return(
     <div 
       className={newPageFram? "newPageFrame frame" :'frame'}
+      ref={frameRef}
     >
         <div 
           className='frame_inner'
