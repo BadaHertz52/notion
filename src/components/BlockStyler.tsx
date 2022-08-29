@@ -101,6 +101,9 @@ const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, chang
             Link
             <IoIosArrowDown className='arrowDown'/>
           </button>
+          <div className='linkLoader'>
+
+          </div>
         </div>
         <div className='commentBtn'>
           <button className='btn'>
