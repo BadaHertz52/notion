@@ -75,14 +75,34 @@ const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, chang
       popup:true,
       what:"popupCommand"
     });
-    setPopupStyle(blockStylerStyle);
+    if(blockStylerStyle!==undefined){
+      const popupStyle:CSSProperties ={
+        top: `calc(${blockStylerStyle} - 32px)`,
+        left : blockStylerStyle.left
+      }
+      setPopupStyle(popupStyle);
+    }
+    setCommandTargetBlock(block);
   };
   const onClickCommentBtn=()=>{
     setPopup({
       popup:true,
       what:"popupComment"
     });
-    setPopupStyle(blockStylerStyle)
+    const frameHtml = openTemplates? document.getElementById("templage")?.firstElementChild: document.querySelector(".frame");
+    if(mainBlockHtml!==null && mainBlockHtml!==undefined && 
+      frameHtml!==null && frameHtml !==undefined ){
+      const blockDomRect= mainBlockHtml.getClientRects()[0];
+      const pageContent = frameHtml.querySelector(".pageContent_inner");
+      const pageContentDomRect= pageContent?.getClientRects()[0];
+      const frameDomRect =frameHtml.getClientRects()[0];
+      pageContentDomRect!==undefined &&
+      setPopupStyle({
+        top:`${blockDomRect.bottom + 50 }px`,
+        left: `${pageContentDomRect.left -frameDomRect.left}px`,
+      });
+    };
+    setSelection(null);
   };
   window.onresize=()=>changeBlockStylerStyle
 
