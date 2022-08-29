@@ -15,6 +15,7 @@ type BlockStylerProps = MenuProps & {
   openTemplates: boolean
 }
 const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,addPage,duplicatePage,movePageToPage,popup,setPopup, setMenuOpen, setOpenRename,setCommentBlock,setTargetPageId,selection,setSelection, openTemplates}:BlockStylerProps)=>{
+  const block =selection.block;
   const bold="bold";
   const initial="initial";
   const italic= "italic";
@@ -25,9 +26,32 @@ const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, chang
   type fontWeightType =typeof bold|typeof initial;
   type fontStyleType= typeof italic| typeof initial;
   type textDecoType= typeof underline| typeof lineThrough | typeof none; 
+  const mainBlockHtml =document.getElementById(`block_${block.id}`)?.firstElementChild;
+  const frameHtml = openTemplates?document.querySelector("#template")?.firstElementChild : document.querySelector('.frame');
+  const [blockStylerStyle,setBlockStylerStyle]=useState<CSSProperties|undefined>(undefined);
 
+  const changeBlockStylerStyle=()=>{
+    if(mainBlockHtml!==null && mainBlockHtml!==undefined && frameHtml!==undefined && frameHtml!==null){
+      const blockDomRect= mainBlockHtml.getClientRects()[0];
+      const frameDomRect = frameHtml.getClientRects()[0];
+      const top = blockDomRect.top - frameDomRect.top;
+      setBlockStylerStyle({
+        top:`${top}px`,
+        left:"45px",
+        maxWidth :`${frameDomRect.width -90}px`
+      })
+    }
+  };
+  window.onresize=()=>changeBlockStylerStyle
+
+  useEffect(()=>{
+    changeBlockStylerStyle();
+  },[mainBlockHtml, frameHtml]);
   return(
-    <div id="blockStyler">
+    <div 
+      id="blockStyler"
+      style={blockStylerStyle}
+    >
       <div className='inner'>
         <div className='typeBtn'>
             {selection.block.type}
