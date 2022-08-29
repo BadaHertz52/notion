@@ -1,4 +1,4 @@
-import React, { Dispatch,SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch,MouseEvent,SetStateAction, useEffect, useState } from 'react';
 import { BsChatLeftText, BsThreeDots } from 'react-icons/bs';
 import { IoIosArrowDown } from 'react-icons/io';
 import {ImArrowUpRight2} from 'react-icons/im';
@@ -7,6 +7,7 @@ import ColorMenu from './ColorMenu';
 import { selectionType } from './Frame';
 import Menu, { MenuAndBlockStylerCommonProps } from './Menu';
 import { Block} from '../modules/notion';
+import { detectRange } from './BlockFn';
 
 type BlockStylerProps = MenuAndBlockStylerCommonProps& {
   selection:selectionType,
@@ -51,10 +52,14 @@ const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, chang
     default:
       break;
   }
-}
+} 
+  const inner =document.getElementById("inner");
   const mainBlockHtml =document.getElementById(`block_${block.id}`)?.firstElementChild;
   const frameHtml = openTemplates?document.querySelector("#template")?.firstElementChild : document.querySelector('.frame');
+  const pageContent = frameHtml?.querySelector(".pageContent_inner");
+  const blockStyler =document.getElementById("blockStyler");
   const [blockStylerStyle,setBlockStylerStyle]=useState<CSSProperties|undefined>(undefined);
+  const [menuStyle,setMenuStyle]=useState<CSSProperties|undefined>(undefined);
   const [openLink, setOpenLink]=useState<boolean>(false);
   const [openMenu, setOpenMenu]=useState<boolean>(false);
   const [openColor, setOpenColor]=useState<boolean>(false);
@@ -70,30 +75,30 @@ const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, chang
       })
     }
   };
+  const changePopupStyle=()=>{
+    if(blockStyler!==null && frameHtml !==null && frameHtml!==undefined) {
+      const blockStylerDomRect= blockStyler.getClientRects()[0];
+      const frameDomRect= frameHtml.getClientRects()[0];
+      const popupStyle:CSSProperties ={
+        top: `${blockStylerDomRect.top - frameDomRect.top}px`,
+        left :`${blockStylerDomRect.left- frameDomRect.left}px`
+      }
+      setPopupStyle(popupStyle);
+      console.log("popup", popupStyle);
+    }
+
+  };
   const onClickTypeBtn=()=>{
     setPopup({
       popup:true,
       what:"popupCommand"
     });
-    if(blockStylerStyle!==undefined){
-      const popupStyle:CSSProperties ={
-        top: `calc(${blockStylerStyle} - 32px)`,
-        left : blockStylerStyle.left
-      }
-      setPopupStyle(popupStyle);
-    }
     setCommandTargetBlock(block);
   };
-  const onClickCommentBtn=()=>{
-    setPopup({
-      popup:true,
-      what:"popupComment"
-    });
-    const frameHtml = openTemplates? document.getElementById("templage")?.firstElementChild: document.querySelector(".frame");
+  const changeCommentStyle =()=>{
     if(mainBlockHtml!==null && mainBlockHtml!==undefined && 
       frameHtml!==null && frameHtml !==undefined ){
       const blockDomRect= mainBlockHtml.getClientRects()[0];
-      const pageContent = frameHtml.querySelector(".pageContent_inner");
       const pageContentDomRect= pageContent?.getClientRects()[0];
       const frameDomRect =frameHtml.getClientRects()[0];
       pageContentDomRect!==undefined &&
@@ -102,10 +107,43 @@ const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, chang
         left: `${pageContentDomRect.left -frameDomRect.left}px`,
       });
     };
+  };
+  const onClickCommentBtn=()=>{
+    setPopup({
+      popup:true,
+      what:"popupComment"
+    });
     setSelection(null);
   };
-  window.onresize=()=>changeBlockStylerStyle
-
+  const changeMenuStyle=()=>{
+    if(blockStyler!==null && frameHtml !== null && frameHtml!==undefined){
+      const blockStylerDomRect =blockStyler.getClientRects()[0];
+      const frameHtmlDomRect= frameHtml.getClientRects()[0];
+      const style :CSSProperties ={
+        top: ` ${blockStylerDomRect.top - 50 - frameHtmlDomRect.left}px`,
+        left: `${blockStylerDomRect.right - frameHtmlDomRect.left- 240}px`
+      };
+      setMenuStyle(style);
+    }
+  };
+  const onClickMenuBtn=()=>{
+    setOpenMenu(true);
+  };
+  window.onresize=()=>changeBlockStylerStyle;
+  const closeMenu =(event:globalThis.MouseEvent)=>{ 
+    if(openMenu){
+      const blockStylerMenu =document.getElementById("blockStylerMenu");
+      const blockStylerMenuDomRect =blockStylerMenu?.getClientRects()[0];
+      const isInner =detectRange(event, blockStylerMenuDomRect );
+      if(!isInner){
+        setOpenMenu(false);
+        setMenuStyle(undefined);
+      };
+    }
+  };
+  inner?.addEventListener("click",(event)=>{
+    closeMenu(event);
+  });
   useEffect(()=>{
     changeBlockStylerStyle();
   },[mainBlockHtml, frameHtml]);
@@ -118,6 +156,7 @@ const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, chang
       <div className='inner'>
         <button 
           className='typeBtn btn'
+          onMouseDown={changePopupStyle}
           onClick={onClickTypeBtn}
         >
           {blockType(block)}
@@ -130,6 +169,7 @@ const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, chang
         </button>
         <button 
           className='commentBtn btn'
+          onMouseDown={changeCommentStyle}
           onClick={onClickCommentBtn}
         >
             <BsChatLeftText/>
@@ -153,7 +193,11 @@ const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, chang
             A
             <IoIosArrowDown className='arrowDown'/>
         </button>
-        <button className='menuBtn btn'>
+        <button 
+          className='menuBtn btn'
+          onMouseDown={changeMenuStyle}
+          onClick={onClickMenuBtn}
+        >
             <BsThreeDots/>
         </button>
       </div>
@@ -172,6 +216,10 @@ const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, chang
           />
       }
       {openMenu&&
+      <div 
+        id="blockStylerMenu"
+        style={menuStyle}
+      >
         <Menu
           pages={pages}
           firstlist={firstlist}
@@ -192,6 +240,7 @@ const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, chang
           setTargetPageId={setTargetPageId}
           setOpenRename= {null}
         />
+      </div>
       }
     </>
   )
