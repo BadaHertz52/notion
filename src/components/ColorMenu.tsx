@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { BgColorType, bg_blue, bg_default, bg_green, bg_grey, bg_yellow, bg_pink, Block, blue, ColorType, defaultColor, green, grey, orange, Page, red } from '../modules/notion';
 import { setTemplateItem } from './BlockComponent';
+import { selectionType } from './Frame';
 
 type StyleColorInformProps ={
   color:ColorType | undefined,
@@ -15,6 +16,7 @@ type ColorInformProps ={
   block:Block,
   editBlock:(pageId: string, block: Block) => void,
   templateHtml:HTMLElement|null,
+  selection:selectionType|null
 };
 const StyleColorInform =styled.span`
   color:${(props:StyleColorInformProps) =>props.color !== undefined? props.color: "initial"};
@@ -26,30 +28,38 @@ const StyleColorInform =styled.span`
   border-radius: 20%;
 `; 
 
-const ColorInform=({color ,background, colorName ,page, block ,editBlock, templateHtml}:ColorInformProps)=>{
+const ColorInform=({color ,background, colorName ,page, block ,editBlock, templateHtml,  selection}:ColorInformProps)=>{
   const changeColor =()=>{
     if(color ===undefined && background !== undefined ){
       setTemplateItem(templateHtml,page);
       ///change backgournd color
-      const newBlock :Block ={
-        ...block,
-        style :{
-          ...block.style,
-          bgColor: background,
-        }
-      };
-      editBlock(page.id, newBlock)
+      if(selection === null){
+        const newBlock :Block ={
+          ...block,
+          style :{
+            ...block.style,
+            bgColor: background,
+          }
+        };
+        editBlock(page.id, newBlock)
+      }else{
+
+      }
     }
     if(color !== undefined && background === undefined){
       ///change color
-      const newBlock :Block ={
-        ...block,
-        style: {
-          ...block.style,
-          color: color
-        }
-      };
-      editBlock(page.id, newBlock)
+      if(selection ===null){
+        const newBlock :Block ={
+          ...block,
+          style: {
+            ...block.style,
+            color: color
+          }
+        };
+        editBlock(page.id, newBlock)
+      }else{
+
+      }
     }
   };
 
@@ -80,8 +90,9 @@ type ColorMenuProps = {
   page :Page,
   block:Block,
   editBlock : (pageId: string, block: Block) => void,
+  selection:selectionType|null,
 };
-const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
+const ColorMenu=({page, block, editBlock, selection}:ColorMenuProps)=>{
   const templateHtml=document.getElementById("template");
   return(
     <div className="menu_color"  >
@@ -96,6 +107,7 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             block={block}
             editBlock={editBlock}
             templateHtml={templateHtml}
+            selection={selection}
           />
           <ColorInform
             colorName='Grey'
@@ -105,6 +117,7 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             block={block}
             editBlock={editBlock}
             templateHtml={templateHtml}
+            selection={selection}
           />
           <ColorInform
             colorName='Orange'
@@ -114,6 +127,7 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             block={block}
             editBlock={editBlock}
             templateHtml={templateHtml}
+            selection={selection}
           />
           <ColorInform
             colorName='Green'
@@ -123,6 +137,7 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             block={block}
             editBlock={editBlock}
             templateHtml={templateHtml}
+            selection={selection}
           />
           <ColorInform
             colorName='Blue'
@@ -132,6 +147,7 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             block={block}
             editBlock={editBlock}
             templateHtml={templateHtml}
+            selection={selection}
           /> 
           <ColorInform
             colorName='Red'
@@ -141,6 +157,7 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             block={block}
             editBlock={editBlock}
             templateHtml={templateHtml}
+            selection={selection}
           />
         </div>
       </section>
@@ -155,6 +172,7 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             block={block}
             editBlock={editBlock}
             templateHtml={templateHtml}
+            selection={selection}
           />
           <ColorInform
             colorName='Grey'
@@ -164,6 +182,7 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             block={block}
             editBlock={editBlock}
             templateHtml={templateHtml}
+            selection={selection}
           />
           <ColorInform
             colorName='Yellow'
@@ -173,6 +192,7 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             block={block}
             editBlock={editBlock}
             templateHtml={templateHtml}
+            selection={selection}
             />
           <ColorInform
             colorName='Green'
@@ -182,6 +202,7 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             block={block}
             editBlock={editBlock}
             templateHtml={templateHtml}
+            selection={selection}
           />
           <ColorInform
             colorName='Blue'
@@ -191,6 +212,7 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             block={block}
             editBlock={editBlock}
             templateHtml={templateHtml}
+            selection={selection}
           />
           <ColorInform
             colorName='Pink'
@@ -200,6 +222,7 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             block={block}
             editBlock={editBlock}
             templateHtml={templateHtml}
+            selection={selection}
           />
         </div>
       </section>

@@ -19,13 +19,14 @@ import { AiOutlineFormatPainter } from 'react-icons/ai';
 import { setTemplateItem } from './BlockComponent';
 
 
-type MenuProps ={
+export type MenuProps ={
   pages:Page[],
   firstlist:listItem[],
   page:Page,
   block:Block,
   userName: string,
-  setMenuOpen : Dispatch<SetStateAction<boolean>>,
+  setMenuOpen : Dispatch<SetStateAction<boolean>>
+  |null,
   addBlock:(pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
   editBlock : (pageId: string, block: Block) => void,
   changeBlockToPage: (currentPageId: string, block: Block) => void,
@@ -38,7 +39,7 @@ type MenuProps ={
   popup:PopupType,
   setCommentBlock: React.Dispatch<React.SetStateAction<Block | null>>,
   setTargetPageId: Dispatch<SetStateAction<string>>,
-  setOpenRename:Dispatch<SetStateAction<boolean>>,
+  setOpenRename:Dispatch<SetStateAction<boolean>>|null,
 };
 
 const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,changeBlockToPage,changePageToBlock ,editBlock, deleteBlock ,addPage ,duplicatePage,movePageToPage ,setPopup ,popup ,setCommentBlock ,setTargetPageId ,setOpenRename}:MenuProps)=>{
@@ -119,7 +120,7 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
     recoveryMenuState();
   };
   const onClickMoveTo=()=>{
-    setMenuOpen(false);
+    setMenuOpen !== null && setMenuOpen(false);
     sessionStorage.setItem("popupStyle", JSON.stringify(popupStyle));
     setPopup({
       popup:true,
@@ -128,7 +129,7 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
   };
   const onOpenCommentInput=()=>{
     setCommentBlock(block);
-    setMenuOpen(false);
+    setMenuOpen !== null && setMenuOpen(false);
     sessionStorage.setItem("popupStyle", JSON.stringify(popupStyle));
     setPopup({
       popup:true,
@@ -138,7 +139,7 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
   const removeBlock =()=>{
     setTemplateItem(templateHtml,page);
     deleteBlock(page.id, block , true);
-    setMenuOpen(false);
+    setMenuOpen !== null && setMenuOpen(false);
   };
 
   const duplicateBlock=()=>{
@@ -158,7 +159,7 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
     if(block.type==="page"){
       duplicatePage(block.id);
     };
-    setMenuOpen(false);
+    setMenuOpen !== null && setMenuOpen(false);
   };
   const onSetEditBtns=()=>{
     setEditBtns([...document.getElementsByClassName("menu_editBtn")]);
@@ -175,8 +176,8 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
     })
   };
   const onClickRename =()=>{
-    setOpenRename(true);
-    setMenuOpen(false);
+    setOpenRename !==null && setOpenRename(true);
+    setMenuOpen !== null &&setMenuOpen(false);
   };
   return(
   <div 
@@ -341,6 +342,7 @@ const Menu=({pages,firstlist, page, block, userName, setMenuOpen,addBlock,change
             page={page}
             block={block}
             editBlock={editBlock}
+            selection={null}
           />
         }
         {turnInToPage &&
