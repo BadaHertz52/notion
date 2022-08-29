@@ -1,8 +1,13 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { BsChatLeftText, BsThreeDots } from 'react-icons/bs';
+import { IoIosArrowDown } from 'react-icons/io';
+import {ImArrowUpRight2} from 'react-icons/im';
+import { CSSProperties } from 'styled-components';
 import ColorMenu from './ColorMenu';
 import CommandBlock from './CommandBlock';
 import { selectionType } from './Frame';
 import Menu, { MenuProps } from './Menu';
+import { Block } from '../modules/notion';
 
 type BlockStylerProps = MenuProps & {
   selection:selectionType,
@@ -25,8 +30,9 @@ const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, chang
     <div id="blockStyler">
       <div className='inner'>
         <div className='typeBtn'>
-          <button className='blockType'>
             {selection.block.type}
+          <button className='blockType btn'>
+            <IoIosArrowDown className='arrowDown'/>
           </button>
           <CommandBlock
             page ={page}
@@ -41,32 +47,36 @@ const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, chang
           />
         </div>
         <div className='linkBtn'>
-          <button>
+          <button className='btn'>
+            <ImArrowUpRight2/>
             Link
+            <IoIosArrowDown className='arrowDown'/>
           </button>
         </div>
         <div className='commentBtn'>
-          <button>
+          <button className='btn'>
+            <BsChatLeftText/>
             Comment
           </button>
         </div>
         <div className='styles'>
-          <button className='boldBtn'>
+          <button className='boldBtn btn'>
             B
           </button>
-          <button className='italicBtn'>
+          <button className='italicBtn btn'>
             i
           </button>
-          <button className='underlineBtn'>
+          <button className='underlineBtn btn'>
             U
           </button>
-          <button className='lineThroughBtn'>
+          <button className='lineThroughBtn btn'>
             S
           </button>
         </div>
         <div className='colorBtn'>
-          <button>
+          <button className='btn'>
             A
+            <IoIosArrowDown className='arrowDown'/>
           </button>
           <ColorMenu
             page={page}
@@ -75,7 +85,10 @@ const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, chang
             selection={selection}
           />
         </div>
-        <div className='openMenuBtn'>
+        <div className='menuBtn'>
+          <button className='btn'> 
+            <BsThreeDots/>
+          </button>
           <Menu
             pages={pages}
             firstlist={firstlist}
