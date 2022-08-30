@@ -150,9 +150,14 @@ const BlockStyler=({pages, firstlist, userName, page, block, addBlock, editBlock
     changeMenuStyle(menu);
     setOpenMenu(true);
   };
-  window.onresize=()=>changeBlockStylerStyle;
+  
+  window.onresize=()=>{
+    changeBlockStylerStyle();
+    openMenu && changeMenuStyle(menu);
+    openColor && changeMenuStyle(color);
+    popup.popup && changePopupStyle();
+  };
   const closeMenu =(event:globalThis.MouseEvent)=>{ 
-    if(openMenu){
       const mainMenu =document.getElementById("mainMenu");
       const sideMenu =document.getElementById("sideMenu");
       const mainMenuDomRect =mainMenu?.getClientRects()[0];
@@ -160,14 +165,40 @@ const BlockStyler=({pages, firstlist, userName, page, block, addBlock, editBlock
       const isInMainMenu =detectRange(event, mainMenuDomRect );
       const isInSideMenu =detectRange(event, sideMenuDomRect);
       if(!isInMainMenu && ! isInSideMenu){
-        setOpenMenu(false);
+        setOpenMenu(false)
         setMenuStyle(undefined);
       };
+  };
+  const closeColorMenu=(event:globalThis.MouseEvent)=>{
+    const colorMenuHtml = document.getElementById("blockStylerColor");
+    const colorMenuDomRect = colorMenuHtml?.getClientRects()[0];
+    if(colorMenuDomRect!==undefined){
+      const isInColorMenu =detectRange(event, colorMenuDomRect);
+      if(!isInColorMenu){
+        setOpenColor(false);
+      }
+    }
+  };
+  const closeBlockStyler=(event:globalThis.MouseEvent)=>{
+    const blockStylerDomRect =blockStyler?.getClientRects()[0];
+    if(blockStylerDomRect!==undefined){
+      const isInBlockStyler = detectRange(event, blockStylerDomRect);
+      if(!isInBlockStyler){
+        editBlock(page.id, block);
+        setSelection(null);
+      }
     }
   };
   inner?.addEventListener("click",(event)=>{
-    closeMenu(event);
+      openMenu && closeMenu(event);
+      openColor && closeColorMenu(event);
+      
+      console.log(openMenu, openColor);
   });
+  inner?.addEventListener("dblclick", (event)=>{
+    !openMenu && !openColor && !popup.popup &&
+      closeBlockStyler(event);
+  })
   useEffect(()=>{
     changeBlockStylerStyle();
   },[mainBlockHtml, frameHtml]);
