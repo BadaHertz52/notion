@@ -57,7 +57,7 @@
   z-index: 5;
   .blockFnIcon{
     svg{
-      color:$itemSvg;
+      fill: $itemSvg;
     }
     
     font : {
@@ -143,7 +143,7 @@
   button{
     display: flex;
     align-items: center;
-    color:$itemSvg ;
+    fill: $itemSvg ;
   }
   .subBlocks{
     display: none;

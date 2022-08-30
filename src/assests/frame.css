@@ -264,7 +264,7 @@ a:link, a:active, a:visited {
   font-weight: bolder;
 }
 .blockFn.on .blockFnIcon svg {
-  color: #a3a3a2;
+  fill: #a3a3a2;
 }
 
 .blockFn button:hover,
@@ -337,7 +337,7 @@ a:link, a:active, a:visited {
 .toggle.block button {
   display: flex;
   align-items: center;
-  color: #a3a3a2;
+  fill: #a3a3a2;
 }
 .toggle.block .subBlocks {
   display: none;
@@ -731,7 +731,7 @@ a:link, a:active, a:visited {
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
-  color: #a3a3a2;
+  fill: #a3a3a2;
   height: 100%;
   box-sizing: border-box;
   display: flex;
@@ -1084,7 +1084,7 @@ form button svg {
   margin: 10px;
 }
 .newPageFrame .pageContent_inner button svg {
-  color: #a3a3a2;
+  fill: #a3a3a2;
   margin-right: 10px;
 }
 

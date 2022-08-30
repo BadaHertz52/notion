@@ -415,7 +415,7 @@ a:link, a:active, a:visited {
   margin-left: 3px;
 }
 
-#blockStylerMenu {
+#blockStylerMenu, #blockStylerColor {
   position: absolute;
   z-index: 30;
 }
@@ -1055,7 +1055,7 @@ a:link, a:active, a:visited {
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
-  color: #a3a3a2;
+  fill: #a3a3a2;
   height: 100%;
   box-sizing: border-box;
   display: flex;
@@ -1525,6 +1525,7 @@ a:link, a:active, a:visited {
   z-index: 10;
   border-radius: 8px;
   box-shadow: 0px 0px 23px -5px #ababab;
+  width: 200px;
   overflow-y: scroll;
   height: 380px;
   color: initial;
@@ -2968,7 +2969,7 @@ a:link, a:active, a:visited {
 .sideBar .itemInner svg {
   font-size: 18px;
   font-weight: bolder;
-  color: #a3a3a2;
+  fill: #a3a3a2;
 }
 .sideBar .list .itemInner {
   justify-content: space-between;
@@ -2989,7 +2990,7 @@ a:link, a:active, a:visited {
   width: -moz-fit-content;
   width: fit-content;
   font-size: 12px;
-  color: #a3a3a2;
+  fill: #a3a3a2;
 }
 .sideBar .sideBarPageFn.on button svg {
   width: -webkit-fit-content;
@@ -2998,7 +2999,7 @@ a:link, a:active, a:visited {
   margin-right: 0;
 }
 .sideBar .sideBarBtn {
-  color: #a3a3a2;
+  fill: #a3a3a2;
   font-weight: bolder;
   font-size: 20px;
 }
@@ -3086,7 +3087,7 @@ a:link, a:active, a:visited {
   margin-bottom: 10px;
   font-size: 11px;
   font-weight: 500;
-  color: #a3a3a2;
+  fill: #a3a3a2;
 }
 .sideBar .srcoller .list .page {
   width: 100%;
@@ -3184,7 +3185,7 @@ a:link, a:active, a:visited {
   align-items: center;
 }
 .sideBar .addNewPageBtn button svg {
-  color: #a3a3a2;
+  fill: #a3a3a2;
   flex-grow: 0;
   flex-shrink: 0;
   margin-right: 8px;
@@ -4247,4 +4248,8 @@ body {
 }
 #inner div, #inner button {
   color: rgb(55, 54, 47);
+}
+
+.editor {
+  overflow-y: hidden;
 }/*# sourceMappingURL=main.css.map */
