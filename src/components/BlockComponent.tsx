@@ -343,7 +343,26 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
   const onSelectContents =(event:SyntheticEvent<HTMLDivElement>)=>{
     const targetBlock = findTargetBlock(event)
     const selectedContent =window.getSelection()?.getRangeAt(0).toString();
+    const contents =targetBlock.contents;
     if(selectedContent!==undefined){
+      const startIndex = contents.indexOf(selectedContent);
+      const lastIndex= startIndex+ (selectedContent.length-1);
+      const changedContent= `<span style="background:#BDE6F1">${selectedContent}</span>`;
+      const pre = contents.slice(0, startIndex);
+        if(lastIndex === selectedContent.length-1){
+          const newContents = `${pre}${changedContent}`;
+          editBlock(page.id, {
+            ...targetBlock,
+            contents: newContents
+          });
+        }else{
+          const after = contents.slice(lastIndex+1);
+          const newContents =`${pre}${changedContent}${after}`;
+          editBlock(page.id, {
+            ...targetBlock,
+            contents: newContents
+          });
+        }
       setSelection({
         block:targetBlock,
         selectedContent:selectedContent
