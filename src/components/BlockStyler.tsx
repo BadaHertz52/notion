@@ -16,8 +16,7 @@ type BlockStylerProps = MenuAndBlockStylerCommonProps& {
   setPopupStyle:Dispatch<React.SetStateAction<React.CSSProperties | undefined>>,
   setCommandTargetBlock: React.Dispatch<React.SetStateAction<Block | null>>
 }
-const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage,popup,setPopup, setCommentBlock,setTargetPageId,selection,setSelection, openTemplates, setPopupStyle, setCommandTargetBlock}:BlockStylerProps)=>{
-  const block =selection.block;
+const BlockStyler=({pages, firstlist, userName, page, block, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage,popup,setPopup, setCommentBlock,setTargetPageId,selection,setSelection, openTemplates, setPopupStyle, setCommandTargetBlock}:BlockStylerProps)=>{
   const bold="bold";
   const initial="initial";
   const italic= "italic";
