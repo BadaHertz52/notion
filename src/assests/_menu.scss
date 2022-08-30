@@ -75,6 +75,7 @@
 }
 .menu_color{
   @include popupMenu;
+  width: 200px;
   overflow-y: scroll;
   height: 380px;
   color: initial;
