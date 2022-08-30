@@ -63,6 +63,9 @@ const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, chang
   const [openLink, setOpenLink]=useState<boolean>(false);
   const [openMenu, setOpenMenu]=useState<boolean>(false);
   const [openColor, setOpenColor]=useState<boolean>(false);
+  const color ="color";
+  const menu ="menu";
+  type menuType =typeof color| typeof menu ;
   const changeBlockStylerStyle=()=>{
     if(mainBlockHtml!==null && mainBlockHtml!==undefined && frameHtml!==undefined && frameHtml!==null){
       const blockDomRect= mainBlockHtml.getClientRects()[0];
@@ -116,18 +119,36 @@ const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, chang
     });
     setSelection(null);
   };
-  const changeMenuStyle=()=>{
+
+  const changeMenuStyle=(param:menuType)=>{
     if(blockStyler!==null && frameHtml !== null && frameHtml!==undefined){
       const blockStylerDomRect =blockStyler.getClientRects()[0];
       const frameHtmlDomRect= frameHtml.getClientRects()[0];
-      const style :CSSProperties ={
-        top: ` ${blockStylerDomRect.top - 50 - frameHtmlDomRect.left}px`,
-        left: `${blockStylerDomRect.right - frameHtmlDomRect.left- 240}px`
-      };
-      setMenuStyle(style);
+      const top =` ${blockStylerDomRect.top - 50 - frameHtmlDomRect.top}px`
+      if(param === menu){
+        const style :CSSProperties ={
+          top: top,
+          left:`${blockStylerDomRect.right - frameHtmlDomRect.left- 240}px`  
+        };
+        setMenuStyle(style);
+      }else{
+        const colorBtnHtml =blockStyler.getElementsByClassName("colorBtn")[0];
+        const colorBtnHtmlDomRect= colorBtnHtml.getClientRects()[0];
+        const style:CSSProperties ={
+          top :`${colorBtnHtmlDomRect.bottom- frameHtmlDomRect.top + colorBtnHtmlDomRect.height + 16}px`,
+          left: `${blockStylerDomRect.right-frameHtmlDomRect.left -200 }px`
+        };
+        setMenuStyle(style);
+      }
+
     }
   };
+  const onClickColorBtn=()=>{
+    changeMenuStyle(color);
+    setOpenColor(true);
+  };
   const onClickMenuBtn=()=>{
+    changeMenuStyle(menu);
     setOpenMenu(true);
   };
   window.onresize=()=>changeBlockStylerStyle;
@@ -158,6 +179,7 @@ const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, chang
       style={blockStylerStyle}
     >
       <div className='inner'>
+
         <button 
           className='typeBtn btn'
           onMouseDown={changePopupStyle}
@@ -193,13 +215,15 @@ const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, chang
             S
           </button>
         </div>
-        <button className='colorBtn btn'>
+        <button 
+          className='colorBtn btn'
+          onClick={onClickColorBtn}
+        >
             A
             <IoIosArrowDown className='arrowDown'/>
         </button>
         <button 
           className='menuBtn btn'
-          onMouseDown={changeMenuStyle}
           onClick={onClickMenuBtn}
         >
             <BsThreeDots/>
@@ -212,12 +236,18 @@ const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, chang
       </div>
     }
       {openColor &&
-            <ColorMenu
+      <div 
+        id="blockStylerColor"
+        style={menuStyle}
+      >
+          <ColorMenu
             page={page}
             block={selection.block}
             editBlock={editBlock}
             selection={selection}
           />
+      </div>
+
       }
       {openMenu&&
       <div 
