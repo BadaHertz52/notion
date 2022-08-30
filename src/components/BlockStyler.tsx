@@ -93,6 +93,7 @@ const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, chang
       popup:true,
       what:"popupCommand"
     });
+    block !=null&&
     setCommandTargetBlock(block);
   };
   const changeCommentStyle =()=>{
@@ -132,10 +133,13 @@ const BlockStyler=({pages, firstlist, userName, page, addBlock, editBlock, chang
   window.onresize=()=>changeBlockStylerStyle;
   const closeMenu =(event:globalThis.MouseEvent)=>{ 
     if(openMenu){
-      const blockStylerMenu =document.getElementById("blockStylerMenu");
-      const blockStylerMenuDomRect =blockStylerMenu?.getClientRects()[0];
-      const isInner =detectRange(event, blockStylerMenuDomRect );
-      if(!isInner){
+      const mainMenu =document.getElementById("mainMenu");
+      const sideMenu =document.getElementById("sideMenu");
+      const mainMenuDomRect =mainMenu?.getClientRects()[0];
+      const sideMenuDomRect =sideMenu?.getClientRects()[0];
+      const isInMainMenu =detectRange(event, mainMenuDomRect );
+      const isInSideMenu =detectRange(event, sideMenuDomRect);
+      if(!isInMainMenu && ! isInSideMenu){
         setOpenMenu(false);
         setMenuStyle(undefined);
       };
