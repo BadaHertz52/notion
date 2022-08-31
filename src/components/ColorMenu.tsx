@@ -38,7 +38,7 @@ const ColorInform=({color ,background, colorName ,page, block ,editBlock, templa
       const targetBlock =selection.block;
       const selectedHtml =document.querySelector(".selected");
       selectedHtml?.classList.add(className);
-      const newBlock = getContent(targetBlock, false);
+      const newBlock = getContent(targetBlock);
       editBlock(page.id, newBlock);
         const newSelection :selectionType ={
           block:newBlock

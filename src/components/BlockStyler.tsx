@@ -232,7 +232,7 @@ const BlockStyler=({pages, firstlist, userName, page, block, addBlock, editBlock
           // 변경된 내용이 있고, selected 만 제거하면 되는 경우 
           const selectedHtml =document.querySelector(".selected");
           selectedHtml?.classList.remove("selected");
-          const editedBlock = getContent(selection.block, false);
+          const editedBlock = getContent(selection.block);
           editBlock(page.id, editedBlock);          
         }
         setSelection(null);
