@@ -1,4 +1,4 @@
-import React, { Dispatch,MouseEvent,SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { BsChatLeftText, BsThreeDots } from 'react-icons/bs';
 import { IoIosArrowDown } from 'react-icons/io';
 import {ImArrowUpRight2} from 'react-icons/im';
@@ -17,6 +17,9 @@ type BlockStylerProps = MenuAndBlockStylerCommonProps& {
   setCommandTargetBlock: React.Dispatch<React.SetStateAction<Block | null>>
 }
 const BlockStyler=({pages, firstlist, userName, page, block, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage,popup,setPopup, setCommentBlock,setTargetPageId,selection,setSelection, openTemplates, setPopupStyle, setCommandTargetBlock}:BlockStylerProps)=>{
+  const changeStart =useRef<boolean>(false);
+  const change =useRef<boolean>(false);
+  const originBlock =useRef<Block|null>(null);
   const bold="bold";
   const initial="initial";
   const italic= "italic";
@@ -184,11 +187,25 @@ const BlockStyler=({pages, firstlist, userName, page, block, addBlock, editBlock
     if(blockStylerDomRect!==undefined){
       const isInBlockStyler = detectRange(event, blockStylerDomRect);
       if(!isInBlockStyler){
-        editBlock(page.id, block);
+        if(!change.current && originBlock.current!==null){
+          editBlock(page.id, originBlock.current);
+        };
         setSelection(null);
       }
     }
   };
+  useEffect(()=>{
+    if(selection !==null){
+        if(changeStart.current){
+          change.current =true
+        }else{
+          originBlock.current = selection.block;
+          changeStart.current = true;
+        };
+    }else{
+      changeStart.current= false
+    }
+  },[selection])
   inner?.addEventListener("click",(event)=>{
       openMenu && closeMenu(event);
       openColor && closeColorMenu(event);
