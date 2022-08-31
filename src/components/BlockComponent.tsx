@@ -80,31 +80,32 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
 
   const showBlockFn=(event: MouseEvent)=>{
     closeMenu(event)
-    const blockHtml =document.getElementById(`block_${block.id}`) as HTMLElement;
-    const mainBlock= blockHtml.querySelector('.mainBlock');
-    const domRect =mainBlock?.getClientRects()[0];
-    const editor = document.getElementsByClassName("editor")[0] ;
-    const blockFn =templateHtml ==null? editor.querySelector(".blockFn"): templateHtml.querySelector('.blockFn');
-    blockFn?.classList.toggle("on");
-    blockFn?.classList.contains("on")?
-    sessionStorage.setItem("blockFnTargetBlock", JSON.stringify(block))
-    :
-    sessionStorage.removeItem("blockFnTargetBlock");
-    if(domRect!==undefined){
-      if(templateHtml==null){
-        const editorDomRect =editor.getClientRects()[0];
-        const top =domRect.top +editor.scrollTop ;
-        const left = domRect.x - editorDomRect.x - 45;
-        const blockFnStyle =`top:${top}px; left:${left}px`;
-        blockFn?.setAttribute("style",blockFnStyle);
-      }else{
-        const templateDomRect =templateHtml.getClientRects()[0];
-          const top = domRect.top - templateDomRect.top ;
-          const left =domRect.x - templateDomRect.x -45;
-          blockFn?.setAttribute("style", `top:${top}px; left:${left}px`);
+    const blockHtml =document.getElementById(`block_${block.id}`);
+    if(blockHtml!==null){
+      const mainBlock= blockHtml.querySelector('.mainBlock');
+      const domRect =mainBlock?.getClientRects()[0];
+      const editor = document.getElementsByClassName("editor")[0] ;
+      const blockFn =templateHtml ==null? editor.querySelector(".blockFn"): templateHtml.querySelector('.blockFn');
+      blockFn?.classList.toggle("on");
+      blockFn?.classList.contains("on")?
+      sessionStorage.setItem("blockFnTargetBlock", JSON.stringify(block))
+      :
+      sessionStorage.removeItem("blockFnTargetBlock");
+      if(domRect!==undefined){
+        if(templateHtml==null){
+          const editorDomRect =editor.getClientRects()[0];
+          const top =domRect.top +editor.scrollTop ;
+          const left = domRect.x - editorDomRect.x - 45;
+          const blockFnStyle =`top:${top}px; left:${left}px`;
+          blockFn?.setAttribute("style",blockFnStyle);
+        }else{
+          const templateDomRect =templateHtml.getClientRects()[0];
+            const top = domRect.top - templateDomRect.top ;
+            const left =domRect.x - templateDomRect.x -45;
+            blockFn?.setAttribute("style", `top:${top}px; left:${left}px`);
+        }
       }
-
-    }
+    } 
   };
 
   const onChangeContents=(event:ContentEditableEvent)=>{
