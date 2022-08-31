@@ -349,21 +349,12 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
       const lastIndex= startIndex+ (selectedContent.length-1);
       const changedContent= `<span class="selected">${selectedContent}</span>`;
       const pre = contents.slice(0, startIndex);
-      let newContents ="";
-        if(lastIndex === selectedContent.length-1){
-          newContents = `${pre}${changedContent}`;
+      const after = contents.slice(lastIndex+1);
+      const newContents =`${pre}${changedContent}${after}`;
           editBlock(page.id, {
             ...targetBlock,
             contents: newContents
           });
-        }else{
-          const after = contents.slice(lastIndex+1);
-          newContents =`${pre}${changedContent}${after}`;
-          editBlock(page.id, {
-            ...targetBlock,
-            contents: newContents
-          });
-        }
       setSelection({
         block:targetBlock,
         selectedContent:selectedContent,
