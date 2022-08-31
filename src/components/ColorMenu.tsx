@@ -29,7 +29,39 @@ const StyleColorInform =styled.span`
   border-radius: 20%;
 `; 
 
-const ColorInform=({color ,background, colorName ,page, block ,editBlock, templateHtml,  selection}:ColorInformProps)=>{
+const ColorInform=({color ,background, colorName ,page, block ,editBlock, templateHtml,  selection, setSelection}:ColorInformProps)=>{
+  const changeContentStyle=(colorName:string)=>{
+    if(selection !==null &&setSelection !==null ){
+      const className= color===undefined? `bg_${colorName.toLocaleLowerCase()}`:
+      `color_${colorName.toLocaleLowerCase()}`
+      const selectedContent= selection.selectedContent;
+      const changedConent= selection.changedContent;
+      const targetBlock =selection.block;
+      const newContents =selection.newContents;
+      const content= `<span class=${className}>${selectedContent}</span>`; 
+      const changedIndex= newContents.indexOf(changedConent);
+      const lastIndex= changedIndex + changedConent.length -1;
+      
+      const pre = newContents.slice(0, changedIndex);
+      const after =newContents.slice(lastIndex+1);
+      const newBlockContents= `${pre}${content}${after}`;
+  
+      const newBlock:Block ={
+        ...targetBlock,
+        contents:newBlockContents,
+        editTime:JSON.stringify(Date.now())
+      };
+      editBlock(page.id, newBlock);
+      const newSelection :selectionType ={
+        block:newBlock,
+        selectedContent: selection.selectedContent,
+        changedContent: content,
+        newContents: newBlockContents
+      };
+      setSelection(newSelection);
+    }
+
+  };
   const changeColor =()=>{
     if(color ===undefined && background !== undefined ){
       setTemplateItem(templateHtml,page);
@@ -44,8 +76,9 @@ const ColorInform=({color ,background, colorName ,page, block ,editBlock, templa
         };
         editBlock(page.id, newBlock)
       }else{
-
-      }
+          changeContentStyle(colorName);
+        }
+        
     }
     if(color !== undefined && background === undefined){
       ///change color
@@ -59,7 +92,7 @@ const ColorInform=({color ,background, colorName ,page, block ,editBlock, templa
         };
         editBlock(page.id, newBlock)
       }else{
-
+        changeContentStyle(colorName);
       }
     }
   };
