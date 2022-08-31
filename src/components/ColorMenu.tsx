@@ -2,6 +2,7 @@ import React, { Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
 import { BgColorType, bg_blue, bg_default, bg_green, bg_grey, bg_yellow, bg_pink, Block, blue, ColorType, defaultColor, green, grey, orange, Page, red } from '../modules/notion';
 import { setTemplateItem } from './BlockComponent';
+import { getContent } from './BlockStyler';
 import { selectionType } from './Frame';
 
 type StyleColorInformProps ={
@@ -34,33 +35,16 @@ const ColorInform=({color ,background, colorName ,page, block ,editBlock, templa
     if(selection !==null &&setSelection !==null ){
       const className= color===undefined? `bg_${colorName.toLocaleLowerCase()}`:
       `color_${colorName.toLocaleLowerCase()}`
-      const selectedContent= selection.selectedContent;
-      const changedConent= selection.changedContent;
       const targetBlock =selection.block;
-      const newContents =selection.newContents;
-      const content= `<span class=${className}>${selectedContent}</span>`; 
-      const changedIndex= newContents.indexOf(changedConent);
-      const lastIndex= changedIndex + changedConent.length -1;
-      
-      const pre = newContents.slice(0, changedIndex);
-      const after =newContents.slice(lastIndex+1);
-      const newBlockContents= `${pre}${content}${after}`;
-  
-      const newBlock:Block ={
-        ...targetBlock,
-        contents:newBlockContents,
-        editTime:JSON.stringify(Date.now())
-      };
+      const selectedHtml =document.querySelector(".selected");
+      selectedHtml?.classList.add(className);
+      const newBlock = getContent(targetBlock, false);
       editBlock(page.id, newBlock);
-      const newSelection :selectionType ={
-        block:newBlock,
-        selectedContent: selection.selectedContent,
-        changedContent: content,
-        newContents: newBlockContents
+        const newSelection :selectionType ={
+          block:newBlock
+        };
+        setSelection(newSelection);
       };
-      setSelection(newSelection);
-    }
-
   };
   const changeColor =()=>{
     if(color ===undefined && background !== undefined ){
