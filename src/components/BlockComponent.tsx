@@ -347,6 +347,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
     let originBlock = targetBlock;
     const selectedHtml =document.querySelector(".selected");
     if(selectedHtml!==null){
+      selectedHtml.classList.remove("selected");
       originBlock = getContent(targetBlock);
     };
     const selectedContent =window.getSelection()?.getRangeAt(0).toString();
