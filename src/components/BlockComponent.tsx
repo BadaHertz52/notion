@@ -357,10 +357,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
             contents: newContents
           });
       setSelection({
-        block:targetBlock,
-        selectedContent:selectedContent,
-        changedContent:changedContent,
-        newContents: newContents
+        block:targetBlock
       });
     }
   };

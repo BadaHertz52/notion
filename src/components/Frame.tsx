@@ -63,21 +63,9 @@ export type FrameProps = Template_Frame_SAME_Props &{
 };
 export type selectionType={
   /**
-   * origin block data
+   * origin block data (수정이전에 block data)
    */
-  block:Block,
-  /**
-   * 선택된 content
-   */
-  selectedContent:string,
-  /**
-   * block 의 contents 중, 선택된 content를 화면상에 표시하기위해 수정된 내용
-   */
-  changedContent:string,
-  /**
-   * 선택된 content를 표시하기 위해 변경된 block.contents
-   */
-  newContents:string,
+  block:Block
 }
 const basicPageCover ='https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assests/img/artificial-turf-g6e884a1d4_1920.jpg';;
 
