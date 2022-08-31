@@ -224,10 +224,15 @@ const BlockStyler=({pages, firstlist, userName, page, block, addBlock, editBlock
     if(blockStylerDomRect!==undefined){
       const isInBlockStyler = detectRange(event, blockStylerDomRect);
       if(!isInBlockStyler){
+        
         if(!change.current && originBlock.current!==null){
+          // 변경된 내용이 없는 경우 
           editBlock(page.id, originBlock.current);
         }else{
-          const editedBlock = getContent(selection.block, true);
+          // 변경된 내용이 있고, selected 만 제거하면 되는 경우 
+          const selectedHtml =document.querySelector(".selected");
+          selectedHtml?.classList.remove("selected");
+          const editedBlock = getContent(selection.block, false);
           editBlock(page.id, editedBlock);          
         }
         setSelection(null);
