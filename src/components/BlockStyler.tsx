@@ -11,10 +11,9 @@ import { detectRange } from './BlockFn';
 /**
  *  select 하거나, 이를 취소한 경우, 변경된 블럭의 contents를 가져오는  함수로 만약 BlockStyler로 스타일을 변경하다면, 스타일 변경 후에 해당 함수를 사용해야 한다.
  * @param targetBlock  
- * @param cancleSelected select를 취소하는 경우라면 true, 아닌면 false
  * @returns 
  */
-export const getContent=(targetBlock:Block, cancleSelected:boolean):Block=>{
+export const getContent=(targetBlock:Block):Block=>{
   const contentEditableHtml =document.getElementById(`${targetBlock.id}_contents`)?.firstElementChild;
   let newBlock =targetBlock;
 if(contentEditableHtml!==null&& contentEditableHtml!==undefined){
@@ -28,12 +27,7 @@ if(contentEditableHtml!==null&& contentEditableHtml!==undefined){
     //span
     if(c.nodeType===1){
       const element =c as Element; 
-      const text =element.textContent as string
-      cancleSelected ?
-      contentsArry.push(text)
-      :
       contentsArry.push(element.outerHTML);
-      console.log("ddd", cancleSelected? text: element.outerHTML);
     }
   });
   const newBlockContents =contentsArry.join('');
