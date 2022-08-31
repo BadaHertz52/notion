@@ -147,7 +147,8 @@
         display: block;
         margin: 10px;
         svg{
-          fill: $itemSvg;
+          color: $itemSvg;
+      fill: $itemSvg;
           margin-right: 10px;
         }
       }

@@ -90,6 +90,7 @@
         size:18px;
         weight:bolder;
       }
+      color: $itemSvg;
       fill: $itemSvg;
     }
   }
@@ -111,6 +112,7 @@
     button{
       width: fit-content;
       font-size: 12px;
+      color: $itemSvg;
       fill: $itemSvg;
       svg{
         width: fit-content;
@@ -120,7 +122,8 @@
   }
   //--sideBarBtn
   .sideBarBtn{
-    fill: $itemSvg;
+    color: $itemSvg;
+      fill: $itemSvg;
     font-weight: bolder;
     font-size: 20px;
     svg{
@@ -210,6 +213,7 @@
         size: 11px;
         weight:500;
       }
+      color: $itemSvg;
       fill: $itemSvg;
 
     }
@@ -317,7 +321,8 @@
       display: flex;
       align-items: center;
       svg{
-        fill: $itemSvg;
+        color: $itemSvg;
+      fill: $itemSvg;
         flex-grow: 0;
         flex-shrink: 0;
         margin-right: 8px;
