@@ -275,6 +275,7 @@ const BlockStyler=({pages, firstlist, userName, page, block, addBlock, editBlock
             block={selection.block}
             editBlock={editBlock}
             selection={selection}
+            setSelection ={setSelection}
           />
       </div>
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
 import { BgColorType, bg_blue, bg_default, bg_green, bg_grey, bg_yellow, bg_pink, Block, blue, ColorType, defaultColor, green, grey, orange, Page, red } from '../modules/notion';
 import { setTemplateItem } from './BlockComponent';
@@ -16,7 +16,8 @@ type ColorInformProps ={
   block:Block,
   editBlock:(pageId: string, block: Block) => void,
   templateHtml:HTMLElement|null,
-  selection:selectionType|null
+  selection:selectionType|null,
+  setSelection: Dispatch<SetStateAction<selectionType | null>>|null
 };
 const StyleColorInform =styled.span`
   color:${(props:StyleColorInformProps) =>props.color !== undefined? props.color: "initial"};
@@ -91,8 +92,9 @@ type ColorMenuProps = {
   block:Block,
   editBlock : (pageId: string, block: Block) => void,
   selection:selectionType|null,
+  setSelection:Dispatch<SetStateAction<selectionType | null>>|null
 };
-const ColorMenu=({page, block, editBlock, selection}:ColorMenuProps)=>{
+const ColorMenu=({page, block, editBlock, selection, setSelection}:ColorMenuProps)=>{
   const templateHtml=document.getElementById("template");
   return(
     <div className="menu_color"  >
@@ -108,6 +110,7 @@ const ColorMenu=({page, block, editBlock, selection}:ColorMenuProps)=>{
             editBlock={editBlock}
             templateHtml={templateHtml}
             selection={selection}
+            setSelection={setSelection}
           />
           <ColorInform
             colorName='Grey'
@@ -118,6 +121,7 @@ const ColorMenu=({page, block, editBlock, selection}:ColorMenuProps)=>{
             editBlock={editBlock}
             templateHtml={templateHtml}
             selection={selection}
+            setSelection={setSelection}
           />
           <ColorInform
             colorName='Orange'
@@ -128,6 +132,7 @@ const ColorMenu=({page, block, editBlock, selection}:ColorMenuProps)=>{
             editBlock={editBlock}
             templateHtml={templateHtml}
             selection={selection}
+            setSelection={setSelection}
           />
           <ColorInform
             colorName='Green'
@@ -138,6 +143,7 @@ const ColorMenu=({page, block, editBlock, selection}:ColorMenuProps)=>{
             editBlock={editBlock}
             templateHtml={templateHtml}
             selection={selection}
+            setSelection={setSelection}
           />
           <ColorInform
             colorName='Blue'
@@ -148,6 +154,7 @@ const ColorMenu=({page, block, editBlock, selection}:ColorMenuProps)=>{
             editBlock={editBlock}
             templateHtml={templateHtml}
             selection={selection}
+            setSelection={setSelection}
           /> 
           <ColorInform
             colorName='Red'
@@ -158,6 +165,7 @@ const ColorMenu=({page, block, editBlock, selection}:ColorMenuProps)=>{
             editBlock={editBlock}
             templateHtml={templateHtml}
             selection={selection}
+            setSelection={setSelection}
           />
         </div>
       </section>
@@ -173,6 +181,7 @@ const ColorMenu=({page, block, editBlock, selection}:ColorMenuProps)=>{
             editBlock={editBlock}
             templateHtml={templateHtml}
             selection={selection}
+            setSelection={setSelection}
           />
           <ColorInform
             colorName='Grey'
@@ -183,6 +192,7 @@ const ColorMenu=({page, block, editBlock, selection}:ColorMenuProps)=>{
             editBlock={editBlock}
             templateHtml={templateHtml}
             selection={selection}
+            setSelection={setSelection}
           />
           <ColorInform
             colorName='Yellow'
@@ -193,6 +203,7 @@ const ColorMenu=({page, block, editBlock, selection}:ColorMenuProps)=>{
             editBlock={editBlock}
             templateHtml={templateHtml}
             selection={selection}
+            setSelection={setSelection}
             />
           <ColorInform
             colorName='Green'
@@ -203,6 +214,7 @@ const ColorMenu=({page, block, editBlock, selection}:ColorMenuProps)=>{
             editBlock={editBlock}
             templateHtml={templateHtml}
             selection={selection}
+            setSelection={setSelection}
           />
           <ColorInform
             colorName='Blue'
@@ -213,6 +225,7 @@ const ColorMenu=({page, block, editBlock, selection}:ColorMenuProps)=>{
             editBlock={editBlock}
             templateHtml={templateHtml}
             selection={selection}
+            setSelection={setSelection}
           />
           <ColorInform
             colorName='Pink'
@@ -223,6 +236,7 @@ const ColorMenu=({page, block, editBlock, selection}:ColorMenuProps)=>{
             editBlock={editBlock}
             templateHtml={templateHtml}
             selection={selection}
+            setSelection={setSelection}
           />
         </div>
       </section>

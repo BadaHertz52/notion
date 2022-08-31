@@ -343,6 +343,7 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
             block={block}
             editBlock={editBlock}
             selection={null}
+            setSelection={null}
           />
         }
         {turnInToPage &&
