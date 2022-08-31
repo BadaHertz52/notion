@@ -288,6 +288,58 @@ a:link, a:active, a:visited {
   color: #B9B8B6;
 }
 
+.selected {
+  background-color: #BDE6F1;
+}
+
+.bg_default {
+  background-color: initial;
+}
+
+.bg_grey {
+  background-color: #e0e0e0;
+}
+
+.bg_yellow {
+  background-color: #fff9c4;
+}
+
+.bg_green {
+  background-color: #ebffd7;
+}
+
+.bg_blue {
+  background-color: #e3f2fd;
+}
+
+.bg_pink {
+  background-color: #fce4ec;
+}
+
+.color_default {
+  color: initial;
+}
+
+.color_grey {
+  color: #bdbdbd;
+}
+
+.color_orange {
+  color: #ffa726;
+}
+
+.color_green {
+  color: #00701a;
+}
+
+.color_blue {
+  color: #1565c0;
+}
+
+.color_red {
+  color: #d32f2f;
+}
+
 .h1 .mainBlock .contentEditable,
 .h2 .mainBlock .contentEditable,
 .h3 .mainBlock .contentEditable {
