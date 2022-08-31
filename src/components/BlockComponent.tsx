@@ -3,6 +3,7 @@ import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import { IoChatboxOutline } from 'react-icons/io5';
 import { MdOutlinePhotoSizeSelectActual } from 'react-icons/md';
 import {  Block,BlockType,blockTypes,findBlock,findParentBlock,findPreviousBlockInDoc,makeNewBlock,Page, toggle } from '../modules/notion';
+import { getContent } from './BlockStyler';
 import { Command, selectionType } from './Frame';
 import ImageContent from './ImageContent';
 export   const setTemplateItem=(templateHtml:HTMLElement|null, page:Page)=>{
@@ -342,9 +343,14 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
     };
   };
   const onSelectContents =(event:SyntheticEvent<HTMLDivElement>)=>{
-    const targetBlock = findTargetBlock(event)
+    const targetBlock = findTargetBlock(event);
+    let originBlock = targetBlock;
+    const selectedHtml =document.querySelector(".selected");
+    if(selectedHtml!==null){
+      originBlock = getContent(targetBlock, true);
+    };
     const selectedContent =window.getSelection()?.getRangeAt(0).toString();
-    const contents =targetBlock.contents;
+    const contents =originBlock.contents;
     if(selectedContent!==undefined){
       const startIndex = contents.indexOf(selectedContent);
       const lastIndex= startIndex+ (selectedContent.length-1);
@@ -353,7 +359,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
       const after = contents.slice(lastIndex+1);
       const newContents =`${pre}${changedContent}${after}`;
           editBlock(page.id, {
-            ...targetBlock,
+            ...originBlock,
             contents: newContents
           });
       setSelection({
