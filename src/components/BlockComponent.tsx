@@ -1,4 +1,4 @@
-import React, { Dispatch, MouseEvent, SetStateAction, SyntheticEvent, useEffect, useRef} from 'react';
+import React, { Dispatch, DragEvent, MouseEvent, SetStateAction, SyntheticEvent, useEffect, useRef, useState} from 'react';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import { IoChatboxOutline } from 'react-icons/io5';
 import { MdOutlinePhotoSizeSelectActual } from 'react-icons/md';
@@ -69,7 +69,6 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
   const contentEditableRef= useRef<HTMLElement>(null);
   const possibleBlocks = page.blocks.filter((block:Block)=> block.type !=="image media" && block.type !=="page");
   const possibleBlocksId = possibleBlocks.map((block:Block)=> block.id );
-
   const findTargetBlock =(event:ContentEditableEvent|React.KeyboardEvent<HTMLDivElement>|MouseEvent| SyntheticEvent<HTMLDivElement>):Block=>{
     const target =event.currentTarget.parentElement as HTMLElement;
     const targetId= target.id;
@@ -341,32 +340,79 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
         default:
         break;
     };
-  };
+  };  
   const onSelectContents =(event:SyntheticEvent<HTMLDivElement>)=>{
     const targetBlock = findTargetBlock(event);
     let originBlock = targetBlock;
     const selectedHtml =document.querySelector(".selected");
+    let newContents ="";
+    console.log("selection", window.getSelection());
     if(selectedHtml!==null){
       selectedHtml.classList.remove("selected");
       originBlock = getContent(targetBlock);
     };
-    const selectedContent =window.getSelection()?.getRangeAt(0).toString();
     const contents =originBlock.contents;
-    if(selectedContent!==undefined){
-      const startIndex = contents.indexOf(selectedContent);
-      const lastIndex= startIndex+ (selectedContent.length-1);
-      const changedContent= `<span class="selected">${selectedContent}</span>`;
-      const pre = contents.slice(0, startIndex);
-      const after = contents.slice(lastIndex+1);
-      const newContents =`${pre}${changedContent}${after}`;
-          editBlock(page.id, {
-            ...originBlock,
-            contents: newContents
-          });
-      setSelection({
-        block:targetBlock
-      });
-    }
+    const selection = window.getSelection();
+    const selectedContent =window.getSelection()?.getRangeAt(0).toString();
+    const changedContent= `<span class="selected">${selectedContent}</span>`;
+    const anchorNode= selection?.anchorNode;
+    const focusNode =selection?.focusNode;
+      if(selection !==null&& anchorNode!==null && anchorNode!==undefined && focusNode!==null && focusNode!==undefined){
+        const anchorNodeParent =anchorNode.parentElement ;
+        const focusNodeParent =focusNode.parentElement ;
+        if(anchorNodeParent === focusNodeParent && selectedContent !==undefined){ 
+          if(targetBlock.contents.includes("<span>")){
+            // textnode 사이에 span 있는 경우
+            const anchorNextSpan = anchorNode.nextSibling as ChildNode;
+            const focusPreSpan =focusNode.previousSibling as ChildNode;
+            if(anchorNextSpan === focusPreSpan){
+
+            }else{
+
+            }
+          }else{
+            
+            const startIndex = contents.indexOf(selectedContent);
+            const lastIndex= startIndex+ (selectedContent.length-1);
+            const changedContent= `<span class="selected">${selectedContent}</span>`;
+            const pre = contents.slice(0, startIndex);
+            const after = contents.slice(lastIndex+1);
+            newContents =`${pre}${changedContent}${after}`;
+            console.log( "newContents", newContents);
+          }
+
+        }else{
+          const anchorValue =anchorNode.textContent as string;
+          const focusValue =focusNode.textContent as string;
+          console.log("anchorNode", anchorNode, anchorValue ,"focusNode", focusNode, focusValue);
+          if(anchorNodeParent?.nodeName === "SPAN"){
+            const anchorNodeParentValue = anchorNodeParent.outerHTML; 
+            const anchorParentClass= anchorNodeParent.className ;
+            const startIndex = contents.indexOf(anchorNodeParentValue);
+            const endIndex = contents.indexOf(focusValue.slice(selection.focusOffset) ); 
+            const pre = contents.slice(0, startIndex);
+            const after =contents.slice(endIndex);
+            newContents = selection.anchorOffset===0?`${pre}${changedContent}${after}`:`${pre}<span class=${anchorParentClass}>${anchorValue.slice(0, selection.anchorOffset)}</span>${changedContent}${after}`;
+            console.log("pre",pre ,"after",after,"newContent", newContents ,"slice",focusValue.slice(selection.focusOffset));
+          }else{
+            const focusParentValue =focusNodeParent?.outerHTML as string;
+            const focusParentClass = focusNodeParent?.className as string ;
+            const startIndex= contents.indexOf(anchorValue.slice( selection.anchorOffset));
+            const endIndex= contents.indexOf(focusParentValue) + focusParentValue.length-1;
+            const pre = contents.slice(0, startIndex);
+            const after =contents.slice(endIndex+1);
+            newContents = selection.focusOffset === focusValue.length ? `${pre}${changedContent}${after}`  :`${pre}${changedContent}<span class="${focusParentClass}">${focusValue.slice(selection.focusOffset+1)}${after}`;
+            console.log(focusParentValue,"pre",pre ,"after",after,"newContent", newContents ,"offset", selection.focusNode, selection.focusOffset, focusValue.length);
+          }
+        };
+      };
+      // editBlock(page.id, {
+      //   ...originBlock,
+      //   contents: newContents
+      // });
+      // setSelection({
+      //   block:targetBlock
+      // });
   };
   function commandChange (event:React.ChangeEvent<HTMLInputElement>){
     setTemplateItem(templateHtml, page);
