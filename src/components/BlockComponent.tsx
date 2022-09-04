@@ -340,7 +340,187 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
         default:
         break;
     };
-  };  
+  }; 
+  /**
+   * block의 contents에서 반복되는 내용의 contents의 index를  보다 정확하게 찾을 수 있도록 해주는 함수 
+   * @param node contentEditable의 childNode
+   * @param block 
+   * @return block.contents에서 node.textContent의 index
+   */
+  const getAccurateIndex=(node:Node, block:Block):{textIndex:number}=>{
+    let totalSentence ="";
+    let stringArray =[];
+    const children = contentEditableRef.current?.childNodes as NodeListOf<Node> | undefined;
+    if(children !==undefined){
+      const childrenArry =Array.from(children);
+      const nodeIndex= childrenArry.indexOf(node);
+      for (let i = 0; i < nodeIndex; i++) {
+        const child = childrenArry[i];
+        if(child.nodeName ==="SPAN"){
+          const spanHtml = node.parentElement?.outerHTML as string;
+          stringArray.push(spanHtml);
+        }else{
+          stringArray.push(node.textContent);
+        }
+      };
+      totalSentence = stringArray.join("");
+    }else{
+      console.log("Can't find contentEditable children")
+    };
+    const textIndex = block.contents.indexOf(totalSentence);
+    return {textIndex: textIndex}
+  };
+  /**
+   * anchorNode로 선택 영역 앞의 부분의 변경된 내용과 contents에서 해당 부분의 index를 가져오는 함수 
+   * @param anchorNode 
+   * @param block 
+   * @returns preChangedContent:선택 영역의 앞의 부분의 변경된 값, selectedIndex: 선택된 영역의 contents에서의 index
+   */ 
+  const getFromAnchorNode=( anchorNode: Node, block:Block, selection:Selection):{preChangedContent:string, selectedStartIndex:number}=>{
+    const contents =block.contents;
+    /**
+     * block.contents 중에서 anchorNode의 앞 부분
+     */
+    let preAnchor :string="";
+    /**
+     * 선택된 영역 앞부분
+     */
+    let preSelection="";
+    /**
+     * block.contents 에서 anchorNode의 index
+     */
+    let anchorStartIndex :number =0;
+    /**
+     * 선택된 영역이 block.contents에서의 index ,
+     *  anchorStartIndex+ anchor에서 선택된 영역의 시작 index
+     */
+    let selectedStartIndex :number =0;
+    const nodeParent = anchorNode.parentElement;
+    if(anchorNode.textContent!==null){
+      /**
+       * anchorNode가 span의 child 인지의 여부에 따라 preSelection 과 selectedStartIndex의 값을 변경하는 함수
+       * @param spanHtml  anchorNode가 span의 child일 경우 span.outerHTML, 아닐 경우 null 
+       */
+      const changeValueByAnchor =(spanHtml:null|string)=>{
+        const text = spanHtml==null? anchorNode.textContent as string : spanHtml;
+         //step 1. preAnchor, anchorStartIndex 
+      if(contents.indexOf(text) === contents.lastIndexOf(text)){
+        // 동일한 내용의 반복이 없는 경우
+        anchorStartIndex= contents.indexOf(text)
+        preAnchor = contents.slice(0, anchorStartIndex);
+      }else{
+        //동일한 내용이 반복되는 경우로 보다 정확한 특정이 필요함 
+        const parentNode =spanHtml ==null? null : anchorNode.parentNode;
+        const anchorIndex= parentNode !==null?  
+                          getAccurateIndex(parentNode, block).textIndex :
+                          getAccurateIndex(anchorNode, block).textIndex;
+
+        preAnchor = contents.slice(0, anchorIndex);
+      };
+      // step 2. preSelection , selectStartIndex
+        /**
+         * anchorNode에서 선택된 영역의 index
+         */
+        const anchorOffset = selection.anchorOffset;
+        /**
+         * anchorNode에서 선택된  부분의 앞 부분
+         */
+        const preSelectionInAnchor =text.slice(0, anchorOffset);
+        preSelection =`${preAnchor}${preSelectionInAnchor}`;
+        selectedStartIndex = anchorStartIndex + anchorOffset ;
+      };
+
+    if(nodeParent?.nodeName==="SPAN"){
+       //anchorNode가 contentEditable의 자식 요소이 span의  textNode 인 경우 
+      const spanHtml =nodeParent.outerHTML;
+      changeValueByAnchor(spanHtml)
+    }else{
+     //anchorNode가 contentEditable의 textNode 인 경우 
+      changeValueByAnchor(null);
+    };
+    }else{
+      console.log(` Error :${anchorNode}'s textContent is null`)
+    };
+    const preChangedContent= nodeParent?.nodeName==="SPAN"? `${preSelection}</span>`: preSelection;
+    console.log("preselection", preSelection, "prechangcontents", preChangedContent ,selectedStartIndex);
+    return({
+      preChangedContent:preChangedContent,
+      selectedStartIndex:selectedStartIndex
+    })
+  };
+
+  const getFromFouseNode=(focusNode: Node, block:Block, selection:Selection):{afterChangedContent:string, selectedEndIndex:number}=>{
+    const contents =block.contents;
+    /**
+     * focusNode 이후의 contents 내용
+     */
+    let afterFocusNode :string="";
+    /**
+     * block.contents에서 focusNode의 index ( selected cotent의 끝의 index)
+     */
+    let focusStartIndex:number =0;
+    /**
+     * 선택된 영역의 뒷부분으로  focusNode에서 선택된 영역의 뒷부분 +afterFocusNode
+     */
+    let afterSelection :string="";
+    /**
+     * block.contents에서 선택된 내용의 끝 위치, focusStartIndex + focus에서 선택된 내용의 끝 index
+     */
+    let selectedEndIndex:number=0;
+
+    const nodeParent = focusNode.parentElement;
+    const nodeText = focusNode.textContent as string;
+    /**
+     * focustNode의 parentNode가 span이냐에 따라 afterSelection 과 selectedEndIndex의 값을 변경하는 함수
+     * @param spanHtml   focusNode가 span의 child일 경우 span.outerHTML, 아닐 경우 null 
+     */
+    const changeValueByFocus=(spanHtml:null|string)=>{
+      // text = nodeText or spanHtml 
+      const text =spanHtml ===null? focusNode.textContent as string : spanHtml;
+      //step1. afterFocus, focusStartIndex
+      if(contents.indexOf(text) === contents.lastIndexOf(text)){
+        //중복x 
+        focusStartIndex= contents.indexOf(text);
+        const focusEndIndex=  focusStartIndex + text.length-1; 
+        afterFocusNode = contents.slice(focusEndIndex+1);
+      }else{
+        //중복0
+        const parentNode = spanHtml !==null? null : focusNode.parentNode;
+        const textIndex= parentNode !==null?  getAccurateIndex(parentNode, block).textIndex :getAccurateIndex(focusNode, block).textIndex ;
+        focusStartIndex = textIndex;
+        const focusEndIndex= textIndex + text.length-1
+        afterFocusNode =contents.slice(focusEndIndex+1);
+      };
+      //step2. afterSelection ,selectedEndIndx 
+        /**
+         * focusNode 에서 selected 된 content가 끝나는 index
+         */
+        const endIndexInFocus= selection.focusOffset -1;
+  
+        selectedEndIndex = focusStartIndex + endIndexInFocus; 
+        /**
+         * span 에서 selected 된 content의 뒷부분
+         */
+        const afterFocusInSpan = text.slice(endIndexInFocus+1);
+  
+        afterSelection =`${afterFocusInSpan}${afterFocusNode}`;
+
+    };
+    if(nodeParent?.nodeName ==="SPAN"){
+      const spanHtml = nodeParent.outerHTML;
+      changeValueByFocus(spanHtml)
+    }else{
+      changeValueByFocus(null);
+    };
+
+    const afterChangedContent :string= nodeParent?.nodeName === "SPAN"? `<span class=${nodeParent?.className}>${afterSelection}`  : afterSelection ;
+    console.log("afterselection", afterSelection, "endindex", selectedEndIndex ,contents[selectedEndIndex]);
+    return({
+      afterChangedContent:afterChangedContent,
+      selectedEndIndex:selectedEndIndex
+    })
+  };
+
   const onSelectContents =(event:SyntheticEvent<HTMLDivElement>)=>{
     const targetBlock = findTargetBlock(event);
     let originBlock = targetBlock;
@@ -355,12 +535,26 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
     const selection = window.getSelection();
     const selectedContent =window.getSelection()?.getRangeAt(0).toString();
     const changedContent= `<span class="selected">${selectedContent}</span>`;
-    const anchorNode= selection?.anchorNode;
-    const focusNode =selection?.focusNode;
+
+    // 수정 ver2 node 수정
+    if(selection !==null){
+      const anchorNode= selection.anchorNode;
+      const focusNode =selection.focusNode;
+      if(anchorNode !==null && focusNode !==null){
+        const {preChangedContent, selectedStartIndex} =getFromAnchorNode(anchorNode, originBlock, selection);
+        const { afterChangedContent,
+        selectedEndIndex} =getFromFouseNode(focusNode, originBlock, selection);
+        
+        const newSelected = contents.slice(selectedStartIndex, selectedEndIndex+1);
+        console.log("newSelected", newSelected);
+      }
+    }
+    /* 수정 ver1
       if(selection !==null&& anchorNode!==null && anchorNode!==undefined && focusNode!==null && focusNode!==undefined){
         const anchorNodeParent =anchorNode.parentElement ;
         const focusNodeParent =focusNode.parentElement ;
         if(anchorNodeParent === focusNodeParent && selectedContent !==undefined){ 
+          // anchorNode. focusNode 
           if(contentEditableRef.current?.querySelector("span")){
             // textnode 사이에 span 있는 경우
             const anchorNextSpan = anchorNode.nextSibling as Element;
@@ -432,6 +626,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
           }
         };
       };
+    */
       // editBlock(page.id, {
       //   ...originBlock,
       //   contents: newContents
@@ -440,6 +635,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
       //   block:targetBlock
       // });
   };
+
   function commandChange (event:React.ChangeEvent<HTMLInputElement>){
     setTemplateItem(templateHtml, page);
     const value = event.target.value;
