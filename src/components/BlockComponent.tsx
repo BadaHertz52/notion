@@ -501,43 +501,66 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
      * block.contents에서 선택된 내용의 끝 위치, focusStartIndex + focus에서 선택된 내용의 끝 index
      */
     let selectedEndIndex:number=0;
-
+    const focusText =focusNode.textContent as string;
     const nodeParent = focusNode.parentElement;
-    const nodeText = focusNode.textContent as string;
     /**
      * focustNode의 parentNode가 span이냐에 따라 afterSelection 과 selectedEndIndex의 값을 변경하는 함수
      * @param spanHtml   focusNode가 span의 child일 경우 span.outerHTML, 아닐 경우 null 
      */
     const changeValueByFocus=(spanHtml:null|string)=>{
       // text = nodeText or spanHtml 
-      const text =spanHtml ===null? focusNode.textContent as string : spanHtml;
+      const text =spanHtml ===null? focusText : spanHtml;
+      console.log("반복확인 focus","반복? :",contents.indexOf(text) !== contents.lastIndexOf(text), focusNode)
       //step1. afterFocus, focusStartIndex
       if(contents.indexOf(text) === contents.lastIndexOf(text)){
         //중복x 
         focusStartIndex= contents.indexOf(text);
         const focusEndIndex=  focusStartIndex + text.length-1; 
         afterFocusNode = contents.slice(focusEndIndex+1);
+        console.log("focus")
       }else{
         //중복0
-        const parentNode = spanHtml !==null? null : focusNode.parentNode;
+        const parentNode = spanHtml ==null? null : focusNode.parentNode;
         const textIndex= parentNode !==null?  getAccurateIndex(parentNode, block).textIndex :getAccurateIndex(focusNode, block).textIndex ;
         focusStartIndex = textIndex;
         const focusEndIndex= textIndex + text.length-1
         afterFocusNode =contents.slice(focusEndIndex+1);
+        console.log("😊text", text, "😊textIndex", textIndex,"🥕focusEndIndex", focusEndIndex ,"contents",contents, contents.length-1, contents[focusEndIndex], "🥕afterFocusNode", afterFocusNode)
       };
       //step2. afterSelection ,selectedEndIndx 
         /**
-         * focusNode 에서 selected 된 content가 끝나는 index
+         * focusNode 에서 selected 된 content가 끝나는 index, focusOffest은 focusNode.textContent에서의 index보다 +1
          */
-        const endIndexInFocus= selection.focusOffset -1;
-  
-        selectedEndIndex = focusStartIndex + endIndexInFocus; 
+        const focusOffset= selection.focusOffset;
         /**
-         * span 에서 selected 된 content의 뒷부분
+         * focusNode.textContent 에서 selected 된 content의 뒷부분
          */
-        const afterFocusInSpan = text.slice(endIndexInFocus+1);
+        let afterOfSelectedInFocus="";
+        if(focusOffset === focusText.length){
+          afterOfSelectedInFocus="";
+          selectedEndIndex =focusStartIndex + text.length-1;
+        }else{
+          if(spanHtml!==null){
+            /**
+             * focusText에서 선택된 부분의 뒷 부분
+             */
+            const afterOfSelectedInFocusText= focusText.slice(focusOffset);
+            /**
+             * spanHtml에서 focusText에서 선택되지 않은 뒷 부분(=afterOfSelectedInFocusText)의 index
+             */
+            const afterOfSelectedInFocusTextIndex= spanHtml.indexOf(afterOfSelectedInFocusText);
   
-        afterSelection =`${afterFocusInSpan}${afterFocusNode}`;
+            afterOfSelectedInFocus =spanHtml.slice(afterOfSelectedInFocusTextIndex);
+            selectedEndIndex = focusStartIndex+  afterOfSelectedInFocusTextIndex -1;
+            console.log( "✳️afterOfSelectedInFocusText",afterOfSelectedInFocusText ,"✳️afterOfSelectedInFocus" ,afterOfSelectedInFocus, selection )
+          }else{
+            afterOfSelectedInFocus = text.slice(focusOffset);
+            selectedEndIndex = focusStartIndex + focusOffset -1; 
+          }
+        };
+        afterSelection =`${afterOfSelectedInFocus}${afterFocusNode}`
+        console.log("✳️afterOfSelectedInFocus", afterOfSelectedInFocus,"✳️afterFocusNode",afterFocusNode );
+;
 
     };
     if(nodeParent?.nodeName ==="SPAN"){
@@ -546,9 +569,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
     }else{
       changeValueByFocus(null);
     };
-
-    const afterChangedContent :string= nodeParent?.nodeName === "SPAN"? `<span class=${nodeParent?.className}>${afterSelection}`  : afterSelection ;
-    console.log("afterselection", afterSelection, "endindex", selectedEndIndex ,contents[selectedEndIndex]);
+    const afterChangedContent :string= (nodeParent?.nodeName === "SPAN" && selection.focusOffset !== focusText.length)? `<span class=${nodeParent?.className}>${afterSelection}`  : afterSelection ;
     return({
       afterChangedContent:afterChangedContent,
       selectedEndIndex:selectedEndIndex
