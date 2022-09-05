@@ -429,9 +429,33 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
         /**
          * anchorNode에서 선택된  부분의 앞 부분
          */
-        const preSelectionInAnchor =text.slice(0, anchorOffset);
-        preSelection =`${preAnchor}${preSelectionInAnchor}`;
-        selectedStartIndex = anchorStartIndex + anchorOffset ;
+        let preOfSelectionInAnchor="";
+        if(spanHtml !==null){
+          /**
+           * span.
+           */
+            const anchorNodeText= anchorNode.textContent as string;
+            /**
+             * anchorNode.textContent 내에서 선택된 부분의 앞부분 
+             */
+            const preOfSelectionInNodeText= anchorNodeText.slice(0, anchorOffset);
+            /**
+             * span.outerHTML 내에서 preOfSelectionInNodeText의 index
+             */
+            const preOfSelectionInNodeTextIndex= spanHtml.indexOf(preOfSelectionInNodeText);
+
+            preOfSelectionInAnchor = spanHtml.slice(0,preOfSelectionInNodeTextIndex+ preOfSelectionInNodeText.length);
+
+            selectedStartIndex = anchorStartIndex + preOfSelectionInAnchor.length; 
+            console.log("🥕preOfSelectionInNodeText",preOfSelectionInNodeText, "🥕preOfSelectionInNodeTextindex", preOfSelectionInNodeTextIndex,  spanHtml[preOfSelectionInNodeTextIndex])
+
+        }else{
+          preOfSelectionInAnchor =text.slice(0, anchorOffset);
+          selectedStartIndex = anchorStartIndex + anchorOffset ;
+        };
+        preSelection =`${preAnchor}${preOfSelectionInAnchor}`;
+
+        console.log("✳️preanfhor",preAnchor,"✳️preOfSelectionInAnchor",preOfSelectionInAnchor,"✳️anchorstartindex",anchorStartIndex , "✳️anchorOffset", anchorOffset);
       };
 
     if(nodeParent?.nodeName==="SPAN"){
