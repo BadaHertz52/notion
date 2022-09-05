@@ -95,7 +95,10 @@
   }
 }
 .selected{
-  background-color:#BDE6F1,
+  background-color:#BDE6F1;
+  .bg_default, .bg_yellow, .bg_blue, .bg_green, .bg_grey,.bg_pink{
+    background-color:#BDE6F1;
+  }
 }
 .bg_default{
   background-color: initial;

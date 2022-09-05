@@ -292,6 +292,9 @@ a:link, a:active, a:visited {
 .selected {
   background-color: #BDE6F1;
 }
+.selected .bg_default, .selected .bg_yellow, .selected .bg_blue, .selected .bg_green, .selected .bg_grey, .selected .bg_pink {
+  background-color: #BDE6F1;
+}
 
 .bg_default {
   background-color: initial;
