@@ -469,7 +469,8 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
     }else{
       console.log(` Error :${anchorNode}'s textContent is null`)
     };
-    const preChangedContent= nodeParent?.nodeName==="SPAN"? `${preSelection}</span>`: preSelection;
+    const preChangedContent= (nodeParent?.nodeName==="SPAN" && selection.anchorOffset>0 )? `${preSelection}</span>`: preSelection;
+    console.log("anchorNode//////", "✳️preselection",preSelection, "✳️selectedstartindex",selectedStartIndex, contents[selectedStartIndex]);
     return({
       preChangedContent:preChangedContent,
       selectedStartIndex:selectedStartIndex
