@@ -375,10 +375,10 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
     return {textIndex: textIndex}
   };
   /**
-   * anchorNode로 선택 영역 앞의 부분의 변경된 내용과 contents에서 해당 부분의 index를 가져오는 함수 
+   * selection.anchorNode를 이용해 selection 이벤트로 선택된 영역의 시작 지점(selectedStartIndex)과 선택영역의 이전 부분(preChangedContent)을 반환하는 함수 
    * @param anchorNode 
    * @param block 
-   * @returns preChangedContent:선택 영역의 앞의 부분의 변경된 값, selectedIndex: 선택된 영역의 contents에서의 index
+   * @returns preChangedContent:선택 영역의 앞의 부분으로, selection 메소드로 인한 변경사항이 있는 경우 변경된 값을 가짐 , selectedStartIndex: 선택된 영역의 block.contents에서의 시작하는 지점
    */ 
   const getFromAnchorNode=( anchorNode: Node, block:Block, selection:Selection):{preChangedContent:string, selectedStartIndex:number}=>{
     const contents =block.contents;
