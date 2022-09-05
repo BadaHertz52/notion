@@ -599,7 +599,7 @@ const initialState :Notion ={
       comments:null,
     },{
       id:"h1",
-      contents:"header1", 
+      contents:'header1<span class="bg_green">header<span class="color_blue">1</span></span>h1<span class="selected bg_grey">h1</span>h1', 
       firstBlock:true,
       subBlocksId:null ,
       parentBlocksId: null,
