@@ -476,7 +476,13 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
       selectedStartIndex:selectedStartIndex
     })
   };
-
+  /**
+   * selection.focusNode을 이용해 selection 이벤트로 선택 영역이 끝나는 지점(selectedEndIndex)과 그 뒷부분의 내용(afterChangedContent)을 반환하는 함수
+   * @param focusNode 
+   * @param block 
+   * @param selection 
+   * @returns afterChangedContent:선택 영역의 앞의 부분으로, selection 메소드로 인한 변경사항이 있는 경우 변경된 값을 가짐 , selectedEndIndex: 선택된 영역의 block.contents에서의 시작하는 지점
+   */
   const getFromFouseNode=(focusNode: Node, block:Block, selection:Selection):{afterChangedContent:string, selectedEndIndex:number}=>{
     const contents =block.contents;
     /**
