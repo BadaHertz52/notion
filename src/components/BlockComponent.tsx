@@ -579,18 +579,8 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
   const onSelectContents =(event:SyntheticEvent<HTMLDivElement>)=>{
     const targetBlock = findTargetBlock(event);
     let originBlock = targetBlock;
-    const selectedHtml =document.querySelector(".selected");
-    let newContents ="";
-    console.log("selection", window.getSelection());
-    if(selectedHtml!==null){
-      selectedHtml.classList.remove("selected");
-      originBlock = getContent(targetBlock);
-    };
     const contents =originBlock.contents;
     const selection = window.getSelection();
-    const selectedContent =window.getSelection()?.getRangeAt(0).toString();
-    const changedContent= `<span class="selected">${selectedContent}</span>`;
-
     // 수정 ver2 node 수정
     if(selection !==null){
       const anchorNode= selection.anchorNode;
@@ -615,7 +605,15 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
     }
 
   };
-
+  const onMouseDownContents=(event:MouseEvent)=>{
+    const selectedHtml =document.querySelector(".selected");
+    if(selectedHtml!==null){
+      selectedHtml.classList.remove("selected");
+      const targetBlock = findTargetBlock(event);
+      const originBlock =getContent(targetBlock);
+      editBlock(page.id, originBlock)
+    };
+  };
   function commandChange (event:React.ChangeEvent<HTMLInputElement>){
     setTemplateItem(templateHtml, page);
     const value = event.target.value;
@@ -687,6 +685,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
           onChange={(event)=> onChangeContents(event )}
           onKeyDown={(event)=> onKeyDownContents(event)}
           onSelect={(event)=>onSelectContents(event)}
+          onMouseDown={(event)=>onMouseDownContents(event)}
         /> 
         :
           <input
