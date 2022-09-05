@@ -349,25 +349,29 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
    */
   const getAccurateIndex=(node:Node, block:Block):{textIndex:number}=>{
     let totalSentence ="";
-    let stringArray =[];
     const children = contentEditableRef.current?.childNodes as NodeListOf<Node> | undefined;
     if(children !==undefined){
       const childrenArry =Array.from(children);
       const nodeIndex= childrenArry.indexOf(node);
-      for (let i = 0; i < nodeIndex; i++) {
-        const child = childrenArry[i];
-        if(child.nodeName ==="SPAN"){
-          const spanHtml = node.parentElement?.outerHTML as string;
-          stringArray.push(spanHtml);
+      console.log("node", node, childrenArry, nodeIndex )
+      const preNodes =childrenArry.slice(0, nodeIndex);
+      const array = preNodes.map((child:Node)=> {
+        let value ="";
+        if(child.nodeName==="SPAN"){
+          const element =child as HTMLElement;
+          value = element.outerHTML;
         }else{
-          stringArray.push(node.textContent);
-        }
-      };
-      totalSentence = stringArray.join("");
+          value = child.textContent as string;
+        };
+          return value;
+      });
+      console.log("array", array);
+      totalSentence = array.join("");
+      console.log("totalsentence", totalSentence)
     }else{
       console.log("Can't find contentEditable children")
     };
-    const textIndex = block.contents.indexOf(totalSentence);
+    const textIndex = totalSentence.length ;
     return {textIndex: textIndex}
   };
   /**
