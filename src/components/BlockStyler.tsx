@@ -249,8 +249,6 @@ const BlockStyler=({pages, firstlist, userName, page, block, addBlock, editBlock
   inner?.addEventListener("click",(event)=>{
       openMenu && closeMenu(event);
       openColor && closeColorMenu(event);
-      
-      console.log(openMenu, openColor);
   });
   inner?.addEventListener("dblclick", (event)=>{
     !openMenu && !openColor && !popup.popup &&
