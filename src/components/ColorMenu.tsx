@@ -37,14 +37,40 @@ const ColorInform=({color ,background, colorName ,page, block ,editBlock, templa
       `color_${colorName.toLocaleLowerCase()}`
       const targetBlock =selection.block;
       const selectedHtml =document.querySelector(".selected");
-      selectedHtml?.classList.add(className);
-      const newBlock = getContent(targetBlock);
-      editBlock(page.id, newBlock);
-        const newSelection :selectionType ={
-          block:newBlock
-        };
-        setSelection(newSelection);
-      };
+      const selectedChildren= selectedHtml?.childNodes  as NodeListOf<Node> | undefined;
+      if(selectedChildren !==undefined){
+        let array:string[] =[];
+        selectedChildren.forEach((node:Node)=> {
+          console.log("nodename", node.nodeName);
+          if(node.nodeName ==="#text"){
+            array.push(node.textContent as string);
+          };
+          if(node.nodeName=== "SPAN"){
+            const element =node as HTMLElement;
+            if(element.className.includes("bg_")){
+              console.log("e", element, element.innerHTML);
+              array.push(element.innerHTML);
+            }
+            else{
+              array.push(element.outerHTML);
+            }
+          };
+        });
+        const newSelectedInnerHtml =array.join("");
+        console.log("new innerhtml", newSelectedInnerHtml);
+        if(selectedHtml!==null){
+          selectedHtml.innerHTML =newSelectedInnerHtml;
+          selectedHtml?.classList.add(className);
+          const newBlock = getContent(targetBlock);
+          editBlock(page.id, newBlock);
+          const newSelection :selectionType ={
+            block:newBlock
+          };
+          setSelection(newSelection);
+        }
+      }
+
+    };
   };
   const changeColor =()=>{
     if(color ===undefined && background !== undefined ){
