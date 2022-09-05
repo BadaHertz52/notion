@@ -415,11 +415,11 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
       }else{
         //동일한 내용이 반복되는 경우로 보다 정확한 특정이 필요함 
         const parentNode =spanHtml ==null? null : anchorNode.parentNode;
-        const anchorIndex= parentNode !==null?  
+        anchorStartIndex= parentNode !==null?  
                           getAccurateIndex(parentNode, block).textIndex :
                           getAccurateIndex(anchorNode, block).textIndex;
 
-        preAnchor = contents.slice(0, anchorIndex);
+        preAnchor = contents.slice(0, anchorStartIndex);
       };
       // step 2. preSelection , selectStartIndex
         /**
