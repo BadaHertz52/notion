@@ -1,4 +1,4 @@
-import React, { Dispatch, DragEvent, MouseEvent, SetStateAction, SyntheticEvent, useEffect, useRef, useState} from 'react';
+import React, { Dispatch,MouseEvent, SetStateAction, SyntheticEvent, useEffect, useRef} from 'react';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import { IoChatboxOutline } from 'react-icons/io5';
 import { MdOutlinePhotoSizeSelectActual } from 'react-icons/md';
