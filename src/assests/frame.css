@@ -344,6 +344,22 @@ a:link, a:active, a:visited {
   color: #d32f2f;
 }
 
+.bold {
+  font-weight: bold;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.lineThrough {
+  text-decoration: line-through;
+}
+
 .h1 .mainBlock .contentEditable,
 .h2 .mainBlock .contentEditable,
 .h3 .mainBlock .contentEditable {
