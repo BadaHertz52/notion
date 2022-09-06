@@ -112,15 +112,25 @@ const BlockStyler=({pages, firstlist, userName, page, block, addBlock, editBlock
   const menu ="menu";
   type menuType =typeof color| typeof menu ;
   const changeBlockStylerStyle=()=>{
+
     if(mainBlockHtml!==null && mainBlockHtml!==undefined && frameHtml!==undefined && frameHtml!==null){
+      const pageContentInner =frameHtml.querySelector(".pageContent_inner") as Element;
       const blockDomRect= mainBlockHtml.getClientRects()[0];
       const frameDomRect = frameHtml.getClientRects()[0];
       const top = blockDomRect.top - frameDomRect.top;
-      setBlockStylerStyle({
-        top:`${top}px`,
-        left:"45px",
-        maxWidth :`${frameDomRect.width -90}px`
-      })
+      const left = blockDomRect.left -frameDomRect.left - pageContentInner.clientLeft;
+      if(left + 450 > frameDomRect.width){
+        setBlockStylerStyle({
+          top:`${top}px`,
+          left:`${(frameDomRect.width - 450)/2}px`
+        })
+      }else{
+        setBlockStylerStyle({
+          top:`${top}px`,
+          left:`${left}px`
+        })
+      }
+
     }
   };
   const changePopupStyle=()=>{
