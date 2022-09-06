@@ -68,11 +68,10 @@ const BlockStyler=({pages, firstlist, userName, page, block, addBlock, editBlock
   const initial="initial";
   const italic= "italic";
   const underline="underline";
-  const lineThrough="line-through";
-  const none="none";
+  const lineThrough="lineThrough";
   type fontWeightType =typeof bold|typeof initial;
   type fontStyleType= typeof italic| typeof initial;
-  type textDecoType= typeof underline| typeof lineThrough | typeof none; 
+  type textDecoType= typeof underline| typeof lineThrough ; 
   const blockType=(block:Block)=> 
   {switch (block.type) {
     case "bulletList":
