@@ -48,8 +48,21 @@ type BlockStylerProps = MenuAndBlockStylerCommonProps& {
   setCommandTargetBlock: React.Dispatch<React.SetStateAction<Block | null>>
 }
 const BlockStyler=({pages, firstlist, userName, page, block, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage,popup,setPopup, setCommentBlock,setTargetPageId,selection,setSelection, openTemplates, setPopupStyle, setCommandTargetBlock}:BlockStylerProps)=>{
+
+  //select-> selection의 스타일 변경-> 변경된 내용을 selection, block에 반영 의 순서로 이루어짐
+
+  /**
+   * selection의 value의 변화가 select 메서드에 의해 변경된 것인지, 스타일 변경에 따른 것인지 구별하기 위해 사용,
+  이 true이면 selection의 스타일 변경에 의한 것이고, false라면 select 메서드에 의한 것으로 판별하다. 
+   */
   const changeStart =useRef<boolean>(false);
+  /**
+   * 스타일의 변경에 따라 selection 에 변경이 있으면 true, 변경 사항이 없으면 false
+   */
   const change =useRef<boolean>(false);
+  /**
+   * select 된 내용의 스타일이 변경되기 전의 block 
+   */
   const originBlock =useRef<Block|null>(null);
   const bold="bold";
   const initial="initial";
