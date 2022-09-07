@@ -1514,6 +1514,10 @@ a:link, a:active, a:visited {
   display: block;
 }
 
+#blockStylerColor .menu_color {
+  height: 200px;
+}
+
 .menu_color {
   width: 320px;
   display: flex;

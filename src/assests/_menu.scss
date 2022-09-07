@@ -73,6 +73,9 @@
     }
   }
 }
+#blockStylerColor .menu_color{
+  height: 200px;
+}
 .menu_color{
   @include popupMenu;
   width: 200px;
