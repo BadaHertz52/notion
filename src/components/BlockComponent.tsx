@@ -506,12 +506,12 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
   };
   /**
    * selection 이벤트로 선택 영역이 끝나는 지점(selectedEndIndex)과 그 뒷부분의 내용(afterChangedContent)을 반환하는 함수
-   * @param endNode  선택된 내용이 끝 나는 지점을 가진 contentEditable.current의 childNode
-   * @param endOffset endNode에서 select된 내용이 끝나는 지점의 index  ; 
+   * @param endNode  선택된 내용이 끝 나는 지점인 text을 가진 contentEditable.current의 childNode
+   * @param endOffset endNode에서 select된 내용이 끝나는 text의 index  ; 
    * @param block 
    * @returns afterChangedContent:선택 영역의 앞의 부분으로, selection 메소드로 인한 변경사항이 있는 경우 변경된 값을 가짐 , selectedEndIndex: 선택된 영역의 block.contents에서의 시작하는 지점
    */
-  const getFromFouseNode=(endNode: Node,endOffset:number, block:Block):{afterChangedContent:string, selectedEndIndex:number}=>{
+  const getFromEndNode=(endNode: Node,endOffset:number, block:Block):{afterChangedContent:string, selectedEndIndex:number}=>{
     const contents =block.contents;
     /**
      * endNode 이후의 contents 내용
@@ -654,7 +654,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
 
         const {preChangedContent, selectedStartIndex} =getFromStartNode(startNode, startOffset, originBlock);
         const { afterChangedContent,
-        selectedEndIndex} =getFromFouseNode(endNode,endOffset, originBlock);
+        selectedEndIndex} =getFromEndNode(endNode,endOffset, originBlock);
         const newSelected = contents.slice(selectedStartIndex, selectedEndIndex+1);
 
         const newContents =`${preChangedContent}<span class="selected">${newSelected}</span>${afterChangedContent}`; 
