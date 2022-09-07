@@ -605,14 +605,18 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
   };
 
   const onSelectContents =(event:SyntheticEvent<HTMLDivElement>)=>{
-    const targetBlock = findTargetBlock(event);
-    let originBlock = targetBlock;
-    const contents =originBlock.contents;
     const SELECTION = window.getSelection();
+    /**
+     * 마우스 드래그를 통한 select 이  아닌 경우
+     */
+    const notSelect = (SELECTION?.anchorNode === SELECTION?.focusNode && SELECTION?.anchorOffset === SELECTION?.focusOffset);
+    if(SELECTION !==null && !notSelect ){
+      const anchorNode= SELECTION?.anchorNode;
+      const focusNode =SELECTION?.focusNode;
+      const targetBlock = findTargetBlock(event);
+      let originBlock = targetBlock;
+      const contents =originBlock.contents;
 
-    if(SELECTION !==null){
-      const anchorNode= SELECTION.anchorNode;
-      const focusNode =SELECTION.focusNode;
       const contentEditableChild = contentEditableRef.current?.childNodes as NodeListOf<Node>;
       if(anchorNode !==null && focusNode !==null && contentEditableChild){
         const childNodes =Array.from(contentEditableChild);
