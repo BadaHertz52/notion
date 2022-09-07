@@ -597,7 +597,9 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
     }else{
       changeValueByFocus(null);
     };
-    const afterChangedContent :string= (nodeParent?.nodeName === "SPAN" && endOffset !== focusText.length-1)? `</span><span class=${nodeParent?.className}>${afterSelection}`  : afterSelection ;
+
+    const afterChangedContent :string= (nodeParent?.nodeName === "SPAN" && endOffset !== focusText.length-1)? `</span><span class="${nodeParent.className}">${afterSelection}`  : afterSelection ;
+
     return({
       afterChangedContent:afterChangedContent,
       selectedEndIndex:selectedEndIndex
