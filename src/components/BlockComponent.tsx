@@ -538,7 +538,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
     const changeValueByFocus=(spanHtml:null|string)=>{
       // text = nodeText or spanHtml 
       const text =spanHtml ===null? focusText : spanHtml;
-      console.log("반복확인 focus","반복? :",contents.indexOf(text) !== contents.lastIndexOf(text), endNode)
+
       //step1. afterFocus, focusStartIndex
       if(contents.indexOf(text) === contents.lastIndexOf(text)){
         //중복x 
@@ -633,7 +633,6 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
 
         if(focusNode.parentNode?.nodeName==="SPAN"){
           const childNode =findNodeInChilNodes(focusNode ,childNodes) as Node;
-          console.log("focus chilnode", childNode)
           focusIndex = childNodes.indexOf(childNode);
         }else{
           focusIndex =childNodes.indexOf(focusNode);
@@ -663,7 +662,6 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
 
         const newContents =`${preChangedContent}<span class="selected">${newSelected}</span>${afterChangedContent}`; 
 
-        console.log("🦄🦄result ","prechanged", preChangedContent,"///", "new selected",newSelected,"///","newContents",newContents, "////", "selected startindex", selectedStartIndex, "///","after", afterChangedContent,"///", "index", selectedEndIndex  )
         editBlock(page.id, {
           ...originBlock,
           contents: newContents
