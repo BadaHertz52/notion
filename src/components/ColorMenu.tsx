@@ -31,35 +31,59 @@ const StyleColorInform =styled.span`
 `; 
 
 const ColorInform=({color ,background, colorName ,page, block ,editBlock, templateHtml,  selection, setSelection}:ColorInformProps)=>{
+
   const changeContentStyle=(colorName:string)=>{
     if(selection !==null &&setSelection !==null ){
-      const className= color===undefined? `bg_${colorName.toLocaleLowerCase()}`:
-      `color_${colorName.toLocaleLowerCase()}`
+      const target = color ===undefined? "bg" :"color";
+      const bg_colors=["bg_default","bg_grey"," bg_orange", "bg_green", " bg_blue",  "bg_pink"];
+      const color_colors=[" color_default","color_grey"," color_orange", "color_green", " color_blue", "color_red" ];
+      const className=  `${target}_${colorName.toLocaleLowerCase()}`;
       const targetBlock =selection.block;
       const selectedHtml =document.querySelector(".selected");
       const selectedChildren= selectedHtml?.childNodes  as NodeListOf<Node> | undefined;
       if(selectedChildren !==undefined){
         let array:string[] =[];
         selectedChildren.forEach((node:Node)=> {
-          console.log("nodename", node.nodeName);
           if(node.nodeName ==="#text"){
             array.push(node.textContent as string);
           };
           if(node.nodeName=== "SPAN"){
-            const element =node as HTMLElement;
-            if(element.className.includes("bg_")){
-              console.log("e", element, element.innerHTML);
-              array.push(element.innerHTML);
+            const spanElement =node as HTMLElement;
+            const targetedChild = spanElement.querySelectorAll(`.${target}`);
+            if(targetedChild[0]!==undefined){
+            // child node 변경
+              targetedChild.forEach((c:Element)=>{
+                if(c.classList.length >1){
+                  const list = Array.from(c.classList);
+                  const color =list.filter((item:string)=>target==="bg"? bg_colors.includes(item) : color_colors.includes(item))[0];
+                  c.classList.remove(target);
+                  c.classList.remove(color);
+                }else{
+                  c.outerHTML =c.innerHTML;
+                }
+              })
             }
-            else{
-              array.push(element.outerHTML);
-            }
+            //class 변경
+            if(spanElement.classList.contains(target)){
+              const classList =Array.from (spanElement.classList);
+              if(classList.length ===2){
+                array.push(spanElement.innerHTML);
+              }else{
+                const color = classList.filter((item:string)=> target==="bg"? bg_colors.includes(item):  color_colors.includes(item))[0];
+                spanElement.classList.remove(target);
+                spanElement.classList.remove(color);
+                array.push(spanElement.outerHTML);
+              };
+            }else{
+              array.push(spanElement.outerHTML);
+            };
           };
         });
         const newSelectedInnerHtml =array.join("");
-        console.log("new innerhtml", newSelectedInnerHtml);
         if(selectedHtml!==null){
           selectedHtml.innerHTML =newSelectedInnerHtml;
+          console.log("className", className);
+          selectedHtml?.classList.add(target);
           selectedHtml?.classList.add(className);
           const newBlock = getContent(targetBlock);
           editBlock(page.id, newBlock);
