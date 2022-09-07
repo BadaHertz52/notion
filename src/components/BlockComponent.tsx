@@ -613,8 +613,10 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
      */
     const notSelect = (SELECTION?.anchorNode === SELECTION?.focusNode && SELECTION?.anchorOffset === SELECTION?.focusOffset);
     if(SELECTION !==null && !notSelect ){
-      const anchorNode= SELECTION?.anchorNode;
-      const focusNode =SELECTION?.focusNode;
+      const anchorNode= SELECTION.anchorNode;
+      const anchorOffset =SELECTION.anchorOffset;
+      const focusNode =SELECTION.focusNode;
+      const focusOffset= SELECTION.focusOffset;
       const targetBlock = findTargetBlock(event);
       let originBlock = targetBlock;
       const contents =originBlock.contents;
@@ -639,11 +641,11 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
         }else{
           focusIndex =childNodes.indexOf(focusNode);
         };
-                          
+        const sameNode = anchorNode ===focusNode ;               
         /**
          * select 된 내용의 시작점이 위치한 node
          */
-        const startNode = anchorIndex <= focusIndex? anchorNode :focusNode;
+        const startNode = anchorIndex < focusIndex? anchorNode :focusNode;
         /**
          * select된 내용이 끝나는 지점이 위치한 node
          */
@@ -651,11 +653,14 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
         /**
          * startNode에서 select된 내용의 시작점의 index 
          */
-        const startOffset = startNode === anchorNode? SELECTION.anchorOffset : SELECTION.focusOffset;
+        const startOffset = sameNode? 
+                            (anchorOffset<focusOffset? anchorOffset : focusOffset) 
+                            :
+                            (startNode === anchorNode? anchorOffset : focusOffset);
         /**
          * endNode에서 select된 내용이 끝나는 지점의 index  ,
          */
-        const endOffset= endNode === focusNode? SELECTION.focusOffset -1: SELECTION.anchorOffset -1 ;
+        const endOffset= startOffset=== anchorOffset ? focusOffset -1: anchorOffset -1 ;
 
         const {preChangedContent, selectedStartIndex} =getFromStartNode(startNode, startOffset, originBlock);
         const { afterChangedContent,
@@ -663,7 +668,6 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
         const newSelected = contents.slice(selectedStartIndex, selectedEndIndex+1);
 
         const newContents =`${preChangedContent}<span class="selected">${newSelected}</span>${afterChangedContent}`; 
-
         editBlock(page.id, {
           ...originBlock,
           contents: newContents
