@@ -297,7 +297,7 @@ a:link, a:active, a:visited {
 }
 
 .bg_default {
-  background-color: initial;
+  background-color: none;
 }
 
 .bg_grey {
@@ -321,7 +321,7 @@ a:link, a:active, a:visited {
 }
 
 .color_default {
-  color: initial;
+  color: rgb(55, 54, 47);
 }
 
 .color_grey {

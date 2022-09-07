@@ -101,7 +101,7 @@
   }
 }
 .bg_default{
-  background-color: initial;
+  background-color: none;
 }
 .bg_grey{
   background-color: #e0e0e0;
@@ -119,7 +119,7 @@
   background-color: #fce4ec;
 }
 .color_default{
-  color:initial;
+  color:$black;
 }
 .color_grey{
   color:#bdbdbd
