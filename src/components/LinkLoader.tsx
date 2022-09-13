@@ -3,6 +3,7 @@ import { BsArrowUpRight, BsLink45Deg } from 'react-icons/bs';
 import { CSSProperties } from 'styled-components';
 import { makePagePath, makeRoutePath } from '../containers/NotionRouter';
 import { Block, findPage, listItem, Page } from '../modules/notion';
+import { selectionType } from './Frame';
 import PageIcon from './PageIcon';
 
 type LinkLoaderProps={
@@ -14,33 +15,26 @@ type LinkLoaderProps={
   editBlock: (pageId: string, block: Block) => void,
   setOpenLink: Dispatch<SetStateAction<boolean>>,
   blockStylerStyle:CSSProperties|undefined,
+  setSelection: Dispatch<SetStateAction<selectionType | null>>,
 }
-const LinkLoader=({recentPagesId, pages,page,pagesId, block,editBlock, setOpenLink, blockStylerStyle}:LinkLoaderProps)=>{
+const LinkLoader=({recentPagesId, pages,page,pagesId, block,editBlock, setOpenLink, blockStylerStyle,setSelection}:LinkLoaderProps)=>{
   const recentPages = recentPagesId!==null? 
                       (recentPagesId.length>3 ?  
                         recentPagesId?.slice(0.4).map((id:string)=> findPage(pagesId,pages,id)) as Page[]
                         : 
                         recentPagesId.map((id:string)=> findPage(pagesId,pages,id))  as Page[]
                       )
-                      :null
-  const PAGES = recentPages!==null?  
+                      :null; 
+  const notTemplatePages =pages.filter((p:Page)=> p.type==="page");                   
+  const pageList = recentPages!==null?  
                 recentPages
                 :
-                (pages.length> 3? 
-                  pages.slice(0.4)
+                (notTemplatePages.length> 3? 
+                  notTemplatePages.slice(0.4)
                   :
-                  pages
+                  notTemplatePages
                 ); 
-  const pageList:listItem[] = PAGES.map((p:Page)=>({
-    id: p.id,
-    title: p.header.title,
-    iconType: p.header.iconType,
-    icon: p.header.icon,
-    subPagesId: p.subPagesId,
-    parentsId:p.parentsId,
-    editTime: p.editTime,
-    createTime: p.createTime,
-  }));
+
   const topDomain =[".com",".net",".org",".edu",".gov",".mil",".int",".biz",".info",".name",".aero",".cat",".coop",".lobs",".mobl",".museum",".pro",".travel", 
   ".ac",".ad",".ae",".af",".ag",".al",".ai",".am",".an",".ao","aq",".ar",".as",".at",".au",".aw",".ax",".az",
   ".ba",".bb",".bb",".be",".bf",".bg",".bh",".bi",".bj",".bm",".bn",".bo",".br",".bs",".bt",".bw",".by",".bz",
@@ -71,19 +65,27 @@ const LinkLoader=({recentPagesId, pages,page,pagesId, block,editBlock, setOpenLi
   const [linkLoaderStyle, setLinkLoaderStyle]=useState<CSSProperties|undefined>(undefined);
   const blockStyler =document.getElementById("blockStyler");
   const [searchValue, setSearchValue]= useState<string|null>(null);
-  const [candidates, setCandidates]=useState<listItem[]|null>(null);
+  const [candidates, setCandidates]=useState<Page[]|null>(null);
   const [webLink, setWebLink]=useState<boolean>(false);
   const onChagneSearch=(event: ChangeEvent<HTMLInputElement>)=>{
     const value = event.target.value;
-    setSearchValue(value);
-    const isWebLink = topDomain.map((d:string)=> value.includes(d)).includes(true);
-    if(isWebLink){
-      setWebLink(true);
-    }else{
+
+    if(value ===""){
+      setSearchValue(null);
+      setCandidates(null);
       setWebLink(false);
-      const candidateArry = pageList.filter((item:listItem)=> item.title.includes(value));
-      candidateArry[0]!==undefined ? setCandidates(candidateArry): setCandidates(null);
-    }
+    }else{
+      setSearchValue(value);
+      const isWebLink = topDomain.map((d:string)=> value.includes(d)).includes(true);
+      if(isWebLink){
+        setWebLink(true);
+        setCandidates(null);
+      }else{
+        setWebLink(false);
+        const candidateArry = notTemplatePages.filter((page:Page)=> page.header.title.includes(value));
+        candidateArry[0]!==undefined ? setCandidates(candidateArry): setCandidates(null);
+      };
+    };
   };
   const addLink=(link:string)=>{
     const selectedHtml =document.querySelector(".selected");
@@ -96,11 +98,8 @@ const LinkLoader=({recentPagesId, pages,page,pagesId, block,editBlock, setOpenLi
         newSelectedHtml.setAttribute("href",`${link}`);
       }else{
         //page link
-        const linkPageIndex= pagesId.indexOf(link);
-        const linkPage=pages[linkPageIndex];
-        const pagePath =makeRoutePath(linkPage, pagesId,pages);
         const originLocation =window.location.origin;
-        const path =`${originLocation}${pagePath}`;
+        const path =`${originLocation}/#/${link}`;
         newSelectedHtml.setAttribute("href",`${path}`);
     };
     selectedHtml.parentNode?.replaceChild(newSelectedHtml,selectedHtml);
@@ -113,6 +112,7 @@ const LinkLoader=({recentPagesId, pages,page,pagesId, block,editBlock, setOpenLi
         editTime:JSON.stringify(Date.now())
       };
       editBlock(page.id, newBlock);
+      setSelection({block:newBlock});
     }
     }
 };
@@ -129,23 +129,29 @@ const LinkLoader=({recentPagesId, pages,page,pagesId, block,editBlock, setOpenLi
     }
   },[ blockStylerStyle,blockStyler]);
   type PageItemProps={
-    item:listItem
+    page:Page
   };
-  const PageItem=({item}:PageItemProps)=>{
+  const PageItem=({page}:PageItemProps)=>{
+    const pagePath = makeRoutePath(page, pagesId,pages).slice(1);
     return(
       <button 
         className='page_inner'
-        onClick={()=>addLink(item.id)}
+        onClick={()=>addLink(pagePath)}
       >
           <PageIcon
-            icon={item.icon}
-            iconType={item.iconType}
+            icon={page.header.icon}
+            iconType={page.header.iconType}
             style={undefined}
           />
-          <div className='pageTitle'>
-            <span>
-                {item.title}
+          <div className='pageInform'>
+            <span className='pageTitle'>
+                {page.header.title}
             </span>
+            { page.parentsId!==null&&
+            <span className='pagePath'>
+              {pagePath}
+            </span>
+            }
           </div>
       </button>
     )
@@ -167,14 +173,14 @@ const LinkLoader=({recentPagesId, pages,page,pagesId, block,editBlock, setOpenLi
           </header>
           <div className='pageList'>
             {(searchValue==null&& candidates==null)?
-              pageList.map((item:listItem)=>
+              pageList.map((p:Page)=>
               <PageItem
-                item={item}/>
+                page={p}/>
               )
               :
-              candidates?.map((item:listItem)=>
+              candidates?.map((p:Page)=>
               <PageItem
-                item={item}
+                page={p}
               />
               )
             }
