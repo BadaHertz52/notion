@@ -599,7 +599,7 @@ const initialState :Notion ={
       comments:null,
     },{
       id:"h1",
-      contents:'header1<span class="color color_green">header<span class=" color color_blue">1</span></span>', 
+      contents:'head<a class="link" target="_blank" href="http://localhost:3000/#/1234">er</a><span class=" color color_blue">1</span></span>', 
       firstBlock:true,
       subBlocksId:null ,
       parentBlocksId: null,
