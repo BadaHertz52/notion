@@ -238,54 +238,58 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
       }
     }
   };
+    /**
+   *  textDeco 스타일을 지정할 경우, 기존에 textDeco가 지정된 element의 클래스를 변경하거나, outerHtml의 값을 변경하는 함수 
+   * @param deco  삭제하고자 하는 , 기존에 지정된 textDeco 스타일
+   * * @param selectedHtml : 선택된 node 
+   */
+  const removeOtherTextDeco=(deco:textDecoType , selectedHtml:HTMLElement)=>{
+    const decoSpan = selectedHtml.querySelectorAll(`.${deco}`);
+    if(decoSpan[0]!==undefined){
+      decoSpan.forEach((e:Element)=>{
+        if(e.classList.length===1){
+          e.outerHTML = e.innerHTML
+        }else{
+          e.classList.remove(deco)
+        }
+      })
+    }
+  };
 /**
  * 클릭한 버튼에 따라, 선택된 내용의 fontWeight, fontstyle , textDeco를 변경하는 함수 
  * @param btnName 클릭한 버튼의 이름 
  */
   const onClickFontStyleBtn=(btnName:fontWeightType|fontStyleType|textDecoType)=>{
-    const selectedHtml = document.querySelector(".selected");
-    if(selectedHtml!==null){
-      const selectedSpan =selectedHtml.querySelectorAll(btnName);
-      if(selectedSpan[0]!==undefined){
-        //btnName과 같은 스타일이 지정된 span 이 있으므로 selectedHtml의 class를 변경하기 전에 같은 스타일이 있는 span을 정리해줌 
-        selectedSpan.forEach((span:Element)=> {
-          if(span.classList.length === 1){
-            // span의 class 가 btnName인 경우
-            span.outerHTML = span.innerHTML;
-          }else{
-            span.classList.remove(btnName);
-          } 
-        });
-      };
-      /**
-       *  textDeco 스타일을 지정할 경우, 기존에 textDeco가 지정된 element의 클래스를 변경하거나, outerHtml의 값을 변경하는 함수 
-       * @param deco  삭제하고자 하는 , 기존에 지정된 textDeco 스타일
-       */
-      const removeOtherTextDeco=(deco:textDecoType)=>{
-        const decoSpan = selectedHtml.querySelectorAll(`.${deco}`);
-        console.log("decospan", decoSpan);
-        if(decoSpan[0]!==undefined){
-          decoSpan.forEach((e:Element)=>{
-            if(e.classList.length===1){
-              e.outerHTML = e.innerHTML
+    const selecteds = document.querySelectorAll(".selected") as NodeListOf<HTMLElement>;
+    if(selecteds[0]!==undefined){
+
+      selecteds.forEach((selectedHtml:HTMLElement)=>{
+        const selectedSpan =selectedHtml.querySelectorAll(btnName);
+        if(selectedSpan[0]!==undefined){
+          //btnName과 같은 스타일이 지정된 span 이 있으므로 selectedHtml의 class를 변경하기 전에 같은 스타일이 있는 span을 정리해줌 
+          selectedSpan.forEach((span:Element)=> {
+            if(span.classList.length === 1){
+              // span의 class 가 btnName인 경우
+              span.outerHTML = span.innerHTML;
             }else{
-              e.classList.remove(deco)
-            }
-          })
-        }
-      };
-      if(btnName==="lineThrough"){
-        removeOtherTextDeco("underline");
-      };
-      if(btnName==="underline"){
-        removeOtherTextDeco("lineThrough")
-      };
-      //class 변경
-      if(selectedHtml.className.includes(btnName)){
-        selectedHtml.classList.remove(btnName);
-      }else{
-        selectedHtml.classList.add(btnName);
-      };
+              span.classList.remove(btnName);
+            } 
+          });
+        };
+
+        if(btnName==="lineThrough"){
+          removeOtherTextDeco("underline" ,selectedHtml);
+        };
+        if(btnName==="underline"){
+          removeOtherTextDeco("lineThrough" ,selectedHtml)
+        };
+        //class 변경 : 버튼을 눌러서 새로 스타일을 지정하거나, 지정했던 스타일을 없애는 기능
+        if(selectedHtml.className.includes(btnName)){
+          selectedHtml.classList.remove(btnName);
+        }else{
+          selectedHtml.classList.add(btnName);
+        };
+      });
       const editedBlock = getContent(block);
       editBlock(page.id, editedBlock);
       setSelection({
@@ -304,13 +308,16 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
           editBlock(page.id, originBlock.current);
         }else{
           // 변경된 내용이 있고, selected 만 제거하면 되는 경우 
-          const selectedHtml =document.querySelector(".selected");
-          if(selectedHtml !==null){
-            if(selectedHtml.classList.length >1){
-              selectedHtml?.classList.remove("selected");
-            }else{
-              selectedHtml.outerHTML =selectedHtml.innerHTML;
-            }
+          const selecteds =document.querySelectorAll(".selected")  as NodeListOf<HTMLElement>;
+          if(selecteds[0] !== undefined){
+            selecteds.forEach((selectedHtml:HTMLElement)=>{
+              if(selectedHtml.classList.length >1){
+                selectedHtml?.classList.remove("selected");
+              }else{
+                selectedHtml.outerHTML =selectedHtml.innerHTML;
+              }
+            })
+
           };
           const editedBlock = getContent(block);
           editBlock(page.id, editedBlock);          

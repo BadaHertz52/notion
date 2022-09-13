@@ -39,61 +39,51 @@ const ColorInform=({color ,background, colorName ,page, block ,editBlock, templa
       const color_colors=[" color_default","color_grey"," color_orange", "color_green", " color_blue", "color_red" ];
       const className=  `${target}_${colorName.toLocaleLowerCase()}`;
       const targetBlock =selection.block;
-      const selectedHtml =document.querySelector(".selected");
-      const selectedChildren= selectedHtml?.childNodes  as NodeListOf<Node> | undefined;
-      if(selectedChildren !==undefined){
-        let array:string[] =[];
-        selectedChildren.forEach((node:Node)=> {
-          if(node.nodeName ==="#text"){
-            array.push(node.textContent as string);
-          };
-          if(node.nodeName=== "SPAN"){
-            const spanElement =node as HTMLElement;
-            const targetedChild = spanElement.querySelectorAll(`.${target}`);
-            if(targetedChild[0]!==undefined){
-            // child node 변경
-              targetedChild.forEach((c:Element)=>{
-                if(c.classList.length >1){
-                  const list = Array.from(c.classList);
-                  const color =list.filter((item:string)=>target==="bg"? bg_colors.includes(item) : color_colors.includes(item))[0];
-                  c.classList.remove(target);
-                  c.classList.remove(color);
-                }else{
-                  c.outerHTML =c.innerHTML;
+      const selecteds =document.querySelectorAll(".selected") as NodeListOf<HTMLElement>;
+      if(selecteds[0]!==undefined){
+        selecteds.forEach((selectedHtml:HTMLElement)=>{
+          //배경색이나 폰트 색상을 바꾸려하는데, 선택된 node의 자식 node 중에 이미 배경색이나 폰트색상이 지정되어 있는 경우, 지정된 스타일을 제거함 
+          const selectedChildren= selectedHtml.childNodes  as NodeListOf<Node> | undefined;
+          if(selectedChildren !==undefined){
+            selectedChildren.forEach((node:Node)=> {
+              if(node.nodeName==="SPAN"){
+                const spantHtml =node as HTMLElement; 
+                if(spantHtml.classList.contains(target)){
+                  const arry =target==="bg"? bg_colors : color_colors;
+                  const targetColor = arry.filter((c:string)=> spantHtml.classList.contains(c))[0];
+                  console.log("이미 있는 class", targetColor);
+                  spantHtml.classList.remove(target);
+                  spantHtml.classList.remove(targetColor);
+                  if(spantHtml.classList[0]===undefined){
+                    const newTextNode = document.createTextNode(spantHtml.innerHTML);
+                    spantHtml.parentNode?.replaceChild(newTextNode, spantHtml);
+                  }
                 }
-              })
-            }
-            //class 변경
-            if(spanElement.classList.contains(target)){
-              const classList =Array.from (spanElement.classList);
-              if(classList.length ===2){
-                array.push(spanElement.innerHTML);
-              }else{
-                const color = classList.filter((item:string)=> target==="bg"? bg_colors.includes(item):  color_colors.includes(item))[0];
-                spanElement.classList.remove(target);
-                spanElement.classList.remove(color);
-                array.push(spanElement.outerHTML);
-              };
-            }else{
-              array.push(spanElement.outerHTML);
+              }
+            });
+          };
+          // 배경색 or 폰트 색상 지정을 위한 className 변경 
+          if(selectedHtml.classList.contains(target)){
+            const arry = target==="bg"? bg_colors: color_colors;
+            const removeTargetClass = arry.filter((c:string)=> selectedHtml.classList.contains(c))[0];
+            selectedHtml.classList.remove(removeTargetClass);
+            selectedHtml.classList.add(className)
+          }else{
+            selectedHtml.classList.add(target);
+            selectedHtml.classList.add(className);
+          };
+          const contentEditableHtml =document.getElementById(`${block.id}_contents`)?.firstElementChild
+          if(contentEditableHtml!==null&& contentEditableHtml!==undefined){
+            const innerHtml =contentEditableHtml.innerHTML;
+            const editedBlock:Block ={
+              ...targetBlock,
+              contents:innerHtml,
+              editTime:JSON.stringify(Date.now())
             };
-          };
-        });
-        const newSelectedInnerHtml =array.join("");
-        if(selectedHtml!==null){
-          selectedHtml.innerHTML =newSelectedInnerHtml;
-          console.log("className", className);
-          selectedHtml?.classList.add(target);
-          selectedHtml?.classList.add(className);
-          const newBlock = getContent(targetBlock);
-          editBlock(page.id, newBlock);
-          const newSelection :selectionType ={
-            block:newBlock
-          };
-          setSelection(newSelection);
-        }
+            editBlock(page.id, editedBlock)
+          }
+        })
       }
-
     };
   };
   const changeColor =()=>{
