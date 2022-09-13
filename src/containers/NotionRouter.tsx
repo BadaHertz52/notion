@@ -96,8 +96,8 @@ const NotionRouter =()=>{
   const location =window.location;
   const hash=location.hash;
   const firstPage =user.favorites!==null? findPage(pagesId, pages,user.favorites[0]) : notion.pages[0];
-  const [targetPageId, setTargetPageId]= useState<string>(firstPage !== undefined? firstPage.id: "none");
-  const [routePage, setRoutePage]=useState<Page|null>(firstPage!==undefined? firstPage: null);
+  const [targetPageId, setTargetPageId]= useState<string>( "none");
+  const [routePage, setRoutePage]=useState<Page|null>(null);
   const [openQF, setOpenQF]=useState<boolean>(false);
   const [showAllComments,setShowAllComments]=useState<boolean>(false);
   const [allCommentsStyle, setAllCommentsStyle]=useState<CSSProperties>({transform:`translateX(${window.innerWidth}px)`});
@@ -206,10 +206,12 @@ const NotionRouter =()=>{
     if(pagesId.includes(pageId)){
       const page =findPage(pagesId, pages, pageId);
       setRoutePage(page);
+      setTargetPageId(page.id);
       addRecentPage(pageId);
     }else if(trashPagesId !==null && trashPages !==null&& trashPagesId.includes(pageId)){
       const page =findPage(trashPagesId, trashPages, pageId);
       setRoutePage(page); 
+      setTargetPageId(page.id);
       addRecentPage(pageId);
     }else{
       setRoutePage(firstPage);
@@ -258,7 +260,13 @@ const NotionRouter =()=>{
     }
   };
   useEffect(()=>{
-    console.log("location", location)
+    if(firstPage!==undefined && routePage==null&& hash=== ""){
+      setRoutePage(firstPage);
+      setTargetPageId(firstPage.id);
+    }
+  },[firstPage]);
+
+  useEffect(()=>{
     if(routePage!==null){
       const path =makeRoutePath(routePage, pagesId,pages);
       navigate(path);
