@@ -148,6 +148,12 @@
 .lineThrough{
   text-decoration: line-through;
 }
+.editableBlock a:link{
+  color:grey;
+  text-decoration: underline;
+  z-index: 5;
+  cursor: pointer;
+}
 .h1 .mainBlock .contentEditable, 
 .h2 .mainBlock .contentEditable,
 .h3 .mainBlock .contentEditable{

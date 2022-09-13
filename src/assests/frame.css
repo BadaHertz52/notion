@@ -360,6 +360,13 @@ a:link, a:active, a:visited {
   text-decoration: line-through;
 }
 
+.editableBlock a:link {
+  color: grey;
+  text-decoration: underline;
+  z-index: 5;
+  cursor: pointer;
+}
+
 .h1 .mainBlock .contentEditable,
 .h2 .mainBlock .contentEditable,
 .h3 .mainBlock .contentEditable {
@@ -1124,9 +1131,13 @@ a:link, a:active, a:visited {
   flex-direction: column;
   align-items: center;
 }
-#linkLoader .inner > div, #linkLoader .inner input {
+#linkLoader .pages, #linkLoader input, #linkLoader .result, #linkLoader .linkToWebPage {
   width: 100%;
   margin-top: 10px;
+}
+#linkLoader .pages header {
+  font-size: 12px;
+  color: #B9B8B6;
 }
 #linkLoader input {
   width: 90%;
@@ -1139,6 +1150,9 @@ a:link, a:active, a:visited {
   background-color: rgba(242, 241, 238, 0.6);
   border: 1px solid #B9B8B6;
   box-shadow: rgba(15, 15, 15, 0.162) 0px 0px 1px inset;
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
 }
 #linkLoader input::-moz-placeholder {
   color: #B9B8B6;
@@ -1159,9 +1173,13 @@ a:link, a:active, a:visited {
 }
 #linkLoader .page_inner {
   width: 100%;
-  height: 1.5rem;
+  padding: 6px;
   display: flex;
   align-items: center;
+  margin-top: 12px;
+}
+#linkLoader .page_inner:hover {
+  background-color: #EDECE9;
 }
 #linkLoader .pageIcon {
   width: 1.5rem;
@@ -1172,10 +1190,34 @@ a:link, a:active, a:visited {
   width: 100%;
   height: 100%;
 }
+#linkLoader .pageInform {
+  width: calc(100% - 1.5rem + 10px);
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+}
 #linkLoader .pageTitle {
   height: 100%;
   font-size: 1rem;
   text-overflow: ellipsis;
+  text-align: left;
+}
+#linkLoader .pagePath {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #B9B8B6;
+}
+#linkLoader .result svg, #linkLoader .linkToWebPage svg {
+  margin-right: 10px;
+}
+#linkLoader .result {
+  padding: 0;
+}
+#linkLoader .result:hover {
+  background-color: #EDECE9;
+}
+#linkLoader .linkToWebPage:hover {
+  background-color: #EDECE9;
 }
 
 #inner .blockComponent,
