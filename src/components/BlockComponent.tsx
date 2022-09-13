@@ -688,6 +688,16 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
       editBlock(page.id, originBlock)
     };
   };
+  const onClickLinkInContents=(event:MouseEvent)=>{
+    const target =event.target as HTMLElement;
+    console.log("target,", target, target.className);
+    if(target.className==="link"){
+      const href =target.getAttribute("href") ;
+      const openType =target.getAttribute("target");
+      href!==null&& openType!==null&&
+      window.open(href,openType);
+    };
+  };
   function commandChange (event:React.ChangeEvent<HTMLInputElement>){
     setTemplateItem(templateHtml, page);
     const value = event.target.value;
@@ -760,6 +770,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
           onKeyDown={(event)=> onKeyDownContents(event)}
           onSelect={(event)=>onSelectContents(event)}
           onMouseDown={(event)=>onMouseDownContents(event)}
+          onClick={(event)=>onClickLinkInContents(event)}
         /> 
         :
           <input
