@@ -426,6 +426,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
         editBlock={editBlock}
         setOpenLink={setOpenLink}
         blockStylerStyle={blockStylerStyle}
+        setSelection={setSelection}
         />
     }
       {openColor &&
