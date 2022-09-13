@@ -8,6 +8,7 @@ import { selectionType } from './Frame';
 import Menu, { MenuAndBlockStylerCommonProps } from './Menu';
 import { Block} from '../modules/notion';
 import { detectRange } from './BlockFn';
+import LinkLoader from './LinkLoader';
 /**
  *  select 하거나, 이를 취소한 경우, 변경된 블럭의 contents를 가져오는  함수로 만약 BlockStyler로 스타일을 변경하다면, 스타일 변경 후에 해당 함수를 사용해야 한다.
  * @param targetBlock  
@@ -41,13 +42,15 @@ if(contentEditableHtml!==null&& contentEditableHtml!==undefined){
 return newBlock
 };
 type BlockStylerProps = MenuAndBlockStylerCommonProps& {
+  pagesId:string[],
+  recentPagesId:string[]|null,
   selection:selectionType,
   setSelection:Dispatch<SetStateAction<selectionType|null>>,
   openTemplates: boolean,
   setPopupStyle:Dispatch<React.SetStateAction<React.CSSProperties | undefined>>,
   setCommandTargetBlock: React.Dispatch<React.SetStateAction<Block | null>>
 }
-const BlockStyler=({pages, firstlist, userName, page, block, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage,popup,setPopup, setCommentBlock,setTargetPageId,selection,setSelection, openTemplates, setPopupStyle, setCommandTargetBlock}:BlockStylerProps)=>{
+const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, block, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage,popup,setPopup, setCommentBlock,setTargetPageId,selection,setSelection, openTemplates, setPopupStyle, setCommandTargetBlock}:BlockStylerProps)=>{
 
   //select-> selection의 스타일 변경-> 변경된 내용을 selection, block에 반영 의 순서로 이루어짐
 
@@ -356,7 +359,10 @@ const BlockStyler=({pages, firstlist, userName, page, block, addBlock, editBlock
           {blockType(block)}
           <IoIosArrowDown className='arrowDown'/>
         </button>
-        <button className='linkBtn btn'>
+        <button 
+          className='linkBtn btn'
+          onClick={()=>setOpenLink(!openLink)}
+        >
           <ImArrowUpRight2/>
           Link
           <IoIosArrowDown className='arrowDown'/>
@@ -411,9 +417,16 @@ const BlockStyler=({pages, firstlist, userName, page, block, addBlock, editBlock
       </div>
     </div>
     {openLink &&
-      <div className='linkLoader'>
-
-      </div>
+      <LinkLoader
+        recentPagesId={recentPagesId}
+        pages={pages}
+        pagesId={pagesId}
+        page={page}
+        block={selection.block}
+        editBlock={editBlock}
+        setOpenLink={setOpenLink}
+        blockStylerStyle={blockStylerStyle}
+        />
     }
       {openColor &&
       <div 

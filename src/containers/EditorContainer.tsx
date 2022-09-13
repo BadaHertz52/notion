@@ -42,6 +42,7 @@ type EditorContainerProps = NotionActionProps &{
   pagesId:string[],
   userName:string,
   firstlist:listItem[],
+  recentPagesId:string[]|null,
   sideAppear:SideAppear,
   page:Page,
 
@@ -51,8 +52,7 @@ type EditorContainerProps = NotionActionProps &{
 
   changePageToBlock:(currentPageId: string, block: Block) => void,
 
-  makePagePath: (page: Page) => pathType[] | null,
-  
+  makePagePath: (page: Page ,pagesId:string[], pages:Page[]) => pathType[] | null,
 
   setTargetPageId:Dispatch<SetStateAction<string>>,
   setRoutePage: React.Dispatch<React.SetStateAction<Page | null>>,
@@ -76,7 +76,7 @@ type EditorContainerProps = NotionActionProps &{
   setFontStyle:Dispatch<SetStateAction<fontStyleType>>,
 };
 
-const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isInTrash, makePagePath,changeSide,addBlock,editBlock ,changeBlockToPage, changePageToBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId, setRoutePage ,openComment,setOpenComment,commentBlock,setCommentBlock,smallText,setSmallText,fullWidth,setFullWidth,showAllComments,  setShowAllComments , setAllCommentsStyle,discardEdit , setOpenExport, openTemplates, setOpenTemplates, fontStyle, setFontStyle}:EditorContainerProps)=>{
+const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,recentPagesId ,isInTrash, makePagePath,changeSide,addBlock,editBlock ,changeBlockToPage, changePageToBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId, setRoutePage ,openComment,setOpenComment,commentBlock,setCommentBlock,smallText,setSmallText,fullWidth,setFullWidth,showAllComments,  setShowAllComments , setAllCommentsStyle,discardEdit , setOpenExport, openTemplates, setOpenTemplates, fontStyle, setFontStyle}:EditorContainerProps)=>{
   const dispatch =useDispatch();
   const user =useSelector((state:RootState)=>state.user);
   const [editorStyle, setEditorStyle]=useState<CSSProperties|undefined>(undefined);
@@ -102,7 +102,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isIn
   },[sideAppear])
 
   useEffect(()=>{
-    setPagePath(makePagePath(page))
+    setPagePath(makePagePath(page, pagesId, pages))
   },[page, page.header.icon, page.header.title, makePagePath]);
 
   return(
@@ -164,6 +164,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,isIn
         pagesId={pagesId}
         pages={pages}
         firstlist={firstlist}
+        recentPagesId={recentPagesId}
         addBlock={addBlock}
         editBlock={editBlock}
         changeBlockToPage={changeBlockToPage}

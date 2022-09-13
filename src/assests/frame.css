@@ -997,6 +997,187 @@ form button svg {
   border-top: 1px solid #d6d6d6;
 }
 
+.switchBtn {
+  position: relative;
+  width: 30px;
+  height: 15px;
+}
+.switchBtn .slider {
+  position: absolute;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 34px;
+  background-color: #ccc;
+  transition: 0.4s;
+}
+.switchBtn .slider::before {
+  position: absolute;
+  content: "";
+  height: 12px;
+  width: 12px;
+  bottom: 1.5px;
+  left: 4px;
+  border-radius: 50%;
+  background-color: white;
+  transition: 0.4s;
+}
+.switchBtn .slider.on {
+  background-color: rgb(46, 170, 220);
+  box-shadow: 0 0 1px rgb(46, 170, 220);
+}
+.switchBtn .slider.on:before {
+  transform: translateX(10px);
+}
+
+#inner .edit_inform {
+  color: rgb(112, 112, 112);
+}
+
+.edit_inform {
+  border-top: 1px solid #B9B8B6;
+  font-size: 12px;
+  text-align: left;
+  margin-bottom: 0;
+}
+.edit_inform p {
+  margin: 10px 0 0 10px;
+}
+
+div {
+  box-sizing: border-box;
+  pointer-events: auto;
+}
+div::-webkit-scrollbar {
+  background: transparent;
+  width: 10px;
+  height: 10px;
+}
+div::-webkit-scrollbar-thumb {
+  background-color: #D3D1CB;
+}
+div::-webkit-scrollbar-track {
+  background-color: #edece9;
+}
+
+.pageLink:hover {
+  background-color: #EDECE9;
+}
+
+button {
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  cursor: pointer;
+  transition: background-color 20ms ease-in 0s;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  padding-left: 1rem;
+}
+ul li,
+ol li {
+  padding-left: 10px;
+}
+
+a:link, a:active, a:visited {
+  text-decoration: none;
+  color: inherit;
+}
+
+#linkLoader {
+  position: absolute;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  margin: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  pointer-events: auto;
+  transform: matrix(1, 0, 0, 1, 0, 0);
+  z-index: 10;
+  border-radius: 8px;
+  box-shadow: 0px 0px 23px -5px #ababab;
+  width: 300px;
+}
+#linkLoader::-webkit-scrollbar-thumb {
+  background: #D3D1CB;
+}
+#linkLoader::-webkit-scrollbar-track {
+  background: #EDECE9;
+}
+#linkLoader .inner {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#linkLoader .inner > div, #linkLoader .inner input {
+  width: 100%;
+  margin-top: 10px;
+}
+#linkLoader input {
+  width: 90%;
+  height: 1.5rem;
+  font-size: 15px;
+  padding-left: 6px;
+  color: rgb(141, 141, 141);
+  margin: 0 5%;
+  border-radius: 5px;
+  background-color: rgba(242, 241, 238, 0.6);
+  border: 1px solid #B9B8B6;
+  box-shadow: rgba(15, 15, 15, 0.162) 0px 0px 1px inset;
+}
+#linkLoader input::-moz-placeholder {
+  color: #B9B8B6;
+}
+#linkLoader input:-ms-input-placeholder {
+  color: #B9B8B6;
+}
+#linkLoader input::placeholder {
+  color: #B9B8B6;
+}
+#linkLoader input:focus {
+  box-sizing: border-box;
+  outline: 3.5px solid rgb(169, 226, 245);
+  border: none;
+}
+#linkLoader .pageList {
+  margin-top: 10px;
+}
+#linkLoader .page_inner {
+  width: 100%;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+}
+#linkLoader .pageIcon {
+  width: 1.5rem;
+  height: 100%;
+  margin-right: 10px;
+}
+#linkLoader .pageImgIcon {
+  width: 100%;
+  height: 100%;
+}
+#linkLoader .pageTitle {
+  height: 100%;
+  font-size: 1rem;
+  text-overflow: ellipsis;
+}
+
 #inner .blockComponent,
 #inner .contents,
 #inner .contentEditable {

@@ -26,6 +26,48 @@ export const serifFontFamily ='Lyon-Text, Georgia, ui-serif, serif';
 export const monoFontFamily ='iawriter-mono, Nitti, Menlo, Courier, monospace'; 
 export type fontStyleType =typeof serifFontFamily| typeof monoFontFamily|typeof defaultFontFamily;
 
+export const makePagePath=(page:Page ,pagesId:string[], pages:Page[]):pathType[]|null=>{
+  if(page.parentsId !==null){
+    const parentPages:Page[] = page.parentsId.map((id:string)=>findPage(pagesId,pages,id));
+    const pagePath:pathType[] =parentPages.concat(page).map((p:Page)=>({
+      id:p.id,
+      title:p.header.title,
+      icon:p.header.icon,
+      iconType:p.header.iconType,
+    }));
+    return pagePath;
+  }else{
+    return (
+      [{
+        id:page.id,
+        title:page.header.title,
+        icon:page.header.icon,
+        iconType:page.header.iconType
+        }])
+  }
+};
+export const makeRoutePath=(page:Page ,pagesId:string[], pages:Page[]):string=>{
+  let path ="";
+  if(page.parentsId ==null){
+    path =`/${page.id}`;
+  }else{
+    const pagePath=makePagePath(page, pagesId, pages);
+    if(pagePath!==null){
+      let PATH ="";
+        for (let i = 0; i <= pagePath.length; i++) {
+          if(i<pagePath.length){
+            const element:pathType = pagePath[i];
+            const id :string =element.id;
+            PATH =PATH.concat(`/${id}`);
+            if(i=== pagePath.length-1){
+              path =PATH;
+            };
+          }
+      };
+    };
+  };
+  return path;
+};
 const NotionRouter =()=>{
   const navigate= useNavigate();
   const dispatch =useDispatch();
@@ -160,58 +202,19 @@ const NotionRouter =()=>{
   //side--
   //action.function ---
 
-
-  const makePagePath=(page:Page):pathType[]|null=>{
-    if(page.parentsId !==null){
-      const parentPages:Page[] = page.parentsId.map((id:string)=>findPage(notion.pagesId, notion.pages,id));
-      const pagePath:pathType[] =parentPages.concat(page).map((p:Page)=>({
-        id:p.id,
-        title:p.header.title,
-        icon:p.header.icon,
-        iconType:p.header.iconType,
-      }));
-      return pagePath;
-    }else{
-      return (
-        [{
-          id:page.id,
-          title:page.header.title,
-          icon:page.header.icon,
-          iconType:page.header.iconType
-          }])
-    }
-  };
-  const makeRoutePath=(page:Page):string=>{
-    let path ="";
-    if(page.parentsId ==null){
-      path =`/${page.id}`;
-    }else{
-      const pagePath=makePagePath(page);
-      if(pagePath!==null){
-        let PATH ="";
-          for (let i = 0; i <= pagePath.length; i++) {
-            if(i<pagePath.length){
-              const element:pathType = pagePath[i];
-              const id :string =element.id;
-              PATH =PATH.concat(`/${id}`);
-              if(i=== pagePath.length-1){
-                path =PATH;
-              };
-            }
-        };
-      };
-    };
-    return path;
-  };
   const findRoutePage =(pageId: string )=>{
     if(pagesId.includes(pageId)){
       const page =findPage(pagesId, pages, pageId);
-      setRoutePage(page); 
+      setRoutePage(page);
+      addRecentPage(pageId);
     }else if(trashPagesId !==null && trashPages !==null&& trashPagesId.includes(pageId)){
       const page =findPage(trashPagesId, trashPages, pageId);
       setRoutePage(page); 
+      addRecentPage(pageId);
     }else{
-      setRoutePage(firstPage)
+      setRoutePage(firstPage);
+      !user.recentPagesId?.includes(firstPage.id) &&
+      addRecentPage(firstPage.id);
     };
   };
   const onClickDiscardEdit =()=>{
@@ -255,8 +258,9 @@ const NotionRouter =()=>{
     }
   };
   useEffect(()=>{
+    console.log("location", location)
     if(routePage!==null){
-      const path =makeRoutePath(routePage);
+      const path =makeRoutePath(routePage, pagesId,pages);
       navigate(path);
       changeTitle(routePage.header.title);
       changeFavicon(routePage.header.icon, routePage.header.iconType);
@@ -273,9 +277,6 @@ const NotionRouter =()=>{
     //sideBar 에서 페이지 이동 시 
     if(targetPageId!== "none"){
       findRoutePage(targetPageId);
-      if(notion.pagesId.includes(targetPageId)){
-        addRecentPage(targetPageId);
-      }
     }else{
       setRoutePage(null);
       changeSide("lock")
@@ -330,11 +331,12 @@ const NotionRouter =()=>{
       <>
         <Routes>
           <Route
-            path={makeRoutePath(routePage)} 
+            path={makeRoutePath(routePage,pagesId,pages)} 
             element={<EditorContainer 
                     sideAppear={sideAppear}
                     firstlist ={firstlist}
                     userName={user.userName}
+                    recentPagesId={user.recentPagesId}
                     page={routePage}
                     pages={pages}
                     pagesId={pagesId}
@@ -457,6 +459,7 @@ const NotionRouter =()=>{
           pages={pages}
           firstlist={firstlist}
           userName={user.userName}
+          recentPagesId ={user.recentPagesId}
           setOpenExport={setOpenExport}
           addBlock={addBlock}
           editBlock={editBlock}
@@ -490,6 +493,7 @@ const NotionRouter =()=>{
             pagesId={pagesId}
             pages={pages}
             firstlist={firstlist}
+            recentPagesId={user.recentPagesId}
             addBlock={addBlock}
             editBlock={editBlock}
             changeBlockToPage={changeBlockToPage}

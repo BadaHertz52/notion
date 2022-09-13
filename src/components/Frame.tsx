@@ -33,6 +33,7 @@ export type Template_Frame_SAME_Props ={
   pages:Page[],
   pagesId:string[],
   firstlist:listItem[],
+  recentPagesId:string[]|null,
   editBlock :(pageId: string, block: Block) => void,
   addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
   changeBlockToPage: (currentPageId: string, block: Block) => void,
@@ -135,7 +136,7 @@ const MoveTargetBlock=({ page, block , editBlock, addBlock,changeToSub ,raiseBlo
   )
 }
 
-const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,commentBlock,openComment, setRoutePage ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit, openTemplates,  setOpenTemplates, fontStyle}:FrameProps)=>{
+const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,commentBlock,openComment, setRoutePage ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit, openTemplates,  setOpenTemplates, fontStyle}:FrameProps)=>{
   const innerWidth =window.innerWidth; 
   const inner =document.getElementById("inner");
   const [templateHtml,setTemplateHtml]=useState<HTMLElement|null>(null);
@@ -1037,9 +1038,11 @@ const Frame =({ userName,page, pagesId, pages, firstlist,editBlock,changeBlockTo
       {selection !==null &&
         <BlockStyler
           pages={pages}
+          pagesId={pagesId}
           firstlist={firstlist}
           userName={userName}
           page={page}
+          recentPagesId={recentPagesId}
           block={selection.block}
           addBlock={addBlock}
           editBlock={editBlock}

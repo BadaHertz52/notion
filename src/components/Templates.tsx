@@ -13,7 +13,7 @@ type TemplatesProps = Template_Frame_SAME_Props &{
   setRoutePage:Dispatch<SetStateAction<Page|null>>,
   setOpenTemplates: Dispatch<SetStateAction<boolean>>
 };
-const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage , addTemplate,cancleEditTemplate, deleteTemplate, setRoutePage ,setTargetPageId,commentBlock,openComment , openTemplates ,setOpenTemplates ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit, fontStyle }:TemplatesProps)=>{
+const Templates =({ templatesId,userName, pagesId, pages, firstlist ,recentPagesId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage , addTemplate,cancleEditTemplate, deleteTemplate, setRoutePage ,setTargetPageId,commentBlock,openComment , openTemplates ,setOpenTemplates ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit, fontStyle }:TemplatesProps)=>{
   const templates = templatesId !==null ? templatesId.map((id:string)=> findPage(pagesId, pages, id))  :null;
   const [template, setTemplate]= useState<Page|null>(templates==null? null : templates[0]);
   const [openEditAlert, setOpenEditAlert]=useState<boolean>(false);
@@ -169,6 +169,7 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist,editBlock,ch
               pagesId={pagesId}
               pages={pages}
               firstlist={firstlist}
+              recentPagesId={recentPagesId}
               addBlock={addBlock}
               editBlock={editBlock}
               changeBlockToPage={changeBlockToPage}
