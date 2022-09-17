@@ -289,10 +289,10 @@ a:link, a:active, a:visited {
   color: #B9B8B6;
 }
 
-.selected {
+.selected, .editableBlock .selected a:link, .editableBlock a:link .selected {
   background-color: #BDE6F1;
 }
-.selected .bg_default, .selected .bg_yellow, .selected .bg_blue, .selected .bg_green, .selected .bg_grey, .selected .bg_pink {
+.selected .bg_default, .selected .bg_yellow, .selected .bg_blue, .selected .bg_green, .selected .bg_grey, .selected .bg_pink, .editableBlock .selected a:link .bg_default, .editableBlock .selected a:link .bg_yellow, .editableBlock .selected a:link .bg_blue, .editableBlock .selected a:link .bg_green, .editableBlock .selected a:link .bg_grey, .editableBlock .selected a:link .bg_pink, .editableBlock a:link .selected .bg_default, .editableBlock a:link .selected .bg_yellow, .editableBlock a:link .selected .bg_blue, .editableBlock a:link .selected .bg_green, .editableBlock a:link .selected .bg_grey, .editableBlock a:link .selected .bg_pink {
   background-color: #BDE6F1;
 }
 
@@ -360,7 +360,7 @@ a:link, a:active, a:visited {
   text-decoration: line-through;
 }
 
-.editableBlock a:link {
+.contentEditable a:link, .contentEditable a:visited, .contentEditable a:active {
   color: grey;
   text-decoration: underline;
   z-index: 5;

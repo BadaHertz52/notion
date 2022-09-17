@@ -94,7 +94,7 @@
     }
   }
 }
-.selected{
+.selected ,.editableBlock .selected a:link , .editableBlock  a:link .selected{
   background-color:#BDE6F1;
   .bg_default, .bg_yellow, .bg_blue, .bg_green, .bg_grey,.bg_pink{
     background-color:#BDE6F1;
@@ -148,11 +148,14 @@
 .lineThrough{
   text-decoration: line-through;
 }
-.editableBlock a:link{
-  color:grey;
-  text-decoration: underline;
-  z-index: 5;
-  cursor: pointer;
+
+.contentEditable {
+  a:link, a:visited, a:active{
+    color:grey;
+    text-decoration: underline;
+    z-index: 5;
+    cursor: pointer;
+  }
 }
 .h1 .mainBlock .contentEditable, 
 .h2 .mainBlock .contentEditable,
