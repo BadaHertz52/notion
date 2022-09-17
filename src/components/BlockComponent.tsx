@@ -347,20 +347,13 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
    * @param childNodes contentEditable.current의 childNodes
    * @returns node를 하위 요소로 하는 contentEditable.current의 childNode
    */
-  function findNodeInChilNodes(node:Node ,childNodes:Node[]){
+  const findNodeInChilNodes=(node:Node ,childNodes:Node[])=>{
     const parentNode =node.parentNode as Node;
-    let childNode =parentNode
+    let childNode : any|Node;
     if(parentNode.parentElement?.className ==="contentEditable"){
       childNode =parentNode;
     }else{
-      const senetence = parentNode.parentElement?.outerHTML;
-      if(senetence !==undefined){
-        const spanArr =childNodes.filter((child:Node)=> child.nodeName==="SPAN") as Element[];
-        const span = spanArr.filter((span:Element)=> span.outerHTML.includes(senetence))[0];
-        if(span!==undefined){
-          childNode = span as Node;
-        }
-      }
+      childNode =findNodeInChilNodes(parentNode,childNodes);
     }
 
     // else if(parentNode.parentNode?.parentElement?.className==="contentEditable"){
@@ -433,6 +426,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
      */
     let selectedStartIndex :number =0;
     const nodeParent = startNode.parentElement;
+
     if(startNode.textContent!==null){
       /**
        * startNode가 span의 child 인지의 여부에 따라 preSelection 과 selectedStartIndex의 값을 변경하는 함수
@@ -605,9 +599,76 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
       selectedEndIndex:selectedEndIndex
     })
   };
-
+/**
+* parentElement가 HtmlAnchorElement이며 focustNode와 별개인 startNode의 textContent를 변경함 
+* @param startOffset : startNode에서 select이 시작된 지점
+* @param startNode select이 시작된 node
+* @param startNodeText :startNode.textContent
+* @param startParentNode :startNode.parentNode
+*/
+function updateStartParentNode(startOffset:number,startNode:Node,startNodeText:string, startParentNode:Node){
+  console.log("startText", startNodeText);
+  const preSelectedInStartNode = startNodeText.slice(0, startOffset);
+  const selectedInStartNode = startNodeText.slice(startOffset);
+  const newSpan = document.createElement("span");
+  newSpan.className="selected";
+  newSpan.innerHTML =selectedInStartNode;
+  const newStartNode =document.createTextNode(preSelectedInStartNode);
+  startParentNode.replaceChild(newSpan, startNode);
+  startParentNode.insertBefore(newStartNode, newSpan);
+  console.log("preselectedinstartNode",preSelectedInStartNode, "selectedInStartNoDE",selectedInStartNode);
+};
+/**
+  * parentElement가 HtmlAnchorElement이며 startNode와 별개인 endNode의 textContent를 변경함 
+  * @param endOffset : endNode에서 select이 끝난 지점
+  * @param endNode select이 끝난 node
+  * @param endNodeText :endNode.textContent
+  * @param endParentNode :endNode.parentNode
+  */
+function updateEndParentNode(endOffset:number,endNode:Node,endNodeText:string, endParentNode:Node){
+  console.log("endText", endNodeText);
+  const afterSelectedInEndNode = endNodeText.slice(endOffset+1);
+  const selectedInEndNode =endNodeText.slice(0, endOffset+1);
+  const newEndNode= document.createTextNode(afterSelectedInEndNode);
+  const newSpan =document.createElement("span");
+  newSpan.className="selected";
+  newSpan.innerHTML =selectedInEndNode;
+  if(afterSelectedInEndNode!==""){
+    endParentNode.replaceChild(newEndNode,endNode);
+    endParentNode.insertBefore(newSpan,newEndNode);
+  }else{
+    endParentNode.replaceChild(newSpan,endNode);
+  };
+};
+/**
+  *select가 일어날 때 anchorNode와  endNode사이의 다른 node들이 존재할 경우, 그 node들도 selected class를 가지도록 수정하는 함수
+  * @param startIndex : contentEditable.current.childNodes 중에 startNode이거나 이를 자식으로 둔 Node 
+  * @param  endIndex : contentEditable.current.childNodes 중에 endNode이거나 이를 자식으로 둔 Node 
+  * @param endNode: select가 끝난 node
+  * @param childNodes: contentEditable.current.childNodes
+  */
+function updateMiddleChildren(startIndex:number, endIndex:number,endNode:Node, childNodes:Node[]){
+  const middleChildren =childNodes.slice(startIndex, endIndex);
+  const middleText =middleChildren.map((c:Node)=>{
+    let data="";
+    if(c.nodeName==="#text"){
+      data = c.textContent as string ;
+    }else{
+      const element =c as Element;
+      data = element.outerHTML;
+    };
+    return data
+  });
+  const newSpan =document.createElement("span");
+  newSpan.className= "selected";
+  newSpan.innerHTML =middleText.join();
+  middleChildren.forEach((c:Node)=>contentEditableRef.current?.removeChild(c));
+  contentEditableRef.current?.insertBefore(newSpan, endNode);
+ };
+  
   const onSelectContents =(event:SyntheticEvent<HTMLDivElement>)=>{
-    const SELECTION = window.getSelection();
+    const SELECTION = window.getSelection(); 
+    console.log("SELECTION", SELECTION, "anchor",SELECTION?.anchorNode,"focus", SELECTION?.focusNode);
     /**
      * 마우스 드래그를 통한 select 이  아닌 경우
      */
@@ -618,38 +679,43 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
       const focusNode =SELECTION.focusNode;
       const focusOffset= SELECTION.focusOffset;
       const targetBlock = findTargetBlock(event);
-      let originBlock = targetBlock;
-      const contents =originBlock.contents;
+      const contents =targetBlock.contents;
 
-      const contentEditableChild = contentEditableRef.current?.childNodes as NodeListOf<Node>;
-      if(anchorNode !==null && focusNode !==null && contentEditableChild){
+      if(anchorNode !==null && focusNode !==null && contentEditableRef.current!==null){
+        const contentEditableChild = contentEditableRef.current.childNodes as NodeListOf<Node>;
         const childNodes =Array.from(contentEditableChild);
 
         let anchorIndex =0;
         let focusIndex=0;
         
-        if(anchorNode.parentNode?.nodeName==="SPAN"){
+        if(anchorNode.parentNode?.nodeName!=="DIV"){
           const childNode =findNodeInChilNodes(anchorNode, childNodes) as Node;
+          console.log("an -childNode",childNode)
           anchorIndex = childNodes.indexOf(childNode);
         }else{
           anchorIndex =childNodes.indexOf(anchorNode);
         };
 
-        if(focusNode.parentNode?.nodeName==="SPAN"){
+        if(focusNode.parentNode?.nodeName !=="DIV"){
           const childNode =findNodeInChilNodes(focusNode ,childNodes) as Node;
+          console.log("FOCUS -childNode",childNode)
           focusIndex = childNodes.indexOf(childNode);
         }else{
           focusIndex =childNodes.indexOf(focusNode);
         };
+        console.log("index", anchorIndex, focusIndex
+        )
         const sameNode = anchorNode ===focusNode ;               
         /**
          * select 된 내용의 시작점이 위치한 node
          */
         const startNode = anchorIndex < focusIndex? anchorNode :focusNode;
+        const startIndex = startNode===anchorNode? anchorIndex : focusIndex;
         /**
          * select된 내용이 끝나는 지점이 위치한 node
          */
         const endNode =anchorIndex <= focusIndex ? focusNode :anchorNode;
+        const endIndex = endNode===focusNode? focusIndex:anchorIndex;
         /**
          * startNode에서 select된 내용의 시작점의 index 
          */
@@ -662,16 +728,69 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
          */
         const endOffset= startOffset=== anchorOffset ? focusOffset -1: anchorOffset -1 ;
 
-        const {preChangedContent, selectedStartIndex} =getFromStartNode(startNode, startOffset, originBlock);
-        const { afterChangedContent,
-        selectedEndIndex} =getFromEndNode(endNode,endOffset, originBlock);
-        const newSelected = contents.slice(selectedStartIndex, selectedEndIndex+1);
+        const startNodeText =startNode.textContent as string; 
+        const endNodeText =endNode.textContent as string; 
 
-        const newContents =`${preChangedContent}<span class="selected">${newSelected}</span>${afterChangedContent}`; 
-        editBlock(page.id, {
-          ...originBlock,
-          contents: newContents
-        });
+        if(anchorNode.parentElement?.tagName !=="A" && focusNode.parentElement?.tagName !=="A"){
+          const {preChangedContent, selectedStartIndex} =getFromStartNode(startNode, startOffset, targetBlock);
+          const { afterChangedContent,
+          selectedEndIndex} =getFromEndNode(endNode,endOffset, targetBlock);
+          const newSelected = contents.slice(selectedStartIndex, selectedEndIndex+1);
+  
+          const newContents =`${preChangedContent}<span class="selected">${newSelected}</span>${afterChangedContent}`; 
+          editBlock(page.id, {
+            ...targetBlock,
+            contents: newContents
+          });
+        }else{
+          const startParentIsA =startNode.parentElement?.tagName==="A";
+          const endParentIsA = endNode.parentElement?.tagName==="A"
+          const startParentNode =startNode.parentNode;
+          const endParentNode =endNode.parentNode;
+
+          if(startParentIsA&& endParentIsA &&(startNode=== endNode)){
+            const innerHtml = startNodeText.slice(startOffset,endOffset+1);
+            const preText =startNodeText.slice(0, startOffset);
+            const afterText =startNodeText.slice(endOffset+1);
+            const newSpan= document.createElement("span");
+            newSpan.innerHTML =innerHtml;
+            newSpan.className="selected";
+            console.log("innerHtml",innerHtml,"pre",preText, preText===
+            "","after",afterText,afterText==="");
+            if(afterText!==""){
+              const afterNode= document.createTextNode(afterText);
+              startNode.parentNode?.insertBefore(newSpan, startNode);
+              startNode.parentNode?.replaceChild(afterNode, startNode);
+            }else{
+              startNode.parentNode?.replaceChild(newSpan, startNode);
+            };
+            if(preText!==""){
+              const preNode =document.createTextNode(preText);
+              startNode.parentNode?.insertBefore(preNode,newSpan);
+            };
+
+            
+          }else{
+            if(endOffset > startOffset+1){
+              updateMiddleChildren(startIndex,endIndex,endNode,childNodes);
+            };
+            startParentNode!==null && updateStartParentNode(startOffset, startNode, startNodeText, startParentNode);
+            endParentNode !==null && updateEndParentNode(endOffset, endNode, endNodeText, endParentNode);
+
+          }
+
+          const newContents = document.getElementById(`${targetBlock.id}_contents`)?.firstElementChild?.innerHTML;
+          console.log("newcontents", newContents);
+          if(newContents !==null && newContents!==undefined){
+            const editedBlock:Block ={
+              ...targetBlock,
+              contents: newContents,
+              editTime:editTime
+            };
+            editBlock(page.id, editedBlock);
+          }
+        };
+
         setSelection({
           block:targetBlock
         });
