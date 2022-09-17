@@ -51,7 +51,6 @@ const ColorInform=({color ,background, colorName ,page, block ,editBlock, templa
                 if(spantHtml.classList.contains(target)){
                   const arry =target==="bg"? bg_colors : color_colors;
                   const targetColor = arry.filter((c:string)=> spantHtml.classList.contains(c))[0];
-                  console.log("이미 있는 class", targetColor);
                   spantHtml.classList.remove(target);
                   spantHtml.classList.remove(targetColor);
                   if(spantHtml.classList[0]===undefined){
