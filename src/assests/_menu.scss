@@ -121,6 +121,9 @@
     height: fit-content
   }
 }
+#sideBar_pageMenu #pageMenu {
+  background-color: #ffff;
+}
 #pageMenu {
   @include popupMenu;
   background-color: initial;

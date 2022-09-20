@@ -1579,6 +1579,10 @@ a:link, a:active, a:visited {
   height: fit-content;
 }
 
+#sideBar_pageMenu #pageMenu {
+  background-color: white;
+}
+
 #pageMenu {
   width: 320px;
   display: flex;
