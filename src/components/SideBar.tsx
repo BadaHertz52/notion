@@ -279,10 +279,11 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
     const targetPage = findPage(pagesId ,pages,item.id);
     const newPageBlock :Block ={
       ...blockSample,
+      contents:"untitle",
       type:"page",
       parentBlocksId:null,
     };
-    addBlock(targetPage.id,newPageBlock, targetPage.blocksId.length, targetPage.blocks==null? null: targetPage.blocksId[targetPage.blocksId.length-1]);
+    addBlock(targetPage.id,newPageBlock, targetPage.blocksId.length, targetPage.firstBlocksId==null? null: targetPage.firstBlocksId[targetPage.firstBlocksId.length-1]);
   };
   
   const onClickMoreBtn=(item:listItem, target:HTMLElement)=>{
@@ -520,7 +521,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
         >
           <div>
             <RiDeleteBin6Line/>
-            <span className=''>
+            <span >
               Delete
             </span>
           </div>
@@ -564,9 +565,6 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
           <div>
             <BsPencilSquare/>
             <span>Rename</span>
-            <span className="">
-              Ctrl+Shift+R
-            </span>
           </div>
         </button>
         <button 
@@ -576,7 +574,6 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
           <div> 
             <IoArrowRedoOutline/>
             <span>Move to</span>
-            <span>Ctrl+Shift+P</span>
           </div>
         </button>
         <div className='edit_inform'>

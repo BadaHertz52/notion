@@ -1245,6 +1245,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
         const newPage:Page ={
           ...pageSample,
           id:action.block.id,
+          parentsId:[targetPage.id]
         };
         addPage(newPage);
         if(action.block.parentBlocksId !==null){
@@ -1769,8 +1770,23 @@ export default function notion (state:Notion =initialState , action :NotionActio
             parentPage.subPagesId.splice(subPageIndex,1);
             if(blockDelete){
               const blockIndex = parentPage.blocksId.indexOf(deletedTargetPage.id);
+              const pageBlock =parentPage.blocks[blockIndex];
               parentPage.blocks.splice(blockIndex,1);
               parentPage.blocksId.splice(blockIndex,1);
+              const firstBlocKIndex = parentPage.firstBlocksId?.indexOf(pageBlock.id);
+              if(firstBlocKIndex!==undefined){
+                if(firstBlocKIndex>-1){
+                  parentPage.firstBlocksId?.splice(firstBlocKIndex,1);
+                }else{
+                  const{parentBlock, parentBlockIndex} =findParentBlock(parentPage,pageBlock); 
+                  const newParentBlock :Block ={
+                    ...parentBlock,
+                    subBlocksId:parentBlock.subBlocksId==null? null : parentBlock.subBlocksId.filter((id:string)=> id!== pageBlock.id),
+                    editTime:editTime
+                  };
+                  parentPage.blocks.splice(parentBlockIndex,1,newParentBlock);
+                }
+              }
             }
             console.log("parent", parentPage);
           }
