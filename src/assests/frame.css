@@ -1403,7 +1403,7 @@ a:link, a:active, a:visited {
   }
   .pageHeader_notCover,
 .pageContent {
-    padding-left: 2rem;
+    padding-left: 1rem;
   }
   .pageHeader .pageTitle,
 .editableBlock,
