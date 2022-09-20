@@ -521,13 +521,16 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
       const conditionX = (clientX >= pageContentDomRect.x)&& (clientX <= pageContentDomRect.right); 
 
       const conditionY = (clientY >= (pageContentDomRect.bottom - padding)) && (clientY <= pageContentDomRect.bottom );
-  
+      /**
+       * mouseEevent가  pageContent의 아래 부분에서 일어났는지에 대한 객체, event가 아래 부분에서 일어났으면 true, 밖의 영역에서 일어났으면 false
+       */
       const isInner =conditionX && conditionY;
       if(isInner){
         const newBlock:Block={
           ...blockSample,
           firstBlock:true
         };
+
         if(page.firstBlocksId){
           addBlock(page.id, newBlock, page.blocks.length, null);
         }else{
@@ -615,7 +618,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
 
   useEffect(()=>{
     setFirstBlocksId(page.firstBlocksId); 
-  },[page])
+  },[page.firstBlocksId]);
 
   useEffect(()=>{
     firstBlocksId?.[0] ===undefined?
