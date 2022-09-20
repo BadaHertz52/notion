@@ -1015,7 +1015,6 @@ export const findPage =(pagesId: string[] ,pages:Page[] ,pageId:string):Page|Tra
       const findLastSubBLOCK=(targetBlock:Block)=>{
         if(targetBlock.subBlocksId!==null){
           const lastSubBlockId= targetBlock.subBlocksId[targetBlock.subBlocksId.length-1];
-          console.log("targetBLock", targetBlock, lastSubBlockId);
           const {BLOCK,index} = findBlock(page,lastSubBlockId);
           if(BLOCK.subBlocksId==null){
             previousBlockInDoc =BLOCK;

@@ -606,7 +606,6 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
 * @param startParentNode :startNode.parentNode
 */
 function updateStartParentNode(startOffset:number,startNode:Node,startNodeText:string, startParentNode:Node){
-  console.log("startText", startNodeText);
   const preSelectedInStartNode = startNodeText.slice(0, startOffset);
   const selectedInStartNode = startNodeText.slice(startOffset);
   const newSpan = document.createElement("span");
@@ -615,7 +614,6 @@ function updateStartParentNode(startOffset:number,startNode:Node,startNodeText:s
   const newStartNode =document.createTextNode(preSelectedInStartNode);
   startParentNode.replaceChild(newSpan, startNode);
   startParentNode.insertBefore(newStartNode, newSpan);
-  console.log("preselectedinstartNode",preSelectedInStartNode, "selectedInStartNoDE",selectedInStartNode);
 };
 /**
   * parentElement가 HtmlAnchorElement이며 startNode와 별개인 endNode의 textContent를 변경함 
@@ -625,7 +623,6 @@ function updateStartParentNode(startOffset:number,startNode:Node,startNodeText:s
   * @param endParentNode :endNode.parentNode
   */
 function updateEndParentNode(endOffset:number,endNode:Node,endNodeText:string, endParentNode:Node){
-  console.log("endText", endNodeText);
   const afterSelectedInEndNode = endNodeText.slice(endOffset+1);
   const selectedInEndNode =endNodeText.slice(0, endOffset+1);
   const newEndNode= document.createTextNode(afterSelectedInEndNode);
@@ -667,7 +664,6 @@ function updateMiddleChildren(startIndex:number, endIndex:number,endNode:Node, c
   
   const onSelectContents =(event:SyntheticEvent<HTMLDivElement>)=>{
     const SELECTION = window.getSelection(); 
-    console.log("SELECTION", SELECTION, "anchor",SELECTION?.anchorNode,"focus", SELECTION?.focusNode);
     /**
      * 마우스 드래그를 통한 select 이  아닌 경우
      */
@@ -689,7 +685,6 @@ function updateMiddleChildren(startIndex:number, endIndex:number,endNode:Node, c
         
         if(anchorNode.parentNode?.nodeName!=="DIV"){
           const childNode =findNodeInChilNodes(anchorNode, childNodes) as Node;
-          console.log("an -childNode",childNode)
           anchorIndex = childNodes.indexOf(childNode);
         }else{
           anchorIndex =childNodes.indexOf(anchorNode);
@@ -697,13 +692,10 @@ function updateMiddleChildren(startIndex:number, endIndex:number,endNode:Node, c
 
         if(focusNode.parentNode?.nodeName !=="DIV"){
           const childNode =findNodeInChilNodes(focusNode ,childNodes) as Node;
-          console.log("FOCUS -childNode",childNode)
           focusIndex = childNodes.indexOf(childNode);
         }else{
           focusIndex =childNodes.indexOf(focusNode);
         };
-        console.log("index", anchorIndex, focusIndex
-        )
         const sameNode = anchorNode ===focusNode ;               
         /**
          * select 된 내용의 시작점이 위치한 node
@@ -779,7 +771,6 @@ function updateMiddleChildren(startIndex:number, endIndex:number,endNode:Node, c
           }
 
           const newContents = document.getElementById(`${targetBlock.id}_contents`)?.firstElementChild?.innerHTML;
-          console.log("newcontents", newContents);
           if(newContents !==null && newContents!==undefined){
             const editedBlock:Block ={
               ...targetBlock,
@@ -808,7 +799,6 @@ function updateMiddleChildren(startIndex:number, endIndex:number,endNode:Node, c
   };
   const onClickLinkInContents=(event:MouseEvent)=>{
     const target =event.target as HTMLElement;
-    console.log("target,", target, target.className);
     if(target.className==="link"){
       const href =target.getAttribute("href") ;
       const openType =target.getAttribute("target");
