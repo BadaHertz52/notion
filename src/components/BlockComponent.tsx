@@ -23,7 +23,6 @@ type  BlockComponentProps ={
   changeToSub: (pageId: string, block: Block, newParentBlockId: string) => void,
   raiseBlock: (pageId: string, block: Block) => void,
   deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
-  blockComments:boolean,
   command :Command,
   setCommand:Dispatch<SetStateAction<Command>>,
   onClickCommentBtn: (block: Block) => void,
@@ -64,7 +63,7 @@ export const BlockComment =({block , onClickCommentBtn}:BlockCommentProps)=>{
   )
 };
 
-const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,blockComments , command, setCommand  ,onClickCommentBtn ,setOpenComment ,setTargetPageId ,setOpenLoader, setLoaderTargetBlock ,closeMenu ,templateHtml, setSelection }:BlockComponentProps)=>{
+const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,command, setCommand  ,onClickCommentBtn ,setOpenComment ,setTargetPageId ,setOpenLoader, setLoaderTargetBlock ,closeMenu ,templateHtml, setSelection }:BlockComponentProps)=>{
   const editTime =JSON.stringify(Date.now);
   const contentEditableRef= useRef<HTMLElement>(null);
   const possibleBlocks = page.blocks.filter((block:Block)=> block.type !=="image media" && block.type !=="page");
