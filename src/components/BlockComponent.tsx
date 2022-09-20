@@ -6,6 +6,7 @@ import {  Block,BlockType,blockTypes,findBlock,findParentBlock,findPreviousBlock
 import { getContent } from './BlockStyler';
 import { Command, selectionType } from './Frame';
 import ImageContent from './ImageContent';
+
 export   const setTemplateItem=(templateHtml:HTMLElement|null, page:Page)=>{
   if(templateHtml!==null){
     const templateItem= sessionStorage.getItem("origintTemplate");
@@ -15,6 +16,7 @@ export   const setTemplateItem=(templateHtml:HTMLElement|null, page:Page)=>{
     }
   };
 };
+
 type  BlockComponentProps ={
   block:Block,
   page:Page,
@@ -76,7 +78,19 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
     const targetBlock = findBlock(page, blockId).BLOCK;
     return targetBlock;
   };
-
+  /**
+* contents가 비어있는 block 을 기준으로 커서를 다른 block으로 옮기는 경우, placeHolder가 보이지 않도록  해당 block의 contentsEmpty를 true로 변경하는 함수
+*@param block : contents가 비어있는 block,
+*/
+const changeContentEmpty=(block:Block)=>{
+  if(block.contents===""&& !block.contentsEmpty){
+    const editedBlock:Block ={
+      ...block,
+      contentsEmpty:true
+    };
+    editBlock(page.id, editedBlock);
+  };
+};
   const showBlockFn=(event: MouseEvent)=>{
     closeMenu(event)
     const blockHtml =document.getElementById(`block_${block.id}`);
@@ -125,10 +139,11 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
           subBlocksId: targetBlock.subBlocksId,
           parentBlocksId:targetBlock.parentBlocksId
         } ;
-        if((targetBlock.contents!== editedContents) || (targetBlock.subBlocksId!==null)){
+        if((targetBlock.contents!== editedContents) || (targetBlock.contents==="")|| (targetBlock.subBlocksId!==null)){
           const editedBlock:Block ={
             ...targetBlock,
             contents:block.contents!== editedContents ?editedContents : targetBlock.contents,
+            contentsEmpty: editedContents===""? true: false,
             subBlocksId: targetBlock.subBlocksId !==null ? null : targetBlock.subBlocksId,
             editTime:editTime,
           };
@@ -192,6 +207,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
           console.log(`Can't find .${targetBlock.id}_contents html`);
         };
     };
+
     switch (code) {
       case "tab":
         event.preventDefault();
@@ -216,6 +232,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
 
         break;
       case "arrowup":
+          changeContentEmpty(targetBlock);
           if(page.firstBlocksId!==null && page.firstBlocksId[0]!== targetBlock.id){
             let doing:boolean = true;
             let referenceBlock:Block = targetBlock;
@@ -329,6 +346,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
           }
 
         };
+        changeContentEmpty(targetBlock);
         if(targetBlock.firstBlock ){
           findNextBlockOfFirstBlock(targetBlock);
         }else{
@@ -340,6 +358,7 @@ const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, d
         break;
     };
   }; 
+  //Selection 
   /**
    * node가 contentEditable.current의 childNodes의 하위일 경우,childNodes중에  해당 node의 상위 node를 찾는 함수 
    * @param node 
@@ -855,9 +874,12 @@ function updateMiddleChildren(startIndex:number, endIndex:number,endNode:Node, c
     !command.boolean && onClickCommentBtn(block);
     
   };
-
+  const onBlurContent=()=>{
+    if(block.contents===""&& !block.contentsEmpty){
+      changeContentEmpty(block)
+    }
+  };  
   const BlockContentEditable=()=>{
-
     useEffect(()=>{
       if(command.boolean){
         const commentInputHtml =document.getElementById("commandInput");
@@ -879,6 +901,7 @@ function updateMiddleChildren(startIndex:number, endIndex:number,endNode:Node, c
           onSelect={(event)=>onSelectContents(event)}
           onMouseDown={(event)=>onMouseDownContents(event)}
           onClick={(event)=>onClickLinkInContents(event)}
+          onBlur={onBlurContent}
         /> 
         :
           <input
