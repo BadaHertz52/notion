@@ -1056,7 +1056,11 @@ export default function notion (state:Notion =initialState , action :NotionActio
                         trash.pages[pageIndex] as TrashPage: 
                         {...pageSample, subPages:null};
   const  blockIndex:number = action.block !==null ?( pages[pageIndex]?.blocksId.indexOf(action.block.id) ): 0 as number;
-
+/**
+ * block data 수정 
+ * @param index  targetPage.blocks 에서의 block의 index
+ * @param block  수정된 data를 가진 block 
+ */
   const editBlockData =(index:number ,block:Block)=>{
     targetPage?.blocks.splice(index,1,block);
     console.log("editBlockData",  block, targetPage.blocks);
@@ -1661,6 +1665,8 @@ export default function notion (state:Notion =initialState , action :NotionActio
         const parentPageIndex = pagesId.indexOf(parentPage.id);
         const subPageIndex= parentPage.subPagesId?.indexOf(targetPage.id) as number;
         parentPage.subPagesId?.splice(subPageIndex,0, newPage.id);
+
+
         pages.splice(parentPageIndex,0, parentPage);
       };
       pages.splice(targetPageIndex+1, 0, newPage);
