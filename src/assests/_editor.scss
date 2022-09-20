@@ -62,7 +62,7 @@
   }
   // topbar ---
   .topbar {
-    width:calc(100% - 28px);
+    width:100%;
     height: 45px ;
     padding: {
       left: 12px;
@@ -111,6 +111,7 @@
   }
   #sideBarBtn {
     margin-right: 5px;
+    padding:10px;
   }
   .pagePathes{
     display: flex;
