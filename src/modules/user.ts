@@ -32,8 +32,8 @@ ReturnType<typeof add_recent_page>|
 ReturnType<typeof clean_recent_page>;
 
 const initialState ={
-  userName:"amet",
-  userEmail:"amet@notion.com",
+  userName:"badahertz52",
+  userEmail:"badahertz52@notion.com",
   favorites:["12345"],
   recentPagesId:null
 };
