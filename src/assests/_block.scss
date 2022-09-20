@@ -87,6 +87,15 @@
   }
 }
 .contentEditable:empty{
+    &::after{
+      content: attr(placeholder);
+      color: $mud;
+    }
+}
+.contentEditable.empty:empty{
+  &::after{
+    content:none;
+  }
   &:hover, &:focus{
     &::after{
       content: attr(placeholder);

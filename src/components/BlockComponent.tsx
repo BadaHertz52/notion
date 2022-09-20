@@ -880,8 +880,8 @@ function updateMiddleChildren(startIndex:number, endIndex:number,endNode:Node, c
       <>
       {!command.command || (command.targetBlock !==null && command.targetBlock.id !== block.id) ? 
         <ContentEditable
-          className='contentEditable'
-          placeholder="type '/' for commmands"
+          className={block.contentsEmpty ?"contentEditable empty": 'contentEditable'}
+          placeholder="Type '/' for commmands"
           html= {block.contents}
           innerRef={contentEditableRef}
           onChange={(event)=> onChangeContents(event )}
