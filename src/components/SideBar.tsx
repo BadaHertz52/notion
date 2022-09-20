@@ -351,7 +351,6 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
         position:"absolute",
         top: domRect.bottom,
         left:domRect.left +10,
-        width:domRect.width 
       })
     }
   };
