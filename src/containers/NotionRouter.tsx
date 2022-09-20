@@ -376,7 +376,6 @@ const NotionRouter =()=>{
                     setRoutePage={setRoutePage}
                     showAllComments={showAllComments}
                     setShowAllComments={setShowAllComments}
-                    setAllCommentsStyle={setAllCommentsStyle}
                     discardEdit={discard_edit}
                     setOpenExport={setOpenExport}
                     openComment={openComment}

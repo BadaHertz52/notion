@@ -67,7 +67,6 @@ type EditorContainerProps = NotionActionProps &{
   setFullWidth:Dispatch<SetStateAction<boolean>>,
   showAllComments:boolean,
   setShowAllComments:Dispatch<SetStateAction<boolean>>,
-  setAllCommentsStyle:Dispatch<SetStateAction<CSSProperties>>,
   discardEdit:boolean,
   setOpenExport :Dispatch<SetStateAction<boolean>>,
   openTemplates: boolean,
@@ -76,14 +75,13 @@ type EditorContainerProps = NotionActionProps &{
   setFontStyle:Dispatch<SetStateAction<fontStyleType>>,
 };
 
-const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,recentPagesId ,isInTrash, makePagePath,changeSide,addBlock,editBlock ,changeBlockToPage, changePageToBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId, setRoutePage ,openComment,setOpenComment,commentBlock,setCommentBlock,smallText,setSmallText,fullWidth,setFullWidth,showAllComments,  setShowAllComments , setAllCommentsStyle,discardEdit , setOpenExport, openTemplates, setOpenTemplates, fontStyle, setFontStyle}:EditorContainerProps)=>{
+const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,recentPagesId ,isInTrash, makePagePath,changeSide,addBlock,editBlock ,changeBlockToPage, changePageToBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId, setRoutePage ,openComment,setOpenComment,commentBlock,setCommentBlock,smallText,setSmallText,fullWidth,setFullWidth,showAllComments,  setShowAllComments ,discardEdit , setOpenExport, openTemplates, setOpenTemplates, fontStyle, setFontStyle}:EditorContainerProps)=>{
   const dispatch =useDispatch();
   const user =useSelector((state:RootState)=>state.user);
   const [editorStyle, setEditorStyle]=useState<CSSProperties|undefined>(undefined);
   const changeToSub =(pageId: string, block: Block,  newParentBlockId: string)=> dispatch(change_to_sub(pageId, block, newParentBlockId));
   const raiseBlock =(pageId: string, block: Block) =>dispatch((raise_block(pageId, block)));
   const [pagePath, setPagePath]=useState<pathType[]|null>(null);
-
 
   useEffect(()=>{
     if(sideAppear==="lock"){
@@ -157,7 +155,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,rece
       setFullWidth={setFullWidth}
       setOpenExport={setOpenExport}
       setFontStyle={setFontStyle}
-      />
+      /> 
       <Frame
         page={page}
         userName={userName}
