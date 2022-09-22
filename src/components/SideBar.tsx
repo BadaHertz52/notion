@@ -151,9 +151,9 @@ const ItemTemplate =({item,setTargetPageId ,onClickMoreBtn, addNewSubPage  }:Ite
 };
 
 const ListTemplate =({notion,targetList ,setTargetPageId , onClickMoreBtn, addNewSubPage}:ListTemplateProp)=>{
-  const findSubPage =(id:string):listItem=>{
-    const index =notion.pagesId.indexOf(id);
-    const subPage:Page =notion.pages[index];
+  const findSubPage =(id:string, pagesId:string[], pages:Page[]):listItem=>{
+    const index =pagesId.indexOf(id);
+    const subPage:Page =pages[index];
     return {
       id: subPage.id,
       title: subPage.header.title,
@@ -165,8 +165,9 @@ const ListTemplate =({notion,targetList ,setTargetPageId , onClickMoreBtn, addNe
       createTime:subPage.createTime,
     };
   };
-  const makeTargetList =(ids:string[]):listItem[]=>{
-    const listItemArry:listItem[] = ids.map((id:string)=>findSubPage(id));
+  const makeTargetList =(ids:string[], pagesId:string[],pages:Page[]):listItem[]=>{
+
+    const listItemArry:listItem[] = ids.map((id:string)=>findSubPage(id,pagesId, pages));
     return listItemArry
   };
   return(
@@ -184,12 +185,12 @@ const ListTemplate =({notion,targetList ,setTargetPageId , onClickMoreBtn, addNe
             addNewSubPage={addNewSubPage}
           />
         </div>
-        {
+        { notion.pages!==null && notion.pagesId!==null &&(
         item.subPagesId !==null ?
         <div className="subPage">
           <ListTemplate
             notion={notion}     
-            targetList={makeTargetList(item.subPagesId)}
+            targetList={makeTargetList(item.subPagesId, notion.pagesId, notion.pages)}
             setTargetPageId={setTargetPageId} 
             onClickMoreBtn={onClickMoreBtn}
             addNewSubPage={addNewSubPage}
@@ -199,7 +200,7 @@ const ListTemplate =({notion,targetList ,setTargetPageId , onClickMoreBtn, addNe
         <div className='subPage no'>
           <span>No page inside</span>
         </div>
-        }
+        )}
       </li> 
     )}
   </ul>
@@ -213,19 +214,23 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
   const pagesId =notion.pagesId;
   const trashPages=notion.trash.pages;
   const trashPagesId=notion.trash.pagesId;
-  const firstPages:Page[] = notion.firstPagesId.map((id:string)=>findPage(notion.pagesId, pages, id));
-  const firstlist:listItem[] = firstPages.map((page:Page)=>{
-    return {
-      id: page.id,
-      title: page.header.title,
-      iconType:page.header.iconType,
-      icon: page.header.icon,
-      subPagesId: page.subPagesId,
-      parentsId: page.parentsId,
-      editTime: page.editTime,
-      createTime:page.createTime
-    }
-  });
+  const firstPagesId =notion.firstPagesId;
+  const firstPages = (pagesId!==null && pages!==null && firstPagesId!==null)? firstPagesId.map((id:string)=>findPage(pagesId, pages, id)) : null;
+  const firstlist:listItem[]|null =firstPages!==null? 
+                                  firstPages.map((page:Page)=>{
+                                                                return {
+                                                                  id: page.id,
+                                                                  title: page.header.title,
+                                                                  iconType:page.header.iconType,
+                                                                  icon: page.header.icon,
+                                                                  subPagesId: page.subPagesId,
+                                                                  parentsId: page.parentsId,
+                                                                  editTime: page.editTime,
+                                                                  createTime:page.createTime
+                                                                }
+                                                                })
+                                    : 
+                                    null;
   const trashBtn =useRef<HTMLButtonElement>(null);
   const [target ,setTarget] =useState<HTMLElement|null>(null);
   const [targetItem,setTargetItem]=useState<listItem|null>(null);
@@ -240,7 +245,8 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
   const [pageMenuStyle, setPageMenuStyle]=useState<CSSProperties>();
 
   const recordIcon =user.userName.substring(0,1);
-  const makeFavoriteList =(favorites:string[] |null):listItem[]|null=>{
+
+  const makeFavoriteList =(favorites:string[] |null, pagesId:string[], pages:Page[]):listItem[]|null=>{
     const list :listItem[]|null =favorites !==null? 
                                 favorites.map((id: string)=> {
                                 const page =findPage(pagesId,pages,id);
@@ -260,30 +266,35 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
                                 null;
   return list
 } ;
-  const list:listItem[] = firstPages.filter((page:Page)=> page.parentsId ==null)
-                                    .map((page:Page)=> (
-                                    { id:page.id,
-                                      iconType:page.header.iconType,
-                                      icon:page.header.icon,
-                                      title: page.header.title,
-                                      subPagesId: page.subPagesId,
-                                      parentsId: page.parentsId,
-                                      editTime:page.editTime,
-                                      createTime:page.createTime,
-                                    })) ; 
+  const list:listItem[]|null = firstPages!==null? 
+                                firstPages.filter((page:Page)=> page.parentsId ==null)
+                                          .map((page:Page)=> (
+                                          { id:page.id,
+                                            iconType:page.header.iconType,
+                                            icon:page.header.icon,
+                                            title: page.header.title,
+                                            subPagesId: page.subPagesId,
+                                            parentsId: page.parentsId,
+                                            editTime:page.editTime,
+                                            createTime:page.createTime,
+                                          })
+                                          )
+                                :null ; 
   const addNewPage=()=>{
     addPage(pageSample)
   };
 
   const addNewSubPage =(item:listItem)=>{
-    const targetPage = findPage(pagesId ,pages,item.id);
-    const newPageBlock :Block ={
-      ...blockSample,
-      contents:"untitle",
-      type:"page",
-      parentBlocksId:null,
-    };
-    addBlock(targetPage.id,newPageBlock, targetPage.blocksId.length, targetPage.firstBlocksId==null? null: targetPage.firstBlocksId[targetPage.firstBlocksId.length-1]);
+    if(pagesId !==null && pages!==null){
+      const targetPage = findPage(pagesId ,pages,item.id);
+      const newPageBlock :Block ={
+        ...blockSample,
+        contents:"untitle",
+        type:"page",
+        parentBlocksId:null,
+      };
+      addBlock(targetPage.id,newPageBlock, targetPage.blocksId.length, targetPage.firstBlocksId==null? null: targetPage.firstBlocksId[targetPage.firstBlocksId.length-1]);
+    }
   };
   
   const onClickMoreBtn=(item:listItem, target:HTMLElement)=>{
@@ -380,7 +391,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
   };
 
   useEffect(()=>{
-    if(targetItem!==null){
+    if(targetItem!==null && pagesId!==null && pages!==null){
       const page =findPage(pagesId,pages, targetItem.id);
       setTargetPage(page);
     }
@@ -445,11 +456,11 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
             <div className="header">
               <span>FAVORITES </span>
             </div>
-            {user.favorites!==null &&
+            {user.favorites!==null && pagesId!==null && pages!==null &&
             <div className="list">
               <ListTemplate  
                 notion ={notion}
-                targetList={makeFavoriteList(user.favorites)}
+                targetList={makeFavoriteList(user.favorites, pagesId,pages)}
                 setTargetPageId={setTargetPageId}
                 onClickMoreBtn={onClickMoreBtn}
                 addNewSubPage={addNewSubPage}
@@ -468,6 +479,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
                 <AiOutlinePlus/>
               </button>
             </div>
+            {notion.pages!==null&&
             <div className="list">
               {notion.pages[0]!==undefined &&
               <ListTemplate 
@@ -478,6 +490,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
                 addNewSubPage={addNewSubPage}
               /> }
             </div>
+            }
           </div>
         </div>
         <div className="fun2">
@@ -585,7 +598,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
         </div>
       </div>
     }
-    {openPageMenu && targetItem !==null &&
+    {openPageMenu && targetItem !==null && firstlist !==null && pages!==null && pagesId!==null &&
     <div 
       id ="sideBar_pageMenu"
       style={pageMenuStyle}
@@ -615,12 +628,11 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
         setOpenRename={setOpenRename}
       />
     }
-    {openTrash && 
+    {openTrash &&
       <Trash
         style={trashStyle}
         trashPagesId={trashPagesId}
         trashPages={trashPages}
-        pages={pages}
         pagesId={pagesId}
         cleanTrash={cleanTrash}
         restorePage={restorePage}

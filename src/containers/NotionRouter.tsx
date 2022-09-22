@@ -4,6 +4,7 @@ import {  Route, Routes, useNavigate} from 'react-router-dom';
 import { CSSProperties } from 'styled-components';
 import AllComments from '../components/AllComments';
 import Export from '../components/Export';
+import Loading from '../components/Loading';
 import QuickFindBord from '../components/QuickFindBord';
 import Templates from '../components/Templates';
 import { RootState } from '../modules';
@@ -74,19 +75,9 @@ const NotionRouter =()=>{
   const notion = useSelector((state:RootState)=> state.notion);
   const pagesId =notion.pagesId;
   const pages =notion.pages;
-  const firstlist:listItem[] = notion.firstPagesId.map((id:string)=> {
-    const PAGE:Page = findPage(notion.pagesId, pages,id);
-    return {
-      id:PAGE.id,
-      title:PAGE.header.title,
-      iconType:PAGE.header.iconType,
-      icon :PAGE.header.icon,
-      editTime:JSON.stringify(Date.now()),
-      createTime:JSON.stringify(Date.now()),
-      subPagesId:PAGE.subPagesId,
-      parentsId:PAGE.parentsId
-    }
-  });
+  const firstPagesId= notion.firstPagesId;
+  const [firstlist ,setFirstList]=useState<listItem[]|null>(null);
+  const [firstPage, setFirstPage]=useState<Page|null>(null);
   const templatesId =notion.templatesId;
   const trashPagesId =notion.trash.pagesId;
   const trashPages =notion.trash.pages;
@@ -95,7 +86,7 @@ const NotionRouter =()=>{
 
   const location =window.location;
   const hash=location.hash;
-  const firstPage =user.favorites!==null? findPage(pagesId, pages,user.favorites[0]) : notion.pages[0];
+
   const [targetPageId, setTargetPageId]= useState<string>( "none");
   const [routePage, setRoutePage]=useState<Page|null>(null);
   const [openQF, setOpenQF]=useState<boolean>(false);
@@ -110,6 +101,7 @@ const NotionRouter =()=>{
   const [fullWidth, setFullWidth]=useState<boolean>(false);
   const [openTemplates, setOpenTemplates]=useState<boolean>(false);
   const [fontStyle, setFontStyle]=useState<fontStyleType>(defaultFontFamily);
+  const [loading, setLoading]=useState<boolean>(true);
     //---action.function 
     //--block
   const editBlock = (pageId:string, block:Block)=> {dispatch(edit_block(pageId, block ));
@@ -135,16 +127,16 @@ const NotionRouter =()=>{
   function deletePage (pageId:string ){
     const lastSlash =hash.lastIndexOf("/");
     const currentPageId = hash.slice(lastSlash+1);
-    if(pageId === currentPageId){
+    if(pageId === currentPageId && firstPagesId!==null){
       const openOtherFirstPage =()=>{
-          notion.firstPagesId[0]=== pageId ?
+          firstPagesId[0]=== pageId ?
           (
-            notion.firstPagesId.length>1 ?
-            setTargetPageId(notion.firstPagesId[1]):
+            firstPagesId.length>1 ?
+            setTargetPageId(firstPagesId[1]):
             setTargetPageId("none")
           )
           :
-            setTargetPageId(notion.firstPagesId[0])
+            setTargetPageId(firstPagesId[0])
       };
       if(user.favorites!==null){
         if(user.favorites.includes(pageId)){
@@ -203,21 +195,24 @@ const NotionRouter =()=>{
   //action.function ---
 
   const findRoutePage =(pageId: string )=>{
-    if(pagesId.includes(pageId)){
-      const page =findPage(pagesId, pages, pageId);
-      setRoutePage(page);
-      setTargetPageId(page.id);
-      addRecentPage(pageId);
-    }else if(trashPagesId !==null && trashPages !==null&& trashPagesId.includes(pageId)){
-      const page =findPage(trashPagesId, trashPages, pageId);
-      setRoutePage(page); 
-      setTargetPageId(page.id);
-      addRecentPage(pageId);
-    }else{
-      setRoutePage(firstPage);
-      !user.recentPagesId?.includes(firstPage.id) &&
-      addRecentPage(firstPage.id);
-    };
+    if(pages!==null && pagesId!==null){
+      if(pagesId.includes(pageId)){
+        const page =findPage(pagesId, pages, pageId);
+        setRoutePage(page);
+        setTargetPageId(page.id);
+        addRecentPage(pageId);
+      }else if(trashPagesId !==null && trashPages !==null&& trashPagesId.includes(pageId)){
+        const page =findPage(trashPagesId, trashPages, pageId);
+        setRoutePage(page); 
+        setTargetPageId(page.id);
+        addRecentPage(pageId);
+      }else{
+        setRoutePage(firstPage);
+        firstPage!==null &&
+        !user.recentPagesId?.includes(firstPage.id) &&
+        addRecentPage(firstPage.id);
+      };
+    }
   };
   const onClickDiscardEdit =()=>{
     discardEdit?.classList.remove("on");
@@ -260,18 +255,44 @@ const NotionRouter =()=>{
     }
   };
   useEffect(()=>{
-    if(firstPage!==undefined && routePage==null&& hash=== ""){
+    if(firstPagesId!==null && pages!==null && pagesId!==null){
+      const FIRSTLIST= firstPagesId.map((id:string)=> {
+        const PAGE:Page = findPage(pagesId, pages,id);
+        return {
+          id:PAGE.id,
+          title:PAGE.header.title,
+          iconType:PAGE.header.iconType,
+          icon :PAGE.header.icon,
+          editTime:JSON.stringify(Date.now()),
+          createTime:JSON.stringify(Date.now()),
+          subPagesId:PAGE.subPagesId,
+          parentsId:PAGE.parentsId
+        }
+      });
+      setFirstList(FIRSTLIST);
+      const FristPage =user.favorites!==null? findPage(pagesId, pages,user.favorites[0]) : pages[0];
+      setFirstPage(FristPage);
+
+    }else{
+      setRoutePage(null);
+      setLoading(false);
+    }
+  },[firstPagesId, pages, pagesId]);
+
+  useEffect(()=>{
+    if(firstPage!==null && routePage==null&& hash=== ""){
       setRoutePage(firstPage);
       setTargetPageId(firstPage.id);
-    }
+    };
   },[firstPage]);
 
   useEffect(()=>{
-    if(routePage!==null){
+    if(routePage!==null && pagesId!==null && pages !==null){
       const path =makeRoutePath(routePage, pagesId,pages);
       navigate(path);
       changeTitle(routePage.header.title);
       changeFavicon(routePage.header.icon, routePage.header.iconType);
+      setLoading(false);
     }
   },[routePage]);
   useEffect(()=>{
@@ -311,129 +332,207 @@ const NotionRouter =()=>{
       id="inner"
       className='sideBar_lock'
     >
-      <SideBarContainer  
-        sideAppear ={sideAppear}
-        setTargetPageId={setTargetPageId}
-        addBlock={addBlock}
-        editBlock={editBlock}
-        deleteBlock={deleteBlock}
-        changeBlockToPage={changeBlockToPage}
-        
-        addPage={addPage}
-        editPage={editPage}
-        deletePage={deletePage}
-        movePageToPage={movePageToPage}
-        duplicatePage={duplicatePage}
-        restorePage={restorePage}
-        cleanTrash={cleanTrash}
-        changeSide={changeSide}
-        addFavorites={addFavorites}
-        removeFavorites ={removeFavorites}
 
-        setOpenQF={setOpenQF}
-        setOpenTemplates={setOpenTemplates}
-        showAllComments={showAllComments}
-      />
       {/* editor------ */}
-      {routePage!== null?
-      <>
-        <Routes>
-          <Route
-            path={makeRoutePath(routePage,pagesId,pages)} 
-            element={<EditorContainer 
-                    sideAppear={sideAppear}
-                    firstlist ={firstlist}
-                    userName={user.userName}
-                    recentPagesId={user.recentPagesId}
-                    page={routePage}
-                    pages={pages}
-                    pagesId={pagesId}
-                    isInTrash={!notion.pagesId.includes(routePage.id)}
-                    makePagePath={makePagePath}
-                    addBlock={addBlock}
-                    editBlock={editBlock}
-                    changeBlockToPage={changeBlockToPage}
-                    changePageToBlock={
-                      changePageToBlock
-                    }
-                    changeToSub={changeToSub}
-                    raiseBlock={raiseBlock}
-                    deleteBlock={deleteBlock}
-  
-                    addPage={addPage}
-                    editPage={editPage}
-                    deletePage={deletePage}
-                    duplicatePage={duplicatePage}
-                    movePageToPage={movePageToPage}
-                    cleanTrash={cleanTrash}
-                    restorePage={restorePage}
+      {loading ?
+        <Loading/>
+      :(
+        <>
+          <SideBarContainer  
+            sideAppear ={sideAppear}
+            setTargetPageId={setTargetPageId}
+            addBlock={addBlock}
+            editBlock={editBlock}
+            deleteBlock={deleteBlock}
+            changeBlockToPage={changeBlockToPage}
 
-                    addFavorites={addFavorites}
-                    removeFavorites={removeFavorites}
-                    changeSide={changeSide}
+            addPage={addPage}
+            editPage={editPage}
+            deletePage={deletePage}
+            movePageToPage={movePageToPage}
+            duplicatePage={duplicatePage}
+            restorePage={restorePage}
+            cleanTrash={cleanTrash}
+            changeSide={changeSide}
+            addFavorites={addFavorites}
+            removeFavorites ={removeFavorites}
 
-                    setTargetPageId={setTargetPageId}
-                    setRoutePage={setRoutePage}
-                    showAllComments={showAllComments}
-                    setShowAllComments={setShowAllComments}
-                    discardEdit={discard_edit}
-                    setOpenExport={setOpenExport}
-                    openComment={openComment}
-                    setOpenComment={setOpenComment}
-                    commentBlock={commentBlock}
-                    setCommentBlock={setCommentBlock}
-                    smallText={smallText}
-                    setSmallText={setSmallText}
-                    fullWidth={fullWidth}
-                    setFullWidth={setFullWidth}
-                    openTemplates={openTemplates}
-                    setOpenTemplates={setOpenTemplates}
-                    fontStyle={fontStyle}
-                    setFontStyle={setFontStyle}
-                    />
-                  } 
+            setOpenQF={setOpenQF}
+            setOpenTemplates={setOpenTemplates}
+            showAllComments={showAllComments}
           />
-        </Routes>         
-      </>    
-      :
-        <div className='editor nonePage'>
-          <p>
-            Page doesn't existence
-          </p>
-          <p>
-            Try make new Page 
-          </p>
-          <button
-            onClick={()=>addPage(pageSample)}
-          >
-            Make new page
-          </button>
-        </div>
-      }
-       {/* ----editor */}
-      {routePage !==null &&
-        <AllComments
-          page={routePage}
-          userName={user.userName}
-          favorites={user.favorites}
-          editBlock={editBlock}
-          showAllComments={showAllComments}
-          setShowAllComments={setShowAllComments}
-          discardEdit={discard_edit}
-          style={allCommentsStyle}
-        />
-      }
-      {openQF &&
-      <QuickFindBord
-        userName={user.userName}
-        recentPagesId={user.recentPagesId}
-        pages={notion.pages}
-        pagesId={notion.pagesId}
-        setTargetPageId={setTargetPageId}
-        cleanRecentPage={cleanRecentPage}
-        setOpenQF={setOpenQF}
-      />
-      }
+        {routePage!== null && pagesId!==null && pages !==null && firstlist!==null ?
+        <>
+          <Routes>
+            <Route
+              path={makeRoutePath(routePage,pagesId,pages)} 
+              element={<EditorContainer 
+                      sideAppear={sideAppear}
+                      firstlist ={firstlist}
+                      userName={user.userName}
+                      recentPagesId={user.recentPagesId}
+                      page={routePage}
+                      pages={pages}
+                      pagesId={pagesId}
+                      isInTrash={!pagesId.includes(routePage.id)}
+                      makePagePath={makePagePath}
+                      addBlock={addBlock}
+                      editBlock={editBlock}
+                      changeBlockToPage={changeBlockToPage}
+                      changePageToBlock={
+                        changePageToBlock
+                      }
+                      changeToSub={changeToSub}
+                      raiseBlock={raiseBlock}
+                      deleteBlock={deleteBlock}
+    
+                      addPage={addPage}
+                      editPage={editPage}
+                      deletePage={deletePage}
+                      duplicatePage={duplicatePage}
+                      movePageToPage={movePageToPage}
+                      cleanTrash={cleanTrash}
+                      restorePage={restorePage}
+  
+                      addFavorites={addFavorites}
+                      removeFavorites={removeFavorites}
+                      changeSide={changeSide}
+  
+                      setTargetPageId={setTargetPageId}
+                      setRoutePage={setRoutePage}
+                      showAllComments={showAllComments}
+                      setShowAllComments={setShowAllComments}
+                      discardEdit={discard_edit}
+                      setOpenExport={setOpenExport}
+                      openComment={openComment}
+                      setOpenComment={setOpenComment}
+                      commentBlock={commentBlock}
+                      setCommentBlock={setCommentBlock}
+                      smallText={smallText}
+                      setSmallText={setSmallText}
+                      fullWidth={fullWidth}
+                      setFullWidth={setFullWidth}
+                      openTemplates={openTemplates}
+                      setOpenTemplates={setOpenTemplates}
+                      fontStyle={fontStyle}
+                      setFontStyle={setFontStyle}
+                      />
+                    } 
+            />
+          </Routes>
+          {openExport && 
+          <Export
+            page={routePage}
+            pagesId={pagesId}
+            pages={pages}
+            firstlist={firstlist}
+            userName={user.userName}
+            recentPagesId ={user.recentPagesId}
+            setOpenExport={setOpenExport}
+            addBlock={addBlock}
+            editBlock={editBlock}
+            changeBlockToPage={changeBlockToPage}
+            changePageToBlock={changePageToBlock}
+            changeToSub={changeToSub}
+            raiseBlock={raiseBlock}
+            deleteBlock={deleteBlock}
+            addPage={addPage}
+            editPage={editPage}
+            duplicatePage={duplicatePage}
+            movePageToPage={movePageToPage}
+            commentBlock={commentBlock}
+            openComment={openComment}
+            setTargetPageId={setTargetPageId}
+            setRoutePage={setRoutePage}
+            setOpenComment={setOpenComment}
+            setCommentBlock ={setCommentBlock}
+            smallText={smallText}
+            fullWidth={fullWidth}
+            discardEdit={discard_edit}
+            openTemplates ={openTemplates}
+            setOpenTemplates={setOpenTemplates}
+            fontStyle={fontStyle}
+          />
+          }
+          {openTemplates &&
+            <Templates
+              templatesId={templatesId}
+              userName={user.userName}
+              pagesId={pagesId}
+              pages={pages}
+              firstlist={firstlist}
+              recentPagesId={user.recentPagesId}
+              addBlock={addBlock}
+              editBlock={editBlock}
+              changeBlockToPage={changeBlockToPage}
+              changePageToBlock={changePageToBlock}
+              changeToSub={changeToSub}
+              raiseBlock={raiseBlock}
+              deleteBlock={deleteBlock}
+              addPage={addPage}
+              editPage={editPage}
+              duplicatePage={duplicatePage}
+              movePageToPage={movePageToPage}
+              addTemplate={addTemplate}
+              cancleEditTemplate ={cancleEditTemplate}
+              deleteTemplate ={deleteTemplate}
+              setRoutePage={setRoutePage}
+              setTargetPageId={setTargetPageId}
+              commentBlock={commentBlock}
+              openComment={openComment}
+              setOpenComment={setOpenComment}
+              openTemplates={openTemplates}
+              setOpenTemplates={setOpenTemplates}
+              setCommentBlock ={setCommentBlock}
+              smallText={smallText}
+              fullWidth={fullWidth}
+              discardEdit={discard_edit}
+              fontStyle={fontStyle}
+
+            />
+          }
+          {routePage !==null &&
+            <AllComments
+              page={routePage}
+              userName={user.userName}
+              favorites={user.favorites}
+              editBlock={editBlock}
+              showAllComments={showAllComments}
+              setShowAllComments={setShowAllComments}
+              discardEdit={discard_edit}
+              style={allCommentsStyle}
+            />
+          }
+          {openQF &&
+          <QuickFindBord
+            userName={user.userName}
+            recentPagesId={user.recentPagesId}
+            pages={pages}
+            pagesId={pagesId}
+            setTargetPageId={setTargetPageId}
+            cleanRecentPage={cleanRecentPage}
+            setOpenQF={setOpenQF}
+          />
+          }
+        </>            
+          :
+            <div className='editor nonePage'>
+              <p>
+                Page doesn't existence
+              </p>
+              <p>
+                Try make new Page 
+              </p>
+              <button
+                onClick={()=>addPage(pageSample)}
+              >
+                Make new page
+              </button>
+            </div>
+        }
+        {/* ----editor */}
+        </>
+      )}
         <div 
           id ="discardEdit"
           className='discardEdit'
@@ -459,77 +558,7 @@ const NotionRouter =()=>{
 
           </div>
         </div>
-        {openExport && routePage !==null &&
-        <Export
-          page={routePage}
-          pagesId={pagesId}
-          pages={pages}
-          firstlist={firstlist}
-          userName={user.userName}
-          recentPagesId ={user.recentPagesId}
-          setOpenExport={setOpenExport}
-          addBlock={addBlock}
-          editBlock={editBlock}
-          changeBlockToPage={changeBlockToPage}
-          changePageToBlock={changePageToBlock}
-          changeToSub={changeToSub}
-          raiseBlock={raiseBlock}
-          deleteBlock={deleteBlock}
-          addPage={addPage}
-          editPage={editPage}
-          duplicatePage={duplicatePage}
-          movePageToPage={movePageToPage}
-          commentBlock={commentBlock}
-          openComment={openComment}
-          setTargetPageId={setTargetPageId}
-          setRoutePage={setRoutePage}
-          setOpenComment={setOpenComment}
-          setCommentBlock ={setCommentBlock}
-          smallText={smallText}
-          fullWidth={fullWidth}
-          discardEdit={discard_edit}
-          openTemplates ={openTemplates}
-          setOpenTemplates={setOpenTemplates}
-          fontStyle={fontStyle}
-        />
-        }
-        {openTemplates &&
-          <Templates
-            templatesId={templatesId}
-            userName={user.userName}
-            pagesId={pagesId}
-            pages={pages}
-            firstlist={firstlist}
-            recentPagesId={user.recentPagesId}
-            addBlock={addBlock}
-            editBlock={editBlock}
-            changeBlockToPage={changeBlockToPage}
-            changePageToBlock={changePageToBlock}
-            changeToSub={changeToSub}
-            raiseBlock={raiseBlock}
-            deleteBlock={deleteBlock}
-            addPage={addPage}
-            editPage={editPage}
-            duplicatePage={duplicatePage}
-            movePageToPage={movePageToPage}
-            addTemplate={addTemplate}
-            cancleEditTemplate ={cancleEditTemplate}
-            deleteTemplate ={deleteTemplate}
-            setRoutePage={setRoutePage}
-            setTargetPageId={setTargetPageId}
-            commentBlock={commentBlock}
-            openComment={openComment}
-            setOpenComment={setOpenComment}
-            openTemplates={openTemplates}
-            setOpenTemplates={setOpenTemplates}
-            setCommentBlock ={setCommentBlock}
-            smallText={smallText}
-            fullWidth={fullWidth}
-            discardEdit={discard_edit}
-            fontStyle={fontStyle}
-            
-          />
-        }
+
     </div>
   )
 };

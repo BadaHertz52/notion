@@ -177,10 +177,10 @@ export const  pageSample:Page ={
   createTime:editTime,
 };
 export type Notion={ 
-  pagesId :string [],
-  firstPagesId: string[],
+  pagesId :string [] |null,
+  firstPagesId: string[] |null,
   templatesId: string[]|null,
-  pages: Page[],
+  pages: Page[] |null,
   trash:{
     pagesId:string[]|null,
     pages:TrashPage[]|null
@@ -479,492 +479,502 @@ const template2 :Page ={
   createTime:Date.parse("2022-8-23-12:00").toString(),
 };
 const initialState :Notion ={
-  pagesId:['12345','page1','page2' ,'1234', '123' ,'template1', 'template2'],
-  firstPagesId :['12345' ,'1234', '123'],
-  templatesId:['template1', 'template2'],
-  pages:[
-    {
-    id: '12345',
-    type:page,
-    header : {
-      title:"welcome notion 🐱",
-      iconType:"img",
-      icon:catImg ,
-      cover: null,
-      comments:[{
-        id:"comment_1",
-        userName:userName,
-        type:"open",
-        content:"this is page comment",
-        editTime: Date.parse("2021-5-20-12:00")
-        .toString(),
-        createTime: Date.parse("2021-5-20-12:00").toString(),
-        subComments:null,
-        subCommentsId:null,
-      }],
-    },
-    firstBlocksId :["text",'img', 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page1', 'page2' ,"numberList", "bulletList"],
-    blocks:[{
-      id:"text",
-      contents:"안녕", 
-      contentsEmpty:false,
-      firstBlock:true,
-      subBlocksId: ["sub1_1", "sub1_2"] ,
-      parentBlocksId: null,
-      type: text,
-      iconType:null,
-      icon:  null ,
-      editTime:Date.parse("2021-5-18-15:00").toString(),
-      createTime: Date.parse("2021-5-18-1:00").toString(),
-      style :{
-        ...basicBlockStyle,
-        color: blue,
-        bgColor: bg_default,
-      },
-      comments:[{
-        id:"comment_text1",
-        userName:userName,
-        type:"open",
-        content:"hi! ☺️", 
-        editTime:(1654086822451).toString(),
-        createTime: (Date.parse("2021-5-20-15:00")).toString(),
-        subComments:null,
-        subCommentsId:null,
-      },]
-    },
-    {
-      id:"img",
-      contents: imgBlockImg,
-      contentsEmpty:false,
-      firstBlock:true,
-      subBlocksId:null, 
-      parentBlocksId: null,
-      type: image,
-      iconType:null,
-      icon:  null ,
-      editTime: (Date.parse("2021-5-18-16:00")).toString()
-      ,
-      createTime: (Date.parse("2021-5-18-2:00")).toString(),
-      style :{
-        ...basicBlockStyle,
-        width:"222px",
-        height:"auto"
-      },
-      comments: null
-    },
-    {
-      id:"toggle",
-      contents:"toggle toggle ",
-      contentsEmpty:false,
-      firstBlock:true,
-      subBlocksId:null, 
-      parentBlocksId: null,
-      type: toggle,
-      iconType:null,
-      icon:  null ,
-      editTime: (Date.parse("2021-5-18-16:00")).toString()
-      ,
-      createTime: (Date.parse("2021-5-18-2:00")).toString(),
-      style :basicBlockStyle,
-      comments: null
-    },{
-      id:"todo",
-      contents:"todo", 
-      contentsEmpty:false,
-      firstBlock:true,
-      subBlocksId:null ,
-      parentBlocksId: null,
-      type: todo,
-      iconType:null,
-      icon:  null ,
-      editTime: (Date.parse("2021-5-18-16:01:00")).toString(),
-      createTime: (Date.parse("2021-5-18-3:00")).toString(),
-      style :{
-        ...basicBlockStyle,
-        bgColor: bg_yellow,
-      },
-      comments:[{
-        id:"comment_todo1",
-        userName:userName,
-        type:"open",
-        content:"todo comments", 
-        editTime:(Date.parse("2021-5-18-16:01:30")).toString(),
-        createTime: (Date.parse("2021-5-21-14:00")).toString(),
-        subComments:null,
-        subCommentsId:null,
-      },]
-    },{
-      id:"todo done",
-      contents:"todo done",
-      contentsEmpty:false,
-      firstBlock:true,
-      subBlocksId:null ,
-      parentBlocksId: null,
-      type: todo_done,
-      iconType:null,
-      icon:  null ,
-      editTime: (Date.parse("2021-5-19-11:30")).toString()
-      ,
-      createTime: (Date.parse("2021-5-18-5:00")).toString(),
-      style :basicBlockStyle,
-      comments:null,
-    },{
-      id:"h1",
-      contents:'head<a class="link" target="_blank" href="http://localhost:3000/#/1234">er</a><span class=" color color_blue">1</span></span>', 
-      contentsEmpty:false,
-      firstBlock:true,
-      subBlocksId:null ,
-      parentBlocksId: null,
-      type: h1,
-      iconType:null,
-      icon:  null ,
-      editTime: (Date.parse("2021-5-19-12:00")).toString(),
-      createTime: (Date.parse("2021-5-18-15:00")).toString(),
-      style :basicBlockStyle,
-      comments:null
-    },{
-      id:"h2",
-      contents:"header2",
-      contentsEmpty:false,
-      firstBlock:true,
-      subBlocksId:null ,
-      parentBlocksId: null,
-      type: h2,
-      iconType:null,
-      icon:  null ,
-      editTime: (Date.parse("2021-5-18-20:00")).toString(),
-      createTime: (Date.parse("2021-5-18-15:00")).toString(),
-      style :basicBlockStyle,
-      comments:null
-    },{
-      id:"h3",
-      contents:"header3", 
-      contentsEmpty:false,
-      firstBlock:true,
-      subBlocksId:null ,
-      parentBlocksId: null,
-      type: h3,
-      iconType:null,
-      icon:  null ,
-      editTime: (Date.parse("2021-5-19-19:20")).toString()
-      , 
-      createTime: (Date.parse("2021-5-18-15:00")).toString(), 
-      style :basicBlockStyle,
-      comments:null
-    },{
-      id:"page1",
-      contents:"page page page",
-      contentsEmpty:false,
-      firstBlock:true,
-      subBlocksId:null ,
-      parentBlocksId: null,
-      type: page,
-      iconType:null,
-      icon:  null ,
-      editTime: (Date.parse("2021-5-20-21:00")).toString()
-      ,
-      createTime: (Date.parse("2021-5-19-15:00")).toString(),
-      style :basicBlockStyle,
-      comments:null
-    },
-    {
-      id:"page2",
-      contents:"page2",
-      contentsEmpty:false,
-      firstBlock:true,
-      subBlocksId:null ,
-      parentBlocksId: null,
-      type: page,
-      iconType:"emoji",
-      icon: emojis[8] ,
-      editTime: (Date.parse("2021-5-20-9:00")).toString(),
-      createTime: (Date.parse("2021-5-19-20:00")).toString(),
-
-      style :basicBlockStyle,
-      comments:null
-    },
-    {id:"sub1_1",
-    contents:"sub1_1", 
-    contentsEmpty:false,
-    firstBlock:false,
-    subBlocksId: ["sub2_1"],
-    parentBlocksId: ["text"],
-    type: text,
-    iconType:null,
-    icon:  null ,
-    editTime: (Date.parse("2021-6-1-1:00")).toString() ,   
-    createTime: (Date.parse("2021-5-30-15:00")).toString(),
-    style :{
-      ...basicBlockStyle,
-    },
-    comments:null
-  },
-  {
-    id:"sub1_2",
-    contents:"sub1_2", 
-    contentsEmpty:false,
-    firstBlock:false,
-    subBlocksId:null,
-    parentBlocksId: ["text"],
-    type: text,
-    iconType:null,
-    icon:  null ,
-    editTime: (Date.parse("2021-5-12-09:00")).toString(),
-    createTime: (Date.parse("2021-5-12-08:50")).toString(),
-    style :{
-      ...basicBlockStyle
-    },
-    comments:[{
-      id:"comment_sub1_2_1",
-      userName:userName,
-      type:"open",
-      content:"subBlock comments",
-      editTime:(Date.parse("2021-5-18-8:00")).toString(),
-      createTime:(Date.parse("2021-5-18-8:00")).toString(),
-      subComments:null,
-      subCommentsId:null,
-    },]
-  },
-  {
-    id:"sub2_1",
-    contents:"sub2_1", 
-    contentsEmpty:false,
-    firstBlock:false,
-    subBlocksId:null,
-    parentBlocksId: ["text", "sub1_1"],
-    type: text,
-    iconType:null,
-    icon:  null ,
-    editTime: (Date.parse("2021-5-27-7:00")).toString(),
-    createTime: (Date.parse("2021-5-27-7:00")).toString(),
-    style :{
-      ...basicBlockStyle
-    },
-    comments:null
-  },
-  {
-    id:"numberList",
-    contents:"", 
-    contentsEmpty:false,
-    firstBlock:true,
-    subBlocksId:["num1", "num2", "num3"],
-    parentBlocksId: null,
-    type: numberList,
-    iconType:null,
-    icon:  null ,
-    editTime: (Date.parse("2021-6-1-18:45")).toString(),
-    createTime: (Date.parse("2021-6-1-18:45")).toString(),
-    style :{
-      ...basicBlockStyle
-    },
-    comments:null
-  },
-  {
-    id:"num1",
-    contents:"n1", 
-    contentsEmpty:false,
-    firstBlock:false,
-    subBlocksId:null,
-    parentBlocksId: [numberList],
-    type: numberList,
-    iconType:null,
-    icon:  null ,
-    editTime: (Date.parse("2021-6-1-19:03")).toString(),
-    createTime: (Date.parse("2021-6-1-19:03")).toString(),
-    style :{
-      ...basicBlockStyle,
-      bgColor: bg_green,
-    },
-    comments:null
-  },
-  {
-    id:"num2",
-    contents:"n2", 
-    contentsEmpty:false,
-    firstBlock:false,
-    subBlocksId:null,
-    parentBlocksId: [numberList],
-    type: numberList,
-    iconType:null,
-    icon:  null ,
-    editTime: (Date.parse("2021-6-1-19:03:50")).toString(),
-    createTime: (Date.parse("2021-6-1-19:03:50")).toString(),
-    style :{
-      ...basicBlockStyle
-    },
-    comments:[{
-      id:"comment_n2",
-      userName:userName,
-      type:"open",
-      content:"comment n2", 
-      editTime:(1654086822451).toString(),
-      createTime:(1654086822451).toString(),
-      subComments:null,
-      subCommentsId:null,
-    },]
-  },
-  {
-    id:"num3",
-    contents:"n3", 
-    contentsEmpty:false,
-    firstBlock:false,
-    subBlocksId:null,
-    parentBlocksId: [numberList],
-    type: numberList,
-    iconType:null,
-    icon:  null ,
-    editTime: Date.parse("2021-6-1-19:12:13").toString(),
-    createTime: Date.parse("2021-6-1-19:12:13").toString(),
-    style :{
-      ...basicBlockStyle
-    },
-    comments:null
-  },
-  {
-    id:"bulletList",
-    contents:"", 
-    contentsEmpty:false,
-    firstBlock:true,
-    subBlocksId:["b1", "b2"],
-    parentBlocksId:null,
-    type: bulletList,
-    iconType:null,
-    icon:  null ,
-    editTime: (Date.parse("2021-6-1-19:13:45")).toString(),
-    createTime: (Date.parse("2021-6-1-19:13:45")).toString(),
-    style :{
-      ...basicBlockStyle
-    },
-    comments:null
-  },
-  {
-    id:"b1",
-    contents:"b1", 
-    contentsEmpty:false,
-    firstBlock:false,
-    subBlocksId:null,
-    parentBlocksId:[bulletList],
-    type: bulletList,
-    iconType:null,
-    icon:  null ,
-    editTime: (Date.parse("2021-6-1-19:23")).toString(),
-    createTime: (Date.parse("2021-6-1-19:23")).toString(),
-    style :{
-      ...basicBlockStyle
-    },
-    comments:null
-  },
-  {
-    id:"b2",
-    contents:"b2", 
-    contentsEmpty:false,
-    firstBlock:false,
-    subBlocksId:null,
-    parentBlocksId:[bulletList],
-    type: bulletList,
-    iconType:null,
-    icon:  null ,
-    editTime: (Date.parse("2021-6-1-20:12" )).toString(),
-    createTime: (Date.parse("2021-6-1-20:12" )).toString(),
-    style :{
-      ...basicBlockStyle
-    },
-    comments:null
-  },
-
-    ],
-    blocksId:["text",'img', 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page1', 'page2' , 'sub1_1' ,'sub1_2', 'sub2_1' ,"numberList" , "num1", "num2", "num3" , "bulletList", "b1", "b2"],
-    subPagesId:['page1','page2'],
-    parentsId: null,
-    editTime :(Date.parse("2021-5-16-15:00")).toString(),
-    createTime :(Date.parse("2021-5-16-15:00")).toString(),
-  },
-  {
-    ...pageSample,
-    id:"page1",
-    header:{
-      ...pageSample.header,
-      title:"page page page"
-    },
-    blocks:[{
-      id:"img",
-      contentsEmpty:false,
-      contents: imgBlockImg,
-      firstBlock:true,
-      subBlocksId:null, 
-      parentBlocksId: null,
-      type: image,
-      iconType:null,
-      icon:  null ,
-      editTime: (Date.parse("2021-5-18-16:00")).toString()
-      ,
-      createTime: (Date.parse("2021-5-18-2:00")).toString(),
-      style :basicBlockStyle,
-      comments: null
-    }],
-    blocksId:["img"],
-    firstBlocksId:["img"],
-    editTime: (Date.parse("2021-5-20-21:00")).toString(),
-    createTime: (Date.parse("2021-5-20-21:00")).toString(),
-    parentsId:['12345']
-  },
-  {
-    ...pageSample,
-    id:"page2",
-    header:{
-      ...pageSample.header,
-      iconType:"emoji",
-      icon:emojis[8],
-      title:"page2"
-    },
-    editTime: JSON.stringify(Date.parse("2021-5-20-9:00")),
-    createTime: JSON.stringify(Date.parse("2021-5-20-9:00")),
-    parentsId:['12345']
-  },
-  {
-    id: '1234',
-    type:page,
-    header : {
-      title:"notion2",
-      iconType:"emoji",
-      icon:emojis[2],
-      cover: null,
-      comments:  null,
-    },
-    firstBlocksId:null,
-    blocks:[blockSample],
-    blocksId:[blockSample.id],
-    subPagesId:null,
-    parentsId: null,
-    editTime:JSON.stringify(Date.parse("2021-5-18-19:00")),
-    createTime:JSON.stringify(Date.parse("2021-5-18-19:00")),
-  },
-  {
-    id: '123',
-    type:page,
-    header : {
-      title:"notion3",
-      iconType:"emoji",
-      icon:emojis[10] ,
-      cover: null,
-      comments:  null,
-    },
-    firstBlocksId:null,
-    blocks:[blockSample],
-    blocksId:[blockSample.id],
-    subPagesId:null,
-    parentsId:null,
-    editTime:JSON.stringify(Date.parse("2021-5-13-15:00")),
-    createTime:JSON.stringify(Date.parse("2021-5-13-15:00")),
-  },
-  template1,
-  template2
-],
+  pagesId:null ,
+  firstPagesId:null,
+  templatesId:null,
+  pages:null,
   trash:{
-    pagesId:null,
-    pages:null
+    pages:null,
+    pagesId:null
   }
-};
+}
+// const initialState :Notion ={
+//   pagesId:['12345','page1','page2' ,'1234', '123' ,'template1', 'template2'],
+//   firstPagesId :['12345' ,'1234', '123'],
+//   templatesId:['template1', 'template2'],
+//   pages:[
+//     {
+//     id: '12345',
+//     type:page,
+//     header : {
+//       title:"welcome notion 🐱",
+//       iconType:"img",
+//       icon:catImg ,
+//       cover: null,
+//       comments:[{
+//         id:"comment_1",
+//         userName:userName,
+//         type:"open",
+//         content:"this is page comment",
+//         editTime: Date.parse("2021-5-20-12:00")
+//         .toString(),
+//         createTime: Date.parse("2021-5-20-12:00").toString(),
+//         subComments:null,
+//         subCommentsId:null,
+//       }],
+//     },
+//     firstBlocksId :["text",'img', 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page1', 'page2' ,"numberList", "bulletList"],
+//     blocks:[{
+//       id:"text",
+//       contents:"안녕", 
+//       contentsEmpty:false,
+//       firstBlock:true,
+//       subBlocksId: ["sub1_1", "sub1_2"] ,
+//       parentBlocksId: null,
+//       type: text,
+//       iconType:null,
+//       icon:  null ,
+//       editTime:Date.parse("2021-5-18-15:00").toString(),
+//       createTime: Date.parse("2021-5-18-1:00").toString(),
+//       style :{
+//         ...basicBlockStyle,
+//         color: blue,
+//         bgColor: bg_default,
+//       },
+//       comments:[{
+//         id:"comment_text1",
+//         userName:userName,
+//         type:"open",
+//         content:"hi! ☺️", 
+//         editTime:(1654086822451).toString(),
+//         createTime: (Date.parse("2021-5-20-15:00")).toString(),
+//         subComments:null,
+//         subCommentsId:null,
+//       },]
+//     },
+//     {
+//       id:"img",
+//       contents: imgBlockImg,
+//       contentsEmpty:false,
+//       firstBlock:true,
+//       subBlocksId:null, 
+//       parentBlocksId: null,
+//       type: image,
+//       iconType:null,
+//       icon:  null ,
+//       editTime: (Date.parse("2021-5-18-16:00")).toString()
+//       ,
+//       createTime: (Date.parse("2021-5-18-2:00")).toString(),
+//       style :{
+//         ...basicBlockStyle,
+//         width:"222px",
+//         height:"auto"
+//       },
+//       comments: null
+//     },
+//     {
+//       id:"toggle",
+//       contents:"toggle toggle ",
+//       contentsEmpty:false,
+//       firstBlock:true,
+//       subBlocksId:null, 
+//       parentBlocksId: null,
+//       type: toggle,
+//       iconType:null,
+//       icon:  null ,
+//       editTime: (Date.parse("2021-5-18-16:00")).toString()
+//       ,
+//       createTime: (Date.parse("2021-5-18-2:00")).toString(),
+//       style :basicBlockStyle,
+//       comments: null
+//     },{
+//       id:"todo",
+//       contents:"todo", 
+//       contentsEmpty:false,
+//       firstBlock:true,
+//       subBlocksId:null ,
+//       parentBlocksId: null,
+//       type: todo,
+//       iconType:null,
+//       icon:  null ,
+//       editTime: (Date.parse("2021-5-18-16:01:00")).toString(),
+//       createTime: (Date.parse("2021-5-18-3:00")).toString(),
+//       style :{
+//         ...basicBlockStyle,
+//         bgColor: bg_yellow,
+//       },
+//       comments:[{
+//         id:"comment_todo1",
+//         userName:userName,
+//         type:"open",
+//         content:"todo comments", 
+//         editTime:(Date.parse("2021-5-18-16:01:30")).toString(),
+//         createTime: (Date.parse("2021-5-21-14:00")).toString(),
+//         subComments:null,
+//         subCommentsId:null,
+//       },]
+//     },{
+//       id:"todo done",
+//       contents:"todo done",
+//       contentsEmpty:false,
+//       firstBlock:true,
+//       subBlocksId:null ,
+//       parentBlocksId: null,
+//       type: todo_done,
+//       iconType:null,
+//       icon:  null ,
+//       editTime: (Date.parse("2021-5-19-11:30")).toString()
+//       ,
+//       createTime: (Date.parse("2021-5-18-5:00")).toString(),
+//       style :basicBlockStyle,
+//       comments:null,
+//     },{
+//       id:"h1",
+//       contents:'head<a class="link" target="_blank" href="http://localhost:3000/#/1234">er</a><span class=" color color_blue">1</span></span>', 
+//       contentsEmpty:false,
+//       firstBlock:true,
+//       subBlocksId:null ,
+//       parentBlocksId: null,
+//       type: h1,
+//       iconType:null,
+//       icon:  null ,
+//       editTime: (Date.parse("2021-5-19-12:00")).toString(),
+//       createTime: (Date.parse("2021-5-18-15:00")).toString(),
+//       style :basicBlockStyle,
+//       comments:null
+//     },{
+//       id:"h2",
+//       contents:"header2",
+//       contentsEmpty:false,
+//       firstBlock:true,
+//       subBlocksId:null ,
+//       parentBlocksId: null,
+//       type: h2,
+//       iconType:null,
+//       icon:  null ,
+//       editTime: (Date.parse("2021-5-18-20:00")).toString(),
+//       createTime: (Date.parse("2021-5-18-15:00")).toString(),
+//       style :basicBlockStyle,
+//       comments:null
+//     },{
+//       id:"h3",
+//       contents:"header3", 
+//       contentsEmpty:false,
+//       firstBlock:true,
+//       subBlocksId:null ,
+//       parentBlocksId: null,
+//       type: h3,
+//       iconType:null,
+//       icon:  null ,
+//       editTime: (Date.parse("2021-5-19-19:20")).toString()
+//       , 
+//       createTime: (Date.parse("2021-5-18-15:00")).toString(), 
+//       style :basicBlockStyle,
+//       comments:null
+//     },{
+//       id:"page1",
+//       contents:"page page page",
+//       contentsEmpty:false,
+//       firstBlock:true,
+//       subBlocksId:null ,
+//       parentBlocksId: null,
+//       type: page,
+//       iconType:null,
+//       icon:  null ,
+//       editTime: (Date.parse("2021-5-20-21:00")).toString()
+//       ,
+//       createTime: (Date.parse("2021-5-19-15:00")).toString(),
+//       style :basicBlockStyle,
+//       comments:null
+//     },
+//     {
+//       id:"page2",
+//       contents:"page2",
+//       contentsEmpty:false,
+//       firstBlock:true,
+//       subBlocksId:null ,
+//       parentBlocksId: null,
+//       type: page,
+//       iconType:"emoji",
+//       icon: emojis[8] ,
+//       editTime: (Date.parse("2021-5-20-9:00")).toString(),
+//       createTime: (Date.parse("2021-5-19-20:00")).toString(),
+
+//       style :basicBlockStyle,
+//       comments:null
+//     },
+//     {id:"sub1_1",
+//     contents:"sub1_1", 
+//     contentsEmpty:false,
+//     firstBlock:false,
+//     subBlocksId: ["sub2_1"],
+//     parentBlocksId: ["text"],
+//     type: text,
+//     iconType:null,
+//     icon:  null ,
+//     editTime: (Date.parse("2021-6-1-1:00")).toString() ,   
+//     createTime: (Date.parse("2021-5-30-15:00")).toString(),
+//     style :{
+//       ...basicBlockStyle,
+//     },
+//     comments:null
+//   },
+//   {
+//     id:"sub1_2",
+//     contents:"sub1_2", 
+//     contentsEmpty:false,
+//     firstBlock:false,
+//     subBlocksId:null,
+//     parentBlocksId: ["text"],
+//     type: text,
+//     iconType:null,
+//     icon:  null ,
+//     editTime: (Date.parse("2021-5-12-09:00")).toString(),
+//     createTime: (Date.parse("2021-5-12-08:50")).toString(),
+//     style :{
+//       ...basicBlockStyle
+//     },
+//     comments:[{
+//       id:"comment_sub1_2_1",
+//       userName:userName,
+//       type:"open",
+//       content:"subBlock comments",
+//       editTime:(Date.parse("2021-5-18-8:00")).toString(),
+//       createTime:(Date.parse("2021-5-18-8:00")).toString(),
+//       subComments:null,
+//       subCommentsId:null,
+//     },]
+//   },
+//   {
+//     id:"sub2_1",
+//     contents:"sub2_1", 
+//     contentsEmpty:false,
+//     firstBlock:false,
+//     subBlocksId:null,
+//     parentBlocksId: ["text", "sub1_1"],
+//     type: text,
+//     iconType:null,
+//     icon:  null ,
+//     editTime: (Date.parse("2021-5-27-7:00")).toString(),
+//     createTime: (Date.parse("2021-5-27-7:00")).toString(),
+//     style :{
+//       ...basicBlockStyle
+//     },
+//     comments:null
+//   },
+//   {
+//     id:"numberList",
+//     contents:"", 
+//     contentsEmpty:false,
+//     firstBlock:true,
+//     subBlocksId:["num1", "num2", "num3"],
+//     parentBlocksId: null,
+//     type: numberList,
+//     iconType:null,
+//     icon:  null ,
+//     editTime: (Date.parse("2021-6-1-18:45")).toString(),
+//     createTime: (Date.parse("2021-6-1-18:45")).toString(),
+//     style :{
+//       ...basicBlockStyle
+//     },
+//     comments:null
+//   },
+//   {
+//     id:"num1",
+//     contents:"n1", 
+//     contentsEmpty:false,
+//     firstBlock:false,
+//     subBlocksId:null,
+//     parentBlocksId: [numberList],
+//     type: numberList,
+//     iconType:null,
+//     icon:  null ,
+//     editTime: (Date.parse("2021-6-1-19:03")).toString(),
+//     createTime: (Date.parse("2021-6-1-19:03")).toString(),
+//     style :{
+//       ...basicBlockStyle,
+//       bgColor: bg_green,
+//     },
+//     comments:null
+//   },
+//   {
+//     id:"num2",
+//     contents:"n2", 
+//     contentsEmpty:false,
+//     firstBlock:false,
+//     subBlocksId:null,
+//     parentBlocksId: [numberList],
+//     type: numberList,
+//     iconType:null,
+//     icon:  null ,
+//     editTime: (Date.parse("2021-6-1-19:03:50")).toString(),
+//     createTime: (Date.parse("2021-6-1-19:03:50")).toString(),
+//     style :{
+//       ...basicBlockStyle
+//     },
+//     comments:[{
+//       id:"comment_n2",
+//       userName:userName,
+//       type:"open",
+//       content:"comment n2", 
+//       editTime:(1654086822451).toString(),
+//       createTime:(1654086822451).toString(),
+//       subComments:null,
+//       subCommentsId:null,
+//     },]
+//   },
+//   {
+//     id:"num3",
+//     contents:"n3", 
+//     contentsEmpty:false,
+//     firstBlock:false,
+//     subBlocksId:null,
+//     parentBlocksId: [numberList],
+//     type: numberList,
+//     iconType:null,
+//     icon:  null ,
+//     editTime: Date.parse("2021-6-1-19:12:13").toString(),
+//     createTime: Date.parse("2021-6-1-19:12:13").toString(),
+//     style :{
+//       ...basicBlockStyle
+//     },
+//     comments:null
+//   },
+//   {
+//     id:"bulletList",
+//     contents:"", 
+//     contentsEmpty:false,
+//     firstBlock:true,
+//     subBlocksId:["b1", "b2"],
+//     parentBlocksId:null,
+//     type: bulletList,
+//     iconType:null,
+//     icon:  null ,
+//     editTime: (Date.parse("2021-6-1-19:13:45")).toString(),
+//     createTime: (Date.parse("2021-6-1-19:13:45")).toString(),
+//     style :{
+//       ...basicBlockStyle
+//     },
+//     comments:null
+//   },
+//   {
+//     id:"b1",
+//     contents:"b1", 
+//     contentsEmpty:false,
+//     firstBlock:false,
+//     subBlocksId:null,
+//     parentBlocksId:[bulletList],
+//     type: bulletList,
+//     iconType:null,
+//     icon:  null ,
+//     editTime: (Date.parse("2021-6-1-19:23")).toString(),
+//     createTime: (Date.parse("2021-6-1-19:23")).toString(),
+//     style :{
+//       ...basicBlockStyle
+//     },
+//     comments:null
+//   },
+//   {
+//     id:"b2",
+//     contents:"b2", 
+//     contentsEmpty:false,
+//     firstBlock:false,
+//     subBlocksId:null,
+//     parentBlocksId:[bulletList],
+//     type: bulletList,
+//     iconType:null,
+//     icon:  null ,
+//     editTime: (Date.parse("2021-6-1-20:12" )).toString(),
+//     createTime: (Date.parse("2021-6-1-20:12" )).toString(),
+//     style :{
+//       ...basicBlockStyle
+//     },
+//     comments:null
+//   },
+
+//     ],
+//     blocksId:["text",'img', 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page1', 'page2' , 'sub1_1' ,'sub1_2', 'sub2_1' ,"numberList" , "num1", "num2", "num3" , "bulletList", "b1", "b2"],
+//     subPagesId:['page1','page2'],
+//     parentsId: null,
+//     editTime :(Date.parse("2021-5-16-15:00")).toString(),
+//     createTime :(Date.parse("2021-5-16-15:00")).toString(),
+//   },
+//   {
+//     ...pageSample,
+//     id:"page1",
+//     header:{
+//       ...pageSample.header,
+//       title:"page page page"
+//     },
+//     blocks:[{
+//       id:"img",
+//       contentsEmpty:false,
+//       contents: imgBlockImg,
+//       firstBlock:true,
+//       subBlocksId:null, 
+//       parentBlocksId: null,
+//       type: image,
+//       iconType:null,
+//       icon:  null ,
+//       editTime: (Date.parse("2021-5-18-16:00")).toString()
+//       ,
+//       createTime: (Date.parse("2021-5-18-2:00")).toString(),
+//       style :basicBlockStyle,
+//       comments: null
+//     }],
+//     blocksId:["img"],
+//     firstBlocksId:["img"],
+//     editTime: (Date.parse("2021-5-20-21:00")).toString(),
+//     createTime: (Date.parse("2021-5-20-21:00")).toString(),
+//     parentsId:['12345']
+//   },
+//   {
+//     ...pageSample,
+//     id:"page2",
+//     header:{
+//       ...pageSample.header,
+//       iconType:"emoji",
+//       icon:emojis[8],
+//       title:"page2"
+//     },
+//     editTime: JSON.stringify(Date.parse("2021-5-20-9:00")),
+//     createTime: JSON.stringify(Date.parse("2021-5-20-9:00")),
+//     parentsId:['12345']
+//   },
+//   {
+//     id: '1234',
+//     type:page,
+//     header : {
+//       title:"notion2",
+//       iconType:"emoji",
+//       icon:emojis[2],
+//       cover: null,
+//       comments:  null,
+//     },
+//     firstBlocksId:null,
+//     blocks:[blockSample],
+//     blocksId:[blockSample.id],
+//     subPagesId:null,
+//     parentsId: null,
+//     editTime:JSON.stringify(Date.parse("2021-5-18-19:00")),
+//     createTime:JSON.stringify(Date.parse("2021-5-18-19:00")),
+//   },
+//   {
+//     id: '123',
+//     type:page,
+//     header : {
+//       title:"notion3",
+//       iconType:"emoji",
+//       icon:emojis[10] ,
+//       cover: null,
+//       comments:  null,
+//     },
+//     firstBlocksId:null,
+//     blocks:[blockSample],
+//     blocksId:[blockSample.id],
+//     subPagesId:null,
+//     parentsId:null,
+//     editTime:JSON.stringify(Date.parse("2021-5-13-15:00")),
+//     createTime:JSON.stringify(Date.parse("2021-5-13-15:00")),
+//   },
+//   template1,
+//   template2
+// ],
+//   trash:{
+//     pagesId:null,
+//     pages:null
+//   }
+// };
 /**
  * block.id로 block을 찾을 수 있는 함수
  * @param page 찾을 block이 존재하는 페이지
@@ -1065,23 +1075,27 @@ export const findPage =(pagesId: string[] ,pages:Page[] ,pageId:string):Page|Tra
       }
     }
 export default function notion (state:Notion =initialState , action :NotionAction) :Notion{
-  const pagesId = [...state.pagesId];
-  const firstPagesId=[...state.firstPagesId];
+  const pagesId = state.pagesId!==null? [...state.pagesId] : null;
+  const firstPagesId=state.firstPagesId!==null? [...state.firstPagesId] : null;
   const templatesId =state.templatesId ==null? null: [...state.templatesId];
-  const pages =[...state.pages];
+  const pages =state.pages !==null?  [...state.pages] : null;
   let trash = {
     pagesId:state.trash.pagesId? [...state.trash.pagesId] :null,
     pages: state.trash.pages? [...state.trash.pages]:null
   };
-  const pageIndex:number = action.type !==RESTORE_PAGE ?  
-                            pagesId.indexOf(action.pageId) as number :
+  const pageIndex:number =  action.type !==RESTORE_PAGE ? 
+                            pagesId?.indexOf(action.pageId) as number :
                             trash.pagesId?.indexOf(action.pageId) as number;
-  const targetPage : Page |TrashPage  =  action.type !==RESTORE_PAGE ? 
-                        pages[pageIndex] as Page: 
+  const targetPage : Page |TrashPage |null =  action.type !==RESTORE_PAGE ? 
+                        (pages!==null?
+                          pages[pageIndex] as Page
+                          :
+                          null
+                        ): 
                         trash.pages !==null?
                         trash.pages[pageIndex] as TrashPage: 
-                        {...pageSample, subPages:null};
-  const  blockIndex:number = action.block !==null ?( pages[pageIndex]?.blocksId.indexOf(action.block.id) ): 0 as number;
+                        null;
+
 /**
  * block data 수정 
  * @param index  targetPage.blocks 에서의 block의 index
@@ -1089,7 +1103,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
  */
   const editBlockData =(index:number ,block:Block)=>{
     targetPage?.blocks.splice(index,1,block);
-    console.log("editBlockData",  block, targetPage.blocks);
+    console.log("editBlockData",  block, targetPage?.blocks);
   };
   /**
    * subBlock 추가 시에 subBlock의 parentBlock을 수정 하는 함수 (parentBlock.subBlocksId 수정)
@@ -1097,7 +1111,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
    * @param previousBlockId 추가 되는 subBlock의 parentBlock.subBlocksId의 index를 설정하기 위한 param ,추가 되는 subBlock 앞에 이미 다른 subBlock이 있는 경우면 앞에 있는 subBlock = previoustBlock
    */
   const updateParentBlock =(subBlock:Block , previousBlockId:string|null)=>{
-    if(subBlock.parentBlocksId!==null ){
+    if(subBlock.parentBlocksId!==null && targetPage!==null ){
       //find parentBlock
         const {parentBlockIndex, parentBlock} =findParentBlock(targetPage, subBlock);
         
@@ -1114,7 +1128,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
           subBlocksId:subBlocksId !==null ? subBlocksId : [subBlock.id]
         };
         //update parentBlock
-        targetPage.blocks.splice(parentBlockIndex,1,editedParentBlock);
+        targetPage?.blocks.splice(parentBlockIndex,1,editedParentBlock);
         console.log("updateparent", parentBlock, editedParentBlock);
         
         
@@ -1224,414 +1238,10 @@ export default function notion (state:Notion =initialState , action :NotionActio
     page.blocks?.splice(index,1);
     page.blocksId?.splice(index,1);
   };
-
-  switch (action.type) {
-    case ADD_BLOCK:
-      if(action.newBlockIndex===0){
-        // 새로운 블럭이 page 의 첫번째 블럭인 경우
-        targetPage.blocks =[action.block];
-        targetPage.blocksId=[action.block.id];
-      }else{
-        targetPage.blocks?.splice(action.newBlockIndex, 0, action.block);
-        targetPage.blocksId?.splice(action.newBlockIndex, 0, action.block.id);
-      };
-
-      if(action.block.firstBlock){
-        if(targetPage.firstBlocksId!==null){
-          if(action.previousBlockId !==null){
-            const firstIndex = targetPage.firstBlocksId.indexOf(action.previousBlockId);
-            targetPage.firstBlocksId.splice(firstIndex+1, 0,action.block.id);
-          }else{
-            targetPage.firstBlocksId =targetPage.firstBlocksId.concat(action.block.id);
-          }
-
-        }else{
-          targetPage.firstBlocksId =[action.block.id]
-        }
-
-      }else{
-              //subBlock 으로 만들어 졌을 때 
-        if(action.block.parentBlocksId!==null){
-        updateParentBlock(action.block , action.previousBlockId);
-        };
-      };
-
-      if(action.block.subBlocksId!==null && action.previousBlockId!==null){
-        // subBlock을 가지는 블록을 기준으로 그 다음 블록으로 만들어진 경우  
-        const previousBlock = findBlock(targetPage, action.previousBlockId).BLOCK;
-        previousBlock.subBlocksId =null;
-
-        action.block.subBlocksId.forEach((id:string)=>{
-          const BLOCK = findBlock(targetPage, id).BLOCK;
-          const parentIndex= BLOCK.parentBlocksId?.indexOf(action.previousBlockId as string);
-          parentIndex !==undefined &&
-          BLOCK.parentBlocksId?.splice(parentIndex,1, action.block.id);
-        })
-      };
-      //새롱 만들어진 block 에 포거스를 두기 위해 
-      sessionStorage.setItem("newBlock", action.block.id);
-      if(action.block.type ==="page"){
-        // 만들어진 블록의 type 이 page 인 경우 
-        const newPage:Page ={
-          ...pageSample,
-          id:action.block.id,
-          parentsId:[targetPage.id]
-        };
-        addPage(newPage);
-        if(action.block.parentBlocksId !==null){
-          const parentPage =findPage(pagesId, pages, action.block.parentBlocksId[0]) as Page ;
-          const editedParentPage:Page ={
-            ...parentPage,
-            blocks: parentPage.blocks.concat(action.block),
-            blocksId:parentPage.blocksId.concat(action.block.id),
-            firstBlocksId:parentPage.firstBlocksId!==null?  parentPage.firstBlocksId?.concat(action.block.id) : [action.block.id],
-            subPagesId: parentPage.subPagesId ==null? [...blockSample.id] : parentPage.subPagesId.concat([blockSample.id]),
-            editTime:editTime
-          };
-          editPage(editedParentPage);
-        }
-      };
-      console.log( "addBlock", targetPage)
-      return {
-        pages:pages,
-        firstPagesId:firstPagesId,
-        templatesId:templatesId,
-        pagesId:pagesId,
-        trash:trash
-      }; 
-    case EDIT_BLOCK:
-      editBlockData(blockIndex, action.block);
-      console.log("edit",action.block  ,targetPage.blocks )
-      return {
-        pages:pages,
-        firstPagesId:firstPagesId,
-        templatesId:templatesId,
-        pagesId:pagesId,
-        trash:trash
-      };
-    case CHANGE_BLOCK_TO_PAGE :
-      const changedTypeBlock:Block ={
-        ...action.block,
-        contents:action.block.contents===""? "untitle": action.block.contents,
-        type:"page",
-        subBlocksId:null,
-        editTime:editTime
-      };
-      editBlockData(blockIndex,changedTypeBlock);
-      let newBlocksId =[blockSample.id];
-      let newBlocks =[blockSample];
-      let newFirstBlocksId =[blockSample.id];
-      let newSubPagesId: string[]|null = null;
-      const allSubBlocks = targetPage.blocks.filter((block:Block)=> block.parentBlocksId?.includes(action.block.id));
-      if(allSubBlocks[0]!==undefined){
-        newBlocks = allSubBlocks.map((block:Block)=>{
-          const newParentBlocksId =block.parentBlocksId !==null ? block.parentBlocksId.slice(1) : null; 
-          const newBlock:Block ={
-            ...block,
-            parentBlocksId: newParentBlocksId !==null?( newParentBlocksId[0]===undefined? null : newParentBlocksId): null,
-            firstBlock: newParentBlocksId ==null || newParentBlocksId[0]===undefined,
-          };
-          return newBlock
-        });
-        newBlocksId = newBlocks.map((block:Block)=>block.id);
-        newFirstBlocksId = newBlocks.filter((block:Block)=> block.firstBlock ===true).map((block:Block)=> block.id);
-        newSubPagesId = newBlocks.filter((block:Block)=> block.type==="page").map((block:Block)=>block.id);
-        if(newBlocks[0] !==undefined ){
-          targetPage.blocks = targetPage.blocks.filter((block:Block)=> !newBlocksId.includes(block.id) );
-          targetPage.blocksId = targetPage.blocksId.filter((id:string)=> !newBlocksId.includes(id));
-        }
-        if( newSubPagesId[0]!==undefined && targetPage.subPagesId !==null){
-          targetPage.subPagesId= targetPage.subPagesId.filter((id:string)=> !newSubPagesId?.includes(id));
-        };
-      }
-      const newPage:Page ={
-        id:action.block.id,
-        type:page,
-        header:{
-          title: action.block.contents ===""?"untitle" :action.block.contents,
-          iconType: action.block.iconType,
-          icon: action.block.icon,
-          cover:null,
-          comments:action.block.comments
-        },
-        firstBlocksId:newFirstBlocksId,
-        blocksId:newBlocksId,
-        blocks:newBlocks,
-        subPagesId: newSubPagesId ==null? null : (newSubPagesId[0]===undefined ? null : newSubPagesId) ,
-        parentsId: [action.pageId],
-        editTime: action.block.editTime,
-        createTime: action.block.createTime,
-      };
-      addPage(newPage);
-
-      console.log("change block type to page", targetPage, newPage)
-      return {
-        pages:pages,
-        firstPagesId:firstPagesId,
-        templatesId:templatesId,
-        pagesId:pagesId,
-        trash:trash
-      };
-    case CHANGE_PAGE_TO_BLOCK:
-      const changedTargetPageIndex= pagesId.indexOf(action.block.id);
-      const changedTargetPage =pages[changedTargetPageIndex];
-      deleteTargetPageData(changedTargetPage ,changedTargetPageIndex ,false);
-      const changedBlock:Block ={
-        ...action.block,
-        subBlocksId: changedTargetPage.blocksId,
-        editTime:editTime
-      };
-      editBlockData(blockIndex, changedBlock);
-      const newSubBlocks :Block[]=changedTargetPage.blocks.map((block:Block)=>({
-        ...block,
-        firstBlock:false,
-        parentBlocksId:block.parentBlocksId!==null? [action.block.id ,...block.parentBlocksId] :[action.block.id]
-      }))
-      targetPage.blocks.push.apply(targetPage.blocks, newSubBlocks);
-      targetPage.blocksId.push.apply(targetPage.blocksId ,changedTargetPage.blocksId);
-      console.log("changePagetoBlock",targetPage, pages, pages[pageIndex],pagesId);
-      return {
-        pages:pages,
-        firstPagesId:firstPagesId,
-        templatesId:templatesId,
-        pagesId:pagesId,
-        trash:trash
-      };
-    case CHANGE_TO_SUB_BLOCK:
-    //1. change  action.block's new parentBlock
-      const {BLOCK, index} = findBlock(targetPage, action.newParentBlockId);
-      const parentBlock:Block ={
-        ...BLOCK,
-        subBlocksId: BLOCK.subBlocksId !==null? BLOCK.subBlocksId.concat(action.block.id)  :[action.block.id],
-        editTime:editTime
-      }
-      const parentBlockIndex =index;
-      editBlockData(parentBlockIndex, parentBlock);
-    
-    //2. change actoin.block to subBlopck : edit parentsId of action.block 
-      const editedBlock :Block ={
-        ...action.block,
-        firstBlock: false,
-        parentBlocksId: parentBlock.parentBlocksId !==null?
-                        parentBlock.parentBlocksId.concat(parentBlock.id):
-                        [parentBlock.id],
-        editTime:editTime
-      }
-      editBlockData(blockIndex,editedBlock);
-      // 3. first-> sub 인 경우  
-      if(action.block.firstBlock){
-        // delte  id from firstBlocksId
-        const index:number = targetPage.firstBlocksId?.indexOf(action.block.id) as number;
-        targetPage.firstBlocksId?.splice(index,1);
-      };
-       // 4. action.block의 subBlock 에서 다른 subBlock 으로 변경되었을 경우 
-      if(action.block.parentBlocksId !==null){
-        const previouseParentBlockId = action.block.parentBlocksId[action.block.parentBlocksId.length-1];
-        const {BLOCK, index} =findBlock(targetPage,previouseParentBlockId);
-        const edtitedPreviousParentBlock :Block ={
-          ...BLOCK,
-          subBlocksId: BLOCK.subBlocksId !==null?BLOCK.subBlocksId.filter((id:string)=> id !== action.block.id) :null ,
-          editTime:editTime,
-        };
-        editBlockData(index, edtitedPreviousParentBlock);
-      };
-      console.log("CHANGE subBlock", targetPage.blocks);
-      return {
-        pages:pages,
-        firstPagesId:firstPagesId,
-        templatesId:templatesId,
-        pagesId:pagesId,
-        trash:trash
-      }; 
-
-    case RAISE_BLOCK :
-      /*  cursor.anchorOffset== 0 일때 backspace 를 누를때 단. targetPage의 fistBlocksId 의 첫번째 인수는 불가 
-        result1 combine: previsouBlockInDoc 의 content 수정 
-          case1. actionblock 이 firstBlock 인 경우, 
-          case2.  block 이 sub 이면 뒤에 다른 subBlock이 있는 경우
-
-        result2.pull: action block 의 subBlock 앞으로 땡기기 
-        */
-        if(targetPage.firstBlocksId!==null &&
-          targetPage.firstBlocksId[0] !== action.block.id
-          ){
-            const targetBlock =action.block; 
-            const {previousBlockInDoc , previousBlockInDocIndex}=findPreviousBlockInDoc(targetPage, action.block);
-            /**
-             * raiseBlock 시  previousBlock의 내용에 block의 내용을 합치는 함수
-             * @param parentBlock : previoustBlock이 parentBlock일 경우를 위한 param
-             * @param parentBlockIndex :previoustBlock이 parentBlock일 경우를 위한 param
-             */
-            const combineContents=(parentBlock:Block|null, parentBlockIndex:number|null)=>{
-              console.log("content combine")
-              const editedPreBlockInDoc :Block ={
-                ...previousBlockInDoc,
-                contents: `${previousBlockInDoc.contents}${targetBlock.contents}`,
-                editTime:editTime
-              };
-
-              if(parentBlockIndex!==null && parentBlock!==null && parentBlock.subBlocksId!==null){
-                const newSubBlocksId =parentBlock.subBlocksId.filter((id:string) => id !== targetBlock.id); 
-
-                const newParentBlock :Block ={
-                  ...parentBlock,
-                  subBlocksId: newSubBlocksId[0]===undefined? null: newSubBlocksId,
-                  editTime:editTime
-                };
-                if(parentBlock.id === previousBlockInDoc.id){
-                  const newParentBlockAlsoPreviousBlock :Block ={
-                    ...newParentBlock,
-                    contents:editedPreBlockInDoc.contents
-                  };
-                  editBlockData(parentBlockIndex,newParentBlockAlsoPreviousBlock);
-                }else{
-                  editBlockData(previousBlockInDocIndex, editedPreBlockInDoc);
-                  editBlockData(parentBlockIndex,newParentBlock);
-                }
-              }else{
-                editBlockData(previousBlockInDocIndex, editedPreBlockInDoc);
-              };
-
-              targetPage.blocks.splice(blockIndex,1);
-              targetPage.blocksId.splice(blockIndex,1);
-              
-              raiseSubBlock(targetPage, action.block, true);
-              updateNewParentAndFirstBlocksIdAfterRaise(targetPage, action.block);
-              //firstBlocksId는 따로 
-            };
-            /**
-             * rasieBlock 시, block를 앞으로 당기는(sub->parent)함수
-             * @param subBlocksId : block의 parentBlock.subBlocksId
-             * @param targetBlockIndexInSubBlocks : block의 subBlocksId 에서의 index
-             * @param parentBlock: block의 parentBlock
-             * @param parentBlockIndex: block의 parentBlock의  page.blocks에서의 index
-             */
-            const pullBlock=(subBlocksId:string[], targetBlockIndexInSubBlocks:number, parentBlock:Block, parentBlockIndex:number)=>{
-              console.log("pull");
-                  raiseSubBlock(targetPage, action.block, false);
-                  const editedTargetBlock :Block ={
-                    ...targetBlock,
-                    parentBlocksId:parentBlock.parentBlocksId,
-                    firstBlock:parentBlock.firstBlock,
-                    editTime:editTime
-                  };
-                    editBlockData(blockIndex, editedTargetBlock);
-                    subBlocksId.splice(targetBlockIndexInSubBlocks,1);
-                    const editedParentBlock:Block ={
-                      ...parentBlock,
-                      subBlocksId: subBlocksId[0]===undefined ? null: subBlocksId,
-                      editTime:editTime
-                    };
-                    editBlockData(parentBlockIndex, editedParentBlock);
-                    //edit fristBlock
-                    if(parentBlock.firstBlock && targetPage.firstBlocksId!==null){
-                      const firstIndex= targetPage.firstBlocksId.indexOf(parentBlock.id);
-                      targetPage.firstBlocksId.splice(firstIndex+1,0, targetBlock.id);
-                      console.log("firsindex", firstIndex);
-                    };
-                  
-                    if(parentBlock.parentBlocksId !==null){
-                      const grandParentBlockId = parentBlock.parentBlocksId[parentBlock.parentBlocksId.length -1];
-                      const {BLOCK, index}= findBlock(targetPage, grandParentBlockId);
-                      const grandParentBlock =BLOCK;
-                      const grandParentBlockIndex= index; 
-                        if(grandParentBlock.subBlocksId!==null){
-                          const grandSubsId = [...grandParentBlock.subBlocksId];
-                          const subIndex= grandSubsId.indexOf(parentBlock.id);
-                          grandSubsId.splice(subIndex+1,0,targetBlock.id);
-                          const newGrandParentBlock:Block ={
-                            ...grandParentBlock,
-                            subBlocksId:grandSubsId,
-                            editTime:editTime
-                          };
-                          console.log("grandParent")
-                          editBlockData(grandParentBlockIndex, newGrandParentBlock);
-                        }
-                    }
-            };
-            //
-            if(targetBlock.firstBlock){
-              //combine -case1
-              combineContents(null,null);
-            }else{
-              const {parentBlock, parentBlockIndex} =findParentBlock(targetPage, targetBlock);
-              if(parentBlock.subBlocksId!==null){
-                /**
-                 * paretBlock.subBlocksId를 복사한 것
-                 */
-                const subBlocksId =[...parentBlock.subBlocksId]; 
-                const targetBlockIndexInSubBlocks = subBlocksId.indexOf(targetBlock.id);
-
-                if(targetBlockIndexInSubBlocks < subBlocksId.length-1){
-                  //combine -case2
-                  combineContents(parentBlock, parentBlockIndex);
-                }else{
-                  //pull
-                  pullBlock(subBlocksId, targetBlockIndexInSubBlocks, parentBlock, parentBlockIndex);
-                };
-                
-              };
-            };
-        };
-        console.log("raiseBlock", pages[pageIndex]);
-      return {
-        pages:pages,
-        firstPagesId:firstPagesId,
-        templatesId:templatesId,
-        pagesId:pagesId,
-        trash:trash
-      }; ;
-
-    case DELETE_BLOCK:
-
-      if(action.block.parentBlocksId !== null){
-        const parentBlocksId = action.block?.parentBlocksId as string[];
-        const parentBlockId :string = parentBlocksId[parentBlocksId.length-1] ;
-        const parentBlockIndex = targetPage.blocksId.indexOf(parentBlockId);
-        const parentBlock = targetPage.blocks[parentBlockIndex];
-        const newSubBlocksId  = parentBlock.subBlocksId?.filter((id:string)=> id !== action.block.id) as string[] ;
-        if(newSubBlocksId[0] !== undefined){
-          editBlockData( parentBlockIndex, {
-            ...parentBlock,
-            subBlocksId: newSubBlocksId
-          })
-        }else{
-          if(action.block.type.includes("List")){
-            deleteBlockData(targetPage, parentBlock);
-          }else{
-            editBlockData( parentBlockIndex, {
-              ...parentBlock,
-              subBlocksId: null,
-            })
-          }
-        };
-      };
-      // 삭제 타깃인 block 이 subBlock을 가지는 경우 .... 
-      if(action.isInMenu){
-        
-        deleteBlockData(targetPage,action.block);
-      }else{
-        raiseSubBlock(targetPage, action.block ,true);
-
-        editFirstBlocksId(targetPage, action.block);
-        targetPage.blocks.splice(blockIndex,1);
-        targetPage.blocksId.splice(blockIndex,1);
-      };
-      if(action.block.type ==="page"){
-        deletePage(action.block.id, false);
-      }
-      console.log("delete", pages[pageIndex]);
-      return {
-        pages:pages,
-        firstPagesId:firstPagesId,
-        templatesId:templatesId,
-        pagesId:pagesId,
-        trash:trash
-      };
-    case ADD_PAGE :
-      function addPage(newPage:Page){
-        pagesId.push(newPage.id);
-        pages.push(newPage);
+  function addPage(newPage:Page){
+    if(pagesId!==null && pages!==null && firstPagesId!==null){
+      pagesId.push(newPage.id);
+      pages.push(newPage);
       if(newPage.parentsId==null){
         //firstPage 일경우
           firstPagesId.push(newPage.id);
@@ -1646,59 +1256,456 @@ export default function notion (state:Notion =initialState , action :NotionActio
         pages.splice(parentPageIndex,1, editedParentPage);
       };  
       console.log("add new page", pages, firstPagesId);
-      };
-      addPage(action.newPage); 
-      return {
-        pages:pages,
-        firstPagesId:firstPagesId,
-        templatesId:templatesId,
-        pagesId:pagesId,
-        trash:trash
-      };
-    case DUPLICATE_PAGE :
-      function duplicatePage(){
-        const targetPageIndex = pagesId.indexOf(targetPage.id);
-      const nextPageId =pagesId[targetPageIndex+1]
-      const nextPage:Page =findPage(pagesId, pages, nextPageId ) ;
-      let number :string ="1";
-      let stop :boolean = false;
-      if(nextPage.header.title === `${targetPage.header.title}(1)`){
-        const slicedPages =pages.slice(targetPageIndex+1);
-        for (let i = 0; i < slicedPages.length && !stop; i++) {
-          const title = slicedPages[i].header.title;
-          if(title === `${targetPage.header.title}(${i+1})`){
-            number = (i+2).toString();
-            console.log("number", number)
+    } ;
+  };
+  if(targetPage !==null && pagesId !==null && pages !==null && firstPagesId!==null){
+    const  blockIndex:number = action.block !==null ?( pages[pageIndex]?.blocksId.indexOf(action.block.id) ): 0 as number;
+    switch(action.type){
+      case ADD_BLOCK:
+
+        if(action.newBlockIndex===0){
+          // 새로운 블럭이 page 의 첫번째 블럭인 경우
+          targetPage.blocks =[action.block];
+          targetPage.blocksId=[action.block.id];
+        }else{
+          targetPage.blocks?.splice(action.newBlockIndex, 0, action.block);
+          targetPage.blocksId?.splice(action.newBlockIndex, 0, action.block.id);
+        };
+  
+        if(action.block.firstBlock){
+          if(targetPage.firstBlocksId!==null){
+            if(action.previousBlockId !==null){
+              const firstIndex = targetPage.firstBlocksId.indexOf(action.previousBlockId);
+              targetPage.firstBlocksId.splice(firstIndex+1, 0,action.block.id);
+            }else{
+              targetPage.firstBlocksId =targetPage.firstBlocksId.concat(action.block.id);
+            }
+  
           }else{
-            stop= true;
+            targetPage.firstBlocksId =[action.block.id]
           }
+  
+        }else{
+                //subBlock 으로 만들어 졌을 때 
+          if(action.block.parentBlocksId!==null){
+          updateParentBlock(action.block , action.previousBlockId);
+          };
+        };
+  
+        if(action.block.subBlocksId!==null && action.previousBlockId!==null){
+          // subBlock을 가지는 블록을 기준으로 그 다음 블록으로 만들어진 경우  
+          const previousBlock = findBlock(targetPage, action.previousBlockId).BLOCK;
+          previousBlock.subBlocksId =null;
+  
+          action.block.subBlocksId.forEach((id:string)=>{
+            const BLOCK = findBlock(targetPage, id).BLOCK;
+            const parentIndex= BLOCK.parentBlocksId?.indexOf(action.previousBlockId as string);
+            parentIndex !==undefined &&
+            BLOCK.parentBlocksId?.splice(parentIndex,1, action.block.id);
+          })
+        };
+        //새롱 만들어진 block 에 포거스를 두기 위해 
+        sessionStorage.setItem("newBlock", action.block.id);
+        if(action.block.type ==="page"){
+          // 만들어진 블록의 type 이 page 인 경우 
+          const newPage:Page ={
+            ...pageSample,
+            id:action.block.id,
+            parentsId:[targetPage.id]
+          };
+          addPage(newPage);
+          if(action.block.parentBlocksId !==null){
+            const parentPage =findPage(pagesId, pages, action.block.parentBlocksId[0]) as Page ;
+            const editedParentPage:Page ={
+              ...parentPage,
+              blocks: parentPage.blocks.concat(action.block),
+              blocksId:parentPage.blocksId.concat(action.block.id),
+              firstBlocksId:parentPage.firstBlocksId!==null?  parentPage.firstBlocksId?.concat(action.block.id) : [action.block.id],
+              subPagesId: parentPage.subPagesId ==null? [...blockSample.id] : parentPage.subPagesId.concat([blockSample.id]),
+              editTime:editTime
+            };
+            editPage(editedParentPage);
+          }
+        };
+        console.log( "addBlock", targetPage)
+        return {
+          pages:pages,
+          firstPagesId:firstPagesId,
+          templatesId:templatesId,
+          pagesId:pagesId,
+          trash:trash
+        }; 
+      case EDIT_BLOCK:
+        editBlockData(blockIndex, action.block);
+        console.log("edit",action.block  ,targetPage.blocks )
+        return {
+          pages:pages,
+          firstPagesId:firstPagesId,
+          templatesId:templatesId,
+          pagesId:pagesId,
+          trash:trash
+        };
+      case CHANGE_BLOCK_TO_PAGE :
+        const changedTypeBlock:Block ={
+          ...action.block,
+          contents:action.block.contents===""? "untitle": action.block.contents,
+          type:"page",
+          subBlocksId:null,
+          editTime:editTime
+        };
+        editBlockData(blockIndex,changedTypeBlock);
+        let newBlocksId =[blockSample.id];
+        let newBlocks =[blockSample];
+        let newFirstBlocksId =[blockSample.id];
+        let newSubPagesId: string[]|null = null;
+        const allSubBlocks = targetPage.blocks.filter((block:Block)=> block.parentBlocksId?.includes(action.block.id));
+        if(allSubBlocks[0]!==undefined){
+          newBlocks = allSubBlocks.map((block:Block)=>{
+            const newParentBlocksId =block.parentBlocksId !==null ? block.parentBlocksId.slice(1) : null; 
+            const newBlock:Block ={
+              ...block,
+              parentBlocksId: newParentBlocksId !==null?( newParentBlocksId[0]===undefined? null : newParentBlocksId): null,
+              firstBlock: newParentBlocksId ==null || newParentBlocksId[0]===undefined,
+            };
+            return newBlock
+          });
+          newBlocksId = newBlocks.map((block:Block)=>block.id);
+          newFirstBlocksId = newBlocks.filter((block:Block)=> block.firstBlock ===true).map((block:Block)=> block.id);
+          newSubPagesId = newBlocks.filter((block:Block)=> block.type==="page").map((block:Block)=>block.id);
+          if(newBlocks[0] !==undefined ){
+            targetPage.blocks = targetPage.blocks.filter((block:Block)=> !newBlocksId.includes(block.id) );
+            targetPage.blocksId = targetPage.blocksId.filter((id:string)=> !newBlocksId.includes(id));
+          }
+          if( newSubPagesId[0]!==undefined && targetPage.subPagesId !==null){
+            targetPage.subPagesId= targetPage.subPagesId.filter((id:string)=> !newSubPagesId?.includes(id));
+          };
         }
-      };
-      const newPage:Page ={
-        ...targetPage,
-        id:`${targetPage.id}_duplicate_${number}`,
-        header:{
-          ...targetPage.header,
-          title: `${targetPage.header.title}(${number})`
-        },
-        editTime:editTime
-      };
-      if(targetPage.parentsId ==null){
-        const index= firstPagesId.indexOf(targetPage.id);
-        firstPagesId.splice(index+1,0, newPage.id);
-      }else{
-        const parentPage = {...findPage(pagesId,pages ,targetPage.parentsId[targetPage.parentsId.length-1])};
-        const parentPageIndex = pagesId.indexOf(parentPage.id);
-        const subPageIndex= parentPage.subPagesId?.indexOf(targetPage.id) as number;
-        parentPage.subPagesId?.splice(subPageIndex,0, newPage.id);
-
-
-        pages.splice(parentPageIndex,0, parentPage);
-      };
-      pages.splice(targetPageIndex+1, 0, newPage);
-      pagesId.splice(targetPageIndex+1,0, newPage.id);
-      };
-      duplicatePage();
+        const newPage:Page ={
+          id:action.block.id,
+          type:page,
+          header:{
+            title: action.block.contents ===""?"untitle" :action.block.contents,
+            iconType: action.block.iconType,
+            icon: action.block.icon,
+            cover:null,
+            comments:action.block.comments
+          },
+          firstBlocksId:newFirstBlocksId,
+          blocksId:newBlocksId,
+          blocks:newBlocks,
+          subPagesId: newSubPagesId ==null? null : (newSubPagesId[0]===undefined ? null : newSubPagesId) ,
+          parentsId: [action.pageId],
+          editTime: action.block.editTime,
+          createTime: action.block.createTime,
+        };
+        addPage(newPage);
+  
+        console.log("change block type to page", targetPage, newPage)
+        return {
+          pages:pages,
+          firstPagesId:firstPagesId,
+          templatesId:templatesId,
+          pagesId:pagesId,
+          trash:trash
+        };
+      case CHANGE_PAGE_TO_BLOCK:
+        const changedTargetPageIndex= pagesId.indexOf(action.block.id);
+        const changedTargetPage =pages[changedTargetPageIndex];
+        deleteTargetPageData(pagesId,pages,firstPagesId, changedTargetPage ,changedTargetPageIndex ,false);
+        const changedBlock:Block ={
+          ...action.block,
+          subBlocksId: changedTargetPage.blocksId,
+          editTime:editTime
+        };
+        editBlockData(blockIndex, changedBlock);
+        const newSubBlocks :Block[]=changedTargetPage.blocks.map((block:Block)=>({
+          ...block,
+          firstBlock:false,
+          parentBlocksId:block.parentBlocksId!==null? [action.block.id ,...block.parentBlocksId] :[action.block.id]
+        }))
+        targetPage.blocks.push.apply(targetPage.blocks, newSubBlocks);
+        targetPage.blocksId.push.apply(targetPage.blocksId ,changedTargetPage.blocksId);
+        console.log("changePagetoBlock",targetPage, pages, pages[pageIndex],pagesId);
+        return {
+          pages:pages,
+          firstPagesId:firstPagesId,
+          templatesId:templatesId,
+          pagesId:pagesId,
+          trash:trash
+        };
+      case CHANGE_TO_SUB_BLOCK:
+      //1. change  action.block's new parentBlock
+        const {BLOCK, index} = findBlock(targetPage, action.newParentBlockId);
+        const parentBlock:Block ={
+          ...BLOCK,
+          subBlocksId: BLOCK.subBlocksId !==null? BLOCK.subBlocksId.concat(action.block.id)  :[action.block.id],
+          editTime:editTime
+        }
+        const parentBlockIndex =index;
+        editBlockData(parentBlockIndex, parentBlock);
+      
+      //2. change actoin.block to subBlopck : edit parentsId of action.block 
+        const editedBlock :Block ={
+          ...action.block,
+          firstBlock: false,
+          parentBlocksId: parentBlock.parentBlocksId !==null?
+                          parentBlock.parentBlocksId.concat(parentBlock.id):
+                          [parentBlock.id],
+          editTime:editTime
+        }
+        editBlockData(blockIndex,editedBlock);
+        // 3. first-> sub 인 경우  
+        if(action.block.firstBlock){
+          // delte  id from firstBlocksId
+          const index:number = targetPage.firstBlocksId?.indexOf(action.block.id) as number;
+          targetPage.firstBlocksId?.splice(index,1);
+        };
+         // 4. action.block의 subBlock 에서 다른 subBlock 으로 변경되었을 경우 
+        if(action.block.parentBlocksId !==null){
+          const previouseParentBlockId = action.block.parentBlocksId[action.block.parentBlocksId.length-1];
+          const {BLOCK, index} =findBlock(targetPage,previouseParentBlockId);
+          const edtitedPreviousParentBlock :Block ={
+            ...BLOCK,
+            subBlocksId: BLOCK.subBlocksId !==null?BLOCK.subBlocksId.filter((id:string)=> id !== action.block.id) :null ,
+            editTime:editTime,
+          };
+          editBlockData(index, edtitedPreviousParentBlock);
+        };
+        console.log("CHANGE subBlock", targetPage.blocks);
+        return {
+          pages:pages,
+          firstPagesId:firstPagesId,
+          templatesId:templatesId,
+          pagesId:pagesId,
+          trash:trash
+        }; 
+  
+      case RAISE_BLOCK :
+        /*  cursor.anchorOffset== 0 일때 backspace 를 누를때 단. targetPage의 fistBlocksId 의 첫번째 인수는 불가 
+          result1 combine: previsouBlockInDoc 의 content 수정 
+            case1. actionblock 이 firstBlock 인 경우, 
+            case2.  block 이 sub 이면 뒤에 다른 subBlock이 있는 경우
+  
+          result2.pull: action block 의 subBlock 앞으로 땡기기 
+          */
+          if(targetPage.firstBlocksId!==null &&
+            targetPage.firstBlocksId[0] !== action.block.id
+            ){
+              const targetBlock =action.block; 
+              const {previousBlockInDoc , previousBlockInDocIndex}=findPreviousBlockInDoc(targetPage, action.block);
+              /**
+               * raiseBlock 시  previousBlock의 내용에 block의 내용을 합치는 함수
+               * @param parentBlock : previoustBlock이 parentBlock일 경우를 위한 param
+               * @param parentBlockIndex :previoustBlock이 parentBlock일 경우를 위한 param
+               */
+              const combineContents=(parentBlock:Block|null, parentBlockIndex:number|null)=>{
+                console.log("content combine")
+                const editedPreBlockInDoc :Block ={
+                  ...previousBlockInDoc,
+                  contents: `${previousBlockInDoc.contents}${targetBlock.contents}`,
+                  editTime:editTime
+                };
+  
+                if(parentBlockIndex!==null && parentBlock!==null && parentBlock.subBlocksId!==null){
+                  const newSubBlocksId =parentBlock.subBlocksId.filter((id:string) => id !== targetBlock.id); 
+  
+                  const newParentBlock :Block ={
+                    ...parentBlock,
+                    subBlocksId: newSubBlocksId[0]===undefined? null: newSubBlocksId,
+                    editTime:editTime
+                  };
+                  if(parentBlock.id === previousBlockInDoc.id){
+                    const newParentBlockAlsoPreviousBlock :Block ={
+                      ...newParentBlock,
+                      contents:editedPreBlockInDoc.contents
+                    };
+                    editBlockData(parentBlockIndex,newParentBlockAlsoPreviousBlock);
+                  }else{
+                    editBlockData(previousBlockInDocIndex, editedPreBlockInDoc);
+                    editBlockData(parentBlockIndex,newParentBlock);
+                  }
+                }else{
+                  editBlockData(previousBlockInDocIndex, editedPreBlockInDoc);
+                };
+  
+                targetPage.blocks.splice(blockIndex,1);
+                targetPage.blocksId.splice(blockIndex,1);
+                
+                raiseSubBlock(targetPage, action.block, true);
+                updateNewParentAndFirstBlocksIdAfterRaise(targetPage, action.block);
+                //firstBlocksId는 따로 
+              };
+              /**
+               * rasieBlock 시, block를 앞으로 당기는(sub->parent)함수
+               * @param subBlocksId : block의 parentBlock.subBlocksId
+               * @param targetBlockIndexInSubBlocks : block의 subBlocksId 에서의 index
+               * @param parentBlock: block의 parentBlock
+               * @param parentBlockIndex: block의 parentBlock의  page.blocks에서의 index
+               */
+              const pullBlock=(subBlocksId:string[], targetBlockIndexInSubBlocks:number, parentBlock:Block, parentBlockIndex:number)=>{
+                console.log("pull");
+                    raiseSubBlock(targetPage, action.block, false);
+                    const editedTargetBlock :Block ={
+                      ...targetBlock,
+                      parentBlocksId:parentBlock.parentBlocksId,
+                      firstBlock:parentBlock.firstBlock,
+                      editTime:editTime
+                    };
+                      editBlockData(blockIndex, editedTargetBlock);
+                      subBlocksId.splice(targetBlockIndexInSubBlocks,1);
+                      const editedParentBlock:Block ={
+                        ...parentBlock,
+                        subBlocksId: subBlocksId[0]===undefined ? null: subBlocksId,
+                        editTime:editTime
+                      };
+                      editBlockData(parentBlockIndex, editedParentBlock);
+                      //edit fristBlock
+                      if(parentBlock.firstBlock && targetPage.firstBlocksId!==null){
+                        const firstIndex= targetPage.firstBlocksId.indexOf(parentBlock.id);
+                        targetPage.firstBlocksId.splice(firstIndex+1,0, targetBlock.id);
+                        console.log("firsindex", firstIndex);
+                      };
+                    
+                      if(parentBlock.parentBlocksId !==null){
+                        const grandParentBlockId = parentBlock.parentBlocksId[parentBlock.parentBlocksId.length -1];
+                        const {BLOCK, index}= findBlock(targetPage, grandParentBlockId);
+                        const grandParentBlock =BLOCK;
+                        const grandParentBlockIndex= index; 
+                          if(grandParentBlock.subBlocksId!==null){
+                            const grandSubsId = [...grandParentBlock.subBlocksId];
+                            const subIndex= grandSubsId.indexOf(parentBlock.id);
+                            grandSubsId.splice(subIndex+1,0,targetBlock.id);
+                            const newGrandParentBlock:Block ={
+                              ...grandParentBlock,
+                              subBlocksId:grandSubsId,
+                              editTime:editTime
+                            };
+                            console.log("grandParent")
+                            editBlockData(grandParentBlockIndex, newGrandParentBlock);
+                          }
+                      }
+              };
+              //
+              if(targetBlock.firstBlock){
+                //combine -case1
+                combineContents(null,null);
+              }else{
+                const {parentBlock, parentBlockIndex} =findParentBlock(targetPage, targetBlock);
+                if(parentBlock.subBlocksId!==null){
+                  /**
+                   * paretBlock.subBlocksId를 복사한 것
+                   */
+                  const subBlocksId =[...parentBlock.subBlocksId]; 
+                  const targetBlockIndexInSubBlocks = subBlocksId.indexOf(targetBlock.id);
+  
+                  if(targetBlockIndexInSubBlocks < subBlocksId.length-1){
+                    //combine -case2
+                    combineContents(parentBlock, parentBlockIndex);
+                  }else{
+                    //pull
+                    pullBlock(subBlocksId, targetBlockIndexInSubBlocks, parentBlock, parentBlockIndex);
+                  };
+                  
+                };
+              };
+          };
+          console.log("raiseBlock", pages[pageIndex]);
+        return {
+          pages:pages,
+          firstPagesId:firstPagesId,
+          templatesId:templatesId,
+          pagesId:pagesId,
+          trash:trash
+        }; ;
+  
+      case DELETE_BLOCK:
+  
+        if(action.block.parentBlocksId !== null){
+          const parentBlocksId = action.block?.parentBlocksId as string[];
+          const parentBlockId :string = parentBlocksId[parentBlocksId.length-1] ;
+          const parentBlockIndex = targetPage.blocksId.indexOf(parentBlockId);
+          const parentBlock = targetPage.blocks[parentBlockIndex];
+          const newSubBlocksId  = parentBlock.subBlocksId?.filter((id:string)=> id !== action.block.id) as string[] ;
+          if(newSubBlocksId[0] !== undefined){
+            editBlockData( parentBlockIndex, {
+              ...parentBlock,
+              subBlocksId: newSubBlocksId
+            })
+          }else{
+            if(action.block.type.includes("List")){
+              deleteBlockData(targetPage, parentBlock);
+            }else{
+              editBlockData( parentBlockIndex, {
+                ...parentBlock,
+                subBlocksId: null,
+              })
+            }
+          };
+        };
+        // 삭제 타깃인 block 이 subBlock을 가지는 경우 .... 
+        if(action.isInMenu){
+          
+          deleteBlockData(targetPage,action.block);
+        }else{
+          raiseSubBlock(targetPage, action.block ,true);
+  
+          editFirstBlocksId(targetPage, action.block);
+          targetPage.blocks.splice(blockIndex,1);
+          targetPage.blocksId.splice(blockIndex,1);
+        };
+        if(action.block.type ==="page"){
+          deletePage(action.block.id, false);
+        }
+        console.log("delete", pages[pageIndex]);
+        return {
+          pages:pages,
+          firstPagesId:firstPagesId,
+          templatesId:templatesId,
+          pagesId:pagesId,
+          trash:trash
+        };
+      
+      case DUPLICATE_PAGE :
+        const targetPageIndex = pagesId.indexOf(targetPage.id);
+        const nextPageId =pagesId[targetPageIndex+1]
+        const nextPage:Page =findPage(pagesId, pages, nextPageId ) ;
+        let number :string ="1";
+        let stop :boolean = false;
+        if(nextPage.header.title === `${targetPage.header.title}(1)`){
+          const slicedPages =pages.slice(targetPageIndex+1);
+          for (let i = 0; i < slicedPages.length && !stop; i++) {
+            const title = slicedPages[i].header.title;
+            if(title === `${targetPage.header.title}(${i+1})`){
+              number = (i+2).toString();
+              console.log("number", number)
+            }else{
+              stop= true;
+            }
+          }
+        };
+        const duplicatedNewPage:Page ={
+          ...targetPage,
+          id:`${targetPage.id}_duplicate_${number}`,
+          header:{
+            ...targetPage.header,
+            title: `${targetPage.header.title}(${number})`
+          },
+          editTime:editTime
+        };
+        if(targetPage.parentsId ==null){
+          const index= firstPagesId.indexOf(targetPage.id);
+          firstPagesId.splice(index+1,0, duplicatedNewPage.id);
+        }else{
+          const parentPage = {...findPage(pagesId,pages ,targetPage.parentsId[targetPage.parentsId.length-1])};
+          const parentPageIndex = pagesId.indexOf(parentPage.id);
+          const subPageIndex= parentPage.subPagesId?.indexOf(targetPage.id) as number;
+          parentPage.subPagesId?.splice(subPageIndex,0, duplicatedNewPage.id);
+  
+  
+          pages.splice(parentPageIndex,0, parentPage);
+        };
+        pages.splice(targetPageIndex+1, 0, duplicatedNewPage);
+        pagesId.splice(targetPageIndex+1,0, duplicatedNewPage.id);
       return{
         pages:pages,
         firstPagesId:firstPagesId,
@@ -1706,27 +1713,30 @@ export default function notion (state:Notion =initialState , action :NotionActio
         pagesId:pagesId,
         trash:trash
       }
+
     case EDIT_PAGE :
       function editPage(newPage:Page){
-        targetPage.header = newPage.header;
-        const parentsId = newPage.parentsId ; 
-        if(parentsId !==null){
-          const parentPageId =parentsId[ parentsId.length -1];
-          const parentPage =findPage(pagesId, pages, parentPageId);
-          const blockIndex = parentPage.blocksId.indexOf(newPage.id);
-          const pageBlock = parentPage.blocks[blockIndex];
-          const editedPageBlock:Block ={
-            ...pageBlock,
-            contents: newPage.header.title,
-            icon: newPage.header.icon,
-            editTime:editTime
+        if(targetPage!==null && pagesId !==null && pages!==null){
+          targetPage.header = newPage.header;
+          const parentsId = newPage.parentsId ; 
+          if(parentsId !==null){
+            const parentPageId =parentsId[ parentsId.length -1];
+            const parentPage =findPage(pagesId, pages, parentPageId);
+            const blockIndex = parentPage.blocksId.indexOf(newPage.id);
+            const pageBlock = parentPage.blocks[blockIndex];
+            const editedPageBlock:Block ={
+              ...pageBlock,
+              contents: newPage.header.title,
+              icon: newPage.header.icon,
+              editTime:editTime
+            };
+            parentPage.blocks.splice(blockIndex,1,editedPageBlock);
           };
-          parentPage.blocks.splice(blockIndex,1,editedPageBlock);
-        };
-        const pageIndex =pagesId.indexOf(newPage.id);
-        pages.splice(pageIndex,1,newPage)
-
-        console.log("edit page",pages);
+          const pageIndex =pagesId.indexOf(newPage.id);
+          pages.splice(pageIndex,1,newPage)
+  
+          console.log("edit page",pages);
+        }
       };
       editPage(action.newPage);
 
@@ -1738,8 +1748,8 @@ export default function notion (state:Notion =initialState , action :NotionActio
         trash:trash
       };
     case MOVE_PAGE_TO_PAGE:
-      function movePageToPage(destinationPageId: string){
-        const destinationPage = findPage(pagesId, pages, destinationPageId);
+      const destinationPageId =action.destinationPageId;
+      const destinationPage = findPage(pagesId, pages, destinationPageId);
       // target page 관련 변경
       if(firstPagesId.includes(targetPage.id)){
         const index = firstPagesId.indexOf(targetPage.id);
@@ -1784,8 +1794,6 @@ export default function notion (state:Notion =initialState , action :NotionActio
       destinationPage.subPagesId.concat(targetPage.id) :
       [targetPage.id];
       console.log("move page to other page", pages , firstPagesId , destinationPage) 
-      };
-      movePageToPage(action.destinationPageId);
       return{
         pages:pages,
         firstPagesId:firstPagesId,
@@ -1794,7 +1802,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
         trash:trash
       };
     case DELETE_PAGE:
-      function deleteTargetPageData(deletedTargetPage:Page, deletedTargetPageIndex:number, blockDelete:boolean){
+      function deleteTargetPageData(pagesId:string[], pages:Page[], firstPagesId:string[],deletedTargetPage:Page, deletedTargetPageIndex:number, blockDelete:boolean){
         if(deletedTargetPage.parentsId !==null){
           const parentPageIndex = pagesId.indexOf(deletedTargetPage.parentsId[deletedTargetPage.parentsId.length-1]);
           const parentPage = pages[parentPageIndex];
@@ -1833,33 +1841,35 @@ export default function notion (state:Notion =initialState , action :NotionActio
       };
 
       function deletePage(pageId:string ,blockDelete:boolean){
-        const deletedTargetPageIndex= pagesId.indexOf(pageId);
-        const deletedTargetPage =pages[deletedTargetPageIndex];
-
-        deleteTargetPageData(deletedTargetPage ,deletedTargetPageIndex ,blockDelete);
-        let trashTargetPage :TrashPage ={
-          ...deletedTargetPage,
-          subPages:null,
-        };
-          if(deletedTargetPage.subPagesId !==null){
-            const subPages:Page[] = deletedTargetPage.subPagesId.map((id:string)=>findPage(pagesId, pages,id));
-            trashTargetPage ={
-              ...deletedTargetPage,
-              subPages:subPages
-            }
-            deletedTargetPage.subPagesId.forEach((id:string)=>{
-              const index= pagesId.indexOf(id);
-              pages.splice(index,1);
-              pagesId.splice(index,1);
-            })
-        };
-        trash ={
-          pagesId:trash.pagesId ==null? 
-          [deletedTargetPage.id] : 
-          trash.pagesId.concat(deletedTargetPage.id),
-          pages: trash.pages ==null? [trashTargetPage] : trash.pages.concat(trashTargetPage)
-        };
-        console.log("delete page", pages ,trash);
+        if(pagesId!==null && pages!==null && firstPagesId!==null){
+          const deletedTargetPageIndex= pagesId.indexOf(pageId);
+          const deletedTargetPage =pages[deletedTargetPageIndex];
+  
+          deleteTargetPageData(pagesId, pages,firstPagesId,deletedTargetPage ,deletedTargetPageIndex ,blockDelete);
+          let trashTargetPage :TrashPage ={
+            ...deletedTargetPage,
+            subPages:null,
+          };
+            if(deletedTargetPage.subPagesId !==null){
+              const subPages:Page[] = deletedTargetPage.subPagesId.map((id:string)=>findPage(pagesId, pages,id));
+              trashTargetPage ={
+                ...deletedTargetPage,
+                subPages:subPages
+              }
+              deletedTargetPage.subPagesId.forEach((id:string)=>{
+                const index= pagesId.indexOf(id);
+                pages.splice(index,1);
+                pagesId.splice(index,1);
+              })
+          };
+          trash ={
+            pagesId:trash.pagesId ==null? 
+            [deletedTargetPage.id] : 
+            trash.pagesId.concat(deletedTargetPage.id),
+            pages: trash.pages ==null? [trashTargetPage] : trash.pages.concat(trashTargetPage)
+          };
+          console.log("delete page", pages ,trash);
+        }
       }
       deletePage(action.pageId, true);
       return{
@@ -1869,17 +1879,88 @@ export default function notion (state:Notion =initialState , action :NotionActio
         pagesId:pagesId,
         trash:trash
       };
-    case RESTORE_PAGE:
+      case CANCLE_EDIT_TEMPLATE:
+        const restorePage=(item:string)=>{
+          const sessionItem= sessionStorage.getItem(item);
+          if(sessionItem!==null ){
+            const originTemplate :Page = JSON.parse(sessionItem);
+            const templateIndexInPages = pagesId.indexOf(originTemplate.id);
+            pages.splice(templateIndexInPages,1, originTemplate);
+            sessionStorage.removeItem(item);
+          }
+        };
+        restorePage("originTemplate");
+        restorePage("originMoveTargetPage")
+        return{
+          pages:pages,
+          firstPagesId:firstPagesId,
+          templatesId:templatesId,
+          pagesId:pagesId,
+          trash:trash
+        };
+      case DELETE_TEMPLATE:
+        const templateIndexInPages = pagesId.indexOf(`${action.pageId}`);
+        pages.splice(templateIndexInPages,1);
+        pagesId.splice(templateIndexInPages,1);
+        if(templatesId!==null){
+          const templageIndexInTemplates =templatesId?.indexOf(`${action.pageId}`);
+          templatesId.splice(templageIndexInTemplates);
+        };
+        return{
+          pages:pages,
+          firstPagesId:firstPagesId,
+          templatesId:templatesId !==null?(templatesId[0]===undefined? null : templatesId)   : templatesId,
+          pagesId:pagesId,
+          trash:trash
+        };
+    }
+  }
+  switch (action.type) {
+    case ADD_PAGE :
+      let PAGES =pages!==null? [...pages]: null;
+      let PAGESID = pagesId !==null? [...pagesId]:null;
+      let FIRSTPAGESID= firstPagesId!==null? [...firstPagesId]:null;
+    
+      if(pagesId!==null && pages!==null && firstPagesId!==null){
+        addPage(action.newPage)
+      }else{
+        PAGES =[action.newPage];
+        PAGESID=[action.newPage.id];
+        FIRSTPAGESID=[action.newPage.id];
+      }
+      ; 
+      return {
+        pages: pages!==null? pages: PAGES,
+        firstPagesId:firstPagesId!==null? firstPagesId: FIRSTPAGESID,
+        templatesId:templatesId,
+        pagesId:pagesId!==null? pagesId: PAGESID,
+        trash:trash
+      };
+
+      case RESTORE_PAGE:
       let trashPages = trash.pages ==null? null :[...trash.pages];
       let trashPagesId =trash.pagesId ===null? null : [...trash.pagesId];
+
+      PAGES =pages!==null? [...pages]: null;
+      PAGESID = pagesId !==null? [...pagesId]:null;
+      FIRSTPAGESID= firstPagesId!==null? [...firstPagesId]:null;
+
       const restoredPage :Page ={
-        ...targetPage,
+        ...targetPage as Page,
         editTime:editTime,
         parentsId:null,
       };
-    pages.push(restoredPage);
-    pagesId.push(restoredPage.id);
-    firstPagesId.push(restoredPage.id);
+
+      if(PAGES!==null && PAGESID!==null && FIRSTPAGESID!==null ){
+        PAGES?.push(restoredPage);
+        PAGESID.push(restoredPage.id);
+        FIRSTPAGESID.push(restoredPage.id);
+      }else{
+        PAGES =[restoredPage];
+        PAGESID =[restoredPage.id];
+        FIRSTPAGESID=[restoredPage.id];
+      }
+    
     if(trashPages!==null && trashPagesId !==null){
       const trashTargetPage = findPage(trashPagesId, trashPages, action.pageId) as TrashPage; 
       const trashTargetPageIndex= trashPagesId.indexOf(trashTargetPage.id);
@@ -1887,15 +1968,15 @@ export default function notion (state:Notion =initialState , action :NotionActio
       trashPagesId.splice(trashTargetPageIndex,1);
       if(trashTargetPage.subPages !==null){
         trashTargetPage.subPages.forEach((sub:Page)=>{
-          pages.push(sub);
-          pagesId.push(sub.id);
+          PAGES?.push(sub);
+          PAGESID?.push(sub.id);
         })
       }
     };
       const newNotion :Notion={
-        pages:pages,
-        pagesId:pagesId,
-        firstPagesId:firstPagesId,
+        pages:PAGES,
+        pagesId:PAGESID,
+        firstPagesId:FIRSTPAGESID,
         templatesId:templatesId,
         trash: (trashPages?.[0] !==undefined && trashPagesId?.[0] !==undefined)
         ? 
@@ -1931,51 +2012,16 @@ export default function notion (state:Notion =initialState , action :NotionActio
         ...pageSample,
         type:template
       };
-      pages.push(newTemplate);
-      pagesId.push(newTemplate.id);
 
       return{
-        pages:pages,
+        pages:pages !==null? pages.concat(newTemplate):[newTemplate],
         firstPagesId:firstPagesId,
         templatesId:templatesId!==null? templatesId.concat(newTemplate.id):[newTemplate.id],
-        pagesId:pagesId,
+        pagesId:pagesId !==null? pagesId.concat(newTemplate.id):[newTemplate.id],
         trash:trash
       };
 
-    case CANCLE_EDIT_TEMPLATE:
-      const restorePage=(item:string)=>{
-        const sessionItem= sessionStorage.getItem(item);
-        if(sessionItem!==null){
-          const originTemplate :Page = JSON.parse(sessionItem);
-          const templateIndexInPages = pagesId.indexOf(originTemplate.id);
-          pages.splice(templateIndexInPages,1, originTemplate);
-          sessionStorage.removeItem(item);
-        }
-      };
-      restorePage("originTemplate");
-      restorePage("originMoveTargetPage")
-      return{
-        pages:pages,
-        firstPagesId:firstPagesId,
-        templatesId:templatesId,
-        pagesId:pagesId,
-        trash:trash
-      };
-      case DELETE_TEMPLATE:
-        const templateIndexInPages = pagesId.indexOf(`${action.pageId}`);
-        pages.splice(templateIndexInPages,1);
-        pagesId.splice(templateIndexInPages,1);
-        if(templatesId!==null){
-          const templageIndexInTemplates =templatesId?.indexOf(`${action.pageId}`);
-          templatesId.splice(templageIndexInTemplates);
-        };
-      return{
-        pages:pages,
-        firstPagesId:firstPagesId,
-        templatesId:templatesId !==null?(templatesId[0]===undefined? null : templatesId)   : templatesId,
-        pagesId:pagesId,
-        trash:trash
-      };
+
     default:
       return state;
   }
