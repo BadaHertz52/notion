@@ -88,14 +88,18 @@
 }
 #block_comments {
   position: absolute;
-  height: fit-content;
   z-index: 20;
+  @include popupMenu;
+  overflow-y: none;
   .comments {
-    @include popupMenu;
     width: 100%;
-    z-index: 20;
+    margin: 0;
+    padding-bottom:0 ;
   }
 } 
+#block_comments.overHeight{
+  overflow-y: scroll;
+}
 .pageComment {
   position: relative;
   .comments{

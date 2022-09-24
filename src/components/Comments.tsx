@@ -246,7 +246,6 @@ export const CommentInput =({userName, pageId, page ,blockComment, subComment,ed
       }) ;
     }
   };
-
   const onClickToMakeNewComment =(event:React.MouseEvent<HTMLButtonElement>)=>{
     const editTime =JSON.stringify(Date.now());
     page !==null&& setTemplateItem(templateHtml, page)
@@ -855,6 +854,7 @@ const Comment =({userName,comment, block,page, pageId, editBlock ,editPage ,setC
   )
 };
 const Comments =({pageId,block,page, userName ,editBlock ,editPage  ,select ,discardEdit}:CommentsProps)=>{
+
   const [targetComments, setTargetComment]= useState<BlockCommentType[]| null>(null);
   const [resolveComments, setResolveComments]= useState<BlockCommentType[]| null>(null);
   const [openComments, setOpenComments]= useState<BlockCommentType[]| null>(null);
@@ -911,7 +911,85 @@ const Comments =({pageId,block,page, userName ,editBlock ,editPage  ,select ,dis
       setTargetComment(resolveComments);
     }
   },[select, openComments, resolveComments]);
+  const blockComments =document.getElementById("block_comments");
 
+  function addClass (element:HTMLElement, maxHeight:number){
+    if(!element.classList.contains("overHeight")){
+      element.classList.add("overHeight");
+      const top = element.style.top;
+      const left =element.style.left ;
+      const bottom =element.style.bottom;
+      const width =element.style.width;
+      const basic =`left:${left}; width:${width}; max-height:${maxHeight}px; `;
+      if(top===""){
+        element.setAttribute("style", basic.concat( `bottom:${bottom}`))
+      }else{
+        element.setAttribute("style", basic.concat(`top:${top}`))
+    }
+    }
+  };
+  function removeClass(element:HTMLElement){
+    if(element.classList.contains("overHeight")){
+      element.classList.remove("overHeight");
+      const top = element.style.top;
+      const left =element.style.left ;
+      const bottom =element.style.bottom;
+      const width =element.style.width;
+      const basic =`left:${left}; width:${width};  `;
+      if(top===""){
+        element.setAttribute("style", basic.concat(`bottom:${bottom}`))
+      }else{
+        element.setAttribute("style", basic.concat(`top:${top}`))
+      }
+    }
+  };
+  function resizeBlockCommentsMaxHeight(){
+    const blockCommentsDomRect= blockComments?.getClientRects()[0];
+    if( blockCommentsDomRect !==undefined && blockComments!==null ){
+      const maxim = Math.round(window.innerHeight * 0.5);
+      const styleTop =blockComments.style.top;
+      const commentsTop =Math.round( blockCommentsDomRect.top);
+      const commentsBottom =Math.round(blockCommentsDomRect.bottom);
+      if(styleTop !==""){
+        // block 아래에 comments 위치
+        console.log("bottom", commentsBottom, window.innerHeight);
+        if(commentsBottom +16 >= (window.innerHeight )){
+          console.log("over");
+          const max= window.innerHeight - commentsTop;
+          const maxHeight :number = max >maxim ? maxim : (max <=0 ? 100 : max);
+          addClass(blockComments,maxHeight );
+        }else{
+          removeClass(blockComments);
+        }
+      }else{
+        // block 위에 comments 위치
+        const frameHtml =blockComments.parentElement;
+        if(frameHtml!==null){
+          const pageContent =frameHtml.querySelector(".pageContent")  ;
+          const pageContentDomRect =pageContent?.getClientRects()[0]
+        if(pageContentDomRect!==undefined){
+          const pageContentTop =Math.round(pageContentDomRect.top);
+          if(commentsTop <= pageContentTop){
+            console.log("over");
+            const max= commentsTop - pageContentTop  ;
+            const maxHeight:number = max >maxim ? maxim : (max<=0 ? 100 :max);
+            addClass(blockComments ,maxHeight);
+          }else{
+            removeClass(blockComments);
+          }
+        }else{
+          console.log("Can't find pageContent element")
+        }
+        }
+      } 
+    }
+  };
+  window.onresize = resizeBlockCommentsMaxHeight;
+  useEffect(()=>{
+    if(blockComments!==null){
+      resizeBlockCommentsMaxHeight();
+    };
+  },[blockComments, targetComments])
   return(
     <>
     <div 

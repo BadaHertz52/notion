@@ -715,12 +715,7 @@ a:link, a:active, a:visited {
 
 #block_comments {
   position: absolute;
-  height: -webkit-fit-content;
-  height: -moz-fit-content;
-  height: fit-content;
   z-index: 20;
-}
-#block_comments .comments {
   width: 320px;
   display: flex;
   flex-direction: column;
@@ -733,14 +728,22 @@ a:link, a:active, a:visited {
   z-index: 10;
   border-radius: 8px;
   box-shadow: 0px 0px 23px -5px #ababab;
-  width: 100%;
-  z-index: 20;
+  overflow-y: none;
 }
-#block_comments .comments::-webkit-scrollbar-thumb {
+#block_comments::-webkit-scrollbar-thumb {
   background: #D3D1CB;
 }
-#block_comments .comments::-webkit-scrollbar-track {
+#block_comments::-webkit-scrollbar-track {
   background: #EDECE9;
+}
+#block_comments .comments {
+  width: 100%;
+  margin: 0;
+  padding-bottom: 0;
+}
+
+#block_comments.overHeight {
+  overflow-y: scroll;
 }
 
 .pageComment {
