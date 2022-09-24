@@ -478,503 +478,503 @@ const template2 :Page ={
   editTime:Date.parse("2022-8-23-15:00").toString(),
   createTime:Date.parse("2022-8-23-12:00").toString(),
 };
-const initialState :Notion ={
-  pagesId:null ,
-  firstPagesId:null,
-  templatesId:null,
-  pages:null,
-  trash:{
-    pages:null,
-    pagesId:null
-  }
-}
 // const initialState :Notion ={
-//   pagesId:['12345','page1','page2' ,'1234', '123' ,'template1', 'template2'],
-//   firstPagesId :['12345' ,'1234', '123'],
-//   templatesId:['template1', 'template2'],
-//   pages:[
-//     {
-//     id: '12345',
-//     type:page,
-//     header : {
-//       title:"welcome notion 🐱",
-//       iconType:"img",
-//       icon:catImg ,
-//       cover: null,
-//       comments:[{
-//         id:"comment_1",
-//         userName:userName,
-//         type:"open",
-//         content:"this is page comment",
-//         editTime: Date.parse("2021-5-20-12:00")
-//         .toString(),
-//         createTime: Date.parse("2021-5-20-12:00").toString(),
-//         subComments:null,
-//         subCommentsId:null,
-//       }],
-//     },
-//     firstBlocksId :["text",'img', 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page1', 'page2' ,"numberList", "bulletList"],
-//     blocks:[{
-//       id:"text",
-//       contents:"안녕", 
-//       contentsEmpty:false,
-//       firstBlock:true,
-//       subBlocksId: ["sub1_1", "sub1_2"] ,
-//       parentBlocksId: null,
-//       type: text,
-//       iconType:null,
-//       icon:  null ,
-//       editTime:Date.parse("2021-5-18-15:00").toString(),
-//       createTime: Date.parse("2021-5-18-1:00").toString(),
-//       style :{
-//         ...basicBlockStyle,
-//         color: blue,
-//         bgColor: bg_default,
-//       },
-//       comments:[{
-//         id:"comment_text1",
-//         userName:userName,
-//         type:"open",
-//         content:"hi! ☺️", 
-//         editTime:(1654086822451).toString(),
-//         createTime: (Date.parse("2021-5-20-15:00")).toString(),
-//         subComments:null,
-//         subCommentsId:null,
-//       },]
-//     },
-//     {
-//       id:"img",
-//       contents: imgBlockImg,
-//       contentsEmpty:false,
-//       firstBlock:true,
-//       subBlocksId:null, 
-//       parentBlocksId: null,
-//       type: image,
-//       iconType:null,
-//       icon:  null ,
-//       editTime: (Date.parse("2021-5-18-16:00")).toString()
-//       ,
-//       createTime: (Date.parse("2021-5-18-2:00")).toString(),
-//       style :{
-//         ...basicBlockStyle,
-//         width:"222px",
-//         height:"auto"
-//       },
-//       comments: null
-//     },
-//     {
-//       id:"toggle",
-//       contents:"toggle toggle ",
-//       contentsEmpty:false,
-//       firstBlock:true,
-//       subBlocksId:null, 
-//       parentBlocksId: null,
-//       type: toggle,
-//       iconType:null,
-//       icon:  null ,
-//       editTime: (Date.parse("2021-5-18-16:00")).toString()
-//       ,
-//       createTime: (Date.parse("2021-5-18-2:00")).toString(),
-//       style :basicBlockStyle,
-//       comments: null
-//     },{
-//       id:"todo",
-//       contents:"todo", 
-//       contentsEmpty:false,
-//       firstBlock:true,
-//       subBlocksId:null ,
-//       parentBlocksId: null,
-//       type: todo,
-//       iconType:null,
-//       icon:  null ,
-//       editTime: (Date.parse("2021-5-18-16:01:00")).toString(),
-//       createTime: (Date.parse("2021-5-18-3:00")).toString(),
-//       style :{
-//         ...basicBlockStyle,
-//         bgColor: bg_yellow,
-//       },
-//       comments:[{
-//         id:"comment_todo1",
-//         userName:userName,
-//         type:"open",
-//         content:"todo comments", 
-//         editTime:(Date.parse("2021-5-18-16:01:30")).toString(),
-//         createTime: (Date.parse("2021-5-21-14:00")).toString(),
-//         subComments:null,
-//         subCommentsId:null,
-//       },]
-//     },{
-//       id:"todo done",
-//       contents:"todo done",
-//       contentsEmpty:false,
-//       firstBlock:true,
-//       subBlocksId:null ,
-//       parentBlocksId: null,
-//       type: todo_done,
-//       iconType:null,
-//       icon:  null ,
-//       editTime: (Date.parse("2021-5-19-11:30")).toString()
-//       ,
-//       createTime: (Date.parse("2021-5-18-5:00")).toString(),
-//       style :basicBlockStyle,
-//       comments:null,
-//     },{
-//       id:"h1",
-//       contents:'head<a class="link" target="_blank" href="http://localhost:3000/#/1234">er</a><span class=" color color_blue">1</span></span>', 
-//       contentsEmpty:false,
-//       firstBlock:true,
-//       subBlocksId:null ,
-//       parentBlocksId: null,
-//       type: h1,
-//       iconType:null,
-//       icon:  null ,
-//       editTime: (Date.parse("2021-5-19-12:00")).toString(),
-//       createTime: (Date.parse("2021-5-18-15:00")).toString(),
-//       style :basicBlockStyle,
-//       comments:null
-//     },{
-//       id:"h2",
-//       contents:"header2",
-//       contentsEmpty:false,
-//       firstBlock:true,
-//       subBlocksId:null ,
-//       parentBlocksId: null,
-//       type: h2,
-//       iconType:null,
-//       icon:  null ,
-//       editTime: (Date.parse("2021-5-18-20:00")).toString(),
-//       createTime: (Date.parse("2021-5-18-15:00")).toString(),
-//       style :basicBlockStyle,
-//       comments:null
-//     },{
-//       id:"h3",
-//       contents:"header3", 
-//       contentsEmpty:false,
-//       firstBlock:true,
-//       subBlocksId:null ,
-//       parentBlocksId: null,
-//       type: h3,
-//       iconType:null,
-//       icon:  null ,
-//       editTime: (Date.parse("2021-5-19-19:20")).toString()
-//       , 
-//       createTime: (Date.parse("2021-5-18-15:00")).toString(), 
-//       style :basicBlockStyle,
-//       comments:null
-//     },{
-//       id:"page1",
-//       contents:"page page page",
-//       contentsEmpty:false,
-//       firstBlock:true,
-//       subBlocksId:null ,
-//       parentBlocksId: null,
-//       type: page,
-//       iconType:null,
-//       icon:  null ,
-//       editTime: (Date.parse("2021-5-20-21:00")).toString()
-//       ,
-//       createTime: (Date.parse("2021-5-19-15:00")).toString(),
-//       style :basicBlockStyle,
-//       comments:null
-//     },
-//     {
-//       id:"page2",
-//       contents:"page2",
-//       contentsEmpty:false,
-//       firstBlock:true,
-//       subBlocksId:null ,
-//       parentBlocksId: null,
-//       type: page,
-//       iconType:"emoji",
-//       icon: emojis[8] ,
-//       editTime: (Date.parse("2021-5-20-9:00")).toString(),
-//       createTime: (Date.parse("2021-5-19-20:00")).toString(),
-
-//       style :basicBlockStyle,
-//       comments:null
-//     },
-//     {id:"sub1_1",
-//     contents:"sub1_1", 
-//     contentsEmpty:false,
-//     firstBlock:false,
-//     subBlocksId: ["sub2_1"],
-//     parentBlocksId: ["text"],
-//     type: text,
-//     iconType:null,
-//     icon:  null ,
-//     editTime: (Date.parse("2021-6-1-1:00")).toString() ,   
-//     createTime: (Date.parse("2021-5-30-15:00")).toString(),
-//     style :{
-//       ...basicBlockStyle,
-//     },
-//     comments:null
-//   },
-//   {
-//     id:"sub1_2",
-//     contents:"sub1_2", 
-//     contentsEmpty:false,
-//     firstBlock:false,
-//     subBlocksId:null,
-//     parentBlocksId: ["text"],
-//     type: text,
-//     iconType:null,
-//     icon:  null ,
-//     editTime: (Date.parse("2021-5-12-09:00")).toString(),
-//     createTime: (Date.parse("2021-5-12-08:50")).toString(),
-//     style :{
-//       ...basicBlockStyle
-//     },
-//     comments:[{
-//       id:"comment_sub1_2_1",
-//       userName:userName,
-//       type:"open",
-//       content:"subBlock comments",
-//       editTime:(Date.parse("2021-5-18-8:00")).toString(),
-//       createTime:(Date.parse("2021-5-18-8:00")).toString(),
-//       subComments:null,
-//       subCommentsId:null,
-//     },]
-//   },
-//   {
-//     id:"sub2_1",
-//     contents:"sub2_1", 
-//     contentsEmpty:false,
-//     firstBlock:false,
-//     subBlocksId:null,
-//     parentBlocksId: ["text", "sub1_1"],
-//     type: text,
-//     iconType:null,
-//     icon:  null ,
-//     editTime: (Date.parse("2021-5-27-7:00")).toString(),
-//     createTime: (Date.parse("2021-5-27-7:00")).toString(),
-//     style :{
-//       ...basicBlockStyle
-//     },
-//     comments:null
-//   },
-//   {
-//     id:"numberList",
-//     contents:"", 
-//     contentsEmpty:false,
-//     firstBlock:true,
-//     subBlocksId:["num1", "num2", "num3"],
-//     parentBlocksId: null,
-//     type: numberList,
-//     iconType:null,
-//     icon:  null ,
-//     editTime: (Date.parse("2021-6-1-18:45")).toString(),
-//     createTime: (Date.parse("2021-6-1-18:45")).toString(),
-//     style :{
-//       ...basicBlockStyle
-//     },
-//     comments:null
-//   },
-//   {
-//     id:"num1",
-//     contents:"n1", 
-//     contentsEmpty:false,
-//     firstBlock:false,
-//     subBlocksId:null,
-//     parentBlocksId: [numberList],
-//     type: numberList,
-//     iconType:null,
-//     icon:  null ,
-//     editTime: (Date.parse("2021-6-1-19:03")).toString(),
-//     createTime: (Date.parse("2021-6-1-19:03")).toString(),
-//     style :{
-//       ...basicBlockStyle,
-//       bgColor: bg_green,
-//     },
-//     comments:null
-//   },
-//   {
-//     id:"num2",
-//     contents:"n2", 
-//     contentsEmpty:false,
-//     firstBlock:false,
-//     subBlocksId:null,
-//     parentBlocksId: [numberList],
-//     type: numberList,
-//     iconType:null,
-//     icon:  null ,
-//     editTime: (Date.parse("2021-6-1-19:03:50")).toString(),
-//     createTime: (Date.parse("2021-6-1-19:03:50")).toString(),
-//     style :{
-//       ...basicBlockStyle
-//     },
-//     comments:[{
-//       id:"comment_n2",
-//       userName:userName,
-//       type:"open",
-//       content:"comment n2", 
-//       editTime:(1654086822451).toString(),
-//       createTime:(1654086822451).toString(),
-//       subComments:null,
-//       subCommentsId:null,
-//     },]
-//   },
-//   {
-//     id:"num3",
-//     contents:"n3", 
-//     contentsEmpty:false,
-//     firstBlock:false,
-//     subBlocksId:null,
-//     parentBlocksId: [numberList],
-//     type: numberList,
-//     iconType:null,
-//     icon:  null ,
-//     editTime: Date.parse("2021-6-1-19:12:13").toString(),
-//     createTime: Date.parse("2021-6-1-19:12:13").toString(),
-//     style :{
-//       ...basicBlockStyle
-//     },
-//     comments:null
-//   },
-//   {
-//     id:"bulletList",
-//     contents:"", 
-//     contentsEmpty:false,
-//     firstBlock:true,
-//     subBlocksId:["b1", "b2"],
-//     parentBlocksId:null,
-//     type: bulletList,
-//     iconType:null,
-//     icon:  null ,
-//     editTime: (Date.parse("2021-6-1-19:13:45")).toString(),
-//     createTime: (Date.parse("2021-6-1-19:13:45")).toString(),
-//     style :{
-//       ...basicBlockStyle
-//     },
-//     comments:null
-//   },
-//   {
-//     id:"b1",
-//     contents:"b1", 
-//     contentsEmpty:false,
-//     firstBlock:false,
-//     subBlocksId:null,
-//     parentBlocksId:[bulletList],
-//     type: bulletList,
-//     iconType:null,
-//     icon:  null ,
-//     editTime: (Date.parse("2021-6-1-19:23")).toString(),
-//     createTime: (Date.parse("2021-6-1-19:23")).toString(),
-//     style :{
-//       ...basicBlockStyle
-//     },
-//     comments:null
-//   },
-//   {
-//     id:"b2",
-//     contents:"b2", 
-//     contentsEmpty:false,
-//     firstBlock:false,
-//     subBlocksId:null,
-//     parentBlocksId:[bulletList],
-//     type: bulletList,
-//     iconType:null,
-//     icon:  null ,
-//     editTime: (Date.parse("2021-6-1-20:12" )).toString(),
-//     createTime: (Date.parse("2021-6-1-20:12" )).toString(),
-//     style :{
-//       ...basicBlockStyle
-//     },
-//     comments:null
-//   },
-
-//     ],
-//     blocksId:["text",'img', 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page1', 'page2' , 'sub1_1' ,'sub1_2', 'sub2_1' ,"numberList" , "num1", "num2", "num3" , "bulletList", "b1", "b2"],
-//     subPagesId:['page1','page2'],
-//     parentsId: null,
-//     editTime :(Date.parse("2021-5-16-15:00")).toString(),
-//     createTime :(Date.parse("2021-5-16-15:00")).toString(),
-//   },
-//   {
-//     ...pageSample,
-//     id:"page1",
-//     header:{
-//       ...pageSample.header,
-//       title:"page page page"
-//     },
-//     blocks:[{
-//       id:"img",
-//       contentsEmpty:false,
-//       contents: imgBlockImg,
-//       firstBlock:true,
-//       subBlocksId:null, 
-//       parentBlocksId: null,
-//       type: image,
-//       iconType:null,
-//       icon:  null ,
-//       editTime: (Date.parse("2021-5-18-16:00")).toString()
-//       ,
-//       createTime: (Date.parse("2021-5-18-2:00")).toString(),
-//       style :basicBlockStyle,
-//       comments: null
-//     }],
-//     blocksId:["img"],
-//     firstBlocksId:["img"],
-//     editTime: (Date.parse("2021-5-20-21:00")).toString(),
-//     createTime: (Date.parse("2021-5-20-21:00")).toString(),
-//     parentsId:['12345']
-//   },
-//   {
-//     ...pageSample,
-//     id:"page2",
-//     header:{
-//       ...pageSample.header,
-//       iconType:"emoji",
-//       icon:emojis[8],
-//       title:"page2"
-//     },
-//     editTime: JSON.stringify(Date.parse("2021-5-20-9:00")),
-//     createTime: JSON.stringify(Date.parse("2021-5-20-9:00")),
-//     parentsId:['12345']
-//   },
-//   {
-//     id: '1234',
-//     type:page,
-//     header : {
-//       title:"notion2",
-//       iconType:"emoji",
-//       icon:emojis[2],
-//       cover: null,
-//       comments:  null,
-//     },
-//     firstBlocksId:null,
-//     blocks:[blockSample],
-//     blocksId:[blockSample.id],
-//     subPagesId:null,
-//     parentsId: null,
-//     editTime:JSON.stringify(Date.parse("2021-5-18-19:00")),
-//     createTime:JSON.stringify(Date.parse("2021-5-18-19:00")),
-//   },
-//   {
-//     id: '123',
-//     type:page,
-//     header : {
-//       title:"notion3",
-//       iconType:"emoji",
-//       icon:emojis[10] ,
-//       cover: null,
-//       comments:  null,
-//     },
-//     firstBlocksId:null,
-//     blocks:[blockSample],
-//     blocksId:[blockSample.id],
-//     subPagesId:null,
-//     parentsId:null,
-//     editTime:JSON.stringify(Date.parse("2021-5-13-15:00")),
-//     createTime:JSON.stringify(Date.parse("2021-5-13-15:00")),
-//   },
-//   template1,
-//   template2
-// ],
+//   pagesId:null ,
+//   firstPagesId:null,
+//   templatesId:null,
+//   pages:null,
 //   trash:{
-//     pagesId:null,
-//     pages:null
+//     pages:null,
+//     pagesId:null
 //   }
-// };
+// }
+const initialState :Notion ={
+  pagesId:['12345','page1','page2' ,'1234', '123' ,'template1', 'template2'],
+  firstPagesId :['12345' ,'1234', '123'],
+  templatesId:['template1', 'template2'],
+  pages:[
+    {
+    id: '12345',
+    type:page,
+    header : {
+      title:"welcome notion 🐱",
+      iconType:"img",
+      icon:catImg ,
+      cover: null,
+      comments:[{
+        id:"comment_1",
+        userName:userName,
+        type:"open",
+        content:"this is page comment",
+        editTime: Date.parse("2021-5-20-12:00")
+        .toString(),
+        createTime: Date.parse("2021-5-20-12:00").toString(),
+        subComments:null,
+        subCommentsId:null,
+      }],
+    },
+    firstBlocksId :["text",'img', 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page1', 'page2' ,"numberList", "bulletList"],
+    blocks:[{
+      id:"text",
+      contents:"안녕", 
+      contentsEmpty:false,
+      firstBlock:true,
+      subBlocksId: ["sub1_1", "sub1_2"] ,
+      parentBlocksId: null,
+      type: text,
+      iconType:null,
+      icon:  null ,
+      editTime:Date.parse("2021-5-18-15:00").toString(),
+      createTime: Date.parse("2021-5-18-1:00").toString(),
+      style :{
+        ...basicBlockStyle,
+        color: blue,
+        bgColor: bg_default,
+      },
+      comments:[{
+        id:"comment_text1",
+        userName:userName,
+        type:"open",
+        content:"hi! ☺️", 
+        editTime:(1654086822451).toString(),
+        createTime: (Date.parse("2021-5-20-15:00")).toString(),
+        subComments:null,
+        subCommentsId:null,
+      },]
+    },
+    {
+      id:"img",
+      contents: imgBlockImg,
+      contentsEmpty:false,
+      firstBlock:true,
+      subBlocksId:null, 
+      parentBlocksId: null,
+      type: image,
+      iconType:null,
+      icon:  null ,
+      editTime: (Date.parse("2021-5-18-16:00")).toString()
+      ,
+      createTime: (Date.parse("2021-5-18-2:00")).toString(),
+      style :{
+        ...basicBlockStyle,
+        width:"222px",
+        height:"auto"
+      },
+      comments: null
+    },
+    {
+      id:"toggle",
+      contents:"toggle toggle ",
+      contentsEmpty:false,
+      firstBlock:true,
+      subBlocksId:null, 
+      parentBlocksId: null,
+      type: toggle,
+      iconType:null,
+      icon:  null ,
+      editTime: (Date.parse("2021-5-18-16:00")).toString()
+      ,
+      createTime: (Date.parse("2021-5-18-2:00")).toString(),
+      style :basicBlockStyle,
+      comments: null
+    },{
+      id:"todo",
+      contents:"todo", 
+      contentsEmpty:false,
+      firstBlock:true,
+      subBlocksId:null ,
+      parentBlocksId: null,
+      type: todo,
+      iconType:null,
+      icon:  null ,
+      editTime: (Date.parse("2021-5-18-16:01:00")).toString(),
+      createTime: (Date.parse("2021-5-18-3:00")).toString(),
+      style :{
+        ...basicBlockStyle,
+        bgColor: bg_yellow,
+      },
+      comments:[{
+        id:"comment_todo1",
+        userName:userName,
+        type:"open",
+        content:"todo comments", 
+        editTime:(Date.parse("2021-5-18-16:01:30")).toString(),
+        createTime: (Date.parse("2021-5-21-14:00")).toString(),
+        subComments:null,
+        subCommentsId:null,
+      },]
+    },{
+      id:"todo done",
+      contents:"todo done",
+      contentsEmpty:false,
+      firstBlock:true,
+      subBlocksId:null ,
+      parentBlocksId: null,
+      type: todo_done,
+      iconType:null,
+      icon:  null ,
+      editTime: (Date.parse("2021-5-19-11:30")).toString()
+      ,
+      createTime: (Date.parse("2021-5-18-5:00")).toString(),
+      style :basicBlockStyle,
+      comments:null,
+    },{
+      id:"h1",
+      contents:'head<a class="link" target="_blank" href="http://localhost:3000/#/1234">er</a><span class=" color color_blue">1</span></span>', 
+      contentsEmpty:false,
+      firstBlock:true,
+      subBlocksId:null ,
+      parentBlocksId: null,
+      type: h1,
+      iconType:null,
+      icon:  null ,
+      editTime: (Date.parse("2021-5-19-12:00")).toString(),
+      createTime: (Date.parse("2021-5-18-15:00")).toString(),
+      style :basicBlockStyle,
+      comments:null
+    },{
+      id:"h2",
+      contents:"header2",
+      contentsEmpty:false,
+      firstBlock:true,
+      subBlocksId:null ,
+      parentBlocksId: null,
+      type: h2,
+      iconType:null,
+      icon:  null ,
+      editTime: (Date.parse("2021-5-18-20:00")).toString(),
+      createTime: (Date.parse("2021-5-18-15:00")).toString(),
+      style :basicBlockStyle,
+      comments:null
+    },{
+      id:"h3",
+      contents:"header3", 
+      contentsEmpty:false,
+      firstBlock:true,
+      subBlocksId:null ,
+      parentBlocksId: null,
+      type: h3,
+      iconType:null,
+      icon:  null ,
+      editTime: (Date.parse("2021-5-19-19:20")).toString()
+      , 
+      createTime: (Date.parse("2021-5-18-15:00")).toString(), 
+      style :basicBlockStyle,
+      comments:null
+    },{
+      id:"page1",
+      contents:"page page page",
+      contentsEmpty:false,
+      firstBlock:true,
+      subBlocksId:null ,
+      parentBlocksId: null,
+      type: page,
+      iconType:null,
+      icon:  null ,
+      editTime: (Date.parse("2021-5-20-21:00")).toString()
+      ,
+      createTime: (Date.parse("2021-5-19-15:00")).toString(),
+      style :basicBlockStyle,
+      comments:null
+    },
+    {
+      id:"page2",
+      contents:"page2",
+      contentsEmpty:false,
+      firstBlock:true,
+      subBlocksId:null ,
+      parentBlocksId: null,
+      type: page,
+      iconType:"emoji",
+      icon: emojis[8] ,
+      editTime: (Date.parse("2021-5-20-9:00")).toString(),
+      createTime: (Date.parse("2021-5-19-20:00")).toString(),
+
+      style :basicBlockStyle,
+      comments:null
+    },
+    {id:"sub1_1",
+    contents:"sub1_1", 
+    contentsEmpty:false,
+    firstBlock:false,
+    subBlocksId: ["sub2_1"],
+    parentBlocksId: ["text"],
+    type: text,
+    iconType:null,
+    icon:  null ,
+    editTime: (Date.parse("2021-6-1-1:00")).toString() ,   
+    createTime: (Date.parse("2021-5-30-15:00")).toString(),
+    style :{
+      ...basicBlockStyle,
+    },
+    comments:null
+  },
+  {
+    id:"sub1_2",
+    contents:"sub1_2", 
+    contentsEmpty:false,
+    firstBlock:false,
+    subBlocksId:null,
+    parentBlocksId: ["text"],
+    type: text,
+    iconType:null,
+    icon:  null ,
+    editTime: (Date.parse("2021-5-12-09:00")).toString(),
+    createTime: (Date.parse("2021-5-12-08:50")).toString(),
+    style :{
+      ...basicBlockStyle
+    },
+    comments:[{
+      id:"comment_sub1_2_1",
+      userName:userName,
+      type:"open",
+      content:"subBlock comments",
+      editTime:(Date.parse("2021-5-18-8:00")).toString(),
+      createTime:(Date.parse("2021-5-18-8:00")).toString(),
+      subComments:null,
+      subCommentsId:null,
+    },]
+  },
+  {
+    id:"sub2_1",
+    contents:"sub2_1", 
+    contentsEmpty:false,
+    firstBlock:false,
+    subBlocksId:null,
+    parentBlocksId: ["text", "sub1_1"],
+    type: text,
+    iconType:null,
+    icon:  null ,
+    editTime: (Date.parse("2021-5-27-7:00")).toString(),
+    createTime: (Date.parse("2021-5-27-7:00")).toString(),
+    style :{
+      ...basicBlockStyle
+    },
+    comments:null
+  },
+  {
+    id:"numberList",
+    contents:"", 
+    contentsEmpty:false,
+    firstBlock:true,
+    subBlocksId:["num1", "num2", "num3"],
+    parentBlocksId: null,
+    type: numberList,
+    iconType:null,
+    icon:  null ,
+    editTime: (Date.parse("2021-6-1-18:45")).toString(),
+    createTime: (Date.parse("2021-6-1-18:45")).toString(),
+    style :{
+      ...basicBlockStyle
+    },
+    comments:null
+  },
+  {
+    id:"num1",
+    contents:"n1", 
+    contentsEmpty:false,
+    firstBlock:false,
+    subBlocksId:null,
+    parentBlocksId: [numberList],
+    type: numberList,
+    iconType:null,
+    icon:  null ,
+    editTime: (Date.parse("2021-6-1-19:03")).toString(),
+    createTime: (Date.parse("2021-6-1-19:03")).toString(),
+    style :{
+      ...basicBlockStyle,
+      bgColor: bg_green,
+    },
+    comments:null
+  },
+  {
+    id:"num2",
+    contents:"n2", 
+    contentsEmpty:false,
+    firstBlock:false,
+    subBlocksId:null,
+    parentBlocksId: [numberList],
+    type: numberList,
+    iconType:null,
+    icon:  null ,
+    editTime: (Date.parse("2021-6-1-19:03:50")).toString(),
+    createTime: (Date.parse("2021-6-1-19:03:50")).toString(),
+    style :{
+      ...basicBlockStyle
+    },
+    comments:[{
+      id:"comment_n2",
+      userName:userName,
+      type:"open",
+      content:"comment n2", 
+      editTime:(1654086822451).toString(),
+      createTime:(1654086822451).toString(),
+      subComments:null,
+      subCommentsId:null,
+    },]
+  },
+  {
+    id:"num3",
+    contents:"n3", 
+    contentsEmpty:false,
+    firstBlock:false,
+    subBlocksId:null,
+    parentBlocksId: [numberList],
+    type: numberList,
+    iconType:null,
+    icon:  null ,
+    editTime: Date.parse("2021-6-1-19:12:13").toString(),
+    createTime: Date.parse("2021-6-1-19:12:13").toString(),
+    style :{
+      ...basicBlockStyle
+    },
+    comments:null
+  },
+  {
+    id:"bulletList",
+    contents:"", 
+    contentsEmpty:false,
+    firstBlock:true,
+    subBlocksId:["b1", "b2"],
+    parentBlocksId:null,
+    type: bulletList,
+    iconType:null,
+    icon:  null ,
+    editTime: (Date.parse("2021-6-1-19:13:45")).toString(),
+    createTime: (Date.parse("2021-6-1-19:13:45")).toString(),
+    style :{
+      ...basicBlockStyle
+    },
+    comments:null
+  },
+  {
+    id:"b1",
+    contents:"b1", 
+    contentsEmpty:false,
+    firstBlock:false,
+    subBlocksId:null,
+    parentBlocksId:[bulletList],
+    type: bulletList,
+    iconType:null,
+    icon:  null ,
+    editTime: (Date.parse("2021-6-1-19:23")).toString(),
+    createTime: (Date.parse("2021-6-1-19:23")).toString(),
+    style :{
+      ...basicBlockStyle
+    },
+    comments:null
+  },
+  {
+    id:"b2",
+    contents:"b2", 
+    contentsEmpty:false,
+    firstBlock:false,
+    subBlocksId:null,
+    parentBlocksId:[bulletList],
+    type: bulletList,
+    iconType:null,
+    icon:  null ,
+    editTime: (Date.parse("2021-6-1-20:12" )).toString(),
+    createTime: (Date.parse("2021-6-1-20:12" )).toString(),
+    style :{
+      ...basicBlockStyle
+    },
+    comments:null
+  },
+
+    ],
+    blocksId:["text",'img', 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page1', 'page2' , 'sub1_1' ,'sub1_2', 'sub2_1' ,"numberList" , "num1", "num2", "num3" , "bulletList", "b1", "b2"],
+    subPagesId:['page1','page2'],
+    parentsId: null,
+    editTime :(Date.parse("2021-5-16-15:00")).toString(),
+    createTime :(Date.parse("2021-5-16-15:00")).toString(),
+  },
+  {
+    ...pageSample,
+    id:"page1",
+    header:{
+      ...pageSample.header,
+      title:"page page page"
+    },
+    blocks:[{
+      id:"img",
+      contentsEmpty:false,
+      contents: imgBlockImg,
+      firstBlock:true,
+      subBlocksId:null, 
+      parentBlocksId: null,
+      type: image,
+      iconType:null,
+      icon:  null ,
+      editTime: (Date.parse("2021-5-18-16:00")).toString()
+      ,
+      createTime: (Date.parse("2021-5-18-2:00")).toString(),
+      style :basicBlockStyle,
+      comments: null
+    }],
+    blocksId:["img"],
+    firstBlocksId:["img"],
+    editTime: (Date.parse("2021-5-20-21:00")).toString(),
+    createTime: (Date.parse("2021-5-20-21:00")).toString(),
+    parentsId:['12345']
+  },
+  {
+    ...pageSample,
+    id:"page2",
+    header:{
+      ...pageSample.header,
+      iconType:"emoji",
+      icon:emojis[8],
+      title:"page2"
+    },
+    editTime: JSON.stringify(Date.parse("2021-5-20-9:00")),
+    createTime: JSON.stringify(Date.parse("2021-5-20-9:00")),
+    parentsId:['12345']
+  },
+  {
+    id: '1234',
+    type:page,
+    header : {
+      title:"notion2",
+      iconType:"emoji",
+      icon:emojis[2],
+      cover: null,
+      comments:  null,
+    },
+    firstBlocksId:null,
+    blocks:[blockSample],
+    blocksId:[blockSample.id],
+    subPagesId:null,
+    parentsId: null,
+    editTime:JSON.stringify(Date.parse("2021-5-18-19:00")),
+    createTime:JSON.stringify(Date.parse("2021-5-18-19:00")),
+  },
+  {
+    id: '123',
+    type:page,
+    header : {
+      title:"notion3",
+      iconType:"emoji",
+      icon:emojis[10] ,
+      cover: null,
+      comments:  null,
+    },
+    firstBlocksId:null,
+    blocks:[blockSample],
+    blocksId:[blockSample.id],
+    subPagesId:null,
+    parentsId:null,
+    editTime:JSON.stringify(Date.parse("2021-5-13-15:00")),
+    createTime:JSON.stringify(Date.parse("2021-5-13-15:00")),
+  },
+  template1,
+  template2
+],
+  trash:{
+    pagesId:null,
+    pages:null
+  }
+};
 /**
  * block.id로 block을 찾을 수 있는 함수
  * @param page 찾을 block이 존재하는 페이지
