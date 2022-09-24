@@ -162,6 +162,7 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
   return (
   <>
     <div 
+      id="blockFn"
       className='blockFn'
     >
       <div className='blockFnIcon'>

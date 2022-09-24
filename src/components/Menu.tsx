@@ -67,7 +67,7 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
         left: innerWidth >767 ?'3rem' : '0.5rem',
       } :
       {
-        top:  (blockFnElement.offsetHeight) *0.5 ,
+        top:  (blockFnElement.offsetHeight)  ,
         left: innerWidth >767 ?'3rem' : '1rem',
       };
     };
