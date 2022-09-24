@@ -139,6 +139,7 @@ const MoveTargetBlock=({ page, block , editBlock, addBlock,changeToSub ,raiseBlo
 const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,commentBlock,openComment, setRoutePage ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit, openTemplates,  setOpenTemplates, fontStyle}:FrameProps)=>{
   const innerWidth =window.innerWidth; 
   const inner =document.getElementById("inner");
+  const frameHtml = openTemplates?document.querySelector("#template")?.firstElementChild as HTMLElement |null: document.querySelector('.frame') as HTMLElement|null;
   const [templateHtml,setTemplateHtml]=useState<HTMLElement|null>(null);
   const editTime =JSON.stringify(Date.now());
   const [firstBlocksId, setFirstBlocksId]=useState<string[]|null>(page.firstBlocksId);
@@ -244,22 +245,32 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   }
   function changeCommentStyle(){
     if(commentBlock !==null){
-      const blockDoc = document.getElementById(`block_${commentBlock.id}`);
-      const editor =document.getElementsByClassName("editor")[0] as HTMLElement;
+      const blockDoc = document.getElementById(`${commentBlock.id}_contents`);
       const editableBlock =document.getElementsByClassName("editableBlock")[0];
       const editableBlockDomRect= editableBlock.getClientRects()[0];
-      const position =blockDoc?.getClientRects()[0]
-      if(position !== undefined &&  editableBlock){
-        const editorDomRect =editor.getClientRects()[0];
+      const blockDocDomRect =blockDoc?.getClientRects()[0]
+      if(blockDocDomRect !== undefined && frameHtml!==null){
+        const frameDomRect =frameHtml.getClientRects()[0];
         const padding = window.getComputedStyle(editableBlock,null).getPropertyValue("padding-right");
         const pxIndex =padding.indexOf("px");
         const paddingValue =Number(padding.slice(0,pxIndex));
         const innerWidth =window.innerWidth;
-        const style :CSSProperties ={
-          position:"absolute",
-          top: position.bottom +editor.scrollTop,
-          left: innerWidth >=425? editableBlockDomRect.x - editorDomRect.x : innerWidth * 0.1 ,
-          width:innerWidth>=425? editableBlock.clientWidth - paddingValue : innerWidth*0.8
+        const top =blockDocDomRect.bottom ;
+        const overHeight = (top + 120 )>= window.innerHeight;
+        const bottom = frameDomRect.height - blockDocDomRect.top +10;
+        const left =innerWidth >=425? editableBlockDomRect.x - frameDomRect.x : innerWidth * 0.1 ;
+        const width =innerWidth>=425? editableBlock.clientWidth - paddingValue : innerWidth*0.8;
+        const style :CSSProperties =overHeight?
+        {
+          bottom:bottom,
+          left:left ,
+          width:width,
+        }
+        : 
+        {
+          top: top,
+          left: left ,
+          width:width
         };
         setCommentsStyle(style);
       } 
@@ -677,6 +688,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   
   window.onresize =changeCommentStyle;
   useEffect(()=>{
+    // stop srcoll when something open
     if(popup.popup ||command.command|| openLoader|| openComment|| moveTargetBlock||selection){
       !frameRef.current?.classList.contains("stop") &&
       frameRef.current?.classList.add("stop");
@@ -691,231 +703,230 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
       className={newPageFram? "newPageFrame frame" :'frame'}
       ref={frameRef}
     >
+      <div 
+        className='frame_inner'
+        style={frameInnerStyle}
+        onMouseMove={showMoveTargetBlock}
+      >
         <div 
-          className='frame_inner'
-          style={frameInnerStyle}
-          onMouseMove={showMoveTargetBlock}
+          className='pageHeader'
+          style={headerStyle}
+          onMouseMove={()=>{setdecoOpen(true)}}
+          onMouseLeave={()=>setdecoOpen(false)}
         >
-          <div 
-            className='pageHeader'
-            style={headerStyle}
-            onMouseMove={()=>{setdecoOpen(true)}}
-            onMouseLeave={()=>setdecoOpen(false)}
+          {page.header.cover !== null &&        
+            <div className='pageCover'>
+              <img src={page.header.cover} alt="page cover " />
+            </div>
+          }
+          <div className="pageHeader_notCover" style={headerBottomStyle}
           >
-            {page.header.cover !== null &&        
-              <div className='pageCover'>
-                <img src={page.header.cover} alt="page cover " />
-              </div>
-            }
-            <div className="pageHeader_notCover" style={headerBottomStyle}
+            <div
+              onClick={onClickPageIcon}
             >
-              <div
-                onClick={onClickPageIcon}
-              >
-                <PageIcon
-                  icon={page.header.icon}
-                  iconType={page.header.iconType}
-                  style={pageIconStyle}
-                />
-              </div>
-
-              {decoOpen &&
-                <div className='deco'>
-                  {page.header.icon ==null &&
-                    <button 
-                      className='decoIcon'
-                      onClick={addRandomIcon}
-                    >
-                      <BsFillEmojiSmileFill/>
-                      <span>Add Icon</span>
-                    </button>
-                  }
-                  {page.header.cover == null&&        
-                    <button 
-                      className='decoCover'
-                      onClick={onClickAddCover}
-                    >
-                      <MdInsertPhoto/>
-                      <span>Add Cover</span>
-                    </button>
-                  }
-                  {page.header.comments==null &&
+              <PageIcon
+                icon={page.header.icon}
+                iconType={page.header.iconType}
+                style={pageIconStyle}
+              />
+            </div>
+            {decoOpen &&
+              <div className='deco'>
+                {page.header.icon ==null &&
                   <button 
-                    className='decoComment'
-                    onClick={()=>setOpenPageCommentInput(true)}
+                    className='decoIcon'
+                    onClick={addRandomIcon}
                   >
-                    <BiMessageDetail/>
-                    <span>Add Comment</span>
+                    <BsFillEmojiSmileFill/>
+                    <span>Add Icon</span>
                   </button>
-                  }
-              </div>
-              }
-              <div 
-                className='pageTitle'
-              >
-                <ContentEditable
-                  html={page.header.title}
-                  onChange={onChangePageTitle}
+                }
+                {page.header.cover == null&&        
+                  <button 
+                    className='decoCover'
+                    onClick={onClickAddCover}
+                  >
+                    <MdInsertPhoto/>
+                    <span>Add Cover</span>
+                  </button>
+                }
+                {page.header.comments==null &&
+                <button 
+                  className='decoComment'
+                  onClick={()=>setOpenPageCommentInput(true)}
+                >
+                  <BiMessageDetail/>
+                  <span>Add Comment</span>
+                </button>
+                }
+            </div>
+            }
+            <div 
+              className='pageTitle'
+            >
+              <ContentEditable
+                html={page.header.title}
+                onChange={onChangePageTitle}
+              />
+            </div>
+            {!newPageFram ? 
+            <div 
+              className='pageComment'
+              style={frameInnerStyle}
+            >
+              {page.header.comments!==null ?
+                page.header.comments.map((comment:BlockCommentType)=>
+              <Comments 
+                key={`pageComment_${comment.id}`}
+                block={null}
+                page={page}
+                pageId={page.id}
+                userName={userName}
+                editBlock={editBlock}
+                editPage={editPage}
+                discardEdit={discardEdit}
+                select={null}
                 />
-              </div>
-              {!newPageFram ? 
+                )
+              :
+                openPageCommentInput &&
+                <CommentInput
+                  page={page}
+                  pageId={page.id}
+                  userName={userName}
+                  blockComment={null}
+                  subComment={null}
+                  editBlock={editBlock}
+                  editPage={editPage}
+                  commentBlock={null}
+                  setCommentBlock={null}
+                  setPageComments ={null}
+                  setPopup={null}
+                  addOrEdit={"add"}
+                  setEdit={setOpenPageCommentInput}
+                  templateHtml={templateHtml}
+                />
+            }
+            </div>
+            :
               <div 
                 className='pageComment'
                 style={frameInnerStyle}
               >
-                {page.header.comments!==null ?
-                  page.header.comments.map((comment:BlockCommentType)=>
-                <Comments 
-                  key={`pageComment_${comment.id}`}
-                  block={null}
-                  page={page}
-                  pageId={page.id}
-                  userName={userName}
-                  editBlock={editBlock}
-                  editPage={editPage}
-                  discardEdit={discardEdit}
-                  select={null}
-                  />
-                  )
-                :
-                  openPageCommentInput &&
-                  <CommentInput
-                    page={page}
-                    pageId={page.id}
-                    userName={userName}
-                    blockComment={null}
-                    subComment={null}
-                    editBlock={editBlock}
-                    editPage={editPage}
-                    commentBlock={null}
-                    setCommentBlock={null}
-                    setPageComments ={null}
-                    setPopup={null}
-                    addOrEdit={"add"}
-                    setEdit={setOpenPageCommentInput}
-                    templateHtml={templateHtml}
-                  />
-              }
+                Press Enter to continue with an empty page or pick a templage
               </div>
-
-              :
-                <div 
-                  className='pageComment'
-                  style={frameInnerStyle}
-                >
-                  Press Enter to continue with an empty page or pick a templage
-                </div>
-            }
-            </div>
-          </div>
-          {openIconPopup &&
-            <IconPoup 
-              currentPageId={page.id}
-              block={null}
-              page={page}
-              style={iconStyle}
-              editBlock={editBlock}
-              editPage={editPage}
-              setOpenIconPopup={setOpenIconPopup}
-            />
           }
-          <div 
-            className="pageContent"
-            onClick={onClickPageContentBottom}
-          >
-            {!newPageFram?
-            <div 
-              className='pageContent_inner'
-              onMouseMove={onMouseMoveToMoveBlock}
-              onMouseUp={onMouseUpToMoveBlock}
-              >
-              {firstBlocksId!==null &&
-                firstBlocksId.map((id:string)=> findBlock(page,id).BLOCK)
-                .map((block:Block)=>{
-                  return (
-                    <EditableBlock
-                      key={block.id}
-                      page={page}
-                      block={block}
-                      addBlock={addBlock}
-                      editBlock={editBlock}
-                      changeToSub={changeToSub}
-                      raiseBlock={raiseBlock}
-                      deleteBlock={deleteBlock}
-                      smallText={smallText}
-                      moveBlock={moveBlock}
-                      setMoveTargetBlock={setMoveTargetBlock}
-                      pointBlockToMoveBlock={pointBlockToMoveBlock}
-                      command={command}
-                      setCommand={setCommand}
-                      setTargetPageId={setTargetPageId}
-                      openComment={openComment}
-                      setOpenComment={setOpenComment}
-                      setCommentBlock={setCommentBlock}
-                      setOpenLoader={setOpenLoader}
-                      setLoaderTargetBlock={setLoaderTargetBlock}
-                      closeMenu={closeMenu}
-                      templateHtml={templateHtml}
-                      setSelection={setSelection}
-                    />
-                  )
-                }
-              )
-              }
-            </div>
-            :
-            <div className='pageContent_inner'>
-              <button
-                onClick={onClickEmptyWithIconBtn}
-              >
-                <GrDocumentText/>
-                <span>Empty with icon</span>
-              </button>
-              <button
-                onClick={onClickEmpty}
-              >
-                <GrDocument/>
-                <span>Empty</span>
-              </button>
-              <button
-                onClick={onClickTemplateBtn}
-              >
-                <HiTemplate/>
-                <span>Templates</span>
-              </button>
-            </div>
-            }
           </div>
-          
         </div>
-        {command.command !==null && command.targetBlock !==null &&
-              <div 
-                id="block_commandBlock"
-                style={commandBlockPositon}
-              >
-                  <CommandBlock 
-                  key={`${command.targetBlock.id}_command`}
-                  page={page}
-                  block={command.targetBlock}
-                  editBlock={editBlock}
-                  changeBlockToPage={changeBlockToPage}
-                  changePageToBlock={changePageToBlock}
-                  command={command}
-                  setCommand={setCommand}
-                  setCommandTargetBlock={null}
-                  setPopup={null}
-                />
-              </div>
-          }
-          {openLoader && loaderTargetBlock !==null &&
-          <Loader
-            block={loaderTargetBlock}
+        {openIconPopup &&
+          <IconPoup 
+            currentPageId={page.id}
+            block={null}
             page={page}
+            style={iconStyle}
             editBlock={editBlock}
-            setOpenLoader={setOpenLoader}
-            setLoaderTargetBlock={setLoaderTargetBlock}
+            editPage={editPage}
+            setOpenIconPopup={setOpenIconPopup}
           />
+        }
+        <div 
+          className="pageContent"
+          onClick={onClickPageContentBottom}
+        >
+          {!newPageFram?
+          <div 
+            className='pageContent_inner'
+            onMouseMove={onMouseMoveToMoveBlock}
+            onMouseUp={onMouseUpToMoveBlock}
+            >
+            {firstBlocksId!==null &&
+              firstBlocksId.map((id:string)=> findBlock(page,id).BLOCK)
+              .map((block:Block)=>{
+                return (
+                  <EditableBlock
+                    key={block.id}
+                    page={page}
+                    block={block}
+                    addBlock={addBlock}
+                    editBlock={editBlock}
+                    changeToSub={changeToSub}
+                    raiseBlock={raiseBlock}
+                    deleteBlock={deleteBlock}
+                    smallText={smallText}
+                    moveBlock={moveBlock}
+                    setMoveTargetBlock={setMoveTargetBlock}
+                    pointBlockToMoveBlock={pointBlockToMoveBlock}
+                    command={command}
+                    setCommand={setCommand}
+                    setTargetPageId={setTargetPageId}
+                    openComment={openComment}
+                    setOpenComment={setOpenComment}
+                    setCommentBlock={setCommentBlock}
+                    setOpenLoader={setOpenLoader}
+                    setLoaderTargetBlock={setLoaderTargetBlock}
+                    closeMenu={closeMenu}
+                    templateHtml={templateHtml}
+                    setSelection={setSelection}
+                  />
+                )
+              }
+            )
+            }
+          </div>
+          :
+          <div className='pageContent_inner'>
+            <button
+              onClick={onClickEmptyWithIconBtn}
+            >
+              <GrDocumentText/>
+              <span>Empty with icon</span>
+            </button>
+            <button
+              onClick={onClickEmpty}
+            >
+              <GrDocument/>
+              <span>Empty</span>
+            </button>
+            <button
+              onClick={onClickTemplateBtn}
+            >
+              <HiTemplate/>
+              <span>Templates</span>
+            </button>
+          </div>
           }
+        </div>
+        
+      </div>
+      {command.command !==null && 
+      command.targetBlock !==null &&
+        <div 
+          id="block_commandBlock"
+          style={commandBlockPositon}
+        >
+            <CommandBlock 
+            key={`${command.targetBlock.id}_command`}
+            page={page}
+            block={command.targetBlock}
+            editBlock={editBlock}
+            changeBlockToPage={changeBlockToPage}
+            changePageToBlock={changePageToBlock}
+            command={command}
+            setCommand={setCommand}
+            setCommandTargetBlock={null}
+            setPopup={null}
+          />
+        </div>
+      }
+      {openLoader && loaderTargetBlock !==null &&
+      <Loader
+        block={loaderTargetBlock}
+        page={page}
+        editBlock={editBlock}
+        setOpenLoader={setOpenLoader}
+        setLoaderTargetBlock={setLoaderTargetBlock}
+      />
+      }
       <BlockFn
         page={page}
         pages={pages}
