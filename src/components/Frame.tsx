@@ -155,7 +155,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   const [loaderTargetBlock, setLoaderTargetBlock]=useState<Block|null>(null);
   const [iconStyle, setIconStyle]=useState<CSSProperties|undefined>(undefined);
   const [commandBlockPositon, setCBPositon]=useState<CSSProperties>();
-  const [commentsStyle, setCommentsStyle]= useState<CSSProperties>();
+  const [commentsStyle, setCommentsStyle]= useState<CSSProperties|undefined>(undefined);
   const [menuOpen, setOpenMenu]= useState<boolean>(false);
   const [commandTargetBlock, setCommandTargetBlock]=useState<Block|null>(null);
   const [popup, setPopup]=useState<PopupType>({
@@ -166,9 +166,9 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   const [moveTargetBlock, setMoveTargetBlock]=useState<Block|null>(null);
   const moveBlock =useRef<boolean>(false);
   const pointBlockToMoveBlock =useRef<Block|null>(null);
-
   const [selection, setSelection]=useState<selectionType|null>(null);
   const frameRef= useRef<HTMLDivElement>(null);
+  const blockCommentsHeight =document.getElementById("block_comments")?.scrollHeight;
   const closePopup=(event:globalThis.MouseEvent)=>{
     if(popup.popup){
       const popupMenu =document.getElementById("popupMenu");
@@ -799,8 +799,8 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
                   editBlock={editBlock}
                   editPage={editPage}
                   commentBlock={null}
-                  setCommentBlock={null}
-                  setPageComments ={null}
+                  allComments={page.header.comments}
+                  setAllComments ={null}
                   setPopup={null}
                   addOrEdit={"add"}
                   setEdit={setOpenPageCommentInput}
@@ -972,18 +972,18 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
               setTargetPageId={setTargetPageId}
             /> 
             }
-            {popup.what ==="popupComment" &&
+            {popup.what ==="popupComment" && commentBlock !==null &&
                 <CommentInput
                 pageId={page.id}
-                page={null}
+                page={page}
                 userName={userName}
                 editBlock={editBlock}
                 editPage={editPage}
                 blockComment={null}
                 subComment={null}
                 commentBlock={commentBlock}
-                setCommentBlock={setCommentBlock}
-                setPageComments={null}
+                allComments={commentBlock.comments}
+                setAllComments={null}
                 setPopup={setPopup}
                 addOrEdit="add"
                 setEdit={null}
@@ -1005,7 +1005,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
             }
           </div>
       }
-      {commentBlock !==null && openComment &&
+      {commentBlock !==null && openComment && commentsStyle!==undefined &&
       <div 
         id="block_comments"
         style={commentsStyle}
@@ -1014,7 +1014,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           userName={userName}
           block={commentBlock}
           pageId={page.id}
-          page={null}
+          page={page}
           editBlock={editBlock}
           editPage={editPage}
           select={null}

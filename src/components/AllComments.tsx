@@ -117,7 +117,7 @@ const AllComments=({page, userName, editBlock, showAllComments, setShowAllCommen
           <Comments
             key={`allComments_${block.id}`}
             pageId={pageId}
-            page={null}
+            page={page}
             userName={userName}
             block={block}
             editBlock={editBlock}
