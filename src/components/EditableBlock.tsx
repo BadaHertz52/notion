@@ -1,5 +1,5 @@
 import React, { CSSProperties, Dispatch, MouseEvent, MutableRefObject, SetStateAction, useEffect, useRef} from 'react';
-import { Block, BlockCommentType, findBlock, Page,  } from '../modules/notion';
+import { Block, MainCommentType, findBlock, Page,  } from '../modules/notion';
 import { Command, selectionType } from './Frame';
 import BlockComponent, { BlockComment, setTemplateItem } from './BlockComponent';
 import { GoPrimitiveDot } from 'react-icons/go';
@@ -74,7 +74,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
   const blockComments = 
   block.comments==null? 
   false : 
-  (block.comments.filter((comment:BlockCommentType)=>  comment.type ==="open" )[0] ===undefined? 
+  (block.comments.filter((comment:MainCommentType)=>  comment.type ==="open" )[0] ===undefined? 
   false:  
   true );
   const blockContentsStyle =(block:Block):CSSProperties =>{

@@ -1,7 +1,7 @@
 import React, { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { CSSProperties } from "styled-components";
-import { Block, BlockCommentType, blockSample, Page } from "../modules/notion";
+import { Block, MainCommentType, Page } from "../modules/notion";
 import { detectRange } from "./BlockFn";
 import Comments from "./Comments";
 
@@ -13,9 +13,10 @@ type AllCommentsProps={
   showAllComments:boolean,
   setShowAllComments:Dispatch<SetStateAction<boolean>>,
   discardEdit:boolean,
+  setDiscardEdit:Dispatch<SetStateAction<boolean>>,
   style:CSSProperties,
 }
-const AllComments=({page, userName, editBlock, showAllComments, setShowAllComments,discardEdit , style}:AllCommentsProps)=>{
+const AllComments=({page, userName, editBlock, showAllComments, setShowAllComments,discardEdit ,setDiscardEdit, style}:AllCommentsProps)=>{
   const inner =document.getElementById("inner");
   inner?.addEventListener("click",(event)=>{
     if(showAllComments){
@@ -51,10 +52,10 @@ const AllComments=({page, userName, editBlock, showAllComments, setShowAllCommen
   };
   useEffect(()=>{
     if(allComments !== undefined){
-      let resultComments:BlockCommentType[] =[];
-      allComments.forEach((comments:BlockCommentType[]|null)=>{
+      let resultComments:MainCommentType[] =[];
+      allComments.forEach((comments:MainCommentType[]|null)=>{
         if(comments !==null){
-          const seletedComments= comments.filter((c:BlockCommentType)=> c.type=== select);
+          const seletedComments= comments.filter((c:MainCommentType)=> c.type=== select);
           seletedComments[0]!==undefined && seletedComments.forEach(c => resultComments.push(c));
         };
         
@@ -124,6 +125,7 @@ const AllComments=({page, userName, editBlock, showAllComments, setShowAllCommen
             editPage={null}
             select={select}
             discardEdit={discardEdit}
+            setDiscardEdit={setDiscardEdit}
           />
         )
       }

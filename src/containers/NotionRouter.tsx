@@ -93,7 +93,7 @@ const NotionRouter =()=>{
   const [showAllComments,setShowAllComments]=useState<boolean>(false);
   const [allCommentsStyle, setAllCommentsStyle]=useState<CSSProperties>({transform:`translateX(${window.innerWidth}px)`});
   const [discard_edit, setDiscardEdit]=useState<boolean>(false);
-  const discardEdit =document.getElementById("discardEdit");
+  const discardEditHtml =document.getElementById("discardEdit");
   const [openExport ,setOpenExport]=useState<boolean>(false);
   const [openComment, setOpenComment]=useState<boolean>(false);
   const [commentBlock, setCommentBlock]=useState<Block|null>(null);
@@ -215,12 +215,13 @@ const NotionRouter =()=>{
     }
   };
   const onClickDiscardEdit =()=>{
-    discardEdit?.classList.remove("on");
+    discardEditHtml?.classList.remove("on");
     setDiscardEdit(true);
   };
 
   const onClickCloseEdit =()=>{
-    discardEdit?.classList.remove("on");
+    discardEditHtml?.classList.remove("on");
+    setDiscardEdit(false);
   };
   const changeTitle=(title:string)=>{
     const titleHtml =document.querySelector("title");
@@ -326,7 +327,7 @@ const NotionRouter =()=>{
         transform:`translateX(${width + 50 }px)`,
       });
     }
-  },[showAllComments])
+  },[showAllComments]);
   return(
     <div 
       id="inner"
@@ -403,6 +404,7 @@ const NotionRouter =()=>{
                       showAllComments={showAllComments}
                       setShowAllComments={setShowAllComments}
                       discardEdit={discard_edit}
+                      setDiscardEdit={setDiscardEdit}
                       setOpenExport={setOpenExport}
                       openComment={openComment}
                       setOpenComment={setOpenComment}
@@ -449,6 +451,7 @@ const NotionRouter =()=>{
             smallText={smallText}
             fullWidth={fullWidth}
             discardEdit={discard_edit}
+            setDiscardEdit={setDiscardEdit}
             openTemplates ={openTemplates}
             setOpenTemplates={setOpenTemplates}
             fontStyle={fontStyle}
@@ -487,6 +490,7 @@ const NotionRouter =()=>{
               smallText={smallText}
               fullWidth={fullWidth}
               discardEdit={discard_edit}
+              setDiscardEdit={setDiscardEdit}
               fontStyle={fontStyle}
 
             />
@@ -500,6 +504,7 @@ const NotionRouter =()=>{
               showAllComments={showAllComments}
               setShowAllComments={setShowAllComments}
               discardEdit={discard_edit}
+              setDiscardEdit={setDiscardEdit}
               style={allCommentsStyle}
             />
           }

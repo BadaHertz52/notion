@@ -68,6 +68,7 @@ type EditorContainerProps = NotionActionProps &{
   showAllComments:boolean,
   setShowAllComments:Dispatch<SetStateAction<boolean>>,
   discardEdit:boolean,
+  setDiscardEdit:Dispatch<SetStateAction<boolean>>,
   setOpenExport :Dispatch<SetStateAction<boolean>>,
   openTemplates: boolean,
   setOpenTemplates: Dispatch<SetStateAction<boolean>>,
@@ -75,7 +76,7 @@ type EditorContainerProps = NotionActionProps &{
   setFontStyle:Dispatch<SetStateAction<fontStyleType>>,
 };
 
-const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,recentPagesId ,isInTrash, makePagePath,changeSide,addBlock,editBlock ,changeBlockToPage, changePageToBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId, setRoutePage ,openComment,setOpenComment,commentBlock,setCommentBlock,smallText,setSmallText,fullWidth,setFullWidth,showAllComments,  setShowAllComments ,discardEdit , setOpenExport, openTemplates, setOpenTemplates, fontStyle, setFontStyle}:EditorContainerProps)=>{
+const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,recentPagesId ,isInTrash, makePagePath,changeSide,addBlock,editBlock ,changeBlockToPage, changePageToBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId, setRoutePage ,openComment,setOpenComment,commentBlock,setCommentBlock,smallText,setSmallText,fullWidth,setFullWidth,showAllComments,  setShowAllComments ,discardEdit , setDiscardEdit,setOpenExport, openTemplates, setOpenTemplates, fontStyle, setFontStyle}:EditorContainerProps)=>{
   const dispatch =useDispatch();
   const user =useSelector((state:RootState)=>state.user);
   const [editorStyle, setEditorStyle]=useState<CSSProperties|undefined>(undefined);
@@ -183,6 +184,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,rece
         smallText={smallText}
         fullWidth={fullWidth}
         discardEdit={discardEdit}
+        setDiscardEdit={setDiscardEdit}
         openTemplates={openTemplates}
         setOpenTemplates={setOpenTemplates}
         fontStyle={fontStyle}

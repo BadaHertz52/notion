@@ -1,6 +1,6 @@
 import '../assests/frame.css';
 import React, { CSSProperties, Dispatch,  MouseEvent,  SetStateAction, useEffect, useRef, useState } from 'react';
-import { Block, BlockCommentType, blockSample,  findBlock, findParentBlock, listItem, Page } from '../modules/notion';
+import { Block, MainCommentType, blockSample,  findBlock, findParentBlock, listItem, Page } from '../modules/notion';
 import EditableBlock, { changeFontSizeBySmallText } from './EditableBlock';
 import IconPoup, { randomIcon } from './IconPoup';
 import CommandBlock from './CommandBlock';
@@ -56,6 +56,7 @@ export type Template_Frame_SAME_Props ={
   smallText: boolean, 
   fullWidth: boolean, 
   discardEdit:boolean,
+  setDiscardEdit:Dispatch<SetStateAction<boolean>>,
   fontStyle: fontStyleType
 };
 export type FrameProps = Template_Frame_SAME_Props &{
@@ -136,7 +137,7 @@ const MoveTargetBlock=({ page, block , editBlock, addBlock,changeToSub ,raiseBlo
   )
 }
 
-const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,commentBlock,openComment, setRoutePage ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit, openTemplates,  setOpenTemplates, fontStyle}:FrameProps)=>{
+const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,commentBlock,openComment, setRoutePage ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit,setDiscardEdit , openTemplates,  setOpenTemplates, fontStyle}:FrameProps)=>{
   const innerWidth =window.innerWidth; 
   const inner =document.getElementById("inner");
   const frameHtml = openTemplates?document.querySelector("#template")?.firstElementChild as HTMLElement |null: document.querySelector('.frame') as HTMLElement|null;
@@ -488,7 +489,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
         };
         setTemplateItem(templateHtml,page);
         editPage(page.id, newPage);
-        setFirstBlocksId(firstBlocksId);
     };
   };
   
@@ -629,6 +629,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
 
   useEffect(()=>{
     setFirstBlocksId(page.firstBlocksId); 
+    console.log("new firstblocks id", page.firstBlocksId)
   },[page.firstBlocksId]);
 
   useEffect(()=>{
@@ -775,7 +776,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
               style={frameInnerStyle}
             >
               {page.header.comments!==null ?
-                page.header.comments.map((comment:BlockCommentType)=>
+                page.header.comments.map((comment:MainCommentType)=>
               <Comments 
                 key={`pageComment_${comment.id}`}
                 block={null}
@@ -785,6 +786,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
                 editBlock={editBlock}
                 editPage={editPage}
                 discardEdit={discardEdit}
+                setDiscardEdit={setDiscardEdit}
                 select={null}
                 />
                 )
@@ -1019,6 +1021,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           editPage={editPage}
           select={null}
           discardEdit={discardEdit}
+          setDiscardEdit={setDiscardEdit}
         />  
       </div>            
       }

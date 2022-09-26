@@ -9,7 +9,7 @@ type ExportProps= FrameProps &{
   setOpenExport:Dispatch<SetStateAction<boolean>>
 }
 const Export =({page,pagesId,pages,firstlist, recentPagesId ,setOpenExport, userName,editBlock,addBlock,changeBlockToPage,changePageToBlock,changeToSub,raiseBlock,deleteBlock,addPage,editPage, duplicatePage ,movePageToPage ,commentBlock,openComment ,setTargetPageId, setRoutePage, 
-  setOpenComment,setCommentBlock,smallText,fullWidth,discardEdit, openTemplates , setOpenTemplates, fontStyle}:ExportProps)=>{
+  setOpenComment,setCommentBlock,smallText,fullWidth,discardEdit,setDiscardEdit, openTemplates , setOpenTemplates, fontStyle}:ExportProps)=>{
   const html ="HTML";
   const pdf="PDF";
   const markdown="Markdown";
@@ -142,6 +142,7 @@ const Export =({page,pagesId,pages,firstlist, recentPagesId ,setOpenExport, user
                 smallText={smallText}
                 fullWidth={fullWidth}
                 discardEdit={discardEdit}
+                setDiscardEdit={setDiscardEdit}
                 openTemplates={openTemplates}
                 setOpenTemplates={setOpenTemplates}
                 fontStyle={fontStyle}
