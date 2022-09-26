@@ -1,4 +1,4 @@
-import React, {  Dispatch, FormEvent,SetStateAction,useEffect,useRef,useState, MouseEvent } from 'react';
+import React, {  Dispatch, FormEvent,SetStateAction,useEffect,useRef,useState, MouseEvent, RefObject } from 'react';
 import { CSSProperties } from 'styled-components';
 import { Block, MainCommentType, SubCommentType, Page } from '../modules/notion';
 import {  BsThreeDots } from 'react-icons/bs';
@@ -113,10 +113,10 @@ const closeToolMore=(event:MouseEvent| globalThis.MouseEvent ,setMoreOpen:Dispat
   const toolMore =document.getElementById("tool_more");
   const tooleMoreArea = toolMore?.getClientRects()[0];
   const isInToolMore = detectRange(event, tooleMoreArea);
-  if(!isInToolMore && tooleMoreArea!==undefined){
+  if(!isInToolMore){
     setMoreOpen(false);
     sessionStorage.removeItem("toolMoreItem");
-  }
+  };
 };
 
 export const CommentInput =({userName, pageId, page ,blockComment, subComment,editBlock,editPage, commentBlock ,allComments, setAllComments,setPopup, addOrEdit,setEdit ,templateHtml}:CommentInputProps)=>{
@@ -443,7 +443,7 @@ export const CommentInput =({userName, pageId, page ,blockComment, subComment,ed
 };
 
 
-const ToolMore =({pageId, block,page, editBlock ,editPage,allComments, setAllComments,setMoreOpen ,toolMoreStyle, templateHtml}:ToolMoreProps)=>{
+const ToolMore =({pageId, block,page, editBlock ,editPage, allComments, setAllComments,setMoreOpen ,toolMoreStyle, templateHtml}:ToolMoreProps)=>{
   const toolMoreItem = sessionStorage.getItem("toolMoreItem");
   const [comment, setComment] =useState<MainCommentType | SubCommentType | null >(null);
   const editTime = JSON.stringify(Date.now());
@@ -457,7 +457,6 @@ const ToolMore =({pageId, block,page, editBlock ,editPage,allComments, setAllCom
       if(comment !==null && block !==null && allComments !==null){
         const blockComments :MainCommentType[] =[...allComments];
         const mainCommentIds = blockComments.map((comment:MainCommentType)=> comment.id);
-        console.log("mainCommentsId", mainCommentIds);
         const updateBlock =()=>{
           const templateHtml= document.getElementById("template");
           setTemplateItem(templateHtml,page);
@@ -471,14 +470,12 @@ const ToolMore =({pageId, block,page, editBlock ,editPage,allComments, setAllCom
         };
 
         if(mainCommentIds?.includes(comment.id)){
-          console.log("is blockcomment type")
             //MainCommentType
             const index = mainCommentIds.indexOf(comment.id);
             blockComments.splice(index,1);
             updateBlock();
         }else{
           //SubCommentType
-          console.log("is comment type", comment ,blockComments);
           const mainComment :MainCommentType = blockComments.filter((b:MainCommentType)=>
             b.subCommentsId?.includes(comment.id))[0];
           const mainCommentIndex= mainCommentIds.indexOf(mainComment.id);
@@ -582,8 +579,9 @@ const ToolMore =({pageId, block,page, editBlock ,editPage,allComments, setAllCom
   )
 };
 
-const CommentTool =({mainComment , comment,block, page ,pageId ,editBlock ,editPage ,setAllComments, moreOpen ,setMoreOpen ,setToolMoreStyle, templateHtml}:CommentToolProps)=>{
-
+const CommentTool =({mainComment , comment,block, page ,pageId ,editBlock ,editPage  ,setAllComments, moreOpen ,setMoreOpen ,setToolMoreStyle, templateHtml}:CommentToolProps)=>{
+  const allCommentsHtml =document.getElementById("allComments");
+  const commentToolRef= useRef<HTMLDivElement>(null);
   const ResolveBtn =({comment}:ResolveBtnProps)=>{
     const changeToResolve =()=>{
       if(page!==null){
@@ -641,45 +639,53 @@ const CommentTool =({mainComment , comment,block, page ,pageId ,editBlock ,editP
       </button>
     )
   };
-  const openToolMore =(event: React.MouseEvent<HTMLButtonElement>)=>{
-    setMoreOpen(true);
-    const target = event.currentTarget ;
-    const block_comments =document.getElementById("block_comments");  
-    
-    const position = target.getClientRects()[0] as DOMRect;
-    if(block_comments !==null){
-      const block_commentsDomRect = block_comments.getClientRects()[0];
+  const setStyleInNotAllComments=(html:HTMLElement |null, targetDomRect:DOMRect)=>{
+    const htmlDomRect =html?.getClientRects()[0];
+    if(htmlDomRect!==undefined){
       const style:CSSProperties ={
         position:"absolute" ,
-        top: (position.top- block_commentsDomRect.top) ,
-        right:block_commentsDomRect.right - position.left + 5
+        top: (targetDomRect.top- htmlDomRect.top) ,
+        right:htmlDomRect.right - targetDomRect.left + 5
       };
       setToolMoreStyle(style);
     }else{
-      const pageComment =document.getElementsByClassName("pageComment")[0]; 
-      const pageCommentDomRect= pageComment.getClientRects()[0];
+      console.log("Can't find comments")
+    }
+  }
+  const openToolMore =(event: React.MouseEvent<HTMLButtonElement>)=>{
+    setMoreOpen(true);
+    const target = event.currentTarget ;
+    const targetDomRect = target.getClientRects()[0] as DOMRect;
+    if(allCommentsHtml==null){
+      if(block===null){
+        const templateHtml =document.getElementById("template");
+        const pageComment =templateHtml==null? document.querySelector(".pageComment") as HTMLElement|null: templateHtml.querySelector(".pageComment") as HTMLElement|null;
+        setStyleInNotAllComments(pageComment ,targetDomRect);
+      }else{
+        const blockCommentsHtml =document.getElementById("block_comments");  
+        setStyleInNotAllComments(blockCommentsHtml ,targetDomRect);
+      }
+    };
+
+    if(allCommentsHtml!==null  && commentToolRef.current!==null){
+      const commentToolDomRect =commentToolRef.current.getClientRects()[0];
+      const top = targetDomRect.bottom + 5;
+      const right =window.innerWidth - commentToolDomRect.right;
       const style:CSSProperties={
         position:"absolute",
-        top: position.top - pageCommentDomRect.top,
-        right: pageCommentDomRect.right -position.left +5
+        top: top,
+        right:right
       };
       setToolMoreStyle(style);
     }
     sessionStorage.setItem("toolMoreItem", JSON.stringify(comment));
-
-  };
-  const inner =document.getElementById("inner");
-
-  inner?.addEventListener("click",  (event)=>{
-    const item =sessionStorage.getItem("toolMoreItem");
-    if(item !==null ){
-      closeToolMore(event,setMoreOpen)
-    };
-  }
-    
-  );
+    }
+  
   return(
-    <div className="commentTool">
+    <div 
+      className="commentTool"
+      ref={commentToolRef}
+    >
       {mainComment &&
         <ResolveBtn
           comment ={comment as MainCommentType}
@@ -697,15 +703,11 @@ const CommentTool =({mainComment , comment,block, page ,pageId ,editBlock ,editP
   )
 };
 
-const CommentBlock =({comment ,mainComment ,block ,page ,pageId, userName,editBlock ,editPage,setPopup  ,allComments,setAllComments , moreOpen ,setMoreOpen ,setToolMoreStyle  ,discardEdit,setDiscardEdit, templateHtml}:CommentBlockProps)=>{
+const CommentBlock =({comment ,mainComment ,block ,page ,pageId, userName,editBlock ,editPage,setPopup ,allComments,setAllComments , moreOpen ,setMoreOpen ,setToolMoreStyle  ,discardEdit,setDiscardEdit, templateHtml}:CommentBlockProps)=>{
   const firstLetter = comment.userName.substring(0,1).toUpperCase();
   const [edit, setEdit]=useState<boolean>(false);
   const editCommentItem= sessionStorage.getItem("editComment");
-  const onClickCommentBlock =(event:React.MouseEvent)=>{
-    moreOpen && closeToolMore(event, setMoreOpen)
-  };
   useEffect(()=>{
-    console.log("discardedit", discardEdit, "item", editCommentItem , "edit", edit)
     // discard edit 
     if(editCommentItem!==null){
       if(discardEdit){
@@ -721,7 +723,6 @@ const CommentBlock =({comment ,mainComment ,block ,page ,pageId, userName,editBl
   return (
     <div 
     className='commentBlock'
-    onClick={onClickCommentBlock}
   >
     <section className='comment_header'>
       <div className="information">
@@ -860,13 +861,14 @@ const Comment =({userName,comment, block,page, pageId, editBlock ,editPage ,allC
   )
 };
 const Comments =({pageId,block,page, userName ,editBlock ,editPage  ,select ,discardEdit ,setDiscardEdit}:CommentsProps)=>{
+  const inner =document.getElementById("inner");
+  const pageComments =page.header.comments;
   const [allComments, setAllComments]=useState<MainCommentType[]|null>(null);
   const [targetComments, setTargetComment]= useState<MainCommentType[]| null>(null);
   const [resolveComments, setResolveComments]= useState<MainCommentType[]| null>(null);
   const [openComments, setOpenComments]= useState<MainCommentType[]| null>(null);
   const [moreOpen, setMoreOpen]= useState<boolean>(false);
   const [toolMoreStyle, setToolMoreStyle]=useState<CSSProperties|undefined>(undefined);
-  const [pageComments, setPageComments]=useState<MainCommentType[]|null>(block ==null? page.header.comments : null);
   const templateHtml= document.getElementById("template");
   const commentsRef =useRef<HTMLDivElement>(null);
   const showComments =(what:"open" | "resolve")=>{
@@ -960,7 +962,6 @@ const Comments =({pageId,block,page, userName ,editBlock ,editPage  ,select ,dis
   //   }
   // };
   useEffect(()=>{
-    console.log("change block comments")
     if(block?.comments !==undefined && block?.comments !==null){
       setAllComments(block.comments)
     }else{
@@ -1005,7 +1006,11 @@ const Comments =({pageId,block,page, userName ,editBlock ,editPage  ,select ,dis
   //     }
   //   }
   // },[targetComments ,blockComments]);
-
+  inner?.addEventListener("click",  (event)=>{
+    if(moreOpen){
+      closeToolMore(event,setMoreOpen)
+    };
+  });
   return(
     <>
     <div 
