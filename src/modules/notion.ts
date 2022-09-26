@@ -54,16 +54,16 @@ const img ="img";
 const emoji ="emoji";
 export type IconType = typeof img|typeof emoji |null ;
 
-export type CommentType ={
+export type SubCommentType ={
   id: string,
   userName:string,
   content: string,
   editTime: string,
   createTime:string,
 }
-export type BlockCommentType = CommentType &{
+export type MainCommentType = SubCommentType &{
   type:"open"|"resolve",
-  subComments:CommentType[]|null,
+  subComments:SubCommentType[]|null,
   subCommentsId : string[] |null,
 };
 export type Block ={
@@ -80,7 +80,7 @@ export type Block ={
   editTime: string ,
   createTime:string,
   style :BlockStyle,
-  comments :BlockCommentType[] |null
+  comments :MainCommentType[] |null
 } ;
 
 export  const blockSample:Block ={
@@ -142,7 +142,7 @@ export type Page ={
     iconType: IconType,
     icon: string|Emoji |null,
     cover: string |null,
-    comments: BlockCommentType[]| null,
+    comments: MainCommentType[]| null,
   }
   firstBlocksId :string[] | null,
   blocks : Block[],  
