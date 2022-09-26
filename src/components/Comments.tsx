@@ -360,19 +360,11 @@ export const CommentInput =({userName, pageId, page ,blockComment, subComment,ed
     })
   };
   useEffect(()=>{
-    switch (addOrEdit) {
-      case "add":
-        blockComment !==null && setEditTargetComment(blockComment); 
-        break;
-      case "edit":
-        subComment !==null ?
+    if(addOrEdit==="edit"){
+      subComment !==null ?
         setEditTargetComment(subComment):
         setEditTargetComment(blockComment)
-        break;
-      default:
-        break;
     };
-    
   },[blockComment, subComment, addOrEdit])
   return(
     <div 
@@ -389,17 +381,21 @@ export const CommentInput =({userName, pageId, page ,blockComment, subComment,ed
       >
         <input
           type="text"
-          placeholder={blockComment===null? 
-            "Add a comment" :
-            (addOrEdit ==="add")? 
-            "Reply....": 
+          placeholder={
+            (addOrEdit==="add")?
+            (blockComment==null?
+            "Add a comment"
+            :
+            "Reply.....")
+            :
             editTargetComment?.content
           }
           className="commentText"
           name="comment"
           onInput={onInputText}
+          value={text}
         />
-        {blockComment !==null && addOrEdit ==="edit" &&
+        { addOrEdit ==="edit" &&
         <button
           className="cancleEditBtn"
           onClick={openDiscardEdit}
@@ -408,21 +404,20 @@ export const CommentInput =({userName, pageId, page ,blockComment, subComment,ed
         </button>
         }
         <button 
-          onClick={onClickToMakeNewComment}
+          onClick={addOrEdit==="add"? makeNewComment : editComment}
           className="commentInputSubmit"
           name="commentInputSubmit"
           disabled ={text ==null || text ===""}
-          
         >
-        {blockComment !==null && addOrEdit ==="edit" ?
-          <IoCheckmarkCircle
-            style={submitStyle}
-          />
-        :
-          <IoArrowUpCircleSharp
-            style={submitStyle}
-          />
-        }
+          { addOrEdit ==="edit" ?
+            <IoCheckmarkCircle
+              style={submitStyle}
+            />
+          :
+            <IoArrowUpCircleSharp
+              style={submitStyle}
+            />
+          }
         </button>
       </form>
 
