@@ -47,8 +47,8 @@
     width: inherit;
   }
   .comment_header{
-    .information, .tool{
-      max-width: 50%;
+    .information{
+      max-width: calc(100% - 90px);
     }
     .information{
       flex-shrink: 1;

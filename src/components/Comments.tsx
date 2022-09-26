@@ -679,7 +679,7 @@ const CommentTool =({mainComment , comment,block, page ,pageId ,editBlock ,editP
     
   );
   return(
-    <div className="tool">
+    <div className="commentTool">
       {mainComment &&
         <ResolveBtn
           comment ={comment as MainCommentType}
@@ -731,15 +731,11 @@ const CommentBlock =({comment ,mainComment ,block ,page ,pageId, userName,editBl
           </div>
         </div>
         <div className='userName'>
-          <p>
-            {comment.userName}
-          </p>
+          {comment.userName}
         </div>
-        <div className="time">
-          <Time
-            editTime={comment.editTime}
-          />
-        </div>
+        <Time
+          editTime={comment.editTime}
+        />
       </div>
       <CommentTool
         mainComment={mainComment }

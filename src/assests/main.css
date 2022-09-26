@@ -144,8 +144,8 @@ a:link, a:active, a:visited {
 #allComments .comments_comments {
   width: inherit;
 }
-#allComments .comment_header .information, #allComments .comment_header .tool {
-  max-width: 50%;
+#allComments .comment_header .information {
+  max-width: calc(100% - 90px);
 }
 #allComments .comment_header .information {
   flex-shrink: 1;
@@ -967,7 +967,6 @@ a:link, a:active, a:visited {
   z-index: 10;
   border-radius: 8px;
   box-shadow: 0px 0px 23px -5px #ababab;
-  overflow-y: none;
 }
 #block_comments::-webkit-scrollbar-thumb {
   background: #D3D1CB;
@@ -1031,16 +1030,18 @@ a:link, a:active, a:visited {
   font-size: 14px;
   height: inherit;
 }
-.commentBlock .comment_header .userName {
-  margin: 0 10px;
-  display: flex;
-  align-items: center;
+.commentBlock .comment_header .firstLetter {
+  flex-shrink: 0;
+  flex-grow: 0;
 }
-.commentBlock .comment_header .userName p {
-  margin: 0;
+.commentBlock .comment_header .userName {
+  margin: 0 5px;
+  flex-shrink: 1;
+  flex-grow: 1;
   font-weight: bold;
   text-align: center;
   line-height: 20px;
+  text-overflow: ellipsis;
 }
 .commentBlock .comment_header .time {
   margin: 0;
@@ -1048,15 +1049,18 @@ a:link, a:active, a:visited {
   font-size: 13px;
   display: flex;
   align-items: center;
+  flex-grow: 1;
+  flex-shrink: 2;
+  text-overflow: ellipsis;
 }
-.commentBlock .comment_header .tool {
+.commentBlock .comment_header .commentTool {
   display: flex;
   align-content: center;
   border: 1px solid #a3a3a2;
   border-radius: 2px;
   height: 20px;
 }
-.commentBlock .comment_header .tool button {
+.commentBlock .comment_header .commentTool button {
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
@@ -1070,14 +1074,14 @@ a:link, a:active, a:visited {
   text-align: center;
   font-size: 12px;
 }
-.commentBlock .comment_header .tool button span {
+.commentBlock .comment_header .commentTool button span {
   padding: 3px;
 }
-.commentBlock .comment_header .tool button svg {
+.commentBlock .comment_header .commentTool button svg {
   font-font-size: 1rem;
   font-weight: bolder;
 }
-.commentBlock .comment_header .tool .resolveTool {
+.commentBlock .comment_header .commentTool .resolveTool {
   border-right: 1px solid #a3a3a2;
 }
 .commentBlock .comment_block,
