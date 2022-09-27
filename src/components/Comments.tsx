@@ -1,4 +1,4 @@
-import React, {  Dispatch, FormEvent,SetStateAction,useEffect,useRef,useState, MouseEvent, RefObject } from 'react';
+import React, {  Dispatch, FormEvent,SetStateAction,useEffect,useRef,useState, MouseEvent } from 'react';
 import { CSSProperties } from 'styled-components';
 import { Block, MainCommentType, SubCommentType, Page } from '../modules/notion';
 import {  BsThreeDots } from 'react-icons/bs';
@@ -43,6 +43,9 @@ type CommentProps ={
   comment:MainCommentType,
   pageId:string,
   page:Page,
+    /**
+   *block===null 이면 page에 대한 comments, block !==null 이면 block에 대한 comments
+   */
   block:Block|null,
   editBlock :(pageId: string, block: Block) => void ,
   editPage: ((pageId: string, newPage: Page) => void )| null,
@@ -67,7 +70,30 @@ type CommentInputProps={
   userName: string,
   pageId: string,
   page:Page,
-  blockComment:MainCommentType|  null,
+  /**
+   * addOrEdit === add : 새로운 mainComment를 만들거나 mainComment에 새로운 subComment를 추가
+   * addOrEdit === edit : mainComment 나 subComment 내용 수정
+   */
+  addOrEdit:"add"|"edit",
+    /**
+   * <CASE1. addOrEdit === "add"> 
+   * (이때 subComment==null)
+   * 
+    1.mainComment===null && subComment==null 
+    =>새로운 mainComment를 만들어야 하는 상황
+
+    2.mainComment!==null && subComment==null
+    => mainComment에 새로운 subComment를 만들어야하는 상황
+
+   * <CASE2. addOrEdit === "edit" 일때>
+    
+    (이때 mainComment , subComment 둘 중 하나만 null, 수정되는 comment만 값을 가짐) 
+
+    1. mainComment !==null => mainComment를 수정해야하는 상황
+
+    2. subComment !==null => subComment를 수정해야하는 상황 
+   */ 
+  mainComment:MainCommentType|  null,
   subComment:SubCommentType |null,
   editBlock :(pageId: string, block: Block) => void |null,
   editPage: ((pageId: string, newPage: Page) => void )| null,
@@ -78,7 +104,6 @@ type CommentInputProps={
   allComments:MainCommentType[]|null,
   setAllComments: Dispatch<SetStateAction<MainCommentType[] | null>>|null,
   setPopup:Dispatch<SetStateAction<PopupType>>| null,
-  addOrEdit:"add"|"edit",
   setEdit:Dispatch<SetStateAction<boolean>>|null,
   templateHtml: HTMLElement | null
 }
@@ -144,15 +169,21 @@ const closeToolMore=(event:MouseEvent| globalThis.MouseEvent ,setMoreOpen:Dispat
   };
 };
 
-export const CommentInput =({userName, pageId, page ,blockComment, subComment,editBlock,editPage, commentBlock ,allComments, setAllComments,setPopup, addOrEdit,setEdit ,templateHtml}:CommentInputProps)=>{
+export const CommentInput =({userName, pageId, page ,mainComment, subComment,editBlock,editPage, commentBlock ,allComments, setAllComments,setPopup, addOrEdit,setEdit ,templateHtml}:CommentInputProps)=>{
   const editTime =JSON.stringify(Date.now());
   const userNameFirstLetter =userName.substring(0,1).toUpperCase();
+  const [editTargetComment, setEditTargetComment]=useState<MainCommentType|SubCommentType|null>(null) ;
+  const reply ="Reply..." ;
+  const changing =editTargetComment?.content;
+  const makingMain ="Add a comment";
+  type situationType =typeof reply| typeof changing| typeof makingMain;
+  const [placeHolder ,setPlaceHolder]=useState<situationType>(makingMain);
   const [submitStyle,setSubmitStyle] =useState<CSSProperties>({
     fill:"#a3a3a2;",
     border:"none"
   });
   const [text, setText]=useState<string>("");
-  const [editTargetComment, setEditTargetComment]=useState<MainCommentType|SubCommentType|null>(null) ;
+  
   const updateBlock =(blockComments:MainCommentType[])=>{
     if(commentBlock !==null){
       const editedBlock :Block ={
@@ -163,16 +194,23 @@ export const CommentInput =({userName, pageId, page ,blockComment, subComment,ed
       setAllComments !==null && setAllComments(blockComments);
     }
   };
-  const findBlockCommentIndex =(blockComments:MainCommentType[] , blockComment:MainCommentType):{blockComments:MainCommentType[],
-    index:number}=>{
-        const comments =[...blockComments];
-        const commentsId= blockComments.map((comment:MainCommentType)=> comment.id);
-        const index= commentsId.indexOf(blockComment.id);
-        return {
-          blockComments:comments,
-          index:index
-        }
-    }
+  const findMainCommentIndex =(comments:MainCommentType[] ,mainComment:MainCommentType)=>{
+    const commentsId = comments.map((m:MainCommentType)=> m.id);
+    const mainCommentIndex =commentsId.indexOf(mainComment.id);
+    return mainCommentIndex
+  };
+  const findMainComment =():{mainComment:MainCommentType, mainCommentIndex:number
+  }=>{
+  const sub =subComment as SubCommentType;
+  const comments =[...allComments as MainCommentType[]];
+  const mainComment =comments.filter((m:MainCommentType)=> m.subCommentsId?.includes(sub.id))[0];
+  const mainCommentIndex= findMainCommentIndex(comments, mainComment);
+  return {
+    mainComment:mainComment,
+    mainCommentIndex:mainCommentIndex
+  }
+    };
+  
   const onInputText=(event:FormEvent<HTMLInputElement>)=>{
     const target =event?.currentTarget ; 
     const value =target.value;
@@ -189,9 +227,9 @@ export const CommentInput =({userName, pageId, page ,blockComment, subComment,ed
       }) ;
     }
   };
-  const addNewComment =()=>{
+  const addMainComment =()=>{
     if(commentBlock !==null){
-      const newId = `blockComment_${editTime}`;
+      const newId = `main_${editTime}`;
       const newBlockComment :MainCommentType ={
         id:newId,
         userName: userName,
@@ -202,30 +240,30 @@ export const CommentInput =({userName, pageId, page ,blockComment, subComment,ed
         subCommentsId:null,
         type:"open"
       };
-      
       const newBlockComments  = allComments ===null? [newBlockComment] : allComments.concat(newBlockComment);
       updateBlock(newBlockComments);
     }
   };
 
   const addSubComment =()=>{
-    if(commentBlock!==null && allComments!==null && blockComment !==null){
-      const {blockComments, index}=findBlockCommentIndex(allComments, blockComment);
+    if(commentBlock!==null && allComments!==null && mainComment!==null){
+      const comments =[...allComments];
+      const mainCommentIndex= findMainCommentIndex(comments, mainComment);
       const newSubComment:SubCommentType ={
-        id :`subComment_${editTime}`,
+        id :`sub_${editTime}`,
         userName :userName,
         content: text,
         editTime:editTime,
         createTime:editTime
       };
-      const newBlockComment:MainCommentType ={
-        ...blockComment,
-        subComments: blockComment.subComments ==null? [newSubComment]: blockComment.subComments.concat(newSubComment),
-        subCommentsId:blockComment.subCommentsId ==null? [newSubComment.id]: blockComment.subCommentsId.concat(newSubComment.id),
+      const editedMainComment:MainCommentType ={
+        ...mainComment,
+        subComments: mainComment.subComments ==null? [newSubComment]: mainComment.subComments.concat(newSubComment),
+        subCommentsId:mainComment.subCommentsId ==null? [newSubComment.id]: mainComment.subCommentsId.concat(newSubComment.id),
         editTime:editTime
       };
-      blockComments.splice(index, 1 ,newBlockComment);
-      updateBlock(blockComments);
+      comments.splice(mainCommentIndex, 1 ,editedMainComment);
+      updateBlock(comments);
     }
   };
   const updatePageComment =(pageComments:MainCommentType[]|null)=>{
@@ -244,7 +282,7 @@ export const CommentInput =({userName, pageId, page ,blockComment, subComment,ed
       } 
     }
   } ;
-  const addPageComment =(page:Page)=>{
+  const addPageMainComment =()=>{
     const newComment:MainCommentType ={
       id: `pageComment_${editTime}`,
       userName: userName,
@@ -258,29 +296,26 @@ export const CommentInput =({userName, pageId, page ,blockComment, subComment,ed
     const newPageComments:MainCommentType[]|null = page.header.comments ==null? [newComment] : page.header.comments.concat(newComment);
     updatePageComment(newPageComments);
   };
-  function findPageCommentIndex( pageComment:MainCommentType){
-    const pageComments =[...allComments as MainCommentType[]];
-    const commentsId = pageComments.map((c:MainCommentType)=>c.id);
-    const pageCommentIndex = commentsId.indexOf(pageComment.id);
-    return {pageCommentIndex:pageCommentIndex , pageComments:pageComments}
-  };
-  const addPageSubComment=(page:Page , pageComment:MainCommentType )=>{
-    const newSubComment :SubCommentType ={
-      id: `subComment_${editTime}`,
-      userName: userName,
-      content: text,
-      editTime: editTime,
-      createTime: editTime,
-    };
+  const addPageSubComment=()=>{
+    if(allComments!==null && mainComment!==null){
+      const comments =[...allComments];
+      const mainCommentIndex=findMainCommentIndex(comments, mainComment);
+      const newSubComment :SubCommentType ={
+        id: `subComment_${editTime}`,
+        userName: userName,
+        content: text,
+        editTime: editTime,
+        createTime: editTime,
+      };
+      const editedMainComment:MainCommentType ={
+        ...mainComment,
+        subComments: mainComment.subComments==null? [newSubComment]: mainComment.subComments?.concat(newSubComment),
+        subCommentsId: mainComment.subCommentsId ===null ? [newSubComment.id] : mainComment.subCommentsId.concat(newSubComment.id),
+      };
+      comments.splice(mainCommentIndex,1,editedMainComment);
+      updatePageComment(comments);
+    }
 
-    const editedPgeComment:MainCommentType ={
-      ...pageComment,
-      subComments: pageComment.subComments==null? [newSubComment]: pageComment.subComments?.concat(newSubComment),
-      subCommentsId: pageComment.subCommentsId ===null ? [newSubComment.id] : pageComment.subCommentsId.concat(newSubComment.id),
-    };
-    const {pageCommentIndex, pageComments}= findPageCommentIndex(pageComment);
-    pageComments.splice(pageCommentIndex,1,editedPgeComment);
-    updatePageComment(pageComments);
   };
   const recoveryInputAfterSubmit=()=>{
     setText("");
@@ -289,82 +324,81 @@ export const CommentInput =({userName, pageId, page ,blockComment, subComment,ed
     setEditTargetComment(null);
     sessionStorage.removeItem("editComment");
   };
+
   const makeNewComment =(event:MouseEvent)=>{
     event.preventDefault();
     if(commentBlock !==null){
-      blockComment ==null?
-      addNewComment():
+      mainComment ==null?
+      addMainComment():
       addSubComment();
     }else{
-      blockComment ==null ?
-      addPageComment(page):
-      addPageSubComment(page, blockComment);
+      mainComment ==null ?
+      addPageMainComment():
+      addPageSubComment();
     };
     recoveryInputAfterSubmit();
   };
 
-  const editBlockComment =()=>{
-    console.log("editblockcomment")
-    if(commentBlock !== null && allComments !==null && blockComment !==null){
-      const {blockComments, index}= findBlockCommentIndex(allComments , blockComment);
+  const editMainComment =()=>{
+    if(commentBlock !== null && allComments !==null && mainComment!==null){
+      const comments =[...allComments];
+      const mainCommentIds = comments.map((m:MainCommentType)=> m.id);
+      const mainCommentIndex = mainCommentIds.indexOf(mainComment.id);
       const editedBlockComment :MainCommentType = {
-        ...blockComment,
+        ...mainComment,
         content:text ,
         editTime:editTime
       };
-      blockComments.splice(index, 1, editedBlockComment);
-      updateBlock(blockComments);
+      comments.splice(mainCommentIndex, 1, editedBlockComment);
+      updateBlock(comments);
     }
   };
+
   const editSubComment =()=>{
-    console.log("editsubcomment")
-    if(commentBlock !==null && allComments !==null && blockComment !==null  &&blockComment.subComments !==null && blockComment.subCommentsId!==null  ){
-      const {blockComments, index}= findBlockCommentIndex(allComments , blockComment);
-      const subComment= editTargetComment as SubCommentType ; 
-      const subIndex= blockComment.subCommentsId.indexOf(subComment.id);
+    if(commentBlock !==null && allComments !==null &&  subComment !== null){
+      const comments =[...allComments];
+      const {mainComment, mainCommentIndex} =findMainComment();
+      const subIndex= mainComment.subCommentsId?.indexOf(subComment.id) as number;
       const editedSubComment :SubCommentType ={
         ...subComment,
         content:text ,
         editTime:editTime
       };
-      blockComment.subComments?.splice(subIndex, 1,editedSubComment);
-      blockComments.splice(index, 1, blockComment);
-      updateBlock(blockComments);
+      mainComment.subComments?.splice(subIndex, 1,editedSubComment);
+      comments.splice(mainCommentIndex,1,mainComment);
+      updateBlock(comments);
     }
   }; 
 
-  const editPageComment =(page:Page)=>{
-    if(allComments !==null){
-      const pageComment  = editTargetComment as MainCommentType
-      const {pageCommentIndex, pageComments}=findPageCommentIndex( pageComment);
-
-      const editedPageComment:MainCommentType ={
-        ...pageComment,
+  const editPageComment =()=>{
+    if(allComments !==null && mainComment!==null){
+      const comments =[...allComments];
+      const mainCommentsId =allComments.map((m:MainCommentType)=> m.id);
+      const mainCommentIndex= mainCommentsId.indexOf(mainComment.id);
+      const editedMainComment:MainCommentType ={
+        ...mainComment,
         content:text ,
         editTime:editTime
       };
-      pageComments.splice(pageCommentIndex,1, editedPageComment);
-      updatePageComment(pageComments);
+      comments.splice(mainCommentIndex,1, editedMainComment);
+      updatePageComment(comments);
     }
   };
 
-  const editPageSubComment=(page:Page)=>{
-    if(allComments !==null && editTargetComment!==null){
-      const subPageComment =editTargetComment as SubCommentType;
-      const pageComments =[...allComments];
-      const pageCommentsId =pageComments.map((c:MainCommentType)=> c.id);
-      const pageComment = pageComments.filter((c:MainCommentType)=> c.subCommentsId?.includes(subPageComment.id))[0];
-      const pageCommentIndex =pageCommentsId.indexOf(pageComment.id);
-      const subIndex= pageComment.subCommentsId?.indexOf(editTargetComment.id);
+  const editPageSubComment=()=>{
+    if(allComments !==null && subComment!==null){
+      const comments =[...allComments];
+      const {mainComment, mainCommentIndex}= findMainComment();
+      const subIndex= mainComment.subCommentsId?.indexOf(subComment.id);
       if(subIndex !==undefined){
         const editedSubComment:SubCommentType ={
-          ...subPageComment,
+          ...subComment,
           content:text ,
           editTime:editTime
         };
-        pageComment.subComments?.splice(subIndex, 1, editedSubComment);
-        pageComments.splice(pageCommentIndex,1,pageComment);
-        updatePageComment(pageComments);
+        mainComment.subComments?.splice(subIndex, 1, editedSubComment);
+        comments.splice(mainCommentIndex,1,mainComment);
+        updatePageComment(comments);
       }
     }
   };
@@ -372,15 +406,15 @@ export const CommentInput =({userName, pageId, page ,blockComment, subComment,ed
     event.preventDefault();
     console.log("click editcomment");
     if(commentBlock !==null){
-      editTargetComment?.id === blockComment?.id?
-      editBlockComment():
+      mainComment !==null ?
+      editMainComment():
       editSubComment();
 
     }else{
-      editTargetComment?.id === blockComment?.id ? 
-      editPageComment(page)
+      mainComment!== null ? 
+      editPageComment()
       :
-      editPageSubComment(page);
+      editPageSubComment();
     };
     recoveryInputAfterSubmit();
   };
@@ -398,12 +432,29 @@ export const CommentInput =({userName, pageId, page ,blockComment, subComment,ed
     })
   };
   useEffect(()=>{
-    if(addOrEdit==="edit"){
-      subComment !==null ?
-        setEditTargetComment(subComment):
-        setEditTargetComment(blockComment)
-    };
-  },[blockComment, subComment, addOrEdit])
+    switch (addOrEdit) {
+      case "add":
+        if(mainComment!==null){
+          //add new subComment to mainComment
+          setPlaceHolder(reply);
+        }else{
+          //make new mainComment
+          setPlaceHolder(makingMain)
+        }
+        break;
+      case "edit":
+        if(subComment!==null){
+          setEditTargetComment(subComment);
+          setPlaceHolder(subComment.content);
+        }else{
+          setEditTargetComment(mainComment);
+          setPlaceHolder(mainComment?.content)
+        }
+        break;
+      default:
+        break;
+    }
+  },[mainComment, subComment, addOrEdit])
   return(
     <div 
       className={addOrEdit==="edit" ? "commentInput editComment" : "commentInput" }
@@ -419,15 +470,7 @@ export const CommentInput =({userName, pageId, page ,blockComment, subComment,ed
       >
         <input
           type="text"
-          placeholder={
-            (addOrEdit==="add")?
-            (blockComment==null?
-            "Add a comment"
-            :
-            "Reply.....")
-            :
-            editTargetComment?.content
-          }
+          placeholder={placeHolder}
           className="commentText"
           name="comment"
           onInput={onInputText}
@@ -808,7 +851,7 @@ const CommentBlock =({comment ,mainComment ,block ,page ,pageId, userName,editBl
           userName={userName}
           pageId={pageId}
           page={page}
-          blockComment={!mainComment? null: comment as MainCommentType}
+          mainComment={!mainComment? null: comment as MainCommentType}
           subComment={!mainComment?  comment as SubCommentType : null}
           editBlock={editBlock}
           editPage={editPage}
@@ -887,7 +930,7 @@ const Comment =({userName,comment, block,page, pageId, editBlock ,editPage ,allC
         pageId={pageId}
         editBlock={editBlock}
         editPage={editPage}
-        blockComment={comment}
+        mainComment={comment}
         subComment={null}
         commentBlock={block}
         allComments={allComments}
@@ -1002,14 +1045,16 @@ const Comments =({pageId,block,page, userName ,editBlock ,editPage  ,select ,dis
   //   }
   // };
   useEffect(()=>{
+    console.log("update block, page ")
     if(block?.comments !==undefined && block?.comments !==null){
       setAllComments(block.comments)
     }else{
       setAllComments(pageComments)
     }
-  },[block?.comments, pageComments]);
+  },[block, page]);
 
   useEffect(()=>{
+    console.log("update all comments," ,allComments);
     if(allComments !==null){
     updateOpenAndResolveComments(allComments)
     }else{
