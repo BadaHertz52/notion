@@ -13,7 +13,7 @@ type TemplatesProps = Template_Frame_SAME_Props &{
   setRoutePage:Dispatch<SetStateAction<Page|null>>,
   setOpenTemplates: Dispatch<SetStateAction<boolean>>
 };
-const Templates =({ templatesId,userName, pagesId, pages, firstlist ,recentPagesId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage , addTemplate,cancleEditTemplate, deleteTemplate, setRoutePage ,setTargetPageId,commentBlock,openComment , openTemplates ,setOpenTemplates ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit,setDiscardEdit, fontStyle }:TemplatesProps)=>{
+const Templates =({ templatesId,userName, pagesId, pages, firstlist ,recentPagesId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage , addTemplate,cancleEditTemplate, deleteTemplate, setRoutePage ,setTargetPageId,commentBlock,openComment , openTemplates ,setOpenTemplates ,setOpenComment , setCommentBlock ,showAllComments ,smallText , fullWidth  ,discardEdit,setDiscardEdit, fontStyle }:TemplatesProps)=>{
   const templates = templatesId !==null ? templatesId.map((id:string)=> findPage(pagesId, pages, id))  :null;
   const [template, setTemplate]= useState<Page|null>(templates==null? null : templates[0]);
   const [openEditAlert, setOpenEditAlert]=useState<boolean>(false);
@@ -31,6 +31,7 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist ,recentPages
       const isInInner = isInX&& isInY;
       if(!isInInner){
         if(template!==null){
+          // 수정이전의 버전인 originTemplate이 있으면, 수정된 버전으로 바꿀 것인지 아닌지를 묻는 창이 뜨고, originTemplate이 없다면 templates 창을 닫음
           const item =sessionStorage.getItem('originTemplate');
             item ===null? 
             setOpenTemplates(false): 
@@ -187,6 +188,7 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist ,recentPages
               setRoutePage={setRoutePage}
               setOpenComment={setOpenComment}
               setCommentBlock ={setCommentBlock}
+              showAllComments={showAllComments}
               smallText={smallText}
               fullWidth={fullWidth}
               discardEdit={discardEdit}

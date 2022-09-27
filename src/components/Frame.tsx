@@ -53,6 +53,7 @@ export type Template_Frame_SAME_Props ={
   openTemplates:boolean,
   setOpenTemplates: React.Dispatch<React.SetStateAction<boolean>>
   setCommentBlock: Dispatch<SetStateAction<Block | null>>,
+  showAllComments:boolean,
   smallText: boolean, 
   fullWidth: boolean, 
   discardEdit:boolean,
@@ -137,7 +138,8 @@ const MoveTargetBlock=({ page, block , editBlock, addBlock,changeToSub ,raiseBlo
   )
 }
 
-const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,commentBlock,openComment, setRoutePage ,setTargetPageId ,setOpenComment , setCommentBlock ,smallText , fullWidth  ,discardEdit,setDiscardEdit , openTemplates,  setOpenTemplates, fontStyle}:FrameProps)=>{
+const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,commentBlock,openComment, setRoutePage ,setTargetPageId ,setOpenComment , setCommentBlock ,
+  showAllComments ,smallText , fullWidth  ,discardEdit,setDiscardEdit , openTemplates,  setOpenTemplates, fontStyle}:FrameProps)=>{
   const innerWidth =window.innerWidth; 
   const inner =document.getElementById("inner");
   const frameHtml = openTemplates?document.querySelector("#template")?.firstElementChild as HTMLElement |null: document.querySelector('.frame') as HTMLElement|null;
@@ -788,6 +790,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
                 discardEdit={discardEdit}
                 setDiscardEdit={setDiscardEdit}
                 select={null}
+                showAllComments={showAllComments}
                 />
                 )
               :
@@ -796,7 +799,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
                   page={page}
                   pageId={page.id}
                   userName={userName}
-                  blockComment={null}
+                  mainComment={null}
                   subComment={null}
                   editBlock={editBlock}
                   editPage={editPage}
@@ -981,7 +984,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
                 userName={userName}
                 editBlock={editBlock}
                 editPage={editPage}
-                blockComment={null}
+                mainComment={null}
                 subComment={null}
                 commentBlock={commentBlock}
                 allComments={commentBlock.comments}
@@ -1022,6 +1025,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           select={null}
           discardEdit={discardEdit}
           setDiscardEdit={setDiscardEdit}
+          showAllComments={showAllComments}
         />  
       </div>            
       }

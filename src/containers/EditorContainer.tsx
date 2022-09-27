@@ -181,6 +181,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,rece
         setRoutePage={setRoutePage}
         setOpenComment={setOpenComment}
         setCommentBlock ={setCommentBlock}
+        showAllComments={showAllComments}
         smallText={smallText}
         fullWidth={fullWidth}
         discardEdit={discardEdit}

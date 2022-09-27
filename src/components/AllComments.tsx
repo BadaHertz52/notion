@@ -126,6 +126,7 @@ const AllComments=({page, userName, editBlock, showAllComments, setShowAllCommen
             select={select}
             discardEdit={discardEdit}
             setDiscardEdit={setDiscardEdit}
+            showAllComments={showAllComments}
           />
         )
       }

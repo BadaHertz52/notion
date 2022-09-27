@@ -38,6 +38,7 @@ type CommentProps ={
   discardEdit:boolean,
   setDiscardEdit:Dispatch<SetStateAction<boolean>>,
   templateHtml: HTMLElement | null
+  showAllComments:boolean,
 };
 
 type CommentInputProps={
@@ -77,6 +78,7 @@ type CommentBlockProps ={
   discardEdit:boolean,
   setDiscardEdit:Dispatch<SetStateAction<boolean>>,
   templateHtml: HTMLElement | null
+  showAllComments:boolean,
 };
 
 type CommentToolProps ={
@@ -92,6 +94,7 @@ type CommentToolProps ={
   setMoreOpen:Dispatch<SetStateAction<boolean>>,
   setToolMoreStyle:Dispatch<SetStateAction<CSSProperties | undefined>>,
   templateHtml: HTMLElement | null
+  showAllComments:boolean,
 };
 
 type ResolveBtnProps ={
@@ -451,7 +454,6 @@ const ToolMore =({pageId, block,page, editBlock ,editPage, allComments, setAllCo
   const onClickDeleteComment =()=>{
     page !==null&& setTemplateItem(templateHtml,page);
     setMoreOpen(false);
-    console.log("comment", comment);
 
     const deleteBlockComment =( )=>{
       if(comment !==null && block !==null && allComments !==null){
@@ -579,8 +581,8 @@ const ToolMore =({pageId, block,page, editBlock ,editPage, allComments, setAllCo
   )
 };
 
-const CommentTool =({mainComment , comment,block, page ,pageId ,editBlock ,editPage  ,setAllComments, moreOpen ,setMoreOpen ,setToolMoreStyle, templateHtml}:CommentToolProps)=>{
-  const allCommentsHtml =document.getElementById("allComments");
+const CommentTool =({mainComment , comment,block, page ,pageId ,editBlock ,editPage  ,setAllComments, moreOpen ,setMoreOpen ,setToolMoreStyle, templateHtml ,showAllComments}:CommentToolProps)=>{
+
   const commentToolRef= useRef<HTMLDivElement>(null);
   const ResolveBtn =({comment}:ResolveBtnProps)=>{
     const changeToResolve =()=>{
@@ -639,36 +641,49 @@ const CommentTool =({mainComment , comment,block, page ,pageId ,editBlock ,editP
       </button>
     )
   };
-  const setStyleInNotAllComments=(html:HTMLElement |null, targetDomRect:DOMRect)=>{
-    const htmlDomRect =html?.getClientRects()[0];
-    if(htmlDomRect!==undefined){
+  /**
+   * allComments가 아닌, page header나 block의 comments에서 ToolMore component의 위치를 지정하는 함수 
+   * @param commentToolDomRect moreToolBtn을 누른 element(class="commentTool")에 대한 domeRect
+   * @param comments  moreToolBtn을 누른 element(class="commentTool")이 위치한 element(class="comments")
+   */
+  const setStyleInNotAllComments=(commentToolDomRect:DOMRect|undefined, comments:HTMLElement|null)=>{
+    const commentsDomRect =comments?.getClientRects()[0]; 
+    if(commentToolDomRect!==undefined && commentsDomRect !==undefined){
+      console.log("<domRect>","tool:",commentToolDomRect,"comments:",commentsDomRect)
       const style:CSSProperties ={
         position:"absolute" ,
-        top: (targetDomRect.top- htmlDomRect.top) ,
-        right:htmlDomRect.right - targetDomRect.left + 5
+        top: (commentToolDomRect.top -commentsDomRect.top) + commentToolDomRect.height +5 ,
+        right: commentsDomRect.right- commentToolDomRect.right
       };
       setToolMoreStyle(style);
     }else{
-      console.log("Can't find comments")
+      console.log("Error:",
+      "can find commentTool?",commentToolDomRect!==undefined,"///" , 
+      "can find comments?",
+      commentsDomRect!==undefined);
     }
   }
   const openToolMore =(event: React.MouseEvent<HTMLButtonElement>)=>{
     setMoreOpen(true);
     const target = event.currentTarget ;
     const targetDomRect = target.getClientRects()[0] as DOMRect;
-    if(allCommentsHtml==null){
-      if(block===null){
+    const commentToolDomRect =commentToolRef.current?.getClientRects()[0];
+    const blockCommentsHtml =document.getElementById("block_comments");  
+    //frame 에서의 comments
+    if(!showAllComments){
+      if(blockCommentsHtml===null){
+        //pageComment
         const templateHtml =document.getElementById("template");
         const pageComment =templateHtml==null? document.querySelector(".pageComment") as HTMLElement|null: templateHtml.querySelector(".pageComment") as HTMLElement|null;
-        setStyleInNotAllComments(pageComment ,targetDomRect);
+        setStyleInNotAllComments(commentToolDomRect,pageComment);
       }else{
-        const blockCommentsHtml =document.getElementById("block_comments");  
-        setStyleInNotAllComments(blockCommentsHtml ,targetDomRect);
+        //blockComment
+        setStyleInNotAllComments(commentToolDomRect, blockCommentsHtml);
+
       }
     };
-
-    if(allCommentsHtml!==null  && commentToolRef.current!==null){
-      const commentToolDomRect =commentToolRef.current.getClientRects()[0];
+    //AllComments에서의 comments
+    if(showAllComments  &&commentToolDomRect!== undefined){
       const top = targetDomRect.bottom + 5;
       const right =window.innerWidth - commentToolDomRect.right;
       const style:CSSProperties={
@@ -703,7 +718,7 @@ const CommentTool =({mainComment , comment,block, page ,pageId ,editBlock ,editP
   )
 };
 
-const CommentBlock =({comment ,mainComment ,block ,page ,pageId, userName,editBlock ,editPage,setPopup ,allComments,setAllComments , moreOpen ,setMoreOpen ,setToolMoreStyle  ,discardEdit,setDiscardEdit, templateHtml}:CommentBlockProps)=>{
+const CommentBlock =({comment ,mainComment ,block ,page ,pageId, userName,editBlock ,editPage,setPopup ,allComments,setAllComments , moreOpen ,setMoreOpen ,setToolMoreStyle  ,discardEdit,setDiscardEdit, templateHtml , showAllComments}:CommentBlockProps)=>{
   const firstLetter = comment.userName.substring(0,1).toUpperCase();
   const [edit, setEdit]=useState<boolean>(false);
   const editCommentItem= sessionStorage.getItem("editComment");
@@ -751,6 +766,7 @@ const CommentBlock =({comment ,mainComment ,block ,page ,pageId, userName,editBl
         setMoreOpen={setMoreOpen}
         setToolMoreStyle={setToolMoreStyle}
         templateHtml={templateHtml}
+        showAllComments={showAllComments}
       />
     </section>
     {mainComment &&
@@ -790,7 +806,7 @@ const CommentBlock =({comment ,mainComment ,block ,page ,pageId, userName,editBl
     </div>
   )
 }
-const Comment =({userName,comment, block,page, pageId, editBlock ,editPage ,allComments ,setAllComments ,moreOpen ,setMoreOpen ,setToolMoreStyle ,discardEdit, setDiscardEdit,templateHtml}:CommentProps)=>{
+const Comment =({userName,comment, block,page, pageId, editBlock ,editPage ,allComments ,setAllComments ,moreOpen ,setMoreOpen ,setToolMoreStyle ,discardEdit, setDiscardEdit,templateHtml ,showAllComments}:CommentProps)=>{
 
   return(
     <div className='comment'>
@@ -813,6 +829,7 @@ const Comment =({userName,comment, block,page, pageId, editBlock ,editPage ,allC
           discardEdit={discardEdit}
           setDiscardEdit={setDiscardEdit}
           templateHtml={templateHtml}
+          showAllComments={showAllComments}
         />
       </div>
       {comment.subComments !==null &&
@@ -825,7 +842,7 @@ const Comment =({userName,comment, block,page, pageId, editBlock ,editPage ,allC
           mainComment={false}
           page={page}
           pageId={pageId}
-          block={page !==null? null: block}
+          block= {block}
           editBlock={editBlock}
           editPage={editPage}
           allComments={allComments}
@@ -837,6 +854,7 @@ const Comment =({userName,comment, block,page, pageId, editBlock ,editPage ,allC
           discardEdit={discardEdit}
           setDiscardEdit={setDiscardEdit}
           templateHtml={templateHtml}
+          showAllComments={showAllComments}
         />)
         }
       </div>
@@ -860,7 +878,7 @@ const Comment =({userName,comment, block,page, pageId, editBlock ,editPage ,allC
     </div>
   )
 };
-const Comments =({pageId,block,page, userName ,editBlock ,editPage  ,select ,discardEdit ,setDiscardEdit}:CommentsProps)=>{
+const Comments =({pageId,block,page, userName ,editBlock ,editPage  ,select ,discardEdit ,setDiscardEdit ,showAllComments}:CommentsProps)=>{
   const inner =document.getElementById("inner");
   const pageComments =page.header.comments;
   const [allComments, setAllComments]=useState<MainCommentType[]|null>(null);
@@ -1055,6 +1073,7 @@ const Comments =({pageId,block,page, userName ,editBlock ,editPage  ,select ,dis
               discardEdit={discardEdit}
               setDiscardEdit={setDiscardEdit}
               templateHtml={templateHtml}
+              showAllComments={showAllComments}
             />
           )
           }

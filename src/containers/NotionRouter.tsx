@@ -448,6 +448,7 @@ const NotionRouter =()=>{
             setRoutePage={setRoutePage}
             setOpenComment={setOpenComment}
             setCommentBlock ={setCommentBlock}
+            showAllComments={showAllComments}
             smallText={smallText}
             fullWidth={fullWidth}
             discardEdit={discard_edit}
@@ -487,6 +488,7 @@ const NotionRouter =()=>{
               openTemplates={openTemplates}
               setOpenTemplates={setOpenTemplates}
               setCommentBlock ={setCommentBlock}
+              showAllComments={showAllComments}
               smallText={smallText}
               fullWidth={fullWidth}
               discardEdit={discard_edit}
