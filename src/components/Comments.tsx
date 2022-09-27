@@ -12,15 +12,31 @@ import { setTemplateItem } from './BlockComponent';
 const open="open";
 const resolve="resolve";
 type CommentsProps={
+  /**
+   *block===null 이면 page에 대한 comments, block !==null 이면 block에 대한 comments
+   */
   block:Block | null,
   page:Page,
   pageId: string,
   userName:string,
   editBlock :(pageId: string, block: Block) => void | null,
   editPage: ((pageId: string, newPage: Page) => void )| null,
+  /**
+   * 사용자가 보고 싶어하는 comment의 type  유형 , select===null 이면 모든 comments를 보여주고 null 이 기본값
+   */
   select : null | typeof open | typeof resolve,
+  /**
+   * comment를 수정하는 중, 사용자가 수정사항을 삭제하려고 하는 지를 판단할 수 있는 property 
+   */
   discardEdit:boolean,
+  /**
+   * comment의 수정사항을 삭제한 후, discardEdit을 원래의 기본값으로 돌리는 데 사용
+   */
   setDiscardEdit:Dispatch<SetStateAction<boolean>>,
+  /**
+   *showAllComments === true이면 AllCommmets안의 comments, showAllComments이면 frame안에 있는 page, block에 대한 comments로, ToolMore의 위치를 지정하는데 사용함
+   */
+  showAllComments:boolean,
 };
 type CommentProps ={
   userName: string,
@@ -32,12 +48,18 @@ type CommentProps ={
   editPage: ((pageId: string, newPage: Page) => void )| null,
   allComments:MainCommentType[]|null,
   setAllComments: Dispatch<SetStateAction<MainCommentType[] | null>>|null,
+  /**
+   * ToolMore를 열것인지 에 대한 값
+   */
   moreOpen:boolean,
   setMoreOpen:Dispatch<SetStateAction<boolean>>,
+  /**
+   * ToolMore의 위치를 지정함
+   */
   setToolMoreStyle:Dispatch<SetStateAction<CSSProperties | undefined>>,
   discardEdit:boolean,
   setDiscardEdit:Dispatch<SetStateAction<boolean>>,
-  templateHtml: HTMLElement | null
+  templateHtml: HTMLElement | null,
   showAllComments:boolean,
 };
 
@@ -77,7 +99,7 @@ type CommentBlockProps ={
   setPopup:Dispatch<SetStateAction<PopupType>>| null,
   discardEdit:boolean,
   setDiscardEdit:Dispatch<SetStateAction<boolean>>,
-  templateHtml: HTMLElement | null
+  templateHtml: HTMLElement | null,
   showAllComments:boolean,
 };
 
@@ -93,7 +115,7 @@ type CommentToolProps ={
   moreOpen:boolean,
   setMoreOpen:Dispatch<SetStateAction<boolean>>,
   setToolMoreStyle:Dispatch<SetStateAction<CSSProperties | undefined>>,
-  templateHtml: HTMLElement | null
+  templateHtml: HTMLElement | null,
   showAllComments:boolean,
 };
 
