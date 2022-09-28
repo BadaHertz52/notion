@@ -716,6 +716,7 @@ a:link, a:active, a:visited {
 #block_comments {
   position: absolute;
   z-index: 20;
+  padding-bottom: 0;
   width: 320px;
   display: flex;
   flex-direction: column;
@@ -735,7 +736,7 @@ a:link, a:active, a:visited {
 #block_comments::-webkit-scrollbar-track {
   background: #EDECE9;
 }
-#block_comments .comments {
+#block_comments .comments_comments {
   width: 100%;
   margin: 0;
   padding-bottom: 0;

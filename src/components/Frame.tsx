@@ -250,7 +250,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
     )
   }
   function changeCommentStyle(){
-    if(commentBlock !==null){
+    if(commentBlock !==null && openComment){
       const blockDoc = document.getElementById(`${commentBlock.id}_contents`);
       const editableBlock =document.getElementsByClassName("editableBlock")[0];
       const editableBlockDomRect= editableBlock.getClientRects()[0];
@@ -266,17 +266,21 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
         const bottom = frameDomRect.height - blockDocDomRect.top +10;
         const left =innerWidth >=425? editableBlockDomRect.x - frameDomRect.x : innerWidth * 0.1 ;
         const width =innerWidth>=425? editableBlock.clientWidth - paddingValue : innerWidth*0.8;
-        const style :CSSProperties =overHeight?
-        {
-          bottom:bottom,
+        const basicStyle:CSSProperties ={
+          display:"flex",
           left:left ,
           width:width,
         }
+        const style :CSSProperties =overHeight?
+        {
+          ...basicStyle,
+          bottom:bottom,
+          
+        }
         : 
         {
+          ...basicStyle,
           top: top,
-          left: left ,
-          width:width
         };
         setCommentsStyle(style);
       } 
@@ -692,7 +696,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
     }
   },[commandTargetBlock]);
   
-  window.onresize =changeCommentStyle;
+  //window.onresize =changeCommentStyle;
   useEffect(()=>{
     // stop srcoll when something open
     if(popup.popup ||command.command|| openLoader|| openComment|| moveTargetBlock||selection){
@@ -790,9 +794,13 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
                 userName={userName}
                 editBlock={editBlock}
                 editPage={editPage}
+                frameHtml={frameHtml}
                 discardEdit={discardEdit}
                 setDiscardEdit={setDiscardEdit}
                 select={null}
+                openComment={false}
+                commentsStyle={undefined}
+                setCommentsStyle={null}
                 showAllComments={showAllComments}
                 />
                 )
@@ -1014,10 +1022,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           </div>
       }
       {commentBlock !==null && openComment && commentsStyle!==undefined &&
-      <div 
-        id="block_comments"
-        style={commentsStyle}
-      >
         <Comments
           userName={userName}
           block={commentBlock}
@@ -1025,12 +1029,15 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           page={page}
           editBlock={editBlock}
           editPage={editPage}
+          frameHtml={frameHtml}
+          openComment={openComment}
+          commentsStyle={commentsStyle}
+          setCommentsStyle={setCommentsStyle}
           select={null}
           discardEdit={discardEdit}
           setDiscardEdit={setDiscardEdit}
           showAllComments={showAllComments}
-        />  
-      </div>            
+        />           
       }
       {moveTargetBlock!==null &&
         <MoveTargetBlock

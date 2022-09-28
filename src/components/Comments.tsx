@@ -21,6 +21,10 @@ type CommentsProps={
   userName:string,
   editBlock :(pageId: string, block: Block) => void | null,
   editPage: ((pageId: string, newPage: Page) => void )| null,
+  frameHtml:HTMLElement|null,
+  openComment:boolean,
+  commentsStyle:CSSProperties|undefined,
+  setCommentsStyle:Dispatch<SetStateAction<CSSProperties|undefined>>|null,
   /**
    * 사용자가 보고 싶어하는 comment의 type  유형 , select===null 이면 모든 comments를 보여주고 null 이 기본값
    */
@@ -49,6 +53,7 @@ type CommentProps ={
   block:Block|null,
   editBlock :(pageId: string, block: Block) => void ,
   editPage: ((pageId: string, newPage: Page) => void )| null,
+  frameHtml:HTMLElement|null,
   allComments:MainCommentType[]|null,
   setAllComments: Dispatch<SetStateAction<MainCommentType[] | null>>|null,
   /**
@@ -116,6 +121,7 @@ type CommentBlockProps ={
   userName:string,
   editBlock:(pageId: string, block: Block) => void,
   editPage: ((pageId: string, newPage: Page) => void )| null,
+  frameHtml:HTMLElement|null,
   allComments:MainCommentType[]|null,
   setAllComments: Dispatch<SetStateAction<MainCommentType[] | null>>|null,
   moreOpen:boolean,
@@ -136,6 +142,7 @@ type CommentToolProps ={
   pageId: string,
   editBlock: (pageId: string, block: Block) => void,
   editPage: ((pageId: string, newPage: Page) => void )| null,
+  frameHtml:HTMLElement|null,
   setAllComments: Dispatch<SetStateAction<MainCommentType[] | null>>|null,
   moreOpen:boolean,
   setMoreOpen:Dispatch<SetStateAction<boolean>>,
@@ -646,7 +653,7 @@ const ToolMore =({pageId, block,page, editBlock ,editPage, allComments, setAllCo
   )
 };
 
-const CommentTool =({mainComment , comment,block, page ,pageId ,editBlock ,editPage  ,setAllComments, moreOpen ,setMoreOpen ,setToolMoreStyle, templateHtml ,showAllComments}:CommentToolProps)=>{
+const CommentTool =({mainComment , comment,block, page ,pageId ,editBlock ,editPage ,frameHtml  ,setAllComments, moreOpen ,setMoreOpen ,setToolMoreStyle, templateHtml ,showAllComments}:CommentToolProps)=>{
 
   const commentToolRef= useRef<HTMLDivElement>(null);
   const ResolveBtn =({comment}:ResolveBtnProps)=>{
@@ -706,28 +713,6 @@ const CommentTool =({mainComment , comment,block, page ,pageId ,editBlock ,editP
       </button>
     )
   };
-  /**
-   * allComments가 아닌, page header나 block의 comments에서 ToolMore component의 위치를 지정하는 함수 
-   * @param commentToolDomRect moreToolBtn을 누른 element(class="commentTool")에 대한 domeRect
-   * @param comments  moreToolBtn을 누른 element(class="commentTool")이 위치한 element(class="comments")
-   */
-  const setStyleInNotAllComments=(commentToolDomRect:DOMRect|undefined, comments:HTMLElement|null)=>{
-    const commentsDomRect =comments?.getClientRects()[0]; 
-    if(commentToolDomRect!==undefined && commentsDomRect !==undefined){
-      console.log("<domRect>","tool:",commentToolDomRect,"comments:",commentsDomRect)
-      const style:CSSProperties ={
-        position:"absolute" ,
-        top: (commentToolDomRect.top -commentsDomRect.top) + commentToolDomRect.height +5 ,
-        right: commentsDomRect.right- commentToolDomRect.right
-      };
-      setToolMoreStyle(style);
-    }else{
-      console.log("Error:",
-      "can find commentTool?",commentToolDomRect!==undefined,"///" , 
-      "can find comments?",
-      commentsDomRect!==undefined);
-    }
-  }
   const openToolMore =(event: React.MouseEvent<HTMLButtonElement>)=>{
     setMoreOpen(true);
     const target = event.currentTarget ;
@@ -735,16 +720,33 @@ const CommentTool =({mainComment , comment,block, page ,pageId ,editBlock ,editP
     const commentToolDomRect =commentToolRef.current?.getClientRects()[0];
     const blockCommentsHtml =document.getElementById("block_comments");  
     //frame 에서의 comments
-    if(!showAllComments){
+    if(!showAllComments && commentToolDomRect!==undefined && frameHtml!==null){
       if(blockCommentsHtml===null){
         //pageComment
         const templateHtml =document.getElementById("template");
         const pageComment =templateHtml==null? document.querySelector(".pageComment") as HTMLElement|null: templateHtml.querySelector(".pageComment") as HTMLElement|null;
-        setStyleInNotAllComments(commentToolDomRect,pageComment);
+ 
+        if(pageComment!==null){
+          const pageCommentsDomRect =pageComment?.getClientRects()[0];
+          const style:CSSProperties ={
+            position:"absolute" ,
+            top: (commentToolDomRect.top -pageCommentsDomRect.top) + commentToolDomRect.height +5 ,
+            right: pageCommentsDomRect.right- commentToolDomRect.right
+          };
+          setToolMoreStyle(style)
+        }else{
+          console.log("Error:Can't find pageComment element")
+        }
+;
       }else{
         //blockComment
-        setStyleInNotAllComments(commentToolDomRect, blockCommentsHtml);
-
+        const frameDomRect =frameHtml.getClientRects()[0];
+        const style:CSSProperties ={
+          position:"absolute" ,
+          top: commentToolDomRect.top + commentToolDomRect.height +5  ,
+          right: frameDomRect.width - commentToolDomRect.left -commentToolDomRect.width
+        };
+        setToolMoreStyle(style);
       }
     };
     //AllComments에서의 comments
@@ -783,7 +785,7 @@ const CommentTool =({mainComment , comment,block, page ,pageId ,editBlock ,editP
   )
 };
 
-const CommentBlock =({comment ,mainComment ,block ,page ,pageId, userName,editBlock ,editPage,setPopup ,allComments,setAllComments , moreOpen ,setMoreOpen ,setToolMoreStyle  ,discardEdit,setDiscardEdit, templateHtml , showAllComments}:CommentBlockProps)=>{
+const CommentBlock =({comment ,mainComment ,block ,page ,pageId, userName,editBlock ,editPage,setPopup ,frameHtml,allComments,setAllComments , moreOpen ,setMoreOpen ,setToolMoreStyle  ,discardEdit,setDiscardEdit, templateHtml , showAllComments}:CommentBlockProps)=>{
   const firstLetter = comment.userName.substring(0,1).toUpperCase();
   const [edit, setEdit]=useState<boolean>(false);
   const editCommentItem= sessionStorage.getItem("editComment");
@@ -793,7 +795,6 @@ const CommentBlock =({comment ,mainComment ,block ,page ,pageId, userName,editBl
       if(discardEdit){
         setEdit(false);
         sessionStorage.removeItem("editComment");
-        console.log("remove item");
         setDiscardEdit(false);
     }else{
       comment.id === editCommentItem && setEdit(true);
@@ -826,6 +827,7 @@ const CommentBlock =({comment ,mainComment ,block ,page ,pageId, userName,editBl
         pageId={pageId}
         editBlock={editBlock}
         editPage={editPage}
+        frameHtml={frameHtml}
         setAllComments={setAllComments}
         moreOpen={moreOpen}
         setMoreOpen={setMoreOpen}
@@ -871,7 +873,7 @@ const CommentBlock =({comment ,mainComment ,block ,page ,pageId, userName,editBl
     </div>
   )
 }
-const Comment =({userName,comment, block,page, pageId, editBlock ,editPage ,allComments ,setAllComments ,moreOpen ,setMoreOpen ,setToolMoreStyle ,discardEdit, setDiscardEdit,templateHtml ,showAllComments}:CommentProps)=>{
+const Comment =({userName,comment, block,page, pageId, editBlock ,editPage ,frameHtml,allComments ,setAllComments ,moreOpen ,setMoreOpen ,setToolMoreStyle ,discardEdit, setDiscardEdit,templateHtml ,showAllComments}:CommentProps)=>{
 
   return(
     <div className='comment'>
@@ -885,6 +887,7 @@ const Comment =({userName,comment, block,page, pageId, editBlock ,editPage ,allC
           pageId={pageId}
           editBlock={editBlock}
           editPage={editPage}
+          frameHtml={frameHtml}
           allComments={allComments}
           setAllComments={setAllComments}
           moreOpen={moreOpen}
@@ -910,6 +913,7 @@ const Comment =({userName,comment, block,page, pageId, editBlock ,editPage ,allC
           block= {block}
           editBlock={editBlock}
           editPage={editPage}
+          frameHtml={frameHtml}
           allComments={allComments}
           setAllComments={setAllComments}
           moreOpen={moreOpen}
@@ -943,7 +947,7 @@ const Comment =({userName,comment, block,page, pageId, editBlock ,editPage ,allC
     </div>
   )
 };
-const Comments =({pageId,block,page, userName ,editBlock ,editPage  ,select ,discardEdit ,setDiscardEdit ,showAllComments}:CommentsProps)=>{
+const Comments =({pageId,block,page, userName ,editBlock ,editPage ,frameHtml ,openComment, commentsStyle,setCommentsStyle ,select ,discardEdit ,setDiscardEdit ,showAllComments}:CommentsProps)=>{
   const inner =document.getElementById("inner");
   const pageComments =page.header.comments;
   const [allComments, setAllComments]=useState<MainCommentType[]|null>(null);
@@ -967,39 +971,39 @@ const Comments =({pageId,block,page, userName ,editBlock ,editPage  ,select ,dis
   /**
    *block_comments의 comments의 높이가 일정 수준을 넘어가면 , 스크롤이 가능하도록 클래스를 넣어주는 함수 
    */
-  function addClass (element:HTMLElement, maxHeight:number){
-    if(!element.classList.contains("overHeight")){
-      element.classList.add("overHeight");
-      const top = element.style.top;
-      const left =element.style.left ;
-      const bottom =element.style.bottom;
-      const width =element.style.width;
-      const basic =`left:${left}; width:${width}; max-height:${maxHeight}px; `;
-      if(top===""){
-        element.setAttribute("style", basic.concat( `bottom:${bottom}`))
-      }else{
-        element.setAttribute("style", basic.concat(`top:${top}`))
-    }
-    }
-  };
+  // function addClass (element:HTMLElement, maxHeight:number){
+  //   if(!element.classList.contains("overHeight")){
+  //     element.classList.add("overHeight");
+  //     const top = element.style.top;
+  //     const left =element.style.left ;
+  //     const bottom =element.style.bottom;
+  //     const width =element.style.width;
+  //     const basic =`left:${left}; width:${width}; max-height:${maxHeight}px; `;
+  //     if(top===""){
+  //       element.setAttribute("style", basic.concat( `bottom:${bottom}`))
+  //     }else{
+  //       element.setAttribute("style", basic.concat(`top:${top}`))
+  //   }
+  //   }
+  // };
   /**
    *block_comments의 comments의 높이가 일정 수준으로 작아질 경우 , 스크롤이 가능하도록 클래스를 제거하는 함수 
    */
-  function removeClass(element:HTMLElement){
-    if(element.classList.contains("overHeight")){
-      element.classList.remove("overHeight");
-      const top = element.style.top;
-      const left =element.style.left ;
-      const bottom =element.style.bottom;
-      const width =element.style.width;
-      const basic =`left:${left}; width:${width};  `;
-      if(top===""){
-        element.setAttribute("style", basic.concat(`bottom:${bottom}`))
-      }else{
-        element.setAttribute("style", basic.concat(`top:${top}`))
-      }
-    }
-  };
+  // function removeClass(element:HTMLElement){
+  //   if(element.classList.contains("overHeight")){
+  //     element.classList.remove("overHeight");
+  //     const top = element.style.top;
+  //     const left =element.style.left ;
+  //     const bottom =element.style.bottom;
+  //     const width =element.style.width;
+  //     const basic =`left:${left}; width:${width};  `;
+  //     if(top===""){
+  //       element.setAttribute("style", basic.concat(`bottom:${bottom}`))
+  //     }else{
+  //       element.setAttribute("style", basic.concat(`top:${top}`))
+  //     }
+  //   }
+  // };
   /**
    * #block_comments의 comments의 max-height을 설정해 스크롤 기능을 넣거나 제거하는 함수 
    */
@@ -1050,7 +1054,7 @@ const Comments =({pageId,block,page, userName ,editBlock ,editPage  ,select ,dis
     }else{
       setAllComments(pageComments)
     }
-  },[block, page]);
+  },[block, page, pageComments]);
 
   useEffect(()=>{
     if(allComments !==null){
@@ -1097,8 +1101,10 @@ const Comments =({pageId,block,page, userName ,editBlock ,editPage  ,select ,dis
   return(
     <>
     <div 
+      id={openComment? "block_comments" : undefined}
       className='comments'
       ref = {commentsRef}
+      style={commentsStyle}
     >
       {resolveComments !==null && resolveComments.length>0 && select==null && block !==null &&
         <section className="commentType">
@@ -1130,6 +1136,7 @@ const Comments =({pageId,block,page, userName ,editBlock ,editPage  ,select ,dis
               pageId={pageId}
               editBlock={editBlock}
               editPage={editPage}
+              frameHtml={frameHtml}
               allComments={allComments}
               setAllComments={setAllComments}
               moreOpen={moreOpen}

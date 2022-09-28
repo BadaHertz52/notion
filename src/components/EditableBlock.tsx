@@ -98,8 +98,8 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
   };
   const onClickCommentBtn=(block:Block)=>{
     if(!openComment){
-      setOpenComment(true); 
       setCommentBlock(block);
+      setOpenComment(true);
     }
   };
 
