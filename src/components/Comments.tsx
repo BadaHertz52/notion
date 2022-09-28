@@ -1045,7 +1045,6 @@ const Comments =({pageId,block,page, userName ,editBlock ,editPage  ,select ,dis
   //   }
   // };
   useEffect(()=>{
-    console.log("update block, page ")
     if(block?.comments !==undefined && block?.comments !==null){
       setAllComments(block.comments)
     }else{
@@ -1054,7 +1053,6 @@ const Comments =({pageId,block,page, userName ,editBlock ,editPage  ,select ,dis
   },[block, page]);
 
   useEffect(()=>{
-    console.log("update all comments," ,allComments);
     if(allComments !==null){
     updateOpenAndResolveComments(allComments)
     }else{
