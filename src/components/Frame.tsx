@@ -146,7 +146,8 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   showAllComments ,smallText , fullWidth  ,discardEdit,setDiscardEdit , openTemplates,  setOpenTemplates, fontStyle}:FrameProps)=>{
   const innerWidth =window.innerWidth; 
   const inner =document.getElementById("inner");
-  const frameHtml = openTemplates?document.querySelector("#template")?.firstElementChild as HTMLElement |null: document.querySelector('.frame') as HTMLElement|null;
+  const frameRef= useRef<HTMLDivElement>(null);
+  const frameHtml =frameRef.current;
   const [templateHtml,setTemplateHtml]=useState<HTMLElement|null>(null);
   const editTime =JSON.stringify(Date.now());
   const [firstBlocksId, setFirstBlocksId]=useState<string[]|null>(page.firstBlocksId);
@@ -174,8 +175,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   const moveBlock =useRef<boolean>(false);
   const pointBlockToMoveBlock =useRef<Block|null>(null);
   const [selection, setSelection]=useState<selectionType|null>(null);
-  const frameRef= useRef<HTMLDivElement>(null);
-  const blockCommentsHeight =document.getElementById("block_comments")?.scrollHeight;
   const closePopup=(event:globalThis.MouseEvent)=>{
     if(popup.popup){
       const popupMenu =document.getElementById("popupMenu");
