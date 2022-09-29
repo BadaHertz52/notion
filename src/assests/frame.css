@@ -729,6 +729,7 @@ a:link, a:active, a:visited {
   z-index: 10;
   border-radius: 8px;
   box-shadow: 0px 0px 23px -5px #ababab;
+  overflow-y: scroll;
 }
 #block_comments::-webkit-scrollbar-thumb {
   background: #D3D1CB;
@@ -740,10 +741,6 @@ a:link, a:active, a:visited {
   width: 100%;
   margin: 0;
   padding-bottom: 0;
-}
-
-#block_comments.overHeight {
-  overflow-y: scroll;
 }
 
 .pageComment {

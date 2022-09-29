@@ -163,7 +163,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   const [loaderTargetBlock, setLoaderTargetBlock]=useState<Block|null>(null);
   const [iconStyle, setIconStyle]=useState<CSSProperties|undefined>(undefined);
   const [commandBlockPositon, setCBPositon]=useState<CSSProperties>();
-  const [commentsStyle, setCommentsStyle]= useState<CSSProperties|undefined>(undefined);
   const [menuOpen, setOpenMenu]= useState<boolean>(false);
   const [commandTargetBlock, setCommandTargetBlock]=useState<Block|null>(null);
   const [popup, setPopup]=useState<PopupType>({
@@ -175,56 +174,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   const moveBlock =useRef<boolean>(false);
   const pointBlockToMoveBlock =useRef<Block|null>(null);
   const [selection, setSelection]=useState<selectionType|null>(null);
-  const closePopup=(event:globalThis.MouseEvent)=>{
-    if(popup.popup){
-      const popupMenu =document.getElementById("popupMenu");
-      const popupMenuDomRect= popupMenu?.getClientRects()[0];
-      const isInPopupMenu =detectRange(event, popupMenuDomRect);
-      !isInPopupMenu && setPopup({
-        popup:false,
-        what:null
-      });
-    };
-  };
-  const closeComments=(event:globalThis.MouseEvent)=>{
-    if(openComment && commentBlock!==null){
-      const commentsDoc= document.getElementById("block_comments") ;
-      const commentBtn =document.getElementById(`${commentBlock.id}_contents`);
-      if(commentsDoc !==null && commentBtn!==null){
-        const commentsDocDomRect= commentsDoc.getClientRects()[0];
-        const commentBtnDomRect =commentBtn.getClientRects()[0];
-        const isInComments =detectRange(event, commentsDocDomRect);
-        const isInCommentsBtn =detectRange(event, commentBtnDomRect);
-        if(!isInComments &&!isInCommentsBtn){
-          setCommentBlock(null);
-          setOpenComment(false); 
-        }
-      }
-    }
-  }
-  const closeMenu =(event:globalThis.MouseEvent| MouseEvent)=>{
-    const mainMenu =document.getElementById("mainMenu");
-    const sideMenu =document.getElementById("sideMenu")?.firstElementChild;
-    const mainMenuArea =mainMenu?.getClientRects()[0] ;
-    const sideMenuArea =sideMenu?.getClientRects()[0] ;
-
-    const isInrMain = detectRange(event, mainMenuArea);
-    const isInSide =detectRange(event, sideMenuArea );
-
-    if(sideMenuArea !==undefined){
-      (isInrMain || isInSide) ? setOpenMenu(true) :setOpenMenu(false);
-    }else{
-      isInrMain ? setOpenMenu(true) : setOpenMenu(false);
-    }
-  };
-  
-  inner?.addEventListener("click", (event:globalThis.MouseEvent)=>{
-    menuOpen &&closeMenu(event);
-    popup.popup && closePopup(event);
-    openComment && commentBlock!==null && closeComments(event);
-  });
-
-  
   const maxWidth = innerWidth -60
   const frameInnerStyle:CSSProperties={
     fontFamily:fontStyle ,
@@ -249,43 +198,50 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
       (innerWidth >= 768?  -62 : -16)
     )
   }
-  function changeCommentStyle(){
-    if(commentBlock !==null && openComment){
-      const blockDoc = document.getElementById(`${commentBlock.id}_contents`);
-      const editableBlock =document.getElementsByClassName("editableBlock")[0];
-      const editableBlockDomRect= editableBlock.getClientRects()[0];
-      const blockDocDomRect =blockDoc?.getClientRects()[0]
-      if(blockDocDomRect !== undefined && frameHtml!==null){
-        const frameDomRect =frameHtml.getClientRects()[0];
-        const padding = window.getComputedStyle(editableBlock,null).getPropertyValue("padding-right");
-        const pxIndex =padding.indexOf("px");
-        const paddingValue =Number(padding.slice(0,pxIndex));
-        const innerWidth =window.innerWidth;
-        const top =blockDocDomRect.bottom ;
-        const overHeight = (top + 120 )>= window.innerHeight;
-        const bottom = frameDomRect.height - blockDocDomRect.top +10;
-        const left =innerWidth >=425? editableBlockDomRect.x - frameDomRect.x : innerWidth * 0.1 ;
-        const width =innerWidth>=425? editableBlock.clientWidth - paddingValue : innerWidth*0.8;
-        const basicStyle:CSSProperties ={
-          display:"flex",
-          left:left ,
-          width:width,
-        }
-        const style :CSSProperties =overHeight?
-        {
-          ...basicStyle,
-          bottom:bottom,
-          
-        }
-        : 
-        {
-          ...basicStyle,
-          top: top,
-        };
-        setCommentsStyle(style);
-      } 
+  const closePopup=(event:globalThis.MouseEvent)=>{
+    if(popup.popup){
+      const popupMenu =document.getElementById("popupMenu");
+      const popupMenuDomRect= popupMenu?.getClientRects()[0];
+      const isInPopupMenu =detectRange(event, popupMenuDomRect);
+      !isInPopupMenu && setPopup({
+        popup:false,
+        what:null
+      });
+    };
+  };
+
+  const closeMenu =(event:globalThis.MouseEvent| MouseEvent)=>{
+    const mainMenu =document.getElementById("mainMenu");
+    const sideMenu =document.getElementById("sideMenu")?.firstElementChild;
+    const mainMenuArea =mainMenu?.getClientRects()[0] ;
+    const sideMenuArea =sideMenu?.getClientRects()[0] ;
+
+    const isInrMain = detectRange(event, mainMenuArea);
+    const isInSide =detectRange(event, sideMenuArea );
+
+    if(sideMenuArea !==undefined){
+      (isInrMain || isInSide) ? setOpenMenu(true) :setOpenMenu(false);
+    }else{
+      isInrMain ? setOpenMenu(true) : setOpenMenu(false);
     }
   };
+  const closeComments=(event:globalThis.MouseEvent)=>{
+    if(openComment && commentBlock!==null){
+      const commentsDoc= document.getElementById("block_comments") ;
+      const commentBtn =document.getElementById(`${commentBlock.id}_contents`);
+      if(commentsDoc !==null && commentBtn!==null){
+        const commentsDocDomRect= commentsDoc.getClientRects()[0];
+        const commentBtnDomRect =commentBtn.getClientRects()[0];
+        const isInComments =detectRange(event, commentsDocDomRect);
+        const isInCommentsBtn =detectRange(event, commentBtnDomRect);
+        if(!isInComments &&!isInCommentsBtn){
+          setCommentBlock(null);
+          setOpenComment(false); 
+        }
+      }
+    }
+  };
+
 
   const onClickPageIcon =(event:React.MouseEvent)=>{
     if(openIconPopup !==true){
@@ -612,9 +568,13 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
         }
     }
   };
+
   inner?.addEventListener("keyup",updateBlock);
-  inner?.addEventListener("click",(event)=>{
+  inner?.addEventListener("click",(event:globalThis.MouseEvent)=>{
     updateBlock();
+    menuOpen &&closeMenu(event);
+    popup.popup && closePopup(event);
+    openComment && commentBlock!==null && closeComments(event);
     if(command.boolean){
       const block_commandBlock =document.getElementById("block_commandBlock");
       const commandDomRect =block_commandBlock?.getClientRects()[0];
@@ -638,7 +598,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
 
   useEffect(()=>{
     setFirstBlocksId(page.firstBlocksId); 
-    console.log("new firstblocks id", page.firstBlocksId)
   },[page.firstBlocksId]);
 
   useEffect(()=>{
@@ -674,10 +633,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
       }
     }
   },[command.boolean ,command.targetBlock, openTemplates]);
-
-  useEffect(()=>{
-    changeCommentStyle();
-  },[commentBlock]);
 
   useEffect(()=>{
     if(commandTargetBlock!==null){
@@ -799,8 +754,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
                 setDiscardEdit={setDiscardEdit}
                 select={null}
                 openComment={false}
-                commentsStyle={undefined}
-                setCommentsStyle={null}
                 showAllComments={showAllComments}
                 />
                 )
@@ -1021,7 +974,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
             }
           </div>
       }
-      {commentBlock !==null && openComment && commentsStyle!==undefined &&
+      {commentBlock !==null && openComment &&
         <Comments
           userName={userName}
           block={commentBlock}
@@ -1031,8 +984,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           editPage={editPage}
           frameHtml={frameHtml}
           openComment={openComment}
-          commentsStyle={commentsStyle}
-          setCommentsStyle={setCommentsStyle}
           select={null}
           discardEdit={discardEdit}
           setDiscardEdit={setDiscardEdit}

@@ -91,16 +91,13 @@
   z-index: 20;
   padding-bottom: 0;
   @include popupMenu;
-  
+  overflow-y: scroll;
   .comments_comments {
     width: 100%;
     margin: 0;
     padding-bottom:0 ;
   }
 } 
-#block_comments.overHeight{
-  overflow-y: scroll;
-}
 .pageComment {
   position: relative;
   .comments{

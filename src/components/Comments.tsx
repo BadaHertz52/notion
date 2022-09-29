@@ -23,8 +23,6 @@ type CommentsProps={
   editPage: ((pageId: string, newPage: Page) => void )| null,
   frameHtml:HTMLElement|null,
   openComment:boolean,
-  commentsStyle:CSSProperties|undefined,
-  setCommentsStyle:Dispatch<SetStateAction<CSSProperties|undefined>>|null,
   /**
    * 사용자가 보고 싶어하는 comment의 type  유형 , select===null 이면 모든 comments를 보여주고 null 이 기본값
    */
@@ -947,9 +945,10 @@ const Comment =({userName,comment, block,page, pageId, editBlock ,editPage ,fram
     </div>
   )
 };
-const Comments =({pageId,block,page, userName ,editBlock ,editPage ,frameHtml ,openComment, commentsStyle,setCommentsStyle ,select ,discardEdit ,setDiscardEdit ,showAllComments}:CommentsProps)=>{
+const Comments =({pageId,block,page, userName ,editBlock ,editPage ,frameHtml ,openComment, select ,discardEdit ,setDiscardEdit ,showAllComments}:CommentsProps)=>{
   const inner =document.getElementById("inner");
   const pageComments =page.header.comments;
+  const [commentsStyle, setCommentsStyle]= useState<CSSProperties|undefined>(undefined);
   const [allComments, setAllComments]=useState<MainCommentType[]|null>(null);
   const [targetComments, setTargetComment]= useState<MainCommentType[]| null>(null);
   const [resolveComments, setResolveComments]= useState<MainCommentType[]| null>(null);
@@ -967,87 +966,58 @@ const Comments =({pageId,block,page, userName ,editBlock ,editPage ,frameHtml ,o
     setResolveComments(comments?.filter((comment:MainCommentType)=> comment.type ==="resolve") );
     setOpenComments( comments?.filter((comment:MainCommentType)=> comment.type ==="open"));
   };
+  /**
+   * frame 에서 block_comments를 열었을때 (openComment === true) block의 위치에 따라 commentsStyle을 설정하는 함수 
+   */
+  function changeCommentsStyle(){
+    if(block !==null && openComment){
+      const blockDoc = document.getElementById(`${block.id}_contents`);
+      const editableBlock =document.getElementsByClassName("editableBlock")[0];
+      const editableBlockDomRect= editableBlock.getClientRects()[0];
+      const blockDocDomRect =blockDoc?.getClientRects()[0]
+      if(blockDocDomRect !== undefined && frameHtml!==null){
+        const frameDomRect =frameHtml.getClientRects()[0];
+        const pageTitleHtml =frameHtml.querySelector(".pageTitle") as HTMLElement;
+        const pageTitleBottom =pageTitleHtml.getClientRects()[0].bottom;
+        const padding = window.getComputedStyle(editableBlock,null).getPropertyValue("padding-right");
+        const pxIndex =padding.indexOf("px");
+        const paddingValue =Number(padding.slice(0,pxIndex));
+        const innerWidth =window.innerWidth;
+        const innerHeight =window.innerHeight;
+        const top =blockDocDomRect.bottom ;
+        const overHeight = (top + 200 )>= window.innerHeight;
+        const bottom = innerHeight - blockDocDomRect.top +10;
+        const left =innerWidth >=425? editableBlockDomRect.x - frameDomRect.x : innerWidth * 0.1 ;
+        const width =innerWidth>=425? editableBlock.clientWidth - paddingValue : innerWidth*0.8;
+        
+        const basicStyle:CSSProperties ={
+          display:"flex",
+          left:left ,
+          width:width,
+        };
+        const style :CSSProperties =overHeight?
+        {
+          ...basicStyle,
+          bottom:bottom,
+          maxHeight: blockDocDomRect.top - pageTitleBottom 
+        }
+        : 
+        {
+          ...basicStyle,
+          top: top,
+          maxHeight : frameDomRect.height - top 
+        };
+        setCommentsStyle(style);
+      } 
+    }
+  };
 
-  /**
-   *block_comments의 comments의 높이가 일정 수준을 넘어가면 , 스크롤이 가능하도록 클래스를 넣어주는 함수 
-   */
-  // function addClass (element:HTMLElement, maxHeight:number){
-  //   if(!element.classList.contains("overHeight")){
-  //     element.classList.add("overHeight");
-  //     const top = element.style.top;
-  //     const left =element.style.left ;
-  //     const bottom =element.style.bottom;
-  //     const width =element.style.width;
-  //     const basic =`left:${left}; width:${width}; max-height:${maxHeight}px; `;
-  //     if(top===""){
-  //       element.setAttribute("style", basic.concat( `bottom:${bottom}`))
-  //     }else{
-  //       element.setAttribute("style", basic.concat(`top:${top}`))
-  //   }
-  //   }
-  // };
-  /**
-   *block_comments의 comments의 높이가 일정 수준으로 작아질 경우 , 스크롤이 가능하도록 클래스를 제거하는 함수 
-   */
-  // function removeClass(element:HTMLElement){
-  //   if(element.classList.contains("overHeight")){
-  //     element.classList.remove("overHeight");
-  //     const top = element.style.top;
-  //     const left =element.style.left ;
-  //     const bottom =element.style.bottom;
-  //     const width =element.style.width;
-  //     const basic =`left:${left}; width:${width};  `;
-  //     if(top===""){
-  //       element.setAttribute("style", basic.concat(`bottom:${bottom}`))
-  //     }else{
-  //       element.setAttribute("style", basic.concat(`top:${top}`))
-  //     }
-  //   }
-  // };
-  /**
-   * #block_comments의 comments의 max-height을 설정해 스크롤 기능을 넣거나 제거하는 함수 
-   */
-  // function resizeBlockCommentsMaxHeight(){
-  //   const blockCommentsDomRect= blockComments?.getClientRects()[0];
-  //   if( blockCommentsDomRect !==undefined && blockComments!==null ){
-  //     const maxim = Math.round(window.innerHeight * 0.5);
-  //     const styleTop =blockComments.style.top;
-  //     const commentsTop =Math.round( blockCommentsDomRect.top);
-  //     const commentsBottom =Math.round(blockCommentsDomRect.bottom);
-  //     console.log("styleTop", styleTop);
-  //     if(styleTop !==""){
-  //       block 아래에 comments 위치
-  //       if(commentsBottom +16 >= (window.innerHeight )){
-  //         console.log("over")
-  //         const max= window.innerHeight - commentsTop;
-  //         const maxHeight :number = max >maxim ? maxim : (max <=0 ? 100 : max);
-  //         addClass(blockComments,maxHeight );
-  //       }else{
-  //         removeClass(blockComments);
-  //       }
-  //     }else{
-  //       block 위에 comments 위치
-  //       const frameHtml =blockComments.parentElement;
-  //       if(frameHtml!==null){
-  //         const pageContent =frameHtml.querySelector(".pageContent")  ;
-  //         const pageContentDomRect =pageContent?.getClientRects()[0]
-  //       if(pageContentDomRect!==undefined){
-  //         const pageContentTop =Math.round(pageContentDomRect.top);
-  //         if(commentsTop <= pageContentTop){
-  //           console.log("over")
-  //           const max= commentsTop - pageContentTop  ;
-  //           const maxHeight:number = max >maxim ? maxim : (max<=0 ? 100 :max);
-  //           addClass(blockComments ,maxHeight);
-  //         }else{
-  //           removeClass(blockComments);
-  //         }
-  //       }else{
-  //         console.log("Can't find pageContent element")
-  //       }
-  //       }
-  //     } 
-  //   }
-  // };
+  useEffect(()=>{
+    openComment ?
+    changeCommentsStyle():
+    setCommentsStyle(undefined);
+  },[openComment]);
+
   useEffect(()=>{
     if(block?.comments !==undefined && block?.comments !==null){
       setAllComments(block.comments)
@@ -1079,25 +1049,12 @@ const Comments =({pageId,block,page, userName ,editBlock ,editPage ,frameHtml ,o
     }
   },[select, openComments, resolveComments]);
 
-
-  // if(blockCommentsOpen.current && blockComments!==null){
-  //   window.onresize = resizeBlockCommentsMaxHeight;
-  // };
-  // useEffect(()=>{
-  //   if(blockComments !==null && targetComments!==null){
-  //     if(blockCommentsOpen.current){
-  //       console.log("re")
-  //       resizeBlockCommentsMaxHeight()
-  //     }else{
-  //       blockCommentsOpen.current = true
-  //     }
-  //   }
-  // },[targetComments ,blockComments]);
   inner?.addEventListener("click",  (event)=>{
     if(moreOpen){
       closeToolMore(event,setMoreOpen)
     };
   });
+  window.onresize =changeCommentsStyle; 
   return(
     <>
     <div 
