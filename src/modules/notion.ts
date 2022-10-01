@@ -1903,9 +1903,10 @@ export default function notion (state:Notion =initialState , action :NotionActio
         pages.splice(templateIndexInPages,1);
         pagesId.splice(templateIndexInPages,1);
         if(templatesId!==null){
-          const templageIndexInTemplates =templatesId?.indexOf(`${action.pageId}`);
-          templatesId.splice(templageIndexInTemplates);
+          const templageIndexInTemplates =templatesId.indexOf(`${action.pageId}`);
+          templatesId.splice(templageIndexInTemplates,1);
         };
+        console.log("delete template", "pages",pages,"templatesId", templatesId); 
         return{
           pages:pages,
           firstPagesId:firstPagesId,
@@ -2008,10 +2009,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
       };
 
     case ADD_TEMPLATE:
-      const newTemplate :Page ={
-        ...pageSample,
-        type:template
-      };
+      const newTemplate = action.template
 
       return{
         pages:pages !==null? pages.concat(newTemplate):[newTemplate],

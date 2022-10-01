@@ -99,13 +99,29 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist ,recentPages
       },
       type:"template"
     };
+    
     addTemplate(newTemplate);
     setOpenTemplates(false);
     setRoutePage(newTemplate);
   };
 
   const onClickDeleteTemplateBtn=()=>{
-    template!==null && deleteTemplate(template.id);
+    console.log("template", template);
+    if(template!==null && templatesId!==null && templates!==null){
+      const index= templatesId?.indexOf(template.id);
+      if(templatesId.length>1){
+        if(index ===0){
+          const nextTemplate = templates[1];
+          setTemplate(nextTemplate);
+        }else{
+          setTemplate(templates[0]);
+        }
+      }else{
+        setOpenTemplates(false);
+      };
+      deleteTemplate(template.id);
+    };
+    setOpenDeleteAlert(false);
   };
 
   return(
@@ -199,7 +215,7 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist ,recentPages
             /> 
             </>
             :
-            <div>
+            <div className='noTemplate'>
               No template
             </div>
           }
@@ -236,7 +252,10 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist ,recentPages
             </button>
             )
             :
-            "No template"}
+            <div className='noTemplate'>
+              No template
+            </div>
+            }
         
           </div>
           <button     
