@@ -216,7 +216,7 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist ,recentPages
             </>
             :
             <div className='noTemplate'>
-              No template
+              <p>NO TEMPLATE</p>
             </div>
           }
 
@@ -253,7 +253,7 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist ,recentPages
             )
             :
             <div className='noTemplate'>
-              No template
+              <p>No template</p>
             </div>
             }
         

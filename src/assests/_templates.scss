@@ -94,6 +94,9 @@
     height: calc(100% - 48px);
     width: 100%;
   }
+  .noTemplate{
+    font-size: 2rem;
+  }
 }
 #templates_side{
   width: 240px;
@@ -195,9 +198,21 @@
       color:$darkgrey;
     }
   }
+  .noTemplate{
+    font-size: 1rem;
+  }
 }
 #templates_side.off{
   display: none;
+}
+.noTemplate{
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color:$mud;
 }
 .templatesAlert{
   z-index: 20;
