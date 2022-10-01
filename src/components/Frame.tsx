@@ -597,6 +597,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   },[openTemplates]);
 
   useEffect(()=>{
+    console.log("page", page.firstBlocksId);
     setFirstBlocksId(page.firstBlocksId); 
   },[page.firstBlocksId]);
 
@@ -808,8 +809,8 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
             onMouseMove={onMouseMoveToMoveBlock}
             onMouseUp={onMouseUpToMoveBlock}
             >
-            {firstBlocksId!==null &&
-              firstBlocksId.map((id:string)=> findBlock(page,id).BLOCK)
+            {page.firstBlocksId!==null &&
+              firstBlocksId?.map((id:string)=> findBlock(page,id).BLOCK)
               .map((block:Block)=>{
                 return (
                   <EditableBlock
