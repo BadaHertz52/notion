@@ -787,6 +787,14 @@ const CommentBlock =({comment ,mainComment ,block ,page ,pageId, userName,editBl
   const firstLetter = comment.userName.substring(0,1).toUpperCase();
   const [edit, setEdit]=useState<boolean>(false);
   const editCommentItem= sessionStorage.getItem("editComment");
+  const blockContentRef =useRef<HTMLDivElement>(null);
+  useEffect(()=>{
+    if(blockContentRef.current!==null && block !==null){
+      const contentHtml =document.createElement("div");
+      contentHtml.innerHTML = block.contents;
+      blockContentRef.current.appendChild(contentHtml);
+    }
+  },[blockContentRef.current]);
   useEffect(()=>{
     // discard edit 
     if(editCommentItem!==null){
@@ -839,8 +847,10 @@ const CommentBlock =({comment ,mainComment ,block ,page ,pageId, userName,editBl
       <div className='comment_block_line'>
       </div>
       {block !==null &&
-      <div className='comment_block_content'>
-        {block.contents}
+      <div 
+        className='comment_block_content' 
+        ref={blockContentRef}
+      >
       </div>
       }
     </section>
