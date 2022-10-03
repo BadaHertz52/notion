@@ -178,8 +178,9 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
       <>
         {subBlocks !== undefined  && 
           subBlocks.map((block:Block)=>(
+          <div className='listItem'>
           <div 
-            className='list mainBlock'
+            className='mainBlock'
             key={`listItem_${subBlocks.indexOf(block)}`}
             onMouseOver={(event)=>onMouseOverToMoveBlock(event, block)}
             onMouseLeave={(event)=>onMouseLeaveToMoveBlock(event)}
@@ -193,7 +194,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
               >
               {block.type.includes("List")&&
               <div 
-                className='list_marker'
+                className='listItem_marker'
               >
                 {block.type.includes("number")? 
                 `${getListMarker(block)}.`
@@ -228,6 +229,38 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
               block={block} 
               onClickCommentBtn={onClickCommentBtn}
             />
+          }
+          </div>
+          {block.subBlocksId!==null &&
+          <div className='subBlocks'>
+            {block.subBlocksId.map((id:string)=> findBlock(page,id).BLOCK).map((sub:Block)=>
+              <EditableBlock
+              key ={block.subBlocksId?.indexOf(sub.id)} 
+              page={page}
+              block={sub}
+              addBlock={addBlock}
+              editBlock={editBlock}
+              changeToSub={changeToSub}
+              raiseBlock={raiseBlock}
+              deleteBlock={deleteBlock}
+              smallText={smallText}
+              moveBlock={moveBlock}
+              setMoveTargetBlock={setMoveTargetBlock}
+              pointBlockToMoveBlock={pointBlockToMoveBlock}
+              command={command}
+              setCommand={setCommand}
+              openComment={openComment}
+              setOpenComment={setOpenComment}
+              setCommentBlock={setCommentBlock}
+              setTargetPageId={setTargetPageId}
+              setOpenLoader={setOpenLoader}
+              setLoaderTargetBlock={setLoaderTargetBlock}
+              closeMenu={closeMenu}
+              templateHtml={templateHtml}
+              setSelection={setSelection}
+              />
+            )}
+          </div>
           }
           </div>
         ))
@@ -306,7 +339,6 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
               <div 
                 className='blockContents' 
                 style={blockContentsStyle(block)}
-                //onMouseOver={ giveFocusToContent}
               >
                 <BlockComponent
                 block={block} 
@@ -336,45 +368,45 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
               />
               }
             </div>
-            </>
+            {subBlocks!==undefined&&
+              <div 
+                className='subBlocks'
+              >
+                {subBlocks.map((subBlock :Block)=> 
+                  <EditableBlock
+                    key ={subBlocks.indexOf(subBlock)} 
+                    page={page}
+                    block={subBlock}
+                    addBlock={addBlock}
+                    editBlock={editBlock}
+                    changeToSub={changeToSub}
+                    raiseBlock={raiseBlock}
+                    deleteBlock={deleteBlock}
+                    smallText={smallText}
+                    moveBlock={moveBlock}
+                    setMoveTargetBlock={setMoveTargetBlock}
+                    pointBlockToMoveBlock={pointBlockToMoveBlock}
+                    command={command}
+                    setCommand={setCommand}
+                    openComment={openComment}
+                    setOpenComment={setOpenComment}
+                    setCommentBlock={setCommentBlock}
+                    setTargetPageId={setTargetPageId}
+                    setOpenLoader={setOpenLoader}
+                    setLoaderTargetBlock={setLoaderTargetBlock}
+                    closeMenu={closeMenu}
+                    templateHtml={templateHtml}
+                    setSelection={setSelection}
+                  />
+                )
+                }
+              </div>
             }
-            {!block.type.includes("List")&&
-            <div 
-              className='subBlocks'
-            >
-              {subBlocks!==undefined&&
-              subBlocks.map((subBlock :Block)=> 
-                <EditableBlock
-                  key ={subBlocks.indexOf(subBlock)} 
-                  page={page}
-                  block={subBlock}
-                  addBlock={addBlock}
-                  editBlock={editBlock}
-                  changeToSub={changeToSub}
-                  raiseBlock={raiseBlock}
-                  deleteBlock={deleteBlock}
-                  smallText={smallText}
-                  moveBlock={moveBlock}
-                  setMoveTargetBlock={setMoveTargetBlock}
-                  pointBlockToMoveBlock={pointBlockToMoveBlock}
-                  command={command}
-                  setCommand={setCommand}
-                  openComment={openComment}
-                  setOpenComment={setOpenComment}
-                  setCommentBlock={setCommentBlock}
-                  setTargetPageId={setTargetPageId}
-                  setOpenLoader={setOpenLoader}
-                  setLoaderTargetBlock={setLoaderTargetBlock}
-                  closeMenu={closeMenu}
-                  templateHtml={templateHtml}
-                  setSelection={setSelection}
-                />
-              )
-              }
-            </div>
+            </>
             }
           </div>
         </div>
+
       </div>
   )
 };

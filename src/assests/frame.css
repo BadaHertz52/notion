@@ -211,7 +211,7 @@ a:link, a:active, a:visited {
 .editableBlock div {
   width: 100%;
 }
-.editableBlock .list_marker,
+.editableBlock .listItem_marker,
 .editableBlock .commentsBubble {
   width: -webkit-fit-content;
   width: -moz-fit-content;
@@ -434,13 +434,23 @@ a:link, a:active, a:visited {
   display: block;
 }
 
-.list {
+.numberList, .bulletList {
   display: flex;
+  flex-direction: column;
 }
-.list .list_marker {
+
+.listItem {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+}
+.listItem .subBlocks .editableBlock {
+  margin-top: 8px;
+}
+.listItem .listItem_marker {
   padding-right: 8px;
 }
-.list .list_marker svg {
+.listItem .listItem_marker svg {
   font-size: 11px;
 }
 

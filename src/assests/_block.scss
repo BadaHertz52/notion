@@ -14,7 +14,7 @@
   div{
     width: 100%;
   }
-  .list_marker ,
+  .listItem_marker ,
   .commentsBubble{
     width: fit-content;
   }
@@ -226,16 +226,27 @@
     display: block;
   }
 }
-
-.list {
+.numberList , .bulletList{
   display: flex;
-  .list_marker{
+  flex-direction: column;
+}
+.listItem {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+  .subBlocks{
+    .editableBlock{
+     margin-top: 8px;
+    }
+  }
+  .listItem_marker{
     padding-right: 8px;
     svg{
       font-size: 11px;
     }
   }
 }
+
 .blockToggleBtn {
   svg{
     transform: rotate(0deg);
