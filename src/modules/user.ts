@@ -31,7 +31,7 @@ ReturnType<typeof remove_favorites>|
 ReturnType<typeof add_recent_page>|
 ReturnType<typeof clean_recent_page>;
 
-const initialState ={
+const initialState :UserState ={
   userName:"badahertz52",
   userEmail:"badahertz52@notion.com",
   favorites:["12345"],
