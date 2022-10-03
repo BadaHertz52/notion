@@ -97,9 +97,13 @@ const changeContentEmpty=(block:Block)=>{
 };
   const showBlockFn=(event: MouseEvent)=>{
     closeMenu(event)
-    const blockHtml =document.getElementById(`block_${block.id}`);
+    const blockHtml =block.type.includes("List")? 
+    document.getElementById(block.id):
+    document.getElementById(`block_${block.id}`);
     if(blockHtml!==null){
-      const mainBlock= blockHtml.querySelector('.mainBlock');
+      const mainBlock= block.type.includes("List")? 
+      blockHtml.parentElement
+      :blockHtml.querySelector('.mainBlock');
       const domRect =mainBlock?.getClientRects()[0];
       const editor = document.getElementsByClassName("editor")[0] ;
       const blockFn =templateHtml ==null? editor.querySelector(".blockFn"): templateHtml.querySelector('.blockFn');
