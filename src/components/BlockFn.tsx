@@ -86,7 +86,7 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
     const templateHtml= document.getElementById("template");
     setTemplateItem(templateHtml, page);
     const sessionItem = sessionStorage.getItem("blockFnTargetBlock") ;
-    if(sessionItem !==null){
+    if(sessionItem !==null && page.blocksId!==null){
       const targetBlock= JSON.parse(sessionItem);
       const targetBlockIndex= page.blocksId.indexOf(targetBlock.id);
       const newBlock =makeNewBlock(page, targetBlock,"");

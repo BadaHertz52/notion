@@ -99,7 +99,7 @@ export  const blockSample:Block ={
   comments:null
 };
 export function makeNewBlock(page:Page, targetBlock:Block|null, newBlockContents :string):Block{
-  let number =page.blocksId.length.toString();
+  let number =page.blocksId?.length.toString() as string;
   const editTime= JSON.stringify(Date.now());
   const newBlock:Block ={
     id: `${page.id}_${number}_${editTime}`,
@@ -145,8 +145,8 @@ export type Page ={
     comments: MainCommentType[]| null,
   }
   firstBlocksId :string[] | null,
-  blocks : Block[],  
-  blocksId : string[], 
+  blocks : Block[] |null,  
+  blocksId : string[] | null, 
   subPagesId:string[] | null,
   parentsId: string[] | null ,
   editTime: string,
@@ -169,8 +169,8 @@ export const  pageSample:Page ={
     comments:  null,
   },
   firstBlocksId :null,
-  blocks :  [blockSample], 
-  blocksId :  [], 
+  blocks : null, 
+  blocksId : null, 
   subPagesId: null,
   parentsId:  null ,
   editTime: editTime,
@@ -975,6 +975,7 @@ const initialState :Notion ={
     pages:null
   }
 };
+
 /**
  * block.id로 block을 찾을 수 있는 함수
  * @param page 찾을 block이 존재하는 페이지
@@ -982,9 +983,9 @@ const initialState :Notion ={
  * @returns index: block의 page.blocks에서의 index, BLOCK: 찾는 block
  */
 export function findBlock( page:Page,blockId: string):{index: number ,BLOCK:Block} {
-  const index = page.blocksId.indexOf(blockId) as number;
-  const block:Block = page.blocks[index];
-
+  const index = page.blocksId?.indexOf(blockId) as number;
+  const blocks =page.blocks as Block[];
+  const block:Block = blocks[index];
   return {
     index: index,
     BLOCK:block,
@@ -1102,7 +1103,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
  * @param block  수정된 data를 가진 block 
  */
   const editBlockData =(index:number ,block:Block)=>{
-    targetPage?.blocks.splice(index,1,block);
+    targetPage?.blocks?.splice(index,1,block);
     console.log("editBlockData",  block, targetPage?.blocks);
   };
   /**
@@ -1128,7 +1129,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
           subBlocksId:subBlocksId !==null ? subBlocksId : [subBlock.id]
         };
         //update parentBlock
-        targetPage?.blocks.splice(parentBlockIndex,1,editedParentBlock);
+        targetPage?.blocks?.splice(parentBlockIndex,1,editedParentBlock);
         console.log("updateparent", parentBlock, editedParentBlock);
         
         
@@ -1185,7 +1186,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
           editTime:editTime
         };
         console.log( "originblock",subBlock,"raisedblock", raisedSubBlock)
-        const index = page.blocksId.indexOf(subBlock.id);
+        const index = page.blocksId?.indexOf(subBlock.id) as number;
         editBlockData(index, raisedSubBlock);
         subBlock.subBlocksId !==null && raiseSubBlock(page, subBlock, blockDelete);
       }
@@ -1230,7 +1231,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
    * @param block :삭제 대상인 block
    */
   const deleteBlockData =(page:Page, block:Block)=>{
-    const index = page.blocksId.indexOf(block.id);
+    const index = page.blocksId?.indexOf(block.id) as number;
     if(block.firstBlock && page.firstBlocksId !==null){
       const firstIndex= page.firstBlocksId.indexOf(block.id);
       block.firstBlock && firstIndex >=0 && page.firstBlocksId?.splice(firstIndex,1);
@@ -1258,8 +1259,8 @@ export default function notion (state:Notion =initialState , action :NotionActio
       console.log("add new page", pages, firstPagesId);
     } ;
   };
-  if(targetPage !==null && pagesId !==null && pages !==null && firstPagesId!==null){
-    const  blockIndex:number = action.block !==null ?( pages[pageIndex]?.blocksId.indexOf(action.block.id) ): 0 as number;
+  if(targetPage !==null && pagesId !==null && pages !==null && firstPagesId!==null ){
+    const  blockIndex:number = action.block !==null ?( pages[pageIndex]?.blocksId?.indexOf(action.block.id) as number ): 0 as number;
     switch(action.type){
       case ADD_BLOCK:
 
@@ -1318,8 +1319,8 @@ export default function notion (state:Notion =initialState , action :NotionActio
             const parentPage =findPage(pagesId, pages, action.block.parentBlocksId[0]) as Page ;
             const editedParentPage:Page ={
               ...parentPage,
-              blocks: parentPage.blocks.concat(action.block),
-              blocksId:parentPage.blocksId.concat(action.block.id),
+              blocks:parentPage.blocks===null? [action.block]: parentPage.blocks.concat(action.block),
+              blocksId:parentPage.blocksId === null? [action.block.id]: parentPage.blocksId?.concat(action.block.id),
               firstBlocksId:parentPage.firstBlocksId!==null?  parentPage.firstBlocksId?.concat(action.block.id) : [action.block.id],
               subPagesId: parentPage.subPagesId ==null? [...blockSample.id] : parentPage.subPagesId.concat([blockSample.id]),
               editTime:editTime
@@ -1334,8 +1335,8 @@ export default function notion (state:Notion =initialState , action :NotionActio
           templatesId:templatesId,
           pagesId:pagesId,
           trash:trash
-        }; 
-      case EDIT_BLOCK:
+        };
+        case EDIT_BLOCK:
         editBlockData(blockIndex, action.block);
         console.log("edit",action.block  ,targetPage.blocks )
         return {
@@ -1358,8 +1359,8 @@ export default function notion (state:Notion =initialState , action :NotionActio
         let newBlocks =[blockSample];
         let newFirstBlocksId =[blockSample.id];
         let newSubPagesId: string[]|null = null;
-        const allSubBlocks = targetPage.blocks.filter((block:Block)=> block.parentBlocksId?.includes(action.block.id));
-        if(allSubBlocks[0]!==undefined){
+        const allSubBlocks = targetPage.blocks?.filter((block:Block)=> block.parentBlocksId?.includes(action.block.id));
+        if( allSubBlocks!==undefined &&allSubBlocks[0]!==undefined){
           newBlocks = allSubBlocks.map((block:Block)=>{
             const newParentBlocksId =block.parentBlocksId !==null ? block.parentBlocksId.slice(1) : null; 
             const newBlock:Block ={
@@ -1373,8 +1374,8 @@ export default function notion (state:Notion =initialState , action :NotionActio
           newFirstBlocksId = newBlocks.filter((block:Block)=> block.firstBlock ===true).map((block:Block)=> block.id);
           newSubPagesId = newBlocks.filter((block:Block)=> block.type==="page").map((block:Block)=>block.id);
           if(newBlocks[0] !==undefined ){
-            targetPage.blocks = targetPage.blocks.filter((block:Block)=> !newBlocksId.includes(block.id) );
-            targetPage.blocksId = targetPage.blocksId.filter((id:string)=> !newBlocksId.includes(id));
+            targetPage.blocks = targetPage.blocks !==null? targetPage.blocks.filter((block:Block)=> !newBlocksId.includes(block.id) ) : null;
+            targetPage.blocksId = targetPage.blocksId!==null? targetPage.blocksId.filter((id:string)=> !newBlocksId.includes(id)) : null;
           }
           if( newSubPagesId[0]!==undefined && targetPage.subPagesId !==null){
             targetPage.subPagesId= targetPage.subPagesId.filter((id:string)=> !newSubPagesId?.includes(id));
@@ -1418,13 +1419,24 @@ export default function notion (state:Notion =initialState , action :NotionActio
           editTime:editTime
         };
         editBlockData(blockIndex, changedBlock);
-        const newSubBlocks :Block[]=changedTargetPage.blocks.map((block:Block)=>({
-          ...block,
-          firstBlock:false,
-          parentBlocksId:block.parentBlocksId!==null? [action.block.id ,...block.parentBlocksId] :[action.block.id]
-        }))
-        targetPage.blocks.push.apply(targetPage.blocks, newSubBlocks);
-        targetPage.blocksId.push.apply(targetPage.blocksId ,changedTargetPage.blocksId);
+        if(changedTargetPage.blocks !==null && changedTargetPage.blocksId!==null && targetPage.blocks!==null && targetPage.blocksId!==null){
+          // targetPage에 changedTargetPage의 block들을 추가 
+          const newSubBlocks :Block[]=changedTargetPage.blocks.map((block:Block)=>({
+            ...block,
+            firstBlock:false,
+            parentBlocksId:block.parentBlocksId!==null? [action.block.id ,...block.parentBlocksId] :[action.block.id]
+          }));
+          const newTargetPageBlocks = targetPage.blocks.concat(newSubBlocks);
+          const newTargetPlageBlocksId =targetPage.blocksId.concat(changedTargetPage.blocksId);
+          const editedTargetPage: Page ={
+            ...targetPage,
+            blocks : newTargetPageBlocks,
+            blocksId:newTargetPlageBlocksId,
+            editTime:editTime
+          };
+          editPage(editedTargetPage);
+        }
+
         console.log("changePagetoBlock",targetPage, pages, pages[pageIndex],pagesId);
         return {
           pages:pages,
@@ -1489,7 +1501,9 @@ export default function notion (state:Notion =initialState , action :NotionActio
           result2.pull: action block 의 subBlock 앞으로 땡기기 
           */
           if(targetPage.firstBlocksId!==null &&
-            targetPage.firstBlocksId[0] !== action.block.id
+            targetPage.firstBlocksId[0] !== action.block.id &&
+            targetPage.blocks !==null &&
+            targetPage.blocksId!==null
             ){
               const targetBlock =action.block; 
               const {previousBlockInDoc , previousBlockInDocIndex}=findPreviousBlockInDoc(targetPage, action.block);
@@ -1527,9 +1541,8 @@ export default function notion (state:Notion =initialState , action :NotionActio
                 }else{
                   editBlockData(previousBlockInDocIndex, editedPreBlockInDoc);
                 };
-  
-                targetPage.blocks.splice(blockIndex,1);
-                targetPage.blocksId.splice(blockIndex,1);
+                targetPage.blocks?.splice(blockIndex,1);
+                targetPage.blocksId?.splice(blockIndex,1);
                 
                 raiseSubBlock(targetPage, action.block, true);
                 updateNewParentAndFirstBlocksIdAfterRaise(targetPage, action.block);
@@ -1620,7 +1633,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
   
       case DELETE_BLOCK:
   
-        if(action.block.parentBlocksId !== null){
+        if(action.block.parentBlocksId !== null && targetPage.blocks!==null && targetPage.blocksId!==null){
           const parentBlocksId = action.block?.parentBlocksId as string[];
           const parentBlockId :string = parentBlocksId[parentBlocksId.length-1] ;
           const parentBlockIndex = targetPage.blocksId.indexOf(parentBlockId);
@@ -1650,8 +1663,8 @@ export default function notion (state:Notion =initialState , action :NotionActio
           raiseSubBlock(targetPage, action.block ,true);
   
           editFirstBlocksId(targetPage, action.block);
-          targetPage.blocks.splice(blockIndex,1);
-          targetPage.blocksId.splice(blockIndex,1);
+          targetPage.blocks?.splice(blockIndex,1);
+          targetPage.blocksId?.splice(blockIndex,1);
         };
         if(action.block.type ==="page"){
           deletePage(action.block.id, false);
@@ -1665,6 +1678,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
           trash:trash
         };
       
+
       case DUPLICATE_PAGE :
         const targetPageIndex = pagesId.indexOf(targetPage.id);
         const nextPageId =pagesId[targetPageIndex+1]
@@ -1719,22 +1733,23 @@ export default function notion (state:Notion =initialState , action :NotionActio
         if(targetPage!==null && pagesId !==null && pages!==null){
           targetPage.header = newPage.header;
           const parentsId = newPage.parentsId ; 
-          if(parentsId !==null){
+          if(parentsId !==null ){
             const parentPageId =parentsId[ parentsId.length -1];
             const parentPage =findPage(pagesId, pages, parentPageId);
-            const blockIndex = parentPage.blocksId.indexOf(newPage.id);
-            const pageBlock = parentPage.blocks[blockIndex];
-            const editedPageBlock:Block ={
-              ...pageBlock,
-              contents: newPage.header.title,
-              icon: newPage.header.icon,
-              editTime:editTime
+            if(parentPage.blocks!==null && parentPage.blocksId !==null){
+              const blockIndex = parentPage.blocksId.indexOf(newPage.id) ;
+              const pageBlock = parentPage.blocks[blockIndex];
+              const editedPageBlock:Block ={
+                ...pageBlock,
+                contents: newPage.header.title,
+                icon: newPage.header.icon,
+                editTime:editTime
+              };
+              parentPage.blocks.splice(blockIndex,1,editedPageBlock);
             };
-            parentPage.blocks.splice(blockIndex,1,editedPageBlock);
           };
           const pageIndex =pagesId.indexOf(newPage.id);
           pages.splice(pageIndex,1,newPage)
-  
           console.log("edit page",pages);
         }
       };
@@ -1758,12 +1773,15 @@ export default function notion (state:Notion =initialState , action :NotionActio
       let pageBlockStyle:BlockStyle =basicBlockStyle;
       if(targetPage.parentsId !==null){
         const parentPage = findPage(pagesId, pages, targetPage.parentsId[targetPage.parentsId.length-1]);
-        const blockIndex= parentPage.blocksId.indexOf(action.pageId);
-        pageBlockStyle = parentPage.blocks[blockIndex].style 
+        if(parentPage.blocks!==null && parentPage.blocksId!==null){
+          const blockIndex= parentPage.blocksId.indexOf(action.pageId);
+          pageBlockStyle = parentPage.blocks[blockIndex].style 
+        
+          parentPage.editTime =editTime;
+          parentPage.blocks.splice(blockIndex,1);
+          parentPage.blocksId.splice(blockIndex,1);
+        };
         const subPageIndex= parentPage.subPagesId?.indexOf(action.pageId);
-        parentPage.editTime =editTime;
-        parentPage.blocks.splice(blockIndex,1);
-        parentPage.blocksId.splice(blockIndex,1);
         subPageIndex !==undefined && parentPage.subPagesId?.splice(subPageIndex,1);
       };
       targetPage.editTime=editTime; 
@@ -1785,14 +1803,18 @@ export default function notion (state:Notion =initialState , action :NotionActio
         style: pageBlockStyle,
         comments: targetPage.header.comments,
       };
-      destinationPage.editTime =editTime ;
+      const editedDestinationPage:Page ={
+        ...destinationPage,
+        editTime :editTime,
+        firstBlocksId : destinationPage.firstBlocksId !== null? destinationPage.firstBlocksId.concat(newPageBlock.id): [newPageBlock.id],
+        blocks :destinationPage.blocks!==null ? destinationPage.blocks.concat(newPageBlock) :[newPageBlock],
+        blocksId:destinationPage.blocksId!==null? destinationPage.blocksId.concat(newPageBlock.id):[newPageBlock.id],
+        subPagesId :  destinationPage.subPagesId !==null ? 
+        destinationPage.subPagesId.concat(targetPage.id) :
+        [targetPage.id]
+      };
+      editPage(editedDestinationPage);
   
-      destinationPage.firstBlocksId !== null? destinationPage.firstBlocksId.push(newPageBlock.id) : destinationPage.firstBlocksId = [newPageBlock.id];
-      destinationPage.blocks.push(newPageBlock);
-      destinationPage.blocksId.push(targetPage.id);
-      destinationPage.subPagesId = destinationPage.subPagesId !==null ? 
-      destinationPage.subPagesId.concat(targetPage.id) :
-      [targetPage.id];
       console.log("move page to other page", pages , firstPagesId , destinationPage) 
       return{
         pages:pages,
@@ -1809,7 +1831,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
           if(parentPage.subPagesId !==null){
             const subPageIndex= parentPage.subPagesId.indexOf(deletedTargetPage.id);
             parentPage.subPagesId.splice(subPageIndex,1);
-            if(blockDelete){
+            if(blockDelete && parentPage.blocksId!==null && parentPage.blocks!==null){
               const blockIndex = parentPage.blocksId.indexOf(deletedTargetPage.id);
               const pageBlock =parentPage.blocks[blockIndex];
               parentPage.blocks.splice(blockIndex,1);
@@ -1938,7 +1960,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
         trash:trash
       };
 
-      case RESTORE_PAGE:
+    case RESTORE_PAGE:
       let trashPages = trash.pages ==null? null :[...trash.pages];
       let trashPagesId =trash.pagesId ===null? null : [...trash.pagesId];
 

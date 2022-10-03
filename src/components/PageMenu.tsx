@@ -45,16 +45,15 @@ const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock,changeBlockToP
         editTime: JSON.stringify(Date.now())
       };
       const moveTargetPage = pages.filter((page:Page)=> page.id === destinationPageId)[0];
-      const firstBlockId =moveTargetPage.blocksId[0];
-      const blocksIdLength = moveTargetPage.blocksId.length; 
       //set origin moveTargetPage
       if(templateHtml!==null){
         const item= JSON.stringify(moveTargetPage);
         sessionStorage.setItem("originMoveTargetPage", item);
       }
-      if(blocksIdLength===1 && firstBlockId.includes("blockSample")){
+      if(moveTargetPage.blocksId==null){
         addBlock(destinationPageId, newBlock, 0 , null);
       }else{  
+        const blocksIdLength = moveTargetPage.blocksId.length;
         addBlock(destinationPageId, newBlock, blocksIdLength , null);
       };
       if(block.type==="page"){

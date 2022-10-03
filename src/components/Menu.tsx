@@ -55,7 +55,6 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
   function changeMenuStyle (){
     const menu = document.querySelector(".menu");
     const menuHeight =menu? menu.clientHeight: 400;
-    const innerWidth =window.innerWidth;
     const innerHeight =window.innerHeight;
     const top = blockFnElement?.getClientRects()[0].top as number;
     const overHeight = ( top + menuHeight ) >= innerHeight;
@@ -63,12 +62,12 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
     if(blockFnElement!==null){
       style =
       overHeight? {
-        bottom: (blockFnElement.offsetHeight) *0.5 ,
-        left: innerWidth >767 ?'3rem' : '0.5rem',
+        bottom: (blockFnElement.offsetHeight) + 10 ,
+        left: '1rem',
       } :
       {
         top:  (blockFnElement.offsetHeight)  ,
-        left: innerWidth >767 ?'3rem' : '1rem',
+        left:  '1rem',
       };
     };
     return style
@@ -143,23 +142,25 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
   };
 
   const duplicateBlock=()=>{
-    setTemplateItem(templateHtml,page);
-    const blockIndex= page.blocksId.indexOf(block.id);
-    const previousBlockId = page.blocksId[blockIndex-1];
-    const editTime =JSON.stringify(Date.now());
-    const number =page.blocksId.length.toString();
-    const newBlock:Block ={
-      ...block,
-      id:`${page.id}_${number}_${editTime}`,
-      editTime:editTime,
-    } ;
-    addBlock(page.id , newBlock,  blockIndex+1, block.parentBlocksId ===null? null : previousBlockId);
-
-    setTemplateItem(templateHtml, page);
-    if(block.type==="page"){
-      duplicatePage(block.id);
-    };
-    setOpenMenu(false);
+    if(page.blocks!==null && page.blocksId!==null){
+      setTemplateItem(templateHtml,page);
+      const blockIndex= page.blocksId.indexOf(block.id);
+      const previousBlockId = page.blocksId[blockIndex-1];
+      const editTime =JSON.stringify(Date.now());
+      const number =page.blocksId.length.toString();
+      const newBlock:Block ={
+        ...block,
+        id:`${page.id}_${number}_${editTime}`,
+        editTime:editTime,
+      } ;
+      addBlock(page.id , newBlock,  blockIndex+1, block.parentBlocksId ===null? null : previousBlockId);
+  
+      setTemplateItem(templateHtml, page);
+      if(block.type==="page"){
+        duplicatePage(block.id);
+      };
+      setOpenMenu(false);
+    }
   };
   const onSetEditBtns=()=>{
     setEditBtns([...document.getElementsByClassName("menu_editBtn")]);

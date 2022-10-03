@@ -72,8 +72,8 @@ export const BlockComment =({block , onClickCommentBtn}:BlockCommentProps)=>{
 const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,command, setCommand  ,onClickCommentBtn ,setOpenComment ,setTargetPageId ,setOpenLoader, setLoaderTargetBlock ,closeMenu ,templateHtml, setSelection }:BlockComponentProps)=>{
   const editTime =JSON.stringify(Date.now);
   const contentEditableRef= useRef<HTMLElement>(null);
-  const possibleBlocks = page.blocks.filter((block:Block)=> block.type !=="image media" && block.type !=="page");
-  const possibleBlocksId = possibleBlocks.map((block:Block)=> block.id );
+  const possibleBlocks :Block[]|null = page.blocks !== null? page.blocks.filter((block:Block)=> block.type !=="image media" && block.type !=="page") : null;
+  const possibleBlocksId :string[]|null = possibleBlocks !==null? possibleBlocks.map((block:Block)=> block.id ) : null;
   const findTargetBlock =(event:ContentEditableEvent|React.KeyboardEvent<HTMLDivElement>|MouseEvent| SyntheticEvent<HTMLDivElement>):Block=>{
     const target =event.currentTarget.parentElement as HTMLElement;
     const targetId= target.id;
@@ -126,73 +126,75 @@ const changeContentEmpty=(block:Block)=>{
   };
 
   const onChangeContents=(event:ContentEditableEvent)=>{
-    setTemplateItem(templateHtml, page);
-    const value =event.target.value;
-    const targetBlock= findTargetBlock(event);
-    const targetBlockIndex= page.blocksId.indexOf(targetBlock.id);
-    const changeBlockContent =()=>{
-      if(value.includes("<div>")){
-        //enter 시에 새로운 블록 생성 
-        const start = value.indexOf("<div>");
-        const end =value.indexOf("</div>");
-        const editedContents =value.slice(0, start);
-        const newBlockContents= value.slice(start+5,end );
-        const newBlock:Block ={
-          ...makeNewBlock(page, targetBlock, newBlockContents),
-          firstBlock: targetBlock.firstBlock,
-          subBlocksId: targetBlock.subBlocksId,
-          parentBlocksId:targetBlock.parentBlocksId
-        } ;
-        if((targetBlock.contents!== editedContents) || (targetBlock.contents==="")|| (targetBlock.subBlocksId!==null)){
-          const editedBlock:Block ={
-            ...targetBlock,
-            contents:block.contents!== editedContents ?editedContents : targetBlock.contents,
-            contentsEmpty: editedContents===""? true: false,
-            subBlocksId: targetBlock.subBlocksId !==null ? null : targetBlock.subBlocksId,
-            editTime:editTime,
-          };
-          editBlock(page.id, editedBlock);
-        }
-        if(block.type ===toggle){
-          const newSubToggleBlock :Block ={
-            ...newBlock,
-            parentBlocksId:[targetBlock.id],
-            firstBlock:false,
-          };
-          addBlock(page.id, newSubToggleBlock, targetBlockIndex+1, targetBlock.id);
-  
-        }else{
-          addBlock(page.id, newBlock,targetBlockIndex+1, targetBlock.id);
-        };
-      }else{
-        // edite targetBlock 
-        const cursor = document.getSelection();
-        const offset =cursor?.anchorOffset;
-        if(!(targetBlock.contents==="" && offset===0&& value ==="")){
-          const editedBlock :Block ={
-            ...targetBlock,
-            contents: value,
-            editTime:editTime,
-          };
-          if(targetBlock.contents !== value){
-            const item={
-              pageId: page.id,
-              block: editedBlock
+    if(page.blocks!==null && page.blocksId!==null){
+      setTemplateItem(templateHtml, page);
+      const value =event.target.value;
+      const targetBlock= findTargetBlock(event);
+      const targetBlockIndex= page.blocksId.indexOf(targetBlock.id);
+      const changeBlockContent =()=>{
+        if(value.includes("<div>")){
+          //enter 시에 새로운 블록 생성 
+          const start = value.indexOf("<div>");
+          const end =value.indexOf("</div>");
+          const editedContents =value.slice(0, start);
+          const newBlockContents= value.slice(start+5,end );
+          const newBlock:Block ={
+            ...makeNewBlock(page, targetBlock, newBlockContents),
+            firstBlock: targetBlock.firstBlock,
+            subBlocksId: targetBlock.subBlocksId,
+            parentBlocksId:targetBlock.parentBlocksId
+          } ;
+          if((targetBlock.contents!== editedContents) || (targetBlock.contents==="")|| (targetBlock.subBlocksId!==null)){
+            const editedBlock:Block ={
+              ...targetBlock,
+              contents:block.contents!== editedContents ?editedContents : targetBlock.contents,
+              contentsEmpty: editedContents===""? true: false,
+              subBlocksId: targetBlock.subBlocksId !==null ? null : targetBlock.subBlocksId,
+              editTime:editTime,
             };
-            sessionStorage.setItem("itemsTobeEdited", JSON.stringify(item));
+            editBlock(page.id, editedBlock);
           }
+          if(block.type ===toggle){
+            const newSubToggleBlock :Block ={
+              ...newBlock,
+              parentBlocksId:[targetBlock.id],
+              firstBlock:false,
+            };
+            addBlock(page.id, newSubToggleBlock, targetBlockIndex+1, targetBlock.id);
+    
+          }else{
+            addBlock(page.id, newBlock,targetBlockIndex+1, targetBlock.id);
+          };
+        }else{
+          // edite targetBlock 
+          const cursor = document.getSelection();
+          const offset =cursor?.anchorOffset;
+          if(!(targetBlock.contents==="" && offset===0&& value ==="")){
+            const editedBlock :Block ={
+              ...targetBlock,
+              contents: value,
+              editTime:editTime,
+            };
+            if(targetBlock.contents !== value){
+              const item={
+                pageId: page.id,
+                block: editedBlock
+              };
+              sessionStorage.setItem("itemsTobeEdited", JSON.stringify(item));
+            }
+          };
         };
-      };
-    }
-    if(!value.startsWith("/")){
-      changeBlockContent();
-    }else{
-      setOpenComment(false);
-      setCommand({
-        boolean:true, 
-        command:"/",
-        targetBlock:targetBlock
-      })
+      }
+      if(!value.startsWith("/")){
+        changeBlockContent();
+      }else{
+        setOpenComment(false);
+        setCommand({
+          boolean:true, 
+          command:"/",
+          targetBlock:targetBlock
+        })
+      }
     }
   };
   const onKeyDownContents=(event:React.KeyboardEvent<HTMLDivElement>)=>{
@@ -245,7 +247,7 @@ const changeContentEmpty=(block:Block)=>{
               if(previousBlockInDoc.type.includes("List")&& previousBlockInDoc.subBlocksId?.[0]===referenceBlock.id){
                 previousBlockInDoc =findPreviousBlockInDoc(page, previousBlockInDoc).previousBlockInDoc;
               };
-              if(possibleBlocksId.includes(previousBlockInDoc.id)){
+              if(possibleBlocksId?.includes(previousBlockInDoc.id)){
                 if(previousBlockInDoc.type.includes("List")&& previousBlockInDoc.subBlocksId!==null){
                   moveFocus(previousBlockInDoc.subBlocksId[previousBlockInDoc.subBlocksId.length-1]);
                 }else{
@@ -265,42 +267,47 @@ const changeContentEmpty=(block:Block)=>{
          * @param nextBlockId : 다음에 이동할 블록의 id
          */
         const setNextHtmlId =(nextBlockId:string)=>{
-          const index = possibleBlocksId.indexOf(nextBlockId);
-          const nextBlock = possibleBlocks[index];
-          if(nextBlock.type.includes("List")&& nextBlock.subBlocksId!==null){
-            moveFocus(nextBlock.subBlocksId[0]);
-          }else{
-          moveFocus(nextBlockId);
+          if(possibleBlocks!==null && possibleBlocksId!==null){
+            const index = possibleBlocksId.indexOf(nextBlockId);
+            const nextBlock = possibleBlocks[index];
+            if(nextBlock.type.includes("List")&& nextBlock.subBlocksId!==null){
+              moveFocus(nextBlock.subBlocksId[0]);
+            }else{
+            moveFocus(nextBlockId);
+            };
           };
+
         };
         /**
          * firstBlock== true 인 블록의 화면상의 다음 블록을 찾아 cursor를 해당 블록의 contentEditable로 옮겨줄 함수
          * @param firstBlock : 기준이 되는 블록
          */
         const findNextBlockOfFirstBlock=(firstBlock:Block)=>{
-          if(page.firstBlocksId!==null){
-            if(firstBlock.subBlocksId===null){
-              const blockIndexAsFirstBlock = page.firstBlocksId.indexOf(firstBlock.id);
-              if(blockIndexAsFirstBlock < page.firstBlocksId.length-1){
-                for (let i = 1; i < page.firstBlocksId.length-blockIndexAsFirstBlock; i++) {
-                  let 
-                  nextBlockId =page.firstBlocksId[blockIndexAsFirstBlock+i];
-                  if(possibleBlocksId.includes(nextBlockId)){
-                    setNextHtmlId(nextBlockId);
-                    i =page.firstBlocksId.length;
-                  };
+          if(possibleBlocks!==null && possibleBlocksId!==null){
+            if(page.firstBlocksId!==null){
+              if(firstBlock.subBlocksId===null){
+                const blockIndexAsFirstBlock = page.firstBlocksId.indexOf(firstBlock.id);
+                if(blockIndexAsFirstBlock < page.firstBlocksId.length-1){
+                  for (let i = 1; i < page.firstBlocksId.length-blockIndexAsFirstBlock; i++) {
+                    let 
+                    nextBlockId =page.firstBlocksId[blockIndexAsFirstBlock+i];
+                    if(possibleBlocksId.includes(nextBlockId)){
+                      setNextHtmlId(nextBlockId);
+                      i =page.firstBlocksId.length;
+                    };
+                  }
+                }
+              }else{
+                for (let i = 0; i < firstBlock.subBlocksId.length;  i++) {
+                  const firstSubBlockId = firstBlock.subBlocksId[i];
+                  if(possibleBlocksId.includes(firstSubBlockId)){
+                    setNextHtmlId(firstSubBlockId);
+                    i =firstBlock.subBlocksId.length;
+                  }
                 }
               }
-            }else{
-              for (let i = 0; i < firstBlock.subBlocksId.length;  i++) {
-                const firstSubBlockId = firstBlock.subBlocksId[i];
-                if(possibleBlocksId.includes(firstSubBlockId)){
-                  setNextHtmlId(firstSubBlockId);
-                  i =firstBlock.subBlocksId.length;
-                }
-              }
+  
             }
-
           }
         };
         /**
@@ -319,7 +326,7 @@ const changeContentEmpty=(block:Block)=>{
                     if(parentBlockIndexAsFirst < page.firstBlocksId.length){
                       for (let i =1 ; i < page.firstBlocksId.length - parentBlockIndexAsFirst; i++) {
                         const nextBlockId = page.firstBlocksId[parentBlockIndexAsFirst +i];
-                        if(possibleBlocksId.includes(nextBlockId)){
+                        if(possibleBlocksId?.includes(nextBlockId)){
                           setNextHtmlId(nextBlockId);
                           i= page.firstBlocksId.length-1;
                         };
@@ -331,7 +338,7 @@ const changeContentEmpty=(block:Block)=>{
                 }else{
                   for (let i = 1; i < parentBlock.subBlocksId.length-blockIndexAsSubBlock; i++) {
                     const nextBlockId = parentBlock.subBlocksId[blockIndexAsSubBlock+i];
-                    if(possibleBlocksId.includes(nextBlockId)){
+                    if(possibleBlocksId?.includes(nextBlockId)){
                       setNextHtmlId(nextBlockId);
                       i =parentBlock.subBlocksId.length;
                       
@@ -344,7 +351,7 @@ const changeContentEmpty=(block:Block)=>{
             findNextBlockByParent(subBlock);
           }else{
             const firstSubBlockId= subBlock.subBlocksId[0];
-            if(possibleBlocksId.includes(firstSubBlockId)){
+            if(possibleBlocksId?.includes(firstSubBlockId)){
               moveFocus(firstSubBlockId);
             };
           }

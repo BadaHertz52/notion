@@ -310,7 +310,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
     };
   };
   const changeBlockPosition =()=>{
-    if(pointBlockToMoveBlock.current!==null && moveTargetBlock!==null){
+    if(pointBlockToMoveBlock.current!==null && moveTargetBlock!==null && page.blocksId!== null && page.blocks!==null){
       setTemplateItem(templateHtml,page);
       //editblock
         const editTime =JSON.stringify(Date.now());
@@ -508,6 +508,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
         };
 
         if(page.firstBlocksId){
+          page.blocks !==null &&
           addBlock(page.id, newBlock, page.blocks.length, null);
         }else{
           addBlock(page.id, newBlock,0,null);

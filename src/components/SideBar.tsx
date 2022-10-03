@@ -293,7 +293,12 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
         type:"page",
         parentBlocksId:null,
       };
-      addBlock(targetPage.id,newPageBlock, targetPage.blocksId.length, targetPage.firstBlocksId==null? null: targetPage.firstBlocksId[targetPage.firstBlocksId.length-1]);
+      if(targetPage.blocksId==null){
+        addBlock(targetPage.id, newPageBlock, 0, null)
+      }else{
+        addBlock(targetPage.id,newPageBlock, targetPage.blocksId.length, targetPage.firstBlocksId==null? null: targetPage.firstBlocksId[targetPage.firstBlocksId.length-1]);
+      }
+
     }
   };
   

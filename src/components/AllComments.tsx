@@ -32,8 +32,8 @@ const AllComments=({page, userName, editBlock, showAllComments, setShowAllCommen
     };
   })
   const pageId= page.id;
-  const commentsBlocks= page.blocks.filter((block:Block)=> block.comments !==null && block.comments); 
-  const targetCommentsBlocks :Block[]|null =commentsBlocks[0]!==undefined? commentsBlocks: null;
+  const commentsBlocks : Block[]|null= page.blocks!==null? page.blocks.filter((block:Block)=> block.comments !==null && block.comments) : null; 
+  const targetCommentsBlocks :Block[]|null =commentsBlocks ==null? null:(commentsBlocks[0]!==undefined? commentsBlocks: null);
   const allComments = targetCommentsBlocks?.map((block:Block)=>block.comments);
   const open ="open";
   const resolve="resolve" ;
