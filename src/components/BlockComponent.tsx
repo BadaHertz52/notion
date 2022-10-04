@@ -201,6 +201,7 @@ const changeContentEmpty=(block:Block)=>{
       }
     }
   };
+
   const onKeyDownContents=(event:React.KeyboardEvent<HTMLDivElement>)=>{
     const code =event.code.toLowerCase();
     const targetBlock= findTargetBlock(event);
@@ -222,11 +223,13 @@ const changeContentEmpty=(block:Block)=>{
       case "tab":
         event.preventDefault();
         setTemplateItem(templateHtml, page);
-          const targetEditableDoc = document.getElementById(`block_${targetBlock.id}`)?.parentElement?.parentElement as HTMLElement ;
-          const previousEditableDoc = targetEditableDoc.previousElementSibling as HTMLElement ;  
-          const previousBlockDoc= previousEditableDoc.firstChild?.firstChild as HTMLElement;
-          const previousBlockId = previousBlockDoc.id.slice(6);
-          changeToSub(page.id, targetBlock,previousBlockId );
+        const previousBlockIdInDoc =findPreviousBlockInDoc(page,targetBlock).previousBlockInDoc.id;
+        if(previousBlockIdInDoc !==undefined){
+          changeToSub(page.id, targetBlock, previousBlockIdInDoc);
+        }else{
+          console.log(`Cant' find block in front of ${targetBlock.id}block on screen`)
+        }
+
         break;
       case "backspace":
         setTemplateItem(templateHtml, page);
@@ -248,9 +251,11 @@ const changeContentEmpty=(block:Block)=>{
             let referenceBlock:Block = targetBlock;
             while (doing) {
               let previousBlockInDoc = findPreviousBlockInDoc(page, referenceBlock).previousBlockInDoc;
+
               if(previousBlockInDoc.type.includes("List")&& previousBlockInDoc.subBlocksId?.[0]===referenceBlock.id){
                 previousBlockInDoc =findPreviousBlockInDoc(page, previousBlockInDoc).previousBlockInDoc;
               };
+
               if(possibleBlocksId?.includes(previousBlockInDoc.id)){
                 if(previousBlockInDoc.type.includes("List")&& previousBlockInDoc.subBlocksId!==null){
                   moveFocus(previousBlockInDoc.subBlocksId[previousBlockInDoc.subBlocksId.length-1]);
