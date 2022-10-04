@@ -785,8 +785,7 @@ function updateMiddleChildren(startIndex:number, endIndex:number,endNode:Node, c
             const newSpan= document.createElement("span");
             newSpan.innerHTML =innerHtml;
             newSpan.className="selected";
-            console.log("innerHtml",innerHtml,"pre",preText, preText===
-            "","after",afterText,afterText==="");
+      
             if(afterText!==""){
               const afterNode= document.createTextNode(afterText);
               startNode.parentNode?.insertBefore(newSpan, startNode);
