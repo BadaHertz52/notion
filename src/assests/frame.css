@@ -1149,12 +1149,14 @@ a:link, a:active, a:visited {
   background: #EDECE9;
 }
 #linkLoader .inner {
-  padding: 14px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-#linkLoader .pages, #linkLoader input, #linkLoader .result, #linkLoader .linkToWebPage {
+#linkLoader .search, #linkLoader .page_inner, #linkLoader .pages header {
+  padding: 7px 14px;
+}
+#linkLoader .search, #linkLoader .pages {
   width: 100%;
   margin-top: 10px;
 }
@@ -1176,6 +1178,7 @@ a:link, a:active, a:visited {
   width: 100%;
   margin-left: 0;
   margin-right: 0;
+  box-sizing: border-box;
 }
 #linkLoader input::-moz-placeholder {
   color: #B9B8B6;
@@ -1196,10 +1199,8 @@ a:link, a:active, a:visited {
 }
 #linkLoader .page_inner {
   width: 100%;
-  padding: 6px;
   display: flex;
   align-items: center;
-  margin-top: 12px;
 }
 #linkLoader .page_inner:hover {
   background-color: #EDECE9;
@@ -1225,22 +1226,64 @@ a:link, a:active, a:visited {
   text-overflow: ellipsis;
   text-align: left;
 }
-#linkLoader .pagePath {
+#linkLoader .pagePathes {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
   margin-top: 6px;
   font-size: 14px;
+  line-height: 1rem;
   color: #B9B8B6;
 }
-#linkLoader .result svg, #linkLoader .linkToWebPage svg {
+#linkLoader .pagePathes .path {
+  display: flex;
+  flex-direction: row;
+}
+#linkLoader .pagePathes .title {
+  width: calc(100% - 4px);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin: 0;
+  flex-grow: 1;
+  flex-shrink: 1;
+  text-align: initial;
+}
+#linkLoader .pagePathes .slash {
+  margin: 0 4px;
+}
+
+#linkLoader_moreFn {
+  border-top: 1px solid #B9B8B6;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+#linkLoader_moreFn > div {
+  width: 100%;
+  padding: 4px;
+}
+#linkLoader_moreFn svg {
   margin-right: 10px;
 }
-#linkLoader .result {
-  padding: 0;
+#linkLoader_moreFn button {
+  padding: 5px 10px;
+  display: flex;
 }
-#linkLoader .result:hover {
+#linkLoader_moreFn button:hover {
   background-color: #EDECE9;
 }
-#linkLoader .linkToWebPage:hover {
-  background-color: #EDECE9;
+
+#linkedFn {
+  display: flex;
+  flex-direction: column;
+}
+#linkedFn span {
+  font-size: 1rem;
+  line-height: 1.1rem;
+}
+#linkedFn svg {
+  font-size: 1.1rem;
 }
 
 #inner .blockComponent,

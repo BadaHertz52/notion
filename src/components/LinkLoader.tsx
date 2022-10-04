@@ -1,8 +1,10 @@
 import React , {useState, ChangeEvent, Dispatch ,SetStateAction, useEffect} from 'react';
 import { BsArrowUpRight, BsLink45Deg } from 'react-icons/bs';
+import { IoMdCopy } from 'react-icons/io';
+import { IoTrashOutline } from 'react-icons/io5';
 import { CSSProperties } from 'styled-components';
-import { makePagePath, makeRoutePath } from '../containers/NotionRouter';
-import { Block, findPage, listItem, Page } from '../modules/notion';
+import {  makePagePath, makeRoutePath, pathType } from '../containers/NotionRouter';
+import { Block, findPage, Page } from '../modules/notion';
 import { selectionType } from './Frame';
 import PageIcon from './PageIcon';
 
@@ -179,7 +181,13 @@ const LinkLoader=({recentPagesId, pages,page,pagesId, block,editBlock, setOpenLi
       setOpenLink(false);
     }
   };
-
+  const setWidth =(lenght:number)=>{
+    const n = 100 / lenght; 
+    const style:CSSProperties ={
+      maxWidth: `${n}%`
+    };
+    return style
+  };
   useEffect(()=>{
     if(blockStyler !==null && blockStylerStyle !==undefined){
       const blockStylerTop =blockStylerStyle.top as string;
@@ -213,6 +221,7 @@ const LinkLoader=({recentPagesId, pages,page,pagesId, block,editBlock, setOpenLi
   };
   const PageItem=({page}:PageItemProps)=>{
     const pagePath = makeRoutePath(page, pagesId,pages).slice(1);
+    const pathes=makePagePath(page, pagesId, pages);
     return(
       <button 
         className='page_inner'
@@ -224,13 +233,23 @@ const LinkLoader=({recentPagesId, pages,page,pagesId, block,editBlock, setOpenLi
             style={undefined}
           />
           <div className='pageInform'>
-            <span className='pageTitle'>
+            <div className='pageTitle'>
                 {page.header.title}
-            </span>
+            </div>
             { page.parentsId!==null&&
-            <span className='pagePath'>
-              {pagePath}
-            </span>
+            <div className='pagePathes'>
+              {pathes?.map((path:pathType)=>
+              <div 
+                className='path'
+                style ={setWidth(pathes.length)}
+              >
+              {pathes.indexOf(path)!==0 && 
+                <div className='slash'>/</div>
+              }
+                <div className='title'>{path.title}</div>
+              </div>
+              )}
+            </div>
             }
           </div>
       </button>
@@ -242,11 +261,12 @@ const LinkLoader=({recentPagesId, pages,page,pagesId, block,editBlock, setOpenLi
       style={linkLoaderStyle}
     >
       <div className="inner">
-        <input
-          className='search'
-          placeholder='Past link or search pages'
-          onChange={onChagneSearch}
-        />
+        <div className='search'>
+          <input
+            placeholder= {linked ? "Edit link or search pages" :'Past link or search pages'} 
+            onChange={onChagneSearch}
+          />
+        </div>
         <div className="pages">
           <header>
             LINK TO BLOCK
@@ -266,39 +286,50 @@ const LinkLoader=({recentPagesId, pages,page,pagesId, block,editBlock, setOpenLi
             }
           </div>
         </div>
-        {webLink && searchValue!==null &&
-          <button  
-            className='linkToWebPage'
-            onClick={()=>addLink(searchValue)}
-          >
-            <BsLink45Deg/>
-            Link to web page
-          </button>
-        }
-        {searchValue !==null &&
-        <button 
-          className='result'
-          onClick={()=>addLink(searchValue)}
-        >
-          <BsArrowUpRight/>
-          <span>
-            New "{searchValue}" page in....
-          </span>
-        </button>
-        }
-        {linked &&
-        <div id="linked">
-          <button>
-            <span>Copy link</span>
-          </button>
-          <button 
-            id="removeLinkBtn"
-            onClick={removeLink}
-          >
-            <span>Remove link</span>
-          </button>
-        </div>}
       </div>
+      {(webLink ||linked|| searchValue!==null) &&
+        <div id="linkLoader_moreFn">
+          {webLink && searchValue!==null &&
+            <div id="linkToWebPage">
+              <button  
+                onClick={()=>addLink(searchValue)}
+                >
+                <BsLink45Deg/>
+                Link to web page
+              </button>
+            </div>
+          }
+          {linked &&
+          <div id="linkedFn">
+            <button>
+              <IoMdCopy/>
+              <span>Copy link</span>
+            </button>
+            <button 
+              id="removeLinkBtn"
+              onClick={removeLink}
+            >
+              <IoTrashOutline/>
+              <span>Remove link</span>
+            </button>
+          </div>}
+          {searchValue !==null &&
+          <div id="linkResult">
+            <button 
+            onClick={()=>addLink(searchValue)}
+            >
+              <BsArrowUpRight/>
+              <span>
+                New "{searchValue}" page in....
+              </span>
+            </button>
+          </div>
+
+          }
+        </div>
+      }
+
+
     </div>
   )
 };

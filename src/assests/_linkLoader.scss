@@ -4,12 +4,14 @@
   @include popupMenu;
   width: 300px;
   .inner{
-    padding:14px;
     display: flex;
     flex-direction: column;
     align-items: center;
   }
-  .pages , input , .result, .linkToWebPage{
+  .search , .page_inner , .pages header{
+    padding: 7px 14px;
+  }
+  .search, .pages {
     width: 100%;
     margin-top: 10px;
   }
@@ -26,16 +28,15 @@
       left:0;
       right:0
     };
+    box-sizing: border-box;
   }
   .pageList{
     margin-top: 10px;
   }
   .page_inner{
     width: 100%;
-    padding:6px;
     display: flex;
     align-items: center;
-    margin-top: 12px;
     &:hover{
       background-color: $itemHover;
     }
@@ -61,26 +62,61 @@
     text-overflow: ellipsis;
     text-align: left;
   }
-  .pagePath{
+  .pagePathes{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
     margin-top: 6px;
     font-size: 14px;
+    line-height: 1rem;
     color:$mud;
-
-  }
-  .result , .linkToWebPage {
-    svg {
-      margin-right: 10px;
+    .path{
+      display: flex;
+      flex-direction: row;
+    }
+    .title{
+      width: calc( 100% - 4px);
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow:ellipsis ;
+      margin: 0;
+      flex-grow: 1;
+      flex-shrink: 1;
+      text-align: initial;
+    }
+    .slash{
+      margin: 0 4px;
     }
   }
-  .result{
-    padding: 0;
+}
+#linkLoader_moreFn {
+  border-top: 1px solid $mud;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  & > div{
+    width: 100%;
+    padding:4px;
+  }
+  svg{
+    margin-right: 10px;
+  }
+  button{
+    padding:5px 10px;
+    display: flex;
     &:hover{
       background-color: $itemHover;
     }
   }
-  .linkToWebPage {
-    &:hover{
-      background-color: $itemHover;
-    }
+}
+#linkedFn{
+  display: flex;
+  flex-direction: column;
+  span {
+    font-size: 1rem;
+    line-height: 1.1rem;
+  }
+  svg{
+    font-size: 1.1rem;
   }
 }
