@@ -67,7 +67,7 @@ const LinkLoader=({recentPagesId, pages,page,pagesId, block,editBlock, setOpenLi
    * 이미 link 되어 있는 지 여부 
    */
   const [linked, setLinked]=useState<boolean>(false);
-  const [linkElement, setLinkElement]=useState<HTMLAnchorElement|NodeListOf<HTMLAnchorElement>|null>(null);
+  const [linkElements, setLinkElement]=useState<HTMLAnchorElement[]|null>(null);
   const [linkLoaderStyle, setLinkLoaderStyle]=useState<CSSProperties|undefined>(undefined);
   const blockStyler =document.getElementById("blockStyler");
   const [searchValue, setSearchValue]= useState<string|null>(null);
@@ -140,20 +140,19 @@ const LinkLoader=({recentPagesId, pages,page,pagesId, block,editBlock, setOpenLi
 
   const addLink=(link:string)=>{
     if(selectedHtml!==null){
-      if(linked){
-        if(linkElement === selectedHtml){
+      if(linked && linkElements!==null){
+        if(linkElements[0] === selectedHtml){
           //href 만 변경 
           changeHref(selectedHtml as HTMLAnchorElement, link);
           getBlockContents();
         }else{
           //기존 link 삭제 후 새로운 link 
           const selectedHtmlParent = selectedHtml.parentElement;
-          if(linkElement === selectedHtmlParent){
+          if(linkElements[0] === selectedHtmlParent){
             changeHref(selectedHtmlParent as HTMLAnchorElement, link);
             getBlockContents();
           }else{
             // 배열 
-            const linkElements =linkElement as NodeListOf<HTMLAnchorElement>; 
             linkElements.forEach((e:HTMLAnchorElement)=>{
               console.log("e", e);
               e.outerHTML =e.innerHTML;
@@ -161,7 +160,6 @@ const LinkLoader=({recentPagesId, pages,page,pagesId, block,editBlock, setOpenLi
             const newSelectedHtml = document.querySelector(
               ".selected"
             );
-            console.log("newselectedHtml", newSelectedHtml);
             newSelectedHtml!==null &&
             makeNewAnchorElement(newSelectedHtml.innerHTML, link);
           }
@@ -174,7 +172,12 @@ const LinkLoader=({recentPagesId, pages,page,pagesId, block,editBlock, setOpenLi
     setOpenLink(false);
   };
   const removeLink =()=>{
-
+    if(linkElements!==null){
+      linkElements.forEach((e:HTMLAnchorElement)=> {
+      e.outerHTML = e.innerHTML});
+      getBlockContents();
+      setOpenLink(false);
+    }
   };
 
   useEffect(()=>{
@@ -198,9 +201,10 @@ const LinkLoader=({recentPagesId, pages,page,pagesId, block,editBlock, setOpenLi
       const haveLinkElement = selectedHtml.querySelector(".link");
       if(selectedLink|| parentLink||haveLinkElement){
         setLinked(true);
-        selectedLink && setLinkElement(selectedHtml as HTMLAnchorElement);
-        parentLink && setLinkElement(selectedHtmlParent as HTMLAnchorElement);
-        haveLinkElement && setLinkElement(selectedHtml.querySelectorAll('.link') as NodeListOf<HTMLAnchorElement>);
+        selectedLink && setLinkElement([selectedHtml as HTMLAnchorElement]);
+        parentLink && setLinkElement([selectedHtmlParent as HTMLAnchorElement]);
+        const linkElementArry =[...selectedHtml.querySelectorAll('.link') as NodeListOf<HTMLAnchorElement>];
+        haveLinkElement && setLinkElement(linkElementArry );
       };
     }
   },[selectedHtml])
