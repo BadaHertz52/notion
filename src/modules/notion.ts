@@ -14,10 +14,12 @@ export const page ="page" as const ;
 export const image ="image media" as const; 
 export const bookmark ="bookmark media" as const; 
 export const numberList ="numberList" as const;
+export const numberListArry ="numberListArry" as const;
 export const bulletList ="bulletList" as const ;
+export const bulletListArry ="bulletListArry" as const ;
 export const blockTypes =[text, toggle, todo, todo_done,image, bookmark, h1, h2, page, numberList, bulletList];
 
-export type BlockType= typeof text|typeof toggle|typeof todo |typeof todo_done|typeof image|typeof bookmark |typeof h1|typeof h2|typeof h3 |typeof page |typeof numberList |typeof bulletList ;
+export type BlockType= typeof text|typeof toggle|typeof todo |typeof todo_done|typeof image|typeof bookmark |typeof h1|typeof h2|typeof h3 |typeof page |typeof numberList |typeof bulletList|typeof numberListArry |typeof bulletListArry;
 
 export const defaultColor :string ="initial" as const ;
 export const grey :string="#bdbdbd" as const ;
@@ -99,10 +101,9 @@ export  const blockSample:Block ={
   comments:null
 };
 export function makeNewBlock(page:Page, targetBlock:Block|null, newBlockContents :string):Block{
-  let number =page.blocksId?.length.toString() as string;
   const editTime= JSON.stringify(Date.now());
   const newBlock:Block ={
-    id: `${page.id}_${number}_${editTime}`,
+    id: `${page.id}_${editTime}`,
     editTime:editTime,
     createTime:editTime,
     type:"text",
@@ -207,13 +208,20 @@ const CLEAN_TRASH ="notion/CLEAN_TRASH" as const ;
 const ADD_TEMPLATE="notion/ADD_TEMPLATE" as const;
 const CANCLE_EDIT_TEMPLATE="notino/CANCLE_EDIT_TEMPLATE" as const; 
 const DELETE_TEMPLATE="notion/DELETE_TEMPLATE" as const ;
-
+/**
+ * page에 새로운 block을 추가하는 액션함수
+ * @param pageId block을 추가할 page의 id
+ * @param block  추가할 block 
+ * @param newBlockIndex  page.blocksId 나 page.blocks에 새로운 블록의 index
+ * @param previousBlockId 새로운 블록이 특정 위치에 존재해야할 경우 , 화면상에서 새로운 블록의 바로 이전에 위치한 block의 id  
+ * @returns 
+ */
 export const add_block =(pageId:string, block:Block ,newBlockIndex:number ,previousBlockId:string|null)=> ({
   type:ADD_BLOCK ,
   pageId:pageId,
   block:block,
   newBlockIndex :newBlockIndex,
-  /**블록과 블록 사이에 새로운 블록을 만드는 경우에 필요함 */
+  /**블록의 위치를 특정할 때 필요  */
   previousBlockId:previousBlockId 
 });
 export const edit_block =(pageId:string, block:Block)=> ({
@@ -759,7 +767,7 @@ const initialState :Notion ={
     firstBlock:true,
     subBlocksId:["num1", "num2", "num3"],
     parentBlocksId: null,
-    type: numberList,
+    type: numberListArry,
     iconType:null,
     icon:  null ,
     editTime: (Date.parse("2021-6-1-18:45")).toString(),
@@ -837,7 +845,7 @@ const initialState :Notion ={
     firstBlock:true,
     subBlocksId:["b1", "b2"],
     parentBlocksId:null,
-    type: bulletList,
+    type: bulletListArry,
     iconType:null,
     icon:  null ,
     editTime: (Date.parse("2021-6-1-19:13:45")).toString(),

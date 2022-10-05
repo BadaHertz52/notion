@@ -5,7 +5,7 @@ import { IoDocumentTextOutline, IoTextOutline } from 'react-icons/io5';
 import { RiPlayList2Fill } from 'react-icons/ri';
 import { VscListOrdered } from 'react-icons/vsc';
 import { Command } from './Frame';
-import { Block, BlockType, Page } from "../modules/notion";
+import { Block, BlockType, bulletListArry, Page } from "../modules/notion";
 import { PopupType } from '../containers/EditorContainer';
 import imgIcon from '../assests/img/vincent-van-gogh-ge1323790d_640.jpg'; 
 import { setTemplateItem } from './BlockComponent';
@@ -203,7 +203,7 @@ const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBl
               </button>
               <button 
                 className="command_btn"
-                onClick={()=>changeType("bulletList")}
+                onClick={()=>changeType('bulletListArry')}
                 name='bullet list'
               >
                 <div className='command_btn_inner'>
@@ -220,7 +220,7 @@ const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBl
               </button>
               <button 
                 className="command_btn"
-                onClick={()=>changeType("numberList")}
+                onClick={()=>changeType('numberListArry')}
                 name="number list"
               >
                 <div className='command_btn_inner'>

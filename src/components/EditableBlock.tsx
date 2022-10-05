@@ -279,7 +279,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
             style={changeFontSizeBySmallText(block, smallText)}
           > 
 
-            {block.type.includes("List") ?
+            {block.type.includes("ListArry") ?
               <ListSub/>
             :
             <>
