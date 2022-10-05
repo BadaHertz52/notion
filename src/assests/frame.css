@@ -1279,7 +1279,7 @@ a:link, a:active, a:visited {
   flex-direction: column;
 }
 #linkedFn span {
-  font-size: 1rem;
+  font-size: 13.5px;
   line-height: 1.1rem;
 }
 #linkedFn svg {
