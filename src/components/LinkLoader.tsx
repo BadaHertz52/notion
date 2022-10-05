@@ -69,7 +69,7 @@ const LinkLoader=({recentPagesId, pages,page,pagesId, block,editBlock, setOpenLi
    * 이미 link 되어 있는 지 여부 
    */
   const [linked, setLinked]=useState<boolean>(false);
-  const [linkElements, setLinkElement]=useState<HTMLAnchorElement[]|null>(null);
+  const [linkElements, setLinkElements]=useState<HTMLAnchorElement[]|null>(null);
   const [linkLoaderStyle, setLinkLoaderStyle]=useState<CSSProperties|undefined>(undefined);
   const blockStyler =document.getElementById("blockStyler");
   const [searchValue, setSearchValue]= useState<string|null>(null);
@@ -109,6 +109,12 @@ const LinkLoader=({recentPagesId, pages,page,pagesId, block,editBlock, setOpenLi
     editBlock(page.id, newBlock);
     setSelection({block:newBlock});
   };
+  };
+  const resetLinked =()=>{
+    if(linked && linkElements!==null){
+      setLinked(false);
+      setLinkElements(null);
+    }
   };
   /**
    * HTMLAnchorElement의 href 를 변경하는 함수 
@@ -172,15 +178,29 @@ const LinkLoader=({recentPagesId, pages,page,pagesId, block,editBlock, setOpenLi
       }
     };
     setOpenLink(false);
+    resetLinked();
   };
+  const copyLink =()=>{
+    if(linkElements!==null){
+      const href = linkElements[0].getAttribute("href");
+      if(href!==null){
+        navigator.clipboard.writeText(href);
+      };
+      setOpenLink(false);
+      resetLinked();
+    }
+  };
+
   const removeLink =()=>{
     if(linkElements!==null){
       linkElements.forEach((e:HTMLAnchorElement)=> {
       e.outerHTML = e.innerHTML});
       getBlockContents();
       setOpenLink(false);
+      resetLinked();
     }
   };
+  
   const setWidth =(lenght:number)=>{
     const n = 100 / lenght; 
     const style:CSSProperties ={
@@ -203,16 +223,15 @@ const LinkLoader=({recentPagesId, pages,page,pagesId, block,editBlock, setOpenLi
   useEffect(()=>{
     if(selectedHtml!==null){
       const selectedHtmlParent =selectedHtml.parentElement;
-      console.log("sp", selectedHtmlParent, selectedHtmlParent?.tagName);
       const parentLink = selectedHtmlParent?.tagName ==="A" && selectedHtmlParent?.classList.contains("link");
       const selectedLink = selectedHtml.tagName ==="A" && selectedHtml.classList.contains("link");
       const haveLinkElement = selectedHtml.querySelector(".link");
       if(selectedLink|| parentLink||haveLinkElement){
         setLinked(true);
-        selectedLink && setLinkElement([selectedHtml as HTMLAnchorElement]);
-        parentLink && setLinkElement([selectedHtmlParent as HTMLAnchorElement]);
+        selectedLink && setLinkElements([selectedHtml as HTMLAnchorElement]);
+        parentLink && setLinkElements([selectedHtmlParent as HTMLAnchorElement]);
         const linkElementArry =[...selectedHtml.querySelectorAll('.link') as NodeListOf<HTMLAnchorElement>];
-        haveLinkElement && setLinkElement(linkElementArry );
+        haveLinkElement && setLinkElements(linkElementArry );
       };
     }
   },[selectedHtml])
@@ -301,7 +320,10 @@ const LinkLoader=({recentPagesId, pages,page,pagesId, block,editBlock, setOpenLi
           }
           {linked &&
           <div id="linkedFn">
-            <button>
+            <button
+              id="copyLinkBtn"
+              onClick={copyLink}
+            >
               <IoMdCopy/>
               <span>Copy link</span>
             </button>
