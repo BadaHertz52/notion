@@ -1282,8 +1282,8 @@ export default function notion (state:Notion =initialState , action :NotionActio
 
         if(action.newBlockIndex===0){
           // 새로운 블럭이 page 의 첫번째 블럭인 경우
-          targetPage.blocks =[action.block];
-          targetPage.blocksId=[action.block.id];
+          targetPage.blocks = targetPage.blocks!==null? [action.block, ...targetPage.blocks] :[action.block];
+          targetPage.blocksId=targetPage.blocksId!==null? [action.block.id, ...targetPage.blocksId] :[action.block.id];
         }else{
           targetPage.blocks?.splice(action.newBlockIndex, 0, action.block);
           targetPage.blocksId?.splice(action.newBlockIndex, 0, action.block.id);
@@ -1437,10 +1437,11 @@ export default function notion (state:Notion =initialState , action :NotionActio
         editBlockData(blockIndex, changedBlock);
         if(changedTargetPage.blocks !==null && changedTargetPage.blocksId!==null && targetPage.blocks!==null && targetPage.blocksId!==null){
           // targetPage에 changedTargetPage의 block들을 추가 
+          const newParentBlocksId = action.block.parentBlocksId!==null? action.block.parentBlocksId.concat(action.block.id): [action.block.id]; 
           const newSubBlocks :Block[]=changedTargetPage.blocks.map((block:Block)=>({
             ...block,
             firstBlock:false,
-            parentBlocksId:block.parentBlocksId!==null? [action.block.id ,...block.parentBlocksId] :[action.block.id]
+            parentBlocksId:block.parentBlocksId!==null? newParentBlocksId.concat(action.block.id) :newParentBlocksId
           }));
           const newTargetPageBlocks = targetPage.blocks.concat(newSubBlocks);
           const newTargetPlageBlocksId =targetPage.blocksId.concat(changedTargetPage.blocksId);
