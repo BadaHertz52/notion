@@ -1,6 +1,6 @@
 import '../assests/frame.css';
 import React, { CSSProperties, Dispatch,  MouseEvent,  SetStateAction, useEffect, useRef, useState } from 'react';
-import { Block, MainCommentType, blockSample,  findBlock, findParentBlock, listItem, Page } from '../modules/notion';
+import { Block, MainCommentType, blockSample,  findBlock, findParentBlock, listItem, Page, makeNewBlock, findPage } from '../modules/notion';
 import EditableBlock, { changeFontSizeBySmallText } from './EditableBlock';
 import IconPoup, { randomIcon } from './IconPoup';
 import CommandBlock from './CommandBlock';
@@ -309,6 +309,9 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
         moveBlock.current=true
     };
   };
+  /**
+   * 마우스 드래그로 블록의 위치를 변경하고, 변경된 위치에 따라 page의 data도 변경하는 함수 
+   */
   const changeBlockPosition =()=>{
     if(pointBlockToMoveBlock.current!==null && moveTargetBlock!==null && page.blocksId!== null && page.blocks!==null){
       setTemplateItem(templateHtml,page);
@@ -317,26 +320,60 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
         const blocksId =[...page.blocksId];
         const blocks=[...page.blocks];
         const pointBlock =pointBlockToMoveBlock.current;
-        const targetBlock :Block ={
-          ...moveTargetBlock,
-          editTime:editTime,
+        const targetBlockIsList =moveTargetBlock.type === "numberList" || moveTargetBlock.type ==="bulletList"; 
+        const newBlock =makeNewBlock(page, null,"" );
+        const newParentBlockOfList :Block ={
+          ...newBlock,
+          firstBlock:pointBlock.firstBlock,
+          type: moveTargetBlock.type=== "numberList"? 'numberListArry': 'bulletListArry' ,
+          subBlocksId:[moveTargetBlock.id],
+          parentBlocksId: pointBlock.parentBlocksId
         };
-        const deleteParentBlocksIdFromSubBlock =(targetBlock:Block, parentBlockId:string)=>{
+        const targetBlock:Block= targetBlockIsList ? 
+        {
+          ...moveTargetBlock,
+          firstBlock:false,
+          parentBlocksId: newParentBlockOfList.parentBlocksId !==null? newParentBlockOfList.parentBlocksId.concat(newParentBlockOfList.id) : [newParentBlockOfList.id],
+          editTime:editTime
+        }
+        :
+        {
+          ...moveTargetBlock,
+          firstBlock:pointBlock.firstBlock,
+          parentBlocksId:pointBlock.parentBlocksId,
+          editTime:editTime
+        };
+
+        /**
+         * targetBlock의 subBlock가 존재할 경우, subBlock들의 parentBlocksId에서 특정 id를 제거하거나 다른 id로 변경하는 함수 
+         * @param targetBlock parentBlocksId를 변경할 subBlock 들의 parentBlock
+         * @param parentBlockId subBlocks 들의 parentBlocksId에서 제거해야할 id
+         * @param newParentBlockId  subBlocks 들의 parentBlocksId에서 parentBlockId(parameter)와 변경되어야할 새로운 parentBlockId
+         */
+        const deleteParentBlocksIdFromSubBlock =(targetBlock:Block, parentBlockId:string , newParentBlockId:string|null)=>{
           if(targetBlock.subBlocksId!==null){
             targetBlock.subBlocksId.forEach((id:string)=>{
               const subBlocksIndex= blocksId.indexOf(id);
               const subBlock = blocks[subBlocksIndex];
+              const parentBlocksId =[...subBlock.parentBlocksId as string[]] ;
+              const parentBlockIndex= parentBlocksId.indexOf(parentBlockId);
+              if(targetBlockIsList && newParentBlockId!==null){
+                parentBlocksId.splice(parentBlockIndex,1, newParentBlockId)
+              }else{
+                parentBlocksId.splice(parentBlockIndex,1);
+              }
               const editedSubBlock:Block ={
                 ...subBlock,
-                parentBlocksId: subBlock.parentBlocksId !== null ? subBlock.parentBlocksId.filter((id:string)=> id !== parentBlockId) : null,
+                parentBlocksId: parentBlockId[0]!==undefined ? parentBlocksId:null,
                 editTime:editTime
               };
               editBlock(page.id, editedSubBlock);
-              subBlock.subBlocksId!==null && deleteParentBlocksIdFromSubBlock(subBlock, parentBlockId);
+              subBlock.subBlocksId!==null && deleteParentBlocksIdFromSubBlock(subBlock, parentBlockId ,newParentBlockId);
             } )
           }
       
         };
+
       if(pointBlock.firstBlock){
         const pointBlock_firstBlockIndex= firstBlocksId?.indexOf(pointBlock.id) as number;
         if(targetBlock.firstBlock){
@@ -346,59 +383,94 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
             firstBlocksId.splice(pointBlock_firstBlockIndex,0,targetBlock.id);
           };
         }else{
-          const editedTargetBlock:Block ={
-            ...moveTargetBlock,
-            parentBlocksId:null,
-            firstBlock:true,
-            editTime:editTime
-          };
-          //edit editedTargetBlock's parentBlock
-          const {parentBlock} = findParentBlock(page, moveTargetBlock);
-          if(parentBlock.subBlocksId!==null){
-            const editedParentBlock:Block ={
-              ...parentBlock,
-              subBlocksId: parentBlock.subBlocksId.filter((id:string)=> id !== editedTargetBlock.id),
-              editTime:editTime,
+            //edit targetBlock's  origin parentBlock
+            const {parentBlock} = findParentBlock(page, moveTargetBlock);
+            if(parentBlock.subBlocksId!==null){
+              const editedParentBlock:Block ={
+                ...parentBlock,
+                subBlocksId: parentBlock.subBlocksId.filter((id:string)=> id !== targetBlock.id),
+                editTime:editTime,
+              };
+              editBlock(page.id, editedParentBlock);
             };
-            editBlock(page.id, editedParentBlock);
-          };
-
-          if(editedTargetBlock.subBlocksId!==null){
-            deleteParentBlocksIdFromSubBlock(editedTargetBlock, parentBlock.id);
-          };
-          editBlock(page.id, editedTargetBlock);
-          //add firtstBlocks
-          if(firstBlocksId!==null){
-            firstBlocksId.splice(pointBlock_firstBlockIndex,0, editedTargetBlock.id);
-          }
+            // edit targetBlock.subBlocksId 
+            if(targetBlock.subBlocksId!==null){
+              deleteParentBlocksIdFromSubBlock(targetBlock, parentBlock.id , targetBlockIsList? newParentBlockOfList.id:null);
+            };
+            //add firtstBlocks
+            if(firstBlocksId!==null){
+              if(targetBlockIsList && page.firstBlocksId!==null ){
+                const preBlockId = page.firstBlocksId[pointBlock_firstBlockIndex-1];
+                const preBlockIndexInBlocksId =page.blocksId.indexOf(preBlockId);
+                addBlock(page.id, newParentBlockOfList, preBlockIndexInBlocksId+1 ,preBlockId );
+              }else{
+                firstBlocksId.splice(pointBlock_firstBlockIndex,0, targetBlock.id);
+              }
+            };
+            editBlock(page.id, targetBlock);
         }
-      }else{
-        //case2. pointBlock is subBlock
-        const newTargetBlock:Block={
-          ...targetBlock,
-          firstBlock:false,
-          parentBlocksId:pointBlock.parentBlocksId,
+      };
+       //case2. pointBlock is subBlock : pointBlock의 parentBlock의 subBlock 으로 이동 
+      if(!pointBlock.firstBlock){
+        const parentBlockOfPointBlock=findParentBlock(page,pointBlock).parentBlock;
+        //STEP1. targetBlock이 firstBlock일 경우 page의 firstBlocksId에서 삭제, 아닐 경우 targetBlock의 parentBlock을 수정 
+        if(targetBlock.firstBlock && firstBlocksId!==null){
+          const firstBlocksIdIndex= firstBlocksId?.indexOf(targetBlock.id);
+          firstBlocksId.splice(firstBlocksIdIndex,1);
+        }else{
+          /**
+           * moveTargetBlock의 parentBlock 으로 , targetBlock은 블록의 이동에 따라  moveTargetBlock에서 data를 변경한 것이기 때문에 targetBlock의 parent가 아닌 moveTargetBlock의 parent여야함  
+           */
+          const moveTargetBlockParent:Block = findParentBlock(page, moveTargetBlock).parentBlock;
+          if(moveTargetBlockParent.id !== parentBlockOfPointBlock.id){
+            const subBlocksId =moveTargetBlockParent.subBlocksId;
+            if(subBlocksId!==null){
+              const subBlockIndex= subBlocksId.indexOf(targetBlock.id);
+              subBlocksId.splice(subBlockIndex,1);
+              const newTargetBlockParent :Block ={
+                ...moveTargetBlockParent,
+                subBlocksId: subBlocksId,
+                editTime:editTime
+              };
+              editBlock(page.id, newTargetBlockParent);
+            }
+          }else{
+            // step2-2에서 실행 
+          }
+      };
+
+        //STEP2. edit parentBlock of pointBlock : 위치 변경에 따라 targetBlock or newParentBlockOfTargetBlock을 parentBlockOfPoint 의 subBlocksId 에 추가 , targetBlockIsList 일 경우 , newParentBlockOfTargetBlock을 페이지에 생성
+
+      // step2-1 : targetBlockIsList 일때, newParentBlockOfTargetBlock을 페이지에 추가 
+      if(targetBlockIsList && parentBlockOfPointBlock.subBlocksId!==null){
+        const pointBlockIndex= blocksId.indexOf(pointBlock.id);
+        const pointBlockIndexAsSub = parentBlockOfPointBlock.subBlocksId.indexOf(pointBlock.id);
+        console.log("poinBlockIndex," ,pointBlockIndex, "pointblockindexAsSub", pointBlockIndexAsSub);
+        if(pointBlockIndexAsSub===0){
+          addBlock(page.id, newParentBlockOfList, pointBlockIndex-1, null);
+        }else{
+          const previousBlockId =parentBlockOfPointBlock.subBlocksId[pointBlockIndexAsSub-1];
+          addBlock(page.id, newParentBlockOfList, pointBlockIndex-1, previousBlockId );
+        }
+      };
+      //step2-2 : targetBlock을 subBlocksId에 추가 
+      if(!targetBlockIsList && parentBlockOfPointBlock.subBlocksId!==null){
+        const parentBlockSubBlocksId =[...parentBlockOfPointBlock.subBlocksId];
+        if(parentBlockSubBlocksId.includes(targetBlock.id)){
+          // 이미 targetBlock 이fparentBlockOfPointBlock 에 있는 경우, parentBlock에서 targetBlock을 삭제
+          const targetBlockSubIndex= parentBlockSubBlocksId.indexOf(targetBlock.id);
+          parentBlockSubBlocksId.splice(targetBlockSubIndex,1);
+        };
+        const subBlockIndex= parentBlockSubBlocksId.indexOf(pointBlock.id);
+        parentBlockSubBlocksId.splice(subBlockIndex, 0, targetBlock.id);
+        const newParentBlock:Block ={
+          ...parentBlockOfPointBlock,
+          subBlocksId:parentBlockSubBlocksId,
           editTime:editTime
         };
-        //edit parent block
-        const parentBlock=findParentBlock(page,pointBlock).parentBlock;
-
-        if(parentBlock.subBlocksId!==null){
-          const parentBlockSubBlocksId =[...parentBlock.subBlocksId];
-          if(parentBlockSubBlocksId.includes(newTargetBlock.id)){
-            const targetBlockSubIndex= parentBlockSubBlocksId.indexOf(newTargetBlock.id);
-            parentBlockSubBlocksId.splice(targetBlockSubIndex,1);
-          };
-          const subBlockIndex= parentBlockSubBlocksId.indexOf(pointBlock.id);
-          parentBlockSubBlocksId.splice(subBlockIndex, 0, newTargetBlock.id);
-          const newParentBlock:Block ={
-            ...parentBlock,
-            subBlocksId:parentBlockSubBlocksId,
-            editTime:editTime
-          };
-          editBlock(page.id ,newParentBlock);
-        };
-
+        editBlock(page.id ,newParentBlock);
+      };
+        //STEP3.targetBlock의 subBlocks의 parentBlocksId 수정 
         const addParentBlockToSubBlock=(targetBlock:Block)=>{ 
           if(targetBlock.subBlocksId!==null){
             targetBlock.subBlocksId.forEach((id:string)=>{
@@ -416,41 +488,20 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           };
         };
         
-        if(newTargetBlock.subBlocksId!==null && newTargetBlock.parentBlocksId!==null){
-          if(targetBlock.parentBlocksId!==null){
-            targetBlock.parentBlocksId[targetBlock.parentBlocksId.length-1] !== newTargetBlock.parentBlocksId[newTargetBlock.parentBlocksId.length-1] && addParentBlockToSubBlock(newTargetBlock);
+        if(targetBlock.subBlocksId!==null && targetBlock.parentBlocksId!==null){
+          if(moveTargetBlock.parentBlocksId!==null){
+            moveTargetBlock.parentBlocksId[moveTargetBlock.parentBlocksId.length-1] !== targetBlock.parentBlocksId[targetBlock.parentBlocksId.length-1] && addParentBlockToSubBlock(targetBlock);
           }else{
-            addParentBlockToSubBlock(newTargetBlock);
+            addParentBlockToSubBlock(targetBlock);
           }
         };
-
-        if(targetBlock.firstBlock && firstBlocksId!==null){
-          const firstBlocksIdIndex= firstBlocksId?.indexOf(targetBlock.id);
-          firstBlocksId.splice(firstBlocksIdIndex,1);
-
-          editBlock(page.id, newTargetBlock);
-
-        }else{
-          const targetBlockParentBlock:Block = findParentBlock(page, targetBlock).parentBlock;
-          if(targetBlockParentBlock.id !== parentBlock.id){
-            const subBlocksId =targetBlockParentBlock.subBlocksId;
-            if(subBlocksId!==null){
-              const subBlockIndex= subBlocksId.indexOf(targetBlock.id);
-              subBlocksId.splice(subBlockIndex,1);
-              const newTargetBlockParent :Block ={
-                ...targetBlockParentBlock,
-                subBlocksId: subBlocksId,
-                editTime:editTime
-              };
-              editBlock(page.id, newTargetBlockParent);
-            }
-          };
-      }
+        //STEP4. targetBlock 수정 
+        editBlock(page.id, targetBlock);
       };
+        const editedPage = findPage(pagesId, pages, page.id); 
         const newPage :Page ={
-          ...page,
-          firstBlocksId:firstBlocksId,
-          editTime:editTime
+          ...editedPage,
+          firstBlocksId:firstBlocksId
         };
         setTemplateItem(templateHtml,page);
         editPage(page.id, newPage);
@@ -879,6 +930,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
             key={`${command.targetBlock.id}_command`}
             page={page}
             block={command.targetBlock}
+            addBlock={addBlock}
             editBlock={editBlock}
             changeBlockToPage={changeBlockToPage}
             changePageToBlock={changePageToBlock}
@@ -965,6 +1017,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
               <CommandBlock
                 page ={page}
                 block ={commandTargetBlock}
+                addBlock ={addBlock}
                 editBlock ={editBlock}
                 changeBlockToPage ={changeBlockToPage}
                 changePageToBlock ={changePageToBlock}
