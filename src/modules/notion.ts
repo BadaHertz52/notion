@@ -1295,7 +1295,12 @@ export default function notion (state:Notion =initialState , action :NotionActio
               const firstIndex = targetPage.firstBlocksId.indexOf(action.previousBlockId);
               targetPage.firstBlocksId.splice(firstIndex+1, 0,action.block.id);
             }else{
-              targetPage.firstBlocksId =targetPage.firstBlocksId.concat(action.block.id);
+              if(action.newBlockIndex===0){
+                targetPage.firstBlocksId = [action.block.id, ...targetPage.firstBlocksId];
+              }else{
+                targetPage.firstBlocksId =targetPage.firstBlocksId.concat(action.block.id);
+              }
+              
             }
   
           }else{
