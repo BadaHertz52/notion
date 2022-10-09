@@ -100,6 +100,13 @@ export  const blockSample:Block ={
   style :basicBlockStyle ,
   comments:null
 };
+/**
+ * 새로운 블록을 생성해 반환하는 함수
+ * @param page  새로운 블록이 입력될 page
+ * @param targetBlock  새로운 블록의 기준이 될 블록 (새로운 블록은 targetBlock의 firstBlock, subBlocksId, parentBlocksId의 값을 가짐 )
+ * @param newBlockContents 새로운 블록의 contents 값
+ * @returns 새로운 블록 
+ */
 export function makeNewBlock(page:Page, targetBlock:Block|null, newBlockContents :string):Block{
   const editTime= JSON.stringify(Date.now());
   const newBlock:Block ={
@@ -1106,13 +1113,14 @@ export default function notion (state:Notion =initialState , action :NotionActio
                         null;
 
 /**
- * block data 수정 
+ * block data 수정 , block의 parentBlock이나 subBlocks에 변경이 있을 경우 해당 parentBlock이나 subBlock을 변경해야함 
  * @param index  targetPage.blocks 에서의 block의 index
  * @param block  수정된 data를 가진 block 
  */
   const editBlockData =(index:number ,block:Block)=>{
     targetPage?.blocks?.splice(index,1,block);
     console.log("editBlockData",  block, targetPage?.blocks);
+    //firstBlock 변경에 띠른 page.firstBlocksId 뱐경은 editPage로 
   };
   /**
    * subBlock 추가 시에 subBlock의 parentBlock을 수정 하는 함수 (parentBlock.subBlocksId 수정)
