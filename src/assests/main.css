@@ -521,13 +521,13 @@ a:link, a:active, a:visited {
   color: inherit;
 }
 
+#block_commandBlock {
+  position: absolute;
+  z-index: 20;
+}
 #block_commandBlock #commandBlock {
   margin-top: 0;
-}
-
-#popupMenu #commandBlock {
-  margin-top: 0;
-  z-index: 30;
+  z-index: inherit;
 }
 
 #commandBlock {
@@ -543,6 +543,7 @@ a:link, a:active, a:visited {
   z-index: 10;
   border-radius: 8px;
   box-shadow: 0px 0px 23px -5px #ababab;
+  overflow-y: scroll;
   margin-top: 1rem;
 }
 #commandBlock::-webkit-scrollbar-thumb {
@@ -563,7 +564,6 @@ a:link, a:active, a:visited {
   background-color: #edece9;
 }
 #commandBlock_inner {
-  max-height: 350px;
   position: relative;
 }
 #commandBlock .command div {

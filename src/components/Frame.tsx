@@ -1,6 +1,6 @@
 import '../assests/frame.css';
 import React, { CSSProperties, Dispatch,  MouseEvent,  SetStateAction, useEffect, useRef, useState } from 'react';
-import { Block, MainCommentType, blockSample,  findBlock, findParentBlock, listItem, Page } from '../modules/notion';
+import { Block, MainCommentType, blockSample,  findBlock, findParentBlock, listItem, Page, todo } from '../modules/notion';
 import EditableBlock, { changeFontSizeBySmallText } from './EditableBlock';
 import IconPoup, { randomIcon } from './IconPoup';
 import CommandBlock from './CommandBlock';
@@ -164,6 +164,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   const [loaderTargetBlock, setLoaderTargetBlock]=useState<Block|null>(null);
   const [iconStyle, setIconStyle]=useState<CSSProperties|undefined>(undefined);
   const [commandBlockPositon, setCBPositon]=useState<CSSProperties>();
+  const [commandBlockStyle, setCommandBlockStyle]=useState<CSSProperties|undefined>(undefined);
   const [menuOpen, setOpenMenu]= useState<boolean>(false);
   const [popup, setPopup]=useState<PopupType>({
     popup:false,
@@ -573,33 +574,57 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
    */
   const changeCBSposition =()=>{
     if(command.boolean && command.targetBlock!==null){
-      const frame =openTemplates? document.getElementById("template"): document.querySelector(".frame");
-      const frameDomRect= frame?.getClientRects()[0];
+      const frameDomRect= frameHtml?.getClientRects()[0];
       const blockStyler =document.getElementById("blockStyler");
       if(blockStyler!==null){
         //blockStyler
         const blockStylerDomRect = blockStyler.getClientRects()[0];
-        if(frameDomRect!==undefined){
-          const style :CSSProperties ={
-            top:`${blockStylerDomRect.top -frameDomRect.top}px`,
-            left: `${blockStylerDomRect.left - frameDomRect.left}px`
+        if(frameDomRect!==undefined ){
+          const top = blockStylerDomRect.top + blockStylerDomRect.height;
+          const left =`${blockStylerDomRect.left - frameDomRect.left}px`; 
+          const remainHeight = frameDomRect.height - top ;
+          const toDown = remainHeight >150;
+          const bottom= blockStylerDomRect.top - frameDomRect.top ;
+          const maxHeight= toDown? remainHeight : blockStylerDomRect.top - frameDomRect.top -50 ; 
+          const style :CSSProperties = toDown?
+          {
+            top:`${top}px`,
+            left: left,
+          }
+          :{
+            bottom: `${bottom}px`,
+            left: left,
           };
           setCBPositon(style);
+          const commandBlock_style:CSSProperties ={
+            maxHeight:`${maxHeight}px`,
+          };
+          setCommandBlockStyle(commandBlock_style);
         }
       }else{
         //typing 으로 type 변경 시 
         const commandInput =document.getElementById("commandInput");
         const commandInputDomRect = commandInput?.getClientRects()[0];
-  
         if(frameDomRect!==undefined &&commandInputDomRect !==undefined){
-          const multiple = command.targetBlock.type==="h1"? 1 : 1.5
-          const plus = openTemplates? 0 : (commandInputDomRect.height)* multiple;
-          const style :CSSProperties ={
-            position:"absolute",
-            top:commandInputDomRect.bottom -frameDomRect.top + 14 + plus  ,
-            left: commandInputDomRect.left -frameDomRect.left  
+          const top =commandInputDomRect.top + commandInputDomRect.height  + 14 ;
+          const left = `${commandInputDomRect.left -frameDomRect.left}px` ; 
+          const remainingHeight = frameDomRect.height - top ; 
+          const toDown = remainingHeight > 150 ;
+          //수정 ....
+          const bottom = frameDomRect.height - commandInputDomRect.top +commandInputDomRect.height ;
+          const maxHeight = toDown? remainingHeight : frameDomRect.top - bottom -50
+          const style :CSSProperties = toDown? {
+            top: `${top}px` ,
+            left:  left,
+          }:{
+            bottom: `${bottom}px`,
+            left: left,
           };
           setCBPositon(style);
+          const commandBlock_style:CSSProperties ={
+            maxHeight:`${maxHeight}px`,
+          };
+          setCommandBlockStyle(commandBlock_style);
         }
       }
 
@@ -875,13 +900,14 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
         </div>
         
       </div>
-      {command.command !==null && 
+      {command.boolean &&
       command.targetBlock !==null &&
         <div 
           id="block_commandBlock"
           style={commandBlockPositon}
         >
             <CommandBlock 
+            style={commandBlockStyle}
             key={`${command.targetBlock.id}_command`}
             page={page}
             block={command.targetBlock}
@@ -917,6 +943,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
         editPage={editPage}
         duplicatePage={duplicatePage}
         movePageToPage={movePageToPage}
+        frameHtml={frameHtml}
         commentBlock={commentBlock}
         setCommentBlock={setCommentBlock}
         moveTargetBlock={moveTargetBlock}
@@ -1029,12 +1056,13 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           popup={popup}
           setPopup={setPopup}
           setPopupStyle={setPopupStyle}
+          command={command}
           setCommand={setCommand}
           setCommentBlock={setCommentBlock}
           setTargetPageId={setTargetPageId}
           selection={selection}
           setSelection={setSelection}
-          openTemplates={openTemplates}
+          frameHtml={frameHtml}
         />
       }
     </div>

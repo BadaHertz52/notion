@@ -9,6 +9,7 @@ import { Block, BlockType, Page } from "../modules/notion";
 import { PopupType } from '../containers/EditorContainer';
 import imgIcon from '../assests/img/vincent-van-gogh-ge1323790d_640.jpg'; 
 import { setTemplateItem } from './BlockComponent';
+import { CSSProperties } from 'styled-components';
 
 type CommandBlockProp ={
   page:Page,
@@ -18,8 +19,9 @@ type CommandBlockProp ={
   changePageToBlock:(currentPageId: string, block: Block) => void,
   command:Command | null,
   setCommand: Dispatch<SetStateAction<Command>> |null ,
+  style:CSSProperties|undefined
 };
-const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBlock ,setCommand ,command }:CommandBlockProp)=>{
+const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBlock ,setCommand ,command ,style}:CommandBlockProp)=>{
   const commandBlock_inner =document.getElementById("commandBlock_inner");
   const commandBlock_noResult =document.getElementById("commandBlock_noResult");
 
@@ -85,6 +87,7 @@ const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBl
   return(
       <div 
         id='commandBlock'
+        style={style}
       >
           <div id='commandBlock_inner'>
           <div className='command basic_blocks'>
@@ -94,7 +97,7 @@ const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBl
             <div className='command_btns type'>
               <button
                 onClick={()=>changeType("text")} 
-                className="command_btn"
+                className="command_btn on"
                 name='text'
               >
                 <div className='command_btn_inner'>
@@ -111,7 +114,7 @@ const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBl
               </button>
               <button  
                 onClick={()=>changeType("page")}
-                className="command_btn"  
+                className="command_btn on "  
                 name='page'
               >
                 <div className='command_btn_inner'>
@@ -128,7 +131,7 @@ const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBl
               </button>
               <button   
                 onClick={()=>changeType("todo")}
-                className="command_btn"
+                className="command_btn on"
                 name='todo list'
               >
                 <div className='command_btn_inner'>
@@ -144,7 +147,7 @@ const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBl
                 </div>
               </button>
               <button 
-              className="command_btn"
+              className="command_btn on"
                 onClick={()=>changeType("h1")}
                 name='h1 heading 1'
               >
@@ -162,7 +165,7 @@ const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBl
               </div>
               </button>
               <button 
-              className="command_btn"
+              className="command_btn on"
                 onClick={()=>changeType("h2")}
                 name='h2 heading 2'
               >
@@ -180,7 +183,7 @@ const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBl
                 </div>
               </button>
               <button 
-                className="command_btn"
+                className="command_btn on"
                 onClick={()=>changeType("h3")}
                 name="h3 heading 3"
               >
@@ -198,7 +201,7 @@ const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBl
                 </div>
               </button>
               <button 
-                className="command_btn"
+                className="command_btn on"
                 onClick={()=>changeType("bulletList")}
                 name='bullet list'
               >
@@ -215,7 +218,7 @@ const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBl
                 </div>
               </button>
               <button 
-                className="command_btn"
+                className="command_btn on"
                 onClick={()=>changeType("numberList")}
                 name="number list"
               >
@@ -232,7 +235,7 @@ const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBl
                 </div>
               </button>
               <button
-                className="command_btn"
+                className="command_btn on"
                 onClick={()=>changeType("toggle")}
                 name="toggle list"
               >
@@ -256,7 +259,7 @@ const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBl
             </header>
             <div className='command_btns type'>
               <button
-                  className="command_btn"
+                  className="command_btn on"
                   onClick={()=>changeType("image media")}
                   name="image"
                 >

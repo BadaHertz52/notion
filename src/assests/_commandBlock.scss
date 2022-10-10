@@ -1,19 +1,18 @@
 @import './common';
 #block_commandBlock {
+  position: absolute;
+  z-index: 20;
   #commandBlock{
-    margin-top: 0
+    margin-top: 0;
+    z-index:inherit;
   }
-}
-#popupMenu #commandBlock{
-  margin-top: 0;
-  z-index: 30;
 }
 #commandBlock{
   @include popupMenu;
   @include webkitScroll;
+  overflow-y: scroll;
   margin-top: 1rem;
   &_inner {
-    max-height: 350px;
     position: relative;
   }
   .command div{
