@@ -333,8 +333,6 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
               changePageToBlock={changePageToBlock}
               command={null}
               setCommand={null}
-              setCommandTargetBlock={null}
-              setPopup={null}
             />
         }
         {color &&

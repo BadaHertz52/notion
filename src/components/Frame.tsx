@@ -153,9 +153,10 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   const [firstBlocksId, setFirstBlocksId]=useState<string[]|null>(page.firstBlocksId);
   const [newPageFram, setNewPageFrame]=useState<boolean>(false);
   const [decoOpen ,setdecoOpen] =useState<boolean>(false);
-  const [command, setCommand]=useState<Command>({boolean:false, 
-  command:null,
-  targetBlock:null
+  const [command, setCommand]=useState<Command>({
+    boolean:false, 
+    command:null,
+    targetBlock:null
   });
   const [openIconPopup, setOpenIconPopup]=useState<boolean>(false);
   const [openPageCommentInput, setOpenPageCommentInput]=useState<boolean>(false);
@@ -164,7 +165,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   const [iconStyle, setIconStyle]=useState<CSSProperties|undefined>(undefined);
   const [commandBlockPositon, setCBPositon]=useState<CSSProperties>();
   const [menuOpen, setOpenMenu]= useState<boolean>(false);
-  const [commandTargetBlock, setCommandTargetBlock]=useState<Block|null>(null);
   const [popup, setPopup]=useState<PopupType>({
     popup:false,
     what:null
@@ -568,7 +568,46 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
         }
     }
   };
+  /**
+   * commandBlockPosition (type:CSSProperties)의 값을 변경하는 함수 
+   */
+  const changeCBSposition =()=>{
+    if(command.boolean && command.targetBlock!==null){
+      const frame =openTemplates? document.getElementById("template"): document.querySelector(".frame");
+      const frameDomRect= frame?.getClientRects()[0];
+      const blockStyler =document.getElementById("blockStyler");
+      if(blockStyler!==null){
+        //blockStyler
+        const blockStylerDomRect = blockStyler.getClientRects()[0];
+        if(frameDomRect!==undefined){
+          const style :CSSProperties ={
+            top:`${blockStylerDomRect.top -frameDomRect.top}px`,
+            left: `${blockStylerDomRect.left - frameDomRect.left}px`
+          };
+          setCBPositon(style);
+        }
+      }else{
+        //typing 으로 type 변경 시 
+        const commandInput =document.getElementById("commandInput");
+        const commandInputDomRect = commandInput?.getClientRects()[0];
+  
+        if(frameDomRect!==undefined &&commandInputDomRect !==undefined){
+          const multiple = command.targetBlock.type==="h1"? 1 : 1.5
+          const plus = openTemplates? 0 : (commandInputDomRect.height)* multiple;
+          const style :CSSProperties ={
+            position:"absolute",
+            top:commandInputDomRect.bottom -frameDomRect.top + 14 + plus  ,
+            left: commandInputDomRect.left -frameDomRect.left  
+          };
+          setCBPositon(style);
+        }
+      }
 
+    }
+  };
+  window.onresize = ()=>{
+    changeCBSposition();
+  };
   inner?.addEventListener("keyup",updateBlock);
   inner?.addEventListener("click",(event:globalThis.MouseEvent)=>{
     updateBlock();
@@ -617,41 +656,9 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
     } 
   },[newPageFram, firstBlocksId]);
   useEffect(()=>{
-    if(command.boolean && command.targetBlock!==null){
-      const frame =openTemplates? document.getElementById("template"): document.querySelector(".frame");
-      const commandInput =document.getElementById("commandInput");
-      const frameDomRect= frame?.getClientRects()[0];
-      const commandInputDomRect = commandInput?.getClientRects()[0];
-      if(frameDomRect!==undefined &&commandInputDomRect !==undefined){
-        const multiple = command.targetBlock.type==="h1"? 1 : 1.5
-        const plus = openTemplates? 0 : (commandInputDomRect.height)* multiple;
-        const style :CSSProperties ={
-          position:"absolute",
-          top:commandInputDomRect.bottom -frameDomRect.top + 14 + plus  ,
-          left: commandInputDomRect.left -frameDomRect.left  
-        };
-        setCBPositon(style);
-      }
-    }
+    changeCBSposition();
   },[command.boolean ,command.targetBlock, openTemplates]);
 
-  useEffect(()=>{
-    if(commandTargetBlock!==null){
-      const editor= document.getElementsByClassName("editor")[0];
-      const editorDomRect= editor.getClientRects()[0];
-      const blockDom = document.getElementById(`block_${commandTargetBlock.id}`);
-      const blockDomRect =blockDom?.getClientRects()[0];
-      if(blockDomRect!==undefined){
-        const style:CSSProperties ={
-          position:"absolute",
-          top : blockDomRect.bottom + blockDomRect.height + editor.scrollTop,
-          left :blockDomRect.left -editorDomRect.left
-        };
-        setPopupStyle(style);
-      };
-    }
-  },[commandTargetBlock]);
-  
   //window.onresize =changeCommentStyle;
   useEffect(()=>{
     // stop srcoll when something open
@@ -883,8 +890,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
             changePageToBlock={changePageToBlock}
             command={command}
             setCommand={setCommand}
-            setCommandTargetBlock={null}
-            setPopup={null}
           />
         </div>
       }
@@ -960,19 +965,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
                 templateHtml={templateHtml}
               />
             }
-            {popup.what === "popupCommand" && commandTargetBlock !==null&&
-              <CommandBlock
-                page ={page}
-                block ={commandTargetBlock}
-                editBlock ={editBlock}
-                changeBlockToPage ={changeBlockToPage}
-                changePageToBlock ={changePageToBlock}
-                setPopup ={setPopup}
-                setCommandTargetBlock={setCommandTargetBlock}
-                setCommand ={null}
-                command ={null}
-              />
-            }
           </div>
       }
       {commentBlock !==null && openComment &&
@@ -1037,9 +1029,9 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           popup={popup}
           setPopup={setPopup}
           setPopupStyle={setPopupStyle}
+          setCommand={setCommand}
           setCommentBlock={setCommentBlock}
           setTargetPageId={setTargetPageId}
-          setCommandTargetBlock ={setCommandTargetBlock}
           selection={selection}
           setSelection={setSelection}
           openTemplates={openTemplates}

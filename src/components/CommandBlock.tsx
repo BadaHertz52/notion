@@ -18,10 +18,8 @@ type CommandBlockProp ={
   changePageToBlock:(currentPageId: string, block: Block) => void,
   command:Command | null,
   setCommand: Dispatch<SetStateAction<Command>> |null ,
-  setPopup:Dispatch<SetStateAction<PopupType>> |null,
-  setCommandTargetBlock :Dispatch<SetStateAction<Block|null>>|null,
 };
-const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBlock ,setCommand ,command ,setPopup, setCommandTargetBlock}:CommandBlockProp)=>{
+const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBlock ,setCommand ,command }:CommandBlockProp)=>{
   const commandBlock_inner =document.getElementById("commandBlock_inner");
   const commandBlock_noResult =document.getElementById("commandBlock_noResult");
 
@@ -71,16 +69,14 @@ const CommandBlock =({ page ,block , editBlock ,changeBlockToPage,changePageToBl
         editBlock(page.id, newBlock);
       };
     };
-    closeCommentBlock();
+    closeCommendBlock();
   };
-  function closeCommentBlock(){
+  function closeCommendBlock(){
     setCommand !==null && setCommand({
       boolean:false, 
       command:null,
       targetBlock:null
     })
-    setPopup !==null && setPopup({popup:false, what:null}) ;
-    setCommandTargetBlock !==null && setCommandTargetBlock(null);
   };
 
   useEffect(()=>{

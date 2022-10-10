@@ -4,7 +4,7 @@ import { IoIosArrowDown } from 'react-icons/io';
 import {ImArrowUpRight2} from 'react-icons/im';
 import { CSSProperties } from 'styled-components';
 import ColorMenu from './ColorMenu';
-import { selectionType } from './Frame';
+import { Command, selectionType } from './Frame';
 import Menu, { MenuAndBlockStylerCommonProps } from './Menu';
 import { Block} from '../modules/notion';
 import { detectRange } from './BlockFn';
@@ -48,9 +48,9 @@ type BlockStylerProps = MenuAndBlockStylerCommonProps& {
   setSelection:Dispatch<SetStateAction<selectionType|null>>,
   openTemplates: boolean,
   setPopupStyle:Dispatch<React.SetStateAction<React.CSSProperties | undefined>>,
-  setCommandTargetBlock: React.Dispatch<React.SetStateAction<Block | null>>
+  setCommand: React.Dispatch<React.SetStateAction<Command>>,
 }
-const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, block, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage,popup,setPopup, setCommentBlock,setTargetPageId,selection,setSelection, openTemplates, setPopupStyle, setCommandTargetBlock}:BlockStylerProps)=>{
+const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, block, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage,popup,setPopup, setCommentBlock,setTargetPageId,selection,setSelection, openTemplates, setPopupStyle,setCommand}:BlockStylerProps)=>{
 
   //select-> selection의 스타일 변경-> 변경된 내용을 selection, block에 반영 의 순서로 이루어짐
 
@@ -136,26 +136,13 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
 
     }
   };
-  const changePopupStyle=()=>{
-    if(blockStyler!==null && frameHtml !==null && frameHtml!==undefined) {
-      const blockStylerDomRect= blockStyler.getClientRects()[0];
-      const frameDomRect= frameHtml.getClientRects()[0];
-      const popupStyle:CSSProperties ={
-        top: `${blockStylerDomRect.top - frameDomRect.top}px`,
-        left :`${blockStylerDomRect.left- frameDomRect.left}px`
-      }
-      setPopupStyle(popupStyle);
-      console.log("popup", popupStyle);
-    }
-
-  };
+  //수정예정
   const onClickTypeBtn=()=>{
-    setPopup({
-      popup:true,
-      what:"popupCommand"
-    });
-    block !=null&&
-    setCommandTargetBlock(block);
+    setCommand({
+      boolean:true,
+      command:"/",
+      targetBlock:block
+    })
   };
   const changeCommentStyle =()=>{
     if(mainBlockHtml!==null && mainBlockHtml!==undefined && 
@@ -214,7 +201,6 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
     changeBlockStylerStyle();
     openMenu && changeMenuStyle(menu);
     openColor && changeMenuStyle(color);
-    popup.popup && changePopupStyle();
   };
   const closeMenu =(event:globalThis.MouseEvent)=>{ 
       const mainMenu =document.getElementById("mainMenu");
@@ -360,7 +346,6 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
 
         <button 
           className='typeBtn btn'
-          onMouseDown={changePopupStyle}
           onClick={onClickTypeBtn}
         >
           {blockType(block)}
