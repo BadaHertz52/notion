@@ -28,6 +28,7 @@ export type MenuAndBlockStylerCommonProps={
   changeBlockToPage: (currentPageId: string, block: Block) => void,
   changePageToBlock:(currentPageId: string, block: Block) => void,
   deleteBlock :(pageId: string, block: Block ,isInMenu:boolean) => void,
+  editPage: (pageId: string, newPage: Page) => void,
   duplicatePage: (targetPageId: string) => void,
   movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
   setPopup :Dispatch<SetStateAction<PopupType>> ,
@@ -42,7 +43,7 @@ type MenuProps
   setOpenRename:Dispatch<SetStateAction<boolean>>|null,
 };
 
-const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,changeBlockToPage,changePageToBlock ,editBlock, deleteBlock ,duplicatePage,movePageToPage ,setPopup ,popup ,setCommentBlock ,setTargetPageId ,setOpenRename}:MenuProps)=>{
+const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,changeBlockToPage,changePageToBlock ,editBlock, deleteBlock ,editPage,duplicatePage,movePageToPage ,setPopup ,popup ,setCommentBlock ,setTargetPageId ,setOpenRename}:MenuProps)=>{
 
   const blockFnElement = document.getElementById("blockFn") ;
   const [editBtns, setEditBtns]= useState<Element[]|null>(null);
@@ -329,9 +330,11 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
             <CommandBlock
               page={page}
               block={block}
+              addBlock={addBlock}
               editBlock={editBlock}
               changeBlockToPage={changeBlockToPage}
               changePageToBlock={changePageToBlock}
+              editPage={editPage}
               command={null}
               setCommand={null}
               setCommandTargetBlock={null}

@@ -50,7 +50,7 @@ type BlockStylerProps = MenuAndBlockStylerCommonProps& {
   setPopupStyle:Dispatch<React.SetStateAction<React.CSSProperties | undefined>>,
   setCommandTargetBlock: React.Dispatch<React.SetStateAction<Block | null>>
 }
-const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, block, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage,popup,setPopup, setCommentBlock,setTargetPageId,selection,setSelection, openTemplates, setPopupStyle, setCommandTargetBlock}:BlockStylerProps)=>{
+const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, block, addBlock, editBlock, changeBlockToPage, changePageToBlock ,editPage,deleteBlock,duplicatePage,movePageToPage,popup,setPopup, setCommentBlock,setTargetPageId,selection,setSelection, openTemplates, setPopupStyle, setCommandTargetBlock}:BlockStylerProps)=>{
 
   //select-> selection의 스타일 변경-> 변경된 내용을 selection, block에 반영 의 순서로 이루어짐
 
@@ -468,6 +468,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
           changeBlockToPage={changeBlockToPage}
           changePageToBlock={changePageToBlock}
           deleteBlock={deleteBlock}
+          editPage={editPage}
           duplicatePage={duplicatePage}
           movePageToPage={movePageToPage}
           popup={popup}
