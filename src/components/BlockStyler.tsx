@@ -102,7 +102,6 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
   }
 } 
   const inner =document.getElementById("inner");
-  const mainBlockHtml =document.getElementById(`block_${block.id}`)?.firstElementChild;
   const pageContent = frameHtml?.querySelector(".pageContent_inner");
   const blockStyler =document.getElementById("blockStyler");
   const [blockStylerStyle,setBlockStylerStyle]=useState<CSSProperties|undefined>(undefined);
@@ -113,14 +112,25 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
   const color ="color";
   const menu ="menu";
   type menuType =typeof color| typeof menu ;
+  /**
+   * BlockStyler의 타켓인 block에 대한 내용을 담고 있는 element중 mainBlock element의 domRect을 반환하는 함수 
+   * @returns DOMRect | undefined
+   */
+  const getMainBlockDomRect=():DOMRect | undefined=>{
+    const blockHtml = frameHtml?.querySelector(`#block_${block.id}`);
+    const mainBlockHtml= block.type.includes("List")? 
+      blockHtml?.parentElement?.parentElement
+      :blockHtml?.querySelector('.mainBlock');
+    const mainBlockDomRect = mainBlockHtml?.getClientRects()[0];
+      return mainBlockDomRect
+  }
   const changeBlockStylerStyle=()=>{
-
-    if(mainBlockHtml!==null && mainBlockHtml!==undefined && frameHtml!==undefined && frameHtml!==null){
+    const mainBlockDomRect =getMainBlockDomRect();
+    if(frameHtml!==undefined && frameHtml!==null && mainBlockDomRect!==undefined){
       const pageContentInner =frameHtml.querySelector(".pageContent_inner") as Element;
-      const blockDomRect= mainBlockHtml.getClientRects()[0];
-      const frameDomRect = frameHtml.getClientRects()[0];
-      const top = blockDomRect.top - frameDomRect.top;
-      const left = blockDomRect.left -frameDomRect.left - pageContentInner.clientLeft;
+      const frameDomRect = frameHtml.getClientRects()[0]; 
+      const top = mainBlockDomRect.top - frameDomRect.top;
+      const left =mainBlockDomRect.left -frameDomRect.left - pageContentInner.clientLeft;
       if(left + 450 > frameDomRect.width){
         setBlockStylerStyle({
           top:`${top}px`,
@@ -132,10 +142,9 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
           left:`${left}px`
         })
       }
-
+      
     }
   };
-  //수정예정
   const onClickTypeBtn=()=>{
     setCommand({
       boolean:true,
@@ -144,14 +153,14 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
     })
   };
   const changeCommentStyle =()=>{
-    if(mainBlockHtml!==null && mainBlockHtml!==undefined && 
+    const mainBlockDomRect =getMainBlockDomRect();
+    if(mainBlockDomRect!==undefined && 
       frameHtml!==null && frameHtml !==undefined ){
-      const blockDomRect= mainBlockHtml.getClientRects()[0];
       const pageContentDomRect= pageContent?.getClientRects()[0];
       const frameDomRect =frameHtml.getClientRects()[0];
       pageContentDomRect!==undefined &&
       setPopupStyle({
-        top:`${blockDomRect.bottom + 50 }px`,
+        top:`${mainBlockDomRect.bottom + 50 }px`,
         left: `${pageContentDomRect.left -frameDomRect.left}px`,
       });
     };
@@ -360,7 +369,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
   })
   useEffect(()=>{
     changeBlockStylerStyle();
-  },[mainBlockHtml, frameHtml]);
+  },[]);
   return(
     <>
     <div 
