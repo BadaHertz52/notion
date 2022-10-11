@@ -4,7 +4,7 @@ import { IoIosArrowDown } from 'react-icons/io';
 import {ImArrowUpRight2} from 'react-icons/im';
 import { CSSProperties } from 'styled-components';
 import ColorMenu from './ColorMenu';
-import { selectionType } from './Frame';
+import { Command, selectionType } from './Frame';
 import Menu, { MenuAndBlockStylerCommonProps } from './Menu';
 import { Block} from '../modules/notion';
 import { detectRange } from './BlockFn';
@@ -46,11 +46,11 @@ type BlockStylerProps = MenuAndBlockStylerCommonProps& {
   recentPagesId:string[]|null,
   selection:selectionType,
   setSelection:Dispatch<SetStateAction<selectionType|null>>,
-  openTemplates: boolean,
   setPopupStyle:Dispatch<React.SetStateAction<React.CSSProperties | undefined>>,
-  setCommandTargetBlock: React.Dispatch<React.SetStateAction<Block | null>>
+  setCommand: React.Dispatch<React.SetStateAction<Command>>,
+  command: Command
 }
-const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, block, addBlock, editBlock, changeBlockToPage, changePageToBlock ,editPage,deleteBlock,duplicatePage,movePageToPage,popup,setPopup, setCommentBlock,setTargetPageId,selection,setSelection, openTemplates, setPopupStyle, setCommandTargetBlock}:BlockStylerProps)=>{
+const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, block, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage, editPage,popup,setPopup, setCommentBlock,setTargetPageId,selection,setSelection ,setPopupStyle,command ,setCommand, frameHtml}:BlockStylerProps)=>{
 
   //select-> selection의 스타일 변경-> 변경된 내용을 selection, block에 반영 의 순서로 이루어짐
 
@@ -103,7 +103,6 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
 } 
   const inner =document.getElementById("inner");
   const mainBlockHtml =document.getElementById(`block_${block.id}`)?.firstElementChild;
-  const frameHtml = openTemplates?document.querySelector("#template")?.firstElementChild : document.querySelector('.frame');
   const pageContent = frameHtml?.querySelector(".pageContent_inner");
   const blockStyler =document.getElementById("blockStyler");
   const [blockStylerStyle,setBlockStylerStyle]=useState<CSSProperties|undefined>(undefined);
@@ -136,26 +135,13 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
 
     }
   };
-  const changePopupStyle=()=>{
-    if(blockStyler!==null && frameHtml !==null && frameHtml!==undefined) {
-      const blockStylerDomRect= blockStyler.getClientRects()[0];
-      const frameDomRect= frameHtml.getClientRects()[0];
-      const popupStyle:CSSProperties ={
-        top: `${blockStylerDomRect.top - frameDomRect.top}px`,
-        left :`${blockStylerDomRect.left- frameDomRect.left}px`
-      }
-      setPopupStyle(popupStyle);
-      console.log("popup", popupStyle);
-    }
-
-  };
+  //수정예정
   const onClickTypeBtn=()=>{
-    setPopup({
-      popup:true,
-      what:"popupCommand"
-    });
-    block !=null&&
-    setCommandTargetBlock(block);
+    setCommand({
+      boolean:true,
+      command:null,
+      targetBlock:block
+    })
   };
   const changeCommentStyle =()=>{
     if(mainBlockHtml!==null && mainBlockHtml!==undefined && 
@@ -214,7 +200,6 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
     changeBlockStylerStyle();
     openMenu && changeMenuStyle(menu);
     openColor && changeMenuStyle(color);
-    popup.popup && changePopupStyle();
   };
   const closeMenu =(event:globalThis.MouseEvent)=>{ 
       const mainMenu =document.getElementById("mainMenu");
@@ -237,6 +222,18 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
         setOpenColor(false);
       }
     }
+  };
+  const closeCommandBlock=(event:globalThis.MouseEvent)=>{
+    const commandBlock = document.getElementById("block_commandBlock");
+    const commandBlockDomRect =commandBlock?.getClientRects()[0];
+    if(commandBlockDomRect!==undefined){
+      const isInCommandBlock = detectRange(event, commandBlockDomRect);
+      !isInCommandBlock && setCommand({
+        boolean:false,
+        command:null,
+        targetBlock:null
+      })
+    };
   };
     /**
    *  textDeco 스타일을 지정할 경우, 기존에 textDeco가 지정된 element의 클래스를 변경하거나, outerHtml의 값을 변경하는 함수 
@@ -297,12 +294,24 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
       });
     }
   };
+    /**
+   * blockStyler를 통해 연 popupMenu를 닫는 함수  
+   * @param event globalThis.MouseEvent
+   */
+    const closePopupInBlockStyler =(event:globalThis.MouseEvent)=>{
+      openMenu && closeMenu(event);
+      openColor && closeColorMenu(event);
+      command.boolean && closeCommandBlock(event);
+    };
+  /**
+   * 화면상에서 클릭한 곳이 blockStyler외의 곳일 경우, blockStyler 에 의한 변경사항의 여부에 따라 변경 사항이 있으면 블록의 contents 중 선택된 영역을 가리키는 selected 클래스를 제거하고, 변경이 없는 경우 원래의 블록으로 되돌린 후, selection 값은 null로 변경하여 BlockStyler component의 실행을 종료하는 함수   
+   * @param event globalThis.MouseEvent
+   */
   const closeBlockStyler=(event:globalThis.MouseEvent)=>{
     const blockStylerDomRect =blockStyler?.getClientRects()[0];
     if(blockStylerDomRect!==undefined){
       const isInBlockStyler = detectRange(event, blockStylerDomRect);
       if(!isInBlockStyler){
-        console.log("/////",!change.current && originBlock.current!==null);
         if(!change.current && originBlock.current!==null){
           // 변경된 내용이 없는 경우 
           editBlock(page.id, originBlock.current);
@@ -338,13 +347,15 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
     }else{
       changeStart.current= false;
     }
-  },[selection])
+  },[selection]);
+
   inner?.addEventListener("click",(event)=>{
-      openMenu && closeMenu(event);
-      openColor && closeColorMenu(event);
+    closePopupInBlockStyler(event);
   });
   inner?.addEventListener("dblclick", (event)=>{
-    !openMenu && !openColor && !popup.popup &&
+    if(openMenu || openColor ||popup.popup || command.boolean){
+      closePopupInBlockStyler(event);
+    }; 
       closeBlockStyler(event);
   })
   useEffect(()=>{
@@ -360,7 +371,6 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
 
         <button 
           className='typeBtn btn'
-          onMouseDown={changePopupStyle}
           onClick={onClickTypeBtn}
         >
           {blockType(block)}
@@ -476,6 +486,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
           setCommentBlock={setCommentBlock}
           setTargetPageId={setTargetPageId}
           setOpenRename= {null}
+          frameHtml={frameHtml}
         />
       </div>
       }

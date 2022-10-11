@@ -25,6 +25,7 @@ type BlockFnProp ={
   duplicatePage: (targetPageId: string) => void,
   commentBlock: Block|null,
   movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
+  frameHtml: HTMLDivElement | null,
   setMoveTargetBlock :Dispatch<SetStateAction<Block| null>>,
   moveTargetBlock:Block|null,
   setCommentBlock: Dispatch<SetStateAction<Block|null>>,
@@ -76,7 +77,7 @@ export const detectRange =(event:MouseEvent| React.MouseEvent , targetArea:DOMRe
   return (inner_x && inner_y);
 };
 
-const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage, editBlock,changeBlockToPage,changePageToBlock, deleteBlock ,addPage,editPage, movePageToPage,  setMoveTargetBlock,moveTargetBlock, setCommentBlock, popup, setPopup ,menuOpen,setOpenMenu ,setPopupStyle ,setTargetPageId }:BlockFnProp)=>{
+const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage, editBlock,changeBlockToPage,changePageToBlock, deleteBlock ,addPage,editPage, movePageToPage,  setMoveTargetBlock,moveTargetBlock,frameHtml ,setCommentBlock, popup, setPopup ,menuOpen,setOpenMenu ,setPopupStyle ,setTargetPageId }:BlockFnProp)=>{
   const [openRename, setOpenRename] =useState<boolean>(false);
 
   const [blockFnTargetBlock, setBlockFnTargetBlock]=useState<Block|null>(null);
@@ -204,6 +205,7 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
             setCommentBlock={setCommentBlock}
             setTargetPageId={setTargetPageId}
             setOpenRename= {setOpenRename}
+            frameHtml={frameHtml}
           />
         }
         {openRename && renameTargetPage !==null &&

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState} from 'react';
+import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState, useRef} from 'react';
 import { Block,listItem, Page } from '../modules/notion';
 import CommandBlock from './CommandBlock';
 import { CSSProperties } from 'styled-components';
@@ -35,6 +35,7 @@ export type MenuAndBlockStylerCommonProps={
   popup:PopupType,
   setCommentBlock: React.Dispatch<React.SetStateAction<Block | null>>,
   setTargetPageId: Dispatch<SetStateAction<string>>,
+  frameHtml: HTMLDivElement | null
 }
 
 type MenuProps
@@ -43,35 +44,48 @@ type MenuProps
   setOpenRename:Dispatch<SetStateAction<boolean>>|null,
 };
 
-const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,changeBlockToPage,changePageToBlock ,editBlock, deleteBlock ,editPage,duplicatePage,movePageToPage ,setPopup ,popup ,setCommentBlock ,setTargetPageId ,setOpenRename}:MenuProps)=>{
-
+const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,changeBlockToPage,changePageToBlock ,editBlock, deleteBlock ,duplicatePage,movePageToPage,editPage ,setPopup ,popup ,setCommentBlock ,setTargetPageId ,setOpenRename ,frameHtml}:MenuProps)=>{
   const blockFnElement = document.getElementById("blockFn") ;
+  const menuRef =useRef<HTMLDivElement>(null);
   const [editBtns, setEditBtns]= useState<Element[]|null>(null);
   const [turnInto, setTurnInto]= useState<boolean>(false);
   const [color, setColor]= useState<boolean>(false);
   const [turnInToPage ,setTurnIntoPage] = useState<boolean>(false);
   const [menuStyle , setMenuStyle]= useState<CSSProperties>(changeMenuStyle());
   const [sideMenuStyle, setSideMenuStyle]=useState<CSSProperties|undefined>(undefined);
+  const [commandBlockStyle, setCommandBlockStyle]=useState<CSSProperties|undefined>(undefined);
   const templateHtml= document.getElementById("template");
   function changeMenuStyle (){
     const menu = document.querySelector(".menu");
     const menuHeight =menu? menu.clientHeight: 400;
-    const innerHeight =window.innerHeight;
-    const top = blockFnElement?.getClientRects()[0].top as number;
-    const overHeight = ( top + menuHeight ) >= innerHeight;
+    const innerWidth =window.innerWidth;
     let style:CSSProperties ={};
-    if(blockFnElement!==null){
+    if(blockFnElement!==null && frameHtml!==null){
+      const frameDomRect= frameHtml?.getClientRects()[0];
+      const top = blockFnElement.getClientRects()[0].top as number;
+      const overHeight = ( top + menuHeight ) >= frameDomRect.height;
       style =
       overHeight? {
-        bottom: (blockFnElement.offsetHeight) + 10 ,
-        left: '1rem',
+        bottom: (blockFnElement.offsetHeight) *0.5 ,
+        left: innerWidth >767 ?'2rem' : '1rem',
       } :
       {
         top:  (blockFnElement.offsetHeight)  ,
-        left:  '1rem',
+        left: innerWidth >767 ?'2rem' : '1rem',
       };
     };
     return style
+  };
+  function changeMaxHeightOfCommand (){
+    const frameDomRect= frameHtml?.getClientRects()[0];
+    if(menuRef.current!==null && frameDomRect!==undefined){
+      const menuTop =menuRef.current.offsetTop;
+      const maxHeight = frameDomRect.height - menuTop -50
+      const commandBlock_style:CSSProperties ={
+        maxHeight:`${maxHeight}px`
+      };
+      setCommandBlockStyle(commandBlock_style);
+    }
   };
   function changeSideMenuStyle(){
     const mainMenu= document.getElementById("mainMenu");
@@ -90,6 +104,9 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
     const style =changeMenuStyle();
     setMenuStyle(style);
     changeSideMenuStyle();
+    if(turnInto){
+      changeMaxHeightOfCommand();
+    }
   };
   useEffect(()=>{
     if(turnInToPage|| turnInto||color){
@@ -110,6 +127,7 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
   };
   const showTurnInto =()=>{
     setTurnInto(true);
+    changeMaxHeightOfCommand();
   };
   const showColorMenu =()=>{
     setColor(true);
@@ -178,12 +196,13 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
     })
   };
   const onClickRename =()=>{
-   setOpenRename!==null&&  setOpenRename(true);
+    setOpenRename!==null&&  setOpenRename(true);
     setOpenMenu(false);
   };
   return(
   <div 
     className="menu"
+    ref={menuRef}
     style={menuStyle}
   >
 
@@ -328,6 +347,7 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
       >
         {turnInto &&
             <CommandBlock
+              style={commandBlockStyle}
               page={page}
               block={block}
               addBlock={addBlock}
@@ -337,8 +357,6 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
               editPage={editPage}
               command={null}
               setCommand={null}
-              setCommandTargetBlock={null}
-              setPopup={null}
             />
         }
         {color &&

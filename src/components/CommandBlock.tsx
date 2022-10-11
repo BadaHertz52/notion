@@ -6,9 +6,9 @@ import { RiPlayList2Fill } from 'react-icons/ri';
 import { VscListOrdered } from 'react-icons/vsc';
 import { Command } from './Frame';
 import {  Block, BlockType,  findParentBlock, makeNewBlock, Page } from "../modules/notion";
-import { PopupType } from '../containers/EditorContainer';
 import imgIcon from '../assests/img/vincent-van-gogh-ge1323790d_640.jpg'; 
 import { setTemplateItem } from './BlockComponent';
+import { CSSProperties } from 'styled-components';
 
 type CommandBlockProp ={
   page:Page,
@@ -20,10 +20,9 @@ type CommandBlockProp ={
   editPage: (pageId: string, newPage: Page) => void,
   command:Command | null,
   setCommand: Dispatch<SetStateAction<Command>> |null ,
-  setPopup:Dispatch<SetStateAction<PopupType>> |null,
-  setCommandTargetBlock :Dispatch<SetStateAction<Block|null>>|null,
+  style:CSSProperties|undefined
 };
-const CommandBlock =({ page ,block, addBlock , editBlock ,changeBlockToPage,changePageToBlock ,editPage,setCommand ,command ,setPopup, setCommandTargetBlock}:CommandBlockProp)=>{
+const CommandBlock =({ page ,block , editBlock ,addBlock ,changeBlockToPage,changePageToBlock ,editPage ,setCommand ,command ,style}:CommandBlockProp)=>{
   const commandBlock_inner =document.getElementById("commandBlock_inner");
   const commandBlock_noResult =document.getElementById("commandBlock_noResult");
 
@@ -135,16 +134,14 @@ const CommandBlock =({ page ,block, addBlock , editBlock ,changeBlockToPage,chan
           break;
       };
     };
-    closeCommentBlock();
+    closeCommendBlock();
   };
-  function closeCommentBlock(){
+  function closeCommendBlock(){
     setCommand !==null && setCommand({
       boolean:false, 
       command:null,
       targetBlock:null
     })
-    setPopup !==null && setPopup({popup:false, what:null}) ;
-    setCommandTargetBlock !==null && setCommandTargetBlock(null);
   };
 
   useEffect(()=>{
@@ -153,6 +150,7 @@ const CommandBlock =({ page ,block, addBlock , editBlock ,changeBlockToPage,chan
   return(
       <div 
         id='commandBlock'
+        style={style}
       >
           <div id='commandBlock_inner'>
           <div className='command basic_blocks'>
@@ -162,7 +160,7 @@ const CommandBlock =({ page ,block, addBlock , editBlock ,changeBlockToPage,chan
             <div className='command_btns type'>
               <button
                 onClick={()=>changeType("text")} 
-                className="command_btn"
+                className="command_btn on"
                 name='text'
               >
                 <div className='command_btn_inner'>
@@ -179,7 +177,7 @@ const CommandBlock =({ page ,block, addBlock , editBlock ,changeBlockToPage,chan
               </button>
               <button  
                 onClick={()=>changeType("page")}
-                className="command_btn"  
+                className="command_btn on "  
                 name='page'
               >
                 <div className='command_btn_inner'>
@@ -196,7 +194,7 @@ const CommandBlock =({ page ,block, addBlock , editBlock ,changeBlockToPage,chan
               </button>
               <button   
                 onClick={()=>changeType("todo")}
-                className="command_btn"
+                className="command_btn on"
                 name='todo list'
               >
                 <div className='command_btn_inner'>
@@ -212,7 +210,7 @@ const CommandBlock =({ page ,block, addBlock , editBlock ,changeBlockToPage,chan
                 </div>
               </button>
               <button 
-              className="command_btn"
+              className="command_btn on"
                 onClick={()=>changeType("h1")}
                 name='h1 heading 1'
               >
@@ -230,7 +228,7 @@ const CommandBlock =({ page ,block, addBlock , editBlock ,changeBlockToPage,chan
               </div>
               </button>
               <button 
-              className="command_btn"
+              className="command_btn on"
                 onClick={()=>changeType("h2")}
                 name='h2 heading 2'
               >
@@ -248,7 +246,7 @@ const CommandBlock =({ page ,block, addBlock , editBlock ,changeBlockToPage,chan
                 </div>
               </button>
               <button 
-                className="command_btn"
+                className="command_btn on"
                 onClick={()=>changeType("h3")}
                 name="h3 heading 3"
               >
@@ -266,8 +264,8 @@ const CommandBlock =({ page ,block, addBlock , editBlock ,changeBlockToPage,chan
                 </div>
               </button>
               <button 
-                className="command_btn"
-                onClick={()=>changeType('bulletList')}
+                className="command_btn on"
+                onClick={()=>changeType("bulletListArry")}
                 name='bullet list'
               >
                 <div className='command_btn_inner'>
@@ -283,8 +281,8 @@ const CommandBlock =({ page ,block, addBlock , editBlock ,changeBlockToPage,chan
                 </div>
               </button>
               <button 
-                className="command_btn"
-                onClick={()=>changeType('numberList')}
+                className="command_btn on"
+                onClick={()=>changeType("numberListArry")}
                 name="number list"
               >
                 <div className='command_btn_inner'>
@@ -300,7 +298,7 @@ const CommandBlock =({ page ,block, addBlock , editBlock ,changeBlockToPage,chan
                 </div>
               </button>
               <button
-                className="command_btn"
+                className="command_btn on"
                 onClick={()=>changeType("toggle")}
                 name="toggle list"
               >
@@ -324,7 +322,7 @@ const CommandBlock =({ page ,block, addBlock , editBlock ,changeBlockToPage,chan
             </header>
             <div className='command_btns type'>
               <button
-                  className="command_btn"
+                  className="command_btn on"
                   onClick={()=>changeType("image media")}
                   name="image"
                 >
