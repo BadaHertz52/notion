@@ -97,12 +97,10 @@ const changeContentEmpty=(block:Block)=>{
 };
   const showBlockFn=(event: MouseEvent)=>{
     closeMenu(event)
-    const blockHtml =block.type.includes("List")? 
-    document.getElementById(block.id):
-    document.getElementById(`block_${block.id}`);
+    const blockHtml =document.getElementById(`block_${block.id}`);
     if(blockHtml!==null){
       const mainBlock= block.type.includes("List")? 
-      blockHtml.parentElement
+      blockHtml.parentElement?.parentElement
       :blockHtml.querySelector('.mainBlock');
       const domRect =mainBlock?.getClientRects()[0];
       const editor = document.getElementsByClassName("editor")[0] ;

@@ -187,7 +187,7 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
           >
             <div className='mainBlock_block'>
             <div 
-              id ={block.id}
+              id ={`block_${block.id}`}
               className= "blockContents"
               ref={blockContentsRef}
               style={listStyle(block)}

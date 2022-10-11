@@ -86,7 +86,7 @@ const MoveTargetBlock=({ page, block , editBlock, addBlock,changeToSub ,raiseBlo
       (<div className='eidtableBlock'>
           <div className='editableBlockInner'>
             <div 
-            id={`block_${block.id}`}
+            id={`moveTarget_block_${block.id}`}
             className={`${block.type} block`}
             style={changeFontSizeBySmallText(block, smallText)}
             >
