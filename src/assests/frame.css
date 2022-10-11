@@ -1302,7 +1302,7 @@ a:link, a:active, a:visited {
   flex-grow: 1;
   flex-shrink: 1;
   z-index: inherit;
-  display: flex;
+  display: flex !important;
   justify-content: center;
   overflow-y: scroll;
 }
