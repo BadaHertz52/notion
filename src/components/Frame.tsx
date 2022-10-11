@@ -584,7 +584,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           const left =`${blockStylerDomRect.left - frameDomRect.left}px`; 
           const remainHeight = frameDomRect.height - top ;
           const toDown = remainHeight >150;
-          const bottom= blockStylerDomRect.top - frameDomRect.top ;
+          const bottom= frameDomRect.height - blockStylerDomRect.top + blockStylerDomRect.height +16 ;
           const maxHeight= toDown? remainHeight : blockStylerDomRect.top - frameDomRect.top -50 ; 
           const style :CSSProperties = toDown?
           {
@@ -610,7 +610,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           const left = `${commandInputDomRect.left -frameDomRect.left}px` ; 
           const remainingHeight = frameDomRect.height - top ; 
           const toDown = remainingHeight > 150 ;
-          //수정 ....
           const bottom = frameDomRect.height - commandInputDomRect.top +commandInputDomRect.height ;
           const maxHeight = toDown? remainingHeight : frameDomRect.top - bottom -50
           const style :CSSProperties = toDown? {
