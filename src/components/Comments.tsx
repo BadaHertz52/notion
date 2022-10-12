@@ -723,7 +723,6 @@ const CommentTool =({mainComment , comment,block, page ,pageId ,editBlock ,editP
         //pageComment
         const templateHtml =document.getElementById("template");
         const pageComment =templateHtml==null? document.querySelector(".pageComment") as HTMLElement|null: templateHtml.querySelector(".pageComment") as HTMLElement|null;
- 
         if(pageComment!==null){
           const pageCommentsDomRect =pageComment?.getClientRects()[0];
           const style:CSSProperties ={
@@ -738,11 +737,10 @@ const CommentTool =({mainComment , comment,block, page ,pageId ,editBlock ,editP
 ;
       }else{
         //blockComment
-        const frameDomRect =frameHtml.getClientRects()[0];
         const style:CSSProperties ={
           position:"absolute" ,
           top: commentToolDomRect.top + commentToolDomRect.height +5  ,
-          right: frameDomRect.width - commentToolDomRect.left -commentToolDomRect.width
+          right:  window.innerWidth - commentToolDomRect.right
         };
         setToolMoreStyle(style);
       }
