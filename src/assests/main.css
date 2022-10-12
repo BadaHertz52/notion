@@ -4077,18 +4077,23 @@ a:link, a:active, a:visited {
   padding: 0;
   box-sizing: border-box;
   border: none;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: lighter;
+  width: calc(100% - 2rem);
   margin-left: 10px;
+  max-width: 100%;
 }
 #quickFindBord .qf_search input::-moz-placeholder {
   color: #B9B8B6;
+  text-overflow: ellipsis;
 }
 #quickFindBord .qf_search input:-ms-input-placeholder {
   color: #B9B8B6;
+  text-overflow: ellipsis;
 }
 #quickFindBord .qf_search input::placeholder {
   color: #B9B8B6;
+  text-overflow: ellipsis;
 }
 #quickFindBord .qf_search input:focus {
   outline: none;
