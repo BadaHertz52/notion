@@ -19,7 +19,7 @@ type QuickFindBordProps ={
 
 const QuickFindBord =({userName,recentPagesId, pages,pagesId ,setTargetPageId, cleanRecentPage ,setOpenQF }:QuickFindBordProps)=>{
   const bestMatches= "Best matches";
-  const lastEditedNewest ="Last edited:Nwest first";
+  const lastEditedNewest ="Last edited:Newest first";
   const lastEditedOldest ="Last edited:Oldest first";
   const createdNewest ="Created:Newest first";
   const createdOldest ="Created:Oldest first";
