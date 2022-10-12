@@ -818,7 +818,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
                 onChange={onChangePageTitle}
               />
             </div>
-            {!newPageFram ? 
             <div 
               className='pageComment'
               style={frameInnerStyle}
@@ -842,7 +841,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
                 />
                 )
               :
-                openPageCommentInput &&
+                (openPageCommentInput ?
                 <CommentInput
                   page={page}
                   pageId={page.id}
@@ -859,16 +858,14 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
                   setEdit={setOpenPageCommentInput}
                   templateHtml={templateHtml}
                 />
+                :
+                <div 
+                >
+                  Press Enter to continue with an empty page or pick a templage
+                </div>
+                )
             }
             </div>
-            :
-              <div 
-                className='pageComment'
-                style={frameInnerStyle}
-              >
-                Press Enter to continue with an empty page or pick a templage
-              </div>
-          }
           </div>
         </div>
         {openIconPopup &&
