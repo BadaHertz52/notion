@@ -101,10 +101,10 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId ,setTargetPageId, c
           let value :number =0 ;
           switch (sort) {
             case "newest":
-              value= A-B;
+              value= B-A;
               break;
             case "oldest":
-              value= B-A;
+              value= A-B;
               break;
             default:
               break;
