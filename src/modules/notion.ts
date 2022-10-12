@@ -1418,22 +1418,22 @@ export default function notion (state:Notion =initialState , action :NotionActio
           };
         }
         const newPage:Page ={
-          id:action.block.id,
+          id:changedTypeBlock.id,
           type:page,
           header:{
-            title: action.block.contents ===""?"untitle" :action.block.contents,
-            iconType: action.block.iconType,
-            icon: action.block.icon,
+            title: changedTypeBlock.contents,
+            iconType: changedTypeBlock.iconType,
+            icon: changedTypeBlock.icon,
             cover:null,
-            comments:action.block.comments
+            comments:changedTypeBlock.comments
           },
           firstBlocksId:newFirstBlocksId,
           blocksId:newBlocksId,
           blocks:newBlocks,
           subPagesId: newSubPagesId ==null? null : (newSubPagesId[0]===undefined ? null : newSubPagesId) ,
           parentsId: [action.pageId],
-          editTime: action.block.editTime,
-          createTime: action.block.createTime,
+          editTime: changedTypeBlock.editTime,
+          createTime: changedTypeBlock.createTime,
         };
         addPage(newPage);
   
