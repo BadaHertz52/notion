@@ -521,9 +521,9 @@ const initialState :Notion ={
         userName:userName,
         type:"open",
         content:"this is page comment",
-        editTime: Date.parse("2021-5-20-12:00")
+        editTime: Date.parse("2022-5-20-12:00")
         .toString(),
-        createTime: Date.parse("2021-5-20-12:00").toString(),
+        createTime: Date.parse("2022-5-20-12:00").toString(),
         subComments:null,
         subCommentsId:null,
       }],
@@ -539,8 +539,8 @@ const initialState :Notion ={
       type: text,
       iconType:null,
       icon:  null ,
-      editTime:Date.parse("2021-5-18-15:00").toString(),
-      createTime: Date.parse("2021-5-18-1:00").toString(),
+      editTime:Date.parse("2022-5-18-15:00").toString(),
+      createTime: Date.parse("2022-5-18-1:00").toString(),
       style :{
         ...basicBlockStyle,
         color: blue,
@@ -552,7 +552,7 @@ const initialState :Notion ={
         type:"open",
         content:"hi! ☺️", 
         editTime:(1654086822451).toString(),
-        createTime: (Date.parse("2021-5-20-15:00")).toString(),
+        createTime: (Date.parse("2022-5-20-15:00")).toString(),
         subComments:null,
         subCommentsId:null,
       },]
@@ -567,9 +567,9 @@ const initialState :Notion ={
       type: image,
       iconType:null,
       icon:  null ,
-      editTime: (Date.parse("2021-5-18-16:00")).toString()
+      editTime: (Date.parse("2022-5-18-16:00")).toString()
       ,
-      createTime: (Date.parse("2021-5-18-2:00")).toString(),
+      createTime: (Date.parse("2022-5-18-2:00")).toString(),
       style :{
         ...basicBlockStyle,
         width:"222px",
@@ -579,17 +579,32 @@ const initialState :Notion ={
     },
     {
       id:"toggle",
-      contents:"toggle toggle ",
+      contents:"Try press toggle btn",
       contentsEmpty:false,
       firstBlock:true,
-      subBlocksId:null, 
+      subBlocksId:['toggleSub'], 
       parentBlocksId: null,
       type: toggle,
       iconType:null,
       icon:  null ,
-      editTime: (Date.parse("2021-5-18-16:00")).toString()
+      editTime: (Date.parse("2022-5-18-16:00")).toString()
       ,
-      createTime: (Date.parse("2021-5-18-2:00")).toString(),
+      createTime: (Date.parse("2022-5-18-2:00")).toString(),
+      style :basicBlockStyle,
+      comments: null
+    }, {
+      id:"toggleSub",
+      contents:"Hi!🤗 ",
+      contentsEmpty:false,
+      firstBlock:false,
+      subBlocksId:null, 
+      parentBlocksId: ['toggle'],
+      type: text,
+      iconType:null,
+      icon:  null ,
+      editTime: (Date.parse("2022-5-18-16:10")).toString()
+      ,
+      createTime: (Date.parse("2022-5-18-2:00")).toString(),
       style :basicBlockStyle,
       comments: null
     },{
@@ -602,8 +617,8 @@ const initialState :Notion ={
       type: todo,
       iconType:null,
       icon:  null ,
-      editTime: (Date.parse("2021-5-18-16:01:00")).toString(),
-      createTime: (Date.parse("2021-5-18-3:00")).toString(),
+      editTime: (Date.parse("2022-5-18-16:01:00")).toString(),
+      createTime: (Date.parse("2022-5-18-3:00")).toString(),
       style :{
         ...basicBlockStyle,
         bgColor: bg_yellow,
@@ -613,8 +628,8 @@ const initialState :Notion ={
         userName:userName,
         type:"open",
         content:"todo comments", 
-        editTime:(Date.parse("2021-5-18-16:01:30")).toString(),
-        createTime: (Date.parse("2021-5-21-14:00")).toString(),
+        editTime:(Date.parse("2022-5-18-16:01:30")).toString(),
+        createTime: (Date.parse("2022-5-21-14:00")).toString(),
         subComments:null,
         subCommentsId:null,
       },]
@@ -628,9 +643,9 @@ const initialState :Notion ={
       type: todo_done,
       iconType:null,
       icon:  null ,
-      editTime: (Date.parse("2021-5-19-11:30")).toString()
+      editTime: (Date.parse("2022-5-19-11:30")).toString()
       ,
-      createTime: (Date.parse("2021-5-18-5:00")).toString(),
+      createTime: (Date.parse("2022-5-18-5:00")).toString(),
       style :basicBlockStyle,
       comments:null,
     },{
@@ -643,8 +658,8 @@ const initialState :Notion ={
       type: h1,
       iconType:null,
       icon:  null ,
-      editTime: (Date.parse("2021-5-19-12:00")).toString(),
-      createTime: (Date.parse("2021-5-18-15:00")).toString(),
+      editTime: (Date.parse("2022-5-19-12:00")).toString(),
+      createTime: (Date.parse("2022-5-18-15:00")).toString(),
       style :basicBlockStyle,
       comments:null
     },{
@@ -657,8 +672,8 @@ const initialState :Notion ={
       type: h2,
       iconType:null,
       icon:  null ,
-      editTime: (Date.parse("2021-5-18-20:00")).toString(),
-      createTime: (Date.parse("2021-5-18-15:00")).toString(),
+      editTime: (Date.parse("2022-5-18-20:00")).toString(),
+      createTime: (Date.parse("2022-5-18-15:00")).toString(),
       style :basicBlockStyle,
       comments:null
     },{
@@ -671,9 +686,9 @@ const initialState :Notion ={
       type: h3,
       iconType:null,
       icon:  null ,
-      editTime: (Date.parse("2021-5-19-19:20")).toString()
+      editTime: (Date.parse("2022-5-19-19:20")).toString()
       , 
-      createTime: (Date.parse("2021-5-18-15:00")).toString(), 
+      createTime: (Date.parse("2022-5-18-15:00")).toString(), 
       style :basicBlockStyle,
       comments:null
     },{
@@ -686,9 +701,9 @@ const initialState :Notion ={
       type: page,
       iconType:null,
       icon:  null ,
-      editTime: (Date.parse("2021-5-20-21:00")).toString()
+      editTime: (Date.parse("2022-5-20-21:00")).toString()
       ,
-      createTime: (Date.parse("2021-5-19-15:00")).toString(),
+      createTime: (Date.parse("2022-5-19-15:00")).toString(),
       style :basicBlockStyle,
       comments:null
     },
@@ -702,8 +717,8 @@ const initialState :Notion ={
       type: page,
       iconType:"emoji",
       icon: emojis[8] ,
-      editTime: (Date.parse("2021-5-20-9:00")).toString(),
-      createTime: (Date.parse("2021-5-19-20:00")).toString(),
+      editTime: (Date.parse("2022-5-20-9:00")).toString(),
+      createTime: (Date.parse("2022-5-19-20:00")).toString(),
 
       style :basicBlockStyle,
       comments:null
@@ -717,8 +732,8 @@ const initialState :Notion ={
     type: text,
     iconType:null,
     icon:  null ,
-    editTime: (Date.parse("2021-6-1-1:00")).toString() ,   
-    createTime: (Date.parse("2021-5-30-15:00")).toString(),
+    editTime: (Date.parse("2022-6-1-1:00")).toString() ,   
+    createTime: (Date.parse("2022-5-30-15:00")).toString(),
     style :{
       ...basicBlockStyle,
     },
@@ -734,8 +749,8 @@ const initialState :Notion ={
     type: text,
     iconType:null,
     icon:  null ,
-    editTime: (Date.parse("2021-5-12-09:00")).toString(),
-    createTime: (Date.parse("2021-5-12-08:50")).toString(),
+    editTime: (Date.parse("2022-5-12-09:00")).toString(),
+    createTime: (Date.parse("2022-5-12-08:50")).toString(),
     style :{
       ...basicBlockStyle
     },
@@ -744,8 +759,8 @@ const initialState :Notion ={
       userName:userName,
       type:"open",
       content:"subBlock comments",
-      editTime:(Date.parse("2021-5-18-8:00")).toString(),
-      createTime:(Date.parse("2021-5-18-8:00")).toString(),
+      editTime:(Date.parse("2022-5-18-8:00")).toString(),
+      createTime:(Date.parse("2022-5-18-8:00")).toString(),
       subComments:null,
       subCommentsId:null,
     },]
@@ -760,8 +775,8 @@ const initialState :Notion ={
     type: text,
     iconType:null,
     icon:  null ,
-    editTime: (Date.parse("2021-5-27-7:00")).toString(),
-    createTime: (Date.parse("2021-5-27-7:00")).toString(),
+    editTime: (Date.parse("2022-5-27-7:00")).toString(),
+    createTime: (Date.parse("2022-5-27-7:00")).toString(),
     style :{
       ...basicBlockStyle
     },
@@ -777,8 +792,8 @@ const initialState :Notion ={
     type: numberListArry,
     iconType:null,
     icon:  null ,
-    editTime: (Date.parse("2021-6-1-18:45")).toString(),
-    createTime: (Date.parse("2021-6-1-18:45")).toString(),
+    editTime: (Date.parse("2022-6-1-18:45")).toString(),
+    createTime: (Date.parse("2022-6-1-18:45")).toString(),
     style :{
       ...basicBlockStyle
     },
@@ -794,8 +809,8 @@ const initialState :Notion ={
     type: numberList,
     iconType:null,
     icon:  null ,
-    editTime: (Date.parse("2021-6-1-19:03")).toString(),
-    createTime: (Date.parse("2021-6-1-19:03")).toString(),
+    editTime: (Date.parse("2022-6-1-19:03")).toString(),
+    createTime: (Date.parse("2022-6-1-19:03")).toString(),
     style :{
       ...basicBlockStyle,
       bgColor: bg_green,
@@ -812,8 +827,8 @@ const initialState :Notion ={
     type: numberList,
     iconType:null,
     icon:  null ,
-    editTime: (Date.parse("2021-6-1-19:03:50")).toString(),
-    createTime: (Date.parse("2021-6-1-19:03:50")).toString(),
+    editTime: (Date.parse("2022-6-1-19:03:50")).toString(),
+    createTime: (Date.parse("2022-6-1-19:03:50")).toString(),
     style :{
       ...basicBlockStyle
     },
@@ -838,8 +853,8 @@ const initialState :Notion ={
     type: numberList,
     iconType:null,
     icon:  null ,
-    editTime: Date.parse("2021-6-1-19:12:13").toString(),
-    createTime: Date.parse("2021-6-1-19:12:13").toString(),
+    editTime: Date.parse("2022-6-1-19:12:13").toString(),
+    createTime: Date.parse("2022-6-1-19:12:13").toString(),
     style :{
       ...basicBlockStyle
     },
@@ -855,8 +870,8 @@ const initialState :Notion ={
     type: bulletListArry,
     iconType:null,
     icon:  null ,
-    editTime: (Date.parse("2021-6-1-19:13:45")).toString(),
-    createTime: (Date.parse("2021-6-1-19:13:45")).toString(),
+    editTime: (Date.parse("2022-6-1-19:13:45")).toString(),
+    createTime: (Date.parse("2022-6-1-19:13:45")).toString(),
     style :{
       ...basicBlockStyle
     },
@@ -872,8 +887,8 @@ const initialState :Notion ={
     type: bulletList,
     iconType:null,
     icon:  null ,
-    editTime: (Date.parse("2021-6-1-19:23")).toString(),
-    createTime: (Date.parse("2021-6-1-19:23")).toString(),
+    editTime: (Date.parse("2022-6-1-19:23")).toString(),
+    createTime: (Date.parse("2022-6-1-19:23")).toString(),
     style :{
       ...basicBlockStyle
     },
@@ -889,8 +904,8 @@ const initialState :Notion ={
     type: bulletList,
     iconType:null,
     icon:  null ,
-    editTime: (Date.parse("2021-6-1-20:12" )).toString(),
-    createTime: (Date.parse("2021-6-1-20:12" )).toString(),
+    editTime: (Date.parse("2022-6-1-20:12" )).toString(),
+    createTime: (Date.parse("2022-6-1-20:12" )).toString(),
     style :{
       ...basicBlockStyle
     },
@@ -898,7 +913,7 @@ const initialState :Notion ={
   },
 
     ],
-    blocksId:["text",'img', 'toggle', 'todo', 'todo done', 'h1', 'h2','h3','page1', 'page2' , 'sub1_1' ,'sub1_2', 'sub2_1' ,"numberList" , "num1", "num2", "num3" , "bulletList", "b1", "b2"],
+    blocksId:["text",'img', 'toggle','toggleSub', 'todo', 'todo done', 'h1', 'h2','h3','page1', 'page2' , 'sub1_1' ,'sub1_2', 'sub2_1' ,"numberList" , "num1", "num2", "num3" , "bulletList", "b1", "b2"],
     subPagesId:['page1','page2'],
     parentsId: null,
     editTime :(Date.parse("2022-5-10-15:00")).toString(),
