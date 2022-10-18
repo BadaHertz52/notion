@@ -198,7 +198,15 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
       -39  : - 16):
       (innerWidth >= 768?  -62 : -16)
     )
-  }
+  };
+  const onMouseMoveOnPH =()=>{
+    if((page.header.icon ===null|| page.header.cover===null || page.header.comments==null) && !decoOpen){
+      setdecoOpen(true);
+    }
+  };
+  const onMouseLeaveFromPH=()=>{
+    decoOpen && setdecoOpen(false);
+  };
   const closePopup=(event:globalThis.MouseEvent)=>{
     if(popup.popup){
       const popupMenu =document.getElementById("popupMenu");
@@ -760,8 +768,8 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
         <div 
           className='pageHeader'
           style={headerStyle}
-          onMouseMove={()=>{setdecoOpen(true)}}
-          onMouseLeave={()=>setdecoOpen(false)}
+          onMouseMove={onMouseMoveOnPH}
+          onMouseLeave={onMouseLeaveFromPH}
         >
           {page.header.cover !== null &&        
             <div className='pageCover'>
@@ -779,7 +787,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
                 style={pageIconStyle}
               />
             </div>
-            {decoOpen &&
+            {decoOpen && 
               <div className='deco'>
                 {page.header.icon ==null &&
                   <button 
@@ -859,6 +867,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
                   templateHtml={templateHtml}
                 />
                 :
+                newPageFram &&
                 <div 
                 >
                   Press Enter to continue with an empty page or pick a templage
