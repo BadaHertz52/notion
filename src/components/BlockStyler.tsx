@@ -177,23 +177,35 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
     if(blockStyler!==null && frameHtml !== null && frameHtml!==undefined){
       const blockStylerDomRect =blockStyler.getClientRects()[0];
       const frameHtmlDomRect= frameHtml.getClientRects()[0];
-      const top =` ${blockStylerDomRect.top - 50 - frameHtmlDomRect.top}px`
+      const top = blockStylerDomRect.bottom + 5
+      const left = param ===menu? 
+                  (blockStylerDomRect.right - frameHtmlDomRect.left- 240 ) 
+                  : 
+                  (blockStylerDomRect.right-frameHtmlDomRect.left -200 );
+      const bottom = window.innerHeight - top +blockStylerDomRect.height ;
+      const remainHeight = bottom - 50; 
+      const style :CSSProperties =remainHeight > 300 ?
+      { top: `${top}px`,
+      left:`${left}px`,
+      maxHeight: `${remainHeight}px`,
+      overflowY:"scroll"
+
+      }
+      : {
+        bottom: `${bottom}px`,
+        left:`${left}px`,
+        maxHeight: `${top - 50}px`,
+        overflowY:"scroll"
+      };
       if(param === menu){
-        const style :CSSProperties ={
-          top: top,
-          left:`${blockStylerDomRect.right - frameHtmlDomRect.left- 240}px`  
+        const STYLE :CSSProperties ={
+          ...style,
+          overflowY:initial
         };
-        setMenuStyle(style);
+        setMenuStyle(STYLE);
       }else{
-        const colorBtnHtml =blockStyler.getElementsByClassName("colorBtn")[0];
-        const colorBtnHtmlDomRect= colorBtnHtml.getClientRects()[0];
-        const style:CSSProperties ={
-          top :`${colorBtnHtmlDomRect.bottom- frameHtmlDomRect.top + colorBtnHtmlDomRect.height + 16}px`,
-          left: `${blockStylerDomRect.right-frameHtmlDomRect.left -200 }px`
-        };
         setMenuStyle(style);
       }
-
     }
   };
   const onClickColorBtn=()=>{
@@ -471,10 +483,6 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
 
       }
       {openMenu&&
-      <div 
-        id="blockStylerMenu"
-        style={menuStyle}
-      >
         <Menu
           pages={pages}
           firstlist={firstlist}
@@ -496,8 +504,8 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
           setTargetPageId={setTargetPageId}
           setOpenRename= {null}
           frameHtml={frameHtml}
+          style={menuStyle}
         />
-      </div>
       }
     </>
   )

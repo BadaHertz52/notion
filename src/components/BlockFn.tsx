@@ -206,6 +206,7 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
             setTargetPageId={setTargetPageId}
             setOpenRename= {setOpenRename}
             frameHtml={frameHtml}
+            style ={undefined}
           />
         }
         {openRename && renameTargetPage !==null &&

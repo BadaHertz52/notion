@@ -61,14 +61,13 @@
       font-weight: bolder;
     }
   }
-  .menuBtn{
-  }
+
   .arrowDown{
     color:$mud;
     margin-left: 3px;
   }
 }
-#blockStylerMenu, #blockStylerColor{
+#blockStylerColor{
   position: absolute;
   z-index: 30
 }

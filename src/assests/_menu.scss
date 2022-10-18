@@ -23,6 +23,8 @@
 #mainMenu {
   @include popupMenu;
   width:240px;
+  max-height: inherit;
+  overflow-y: scroll;
   .menu_inner {
     padding: 5% 0;
   }
@@ -56,6 +58,7 @@
   display: block;
   position:absolute;
   z-index:20;
+  overflow-y:"scroll";
   &>div{
     width: 250px;
   }

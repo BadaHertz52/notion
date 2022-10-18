@@ -35,44 +35,50 @@ export type MenuAndBlockStylerCommonProps={
   popup:PopupType,
   setCommentBlock: React.Dispatch<React.SetStateAction<Block | null>>,
   setTargetPageId: Dispatch<SetStateAction<string>>,
-  frameHtml: HTMLDivElement | null
+  frameHtml: HTMLDivElement | null,
+  
 }
 
 type MenuProps
 =MenuAndBlockStylerCommonProps& {
   setOpenMenu : Dispatch<SetStateAction<boolean>>,
   setOpenRename:Dispatch<SetStateAction<boolean>>|null,
+  style:CSSProperties|undefined
 };
 
-const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,changeBlockToPage,changePageToBlock ,editBlock, deleteBlock ,duplicatePage,movePageToPage,editPage ,setPopup ,popup ,setCommentBlock ,setTargetPageId ,setOpenRename ,frameHtml}:MenuProps)=>{
+const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,changeBlockToPage,changePageToBlock ,editBlock, deleteBlock ,duplicatePage,movePageToPage,editPage ,setPopup ,popup ,setCommentBlock ,setTargetPageId ,setOpenRename ,frameHtml, style }:MenuProps)=>{
   const blockFnElement = document.getElementById("blockFn") ;
   const menuRef =useRef<HTMLDivElement>(null);
   const [editBtns, setEditBtns]= useState<Element[]|null>(null);
   const [turnInto, setTurnInto]= useState<boolean>(false);
   const [color, setColor]= useState<boolean>(false);
   const [turnInToPage ,setTurnIntoPage] = useState<boolean>(false);
-  const [menuStyle , setMenuStyle]= useState<CSSProperties>(changeMenuStyle());
+  const blockStylerHtml = document.getElementById("blockStyler");
+  const [menuStyle , setMenuStyle]= useState<CSSProperties|undefined>(style ===undefined? changeMenuStyle():style);
   const [sideMenuStyle, setSideMenuStyle]=useState<CSSProperties|undefined>(undefined);
   const templateHtml= document.getElementById("template");
   function changeMenuStyle (){
     const menu = document.querySelector(".menu");
     const menuHeight =menu? menu.clientHeight: 400;
     const innerWidth =window.innerWidth;
+    const frameDomRect= frameHtml?.getClientRects()[0];
     let style:CSSProperties ={};
-    if(blockFnElement!==null && frameHtml!==null){
-      const frameDomRect= frameHtml?.getClientRects()[0];
-      const top = blockFnElement.getClientRects()[0].top as number;
-      const overHeight = ( top + menuHeight ) >= frameDomRect.height;
-      style =
-      overHeight? {
-        bottom: (blockFnElement.offsetHeight) *0.5 ,
-        left: innerWidth >767 ?'2rem' : '1rem',
-      } :
-      {
-        top:  (blockFnElement.offsetHeight)  ,
-        left: innerWidth >767 ?'2rem' : '1rem',
+      if(blockFnElement!==null && frameDomRect!==undefined){
+        const blockFnTop = blockFnElement.getClientRects()[0].top as number;
+        const overHeight = ( blockFnTop + menuHeight ) >= frameDomRect.height;
+        const bottom =(blockFnElement.offsetHeight) *0.5 ;
+        const top =(blockFnElement.offsetHeight)  
+        style =
+        overHeight? {
+          bottom: `${bottom}px`,
+          left: innerWidth >767 ?'2rem' : '1rem',
+        } :
+        {
+          top:  `${top}px`,
+          left: innerWidth >767 ?'2rem' : '1rem',
+        };
+
       };
-    };
     return style
   };
   function changeSideMenuStyle(){
@@ -88,14 +94,15 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
         "10px",
         left: innerWidth> 767? left : `${mainMenu.clientWidth * (innerWidth >=375 ? 0.5: 0.3)}px`,
         maxHeight:`${maxHeight}px`,
-        overflowY:"scroll"
       };
       setSideMenuStyle(style);
     }
   };
   window.onresize =()=>{
-    const style =changeMenuStyle();
-    setMenuStyle(style);
+    if(blockStylerHtml ===null){
+      const style =changeMenuStyle();
+      setMenuStyle(style);
+    };
     changeSideMenuStyle();
   };
   useEffect(()=>{
