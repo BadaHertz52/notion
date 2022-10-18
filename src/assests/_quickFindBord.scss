@@ -27,12 +27,15 @@
       padding:0;
       box-sizing: border-box;
       border:none;
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: lighter;
+      width: calc(100% - 2rem);
       margin-left: 10px;
+      max-width: 100%;
     }
     input::placeholder{
       color: $mud;
+      text-overflow: ellipsis;
     }
     input:focus{
       outline: none;

@@ -88,12 +88,14 @@
 }
 #block_comments {
   position: absolute;
-  height: fit-content;
   z-index: 20;
-  .comments {
-    @include popupMenu;
+  padding-bottom: 0;
+  @include popupMenu;
+  overflow-y: scroll;
+  .comments_comments {
     width: 100%;
-    z-index: 20;
+    margin: 0;
+    padding-bottom:0 ;
   }
 } 
 .pageComment {
@@ -138,16 +140,18 @@
       font-size: 14px;
       height: inherit;
     }
+    .firstLetter{
+      flex-shrink: 0;
+      flex-grow: 0;
+    }
     .userName{
-      margin: 0 10px;
-      display: flex;
-      align-items: center;
-      p{
-        margin: 0;
-        font-weight: bold;
-        text-align: center;
-        line-height: 20px;
-      }
+      margin: 0 5px;
+      flex-shrink: 1;
+      flex-grow: 1;
+      font-weight: bold;
+      text-align: center;
+      line-height: 20px;
+      text-overflow: ellipsis;
     }
     .time{
       margin:0;
@@ -155,8 +159,11 @@
       font-size: 13px;
       display: flex;
       align-items: center;
+      flex-grow: 1;
+      flex-shrink: 2;
+      text-overflow: ellipsis;
     }
-    .tool{
+    .commentTool{
       display: flex;
       align-content: center;
       border: 1px solid $itemSvg;
@@ -164,7 +171,8 @@
       height: 20px;
       button{
         width: fit-content;
-        color:$itemSvg;
+        color: $itemSvg;
+      fill: $itemSvg;
         height:100% ;
         box-sizing: border-box;
         display: flex;
@@ -273,7 +281,8 @@
 form button{
   svg{
     font-size: 1.3rem;
-    fill: $itemSvg; 
+    color: $itemSvg;
+      fill: $itemSvg; 
   }
 }
 #tool_more{

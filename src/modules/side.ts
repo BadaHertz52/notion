@@ -19,7 +19,7 @@ type SideAction =
 ReturnType<typeof change_side> 
 
 const initialState:Side = {
-  appear:float
+  appear:lock
 } ;
 
 export default function side (state:Side = initialState, action:SideAction):Side{

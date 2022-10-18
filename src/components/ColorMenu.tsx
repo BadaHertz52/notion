@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
 import { BgColorType, bg_blue, bg_default, bg_green, bg_grey, bg_yellow, bg_pink, Block, blue, ColorType, defaultColor, green, grey, orange, Page, red } from '../modules/notion';
+import { setTemplateItem } from './BlockComponent';
+import { getContent } from './BlockStyler';
+import { selectionType } from './Frame';
 
 type StyleColorInformProps ={
   color:ColorType | undefined,
@@ -13,6 +16,9 @@ type ColorInformProps ={
   page:Page,
   block:Block,
   editBlock:(pageId: string, block: Block) => void,
+  templateHtml:HTMLElement|null,
+  selection:selectionType|null,
+  setSelection: Dispatch<SetStateAction<selectionType | null>>|null
 };
 const StyleColorInform =styled.span`
   color:${(props:StyleColorInformProps) =>props.color !== undefined? props.color: "initial"};
@@ -24,29 +30,93 @@ const StyleColorInform =styled.span`
   border-radius: 20%;
 `; 
 
-const ColorInform=({color ,background, colorName ,page, block ,editBlock}:ColorInformProps)=>{
+const ColorInform=({color ,background, colorName ,page, block ,editBlock, templateHtml,  selection, setSelection}:ColorInformProps)=>{
+
+  const changeContentStyle=(colorName:string)=>{
+    if(selection !==null &&setSelection !==null ){
+      const target = color ===undefined? "bg" :"color";
+      const bg_colors=["bg_default","bg_grey"," bg_orange", "bg_green", " bg_blue",  "bg_pink"];
+      const color_colors=[" color_default","color_grey"," color_orange", "color_green", " color_blue", "color_red" ];
+      const className=  `${target}_${colorName.toLocaleLowerCase()}`;
+      const targetBlock =selection.block;
+      const selecteds =document.querySelectorAll(".selected") as NodeListOf<HTMLElement>;
+      if(selecteds[0]!==undefined){
+        selecteds.forEach((selectedHtml:HTMLElement)=>{
+          //배경색이나 폰트 색상을 바꾸려하는데, 선택된 node의 자식 node 중에 이미 배경색이나 폰트색상이 지정되어 있는 경우, 지정된 스타일을 제거함 
+          const selectedChildren= selectedHtml.childNodes  as NodeListOf<Node> | undefined;
+          if(selectedChildren !==undefined){
+            selectedChildren.forEach((node:Node)=> {
+              if(node.nodeName==="SPAN"){
+                const spantHtml =node as HTMLElement; 
+                if(spantHtml.classList.contains(target)){
+                  const arry =target==="bg"? bg_colors : color_colors;
+                  const targetColor = arry.filter((c:string)=> spantHtml.classList.contains(c))[0];
+                  spantHtml.classList.remove(target);
+                  spantHtml.classList.remove(targetColor);
+                  if(spantHtml.classList[0]===undefined){
+                    const newTextNode = document.createTextNode(spantHtml.innerHTML);
+                    spantHtml.parentNode?.replaceChild(newTextNode, spantHtml);
+                  }
+                }
+              }
+            });
+          };
+          // 배경색 or 폰트 색상 지정을 위한 className 변경 
+          if(selectedHtml.classList.contains(target)){
+            const arry = target==="bg"? bg_colors: color_colors;
+            const removeTargetClass = arry.filter((c:string)=> selectedHtml.classList.contains(c))[0];
+            selectedHtml.classList.remove(removeTargetClass);
+            selectedHtml.classList.add(className)
+          }else{
+            selectedHtml.classList.add(target);
+            selectedHtml.classList.add(className);
+          };
+          const contentEditableHtml =document.getElementById(`${block.id}_contents`)?.firstElementChild
+          if(contentEditableHtml!==null&& contentEditableHtml!==undefined){
+            const innerHtml =contentEditableHtml.innerHTML;
+            const editedBlock:Block ={
+              ...targetBlock,
+              contents:innerHtml,
+              editTime:JSON.stringify(Date.now())
+            };
+            editBlock(page.id, editedBlock)
+          }
+        })
+      }
+    };
+  };
   const changeColor =()=>{
     if(color ===undefined && background !== undefined ){
+      setTemplateItem(templateHtml,page);
       ///change backgournd color
-      const newBlock :Block ={
-        ...block,
-        style :{
-          ...block.style,
-          bgColor: background,
+      if(selection === null){
+        const newBlock :Block ={
+          ...block,
+          style :{
+            ...block.style,
+            bgColor: background,
+          }
+        };
+        editBlock(page.id, newBlock)
+      }else{
+          changeContentStyle(colorName);
         }
-      };
-      editBlock(page.id, newBlock)
+        
     }
     if(color !== undefined && background === undefined){
       ///change color
-      const newBlock :Block ={
-        ...block,
-        style: {
-          ...block.style,
-          color: color
-        }
-      };
-      editBlock(page.id, newBlock)
+      if(selection ===null){
+        const newBlock :Block ={
+          ...block,
+          style: {
+            ...block.style,
+            color: color
+          }
+        };
+        editBlock(page.id, newBlock)
+      }else{
+        changeContentStyle(colorName);
+      }
     }
   };
 
@@ -77,9 +147,11 @@ type ColorMenuProps = {
   page :Page,
   block:Block,
   editBlock : (pageId: string, block: Block) => void,
+  selection:selectionType|null,
+  setSelection:Dispatch<SetStateAction<selectionType | null>>|null
 };
-const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
-
+const ColorMenu=({page, block, editBlock, selection, setSelection}:ColorMenuProps)=>{
+  const templateHtml=document.getElementById("template");
   return(
     <div className="menu_color"  >
       <section className="color_colors">
@@ -92,6 +164,9 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             page={page}
             block={block}
             editBlock={editBlock}
+            templateHtml={templateHtml}
+            selection={selection}
+            setSelection={setSelection}
           />
           <ColorInform
             colorName='Grey'
@@ -100,6 +175,9 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             page={page}
             block={block}
             editBlock={editBlock}
+            templateHtml={templateHtml}
+            selection={selection}
+            setSelection={setSelection}
           />
           <ColorInform
             colorName='Orange'
@@ -108,6 +186,9 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             background ={undefined}
             block={block}
             editBlock={editBlock}
+            templateHtml={templateHtml}
+            selection={selection}
+            setSelection={setSelection}
           />
           <ColorInform
             colorName='Green'
@@ -116,6 +197,9 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             background ={undefined}
             block={block}
             editBlock={editBlock}
+            templateHtml={templateHtml}
+            selection={selection}
+            setSelection={setSelection}
           />
           <ColorInform
             colorName='Blue'
@@ -124,6 +208,9 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             background={undefined}
             block={block}
             editBlock={editBlock}
+            templateHtml={templateHtml}
+            selection={selection}
+            setSelection={setSelection}
           /> 
           <ColorInform
             colorName='Red'
@@ -132,6 +219,9 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             background={undefined}
             block={block}
             editBlock={editBlock}
+            templateHtml={templateHtml}
+            selection={selection}
+            setSelection={setSelection}
           />
         </div>
       </section>
@@ -145,6 +235,9 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             background={bg_default}
             block={block}
             editBlock={editBlock}
+            templateHtml={templateHtml}
+            selection={selection}
+            setSelection={setSelection}
           />
           <ColorInform
             colorName='Grey'
@@ -153,6 +246,9 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             background={bg_grey}
             block={block}
             editBlock={editBlock}
+            templateHtml={templateHtml}
+            selection={selection}
+            setSelection={setSelection}
           />
           <ColorInform
             colorName='Yellow'
@@ -161,6 +257,9 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             background={bg_yellow}
             block={block}
             editBlock={editBlock}
+            templateHtml={templateHtml}
+            selection={selection}
+            setSelection={setSelection}
             />
           <ColorInform
             colorName='Green'
@@ -169,6 +268,9 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             background={bg_green}
             block={block}
             editBlock={editBlock}
+            templateHtml={templateHtml}
+            selection={selection}
+            setSelection={setSelection}
           />
           <ColorInform
             colorName='Blue'
@@ -177,6 +279,9 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             background={bg_blue}
             block={block}
             editBlock={editBlock}
+            templateHtml={templateHtml}
+            selection={selection}
+            setSelection={setSelection}
           />
           <ColorInform
             colorName='Pink'
@@ -185,6 +290,9 @@ const ColorMenu=({page, block, editBlock}:ColorMenuProps)=>{
             background={bg_pink}
             block={block}
             editBlock={editBlock}
+            templateHtml={templateHtml}
+            selection={selection}
+            setSelection={setSelection}
           />
         </div>
       </section>

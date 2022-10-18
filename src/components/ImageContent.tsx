@@ -1,13 +1,14 @@
-import React, { MouseEvent, useCallback, useEffect, useRef, useState } from 'react';
+import React, { MouseEvent,  useRef, useState } from 'react';
 import { CSSProperties } from 'styled-components';
-import { Block } from '../modules/notion';
+import { Block, Page } from '../modules/notion';
+import { setTemplateItem } from './BlockComponent';
 
 type ImageContentProps={
-  pageId:string,
+  page:Page,
   block:Block,
   editBlock:(pageId:string, block:Block)=>void,
 }
-const ImageContent =({pageId,block,editBlock}:ImageContentProps)=>{
+const ImageContent =({page,block,editBlock}:ImageContentProps)=>{
   const imageContent =document.getElementById(`${block.id}_contents`) ;
   const previousClientX =useRef(0);
   const previousClientY = useRef(0);
@@ -48,7 +49,7 @@ const ImageContent =({pageId,block,editBlock}:ImageContentProps)=>{
     previousClientY.current =event.clientY;
     drag.current=true; 
   };
-  const onMouseUp=useCallback((event:globalThis.MouseEvent)=>{
+  const onMouseUp=(event:globalThis.MouseEvent)=>{
     if(drag.current){
       previousClientX.current =0;
       previousClientY.current =0;
@@ -65,13 +66,15 @@ const ImageContent =({pageId,block,editBlock}:ImageContentProps)=>{
           },
           editTime:JSON.stringify(Date.now()),
         };
-        editBlock(pageId, editedBlock)
+        const templateHtml =document.getElementById("template");
+        setTemplateItem(templateHtml,page);
+        editBlock(page.id, editedBlock)
       };
     }  
-  },[targetImgContent]);
+  };
 
-    imageContent?.addEventListener("mousemove", (event)=> onMouseMove(event));
-    imageContent?.addEventListener("mouseup", (event)=> onMouseUp(event))
+  imageContent?.addEventListener("mousemove", (event)=> onMouseMove(event));
+  imageContent?.addEventListener("mouseup", (event)=> onMouseUp(event))
   return(
     <div 
       className="imageContent"

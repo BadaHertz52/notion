@@ -3,7 +3,6 @@
   font-weight: initial;
   position: absolute;
 }
-
 #mainMenu,
 #sideMenu,
 #popupMenu{
@@ -14,6 +13,7 @@
   position: absolute;
   font-size: 14px;
   padding: 3px;
+  z-index: 30;
   .commentInput{
     width: 300px;
     margin: 10PX;
@@ -68,6 +68,7 @@
   }
   #commandBlock {
     margin-top: 0;
+    overflow: initial;
     .command_btn {
       display: block
     }
@@ -75,8 +76,7 @@
 }
 .menu_color{
   @include popupMenu;
-  overflow-y: scroll;
-  height: 380px;
+  width: 200px;
   color: initial;
   font-weight: initial;
   section > header {
@@ -111,7 +111,15 @@
   }
 
 }
-
+#sideMenu #pageMenu{
+  .inner{
+    width: 100%;
+    height: fit-content
+  }
+}
+#sideBar_pageMenu #pageMenu {
+  background-color: #ffff;
+}
 #pageMenu {
   @include popupMenu;
   background-color: initial;
@@ -120,6 +128,8 @@
     width: 100%;
     box-sizing: border-box;
     padding: 10px 0;
+    display: flex;
+    flex-direction: column
   }
   .search{
     input{

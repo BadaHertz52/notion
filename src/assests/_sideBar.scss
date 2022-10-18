@@ -91,6 +91,7 @@
         weight:bolder;
       }
       color: $itemSvg;
+      fill: $itemSvg;
     }
   }
   .list .itemInner{
@@ -111,7 +112,8 @@
     button{
       width: fit-content;
       font-size: 12px;
-      color:$itemSvg;
+      color: $itemSvg;
+      fill: $itemSvg;
       svg{
         width: fit-content;
         margin-right: 0;
@@ -120,7 +122,8 @@
   }
   //--sideBarBtn
   .sideBarBtn{
-    color:$itemSvg;
+    color: $itemSvg;
+      fill: $itemSvg;
     font-weight: bolder;
     font-size: 20px;
     svg{
@@ -210,7 +213,8 @@
         size: 11px;
         weight:500;
       }
-      color:$itemSvg;
+      color: $itemSvg;
+      fill: $itemSvg;
 
     }
     .list .page {
@@ -317,7 +321,8 @@
       display: flex;
       align-items: center;
       svg{
-        color:$itemSvg;
+        color: $itemSvg;
+      fill: $itemSvg;
         flex-grow: 0;
         flex-shrink: 0;
         margin-right: 8px;

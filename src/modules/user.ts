@@ -31,9 +31,9 @@ ReturnType<typeof remove_favorites>|
 ReturnType<typeof add_recent_page>|
 ReturnType<typeof clean_recent_page>;
 
-const initialState ={
-  userName:"amet",
-  userEmail:"amet@notion.com",
+const initialState :UserState ={
+  userName:"badahertz52",
+  userEmail:"badahertz52@notion.com",
   favorites:["12345"],
   recentPagesId:null
 };
@@ -41,11 +41,12 @@ const initialState ={
 export default function user (state:UserState =initialState, action:UserAction):UserState{
   switch (action.type) {
     case ADD_FAVORITES :
+      const favorites =state.favorites !==null? 
+      state.favorites.concat(action.itemId) : 
+      [action.itemId];
       return {
         ...state,
-        favorites: state.favorites !==null? 
-        state.favorites.concat(action.itemId) : 
-        [...action.itemId]
+        favorites: favorites
       }
         ;
     case REMOVE_FAVORITES :

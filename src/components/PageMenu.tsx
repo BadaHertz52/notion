@@ -1,7 +1,7 @@
 import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
-import { GrDocumentText } from 'react-icons/gr';
-import {  basicBlockStyle, Block,  listItem, makeNewBlock, Page, pageSample } from '../modules/notion';
+import { Block,  listItem,  Page} from '../modules/notion';
+import { setTemplateItem } from './BlockComponent';
 import PageIcon from './PageIcon';
 
 type PageMenuProps ={
@@ -12,14 +12,12 @@ type PageMenuProps ={
   deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
   changeBlockToPage: (currentPageId: string, block: Block) => void
   addBlock:(pageId: string, block: Block, nextBlockIndex: number, previousBlockId: string | null) => void,
-  editBlock: (pageId: string, block: Block) => void,
-  setMenuOpen:Dispatch<SetStateAction<boolean>> |null,
-  addPage:( newPage: Page) => void,
+  setOpenMenu:Dispatch<SetStateAction<boolean>> |null,
   movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
-    setTargetPageId: Dispatch<SetStateAction<string>>,
+  setTargetPageId: Dispatch<SetStateAction<string>>,
 };
 
-const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock,changeBlockToPage, addBlock, editBlock,addPage , movePageToPage ,setMenuOpen ,setTargetPageId}:PageMenuProps)=>{
+const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock,changeBlockToPage, addBlock, movePageToPage ,setOpenMenu ,setTargetPageId}:PageMenuProps)=>{
 
   type PageButtonProps={
     item: listItem
@@ -33,9 +31,10 @@ const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock,changeBlockToP
       const block:Block= JSON.parse(sessionItem);
       setBlock(block);
     };
-  },[sessionItem]);
-
+  },[sessionItem, what]);
+  const templateHtml= document.getElementById("template");
   const moveBlockToPage =(destinationPageId:string ,block:Block)=>{
+    setTemplateItem(templateHtml, currentPage);
     // 기존 페이지에서 블록 삭제
       deleteBlock(currentPage.id, block, true);
       // 블록을 다른 페이지로 이동
@@ -46,20 +45,23 @@ const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock,changeBlockToP
         editTime: JSON.stringify(Date.now())
       };
       const moveTargetPage = pages.filter((page:Page)=> page.id === destinationPageId)[0];
-      const firstBlockId =moveTargetPage.blocksId[0];
-      const blocksIdLength = moveTargetPage.blocksId.length; 
-
-      if(blocksIdLength===1 && firstBlockId.includes("blockSample")){
+      //set origin moveTargetPage
+      if(templateHtml!==null){
+        const item= JSON.stringify(moveTargetPage);
+        sessionStorage.setItem("originMoveTargetPage", item);
+      }
+      if(moveTargetPage.blocksId==null){
         addBlock(destinationPageId, newBlock, 0 , null);
       }else{  
+        const blocksIdLength = moveTargetPage.blocksId.length;
         addBlock(destinationPageId, newBlock, blocksIdLength , null);
       };
       if(block.type==="page"){
         movePageToPage(block.id,destinationPageId)
       };
-    
+      
     // close Menu and recovery Menu state
-    setMenuOpen !==null && setMenuOpen(false);
+    setOpenMenu !==null && setOpenMenu(false);
   };
   const onClickToMove =(id:string)=>{
     switch (what) {
@@ -116,6 +118,7 @@ const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock,changeBlockToP
   };
   const makeNewSubPage =()=>{
     if(block !==null){
+      setTemplateItem(templateHtml,currentPage);
       changeBlockToPage(currentPage.id, block);
     } 
   };

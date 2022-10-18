@@ -1,40 +1,15 @@
 import { NodeHtmlMarkdown } from "node-html-markdown";
 import React, { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
-import { Block, findPage, listItem, Page } from "../modules/notion";
-import Frame from "./Frame";
+import {  findPage,Page } from "../modules/notion";
+import Frame, { FrameProps } from "./Frame";
 import ReactDOMServer from 'react-dom/server';
 
-type ExportProps={
-  page:Page,
-  pagesId:string[],
-  pages:Page[],
-  setOpenExport:Dispatch<SetStateAction<boolean>>,
-  //for frame
-  userName:string,
-  firstlist:listItem[],
-  editBlock :(pageId: string, block: Block) => void,
-  addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
-  changeBlockToPage: (currentPageId: string, block: Block) => void,
-  changePageToBlock:(currentPageId: string, block: Block) => void,
-  changeToSub: (pageId: string, block: Block, newParentBlockId: string) => void,
-  raiseBlock: (pageId: string, block: Block) => void,
-  deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
-  addPage :(newPage:Page ,)=>void,
-  editPage :(pageId:string,newPage:Page ,)=>void,
-  duplicatePage:(targetPageId: string) => void,
-  movePageToPage:(targetPageId: string, destinationPageId: string) => void,
-  deletePage: (pageId: string) => void,
-  commentBlock: Block | null,
-  openComment :boolean, 
-  setTargetPageId: React.Dispatch<React.SetStateAction<string>>,
-  setOpenComment: Dispatch<SetStateAction<boolean>>,
-  setCommentBlock: Dispatch<SetStateAction<Block | null>>,
-  smallText: boolean, 
-  fullWidth: boolean, 
-  discardEdit:boolean,
+type ExportProps= FrameProps &{
+  setOpenExport:Dispatch<SetStateAction<boolean>>
 }
-const Export =({page,pagesId,pages,firstlist ,setOpenExport, userName,editBlock,addBlock,changeBlockToPage,changePageToBlock,changeToSub,raiseBlock,deleteBlock,addPage,editPage, duplicatePage ,deletePage,movePageToPage,commentBlock,openComment ,setTargetPageId,setOpenComment,setCommentBlock,smallText,fullWidth,discardEdit}:ExportProps)=>{
+const Export =({page,pagesId,pages,firstlist, recentPagesId ,setOpenExport, userName,editBlock,addBlock,changeBlockToPage,changePageToBlock,changeToSub,raiseBlock,deleteBlock,addPage,editPage, duplicatePage ,movePageToPage ,commentBlock,openComment ,setTargetPageId, setRoutePage, 
+  setOpenComment,setCommentBlock , showAllComments,smallText,fullWidth,discardEdit,setDiscardEdit, openTemplates , setOpenTemplates, fontStyle}:ExportProps)=>{
   const html ="HTML";
   const pdf="PDF";
   const markdown="Markdown";
@@ -44,7 +19,6 @@ const Export =({page,pagesId,pages,firstlist ,setOpenExport, userName,editBlock,
   type Content = typeof everything| typeof noFileImage;
   const [format, setFormat]=useState<Format>(html);
   const [content, setContent]=useState<Content>(everything);
-  const [subPageFrameString, setSubPageFrameString] =useState<string|null>(null);
   const exportHtml =document.getElementById("export");
   const openOptions=(event:MouseEvent)=>{
     const currentTarget =event.currentTarget;
@@ -105,7 +79,6 @@ const Export =({page,pagesId,pages,firstlist ,setOpenExport, userName,editBlock,
         const styleTag= [...document.querySelectorAll("style")];
         const styleCode= styleTag[1].outerHTML;
         const includeSubPage :boolean=  includeSubpagesSlider.classList.contains("on");
-        const createSubPageFolder :boolean =createSubPageFolderSlider.classList.contains("on");
         const convertHtml =(title:string, frameHtml:string)=>{
           const html =`
           <!DOCTYPE html>
@@ -145,10 +118,10 @@ const Export =({page,pagesId,pages,firstlist ,setOpenExport, userName,editBlock,
               <Frame
                 page={subPage}
                 userName={userName}
-                firstBlocksId={subPage.firstBlocksId}
                 pages={pages}
                 pagesId={pagesId}
                 firstlist={firstlist}
+                recentPagesId={recentPagesId}
                 addBlock={addBlock}
                 editBlock={editBlock}
                 changeBlockToPage={changeBlockToPage}
@@ -160,15 +133,20 @@ const Export =({page,pagesId,pages,firstlist ,setOpenExport, userName,editBlock,
                 editPage={editPage}
                 duplicatePage={duplicatePage}
                 movePageToPage={movePageToPage}
-                deletePage={deletePage}
                 commentBlock={commentBlock}
                 openComment={openComment}
+                setRoutePage={setRoutePage}
                 setTargetPageId={setTargetPageId}
                 setOpenComment={setOpenComment}
                 setCommentBlock ={setCommentBlock}
+                showAllComments={showAllComments}
                 smallText={smallText}
                 fullWidth={fullWidth}
                 discardEdit={discardEdit}
+                setDiscardEdit={setDiscardEdit}
+                openTemplates={openTemplates}
+                setOpenTemplates={setOpenTemplates}
+                fontStyle={fontStyle}
               />;
               return { jsx:frameComponent, title:subPage.header.title};
           });
@@ -279,21 +257,6 @@ const Export =({page,pagesId,pages,firstlist ,setOpenExport, userName,editBlock,
             >
                 <span 
                   id="includeSubPagesSlider"
-                  className="slider"
-                  >
-                  </span>
-            </button>
-          </div>
-          <div className="select switch">
-            <div className="select_label">
-              Create folders for subPages
-            </div>
-            <button 
-              className='switchBtn'
-              onClick={onClickSwitchBtn}
-            >
-                <span 
-                  id="createSubPageFolderSlider"
                   className="slider"
                   >
                   </span>

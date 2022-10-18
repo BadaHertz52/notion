@@ -15,8 +15,7 @@ type TrashProps={
   style:CSSProperties |undefined,
   trashPagesId:string[]|null,
   trashPages: Page[] |null,
-  pagesId:string[],
-  pages:Page[],
+  pagesId:string[] |null,
   cleanTrash: (itemId: string) => void,
   restorePage: (pageId: string) => void,
   setTargetPageId: Dispatch<SetStateAction<string>>,
@@ -58,7 +57,7 @@ const ResultItem=({item , restorePage, cleanTrash ,setTargetPageId, setOpenTrash
   )
 };
 
-const Trash=({style,trashPages, trashPagesId ,pages,pagesId, restorePage, cleanTrash ,setTargetPageId ,setOpenTrash}:TrashProps)=>{
+const Trash=({style,trashPages, trashPagesId ,pagesId, restorePage, cleanTrash ,setTargetPageId ,setOpenTrash}:TrashProps)=>{
   const [trashList ,setTrashList ]=useState<resultType[]|undefined>(undefined);
   //undefined 이면 trash가 없는것 
   const [result, setResult] =useState<resultType[]|null>(null);
@@ -75,39 +74,42 @@ const Trash=({style,trashPages, trashPagesId ,pages,pagesId, restorePage, cleanT
   };
 
   useEffect(()=>{
-    let filteringTargetList :resultType[]|undefined=undefined;
-
-    const makeFilteringTargetList =(pages:Page[]|null) : resultType[]|undefined=> pages?.map((page:Page)=>(
-      makeResultType(page,pagesId , pages ,trashPagesId,trashPages)));
-
-    switch (sort) {
-      case "all":
-        filteringTargetList = makeFilteringTargetList(trashPages)
-        break;
-      case "current":
-        const location =window.location;
-        const path =location.hash;
-        const lastSlash = path.lastIndexOf("/");
-        const currentPageId = path.slice(lastSlash+1);
-        const filteredTrashPages = trashPages?.filter((page:Page)=> page.parentsId?.includes(currentPageId));
-        console.log(filteredTrashPages);
-        filteringTargetList = filteredTrashPages!==undefined 
-                              ?
-                              (filteredTrashPages[0]!==undefined
+    if(pagesId!==null){
+      let filteringTargetList :resultType[]|undefined=undefined;
+      const makeFilteringTargetList =(pages:Page[]|null) : resultType[]|undefined=> pages?.map((page:Page)=>(
+        makeResultType(page,pagesId , pages ,trashPagesId,trashPages)));
+  
+      switch (sort) {
+        case "all":
+          filteringTargetList = makeFilteringTargetList(trashPages)
+          break;
+        case "current":
+          const location =window.location;
+          const path =location.hash;
+          const lastSlash = path.lastIndexOf("/");
+          const currentPageId = path.slice(lastSlash+1);
+          const filteredTrashPages = trashPages?.filter((page:Page)=> page.parentsId?.includes(currentPageId));
+          filteringTargetList = filteredTrashPages!==undefined 
                                 ?
-                              makeFilteringTargetList(filteredTrashPages)
-                                : 
-                              undefined)
-                              :
-                              undefined;
-        break;
-      default:
-        break;
-        
-    };
-    setTrashList(filteringTargetList);
-    filteringTargetList!==undefined && setResult(filteringTargetList)
-  },[sort]);
+                                (filteredTrashPages[0]!==undefined
+                                  ?
+                                makeFilteringTargetList(filteredTrashPages)
+                                  : 
+                                undefined)
+                                :
+                                undefined;
+          break;
+        default:
+          break;
+          
+      };
+      setTrashList(filteringTargetList);
+      filteringTargetList!==undefined && setResult(filteringTargetList)
+    }else{
+      setTrashList(undefined);
+    }
+
+  },[sort,pagesId,trashPages, trashPagesId]);
 
   return(
     <div 

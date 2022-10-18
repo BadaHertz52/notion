@@ -1,37 +1,18 @@
-import React, { Dispatch } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { Dispatch, SetStateAction } from 'react';
+import {  useSelector } from 'react-redux';
 import SideBar from '../components/SideBar';
 import { RootState } from '../modules';
-import { Block,Page, } from '../modules/notion';
 import { SideAppear } from '../modules/side';
-import { add_favorites, remove_favorites } from '../modules/user';
+import { NotionActionProps } from './EditorContainer';
 
-type SideBarContainerProp ={
+export type SideBarContainerProp = NotionActionProps &{
   sideAppear:SideAppear,
-  editBlock :(pageId: string, block: Block) => void,
-  addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
-  changeToSub: (pageId: string, block: Block, newParentBlockId: string) => void,
-  raiseBlock: (pageId: string, block: Block) => void,
-  deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
-  changeBlockToPage: (currentPageId: string, block: Block) => void,
-
-  addPage : ( newPage:Page, )=>void,
-  duplicatePage: (targetPageId: string) => void,
-  editPage : (pageId:string , newPage:Page, )=>void,
-  deletePage : (pageId:string , )=>void,
-  movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
-  restorePage: (pageId: string) => void,
-  cleanTrash: (pageId: string) => void,
-
-  addFavorites: (itemId: string) => void,
-  removeFavorites: (itemId: string) => void,
-
-  changeSide: (appear: SideAppear) => void,
-
-  setTargetPageId: Dispatch<React.SetStateAction<string>>,
-  setOpenQF: Dispatch<React.SetStateAction<boolean>>
+  setTargetPageId: Dispatch<SetStateAction<string>>,
+  setOpenQF: Dispatch<SetStateAction<boolean>>,
+  setOpenTemplates :Dispatch<SetStateAction<boolean>>,
+  showAllComments:boolean,
 };
-const SideBarContainer =({sideAppear,addBlock,editBlock,deleteBlock,changeBlockToPage,addPage,duplicatePage,editPage,deletePage,movePageToPage,restorePage, cleanTrash, addFavorites, removeFavorites, changeSide,setTargetPageId ,setOpenQF }:SideBarContainerProp)=>{
+const SideBarContainer =({sideAppear,addBlock,editBlock,deleteBlock,changeBlockToPage,addPage,duplicatePage,editPage,deletePage,movePageToPage,restorePage, cleanTrash, addFavorites, removeFavorites, changeSide,setTargetPageId ,setOpenQF ,setOpenTemplates, showAllComments  }:SideBarContainerProp)=>{
   const notion =useSelector((state:RootState)=> state.notion);
   
   const user = useSelector((state:RootState)=> state.user);
@@ -44,7 +25,6 @@ const SideBarContainer =({sideAppear,addBlock,editBlock,deleteBlock,changeBlockT
     editBlock={editBlock}
     deleteBlock={deleteBlock}
     changeBlockToPage={changeBlockToPage}
-    
     addPage={addPage}
     duplicatePage={duplicatePage}
     editPage={editPage}
@@ -59,6 +39,8 @@ const SideBarContainer =({sideAppear,addBlock,editBlock,deleteBlock,changeBlockT
     changeSide={changeSide}
     setTargetPageId={setTargetPageId}
     setOpenQF={setOpenQF}
+    setOpenTemplates={setOpenTemplates}
+    showAllComments={showAllComments}
     />
   )
 };

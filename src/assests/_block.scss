@@ -14,11 +14,12 @@
   div{
     width: 100%;
   }
-  .list_marker ,
+  .listItem_marker ,
   .commentsBubble{
     width: fit-content;
   }
 }
+
 .mainBlock{
   display: flex;
   justify-content: space-between;
@@ -30,7 +31,9 @@
   }
   width: 100%;
 }
-
+.mainBlock.on{
+  border-top:  5px solid #8ae2ff;
+}
 .subBlocks{
   padding:0;
   padding-left: 20px;
@@ -54,7 +57,8 @@
   z-index: 5;
   .blockFnIcon{
     svg{
-      color:$itemSvg;
+      color: $itemSvg;
+      fill: $itemSvg;
     }
     
     font : {
@@ -82,9 +86,85 @@
     outline: none;
   }
 }
-.contentEditable:empty::after{
-  content: attr(placeholder);
-  color: $mud;
+.contentEditable:empty{
+    &::after{
+      content: attr(placeholder);
+      color: $mud;
+    }
+}
+.contentEditable.empty:empty{
+  &::after{
+    content:none;
+  }
+  &:hover, &:focus{
+    &::after{
+      content: attr(placeholder);
+      color: $mud;
+    }
+  }
+}
+.selected ,.editableBlock .selected a:link , .editableBlock  a:link .selected{
+  background-color:#BDE6F1;
+  .bg_default, .bg_yellow, .bg_blue, .bg_green, .bg_grey,.bg_pink{
+    background-color:#BDE6F1;
+  }
+}
+.bg_default{
+  background-color: none;
+}
+.bg_grey{
+  background-color: #e0e0e0;
+}
+.bg_yellow{
+  background-color:#fff9c4 ;
+}
+.bg_green{
+  background-color: #ebffd7;
+}
+.bg_blue{
+  background-color:#e3f2fd ;
+}
+.bg_pink{
+  background-color: #fce4ec;
+}
+.color_default{
+  color:$black;
+}
+.color_grey{
+  color:#bdbdbd
+}
+.color_orange{
+  color:#ffa726
+}
+.color_green{
+  color:#00701a
+}
+.color_blue{
+  color:#1565c0
+} 
+.color_red{
+  color:#d32f2f
+}
+.bold{
+  font-weight: bold;
+}
+.italic{
+  font-style: italic;
+}
+.underline{
+  text-decoration: underline;
+}
+.lineThrough{
+  text-decoration: line-through;
+}
+
+.contentEditable {
+  a:link, a:visited, a:active{
+    color:grey;
+    text-decoration: underline;
+    z-index: 5;
+    cursor: pointer;
+  }
 }
 .h1 .mainBlock .contentEditable, 
 .h2 .mainBlock .contentEditable,
@@ -135,7 +215,7 @@
   button{
     display: flex;
     align-items: center;
-    color:$itemSvg ;
+    fill: $itemSvg ;
   }
   .subBlocks{
     display: none;
@@ -146,16 +226,27 @@
     display: block;
   }
 }
-
-.list {
+.numberList , .bulletList{
   display: flex;
-  .list_marker{
+  flex-direction: column;
+}
+.listItem {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+  .subBlocks{
+    .editableBlock{
+     margin-top: 8px;
+    }
+  }
+  .listItem_marker{
     padding-right: 8px;
     svg{
       font-size: 11px;
     }
   }
 }
+
 .blockToggleBtn {
   svg{
     transform: rotate(0deg);

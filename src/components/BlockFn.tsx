@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect,  useState } from 'react';
 import Menu from './Menu';
 import {Block, findPage, listItem, makeNewBlock, Page} from '../modules/notion';
 import { CSSProperties } from 'styled-components';
@@ -7,8 +7,7 @@ import Rename from './Rename';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { CgMenuGridO } from 'react-icons/cg';
 import { PopupType } from '../containers/EditorContainer';
-import CommandBlock from './CommandBlock';
-
+import { setTemplateItem } from './BlockComponent';
 
 type BlockFnProp ={
   pages:Page[],
@@ -24,14 +23,16 @@ type BlockFnProp ={
   addPage : ( newPage:Page, )=>void,
   editPage: (pageId: string, newPage: Page) => void,
   duplicatePage: (targetPageId: string) => void,
-  deletePage : (pageId:string , )=>void,
   commentBlock: Block|null,
   movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
+  frameHtml: HTMLDivElement | null,
+  setMoveTargetBlock :Dispatch<SetStateAction<Block| null>>,
+  moveTargetBlock:Block|null,
   setCommentBlock: Dispatch<SetStateAction<Block|null>>,
   popup:PopupType,
   setPopup: Dispatch<SetStateAction<PopupType>>,
   menuOpen:boolean,
-  setMenuOpen:Dispatch<SetStateAction<boolean>>,
+  setOpenMenu:Dispatch<SetStateAction<boolean>>,
   setPopupStyle:Dispatch<SetStateAction<CSSProperties|undefined>>,
   setTargetPageId: Dispatch<SetStateAction<string>>,
 };
@@ -76,21 +77,17 @@ export const detectRange =(event:MouseEvent| React.MouseEvent , targetArea:DOMRe
   return (inner_x && inner_y);
 };
 
-const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage, editBlock,changeBlockToPage,changePageToBlock, deleteBlock ,addPage,editPage, movePageToPage, deletePage ,setCommentBlock, popup, setPopup ,menuOpen,setMenuOpen ,setPopupStyle ,setTargetPageId }:BlockFnProp)=>{
-  const inner =document.getElementById("inner");
+const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage, editBlock,changeBlockToPage,changePageToBlock, deleteBlock ,addPage,editPage, movePageToPage,  setMoveTargetBlock,moveTargetBlock,frameHtml ,setCommentBlock, popup, setPopup ,menuOpen,setOpenMenu ,setPopupStyle ,setTargetPageId }:BlockFnProp)=>{
   const [openRename, setOpenRename] =useState<boolean>(false);
 
   const [blockFnTargetBlock, setBlockFnTargetBlock]=useState<Block|null>(null);
   const [renameTargetPage, setRenameTargetPage]=useState<Page|null>(null);
-  useEffect(()=>{
-    if(openRename && blockFnTargetBlock !==null){
-      const page =findPage(pagesId, pages, blockFnTargetBlock.id) as Page; 
-      setRenameTargetPage(page);
-    }
-  },[openRename])
+
   const makeBlock =()=>{
+    const templateHtml= document.getElementById("template");
+    setTemplateItem(templateHtml, page);
     const sessionItem = sessionStorage.getItem("blockFnTargetBlock") ;
-    if(sessionItem !==null){
+    if(sessionItem !==null && page.blocksId!==null){
       const targetBlock= JSON.parse(sessionItem);
       const targetBlockIndex= page.blocksId.indexOf(targetBlock.id);
       const newBlock =makeNewBlock(page, targetBlock,"");
@@ -99,59 +96,40 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
       console.log("BlockFn-makeBlock error: there is no session item")
     }
   };
-
-  const openMenu=()=>{
+  const onMouseDownMenu=()=>{
     const sessionItem = sessionStorage.getItem("blockFnTargetBlock") ;
-    if(sessionItem !==null){
+    if(sessionItem!==null){
+      const targetBlock = JSON.parse(sessionItem);
+      moveTargetBlock==null && setMoveTargetBlock(targetBlock)
+    } ;
+  };
+  const onClickMenu=()=>{
+    moveTargetBlock!==null&& setMoveTargetBlock(null);
+    const sessionItem = sessionStorage.getItem("blockFnTargetBlock") ;
+    menuOpen && setOpenMenu(false); 
+    popup.popup && setPopup({
+      popup:false,
+      what:null
+    })
+    if(sessionItem!==null && !menuOpen){
       const targetBlock = JSON.parse(sessionItem);
       setBlockFnTargetBlock(targetBlock);
-      setMenuOpen(!menuOpen);
-      setPopup({
-        popup:false,
-        what:null
-      })
+      setOpenMenu(true);
+      sessionStorage.remove("blockFnTargetBlock");
     }else{
       console.log("BlockFn-openMenu error: there is no session item")
     } ;
   };
-
-  const closeMenu =(event:MouseEvent)=>{
-    const mainMenu =document.getElementById("mainMenu");
-    const sideMenu =document.getElementById("sideMenu")?.firstElementChild;
-    const mainMenuArea =mainMenu?.getClientRects()[0] ;
-    const sideMenuArea =sideMenu?.getClientRects()[0] ;
-
-    const isInrMain = detectRange(event, mainMenuArea);
-    const isInSide =detectRange(event, sideMenuArea );
-
-    if(sideMenuArea !==undefined){
-      (isInrMain || isInSide) ? setMenuOpen(true) :setMenuOpen(false);
-    }else{
-      isInrMain ? setMenuOpen(true) : setMenuOpen(false);
+  useEffect(()=>{
+    if(openRename && blockFnTargetBlock !==null){
+      const page =findPage(pagesId, pages, blockFnTargetBlock.id) as Page; 
+      setRenameTargetPage(page);
     }
-  };
-  const closePopup =(event:MouseEvent)=>{
-    const popupMenu =document.getElementById("popupMenu");
-    const popupMenuArea =popupMenu?.getClientRects()[0];
-    const isInPopupMenu =detectRange(event, popupMenuArea);
-    if(!isInPopupMenu){
-
-      setPopup({
-        popup:false,
-        what: null
-      });
-    }
-
-  };
-
-  inner?.addEventListener("click", (event:MouseEvent)=>{
-      menuOpen &&closeMenu(event);
-      popup.popup && closePopup(event);
-    });
+  },[openRename, blockFnTargetBlock, pagesId, pages]);
 
   useEffect(()=>{
     const popupStyleItem =sessionStorage.getItem("popupStyle");
-    if(popup && popupStyleItem !==null){
+    if(popup.popup && popupStyleItem !==null){
       const firstPoint= popupStyleItem.indexOf("px;");
       const secondPosint =popupStyleItem.indexOf("left:");
       const lastPosint =popupStyleItem.lastIndexOf("px");
@@ -163,7 +141,8 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
       });
       sessionStorage.removeItem("popupStyle")
     }
-  },[popup]);
+  },[popup.popup, setPopupStyle]);
+
   useEffect(()=>{
     const innerHeight =window.innerHeight;
     const inner =document.getElementById("inner");
@@ -195,9 +174,12 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
           <AiOutlinePlus/>
         </button>
       </div>
-      <div className='blockFnIcon'> 
+      <div 
+        className='blockFnIcon'
+      > 
         <button
-          onClick={openMenu}
+          onClick={onClickMenu}
+          onMouseDown={onMouseDownMenu}
           title ="Click to open menu"
         >
           <CgMenuGridO/>
@@ -209,21 +191,21 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
             firstlist={firstlist}
             page={page}
             userName={userName}
-            setMenuOpen={setMenuOpen}
+            setOpenMenu={setOpenMenu}
             addBlock={addBlock}
             editBlock={editBlock}
             changeBlockToPage={changeBlockToPage}
             changePageToBlock={changePageToBlock}
             deleteBlock={deleteBlock}
-            addPage={addPage}
+            editPage={editPage}
             duplicatePage={duplicatePage}
             movePageToPage={movePageToPage}
-            deletePage={deletePage}
             popup={popup}
             setPopup={setPopup}
             setCommentBlock={setCommentBlock}
             setTargetPageId={setTargetPageId}
             setOpenRename= {setOpenRename}
+            frameHtml={frameHtml}
           />
         }
         {openRename && renameTargetPage !==null &&

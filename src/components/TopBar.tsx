@@ -7,7 +7,7 @@ import PageMenu from './PageMenu';
 
 import { AiOutlineMenu} from 'react-icons/ai';
 import { FiChevronsLeft } from 'react-icons/fi';
-import { AiFillStar, AiOutlineClockCircle, AiOutlineStar } from "react-icons/ai";
+import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { BiMessageDetail } from "react-icons/bi";
 import { BsThreeDots } from "react-icons/bs";
 import { RiDeleteBin6Line } from 'react-icons/ri';
@@ -16,6 +16,7 @@ import { GrDocumentUpload } from 'react-icons/gr';
 import { CSSProperties } from 'styled-components';
 import PageIcon from './PageIcon';
 import { detectRange } from './BlockFn';
+import { defaultFontFamily, fontStyleType, monoFontFamily, serifFontFamily } from '../containers/NotionRouter';
 
 type TopBarProps ={
   firstlist:listItem[],
@@ -26,31 +27,28 @@ type TopBarProps ={
   pagePath: pathType[] |null ,
 
   addBlock:(pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
-  editBlock: (pageId: string, block: Block) => void,
   deleteBlock: (pageId: string, block: Block, isInMenu: boolean) => void,
   changeBlockToPage: (currentPageId: string, block: Block) => void,
 
-  addPage: (newPage: Page) => void
   deletePage: (pageId: string) => void,
   movePageToPage: (targetPageId: string, destinationPageId: string) => void,
 
   changeSide: (appear: SideAppear) => void,
-  
   removeFavorites: (itemId: string) => void,
 
   addFavorites: (itemId: string) => void
   setTargetPageId:Dispatch<SetStateAction<string>>,
   showAllComments:boolean,
   setShowAllComments:Dispatch<SetStateAction<boolean>>,
-  setAllCommentsStyle:Dispatch<SetStateAction<CSSProperties>>,
   smallText:boolean,
   setSmallText:Dispatch<SetStateAction<boolean>>,
   fullWidth:boolean,
   setFullWidth:Dispatch<SetStateAction<boolean>>,
   setOpenExport :Dispatch<SetStateAction<boolean>>,
+  setFontStyle:Dispatch<SetStateAction<fontStyleType>>
 };
-export const defaultFontFamily ='ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"' ;
-const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock, editBlock ,changeBlockToPage ,deleteBlock ,addPage,deletePage, movePageToPage, changeSide ,addFavorites,removeFavorites ,setTargetPageId  , showAllComments, setShowAllComments ,setAllCommentsStyle , smallText, setSmallText ,fullWidth, setFullWidth ,setOpenExport}:TopBarProps)=>{
+
+const TopBar =({ firstlist,favorites,sideAppear,page , pages,pagePath, addBlock, changeBlockToPage ,deleteBlock ,deletePage, movePageToPage, changeSide ,addFavorites,removeFavorites ,setTargetPageId  , showAllComments, setShowAllComments , smallText, setSmallText ,fullWidth, setFullWidth ,setOpenExport, setFontStyle}:TopBarProps)=>{
   const inner =document.getElementById("inner");
   const [title, setTitle]= useState<string>("");
   const [openPageMoreFun, setOpenPageMoreFun] =useState<boolean>(false);
@@ -91,7 +89,7 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
   }
   const onClickViewAllComments=()=>{
     setShowAllComments(!showAllComments)
-    //changeAllCommentAndTopBarStyle()
+    changeAllCommentAndTopBarStyle()
   };
   const defaultStyle ="default";
   const serif ="serif"; 
@@ -112,26 +110,21 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
       element.classList.remove("on"); 
     });
     targetFontSample!==null && targetFontSample.classList.add("on");
-    const frame_inner = [...document.getElementsByClassName("frame_inner")];
-    const serifFontFamily ='Lyon-Text, Georgia, ui-serif, serif';
-    const monoFontFamily ='iawriter-mono, Nitti, Menlo, Courier, monospace'; 
 
-    let fontFamily =defaultFontFamily;
-    
     switch (font) {
       case "default":
-        fontFamily =defaultFontFamily;
+        setFontStyle(defaultFontFamily);
         break;
       case "serif":
-        fontFamily =serifFontFamily;
+        setFontStyle(serifFontFamily);
         break;
       case "mono":
-        fontFamily =monoFontFamily;
+        setFontStyle(monoFontFamily);
         break;
       default:
         break;
     };
-    frame_inner.forEach((content:Element)=> content.setAttribute("style",`font-family:${fontFamily}` ))
+
   };
   const changeFontSize=()=>{
     setSmallText(!smallText);
@@ -156,7 +149,6 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
       pagePath.forEach((e:Element)=> e.setAttribute("style",`max-width:${width}px`));
     };
     if(showAllComments){
-      setAllCommentsStyle({transform:"translateX(0)"});
       if(innerWidth >= 385){
         const newWidth =innerWidth -(12+385+5);
         topbar_left?.setAttribute("style", `width: ${newWidth}px`);
@@ -168,7 +160,6 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
         pageFun?.setAttribute("style", "width:50%");
       }
     }else{
-      setAllCommentsStyle({transform:`translateX(${innerWidth}px)`});
       topbar_left?.setAttribute("style", "width:50%");
       changePathWidth( (innerWidth * 0.5) -26);
     };
@@ -182,7 +173,7 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
     if(sideAppear ==="close"){
       setTitle("Float sideBar ")
     }
-  },[]);
+  },[sideAppear]);
 
   inner?.addEventListener("click", function(event:MouseEvent){
     if(openPageMenu){
@@ -275,15 +266,11 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
           Share
         </button>
         <button
+          id="allCommentsBtn"
           title='View all comments'
           onClick={onClickViewAllComments}
         >
           <BiMessageDetail/>
-        </button>
-        <button
-          title="View all updates"
-        >
-          <AiOutlineClockCircle/>
         </button>
         <button
           title="Pin this page in your sidebar"
@@ -427,12 +414,10 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages ,pagePath, addBlock
           firstlist={firstlist}
           pages={pages}
           addBlock={addBlock}
-          editBlock={editBlock}
           changeBlockToPage={changeBlockToPage}
           deleteBlock={deleteBlock}
-          addPage={addPage}
           movePageToPage={movePageToPage}
-          setMenuOpen={setOpenPageMenu}
+          setOpenMenu={setOpenPageMenu}
           setTargetPageId={setTargetPageId}
         />
         }

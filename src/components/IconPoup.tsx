@@ -2,6 +2,7 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import { BsEmojiSmile } from 'react-icons/bs';
 import { CSSProperties } from 'styled-components';
 import { Block, emojiPath, IconType, Page } from '../modules/notion';
+import { setTemplateItem } from './BlockComponent';
 import { detectRange } from './BlockFn';
 const smileEmoji ="smile";
 const heartEyesEmoji ="heart_eyes"; 
@@ -109,6 +110,8 @@ const IconPopup =({ currentPageId,block,page, editBlock ,editPage,style,  setOpe
 
   const changePageIcon =(icon:string|Emoji|null ,iconType:IconType)=>{
     const editTime = JSON.stringify(Date.now());
+    const templateHtml =document.getElementById("template");
+    setTemplateItem(templateHtml,page);
     editPage(page.id, {
       ...page,
       header :{
@@ -125,6 +128,7 @@ const IconPopup =({ currentPageId,block,page, editBlock ,editPage,style,  setOpe
         icon:icon,
         editTime:editTime
       };
+
       editBlock(currentPageId, editedBlock)
     }
     setOpenIconPopup(false);
@@ -144,7 +148,6 @@ const IconPopup =({ currentPageId,block,page, editBlock ,editPage,style,  setOpe
       reader.onload =function(){
         const result = reader.result as string;
         changePageIcon(result, "img");
-        console.log("result", result);
       };
       reader.readAsDataURL(file);
     }

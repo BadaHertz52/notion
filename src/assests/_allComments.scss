@@ -38,13 +38,17 @@
     width: 100%;
     position: relative;
     pointer-events: auto;
+    padding: 0;
+    margin:0;
+    max-height: 40%;
+    overflow-y: scroll;
   }
   .comments_comments {
     width: inherit;
   }
   .comment_header{
-    .information, .tool{
-      max-width: 50%;
+    .information{
+      max-width: calc(100% - 90px);
     }
     .information{
       flex-shrink: 1;
@@ -87,6 +91,32 @@
   .comment {
     &:hover{
       background-color: rgba(55, 53, 47, 0.03);
+    }
+  }
+  .noResult{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    position: relative;
+    & >div{
+      width: 100%;
+      position: absolute;
+      top:30%;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      color:$mud;
+      font-weight: bold;
+    }
+    p{
+      width: 90%;
+      text-align: center;
+    }
+    p:first-child{
+      font-size: 1.5rem;
+    }
+    p:last-child{
+      font-size: 14px;
     }
   }
 }

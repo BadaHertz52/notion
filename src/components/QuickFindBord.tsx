@@ -19,7 +19,7 @@ type QuickFindBordProps ={
 
 const QuickFindBord =({userName,recentPagesId, pages,pagesId ,setTargetPageId, cleanRecentPage ,setOpenQF }:QuickFindBordProps)=>{
   const bestMatches= "Best matches";
-  const lastEditedNewest ="Last edited:Nwest first";
+  const lastEditedNewest ="Last edited:Newest first";
   const lastEditedOldest ="Last edited:Oldest first";
   const createdNewest ="Created:Newest first";
   const createdOldest ="Created:Oldest first";
@@ -60,6 +60,7 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId ,setTargetPageId, c
     };
   };
   const onClickOption =(event:React.MouseEvent)=>{
+    event.preventDefault();
     const selected =document.getElementById("quickFindBord")?.getElementsByClassName("selected")[0];
     if(selected !==null){
       selected?.classList.remove("selected");
@@ -100,10 +101,10 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId ,setTargetPageId, c
           let value :number =0 ;
           switch (sort) {
             case "newest":
-              value= A-B;
+              value= B-A;
               break;
             case "oldest":
-              value= B-A;
+              value= A-B;
               break;
             default:
               break;
@@ -137,17 +138,50 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId ,setTargetPageId, c
     };
     openSortOptions();
   };
+  /**
+   * QuickFindBord 에 click 이벤트가 일어날때, 해당 이벤트가 sortOptions에서 일어난 이벤트인지 확인하는 함수
+   * @param event QuickFindBord에서 발생한 click 이벤트
+   * @returns click 이벤트가 sortOptions에서 발생했는지 여부
+   */
+  const checkOptionBtnClicked =(event:React.MouseEvent)=>{  
+    const eventTarget =event.target as HTMLElement;
+    console.log("target", eventTarget, eventTarget.tagName);
+    let optionBtnIsClicked :boolean =false;
+    const changeReturnValue =(condition:boolean)=>{
+      if(condition){
+        optionBtnIsClicked = true;
+      }else{
+        optionBtnIsClicked =false;
+      }
+    };
+    switch (eventTarget.tagName) {
+      case "SVG":
+        const parentElement =eventTarget.parentElement as HTMLElement;
+        changeReturnValue(parentElement.className ==="checkIcon");
+        break;
+      case "DIV":
+        changeReturnValue(eventTarget.className==="optionName");
+        break;
+      case "BUTTON":
+        changeReturnValue(eventTarget.classList.contains("optionBtn"));
+        break;
+      default:
+        break;
+    };
+    return optionBtnIsClicked ;
+  };
   const closeQuickFindBord=(event:React.MouseEvent)=>{
     const inner =document.getElementById
     ("quickFindBoard_inner");
     const innerDomRect =inner?.getClientRects()[0];
-
     if(innerDomRect !==undefined){
       const isInBord =detectRange(event, innerDomRect);
-      console.log(isInBord)
-      !isInBord && 
-      setOpenQF(false)
-    }
+      if(!isInBord){
+        const optionBtnIsClicked =checkOptionBtnClicked(event);
+        console.log("optionBtnIsClicked",optionBtnIsClicked);
+        !optionBtnIsClicked && setOpenQF(false);
+      };
+    };
   }
   return(
     <div 
@@ -188,7 +222,7 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId ,setTargetPageId, c
                   >
                     <button
                       onClick ={onClickOption}
-                      className="selected"
+                      className="selected optionBtn"
                     >
                       <div className="optionName">
                         {bestMatches}
@@ -199,6 +233,7 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId ,setTargetPageId, c
                     </button>
                   <button  
                     onClick ={onClickOption}
+                    className="optionBtn"
                   >
                     <div className="optionName">
                       {lastEditedNewest}
@@ -209,6 +244,7 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId ,setTargetPageId, c
                   </button>
                   <button  
                     onClick ={onClickOption}
+                    className="optionBtn"
                   >
                     <div className="optionName">
                       {lastEditedOldest}
@@ -220,6 +256,7 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId ,setTargetPageId, c
                   </button>
                   <button
                   onClick ={onClickOption}
+                  className="optionBtn"
                   >
                     <div className="optionName">
                       {createdNewest}
@@ -230,6 +267,7 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId ,setTargetPageId, c
                   </button>
                   <button 
                     onClick ={onClickOption}
+                    className="optionBtn"
                   >
                     <div className="optionName">
                       {createdOldest}

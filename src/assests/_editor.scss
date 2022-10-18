@@ -24,8 +24,6 @@
   }
 }
 .editor {
-  width: 100vw;
-  overflow-y: scroll;
   flex-grow: 1;
   flex-shrink: 1;
   height: 100%;
@@ -68,8 +66,9 @@
     height: 45px ;
     padding: {
       left: 12px;
-      right: 14px;
-    }
+      right: 16px;
+    };
+    box-sizing: border-box;
     flex-grow: 0;
     flex-shrink: 0;
     display: flex;
@@ -112,6 +111,7 @@
   }
   #sideBarBtn {
     margin-right: 5px;
+    padding:10px;
   }
   .pagePathes{
     display: flex;
