@@ -270,15 +270,6 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
                     </span>
                   </div>
                 </button>
-                <button
-                  className='underline menu_editBtn'
-                  name="copy link to block"
-                >
-                  <div>                
-                    <BsLink45Deg/>
-                    <span>Copy link to block</span>
-                  </div>
-                </button>
                 {block.type === "page" && 
                 <button
                   className='menu_editBtn'
