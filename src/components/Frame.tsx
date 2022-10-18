@@ -23,6 +23,7 @@ import { setTemplateItem } from './BlockComponent';
 import { fontStyleType } from '../containers/NotionRouter';
 import BlockStyler from './BlockStyler';
 
+
 export type Command ={
   boolean:boolean,
   command:string | null,
@@ -152,6 +153,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   const editTime =JSON.stringify(Date.now());
   const [firstBlocksId, setFirstBlocksId]=useState<string[]|null>(page.firstBlocksId);
   const [newPageFram, setNewPageFrame]=useState<boolean>(false);
+  const [openLoaaderForCover, setOpenLoaderForCover] =useState<boolean>(false);
   const [decoOpen ,setdecoOpen] =useState<boolean>(false);
   const [command, setCommand]=useState<Command>({
     boolean:false, 
@@ -608,7 +610,20 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
     editPage(page.id ,newPage);
     setRoutePage(newPage);
   };
-
+  const onMouseEnterPC=(event:MouseEvent)=>{
+    const currentTarget =event?.currentTarget;
+    currentTarget.classList.add("on");
+  };
+  const onMouseLeavePC=(event:MouseEvent)=>{
+    const currentTarget =event?.currentTarget;
+    currentTarget.classList.remove("on");
+  };
+  
+  const onClickChangeCoverBtn =()=>{
+    setOpenLoaderForCover(true);
+    const pageCover =frameHtml?.querySelector(".pageCover");
+    pageCover?.classList.remove("on");
+  };
   const onClickTemplateBtn=()=>{
     setOpenTemplates(true);
     sessionStorage.setItem("targetPageId",page.id);
@@ -772,13 +787,35 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           onMouseLeave={onMouseLeaveFromPH}
         >
           {page.header.cover !== null &&        
-            <div className='pageCover'>
+            <div 
+              className='pageCover'
+              onMouseEnter={(event)=>onMouseEnterPC(event)}
+              onMouseLeave={(event)=>onMouseLeavePC(event)}
+            >
               <img src={page.header.cover} alt="page cover " />
+              <button 
+                className='changeCoverBtn'
+                onClick={onClickChangeCoverBtn}
+              >
+                change cover
+              </button>
             </div>
+          }
+          {openLoaaderForCover&&
+            <Loader
+              block={null}
+              page={page}
+              editBlock={null}
+              editPage={editPage}
+              frameHtml={frameHtml}
+              setOpenLoader={setOpenLoaderForCover}
+              setLoaderTargetBlock={null}
+            />
           }
           <div className="pageHeader_notCover" style={headerBottomStyle}
           >
             <div
+              className='pageIcon'
               onClick={onClickPageIcon}
             >
               <PageIcon
@@ -983,6 +1020,8 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
         block={loaderTargetBlock}
         page={page}
         editBlock={editBlock}
+        editPage={null}
+        frameHtml={frameHtml}
         setOpenLoader={setOpenLoader}
         setLoaderTargetBlock={setLoaderTargetBlock}
       />

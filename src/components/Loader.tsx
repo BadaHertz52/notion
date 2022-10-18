@@ -4,13 +4,15 @@ import { Block, Page } from '../modules/notion';
 import { setTemplateItem } from './BlockComponent';
 import { detectRange } from './BlockFn';
 type LoaderProps={
-  block:Block,
+  block:Block|null,
   page:Page,
-  editBlock :(pageId:string, block:Block)=>void,
+  editBlock :((pageId:string, block:Block)=>void) | null,
+  editPage:((pageId: string, newPage: Page) => void) | null,
+  frameHtml: HTMLDivElement | null,
   setOpenLoader :Dispatch<SetStateAction<boolean>>,
-  setLoaderTargetBlock :Dispatch<SetStateAction<Block|null>>,
+  setLoaderTargetBlock :Dispatch<SetStateAction<Block|null>>|null,
 }
-const Loader =({block, page, editBlock ,setOpenLoader ,setLoaderTargetBlock}:LoaderProps)=>{
+const Loader =({block, page, editBlock ,editPage ,frameHtml,setOpenLoader ,setLoaderTargetBlock}:LoaderProps)=>{
   const inner =document.getElementById("inner");
   const loaderHtml =document.getElementById("loader");
   const [loaderStyle, setLoaderStyle]=useState<CSSProperties|undefined>(undefined);
@@ -20,16 +22,31 @@ const Loader =({block, page, editBlock ,setOpenLoader ,setLoaderTargetBlock}:Loa
       const reader = new FileReader();
       reader.onload= function(){
         const result = reader.result as string;
-        const editedBlock :Block ={
-          ...block,
-          type:"image media",
-          contents:result,
-          editTime:JSON.stringify(Date.now(),)
-        };
-        const templateHtml =document.getElementById("template");
-        setTemplateItem(templateHtml,page);
-        editBlock(page.id,editedBlock);
-        closeLoader();
+        if(block !==null){
+          const editedBlock :Block ={
+            ...block,
+            type:"image media",
+            contents:result,
+            editTime:JSON.stringify(Date.now())
+          };
+          const templateHtml =document.getElementById("template");
+          setTemplateItem(templateHtml,page);
+          editBlock!==null && editBlock(page.id,editedBlock);
+          closeLoader();
+        }else{
+          //change page cover 
+          const editedPage :Page ={
+            ...page ,
+            header:{
+              ...page.header,
+              cover:result
+            },
+            editTime:JSON.stringify(Date.now())
+          };
+          editPage!==null &&
+          editPage(page.id, editedPage);
+          closeLoader();
+        }
       };
       reader.readAsDataURL(file);
     }else{
@@ -38,6 +55,7 @@ const Loader =({block, page, editBlock ,setOpenLoader ,setLoaderTargetBlock}:Loa
   };
   function closeLoader(){
     setOpenLoader(false);
+    setLoaderTargetBlock!==null&&
     setLoaderTargetBlock(null);
   }
   inner?.addEventListener("click", (event)=>{
@@ -48,23 +66,37 @@ const Loader =({block, page, editBlock ,setOpenLoader ,setLoaderTargetBlock}:Loa
     }
   })
   function changeLoaderStyle(){
-    const blockDom = document.getElementById(`block_${block.id}`);
-    const blockDomRect = blockDom?.getClientRects()[0];
-    const frame =document.getElementsByClassName("frame")[0];
-    const frameDomRect =frame.getClientRects()[0];
-    const frameInner =document.querySelector(".frame_inner");
-    if(blockDomRect!==undefined && frameDomRect!==undefined  &&  
-    frameInner !==null ){
+    console.log("block",block)
+    if(block !==null){
+      const blockDom = document.getElementById(`block_${block.id}`);
+      const blockDomRect = blockDom?.getClientRects()[0];
+      if(blockDomRect!==undefined && frameHtml!==null ){
+        const frameDomRect =frameHtml.getClientRects()[0];
+        const frameInner =frameHtml.querySelector(".frame_inner") as Element;
+          const style:CSSProperties={
+          position:"absolute",
+          top:blockDomRect.bottom - frameDomRect.top + blockDomRect.height +10 ,
+          left: blockDomRect.x -frameDomRect.x +((frameDomRect.width -frameInner.clientWidth) *0.5) ,
+          width: blockDomRect.width
+        };
+        setLoaderStyle(style);};
+    }else{
+      const pageCover =frameHtml?.querySelector(".pageCover");
+      if(pageCover !==undefined && pageCover!==null ){
         const style:CSSProperties={
-        position:"absolute",
-        top:blockDomRect.bottom - frameDomRect.top + blockDomRect.height +10 ,
-        left: blockDomRect.x -frameDomRect.x +((frameDomRect.width -frameInner.clientWidth) *0.5) ,
-        width: blockDomRect.width
-      };
-      setLoaderStyle(style);
-    };
+          position:"absolute",
+          top:pageCover.clientHeight ,
+          left :pageCover.clientWidth * 0.3,
+          width:pageCover.clientWidth * 0.5
+        };
+        setLoaderStyle(style);
+      }
+
+    }
+
   }
   useEffect(()=>{
+    console.log(loaderStyle)
     loaderStyle===undefined &&
     changeLoaderStyle();
   },[loaderStyle]);
@@ -84,9 +116,7 @@ const Loader =({block, page, editBlock ,setOpenLoader ,setLoaderTargetBlock}:Loa
               <button>
                 Upload
               </button>
-              {/* <button>
-                Embed link
-              </button> */}
+
             </div>
           </div>
           <div className='loaderForm innerPadding'>
