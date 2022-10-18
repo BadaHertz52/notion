@@ -66,7 +66,6 @@ const Loader =({block, page, editBlock ,editPage ,frameHtml,setOpenLoader ,setLo
     }
   })
   function changeLoaderStyle(){
-    console.log("block",block)
     if(block !==null){
       const blockDom = document.getElementById(`block_${block.id}`);
       const blockDomRect = blockDom?.getClientRects()[0];
