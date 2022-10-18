@@ -53,7 +53,6 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
   const [turnInToPage ,setTurnIntoPage] = useState<boolean>(false);
   const [menuStyle , setMenuStyle]= useState<CSSProperties>(changeMenuStyle());
   const [sideMenuStyle, setSideMenuStyle]=useState<CSSProperties|undefined>(undefined);
-  const [commandBlockStyle, setCommandBlockStyle]=useState<CSSProperties|undefined>(undefined);
   const templateHtml= document.getElementById("template");
   function changeMenuStyle (){
     const menu = document.querySelector(".menu");
@@ -76,26 +75,20 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
     };
     return style
   };
-  function changeMaxHeightOfCommand (){
-    const frameDomRect= frameHtml?.getClientRects()[0];
-    if(menuRef.current!==null && frameDomRect!==undefined){
-      const menuTop =menuRef.current.offsetTop;
-      const maxHeight = frameDomRect.height - menuTop -50
-      const commandBlock_style:CSSProperties ={
-        maxHeight:`${maxHeight}px`
-      };
-      setCommandBlockStyle(commandBlock_style);
-    }
-  };
   function changeSideMenuStyle(){
     const mainMenu= document.getElementById("mainMenu");
     const innerWidth= window.innerWidth;
-    if(mainMenu !==null ){
+    const innerHeight =window.innerHeight;
+    if(mainMenu !==null && menuRef.current!==null){
+      const menuTop =menuRef.current.getClientRects()[0].top;
+      const maxHeight = innerHeight - menuTop -100;
       const left =(mainMenu?.clientWidth)* 0.7;
       const style :CSSProperties= {
         top: innerWidth >767? '-10px' :
         "10px",
         left: innerWidth> 767? left : `${mainMenu.clientWidth * (innerWidth >=375 ? 0.5: 0.3)}px`,
+        maxHeight:`${maxHeight}px`,
+        overflowY:"scroll"
       };
       setSideMenuStyle(style);
     }
@@ -104,9 +97,6 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
     const style =changeMenuStyle();
     setMenuStyle(style);
     changeSideMenuStyle();
-    if(turnInto){
-      changeMaxHeightOfCommand();
-    }
   };
   useEffect(()=>{
     if(turnInToPage|| turnInto||color){
@@ -127,14 +117,19 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
   };
   const showTurnInto =()=>{
     setTurnInto(true);
-    changeMaxHeightOfCommand();
+    setColor(false);
+    setTurnIntoPage(false);
   };
   const showColorMenu =()=>{
     setColor(true);
+    setTurnInto(false);
+    setTurnIntoPage(false);
     recoveryMenuState();
   };
   const showPageMenu =()=>{
     setTurnIntoPage(true);
+    setTurnInto(false);
+    setColor(false);
     recoveryMenuState();
   };
   const onClickMoveTo=()=>{
@@ -228,7 +223,6 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
                   <div>
                     <RiDeleteBin6Line/>
                     <span>Delete</span>
-                    <span>Del</span>
                   </div>
                 </button>
                 <button
@@ -239,7 +233,6 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
                   <div>
                     <HiOutlineDuplicate/>
                     <span>Duplicate</span>
-                    <span>Ctrl+D</span>
                   </div>
                 </button>
                 <button
@@ -287,7 +280,6 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
                   <div>
                     <HiOutlinePencilAlt/>
                     <span>Rename</span>
-                    <span>Ctrl+Shift+R</span>
                   </div>
                 </button>
                 }
@@ -299,7 +291,6 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
                   <div>
                     <IoArrowRedoOutline/>
                     <span>Move to</span>
-                    <span>Ctrl+Shift+P</span>
                   </div>
                 </button>
                 {block.type !== "page" &&
@@ -311,7 +302,6 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
                   <div>
                     <BiCommentDetail/>
                     <span>Comment</span>
-                    <span>Ctrl+Shift+M</span>
                   </div>
                 </button>
                 }
@@ -347,7 +337,7 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
       >
         {turnInto &&
             <CommandBlock
-              style={commandBlockStyle}
+              style={undefined}
               page={page}
               block={block}
               addBlock={addBlock}
