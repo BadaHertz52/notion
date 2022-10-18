@@ -1516,13 +1516,10 @@ a:link, a:active, a:visited {
 }
 #sideMenu #commandBlock {
   margin-top: 0;
+  overflow: initial;
 }
 #sideMenu #commandBlock .command_btn {
   display: block;
-}
-
-#blockStylerColor .menu_color {
-  height: 200px;
 }
 
 .menu_color {
@@ -1539,8 +1536,6 @@ a:link, a:active, a:visited {
   border-radius: 8px;
   box-shadow: 0px 0px 23px -5px #ababab;
   width: 200px;
-  overflow-y: scroll;
-  height: 380px;
   color: initial;
   font-weight: initial;
 }
