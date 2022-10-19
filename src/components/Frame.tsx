@@ -324,7 +324,8 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
    * 마우스 드래그로 블록의 위치를 변경하고, 변경된 위치에 따라 page의 data도 변경하는 함수 
    */
   const changeBlockPosition =()=>{
-    if(pointBlockToMoveBlock.current!==null && moveTargetBlock!==null && page.blocksId!== null && page.blocks!==null){
+    if(pointBlockToMoveBlock.current!==null && moveTargetBlock!==null && page.blocksId!== null && page.blocks!==null && firstBlocksId!==null){
+      const FIRST_BLOCKS_ID=[...firstBlocksId];
       setTemplateItem(templateHtml,page);
       //editblock
         const editTime =JSON.stringify(Date.now());
@@ -386,13 +387,12 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
         };
 
       if(pointBlock.firstBlock){
-        const pointBlock_firstBlockIndex= firstBlocksId?.indexOf(pointBlock.id) as number;
+        const pointBlock_firstBlockIndex= FIRST_BLOCKS_ID?.indexOf(pointBlock.id) as number;
         if(targetBlock.firstBlock){
-          if(firstBlocksId!==null ){
-            const firstBlockIndex = firstBlocksId.indexOf(targetBlock.id);
-            firstBlocksId.splice(firstBlockIndex,1);
-            firstBlocksId.splice(pointBlock_firstBlockIndex,0,targetBlock.id);
-          };
+            const firstBlockIndex = FIRST_BLOCKS_ID.indexOf(targetBlock.id);
+            FIRST_BLOCKS_ID.splice(firstBlockIndex,1);
+            FIRST_BLOCKS_ID.splice(pointBlock_firstBlockIndex,0,targetBlock.id);
+
         }else{
             //edit targetBlock's  origin parentBlock
             const {parentBlock} = findParentBlock(page, moveTargetBlock);
@@ -409,15 +409,14 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
               deleteParentBlocksIdFromSubBlock(targetBlock, parentBlock.id , targetBlockIsList? newParentBlockOfList.id:null);
             };
             //add firtstBlocks
-            if(firstBlocksId!==null){
-              if(targetBlockIsList && page.firstBlocksId!==null ){
-                const preBlockId = page.firstBlocksId[pointBlock_firstBlockIndex-1];
+              if(targetBlockIsList){
+                const preBlockId = FIRST_BLOCKS_ID[pointBlock_firstBlockIndex-1];
                 const preBlockIndexInBlocksId =page.blocksId.indexOf(preBlockId);
                 addBlock(page.id, newParentBlockOfList, preBlockIndexInBlocksId+1 ,preBlockId );
               }else{
-                firstBlocksId.splice(pointBlock_firstBlockIndex,0, targetBlock.id);
+                FIRST_BLOCKS_ID.splice(pointBlock_firstBlockIndex,0, targetBlock.id);
               }
-            };
+            
             editBlock(page.id, targetBlock);
         }
       };
@@ -425,9 +424,9 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
       if(!pointBlock.firstBlock){
         const parentBlockOfPointBlock=findParentBlock(page,pointBlock).parentBlock;
         //STEP1. targetBlock이 firstBlock일 경우 page의 firstBlocksId에서 삭제, 아닐 경우 targetBlock의 parentBlock을 수정 
-        if(targetBlock.firstBlock && firstBlocksId!==null){
-          const firstBlocksIdIndex= firstBlocksId?.indexOf(targetBlock.id);
-          firstBlocksId.splice(firstBlocksIdIndex,1);
+        if(targetBlock.firstBlock){
+          const firstBlocksIdIndex= FIRST_BLOCKS_ID.indexOf(targetBlock.id);
+          FIRST_BLOCKS_ID.splice(firstBlocksIdIndex,1);
         }else{
           /**
            * moveTargetBlock의 parentBlock 으로 , targetBlock은 블록의 이동에 따라  moveTargetBlock에서 data를 변경한 것이기 때문에 targetBlock의 parent가 아닌 moveTargetBlock의 parent여야함  
@@ -456,7 +455,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
       if(targetBlockIsList && parentBlockOfPointBlock.subBlocksId!==null){
         const pointBlockIndex= blocksId.indexOf(pointBlock.id);
         const pointBlockIndexAsSub = parentBlockOfPointBlock.subBlocksId.indexOf(pointBlock.id);
-        console.log("poinBlockIndex," ,pointBlockIndex, "pointblockindexAsSub", pointBlockIndexAsSub);
         if(pointBlockIndexAsSub===0){
           addBlock(page.id, newParentBlockOfList, pointBlockIndex-1, null);
         }else{
@@ -512,10 +510,11 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
         const editedPage = findPage(pagesId, pages, page.id); 
         const newPage :Page ={
           ...editedPage,
-          firstBlocksId:firstBlocksId
+          firstBlocksId:FIRST_BLOCKS_ID
         };
         setTemplateItem(templateHtml,page);
         editPage(page.id, newPage);
+        setFirstBlocksId(FIRST_BLOCKS_ID);
     };
   };
   
@@ -735,14 +734,15 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   },[openTemplates]);
 
   useEffect(()=>{
-    console.log("page", page.firstBlocksId);
     setFirstBlocksId(page.firstBlocksId); 
   },[page.firstBlocksId]);
 
   useEffect(()=>{
-    firstBlocksId?.[0] ===undefined?
-    setNewPageFrame(true):
-    setNewPageFrame(false);
+    if(firstBlocksId==null){
+    setNewPageFrame(true)
+    }else{
+      setNewPageFrame(false);
+    }
   },[firstBlocksId]);
 
   useEffect(()=>{
@@ -935,9 +935,8 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
             onMouseMove={onMouseMoveToMoveBlock}
             onMouseUp={onMouseUpToMoveBlock}
             >
-            {page.firstBlocksId!==null &&
-              firstBlocksId?.map((id:string)=> findBlock(page,id).BLOCK)
-              .map((block:Block)=>{
+            {firstBlocksId!==null &&
+              firstBlocksId.map((id:string)=> findBlock(page,id).BLOCK).map((block:Block)=>{
                 return (
                   <EditableBlock
                     key={block.id}
