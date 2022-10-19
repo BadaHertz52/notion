@@ -1995,41 +1995,41 @@ export default function notion (state:Notion =initialState , action :NotionActio
         pagesId:pagesId,
         trash:trash
       };
-      case CANCLE_EDIT_TEMPLATE:
-        const restorePage=(item:string)=>{
-          const sessionItem= sessionStorage.getItem(item);
-          if(sessionItem!==null ){
-            const originTemplate :Page = JSON.parse(sessionItem);
-            const templateIndexInPages = pagesId.indexOf(originTemplate.id);
-            pages.splice(templateIndexInPages,1, originTemplate);
-            sessionStorage.removeItem(item);
-          }
-        };
-        restorePage("originTemplate");
-        restorePage("originMoveTargetPage")
-        return{
-          pages:pages,
-          firstPagesId:firstPagesId,
-          templatesId:templatesId,
-          pagesId:pagesId,
-          trash:trash
-        };
-      case DELETE_TEMPLATE:
-        const templateIndexInPages = pagesId.indexOf(`${action.pageId}`);
-        pages.splice(templateIndexInPages,1);
-        pagesId.splice(templateIndexInPages,1);
-        if(templatesId!==null){
-          const templageIndexInTemplates =templatesId.indexOf(`${action.pageId}`);
-          templatesId.splice(templageIndexInTemplates,1);
-        };
-        console.log("delete template", "pages",pages,"templatesId", templatesId); 
-        return{
-          pages:pages,
-          firstPagesId:firstPagesId,
-          templatesId:templatesId !==null?(templatesId[0]===undefined? null : templatesId)   : templatesId,
-          pagesId:pagesId,
-          trash:trash
-        };
+    case CANCLE_EDIT_TEMPLATE:
+      const restorePage=(item:string)=>{
+        const sessionItem= sessionStorage.getItem(item);
+        if(sessionItem!==null ){
+          const originTemplate :Page = JSON.parse(sessionItem);
+          const templateIndexInPages = pagesId.indexOf(originTemplate.id);
+          pages.splice(templateIndexInPages,1, originTemplate);
+          sessionStorage.removeItem(item);
+        }
+      };
+      restorePage("originTemplate");
+      restorePage("originMoveTargetPage")
+      return{
+        pages:pages,
+        firstPagesId:firstPagesId,
+        templatesId:templatesId,
+        pagesId:pagesId,
+        trash:trash
+      };
+    case DELETE_TEMPLATE:
+      const templateIndexInPages = pagesId.indexOf(`${action.pageId}`);
+      pages.splice(templateIndexInPages,1);
+      pagesId.splice(templateIndexInPages,1);
+      if(templatesId!==null){
+        const templageIndexInTemplates =templatesId.indexOf(`${action.pageId}`);
+        templatesId.splice(templageIndexInTemplates,1);
+      };
+      console.log("delete template", "pages",pages,"templatesId", templatesId); 
+      return{
+        pages:pages,
+        firstPagesId:firstPagesId,
+        templatesId:templatesId !==null?(templatesId[0]===undefined? null : templatesId)   : templatesId,
+        pagesId:pagesId,
+        trash:trash
+      };
     }
   }
   switch (action.type) {
