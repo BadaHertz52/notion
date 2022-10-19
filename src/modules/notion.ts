@@ -1767,8 +1767,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
 
     case EDIT_PAGE :
       function editPage(newPage:Page){
-        if(targetPage!==null && pagesId !==null && pages!==null){
-          targetPage.header = newPage.header;
+        if( pagesId !==null && pages!==null){
           const parentsId = newPage.parentsId ; 
           if(parentsId !==null ){
             const parentPageId =parentsId[ parentsId.length -1];
