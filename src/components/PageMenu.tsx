@@ -44,22 +44,18 @@ const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock,changeBlockToP
         parentBlocksId:null,
         editTime: JSON.stringify(Date.now())
       };
-      const moveTargetPage = pages.filter((page:Page)=> page.id === destinationPageId)[0];
-      //set origin moveTargetPage
+      const destinationPage = pages.filter((page:Page)=> page.id === destinationPageId)[0];
+      //set origin destinationPage
       if(templateHtml!==null){
-        const item= JSON.stringify(moveTargetPage);
+        const item= JSON.stringify(destinationPage);
         sessionStorage.setItem("originMoveTargetPage", item);
       }
-      if(moveTargetPage.blocksId==null){
+      if(destinationPage.blocksId==null){
         addBlock(destinationPageId, newBlock, 0 , null);
       }else{  
-        const blocksIdLength = moveTargetPage.blocksId.length;
+        const blocksIdLength = destinationPage.blocksId.length;
         addBlock(destinationPageId, newBlock, blocksIdLength , null);
       };
-      if(block.type==="page"){
-        movePageToPage(block.id,destinationPageId)
-      };
-      
     // close Menu and recovery Menu state
     setOpenMenu !==null && setOpenMenu(false);
   };
@@ -67,7 +63,11 @@ const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock,changeBlockToP
     switch (what) {
       case "block":
         if(block !==null){
-          moveBlockToPage(id ,block)
+          if(block.type ==="page"){
+            movePageToPage(block.id,id);
+          }else{
+            moveBlockToPage(id ,block)
+          }
         }
         break;
       case "page":

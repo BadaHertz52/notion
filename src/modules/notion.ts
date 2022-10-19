@@ -1799,19 +1799,25 @@ export default function notion (state:Notion =initialState , action :NotionActio
         trash:trash
       };
     case MOVE_PAGE_TO_PAGE:
+      /**
+       * 이동의 대상인 page 
+       */
       const moveTargetPage = findPage(pagesId, pages, action.pageId);
       const moveTargetPageIndex =pagesId.indexOf(action.pageId);
       const destinationPageId =action.destinationPageId;
+      /**
+       * 이동의 목적지인 page
+       */
       const destinationPage = findPage(pagesId, pages, destinationPageId);
       const destinationPageIndex =pagesId.indexOf(destinationPage.id);
-      // editedMoveTargetpage
+      // editedMoveTargetpage : 이동으로 인해 데이터가 변경된 moveTargetPage 
       const editedMoveTargetPage:Page ={
         ...moveTargetPage,
         parentsId:[destinationPageId],
         editTime:editTime
       };
       pages.splice(moveTargetPageIndex,1,editedMoveTargetPage);
-      // firstPagesId 변경
+      // notion의 firstPagesId 변경
       if(firstPagesId.includes(editedMoveTargetPage.id)){
         const index = firstPagesId.indexOf(editedMoveTargetPage.id);
         firstPagesId.splice(index,1);
@@ -1844,15 +1850,23 @@ export default function notion (state:Notion =initialState , action :NotionActio
       };
       let pageBlockStyle:BlockStyle =basicBlockStyle;
 
-      // 페이지 이동전, targetPage가 들어 있는 page에서 targetPage에 대한 데이터 삭제 
+      // 페이지 이동전, targetPage가 들어 있는 page에서 targetPage에 대한 데이터 삭제 :block 삭제, subPages 삭제
       if(moveTargetPage.parentsId !==null){
         /**
          * 이동 전에 targetPage가 들어있는 page 
          */
         const parentPage = findPage(pagesId, pages, moveTargetPage.parentsId[moveTargetPage.parentsId.length-1]);
-        if(parentPage.blocks!==null && parentPage.blocksId!==null){
+        if(parentPage.blocks!==null && parentPage.blocksId!==null && parentPage.firstBlocksId!==null && parentPage.subPagesId!==null){
           const blockIndex= parentPage.blocksId.indexOf(action.pageId);
           const pageBlock =parentPage.blocks[blockIndex];
+          const firstBlocksId =[...parentPage.firstBlocksId];
+          const subPagesId =[...parentPage.subPagesId];
+          //parentPage의 firstBlock 수정 
+          if(pageBlock.firstBlock){
+            const indexAsFirst = firstBlocksId.indexOf(pageBlock.id);
+            parentPage.firstBlocksId.splice(indexAsFirst,1)
+            //firstBlocksId.splice(indexAsFirst,1);
+          }
           //pageBlock의 parentBlock을 수정
           if(pageBlock.parentBlocksId!==null){
             const {parentBlock, parentBlockIndex}= findParentBlock(parentPage, pageBlock);
@@ -1866,13 +1880,14 @@ export default function notion (state:Notion =initialState , action :NotionActio
             };
             parentPage.blocks.splice(parentBlockIndex, 1 , editedParentBlock);
           };
-          pageBlockStyle = pageBlock.style ;
-          parentPage.editTime =editTime;
+          //parentPage에서 pageBlock 삭제 , subPagesId에서 moveTargetPage 삭제 
           parentPage.blocks.splice(blockIndex,1);
           parentPage.blocksId.splice(blockIndex,1);
+          const subPageIndex= subPagesId.indexOf(moveTargetPage.id);
+          parentPage.subPagesId.splice(subPageIndex,1);
+          pageBlockStyle = pageBlock.style ;
         };
-        const subPageIndex= parentPage.subPagesId?.indexOf(action.pageId);
-        subPageIndex !==undefined && parentPage.subPagesId?.splice(subPageIndex,1);
+        
       };
 
       //destination page 관련 변경
@@ -1909,7 +1924,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
       };
       pages.splice(destinationPageIndex,1, editedDestinationPage);
   
-      console.log("move page to other page", pages , firstPagesId , destinationPage) 
+      console.log("move page to other page",editedDestinationPage, "pages", pages); 
       return{
         pages:pages,
         firstPagesId:firstPagesId,
