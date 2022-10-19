@@ -1800,20 +1800,74 @@ export default function notion (state:Notion =initialState , action :NotionActio
         trash:trash
       };
     case MOVE_PAGE_TO_PAGE:
+      const moveTargetPage = findPage(pagesId, pages, action.pageId);
+      const moveTargetPageIndex =pagesId.indexOf(action.pageId);
       const destinationPageId =action.destinationPageId;
       const destinationPage = findPage(pagesId, pages, destinationPageId);
-      // target page 관련 변경
-      if(firstPagesId.includes(targetPage.id)){
-        const index = firstPagesId.indexOf(targetPage.id);
+      const destinationPageIndex =pagesId.indexOf(destinationPage.id);
+      // editedMoveTargetpage
+      const editedMoveTargetPage:Page ={
+        ...moveTargetPage,
+        parentsId:[destinationPageId],
+        editTime:editTime
+      };
+      pages.splice(moveTargetPageIndex,1,editedMoveTargetPage);
+      // firstPagesId 변경
+      if(firstPagesId.includes(editedMoveTargetPage.id)){
+        const index = firstPagesId.indexOf(editedMoveTargetPage.id);
         firstPagesId.splice(index,1);
       };
+      // targetPage의 subPage의 parentsId 변경
+      /**
+       * 페이지가 다른 페이지의 subPage로 이동함에 따라 해당page에 있는 subPage들의 parentsId를 수정하는 함수 
+       * @param pageId subPage의 id
+       */
+      const changeParentsId =(pageId:string)=>{
+        const subPage = findPage(pagesId, pages, pageId) as Page;
+        const subPageIndex = pagesId.indexOf(pageId);
+        if(subPage.parentsId!==null){
+          const targetPageIndex= subPage.parentsId.indexOf(action.pageId);
+          const remainPagesId = subPage.parentsId.slice(targetPageIndex);
+          const newParentPagesId =[destinationPageId, ...remainPagesId];
+          const editedSubPage:Page ={
+            ...subPage,
+            parentsId:newParentPagesId,
+            editTime:editTime
+          };
+          pages.splice(subPageIndex,1, editedSubPage);
+          if(subPage.subPagesId!==null){
+            subPage.subPagesId.forEach((subPageId:string)=> changeParentsId(subPageId));
+          }
+        };
+      };
+      if(editedMoveTargetPage.subPagesId!==null){
+        editedMoveTargetPage.subPagesId.forEach((subPageId:string)=> changeParentsId(subPageId));
+      };
       let pageBlockStyle:BlockStyle =basicBlockStyle;
-      if(targetPage.parentsId !==null){
-        const parentPage = findPage(pagesId, pages, targetPage.parentsId[targetPage.parentsId.length-1]);
+
+      // 페이지 이동전, targetPage가 들어 있는 page에서 targetPage에 대한 데이터 삭제 
+      if(moveTargetPage.parentsId !==null){
+        /**
+         * 이동 전에 targetPage가 들어있는 page 
+         */
+        const parentPage = findPage(pagesId, pages, moveTargetPage.parentsId[moveTargetPage.parentsId.length-1]);
         if(parentPage.blocks!==null && parentPage.blocksId!==null){
           const blockIndex= parentPage.blocksId.indexOf(action.pageId);
-          pageBlockStyle = parentPage.blocks[blockIndex].style 
-        
+          const pageBlock =parentPage.blocks[blockIndex];
+          //pageBlock의 parentBlock을 수정
+          if(pageBlock.parentBlocksId!==null){
+            const {parentBlock, parentBlockIndex}= findParentBlock(parentPage, pageBlock);
+            const subIndex= parentBlock.subBlocksId?.indexOf(pageBlock.id) as number;
+            const subBlocksId =[...parentBlock.subBlocksId as string[]];
+            subBlocksId.splice(subIndex,1);
+            const editedParentBlock:Block ={
+              ...parentBlock,
+              subBlocksId: subBlocksId,
+              editTime:editTime
+            };
+            parentPage.blocks.splice(parentBlockIndex, 1 , editedParentBlock);
+          };
+          pageBlockStyle = pageBlock.style ;
           parentPage.editTime =editTime;
           parentPage.blocks.splice(blockIndex,1);
           parentPage.blocksId.splice(blockIndex,1);
@@ -1821,25 +1875,29 @@ export default function notion (state:Notion =initialState , action :NotionActio
         const subPageIndex= parentPage.subPagesId?.indexOf(action.pageId);
         subPageIndex !==undefined && parentPage.subPagesId?.splice(subPageIndex,1);
       };
-      targetPage.editTime=editTime; 
-      targetPage.parentsId =[destinationPage.id];
 
       //destination page 관련 변경
+      /**
+       * 다른 page(destiantion page)로 이동 시 , targetPage는  그 페이지의 page type block으로 추가되는데 그때 추가되는 block 
+       */
       const newPageBlock :Block={
-        id: targetPage.id,
-        contents:targetPage.header.title,
+        id: editedMoveTargetPage.id,
+        contents:editedMoveTargetPage.header.title,
         contentsEmpty:false,
         firstBlock: true,
         subBlocksId: null,
         parentBlocksId: null,
         type:  "page",
-        iconType:targetPage.header.iconType,
-        icon: targetPage.header.icon,
-        editTime: targetPage.editTime,
-        createTime: targetPage.createTime,
+        iconType:editedMoveTargetPage.header.iconType,
+        icon: editedMoveTargetPage.header.icon,
+        editTime: editedMoveTargetPage.editTime,
+        createTime: editedMoveTargetPage.createTime,
         style: pageBlockStyle,
-        comments: targetPage.header.comments,
+        comments: editedMoveTargetPage.header.comments,
       };
+      /**
+       * page가 이동됨에 따라 데이터가 변경된 destinationPage
+       */
       const editedDestinationPage:Page ={
         ...destinationPage,
         editTime :editTime,
@@ -1847,10 +1905,10 @@ export default function notion (state:Notion =initialState , action :NotionActio
         blocks :destinationPage.blocks!==null ? destinationPage.blocks.concat(newPageBlock) :[newPageBlock],
         blocksId:destinationPage.blocksId!==null? destinationPage.blocksId.concat(newPageBlock.id):[newPageBlock.id],
         subPagesId :  destinationPage.subPagesId !==null ? 
-        destinationPage.subPagesId.concat(targetPage.id) :
-        [targetPage.id]
+        destinationPage.subPagesId.concat(editedMoveTargetPage.id) :
+        [editedMoveTargetPage.id]
       };
-      editPage(editedDestinationPage);
+      pages.splice(destinationPageIndex,1, editedDestinationPage);
   
       console.log("move page to other page", pages , firstPagesId , destinationPage) 
       return{
