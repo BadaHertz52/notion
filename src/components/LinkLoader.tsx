@@ -1,8 +1,8 @@
 import React , {useState, ChangeEvent, Dispatch ,SetStateAction, useEffect} from 'react';
 import { BsArrowUpRight, BsLink45Deg } from 'react-icons/bs';
 import { CSSProperties } from 'styled-components';
-import { makePagePath, makeRoutePath } from '../containers/NotionRouter';
-import { Block, findPage, listItem, Page } from '../modules/notion';
+import { makeRoutePath } from '../containers/NotionRouter';
+import { Block, findPage,  Page } from '../modules/notion';
 import { selectionType } from './Frame';
 import PageIcon from './PageIcon';
 
@@ -87,7 +87,7 @@ const LinkLoader=({recentPagesId, pages,page,pagesId, block,editBlock, setOpenLi
       };
     };
   };
-  const addLink=(link:string)=>{
+  const addLink=(link:string )=>{
     const selectedHtml =document.querySelector(".selected");
     if(selectedHtml!==null){
       const newSelectedHtml =document.createElement("a");
@@ -95,7 +95,12 @@ const LinkLoader=({recentPagesId, pages,page,pagesId, block,editBlock, setOpenLi
       newSelectedHtml.innerHTML= selectedHtml.innerHTML;
       newSelectedHtml.setAttribute("target","_blank");
       if(webLink){
-        newSelectedHtml.setAttribute("href",`${link}`);
+        if(link.includes("https://")|| link.includes("http://")){
+          newSelectedHtml.setAttribute("href",`${link}`);
+        }else{
+          newSelectedHtml.setAttribute("href",`https://${link}`);
+        }
+        
       }else{
         //page link
         const originLocation =window.location.origin;
@@ -113,7 +118,8 @@ const LinkLoader=({recentPagesId, pages,page,pagesId, block,editBlock, setOpenLi
       };
       editBlock(page.id, newBlock);
       setSelection({block:newBlock});
-    }
+    };
+    setOpenLink(false);
     }
 };
   useEffect(()=>{
