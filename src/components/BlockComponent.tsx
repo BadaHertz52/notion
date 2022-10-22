@@ -2,7 +2,7 @@ import React, { Dispatch,MouseEvent, SetStateAction, SyntheticEvent, useEffect, 
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import { IoChatboxOutline } from 'react-icons/io5';
 import { MdOutlinePhotoSizeSelectActual } from 'react-icons/md';
-import {  Block,BlockType,blockTypes,findBlock,findParentBlock,findPreviousBlockInDoc,makeNewBlock,Page, toggle } from '../modules/notion';
+import {  Block,BlockType,blockTypes,findBlock,findParentBlock,findPreviousBlockInDoc,getBlockText,makeNewBlock,Page, toggle } from '../modules/notion';
 import { getContent } from './BlockStyler';
 import { Command, selectionType } from './Frame';
 import ImageContent from './ImageContent';
@@ -897,6 +897,7 @@ function updateMiddleChildren(startIndex:number, endIndex:number,endNode:Node, c
     }
   };  
   const BlockContentEditable=()=>{
+    const blockContents = block.type ==="page"? getBlockText(block): block.contents;
     useEffect(()=>{
       if(command.boolean){
         const commentInputHtml =document.getElementById("commandInput");
@@ -911,7 +912,7 @@ function updateMiddleChildren(startIndex:number, endIndex:number,endNode:Node, c
         <ContentEditable
           className={block.contentsEmpty ?"contentEditable empty": 'contentEditable'}
           placeholder="Type '/' for commmands"
-          html= {block.contents}
+          html= {blockContents}
           innerRef={contentEditableRef}
           onChange={(event)=> onChangeContents(event )}
           onKeyDown={(event)=> onKeyDownContents(event)}

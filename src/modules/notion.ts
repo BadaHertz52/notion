@@ -1,3 +1,4 @@
+import { getContent } from '../components/BlockStyler';
 import { Emoji, emojis } from '../components/IconPoup';
 export const emojiPath ="https://raw.githubusercontent.com/BadaHertz52/notion/master/image/emoji/";
 const catImg = 'https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assests/img/michael-sum-LEpfefQf4rU-unsplash.jpg' ;
@@ -1005,7 +1006,31 @@ const initialState :Notion ={
     pages:null
   }
 };
-
+/**
+ *  block content에 있는 스타일 코드와 링크를 제외하고 글자 그대로를 반환하는 함수 
+ * @param block 
+ * @returns 
+ */
+export const getBlockText =(block:Block)=>{
+  const contentEditableHtml =document.getElementById(`${block.id}_contents`)?.firstElementChild;
+  let text ="";
+  if(contentEditableHtml!==null&& contentEditableHtml!==undefined){
+    const children = [...contentEditableHtml.childNodes];
+    let contentsArry:string[]=[];
+    children.forEach((c:Node)=>{
+    if(c.nodeType ===3){
+      c.nodeValue !==null&&
+      contentsArry.push(c.nodeValue);
+    }
+    if(c.nodeType===1){
+      const element =c as HTMLElement; 
+      contentsArry.push(element.innerText);
+    }
+  });
+    text = contentsArry.join('');
+  };
+  return text
+};
 /**
  * block.id로 block을 찾을 수 있는 함수
  * @param page 찾을 block이 존재하는 페이지
@@ -1417,11 +1442,13 @@ export default function notion (state:Notion =initialState , action :NotionActio
             targetPage.subPagesId= targetPage.subPagesId.filter((id:string)=> !newSubPagesId?.includes(id));
           };
         }
+
+        const title = changedTypeBlock.contents.includes("<span")? getBlockText(action.block) : changedTypeBlock.contents ;
         const newPage:Page ={
           id:changedTypeBlock.id,
           type:page,
           header:{
-            title: changedTypeBlock.contents,
+            title: title,
             iconType: changedTypeBlock.iconType,
             icon: changedTypeBlock.icon,
             cover:null,

@@ -218,10 +218,7 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages,pagePath, addBlock,
                 style={undefined}
               />
               <div>
-                {page.header.title? 
-                page.header.title 
-                : 
-                ""}
+                {page.header.title }
               </div>
             </button>
           :
