@@ -184,6 +184,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
     };
   };
   const onClickCommentBtn=()=>{
+    changeCommentStyle();
     setPopup({
       popup:true,
       what:"popupComment"
@@ -425,7 +426,6 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
         </button>
         <button 
           className='commentBtn btn'
-          onMouseDown={changeCommentStyle}
           onClick={onClickCommentBtn}
         >
             <BsChatLeftText/>
