@@ -123,7 +123,11 @@ const LinkLoader=({recentPagesId, pages,page,pagesId, block,editBlock, setOpenLi
    */
   const changeHref =(element:HTMLAnchorElement, link:string)=>{
     if(webLink){
-      element.setAttribute("href",link);
+      if(link.includes("https://")|| link.includes("http://")){
+          element.setAttribute("href",`${link}`);
+        }else{
+          element.setAttribute("href",`https://${link}`);
+        }
     }else{
       //page link
       const originLocation =window.location.origin;
@@ -162,7 +166,6 @@ const LinkLoader=({recentPagesId, pages,page,pagesId, block,editBlock, setOpenLi
           }else{
             // 배열 
             linkElements.forEach((e:HTMLAnchorElement)=>{
-              console.log("e", e);
               e.outerHTML =e.innerHTML;
             });
             const newSelectedHtml = document.querySelector(
