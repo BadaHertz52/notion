@@ -17,6 +17,7 @@ import {IoArrowRedoOutline} from 'react-icons/io5';
 import {RiDeleteBin6Line } from 'react-icons/ri';
 import { AiOutlineFormatPainter } from 'react-icons/ai';
 import { setTemplateItem } from './BlockComponent';
+import { selectionType } from './Frame';
 export type MenuAndBlockStylerCommonProps={
   pages:Page[],
   firstlist:listItem[],
@@ -43,10 +44,11 @@ type MenuProps
 =MenuAndBlockStylerCommonProps& {
   setOpenMenu : Dispatch<SetStateAction<boolean>>,
   setOpenRename:Dispatch<SetStateAction<boolean>>|null,
+  setSelection: Dispatch<SetStateAction<selectionType|null>>|null,
   style:CSSProperties|undefined
 };
 
-const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,changeBlockToPage,changePageToBlock ,editBlock, deleteBlock ,duplicatePage,movePageToPage,editPage ,setPopup ,popup ,setCommentBlock ,setTargetPageId ,setOpenRename ,frameHtml, style }:MenuProps)=>{
+const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,changeBlockToPage,changePageToBlock ,editBlock, deleteBlock ,duplicatePage,movePageToPage,editPage ,setPopup ,popup ,setCommentBlock ,setTargetPageId ,setOpenRename ,frameHtml,setSelection, style }:MenuProps)=>{
   const blockFnElement = document.getElementById("blockFn") ;
   const menuRef =useRef<HTMLDivElement>(null);
   const [editBtns, setEditBtns]= useState<Element[]|null>(null);
@@ -132,15 +134,18 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
     setTurnInto(false);
     setTurnIntoPage(false);
     recoveryMenuState();
+    setSelection!==null && setSelection(null);
   };
   const showPageMenu =()=>{
     setTurnIntoPage(true);
+    setSelection!==null && setSelection(null);
     setTurnInto(false);
     setColor(false);
     recoveryMenuState();
   };
   const onClickMoveTo=()=>{
     setOpenMenu(false);
+    setSelection!==null && setSelection(null);
     sessionStorage.setItem("popupStyle", JSON.stringify(popupStyle));
     setPopup({
       popup:true,
@@ -150,6 +155,7 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
   const onOpenCommentInput=()=>{
     setCommentBlock(block);
     setOpenMenu(false);
+    setSelection!==null && setSelection(null);
     sessionStorage.setItem("popupStyle", JSON.stringify(popupStyle));
     setPopup({
       popup:true,
@@ -157,12 +163,14 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
     })
   };
   const removeBlock =()=>{
+    setSelection!==null && setSelection(null);
     setTemplateItem(templateHtml,page);
     deleteBlock(page.id, block , true);
     setOpenMenu(false);
   };
 
   const duplicateBlock=()=>{
+    setSelection!==null && setSelection(null);
     if(page.blocks!==null && page.blocksId!==null){
       setTemplateItem(templateHtml,page);
       const blockIndex= page.blocksId.indexOf(block.id);
@@ -198,6 +206,7 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
     })
   };
   const onClickRename =()=>{
+    setSelection!==null && setSelection(null);
     setOpenRename!==null&&  setOpenRename(true);
     setOpenMenu(false);
   };

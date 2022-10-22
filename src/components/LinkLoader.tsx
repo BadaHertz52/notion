@@ -107,7 +107,10 @@ const LinkLoader=({recentPagesId, pages,page,pagesId, block,editBlock, setOpenLi
       editTime:JSON.stringify(Date.now())
     };
     editBlock(page.id, newBlock);
-    setSelection({block:newBlock});
+    setSelection({
+      block:newBlock,
+      change:true
+    });
   };
   };
   const resetLinked =()=>{

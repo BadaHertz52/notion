@@ -11,12 +11,12 @@ import { detectRange } from './BlockFn';
 import LinkLoader from './LinkLoader';
 /**
  *  select 하거나, 이를 취소한 경우, 변경된 블럭의 contents를 가져오는  함수로 만약 BlockStyler로 스타일을 변경하다면, 스타일 변경 후에 해당 함수를 사용해야 한다.
- * @param targetBlock  
+ * @param block  
  * @returns 
  */
-export const getContent=(targetBlock:Block):Block=>{
-  const contentEditableHtml =document.getElementById(`${targetBlock.id}_contents`)?.firstElementChild;
-  let newBlock =targetBlock;
+export const getContent=(block:Block):Block=>{
+  const contentEditableHtml =document.getElementById(`${block.id}_contents`)?.firstElementChild;
+  let newBlock =block;
 if(contentEditableHtml!==null&& contentEditableHtml!==undefined){
   const children = contentEditableHtml.childNodes;
   let contentsArry:string[]=[];
@@ -33,7 +33,7 @@ if(contentEditableHtml!==null&& contentEditableHtml!==undefined){
   });
   const newBlockContents =contentsArry.join('');
   newBlock ={
-    ...targetBlock,
+    ...block,
     contents:newBlockContents,
     editTime:JSON.stringify(Date.now())
   };
@@ -51,24 +51,6 @@ type BlockStylerProps = MenuAndBlockStylerCommonProps& {
   command: Command
 }
 const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, block, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage, editPage,popup,setPopup, setCommentBlock,setTargetPageId,selection,setSelection ,setPopupStyle,command ,setCommand, frameHtml}:BlockStylerProps)=>{
-  const index =page.blocksId?.indexOf(block.id) as number;
-  const blocks =page.blocks as Block[];
-  const targetBlock =blocks[index];
-  //select-> selection의 스타일 변경-> 변경된 내용을 selection, block에 반영 의 순서로 이루어짐
-
-  /**
-   * selection의 value의 변화가 select 메서드에 의해 변경된 것인지, 스타일 변경에 따른 것인지 구별하기 위해 사용,
-  이 true이면 selection의 스타일 변경에 의한 것이고, false라면 select 메서드에 의한 것으로 판별하다. 
-   */
-  const changeStart =useRef<boolean>(false);
-  /**
-   * 스타일의 변경에 따라 selection 에 변경이 있으면 true, 변경 사항이 없으면 false
-   */
-  const change =useRef<boolean>(false);
-  /**
-   * select 된 내용의 스타일이 변경되기 전의 targetBlock 
-   */
-  const originBlock =useRef<Block|null>(null);
   const bold="bold";
   const initial="initial";
   const italic= "italic";
@@ -79,7 +61,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
   type textDecoType= typeof underline| typeof lineThrough ; 
   const getBlockType=()=> 
   {  
-    const blockType = targetBlock.type ;
+    const blockType = block.type ;
     switch (blockType) {
     case "bulletList":
       return "Bullted list";
@@ -113,6 +95,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
   const [openLink, setOpenLink]=useState<boolean>(false);
   const [openMenu, setOpenMenu]=useState<boolean>(false);
   const [openColor, setOpenColor]=useState<boolean>(false);
+  const selectionChange =useRef<boolean>(selection.change);
   const color ="color";
   const menu ="menu";
   type menuType =typeof color| typeof menu ;
@@ -121,8 +104,8 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
    * @returns DOMRect | undefined
    */
   const getMainBlockDomRect=():DOMRect | undefined=>{
-    const blockHtml = frameHtml?.querySelector(`#block_${targetBlock.id}`);
-    const mainBlockHtml= targetBlock.type.includes("List")? 
+    const blockHtml = frameHtml?.querySelector(`#block_${block.id}`);
+    const mainBlockHtml= block.type.includes("List")? 
       blockHtml?.parentElement?.parentElement
       :blockHtml?.querySelector('.mainBlock');
     const mainBlockDomRect = mainBlockHtml?.getClientRects()[0];
@@ -153,7 +136,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
     setCommand({
       boolean:true,
       command:null,
-      targetBlock:targetBlock
+      targetBlock:block
     })
   };
   const changeCommentStyle =()=>{
@@ -189,7 +172,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
       popup:true,
       what:"popupComment"
     });
-    setCommentBlock(targetBlock);
+    setCommentBlock(block);
     removeSelected();
   };
 
@@ -328,10 +311,11 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
           selectedHtml.classList.add(btnName);
         };
       });
-      const editedBlock = getContent(targetBlock);
+      const editedBlock = getContent(block);
       editBlock(page.id, editedBlock);
       setSelection({
-        block:editedBlock
+        block:editedBlock,
+        change:true
       });
     }
   };
@@ -348,9 +332,9 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
      * block의 content에서 selected class를 삭제하는 함수 
      */
   function removeSelected(){
-    if(!change.current && originBlock.current!==null){
+    if(!selectionChange.current){
       // 변경된 내용이 없는 경우 
-      editBlock(page.id, originBlock.current);
+      editBlock(page.id, block);
     }else{
       // 변경된 내용이 있고, selected 만 제거하면 되는 경우 
       const selecteds =document.querySelectorAll(".selected")  as NodeListOf<HTMLElement>;
@@ -364,7 +348,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
         })
 
       };
-      const editedBlock = getContent(targetBlock);
+      const editedBlock = getContent(block);
       editBlock(page.id, editedBlock);          
     }
     setSelection(null);
@@ -374,39 +358,32 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
    * @param event globalThis.MouseEvent
    */
   const closeBlockStyler=(event:globalThis.MouseEvent)=>{
-    const blockStylerDomRect =blockStyler?.getClientRects()[0];
-    if(blockStylerDomRect!==undefined){
-      const isInBlockStyler = detectRange(event, blockStylerDomRect);
-      if(!isInBlockStyler){
-        removeSelected();
+    if( !(openMenu || openColor ||popup.popup || command.boolean)){
+      const blockStylerDomRect =blockStyler?.getClientRects()[0];
+      if(blockStylerDomRect!==undefined){
+        const isInBlockStyler = detectRange(event, blockStylerDomRect);
+        if(!isInBlockStyler){
+          removeSelected();
+          console.log("close blocstyler");
+        }
       }
-    }
+    };
   };
-  useEffect(()=>{
-    if(selection !==null){
-        if(changeStart.current){
-          change.current =true
-        }else{
-          originBlock.current = selection.block;
-          changeStart.current = true;
-        };
-    }else{
-      changeStart.current= false;
-    }
-  },[selection]);
 
-  inner?.addEventListener("click",(event)=>{
-    closePopupInBlockStyler(event);
-  });
-  inner?.addEventListener("dblclick", (event)=>{
+  inner?.addEventListener("click", (event)=>{
+    console.log("popup", openMenu || openColor ||popup.popup || command.boolean)
     if(openMenu || openColor ||popup.popup || command.boolean){
       closePopupInBlockStyler(event);
-    }; 
+    }else{
       closeBlockStyler(event);
+    } 
+   
+    
   })
   useEffect(()=>{
     changeBlockStylerStyle();
-  },[]);
+    selectionChange.current = selection.change;
+  },[selection]);
   return(
     <>
     <div 
@@ -527,6 +504,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
           setCommentBlock={setCommentBlock}
           setTargetPageId={setTargetPageId}
           setOpenRename= {null}
+          setSelection={setSelection}
           frameHtml={frameHtml}
           style={menuStyle}
         />

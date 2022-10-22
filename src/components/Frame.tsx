@@ -69,7 +69,11 @@ export type selectionType={
   /**
    * origin block data (수정이전에 block data)
    */
-  block:Block
+  block:Block,
+  /**
+   * blockStyler에 의한 block data의 변화가 있는 지 여부 
+   */
+  change:boolean
 }
 const basicPageCover ='https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assests/img/artificial-turf-g6e884a1d4_1920.jpg';;
 /**

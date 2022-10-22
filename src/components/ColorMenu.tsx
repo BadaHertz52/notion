@@ -2,7 +2,6 @@ import React, { Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
 import { BgColorType, bg_blue, bg_default, bg_green, bg_grey, bg_yellow, bg_pink, Block, blue, ColorType, defaultColor, green, grey, orange, Page, red } from '../modules/notion';
 import { setTemplateItem } from './BlockComponent';
-import { getContent } from './BlockStyler';
 import { selectionType } from './Frame';
 
 type StyleColorInformProps ={
@@ -79,13 +78,19 @@ const ColorInform=({color ,background, colorName ,page, block ,editBlock, templa
               contents:innerHtml,
               editTime:JSON.stringify(Date.now())
             };
-            editBlock(page.id, editedBlock)
+            editBlock(page.id, editedBlock);
+            console.log("color menu selection", setSelection, "editedblock", editedBlock);
+            setSelection!==null && setSelection({
+              block:editedBlock,
+              change:true
+            })
           }
         })
       }
     };
   };
   const changeColor =()=>{
+    console.log("setselectoin", setSelection, "selection", selection);
     if(color ===undefined && background !== undefined ){
       setTemplateItem(templateHtml,page);
       ///change backgournd color

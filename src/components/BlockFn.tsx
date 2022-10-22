@@ -205,6 +205,7 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
             setCommentBlock={setCommentBlock}
             setTargetPageId={setTargetPageId}
             setOpenRename= {setOpenRename}
+            setSelection={null}
             frameHtml={frameHtml}
             style ={undefined}
           />

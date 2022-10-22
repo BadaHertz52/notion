@@ -818,7 +818,8 @@ function updateMiddleChildren(startIndex:number, endIndex:number,endNode:Node, c
         };
 
         setSelection({
-          block:targetBlock
+          block:targetBlock,
+          change:false
         });
       }
     }
