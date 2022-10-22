@@ -189,7 +189,8 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
       popup:true,
       what:"popupComment"
     });
-    setSelection(null);
+    setCommentBlock(targetBlock);
+    removeSelected();
   };
 
   const changeMenuStyle=(param:menuType)=>{
@@ -343,6 +344,31 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
       openColor && closeColorMenu(event);
       command.boolean && closeCommandBlock(event);
     };
+    /**
+     * block의 content에서 selected class를 삭제하는 함수 
+     */
+  function removeSelected(){
+    if(!change.current && originBlock.current!==null){
+      // 변경된 내용이 없는 경우 
+      editBlock(page.id, originBlock.current);
+    }else{
+      // 변경된 내용이 있고, selected 만 제거하면 되는 경우 
+      const selecteds =document.querySelectorAll(".selected")  as NodeListOf<HTMLElement>;
+      if(selecteds[0] !== undefined){
+        selecteds.forEach((selectedHtml:HTMLElement)=>{
+          if(selectedHtml.classList.length >1){
+            selectedHtml?.classList.remove("selected");
+          }else{
+            selectedHtml.outerHTML =selectedHtml.innerHTML;
+          }
+        })
+
+      };
+      const editedBlock = getContent(targetBlock);
+      editBlock(page.id, editedBlock);          
+    }
+    setSelection(null);
+  };
   /**
    * 화면상에서 클릭한 곳이 blockStyler외의 곳일 경우, blockStyler 에 의한 변경사항의 여부에 따라 변경 사항이 있으면 블록의 contents 중 선택된 영역을 가리키는 selected 클래스를 제거하고, 변경이 없는 경우 원래의 블록으로 되돌린 후, selection 값은 null로 변경하여 BlockStyler component의 실행을 종료하는 함수   
    * @param event globalThis.MouseEvent
@@ -352,27 +378,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
     if(blockStylerDomRect!==undefined){
       const isInBlockStyler = detectRange(event, blockStylerDomRect);
       if(!isInBlockStyler){
-        if(!change.current && originBlock.current!==null){
-          // 변경된 내용이 없는 경우 
-          editBlock(page.id, originBlock.current);
-        }else{
-          // 변경된 내용이 있고, selected 만 제거하면 되는 경우 
-          const selecteds =document.querySelectorAll(".selected")  as NodeListOf<HTMLElement>;
-          if(selecteds[0] !== undefined){
-            selecteds.forEach((selectedHtml:HTMLElement)=>{
-              if(selectedHtml.classList.length >1){
-                selectedHtml?.classList.remove("selected");
-              }else{
-                selectedHtml.outerHTML =selectedHtml.innerHTML;
-              }
-            })
-
-          };
-          const editedBlock = getContent(block);
-          editBlock(page.id, editedBlock);          
-        }
-        setSelection(null);
-        
+        removeSelected();
       }
     }
   };
