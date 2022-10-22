@@ -650,7 +650,7 @@ const initialState :Notion ={
       comments:null,
     },{
       id:"h1",
-      contents:'head<a class="link" target="_blank" href="http://localhost:3000/#/1234">er</a><span class=" color color_blue">1</span></span>', 
+      contents:'head<a class="link" target="_blank" href="https://github.com/BadaHertz52">er</a><span class=" color color_blue">1</span></span>', 
       contentsEmpty:false,
       firstBlock:true,
       subBlocksId:null ,
