@@ -51,7 +51,9 @@ type BlockStylerProps = MenuAndBlockStylerCommonProps& {
   command: Command
 }
 const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, block, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage, editPage,popup,setPopup, setCommentBlock,setTargetPageId,selection,setSelection ,setPopupStyle,command ,setCommand, frameHtml}:BlockStylerProps)=>{
-
+  const index =page.blocksId?.indexOf(block.id) as number;
+  const blocks =page.blocks as Block[];
+  const targetBlock =blocks[index];
   //select-> selection의 스타일 변경-> 변경된 내용을 selection, block에 반영 의 순서로 이루어짐
 
   /**
@@ -64,7 +66,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
    */
   const change =useRef<boolean>(false);
   /**
-   * select 된 내용의 스타일이 변경되기 전의 block 
+   * select 된 내용의 스타일이 변경되기 전의 targetBlock 
    */
   const originBlock =useRef<Block|null>(null);
   const bold="bold";
@@ -75,8 +77,10 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
   type fontWeightType =typeof bold|typeof initial;
   type fontStyleType= typeof italic| typeof initial;
   type textDecoType= typeof underline| typeof lineThrough ; 
-  const blockType=(block:Block)=> 
-  {switch (block.type) {
+  const getBlockType=()=> 
+  {  
+    const blockType = targetBlock.type ;
+    switch (blockType) {
     case "bulletList":
       return "Bullted list";
     case "h1":
@@ -117,8 +121,8 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
    * @returns DOMRect | undefined
    */
   const getMainBlockDomRect=():DOMRect | undefined=>{
-    const blockHtml = frameHtml?.querySelector(`#block_${block.id}`);
-    const mainBlockHtml= block.type.includes("List")? 
+    const blockHtml = frameHtml?.querySelector(`#block_${targetBlock.id}`);
+    const mainBlockHtml= targetBlock.type.includes("List")? 
       blockHtml?.parentElement?.parentElement
       :blockHtml?.querySelector('.mainBlock');
     const mainBlockDomRect = mainBlockHtml?.getClientRects()[0];
@@ -149,7 +153,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
     setCommand({
       boolean:true,
       command:null,
-      targetBlock:block
+      targetBlock:targetBlock
     })
   };
   const changeCommentStyle =()=>{
@@ -308,7 +312,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
           selectedHtml.classList.add(btnName);
         };
       });
-      const editedBlock = getContent(block);
+      const editedBlock = getContent(targetBlock);
       editBlock(page.id, editedBlock);
       setSelection({
         block:editedBlock
@@ -394,7 +398,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
           className='typeBtn btn'
           onClick={onClickTypeBtn}
         >
-          {blockType(block)}
+          {getBlockType()}
           <IoIosArrowDown className='arrowDown'/>
         </button>
         <button 
