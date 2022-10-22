@@ -162,11 +162,25 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
       frameHtml!==null && frameHtml !==undefined ){
       const pageContentDomRect= pageContent?.getClientRects()[0];
       const frameDomRect =frameHtml.getClientRects()[0];
-      pageContentDomRect!==undefined &&
-      setPopupStyle({
-        top:`${mainBlockDomRect.bottom + 50 }px`,
-        left: `${pageContentDomRect.left -frameDomRect.left}px`,
-      });
+      const top = mainBlockDomRect.bottom+ 8 ;
+      const innerHeight =window.innerHeight;
+      const remainHeight = innerHeight -(top + 50);
+      
+      if(pageContentDomRect!==undefined ){
+        const left =pageContentDomRect.left -frameDomRect.left; 
+        const bottom = (innerHeight- mainBlockDomRect.top) + 8 ;
+        remainHeight >10 ?
+        setPopupStyle({
+          top:`${top}px`,
+          left: `${left}px`,
+        })
+        :
+        setPopupStyle({
+          bottom:`${bottom}px`,
+          left: `${left}px`,
+        });
+      }
+
     };
   };
   const onClickCommentBtn=()=>{
