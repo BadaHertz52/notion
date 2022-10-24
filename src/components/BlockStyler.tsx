@@ -285,22 +285,12 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
       });
     }
   };
-  //   /**
-  //  * blockStyler를 통해 연 popupMenu를 닫는 함수  
-  //  * @param event globalThis.MouseEvent
-  //  */
-  //   const closePopupInBlockStyler =(event:globalThis.MouseEvent)=>{
-  //     openMenu && closeMenu(event);
-  //     openColor && closeColorMenu(event);
-  //     command.boolean && closeCommandBlock(event);
-  //   };
     /**
      * block의 content에서 selected class를 삭제하는 함수 
      */
   function removeSelected(){
       // 변경된 내용이 있고, selected 만 제거하면 되는 경우 
       const selecteds =document.querySelectorAll(".selected")  as NodeListOf<HTMLElement>;
-      console.log("selecteds",selecteds);
       if(selecteds[0] !== undefined){
         selecteds.forEach((selectedHtml:HTMLElement)=>{
           if(selectedHtml.classList.length >1){
@@ -312,7 +302,6 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
       
       const editedBlock = getContent(block);
       editBlock(page.id, editedBlock);    
-      console.log("editedBLOCK", editedBlock);
       setSelection(null);      
     }
   };
@@ -332,8 +321,8 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
           const colorMenuHtml = document.getElementById("blockStylerColor");
           const commandBlockHtml = document.getElementById("block_commandBlock");
           const mainMenu =document.getElementById("mainMenu");
-          console.log("?", colorMenuHtml==null && commandBlockHtml===null && mainMenu===null)
-          if(colorMenuHtml==null && commandBlockHtml===null && mainMenu===null){
+          const linkLoaderHtml = document.getElementById("linkLoader");
+          if(colorMenuHtml==null && commandBlockHtml===null && mainMenu===null && linkLoaderHtml ==null){
             removeSelected();
         }
       }
