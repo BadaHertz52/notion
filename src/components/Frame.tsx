@@ -81,7 +81,7 @@ const basicPageCover ='https://raw.githubusercontent.com/BadaHertz52/notion/mast
  * @param param0 
  * @returns 
  */
-const MoveTargetBlock=({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText, moveBlock  ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand ,setTargetPageId  ,openComment ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock, closeMenu,templateHtml ,setSelection
+const MoveTargetBlock=({ pages,pagesId,page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText, moveBlock  ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand ,setTargetPageId  ,openComment ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock, closeMenu,templateHtml ,setSelection
 }:EditableBlockProps)=>{
   return(
     <div 
@@ -119,6 +119,8 @@ const MoveTargetBlock=({ page, block , editBlock, addBlock,changeToSub ,raiseBlo
       ):
       <EditableBlock
         key={block.id}
+        pages={pages}
+        pagesId={pagesId}
         page={page}
         block={block}
         addBlock={addBlock}
@@ -944,6 +946,8 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
                 return (
                   <EditableBlock
                     key={block.id}
+                    pages={pages}
+                    pagesId={pagesId}
                     page={page}
                     block={block}
                     addBlock={addBlock}
@@ -1114,6 +1118,8 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
       {moveTargetBlock!==null &&
         <MoveTargetBlock
           key={moveTargetBlock.id}
+          pages={pages}
+          pagesId={pagesId}
           page={page}
           block={moveTargetBlock}
           addBlock={addBlock}
