@@ -115,6 +115,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   const [popupStyle, setPopupStyle]=useState<CSSProperties |undefined>(undefined); 
   const [moveTargetBlock, setMoveTargetBlock]=useState<Block|null>(null);
   const moveBlock =useRef<boolean>(false);
+  /** block 이동 시, 이동 할 위치의 기준이 되는 block(block 은 pointBlockToMoveBlock.current의 앞에 위치하게됨) */
   const pointBlockToMoveBlock =useRef<Block|null>(null);
   const [selection, setSelection]=useState<selectionType|null>(null);
   const maxWidth = innerWidth -60
@@ -281,6 +282,9 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           subBlocksId:[moveTargetBlock.id],
           parentBlocksId: pointBlock.parentBlocksId
         };
+        /**
+         * 이동의 타켓이 되는 block으로 이동으로 인해 변경한 data를 가짐
+         */
         const targetBlock:Block= targetBlockIsList ? 
         {
           ...moveTargetBlock,
@@ -353,6 +357,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
                 const preBlockId = FIRST_BLOCKS_ID[pointBlock_firstBlockIndex-1];
                 const preBlockIndexInBlocksId =page.blocksId.indexOf(preBlockId);
                 addBlock(page.id, newParentBlockOfList, preBlockIndexInBlocksId+1 ,preBlockId );
+                FIRST_BLOCKS_ID.splice(pointBlock_firstBlockIndex,0,newParentBlockOfList.id);
               }else{
                 FIRST_BLOCKS_ID.splice(pointBlock_firstBlockIndex,0, targetBlock.id);
               }
