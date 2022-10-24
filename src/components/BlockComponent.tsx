@@ -2,7 +2,7 @@ import React, { Dispatch,MouseEvent, SetStateAction, SyntheticEvent, useEffect, 
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import { IoChatboxOutline } from 'react-icons/io5';
 import { MdOutlinePhotoSizeSelectActual } from 'react-icons/md';
-import {  Block,BlockType,blockTypes,findBlock,findPage,findParentBlock,findPreviousBlockInDoc,getBlockText,makeNewBlock,Page, toggle } from '../modules/notion';
+import {  Block,BlockType,blockTypes,findBlock,findPage,findParentBlock,findPreviousBlockInDoc,makeNewBlock,Page, toggle } from '../modules/notion';
 import { getContent } from './BlockStyler';
 import { Command, selectionType } from './Frame';
 import ImageContent from './ImageContent';
