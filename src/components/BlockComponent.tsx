@@ -2,7 +2,7 @@ import React, { Dispatch,MouseEvent, SetStateAction, SyntheticEvent, useEffect, 
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import { IoChatboxOutline } from 'react-icons/io5';
 import { MdOutlinePhotoSizeSelectActual } from 'react-icons/md';
-import {  Block,BlockType,blockTypes,findBlock,findParentBlock,findPreviousBlockInDoc,getBlockText,makeNewBlock,Page, toggle } from '../modules/notion';
+import {  Block,BlockType,blockTypes,findBlock,findPage,findParentBlock,findPreviousBlockInDoc,getBlockText,makeNewBlock,Page, toggle } from '../modules/notion';
 import { getContent } from './BlockStyler';
 import { Command, selectionType } from './Frame';
 import ImageContent from './ImageContent';
@@ -22,6 +22,8 @@ export const setTemplateItem=(templateHtml:HTMLElement|null, page:Page)=>{
 };
 
 type  BlockComponentProps ={
+  pages:Page[],
+  pagesId:string[],
   block:Block,
   page:Page,
   editBlock :(pageId: string, block: Block) => void,
@@ -69,7 +71,7 @@ export const BlockComment =({block , onClickCommentBtn}:BlockCommentProps)=>{
   )
 };
 
-const BlockComponent=({block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,command, setCommand  ,onClickCommentBtn ,setOpenComment ,setTargetPageId ,setOpenLoader, setLoaderTargetBlock ,closeMenu ,templateHtml, setSelection }:BlockComponentProps)=>{
+const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,command, setCommand  ,onClickCommentBtn ,setOpenComment ,setTargetPageId ,setOpenLoader, setLoaderTargetBlock ,closeMenu ,templateHtml, setSelection }:BlockComponentProps)=>{
   const editTime =JSON.stringify(Date.now);
   const contentEditableRef= useRef<HTMLElement>(null);
   const possibleBlocks :Block[]|null = page.blocks !== null? page.blocks.filter((block:Block)=> block.type !=="image media" && block.type !=="page") : null;
@@ -898,7 +900,12 @@ function updateMiddleChildren(startIndex:number, endIndex:number,endNode:Node, c
     }
   };  
   const BlockContentEditable=()=>{
-    const blockContents = block.type ==="page"? getBlockText(block): block.contents;
+    const getPageTitle =()=>{
+      const targetPage =findPage(pagesId, pages, block.id);
+      const title =targetPage.header.title;
+      return title
+    };
+    const blockContents = block.type ==="page"? getPageTitle(): block.contents;
     useEffect(()=>{
       if(command.boolean){
         const commentInputHtml =document.getElementById("commandInput");

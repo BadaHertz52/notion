@@ -8,6 +8,8 @@ import {  MdPlayArrow } from 'react-icons/md';
 import PageIcon from './PageIcon';
 
 export type EditableBlockProps ={
+  pages:Page[],
+  pagesId:string[],
   page:Page,
   block:Block,
   editBlock :(pageId: string, block: Block) => void,
@@ -63,7 +65,7 @@ export const changeFontSizeBySmallText=(block:Block, smallText:boolean):CSSPrope
   return style 
 };
 
-const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText, moveBlock ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand , openComment, setTargetPageId ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock,closeMenu ,templateHtml ,setSelection
+const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText, moveBlock ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand , openComment, setTargetPageId ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock,closeMenu ,templateHtml ,setSelection
 
 }:EditableBlockProps)=>{  
   const className = block.type !== "toggle" ?
@@ -206,6 +208,8 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
               <BlockComponent 
                 block={block} 
                 page={page}
+                pages={pages}
+                pagesId={pagesId}
                 addBlock={addBlock}
                 editBlock={editBlock}
                 changeToSub={changeToSub}
@@ -236,6 +240,8 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
             {block.subBlocksId.map((id:string)=> findBlock(page,id).BLOCK).map((sub:Block)=>
               <EditableBlock
               key ={block.subBlocksId?.indexOf(sub.id)} 
+              pages={pages}
+              pagesId={pagesId}
               page={page}
               block={sub}
               addBlock={addBlock}
@@ -341,6 +347,8 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                 style={blockContentsStyle(block)}
               >
                 <BlockComponent
+                pages={pages}
+                pagesId={pagesId}
                 block={block} 
                 page={page}
                 addBlock={addBlock}
@@ -375,6 +383,8 @@ const EditableBlock =({ page, block , editBlock, addBlock,changeToSub ,raiseBloc
                 {subBlocks.map((subBlock :Block)=> 
                   <EditableBlock
                     key ={subBlocks.indexOf(subBlock)} 
+                    pages={pages}
+                    pagesId={pagesId}
                     page={page}
                     block={subBlock}
                     addBlock={addBlock}

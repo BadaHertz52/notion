@@ -353,12 +353,23 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
     }
     setSelection(null);
   };
-  /**
+
+  inner?.addEventListener("click", (event)=>{
+    
+    console.log("popup", openMenu || openColor ||popup.popup || command.boolean)
+    if(openMenu || openColor ||popup.popup || command.boolean){
+      closePopupInBlockStyler(event);
+    }else{
+      console.log("dclick", openMenu || openColor ||popup.popup || command.boolean)
+      closeBlockStyler(event);
+    } 
+  });
+    /**
    * 화면상에서 클릭한 곳이 blockStyler외의 곳일 경우, blockStyler 에 의한 변경사항의 여부에 따라 변경 사항이 있으면 블록의 contents 중 선택된 영역을 가리키는 selected 클래스를 제거하고, 변경이 없는 경우 원래의 블록으로 되돌린 후, selection 값은 null로 변경하여 BlockStyler component의 실행을 종료하는 함수   
    * @param event globalThis.MouseEvent
    */
-  const closeBlockStyler=(event:globalThis.MouseEvent)=>{
-    if( !(openMenu || openColor ||popup.popup || command.boolean)){
+    function closeBlockStyler(event:globalThis.MouseEvent){
+      console.log("close condition", openMenu || openColor ||popup.popup || command.boolean)
       const blockStylerDomRect =blockStyler?.getClientRects()[0];
       if(blockStylerDomRect!==undefined){
         const isInBlockStyler = detectRange(event, blockStylerDomRect);
@@ -368,18 +379,6 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
         }
       }
     };
-  };
-
-  inner?.addEventListener("click", (event)=>{
-    console.log("popup", openMenu || openColor ||popup.popup || command.boolean)
-    if(openMenu || openColor ||popup.popup || command.boolean){
-      closePopupInBlockStyler(event);
-    }else{
-      closeBlockStyler(event);
-    } 
-   
-    
-  })
   useEffect(()=>{
     changeBlockStylerStyle();
     selectionChange.current = selection.change;
