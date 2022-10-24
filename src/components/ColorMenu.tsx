@@ -79,7 +79,6 @@ const ColorInform=({color ,background, colorName ,page, block ,editBlock, templa
               editTime:JSON.stringify(Date.now())
             };
             editBlock(page.id, editedBlock);
-            console.log("color menu selection", setSelection, "editedblock", editedBlock);
             setSelection!==null && setSelection({
               block:editedBlock,
               change:true
@@ -90,7 +89,6 @@ const ColorInform=({color ,background, colorName ,page, block ,editBlock, templa
     };
   };
   const changeColor =()=>{
-    console.log("setselectoin", setSelection, "selection", selection);
     if(color ===undefined && background !== undefined ){
       setTemplateItem(templateHtml,page);
       ///change backgournd color
