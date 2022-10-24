@@ -1019,6 +1019,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
             editPage={editPage}
             command={command}
             setCommand={setCommand}
+            setSelection={setSelection}
           />
         </div>
       }

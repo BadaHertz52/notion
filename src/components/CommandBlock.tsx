@@ -4,8 +4,8 @@ import { IoIosList } from 'react-icons/io';
 import { IoDocumentTextOutline, IoTextOutline } from 'react-icons/io5';
 import { RiPlayList2Fill } from 'react-icons/ri';
 import { VscListOrdered } from 'react-icons/vsc';
-import { Command } from './Frame';
-import {  Block, BlockType,  findParentBlock, makeNewBlock, Page } from "../modules/notion";
+import { Command, selectionType } from './Frame';
+import {  Block, BlockType,  findBlock,  findParentBlock, makeNewBlock, Page } from "../modules/notion";
 import imgIcon from '../assests/img/vincent-van-gogh-ge1323790d_640.jpg'; 
 import { setTemplateItem } from './BlockComponent';
 import { CSSProperties } from 'styled-components';
@@ -20,9 +20,10 @@ type CommandBlockProp ={
   editPage: (pageId: string, newPage: Page) => void,
   command:Command | null,
   setCommand: Dispatch<SetStateAction<Command>> |null ,
+  setSelection:Dispatch<SetStateAction<selectionType | null>>|null,
   style:CSSProperties|undefined
 };
-const CommandBlock =({ page ,block , editBlock ,addBlock ,changeBlockToPage,changePageToBlock ,editPage ,setCommand ,command ,style}:CommandBlockProp)=>{
+const CommandBlock =({ page ,block , editBlock ,addBlock ,changeBlockToPage,changePageToBlock ,editPage ,setCommand ,command ,setSelection ,style}:CommandBlockProp)=>{
   const commandBlock_inner =document.getElementById("commandBlock_inner");
   const commandBlock_noResult =document.getElementById("commandBlock_noResult");
 
@@ -69,7 +70,10 @@ const CommandBlock =({ page ,block , editBlock ,addBlock ,changeBlockToPage,chan
       firstBlock:false ,
       parentBlocksId: newParentBlock.parentBlocksId !== null ? newParentBlock.parentBlocksId.concat(newParentBlock.id): [...newParentBlock.id],
     };
-    console.log("newListParent", newParentBlock," editedListBlock", editedListBlock);
+    setSelection!==null && setSelection({
+      change:true,
+      block:editedListBlock
+    });
     const indexOfEditedBlockInBlocks = page.blocksId?.indexOf(editedBlock.id) as number; 
     if(block.parentBlocksId!==null){
       const {parentBlock} = findParentBlock(page, block);
@@ -120,6 +124,11 @@ const CommandBlock =({ page ,block , editBlock ,addBlock ,changeBlockToPage,chan
       switch (blockType) {
         case "page":
           changeBlockToPage(page.id, block);
+          const changedBlock =findBlock(page,block.id).BLOCK;
+          setSelection!==null && setSelection({
+            change:true,
+            block:changedBlock
+          });
           break;
         case "numberList":
           changeToListType(editedBlock, "numberListArry");
@@ -130,7 +139,11 @@ const CommandBlock =({ page ,block , editBlock ,addBlock ,changeBlockToPage,chan
         default:
           block.type==="page"?
           changePageToBlock(page.id, editedBlock):
-          editBlock(page.id, editedBlock)
+          editBlock(page.id, editedBlock);
+          setSelection!==null && setSelection({
+            change:true,
+            block:editedBlock
+          })
           break;
       };
     };
