@@ -132,6 +132,13 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
     }
   };
   const onClickTypeBtn=()=>{
+    command.boolean?
+    setCommand({
+      boolean:false,
+      command:null,
+      targetBlock:null
+    })
+    :
     setCommand({
       boolean:true,
       command:null,
@@ -211,12 +218,20 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
     }
   };
   const onClickColorBtn=()=>{
-    changeMenuStyle(color);
-    setOpenColor(true);
+    if(openColor){
+      setOpenColor(false)
+    }else{
+      changeMenuStyle(color);
+      setOpenColor(true);
+    }
   };
   const onClickMenuBtn=()=>{
-    changeMenuStyle(menu);
-    setOpenMenu(true);
+    if(openMenu){
+      setOpenMenu(false);
+    }else{
+      changeMenuStyle(menu);
+      setOpenMenu(true);
+    }
   };
   
   window.onresize=()=>{
