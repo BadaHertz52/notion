@@ -114,7 +114,7 @@ export function makeNewBlock(page:Page, targetBlock:Block|null, newBlockContents
     id: `${page.id}_${editTime}`,
     editTime:editTime,
     createTime:editTime,
-    type:"text",
+    type:targetBlock!==null? targetBlock.type: "text",
     contents: newBlockContents === "<br>"? "": 
     newBlockContents,
     contentsEmpty:false,
@@ -1319,7 +1319,6 @@ export default function notion (state:Notion =initialState , action :NotionActio
     const  blockIndex:number = action.block !==null ?( pages[pageIndex]?.blocksId?.indexOf(action.block.id) as number ): 0 as number;
     switch(action.type){
       case ADD_BLOCK:
-
         if(action.newBlockIndex===0){
           // 새로운 블럭이 page 의 첫번째 블럭인 경우
           targetPage.blocks = targetPage.blocks!==null? [action.block, ...targetPage.blocks] :[action.block];
