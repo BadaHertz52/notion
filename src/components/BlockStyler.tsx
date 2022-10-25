@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import React, { Dispatch, HtmlHTMLAttributes, SetStateAction, useEffect, useState } from 'react';
 import { BsChatLeftText, BsThreeDots } from 'react-icons/bs';
 import { IoIosArrowDown } from 'react-icons/io';
 import {ImArrowUpRight2} from 'react-icons/im';
@@ -132,6 +132,13 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
     }
   };
   const onClickTypeBtn=()=>{
+    command.boolean?
+    setCommand({
+      boolean:false,
+      command:null,
+      targetBlock:null
+    })
+    :
     setCommand({
       boolean:true,
       command:null,
@@ -211,12 +218,20 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
     }
   };
   const onClickColorBtn=()=>{
-    changeMenuStyle(color);
-    setOpenColor(true);
+    if(openColor){
+      setOpenColor(false)
+    }else{
+      changeMenuStyle(color);
+      setOpenColor(true);
+    }
   };
   const onClickMenuBtn=()=>{
-    changeMenuStyle(menu);
-    setOpenMenu(true);
+    if(openMenu){
+      setOpenMenu(false);
+    }else{
+      changeMenuStyle(menu);
+      setOpenMenu(true);
+    }
   };
   
   window.onresize=()=>{
@@ -289,26 +304,79 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
      * block의 content에서 selected class를 삭제하는 함수 
      */
   function removeSelected(){
-      // 변경된 내용이 있고, selected 만 제거하면 되는 경우 
-      const selecteds =document.querySelectorAll(".selected")  as NodeListOf<HTMLElement>;
-      if(selecteds[0] !== undefined){
-        selecteds.forEach((selectedHtml:HTMLElement)=>{
+      // 변경된 내용이 있고, selected 만 제거하면 되는 경우
+      const blockContentHtml = frameHtml?.querySelector(`#${block.id}_contents`); 
+      const selecteds =blockContentHtml?.querySelectorAll(".selected") ;
+
+      if(selecteds !==undefined && selecteds[0] !== undefined){
+        selecteds.forEach((selectedHtml:Element)=>{
           if(selectedHtml.classList.length >1){
             selectedHtml?.classList.remove("selected");
           }else{
             selectedHtml.outerHTML =selectedHtml.innerHTML;
           }
-        })
+        })    
+    }else{
+      const spanElements =blockContentHtml?.querySelectorAll("span");
+      if(spanElements!==undefined){
+        spanElements.forEach((element:HTMLSpanElement)=>{
+          if(element.className===""){
+            element.outerHTML =element.innerHTML;
+          };
+        });
+      }
       
-      const editedBlock = getContent(block);
-      editBlock(page.id, editedBlock);    
-      setSelection(null);      
     }
+    const editedBlock = getContent(block);
+    editBlock(page.id, editedBlock);
+    setSelection(null);
   };
 
   inner?.addEventListener("click", (event)=>{
     closeBlockStyler(event);
   });
+  const closeCommandBlock=(event:globalThis.MouseEvent, commandBlockHtml:HTMLElement)=>{
+    const commandBlockDomRect =commandBlockHtml.getClientRects()[0];
+    const isIn =detectRange(event, commandBlockDomRect);
+    !isIn && setCommand({
+      boolean:false,
+      command:null,
+      targetBlock:null
+    })
+  };
+  /**
+   * 유저가 colorMenuHtml 밖의 영역을 클릭 할 경우 openColor의 값을 false로 변경해 colorMenu 창을 닫는 함수 
+   * @param event globalThis.MouseEvent
+   * @param colorMenuHtml 
+   */
+  const closeColorMenu=(event:globalThis.MouseEvent, colorMenuHtml:HTMLElement)=>{
+    const colorMenuDomRect =colorMenuHtml.getClientRects()[0];
+    const isIn =detectRange(event, colorMenuDomRect);
+    !isIn && setOpenColor(false);
+  };
+    /**
+   * 유저가 linkLoaderHtml 밖의 영역을 클릭 할 경우 openLinkLoader의 값을 false로 변경해 colorMenu 창을 닫는 함수 
+   * @param event globalThis.MouseEvent
+   * @param linkLoaderHtml 
+   */
+  const closeLinkLoader=(event:globalThis.MouseEvent, linkLoaderHtml:HTMLElement)=>{
+    const linkLoaderDomRect =linkLoaderHtml.getClientRects()[0];
+    const isIn =detectRange(event, linkLoaderDomRect);
+    !isIn && setOpenLink(false);
+  };
+    /**
+   * 유저가 mainMenu 나 sideMenu 밖의 영역을 클릭 할 경우 openMenu 의 값을 false로 변경해 Menu 창을 닫는 함수 
+   * @param event globalThis.MouseEvent
+   * @param colorMenuHtml 
+   */
+  const closeMenu=(event:globalThis.MouseEvent, mainMenuHtml:HTMLElement)=>{
+    const mainMenuDomRect =mainMenuHtml.getClientRects()[0];
+    const sideMenuHtml =document.getElementById("sideMenu");
+    const sideMenuDomRect =sideMenuHtml?.getClientRects()[0];
+    const isInMainMenu =detectRange(event, mainMenuDomRect);
+    const isInSideMenu =detectRange(event, sideMenuDomRect);
+    !isInMainMenu && !isInSideMenu &&setOpenMenu(false);
+  };
     /**
    * 화면상에서 클릭한 곳이 blockStyler외의 곳일 경우, blockStyler 에 의한 변경사항의 여부에 따라 변경 사항이 있으면 블록의 contents 중 선택된 영역을 가리키는 selected 클래스를 제거하고, 변경이 없는 경우 원래의 블록으로 되돌린 후, selection 값은 null로 변경하여 BlockStyler component의 실행을 종료하는 함수   
    * @param event globalThis.MouseEvent
@@ -322,9 +390,23 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
           const commandBlockHtml = document.getElementById("block_commandBlock");
           const mainMenu =document.getElementById("mainMenu");
           const linkLoaderHtml = document.getElementById("linkLoader");
+          console.log("click",colorMenuHtml,commandBlockHtml,mainMenu,linkLoaderHtml );
           if(colorMenuHtml==null && commandBlockHtml===null && mainMenu===null && linkLoaderHtml ==null){
             removeSelected();
-        }
+          }else{
+            if(colorMenuHtml!==null){
+              closeColorMenu(event, colorMenuHtml);
+            };
+            if(commandBlockHtml!==null){
+              closeCommandBlock(event,commandBlockHtml);
+            };
+            if(mainMenu!==null){
+              closeMenu(event, mainMenu);
+            };
+            if(linkLoaderHtml!==null){
+              closeLinkLoader(event, linkLoaderHtml);
+            }
+          }
       }
     }
   };
