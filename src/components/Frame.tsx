@@ -1,7 +1,7 @@
 import '../assests/frame.css';
 import React, { CSSProperties, Dispatch,  MouseEvent,  SetStateAction, useEffect, useRef, useState } from 'react';
 import { Block, MainCommentType, blockSample,  findBlock, findParentBlock, listItem, Page,  makeNewBlock, findPage } from '../modules/notion';
-import EditableBlock, { changeFontSizeBySmallText } from './EditableBlock';
+import EditableBlock from './EditableBlock';
 import IconPoup, { randomIcon } from './IconPoup';
 import CommandBlock from './CommandBlock';
 import Comments, { CommentInput } from './Comments';
@@ -11,7 +11,6 @@ import PageIcon from './PageIcon';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import PageMenu from './PageMenu';
 import { PopupType } from '../containers/EditorContainer';
-import {EditableBlockProps} from './EditableBlock';
 
 //icon
 import { BiMessageDetail } from 'react-icons/bi';
