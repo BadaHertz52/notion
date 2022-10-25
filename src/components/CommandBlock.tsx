@@ -13,17 +13,17 @@ import { CSSProperties } from 'styled-components';
 type CommandBlockProp ={
   page:Page,
   block:Block,
-  addBlock:(pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
   editBlock :(pageId:string, block:Block)=>void,
   changeBlockToPage: (currentPageId: string, block: Block) => void,
   changePageToBlock:(currentPageId: string, block: Block) => void,
   editPage: (pageId: string, newPage: Page) => void,
   command:Command | null,
   setCommand: Dispatch<SetStateAction<Command>> |null ,
+  setTurnInto: React.Dispatch<React.SetStateAction<boolean>>|null,
   setSelection:Dispatch<SetStateAction<selectionType | null>>|null,
   style:CSSProperties|undefined
 };
-const CommandBlock =({ page ,block , editBlock ,addBlock ,changeBlockToPage,changePageToBlock ,editPage ,setCommand ,command ,setSelection ,style}:CommandBlockProp)=>{
+const CommandBlock =({ page ,block , editBlock,changeBlockToPage,changePageToBlock ,editPage ,setCommand ,command ,setSelection ,setTurnInto ,style}:CommandBlockProp)=>{
   const commandBlock_inner =document.getElementById("commandBlock_inner");
   const commandBlock_noResult =document.getElementById("commandBlock_noResult");
 
@@ -237,6 +237,15 @@ const CommandBlock =({ page ,block , editBlock ,addBlock ,changeBlockToPage,chan
     };
     closeCommendBlock();
   };
+  const onClickImgTypeBtn=()=>{
+    setCommand!==null && setCommand({
+      boolean:false,
+      targetBlock:null,
+      command:null
+    });
+    setTurnInto!==null && setTurnInto(false);
+    changeType("image media");
+  }
   function closeCommendBlock(){
     setCommand !==null && setCommand({
       boolean:false, 
@@ -424,7 +433,7 @@ const CommandBlock =({ page ,block , editBlock ,addBlock ,changeBlockToPage,chan
             <div className='command_btns type'>
               <button
                   className="command_btn on"
-                  onClick={()=>changeType("image media")}
+                  onClick={onClickImgTypeBtn}
                   name="image"
                 >
                 <div className='command_btn_inner'>

@@ -347,13 +347,13 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
               style={undefined}
               page={page}
               block={block}
-              addBlock={addBlock}
               editBlock={editBlock}
               changeBlockToPage={changeBlockToPage}
               changePageToBlock={changePageToBlock}
               editPage={editPage}
               command={null}
               setCommand={null}
+              setTurnInto={setTurnInto}
               setSelection={setSelection}
             />
         }

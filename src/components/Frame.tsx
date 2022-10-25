@@ -1012,13 +1012,13 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
             key={`${command.targetBlock.id}_command`}
             page={page}
             block={command.targetBlock}
-            addBlock={addBlock}
             editBlock={editBlock}
             changeBlockToPage={changeBlockToPage}
             changePageToBlock={changePageToBlock}
             editPage={editPage}
             command={command}
             setCommand={setCommand}
+            setTurnInto={null}
             setSelection={setSelection}
           />
         </div>
