@@ -507,8 +507,10 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
        */
       const isInner =conditionX && conditionY;
       if(isInner){
+        const randomNumber =Math.floor(Math.random() * (100000 - 1) + 1);
         const newBlock:Block={
           ...blockSample,
+          id:`${page.id}_${JSON.stringify(Date.now)}_${randomNumber}`,
           firstBlock:true
         };
 

@@ -110,8 +110,9 @@ export  const blockSample:Block ={
  */
 export function makeNewBlock(page:Page, targetBlock:Block|null, newBlockContents :string):Block{
   const editTime= JSON.stringify(Date.now());
+  const randomNumber =Math.floor(Math.random() * (1000000000 - 1) + 1);
   const newBlock:Block ={
-    id: `${page.id}_${editTime}`,
+    id: `${page.id}_${editTime}_${randomNumber}`,
     editTime:editTime,
     createTime:editTime,
     type:targetBlock!==null? targetBlock.type: "text",

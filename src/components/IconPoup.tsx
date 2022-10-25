@@ -89,7 +89,7 @@ typeof smileEmoji
 export const emojis:Emoji[] =[smileEmoji,heartEyesEmoji , angryEmoji, sobEmoji , heartEmoji , purpleHeartEmoji, no_entry_signEmoji , warningEmoji , memoEmoji , alarmEmoji, phoneEmoji , gameEmoji , computerEmoji , prayEmoji , tadaEmoji , giftEmoji , popcornEmoji , musicalNoteEmoji , dollarEmoji , creditCardEmoji , calendarEmoji , chartEmoji, bulbEmoji , shoppingTrolleyEmoji , bathEmoji, friesEmoji , cakeEmoji , appleEmoji , carrotEmoji , airplaneEmoji , busEmoji , metroEmoji , houseEmoji , tentEmoji , starEmoji , sunnyEmoji, rainbowEmoji , rainEmoji, snowmanEmoji , blossomEmoji];
 
 export const randomIcon =():Emoji=>{
-  const index = Math.floor(Math.random() * (3));
+  const index = Math.floor(Math.random() * (emojis.length,0) + 0);
   return emojis[index]
 };
 
