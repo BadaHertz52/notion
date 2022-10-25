@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import React, { Dispatch, HtmlHTMLAttributes, SetStateAction, useEffect, useState } from 'react';
 import { BsChatLeftText, BsThreeDots } from 'react-icons/bs';
 import { IoIosArrowDown } from 'react-icons/io';
 import {ImArrowUpRight2} from 'react-icons/im';
@@ -289,21 +289,32 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
      * block의 content에서 selected class를 삭제하는 함수 
      */
   function removeSelected(){
-      // 변경된 내용이 있고, selected 만 제거하면 되는 경우 
-      const selecteds =document.querySelectorAll(".selected")  as NodeListOf<HTMLElement>;
-      if(selecteds[0] !== undefined){
-        selecteds.forEach((selectedHtml:HTMLElement)=>{
+      // 변경된 내용이 있고, selected 만 제거하면 되는 경우
+      const blockContentHtml = frameHtml?.querySelector(`#${block.id}_contents`); 
+      const selecteds =blockContentHtml?.querySelectorAll(".selected") ;
+
+      if(selecteds !==undefined && selecteds[0] !== undefined){
+        selecteds.forEach((selectedHtml:Element)=>{
           if(selectedHtml.classList.length >1){
             selectedHtml?.classList.remove("selected");
           }else{
             selectedHtml.outerHTML =selectedHtml.innerHTML;
           }
-        })
+        })    
+    }else{
+      const spanElements =blockContentHtml?.querySelectorAll("span");
+      if(spanElements!==undefined){
+        spanElements.forEach((element:HTMLSpanElement)=>{
+          if(element.className===""){
+            element.outerHTML =element.innerHTML;
+          };
+        });
+      }
       
-      const editedBlock = getContent(block);
-      editBlock(page.id, editedBlock);    
-      setSelection(null);      
     }
+    const editedBlock = getContent(block);
+    editBlock(page.id, editedBlock);
+    setSelection(null);
   };
 
   inner?.addEventListener("click", (event)=>{
