@@ -2,7 +2,7 @@ import React, { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import { CSSProperties } from "styled-components";
 import { Block, Page } from "../modules/notion";
 import { setTemplateItem } from "./BlockComponent";
-import IconPoup from "./IconPopup";
+import IconPopup from "./IconPopup";
 import PageIcon from "./PageIcon";
 import { closePopup } from "./SideBar";
 type RenameProps = {
@@ -78,7 +78,7 @@ const Rename =({currentPageId,block ,page,editBlock ,editPage,renameStyle, setOp
           />
       </div>
       {openIconPopup && 
-          <IconPoup
+          <IconPopup
             page={page}
             currentPageId={currentPageId}
             block= {block}

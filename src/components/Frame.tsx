@@ -2,7 +2,7 @@ import '../assests/frame.css';
 import React, { CSSProperties, Dispatch,  MouseEvent,  SetStateAction, useEffect, useRef, useState } from 'react';
 import { Block, MainCommentType, blockSample,  findBlock, findParentBlock, listItem, Page,  makeNewBlock, findPage } from '../modules/notion';
 import EditableBlock from './EditableBlock';
-import IconPoup, { randomIcon } from './IconPopup';
+import IconPopup, { randomIcon } from './IconPopup';
 import CommandBlock from './CommandBlock';
 import Comments, { CommentInput } from './Comments';
 import BlockFn, { detectRange } from './BlockFn';
@@ -22,7 +22,6 @@ import { setTemplateItem } from './BlockComponent';
 import { fontStyleType } from '../containers/NotionRouter';
 import BlockStyler from './BlockStyler';
 import MoveTargetBlock from './MoveTargetBlock';
-
 
 export type Command ={
   boolean:boolean,
@@ -861,7 +860,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           </div>
         </div>
         {openIconPopup &&
-          <IconPoup 
+          <IconPopup 
             currentPageId={page.id}
             block={null}
             page={page}
