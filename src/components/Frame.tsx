@@ -2,7 +2,7 @@ import '../assests/frame.css';
 import React, { CSSProperties, Dispatch,  MouseEvent,  SetStateAction, useEffect, useRef, useState } from 'react';
 import { Block, MainCommentType, blockSample,  findBlock, findParentBlock, listItem, Page,  makeNewBlock, findPage } from '../modules/notion';
 import EditableBlock from './EditableBlock';
-import IconPoup, { randomIcon } from './IconPoup';
+import IconPoup, { randomIcon } from './IconPopup';
 import CommandBlock from './CommandBlock';
 import Comments, { CommentInput } from './Comments';
 import BlockFn, { detectRange } from './BlockFn';

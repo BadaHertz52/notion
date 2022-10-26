@@ -1,5 +1,5 @@
 import { getContent } from '../components/BlockStyler';
-import { Emoji, emojis } from '../components/IconPoup';
+import { Emoji, emojis } from '../components/IconPopup';
 export const emojiPath ="https://raw.githubusercontent.com/BadaHertz52/notion/master/image/emoji/";
 const catImg = 'https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assests/img/michael-sum-LEpfefQf4rU-unsplash.jpg' ;
 const imgBlockImg ='https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assests/img/roses-gfcb7dbdd4_640.jpg';

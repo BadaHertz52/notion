@@ -2,7 +2,7 @@ import React, { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import { CSSProperties } from "styled-components";
 import { Block, Page } from "../modules/notion";
 import { setTemplateItem } from "./BlockComponent";
-import IconPoup from "./IconPoup";
+import IconPoup from "./IconPopup";
 import PageIcon from "./PageIcon";
 import { closePopup } from "./SideBar";
 type RenameProps = {
@@ -18,9 +18,12 @@ const Rename =({currentPageId,block ,page,editBlock ,editPage,renameStyle, setOp
   const inner =document.getElementById("inner");
   const [openIconPopup, setOpenIconPopup]=useState<boolean>(false);
   inner?.addEventListener('click', (event)=>{
-    openIconPopup && closePopup("iconPopup", setOpenIconPopup, event);
-    closePopup("rename", setOpenRename, event);
-    
+    const target =event.target as null|Element ;
+    if(target===null || target?.id !=="imageIconInput"){
+      openIconPopup && closePopup("iconPopup", setOpenIconPopup, event);
+      closePopup("rename", setOpenRename, event);
+    }
+
   });
   const onClickRenameIcon =()=>{
     setOpenIconPopup(true);

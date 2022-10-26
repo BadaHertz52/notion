@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 import { BsEmojiSmile } from 'react-icons/bs';
 import { CSSProperties } from 'styled-components';
 import { Block, emojiPath, IconType, Page } from '../modules/notion';
@@ -93,7 +93,7 @@ export const randomIcon =():Emoji=>{
   return emojis[index]
 };
 
-type IconPoupProps ={
+type IconPopupProps ={
   currentPageId:string |null,
   block:Block|null,
   page:Page,
@@ -102,17 +102,16 @@ type IconPoupProps ={
   style :CSSProperties |undefined,
   setOpenIconPopup :Dispatch<SetStateAction<boolean>>,
 };
-const IconPopup =({ currentPageId,block,page, editBlock ,editPage,style,  setOpenIconPopup} :IconPoupProps)=>{
+const IconPopup =({ currentPageId,block,page, editBlock ,editPage,style,  setOpenIconPopup} :IconPopupProps)=>{
   const emoji ="emoji";
   const image="image";
   type Category = typeof emoji | typeof image;
   const [category , setCategory] =useState<Category>(emoji);
-
   const changePageIcon =(icon:string|Emoji|null ,iconType:IconType)=>{
     const editTime = JSON.stringify(Date.now());
     const templateHtml =document.getElementById("template");
     setTemplateItem(templateHtml,page);
-    editPage(page.id, {
+    const editedPage:Page ={
       ...page,
       header :{
         ...page.header,
@@ -120,7 +119,8 @@ const IconPopup =({ currentPageId,block,page, editBlock ,editPage,style,  setOpe
         icon: icon
       },
       editTime:editTime
-    });
+    };
+    editPage(page.id, editedPage );
     if(block !==null  && currentPageId !==null){
       const editedBlock:Block ={
         ...block,
@@ -128,7 +128,6 @@ const IconPopup =({ currentPageId,block,page, editBlock ,editPage,style,  setOpe
         icon:icon,
         editTime:editTime
       };
-
       editBlock(currentPageId, editedBlock)
     }
     setOpenIconPopup(false);
@@ -141,7 +140,7 @@ const IconPopup =({ currentPageId,block,page, editBlock ,editPage,style,  setOpe
     changePageIcon(randomIcon(), "emoji");
   };
 
-  const onChangeImgIcon=(event:React.ChangeEvent<HTMLInputElement>)=>{
+  const onChangeImgIcon=(event:ChangeEvent<HTMLInputElement>)=>{
     const file = event.target.files?.[0];
     if(file !==undefined){
       const reader = new FileReader();
@@ -158,7 +157,12 @@ const IconPopup =({ currentPageId,block,page, editBlock ,editPage,style,  setOpe
     const iconPopup =document.getElementById("iconPopup");
     const iconPopupDomRect = iconPopup?.getClientRects()[0];
     const isInIconPopup =detectRange(event, iconPopupDomRect);
-    !isInIconPopup && setOpenIconPopup(false);
+    const target =event.target as null|Element;
+    if(target ===null || target.id !== "imageIconInput"){
+      !isInIconPopup && 
+      setOpenIconPopup(false);
+    };
+
   })
   return(
     <div 
@@ -231,7 +235,7 @@ const IconPopup =({ currentPageId,block,page, editBlock ,editPage,style,  setOpe
           </label>
           <input
             id="imageIconInput"
-            name="imageIcon"
+            name="imageIconInput"
             type="file"
             accept='image/*'
             onChange={onChangeImgIcon}
