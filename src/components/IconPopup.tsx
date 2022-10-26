@@ -158,7 +158,7 @@ const IconPopup =({ currentPageId,block,page, editBlock ,editPage,style,  setOpe
     const iconPopupDomRect = iconPopup?.getClientRects()[0];
     const isInIconPopup =detectRange(event, iconPopupDomRect);
     const target =event.target as null|Element;
-    if(target ===null || target.id !== "imageIconInput"){
+    if(target?.id !== "imageIconInput"){
       !isInIconPopup && 
       setOpenIconPopup(false);
     };
