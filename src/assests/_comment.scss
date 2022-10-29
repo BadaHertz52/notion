@@ -100,6 +100,16 @@
 } 
 .pageComment {
   position: relative;
+  .commentBlock {
+    .comment_header .information ,
+    .comment_content {
+      font-size: inherit;
+    }
+  }
+  .commentInput form input
+  {
+    font-size: inherit;
+  }
   .comments{
     position: relative;
   }
@@ -107,6 +117,7 @@
     display: none;
   }
 }
+
 #commentsInner {
   position: relative;
 }
@@ -275,9 +286,7 @@
       }
     }
   }
-  .pageComment .commentInput form input {
-    font-size: 14px;
-  }
+
 form button{
   svg{
     font-size: 1.3rem;

@@ -116,18 +116,22 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   /** block 이동 시, 이동 할 위치의 기준이 되는 block(block 은 pointBlockToMoveBlock.current의 앞에 위치하게됨) */
   const pointBlockToMoveBlock =useRef<Block|null>(null);
   const [selection, setSelection]=useState<selectionType|null>(null);
-  const maxWidth = innerWidth -60
+  const maxWidth = innerWidth -60;
+  const fontSize = openTemplates? "20px": ( smallText? "16px": "17px")
   const frameInnerStyle:CSSProperties={
     fontFamily:fontStyle ,
-    fontSize: openTemplates? "14px": ( smallText? "14px": "16px"),
+    fontSize: fontSize,
     width: openTemplates? "100%": (fullWidth?  `${maxWidth}px`: ( innerWidth>900?  '900px' : "75%") ) ,
   };
+  const pageCommentStyle:CSSProperties ={
+    fontSize:fontSize
+  }
   const headerStyle: CSSProperties ={
     marginTop: page.header.cover !==null? "10px": "30px" ,
     
   };
-  const headerBottomStyle :CSSProperties ={
-    fontSize:smallText? (innerWidth >= 768 ? "32px" : "24px"): ( innerWidth >= 768?  "40px" : "32px" )
+  const pageTitleStyle :CSSProperties ={
+    fontSize:smallText? '43px': '48px'
   };
   const size = page.header.iconType=== null? (innerWidth>= 768? 72 : 48) :( innerWidth>= 768? 124: 72);
   const pageIconStyle :CSSProperties={
@@ -757,10 +761,11 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
               setLoaderTargetBlock={null}
             />
           }
-          <div className="pageHeader_notCover" style={headerBottomStyle}
+          <div className="pageHeader_notCover"
           >
             <div
               className='pageIcon'
+              style={pageTitleStyle}
               onClick={onClickPageIcon}
             >
               <PageIcon
@@ -802,6 +807,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
             }
             <div 
               className='pageTitle'
+              style={pageTitleStyle}
             >
               <ContentEditable
                 html={page.header.title}
@@ -810,7 +816,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
             </div>
             <div 
               className='pageComment'
-              style={frameInnerStyle}
+              style={pageCommentStyle}
             >
               {page.header.comments!==null ?
                 page.header.comments.map((comment:MainCommentType)=>
