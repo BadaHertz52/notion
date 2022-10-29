@@ -79,6 +79,7 @@ button {
           user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
+  font-size: inherit;
 }
 
 ul,
@@ -178,6 +179,7 @@ button {
           user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
+  font-size: inherit;
 }
 
 ul,
@@ -396,6 +398,9 @@ a:link, a:active, a:visited {
   font-size: inherit;
 }
 
+.page.block {
+  padding: 5px;
+}
 .page.block .pageIcon, .page.block img {
   width: 18px;
   height: 18px;
@@ -407,6 +412,12 @@ a:link, a:active, a:visited {
 .page.block .blockContents {
   display: flex;
   align-items: center;
+}
+.page.block .contentEditable {
+  border-bottom: 1px solid #B9B8B6;
+}
+.page.block:hover {
+  background-color: #EDECE9;
 }
 
 .todo.done.block path {
@@ -609,6 +620,7 @@ button {
           user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
+  font-size: inherit;
 }
 
 ul,
@@ -747,6 +759,13 @@ a:link, a:active, a:visited {
 
 .pageComment {
   position: relative;
+}
+.pageComment .commentBlock .comment_header .information,
+.pageComment .commentBlock .comment_content {
+  font-size: inherit;
+}
+.pageComment .commentInput form input {
+  font-size: inherit;
 }
 .pageComment .comments {
   position: relative;
@@ -960,10 +979,6 @@ a:link, a:active, a:visited {
   outline: none;
 }
 
-.pageComment .commentInput form input {
-  font-size: 14px;
-}
-
 form button svg {
   font-size: 1.3rem;
   color: #a3a3a2;
@@ -1100,6 +1115,7 @@ button {
           user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
+  font-size: inherit;
 }
 
 ul,
