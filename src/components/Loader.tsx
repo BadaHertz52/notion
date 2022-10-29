@@ -95,7 +95,6 @@ const Loader =({block, page, editBlock ,editPage ,frameHtml,setOpenLoader ,setLo
 
   }
   useEffect(()=>{
-    console.log(loaderStyle)
     loaderStyle===undefined &&
     changeLoaderStyle();
   },[loaderStyle]);

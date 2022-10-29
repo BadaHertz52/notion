@@ -21,10 +21,13 @@ import PageIcon from './PageIcon';
 import { SideBarContainerProp } from '../containers/SideBarContainer';
 
 export const closePopup =(elementId:string ,setState:Dispatch<SetStateAction<boolean>> , event:MouseEvent)=>{
-  const element = document.getElementById(elementId);
-  const elementDomRect = element?.getClientRects()[0];
-  const isInElement = detectRange(event, elementDomRect);
-  !isInElement && setState(false);
+  const eventTarget =event.target as Element|null;
+  if(eventTarget?.id !=="imageIconInput"){
+    const element = document.getElementById(elementId);
+    const elementDomRect = element?.getClientRects()[0];
+    const isInElement = detectRange(event, elementDomRect);
+    !isInElement && setState(false);
+  };
 };
 
 type SideBarProps = SideBarContainerProp & {

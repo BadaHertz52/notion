@@ -1,5 +1,5 @@
 import { getContent } from '../components/BlockStyler';
-import { Emoji, emojis } from '../components/IconPoup';
+import { Emoji, emojis } from '../components/IconPopup';
 export const emojiPath ="https://raw.githubusercontent.com/BadaHertz52/notion/master/image/emoji/";
 const catImg = 'https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assests/img/michael-sum-LEpfefQf4rU-unsplash.jpg' ;
 const imgBlockImg ='https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assests/img/roses-gfcb7dbdd4_640.jpg';
@@ -73,7 +73,6 @@ export type Block ={
   /** 새로 만들어진 block.id 는 `${page.id}_${number}_${editTime}` 형식 */
   id:string,
   contents:string, 
-  contentsEmpty:boolean,
   firstBlock:boolean,
   subBlocksId : string[]|null ,
   parentBlocksId: string[]|null,
@@ -89,7 +88,6 @@ export type Block ={
 export  const blockSample:Block ={
   id:`blockSample_${editTime}`,
   contents:"",
-  contentsEmpty:false,
   firstBlock:true,
   subBlocksId:null ,
   parentBlocksId: null,
@@ -110,14 +108,15 @@ export  const blockSample:Block ={
  */
 export function makeNewBlock(page:Page, targetBlock:Block|null, newBlockContents :string):Block{
   const editTime= JSON.stringify(Date.now());
+  const randomNumber =Math.floor(Math.random() * (1000000000 - 1) + 1);
   const newBlock:Block ={
-    id: `${page.id}_${editTime}`,
+    id: `${page.id}_${editTime}_${randomNumber}`,
     editTime:editTime,
     createTime:editTime,
-    type:"text",
+    type:targetBlock!==null? targetBlock.type: "text",
     contents: newBlockContents === "<br>"? "": 
     newBlockContents,
-    contentsEmpty:false,
+    
     firstBlock: targetBlock !==null? targetBlock.firstBlock : true,
     subBlocksId:targetBlock!==null? targetBlock.subBlocksId: null,
     parentBlocksId:targetBlock!==null? targetBlock.parentBlocksId : null,
@@ -404,7 +403,7 @@ const returnTemplateSubBlock =(day:string, index:number)=>{
   const templateBlock :Block ={
     id:`templateSub_${day}`,
     contents:todoList[num],
-    contentsEmpty:false,
+    
     firstBlock:false,
     subBlocksId:null,
     parentBlocksId:[`templateBlock_${day}`],
@@ -423,7 +422,7 @@ const returnTemplateBlock=(day:string, index:number)=>{
   const templateBlock :Block ={
     id:`templateBlock_${day}`,
     contents:`${day}`,
-    contentsEmpty:false,
+    
     firstBlock:true,
     subBlocksId:[`templateSub_${day}`] ,
     parentBlocksId: null,
@@ -533,7 +532,6 @@ const initialState :Notion ={
     blocks:[{
       id:"text",
       contents:"안녕", 
-      contentsEmpty:false,
       firstBlock:true,
       subBlocksId: ["sub1_1", "sub1_2"] ,
       parentBlocksId: null,
@@ -561,7 +559,6 @@ const initialState :Notion ={
     {
       id:"img",
       contents: imgBlockImg,
-      contentsEmpty:false,
       firstBlock:true,
       subBlocksId:null, 
       parentBlocksId: null,
@@ -581,7 +578,6 @@ const initialState :Notion ={
     {
       id:"toggle",
       contents:"Try press toggle btn",
-      contentsEmpty:false,
       firstBlock:true,
       subBlocksId:['toggleSub'], 
       parentBlocksId: null,
@@ -596,7 +592,6 @@ const initialState :Notion ={
     }, {
       id:"toggleSub",
       contents:"Hi!🤗 ",
-      contentsEmpty:false,
       firstBlock:false,
       subBlocksId:null, 
       parentBlocksId: ['toggle'],
@@ -611,7 +606,6 @@ const initialState :Notion ={
     },{
       id:"todo",
       contents:"todo", 
-      contentsEmpty:false,
       firstBlock:true,
       subBlocksId:null ,
       parentBlocksId: null,
@@ -637,7 +631,6 @@ const initialState :Notion ={
     },{
       id:"todo done",
       contents:"todo done",
-      contentsEmpty:false,
       firstBlock:true,
       subBlocksId:null ,
       parentBlocksId: null,
@@ -652,7 +645,6 @@ const initialState :Notion ={
     },{
       id:"h1",
       contents:'head<a class="link" target="_blank" href="https://github.com/BadaHertz52">er</a><span class=" color color_blue">1</span></span>', 
-      contentsEmpty:false,
       firstBlock:true,
       subBlocksId:null ,
       parentBlocksId: null,
@@ -666,7 +658,6 @@ const initialState :Notion ={
     },{
       id:"h2",
       contents:"header2",
-      contentsEmpty:false,
       firstBlock:true,
       subBlocksId:null ,
       parentBlocksId: null,
@@ -680,7 +671,6 @@ const initialState :Notion ={
     },{
       id:"h3",
       contents:"header3", 
-      contentsEmpty:false,
       firstBlock:true,
       subBlocksId:null ,
       parentBlocksId: null,
@@ -695,7 +685,6 @@ const initialState :Notion ={
     },{
       id:"page1",
       contents:"page page page",
-      contentsEmpty:false,
       firstBlock:true,
       subBlocksId:null ,
       parentBlocksId: null,
@@ -711,7 +700,6 @@ const initialState :Notion ={
     {
       id:"page2",
       contents:"page2",
-      contentsEmpty:false,
       firstBlock:true,
       subBlocksId:null ,
       parentBlocksId: null,
@@ -720,13 +708,11 @@ const initialState :Notion ={
       icon: emojis[8] ,
       editTime: (Date.parse("2022-5-20-9:00")).toString(),
       createTime: (Date.parse("2022-5-19-20:00")).toString(),
-
       style :basicBlockStyle,
       comments:null
     },
     {id:"sub1_1",
     contents:"sub1_1", 
-    contentsEmpty:false,
     firstBlock:false,
     subBlocksId: ["sub2_1"],
     parentBlocksId: ["text"],
@@ -743,7 +729,6 @@ const initialState :Notion ={
   {
     id:"sub1_2",
     contents:"sub1_2", 
-    contentsEmpty:false,
     firstBlock:false,
     subBlocksId:null,
     parentBlocksId: ["text"],
@@ -769,7 +754,6 @@ const initialState :Notion ={
   {
     id:"sub2_1",
     contents:"sub2_1", 
-    contentsEmpty:false,
     firstBlock:false,
     subBlocksId:null,
     parentBlocksId: ["text", "sub1_1"],
@@ -786,7 +770,6 @@ const initialState :Notion ={
   {
     id:"numberList",
     contents:"", 
-    contentsEmpty:false,
     firstBlock:true,
     subBlocksId:["num1", "num2", "num3"],
     parentBlocksId: null,
@@ -803,7 +786,6 @@ const initialState :Notion ={
   {
     id:"num1",
     contents:"n1", 
-    contentsEmpty:false,
     firstBlock:false,
     subBlocksId:null,
     parentBlocksId: [numberList],
@@ -821,7 +803,6 @@ const initialState :Notion ={
   {
     id:"num2",
     contents:"n2", 
-    contentsEmpty:false,
     firstBlock:false,
     subBlocksId:null,
     parentBlocksId: [numberList],
@@ -847,7 +828,6 @@ const initialState :Notion ={
   {
     id:"num3",
     contents:"n3", 
-    contentsEmpty:false,
     firstBlock:false,
     subBlocksId:null,
     parentBlocksId: [numberList],
@@ -864,7 +844,6 @@ const initialState :Notion ={
   {
     id:"bulletList",
     contents:"", 
-    contentsEmpty:false,
     firstBlock:true,
     subBlocksId:["b1", "b2"],
     parentBlocksId:null,
@@ -881,7 +860,6 @@ const initialState :Notion ={
   {
     id:"b1",
     contents:"b1", 
-    contentsEmpty:false,
     firstBlock:false,
     subBlocksId:null,
     parentBlocksId:[bulletList],
@@ -898,7 +876,6 @@ const initialState :Notion ={
   {
     id:"b2",
     contents:"b2", 
-    contentsEmpty:false,
     firstBlock:false,
     subBlocksId:null,
     parentBlocksId:[bulletList],
@@ -929,7 +906,6 @@ const initialState :Notion ={
     },
     blocks:[{
       id:"img",
-      contentsEmpty:false,
       contents: imgBlockImg,
       firstBlock:true,
       subBlocksId:null, 
@@ -1319,7 +1295,6 @@ export default function notion (state:Notion =initialState , action :NotionActio
     const  blockIndex:number = action.block !==null ?( pages[pageIndex]?.blocksId?.indexOf(action.block.id) as number ): 0 as number;
     switch(action.type){
       case ADD_BLOCK:
-
         if(action.newBlockIndex===0){
           // 새로운 블럭이 page 의 첫번째 블럭인 경우
           targetPage.blocks = targetPage.blocks!==null? [action.block, ...targetPage.blocks] :[action.block];
@@ -1924,7 +1899,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
       const newPageBlock :Block={
         id: editedMoveTargetPage.id,
         contents:editedMoveTargetPage.header.title,
-        contentsEmpty:false,
+        
         firstBlock: true,
         subBlocksId: null,
         parentBlocksId: null,

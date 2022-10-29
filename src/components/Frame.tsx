@@ -1,8 +1,8 @@
 import '../assests/frame.css';
 import React, { CSSProperties, Dispatch,  MouseEvent,  SetStateAction, useEffect, useRef, useState } from 'react';
 import { Block, MainCommentType, blockSample,  findBlock, findParentBlock, listItem, Page,  makeNewBlock, findPage } from '../modules/notion';
-import EditableBlock, { changeFontSizeBySmallText } from './EditableBlock';
-import IconPoup, { randomIcon } from './IconPoup';
+import EditableBlock from './EditableBlock';
+import IconPopup, { randomIcon } from './IconPopup';
 import CommandBlock from './CommandBlock';
 import Comments, { CommentInput } from './Comments';
 import BlockFn, { detectRange } from './BlockFn';
@@ -11,7 +11,6 @@ import PageIcon from './PageIcon';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import PageMenu from './PageMenu';
 import { PopupType } from '../containers/EditorContainer';
-import {EditableBlockProps} from './EditableBlock';
 
 //icon
 import { BiMessageDetail } from 'react-icons/bi';
@@ -22,7 +21,7 @@ import { HiTemplate } from 'react-icons/hi';
 import { setTemplateItem } from './BlockComponent';
 import { fontStyleType } from '../containers/NotionRouter';
 import BlockStyler from './BlockStyler';
-
+import MoveTargetBlock from './MoveTargetBlock';
 
 export type Command ={
   boolean:boolean,
@@ -81,73 +80,6 @@ const basicPageCover ='https://raw.githubusercontent.com/BadaHertz52/notion/mast
  * @param param0 
  * @returns 
  */
-const MoveTargetBlock=({ pages,pagesId,page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText, moveBlock  ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand ,setTargetPageId  ,openComment ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock, closeMenu,templateHtml ,setSelection
-}:EditableBlockProps)=>{
-  return(
-    <div 
-      id="moveTargetBlock" 
-    >
-      {(block.type.includes("List")&& !block.firstBlock)?
-      (<div className='eidtableBlock'>
-          <div className='editableBlockInner'>
-            <div 
-            id={`moveTarget_block_${block.id}`}
-            className={`${block.type} block`}
-            style={changeFontSizeBySmallText(block, smallText)}
-            >
-              <div  className="mainBlock">
-                <div className='mainBlock_block'>
-                  <div 
-                    id={block.id}
-                    className="blockComponent"
-                  >
-                    <div 
-                      className={`${block.type}_blockComponent blockComponent`}
-                    >
-                      <div 
-                        className='contentEditable'
-                      >
-                        {block.contents !==""? block.contents : "type '/' for commmands"}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-      </div>
-      ):
-      <EditableBlock
-        key={block.id}
-        pages={pages}
-        pagesId={pagesId}
-        page={page}
-        block={block}
-        addBlock={addBlock}
-        editBlock={editBlock}
-        changeToSub={changeToSub}
-        raiseBlock={raiseBlock}
-        deleteBlock={deleteBlock}
-        smallText={smallText}
-        moveBlock={moveBlock}
-        setMoveTargetBlock={setMoveTargetBlock}
-        pointBlockToMoveBlock={pointBlockToMoveBlock}
-        command={command}
-        setCommand={setCommand}
-        setTargetPageId={setTargetPageId}
-        openComment={openComment}
-        setOpenComment={setOpenComment}
-        setCommentBlock={setCommentBlock}
-        setOpenLoader={setOpenLoader}
-        setLoaderTargetBlock={setLoaderTargetBlock}
-        closeMenu={closeMenu}
-        templateHtml={templateHtml}
-        setSelection={setSelection}
-      />
-      }
-    </div>
-  )
-}
 
 const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,commentBlock,openComment, setRoutePage ,setTargetPageId ,setOpenComment , setCommentBlock ,
   showAllComments ,smallText , fullWidth  ,discardEdit,setDiscardEdit , openTemplates,  setOpenTemplates, fontStyle}:FrameProps)=>{
@@ -181,6 +113,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   const [popupStyle, setPopupStyle]=useState<CSSProperties |undefined>(undefined); 
   const [moveTargetBlock, setMoveTargetBlock]=useState<Block|null>(null);
   const moveBlock =useRef<boolean>(false);
+  /** block 이동 시, 이동 할 위치의 기준이 되는 block(block 은 pointBlockToMoveBlock.current의 앞에 위치하게됨) */
   const pointBlockToMoveBlock =useRef<Block|null>(null);
   const [selection, setSelection]=useState<selectionType|null>(null);
   const maxWidth = innerWidth -60
@@ -347,6 +280,9 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           subBlocksId:[moveTargetBlock.id],
           parentBlocksId: pointBlock.parentBlocksId
         };
+        /**
+         * 이동의 타켓이 되는 block으로 이동으로 인해 변경한 data를 가짐
+         */
         const targetBlock:Block= targetBlockIsList ? 
         {
           ...moveTargetBlock,
@@ -419,6 +355,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
                 const preBlockId = FIRST_BLOCKS_ID[pointBlock_firstBlockIndex-1];
                 const preBlockIndexInBlocksId =page.blocksId.indexOf(preBlockId);
                 addBlock(page.id, newParentBlockOfList, preBlockIndexInBlocksId+1 ,preBlockId );
+                FIRST_BLOCKS_ID.splice(pointBlock_firstBlockIndex,0,newParentBlockOfList.id);
               }else{
                 FIRST_BLOCKS_ID.splice(pointBlock_firstBlockIndex,0, targetBlock.id);
               }
@@ -569,8 +506,10 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
        */
       const isInner =conditionX && conditionY;
       if(isInner){
+        const randomNumber =Math.floor(Math.random() * (100000 - 1) + 1);
         const newBlock:Block={
           ...blockSample,
+          id:`${page.id}_${JSON.stringify(Date.now)}_${randomNumber}`,
           firstBlock:true
         };
 
@@ -921,7 +860,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           </div>
         </div>
         {openIconPopup &&
-          <IconPoup 
+          <IconPopup 
             currentPageId={page.id}
             block={null}
             page={page}
@@ -1012,13 +951,14 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
             key={`${command.targetBlock.id}_command`}
             page={page}
             block={command.targetBlock}
-            addBlock={addBlock}
             editBlock={editBlock}
             changeBlockToPage={changeBlockToPage}
             changePageToBlock={changePageToBlock}
             editPage={editPage}
             command={command}
             setCommand={setCommand}
+            setTurnInto={null}
+            setSelection={setSelection}
           />
         </div>
       }

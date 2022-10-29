@@ -4,8 +4,8 @@ import { IoIosList } from 'react-icons/io';
 import { IoDocumentTextOutline, IoTextOutline } from 'react-icons/io5';
 import { RiPlayList2Fill } from 'react-icons/ri';
 import { VscListOrdered } from 'react-icons/vsc';
-import { Command } from './Frame';
-import {  Block, BlockType,  findParentBlock, makeNewBlock, Page } from "../modules/notion";
+import { Command, selectionType } from './Frame';
+import {  Block, BlockType,  findBlock,  findParentBlock, makeNewBlock, numberList, Page } from "../modules/notion";
 import imgIcon from '../assests/img/vincent-van-gogh-ge1323790d_640.jpg'; 
 import { setTemplateItem } from './BlockComponent';
 import { CSSProperties } from 'styled-components';
@@ -13,16 +13,17 @@ import { CSSProperties } from 'styled-components';
 type CommandBlockProp ={
   page:Page,
   block:Block,
-  addBlock:(pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
   editBlock :(pageId:string, block:Block)=>void,
   changeBlockToPage: (currentPageId: string, block: Block) => void,
   changePageToBlock:(currentPageId: string, block: Block) => void,
   editPage: (pageId: string, newPage: Page) => void,
   command:Command | null,
   setCommand: Dispatch<SetStateAction<Command>> |null ,
+  setTurnInto: React.Dispatch<React.SetStateAction<boolean>>|null,
+  setSelection:Dispatch<SetStateAction<selectionType | null>>|null,
   style:CSSProperties|undefined
 };
-const CommandBlock =({ page ,block , editBlock ,addBlock ,changeBlockToPage,changePageToBlock ,editPage ,setCommand ,command ,style}:CommandBlockProp)=>{
+const CommandBlock =({ page ,block , editBlock,changeBlockToPage,changePageToBlock ,editPage ,setCommand ,command ,setSelection ,setTurnInto ,style}:CommandBlockProp)=>{
   const commandBlock_inner =document.getElementById("commandBlock_inner");
   const commandBlock_noResult =document.getElementById("commandBlock_noResult");
 
@@ -58,84 +59,193 @@ const CommandBlock =({ page ,block , editBlock ,addBlock ,changeBlockToPage,chan
    * @param editedBlock 
    */
   const changeToListType =(editedBlock:Block ,parentBlockType:BlockType)=>{
-    const newBlock =makeNewBlock(page, block, "");
-    const newParentBlock :Block ={
-      ...newBlock,
-      type: parentBlockType,
-      subBlocksId:[editedBlock.id],
-    };
-    const editedListBlock :Block ={
-      ...editedBlock,
-      firstBlock:false ,
-      parentBlocksId: newParentBlock.parentBlocksId !== null ? newParentBlock.parentBlocksId.concat(newParentBlock.id): [...newParentBlock.id],
-    };
-    console.log("newListParent", newParentBlock," editedListBlock", editedListBlock);
-    const indexOfEditedBlockInBlocks = page.blocksId?.indexOf(editedBlock.id) as number; 
-    if(block.parentBlocksId!==null){
-      const {parentBlock} = findParentBlock(page, block);
-      const subBlocksId =[...parentBlock.subBlocksId as string[]];
-      const index = subBlocksId.indexOf(block.id);
-      subBlocksId.splice(index,1);
-      const editedParentBlock :Block ={
-        ...parentBlock,
-        subBlocksId: subBlocksId,
+    if(page.firstBlocksId!==null && page.blocks!==null && page.blocksId!==null){
+      const firstBlocksId =[...page.firstBlocksId];
+      const blocks=[...page.blocks];
+      const blocksId =[...page.blocksId];
+      const indexOfBlocks = blocksId.indexOf(editedBlock.id);
+
+      const newBlock =makeNewBlock(page, editedBlock, "");
+      const newParentBlock :Block ={
+        ...newBlock,
+        type: parentBlockType,
+        subBlocksId:[editedBlock.id],
+      };
+      const listBlock :Block ={
+        ...editedBlock,
+        firstBlock:false ,
+        parentBlocksId: newParentBlock.parentBlocksId !== null ? newParentBlock.parentBlocksId.concat(newParentBlock.id): [newParentBlock.id],
+      };
+      //listBlock data 수정
+      blocks.splice(indexOfBlocks,1,listBlock);
+      
+      
+      setSelection!==null && setSelection({
+        change:true,
+        block:listBlock
+      });
+      // newParent 를 blocks에 추가 
+      if(editedBlock.parentBlocksId!==null){
+        //editedBlock is not firstBlock
+        const {parentBlock, parentBlockIndex} = findParentBlock(page, editedBlock);
+        const subBlocksId =[...parentBlock.subBlocksId as string[]];
+        const index = subBlocksId.indexOf(editedBlock.id);
+        const editTime =JSON.stringify(Date.now());
+
+        if(parentBlock.type.includes("Arry")){
+          const updatedNewParentBlock :Block ={
+            ...newParentBlock,
+            parentBlocksId: parentBlock.parentBlocksId,
+            firstBlock:parentBlock.firstBlock
+          };
+          const updatedListBlock :Block ={
+            ...listBlock,
+            parentBlocksId: updatedNewParentBlock.parentBlocksId==null? [updatedNewParentBlock.id]: updatedNewParentBlock.parentBlocksId.concat(updatedNewParentBlock.id)
+          };
+          blocks.splice(indexOfBlocks,1,updatedListBlock);
+          
+
+          if(parentBlock.firstBlock){
+            const indexAsFirst = firstBlocksId.indexOf(parentBlock.id);
+            firstBlocksId.splice(indexAsFirst+1,0, updatedNewParentBlock.id);
+          }
+          //block의 subBlock으로의 위치에 따라 newParentBlock의 data나 위치가 달라짐
+          if(index ===0){
+            blocks.splice(parentBlockIndex,1,updatedNewParentBlock);
+            blocksId.splice(parentBlockIndex,1,updatedNewParentBlock.id);
+          }else{
+            blocks.splice(indexOfBlocks,0,updatedNewParentBlock);
+            blocksId.splice(indexOfBlocks,0,updatedNewParentBlock.id);
+            
+            if(index===subBlocksId.length-1){
+              subBlocksId.splice(index,1);
+              const editedParentBlock :Block ={
+                ...parentBlock,
+                subBlocksId: subBlocksId,
+                editTime:editTime
+              };
+              blocks.splice(parentBlockIndex,1,editedParentBlock);
+            }else{
+              const preSubBlocksId =subBlocksId.slice(0,index);
+              const afterSubBlocksId =subBlocksId.slice(index+1);
+
+              const editedParentBlock :Block ={
+                ...parentBlock,
+                subBlocksId: preSubBlocksId,
+                editTime :editTime
+              };
+              blocks.splice(parentBlockIndex,1,editedParentBlock);
+              const newBlock = makeNewBlock(page, parentBlock, "");
+              const newAfterArryBlock:Block ={
+                ...newBlock,
+                id:`${page.id}_${editTime}(1)`,
+                subBlocksId:afterSubBlocksId
+              };
+              blocks.splice(indexOfBlocks+2,0,newAfterArryBlock);
+              blocksId.splice(indexOfBlocks+2,0, newAfterArryBlock.id);
+              if(parentBlock.firstBlock){
+                const indexAsFirst = firstBlocksId.indexOf(parentBlock.id);
+                firstBlocksId.splice(indexAsFirst+2,0,newAfterArryBlock.id);
+              }
+            }
+          };
+
+        }else{
+          // parentBlock의 subBlocks 중 block을 newParentBlock으로 바꿈
+          subBlocksId.splice(index,1,newParentBlock.id);
+          const editedParentBlock :Block ={
+            ...parentBlock,
+            subBlocksId: subBlocksId,
+            editTime:JSON.stringify(Date.now())
+          };
+          blocks.splice(parentBlockIndex,1,editedParentBlock);
+  
+          const editedNewParentBlock:Block ={
+            ...newParentBlock,
+            parentBlocksId: editedParentBlock.parentBlocksId!==null ? editedParentBlock.parentBlocksId.concat(editedParentBlock.id):[editedParentBlock.id],
+          };
+          blocks.splice(indexOfBlocks,0,editedNewParentBlock);
+          blocksId.splice(indexOfBlocks,0,editedNewParentBlock.id);
+          const editedListBlock:Block ={
+            ...listBlock,
+            parentBlocksId: editedNewParentBlock.parentBlocksId!==null ? editedNewParentBlock.parentBlocksId.concat(editedNewParentBlock.id):[editedNewParentBlock.id]
+          };
+          blocks.splice(indexOfBlocks,1,editedListBlock);
+        }
+
+      }else{
+          const indexOfBlockAsFirstBlock = firstBlocksId.indexOf(editedBlock.id) ;
+          firstBlocksId.splice(indexOfBlockAsFirstBlock,1, newParentBlock.id);
+          blocks.splice(indexOfBlocks,0,newParentBlock);
+          blocksId.splice(indexOfBlocks,0,newParentBlock.id);
+      };
+      const editedPage :Page ={
+        ...page,
+        firstBlocksId:firstBlocksId,
+        blocks:blocks,
+        blocksId:blocksId,
         editTime:JSON.stringify(Date.now())
       };
-      editBlock(page.id, editedParentBlock);
-      editBlock(page.id, editedListBlock);
-      addBlock(page.id, newParentBlock, indexOfEditedBlockInBlocks-1, index===0? null : subBlocksId[index -1]);
-    }else{
-      if(page.firstBlocksId!==null){
-        const firstBlocksId =[...page.firstBlocksId];
-        const indexOfBlockAsFirstBlock = firstBlocksId.indexOf(block.id) ;
-        const previousFirstBlockId =page.firstBlocksId[indexOfBlockAsFirstBlock-1];
-        firstBlocksId.splice(indexOfBlockAsFirstBlock,1);
-        const editedPage :Page ={
-          ...page,
-          firstBlocksId:firstBlocksId
-        };
-        editPage(page.id, editedPage);
-
-        editBlock(page.id, editedListBlock);
-        
-        if(indexOfBlockAsFirstBlock===0){
-          addBlock(page.id, newParentBlock,0, null);
-        }else{
-          addBlock(page.id, newParentBlock, indexOfEditedBlockInBlocks, previousFirstBlockId);
-        };
-        
-      }
+      editPage(page.id, editedPage);
     };
   };
   const changeType=( blockType:BlockType)=>{
     const templateHtml= document.getElementById("template");
     setTemplateItem(templateHtml, page);
     if(block.type !== blockType){
+
       const editedBlock:Block ={
         ...block,
         editTime:JSON.stringify(Date.now()),
-        type:blockType,
+        type: 
+        blockType==="bulletListArry"? 
+        "bulletList"
+        :
+        (
+          blockType==="numberListArry"?
+          numberList
+          :
+          blockType
+        ),
         contents:blockType ==="image media"? "": block.contents,
       };
       switch (blockType) {
         case "page":
           changeBlockToPage(page.id, block);
+          const changedBlock =findBlock(page,block.id).BLOCK;
+          setSelection!==null && setSelection({
+            change:true,
+            block:changedBlock
+          });
           break;
-        case "numberList":
+        case "numberListArry":
           changeToListType(editedBlock, "numberListArry");
           break;
-        case "bulletList":
+        case "bulletListArry":
           changeToListType(editedBlock , "bulletListArry");
           break;
         default:
           block.type==="page"?
           changePageToBlock(page.id, editedBlock):
-          editBlock(page.id, editedBlock)
+          editBlock(page.id, editedBlock);
+          setSelection!==null && setSelection({
+            change:true,
+            block:editedBlock
+          })
           break;
       };
     };
     closeCommendBlock();
   };
+  const onClickImgTypeBtn=()=>{
+    setCommand!==null && setCommand({
+      boolean:false,
+      targetBlock:null,
+      command:null
+    });
+    setTurnInto!==null && setTurnInto(false);
+    changeType("image media");
+  }
   function closeCommendBlock(){
     setCommand !==null && setCommand({
       boolean:false, 
@@ -323,7 +433,7 @@ const CommandBlock =({ page ,block , editBlock ,addBlock ,changeBlockToPage,chan
             <div className='command_btns type'>
               <button
                   className="command_btn on"
-                  onClick={()=>changeType("image media")}
+                  onClick={onClickImgTypeBtn}
                   name="image"
                 >
                 <div className='command_btn_inner'>

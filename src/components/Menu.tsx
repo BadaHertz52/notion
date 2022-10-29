@@ -10,7 +10,7 @@ import Time from './Time';
 
 //icon
 import {BiCommentDetail} from 'react-icons/bi';
-import { BsArrowClockwise, BsLink45Deg } from 'react-icons/bs';
+import { BsArrowClockwise } from 'react-icons/bs';
 import {MdOutlineRestorePage} from 'react-icons/md';
 import {TiArrowSortedDown} from 'react-icons/ti';
 import {IoArrowRedoOutline} from 'react-icons/io5';
@@ -347,13 +347,14 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
               style={undefined}
               page={page}
               block={block}
-              addBlock={addBlock}
               editBlock={editBlock}
               changeBlockToPage={changeBlockToPage}
               changePageToBlock={changePageToBlock}
               editPage={editPage}
               command={null}
               setCommand={null}
+              setTurnInto={setTurnInto}
+              setSelection={setSelection}
             />
         }
         {color &&
