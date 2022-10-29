@@ -185,6 +185,7 @@
   }
 }
 .page.block {
+  padding:5px;
   .pageIcon,img{
     width: 18px;
     height: 18px;
@@ -196,6 +197,12 @@
   .blockContents{
     display: flex;
     align-items: center;
+  }
+  .contentEditable{
+    border-bottom: 1px solid  $mud;
+  }
+  &:hover{
+    background-color: $itemHover;
   }
 }
 .todo.done.block{
