@@ -84,19 +84,6 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
     const targetBlock = findBlock(page, blockId).BLOCK;
     return targetBlock;
   };
-  /**
-* contents가 비어있는 block 을 기준으로 커서를 다른 block으로 옮기는 경우, placeHolder가 보이지 않도록  해당 block의 contentsEmpty를 true로 변경하는 함수
-*@param block : contents가 비어있는 block,
-*/
-const changeContentEmpty=(block:Block)=>{
-  if(block.contents===""&& !block.contentsEmpty){
-    const editedBlock:Block ={
-      ...block,
-      contentsEmpty:true
-    };
-    editBlock(page.id, editedBlock);
-  };
-};
   const showBlockFn=(event: MouseEvent)=>{
     closeMenu(event)
     const blockHtml =document.getElementById(`block_${block.id}`);
@@ -152,7 +139,6 @@ const changeContentEmpty=(block:Block)=>{
             const editedBlock:Block ={
               ...targetBlock,
               contents:block.contents!== editedContents ?editedContents : targetBlock.contents,
-              contentsEmpty: editedContents===""? true: false,
               subBlocksId: targetBlock.subBlocksId !==null ? null : targetBlock.subBlocksId,
               editTime:editTime,
             };
@@ -245,7 +231,6 @@ const changeContentEmpty=(block:Block)=>{
 
         break;
       case "arrowup":
-          changeContentEmpty(targetBlock);
           if(page.firstBlocksId!==null && page.firstBlocksId[0]!== targetBlock.id){
             let doing:boolean = true;
             let referenceBlock:Block = targetBlock;
@@ -366,7 +351,6 @@ const changeContentEmpty=(block:Block)=>{
           }
 
         };
-        changeContentEmpty(targetBlock);
         if(targetBlock.firstBlock ){
           findNextBlockOfFirstBlock(targetBlock);
         }else{
@@ -894,11 +878,7 @@ function updateMiddleChildren(startIndex:number, endIndex:number,endNode:Node, c
     !command.boolean && onClickCommentBtn(block);
     
   };
-  const onBlurContent=()=>{
-    if(block.contents===""&& !block.contentsEmpty){
-      changeContentEmpty(block)
-    }
-  };  
+  
   const BlockContentEditable=()=>{
     const getPageTitle =()=>{
       const targetPage =findPage(pagesId, pages, block.id);
@@ -918,7 +898,7 @@ function updateMiddleChildren(startIndex:number, endIndex:number,endNode:Node, c
       <>
       {!command.command || (command.targetBlock !==null && command.targetBlock.id !== block.id) ? 
         <ContentEditable
-          className={block.contentsEmpty ?"contentEditable empty": 'contentEditable'}
+          className='contentEditable'
           placeholder="Type '/' for commmands"
           html= {blockContents}
           innerRef={contentEditableRef}
@@ -927,7 +907,6 @@ function updateMiddleChildren(startIndex:number, endIndex:number,endNode:Node, c
           onSelect={(event)=>onSelectContents(event)}
           onMouseDown={(event)=>onMouseDownContents(event)}
           onClick={(event)=>onClickLinkInContents(event)}
-          onBlur={onBlurContent}
         /> 
         :
           <input

@@ -284,15 +284,7 @@ a:link, a:active, a:visited {
   outline: none;
 }
 
-.contentEditable:empty::after {
-  content: attr(placeholder);
-  color: #B9B8B6;
-}
-
-.contentEditable.empty:empty::after {
-  content: none;
-}
-.contentEditable.empty:empty:hover::after, .contentEditable.empty:empty:focus::after {
+.contentEditable:empty:hover::after, .contentEditable:empty:focus::after {
   content: attr(placeholder);
   color: #B9B8B6;
 }

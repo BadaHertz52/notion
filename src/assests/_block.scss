@@ -87,15 +87,6 @@
   }
 }
 .contentEditable:empty{
-    &::after{
-      content: attr(placeholder);
-      color: $mud;
-    }
-}
-.contentEditable.empty:empty{
-  &::after{
-    content:none;
-  }
   &:hover, &:focus{
     &::after{
       content: attr(placeholder);
@@ -103,6 +94,7 @@
     }
   }
 }
+
 .selected ,.editableBlock .selected a:link , .editableBlock  a:link .selected{
   background-color:#BDE6F1;
   .bg_default, .bg_yellow, .bg_blue, .bg_green, .bg_grey,.bg_pink{
