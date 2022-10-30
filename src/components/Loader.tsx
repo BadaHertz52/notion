@@ -53,6 +53,19 @@ const Loader =({block, page, editBlock ,editPage ,frameHtml,setOpenLoader ,setLo
       console.log("can't find image file")
     }
   };
+  const removePageCover=()=>{
+    const editedPage:Page ={
+      ...page,
+      header:{
+        ...page.header,
+        cover:null
+      },
+      editTime:JSON.stringify(Date.now())
+    };
+    editPage!==null&&
+    editPage(page.id, editedPage);
+    setOpenLoader(false);
+  };
   function closeLoader(){
     setOpenLoader(false);
     setLoaderTargetBlock!==null&&
@@ -111,9 +124,17 @@ const Loader =({block, page, editBlock ,editPage ,frameHtml,setOpenLoader ,setLo
         <div className='imgLoader'>
           <div className='menu'>
             <div className=' innerPadding'>
-              <button>
+              <button name='uploadBtn'>
                 Upload
               </button>
+              {block===null &&
+                <button
+                  className='removeBtn'
+                  onClick={removePageCover}
+                >
+                  Remove
+                </button>
+              }
 
             </div>
           </div>
