@@ -1406,7 +1406,7 @@ a:link, a:active, a:visited {
   width: 100%;
   height: 24px;
 }
-.pageHeader .deco button {
+.pageHeader .deco div button {
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
