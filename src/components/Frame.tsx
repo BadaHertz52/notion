@@ -774,37 +774,39 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
                 style={pageIconStyle}
               />
             </div>
-            {decoOpen && 
-              <div className='deco'>
-                {page.header.icon ==null &&
+            <div className='deco'>
+              {decoOpen && 
+                <div>
+                  {page.header.icon ==null &&
+                    <button 
+                      className='decoIcon'
+                      onClick={addRandomIcon}
+                    >
+                      <BsFillEmojiSmileFill/>
+                      <span>Add Icon</span>
+                    </button>
+                  }
+                  {page.header.cover == null&&        
+                    <button 
+                      className='decoCover'
+                      onClick={onClickAddCover}
+                    >
+                      <MdInsertPhoto/>
+                      <span>Add Cover</span>
+                    </button>
+                  }
+                  {page.header.comments==null &&
                   <button 
-                    className='decoIcon'
-                    onClick={addRandomIcon}
+                    className='decoComment'
+                    onClick={()=>setOpenPageCommentInput(true)}
                   >
-                    <BsFillEmojiSmileFill/>
-                    <span>Add Icon</span>
+                    <BiMessageDetail/>
+                    <span>Add Comment</span>
                   </button>
-                }
-                {page.header.cover == null&&        
-                  <button 
-                    className='decoCover'
-                    onClick={onClickAddCover}
-                  >
-                    <MdInsertPhoto/>
-                    <span>Add Cover</span>
-                  </button>
-                }
-                {page.header.comments==null &&
-                <button 
-                  className='decoComment'
-                  onClick={()=>setOpenPageCommentInput(true)}
-                >
-                  <BiMessageDetail/>
-                  <span>Add Comment</span>
-                </button>
-                }
+                  }
+              </div>
+              }
             </div>
-            }
             <div 
               className='pageTitle'
               style={pageTitleStyle}
