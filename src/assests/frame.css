@@ -1368,6 +1368,7 @@ a:link, a:active, a:visited {
   display: none;
 }
 .pageHeader .pageCover.on .changeCoverBtn {
+  font-size: 1rem;
   display: block;
   transition: display 1ms ease;
   position: absolute;
@@ -1397,8 +1398,12 @@ a:link, a:active, a:visited {
   height: -moz-fit-content;
   height: fit-content;
 }
-.pageHeader .deco {
+.pageHeader .pageIcon.iconNull {
+  display: none;
+}
+.pageHeader .deco div {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   justify-content: flex-start;
   margin-top: 8px;
@@ -1419,10 +1424,10 @@ a:link, a:active, a:visited {
   align-items: center;
   font-size: 14px;
 }
-.pageHeader .deco button svg {
+.pageHeader .deco div button svg {
   padding-right: 5px;
 }
-.pageHeader .deco span {
+.pageHeader .deco div span {
   font-size: 13px;
 }
 .pageHeader .pageIcon {

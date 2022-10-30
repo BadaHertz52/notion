@@ -8,6 +8,7 @@ type PageItemProps={
   style:CSSProperties|undefined
 }
 const PageIcon=({icon, iconType, style}:PageItemProps)=>{
+  const pageIconClassName = icon===null? "pageIcon iconNull" :"pageIcon";
   const imgSrc = icon!==null? 
   (
     iconType ==="img"?
@@ -18,7 +19,7 @@ const PageIcon=({icon, iconType, style}:PageItemProps)=>{
   pageDefultImg ;
   return(
     <div 
-      className="pageIcon"
+      className={pageIconClassName}
       style={style}
     >
       <span>

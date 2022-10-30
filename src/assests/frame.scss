@@ -70,6 +70,7 @@
     }
     .pageCover.on{
       .changeCoverBtn{
+        font-size: 1rem;
         display: block;
         transition: display 1ms ease;
         position:absolute;
@@ -97,8 +98,12 @@
       width: fit-content;
       height: fit-content;
     }
-    .deco{
+    .pageIcon.iconNull{
+      display: none;
+    }
+    .deco div{
       display: flex;
+      flex-direction: row;
       flex-wrap: wrap;
       justify-content: flex-start;
       margin-top: 8px;
