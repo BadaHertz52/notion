@@ -150,6 +150,13 @@ const Loader =({block, page, editBlock ,editPage ,frameHtml,setOpenLoader ,setLo
                 onChange={onChangeImgFile}
               />
           </div>
+          <div className='explain innerPadding'>
+                {block ===null?
+                "Images wider that 1500 pixels work best"
+                :
+                "The maximum size per file is 5MB"
+                }
+          </div>
         </div>
     </div>
   </div>
