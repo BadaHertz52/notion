@@ -27,10 +27,17 @@
       position: relative;
       .innerPadding{
         display: flex;
-        padding-bottom: 0;
-        button{
-          margin-left: 1rem;
-          padding-bottom: 10px;
+        justify-content: space-between;
+        padding: 5px 1rem;
+      }
+      button{
+        padding: 5px 10px;
+        font-size: 14px;
+      }
+      .removeBtn{
+        color:rgb(136, 136, 136);
+        &:hover{
+          background-color: $itemHover;
         }
       }
     }
@@ -44,6 +51,7 @@
         text-align: center;
         padding:6px;
         box-sizing: border-box;
+        font-size: 14px;
         &:hover{
           background-color: $itemHover;
         }
@@ -53,6 +61,11 @@
         width:0;
         height: 0;
       }
+    }
+    .explain{
+      font-size: 14px;
+      color:$mud;
+      text-align: center;
     }
   }
 }

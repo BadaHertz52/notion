@@ -2760,11 +2760,18 @@ a:link, a:active, a:visited {
 }
 #loader .imgLoader .menu .innerPadding {
   display: flex;
-  padding-bottom: 0;
+  justify-content: space-between;
+  padding: 5px 1rem;
 }
-#loader .imgLoader .menu .innerPadding button {
-  margin-left: 1rem;
-  padding-bottom: 10px;
+#loader .imgLoader .menu button {
+  padding: 5px 10px;
+  font-size: 14px;
+}
+#loader .imgLoader .menu .removeBtn {
+  color: rgb(136, 136, 136);
+}
+#loader .imgLoader .menu .removeBtn:hover {
+  background-color: #EDECE9;
 }
 #loader .imgLoader .loaderForm {
   width: 100%;
@@ -2777,6 +2784,7 @@ a:link, a:active, a:visited {
   text-align: center;
   padding: 6px;
   box-sizing: border-box;
+  font-size: 14px;
 }
 #loader .imgLoader .loaderForm label:hover {
   background-color: #EDECE9;
@@ -2785,6 +2793,11 @@ a:link, a:active, a:visited {
   position: absolute;
   width: 0;
   height: 0;
+}
+#loader .imgLoader .explain {
+  font-size: 14px;
+  color: #B9B8B6;
+  text-align: center;
 }
 
 .loading, .loading_container {
