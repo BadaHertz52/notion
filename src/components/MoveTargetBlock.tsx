@@ -1,7 +1,7 @@
 import React from'react';
 import EditableBlock, { changeFontSizeBySmallText, EditableBlockProps } from './EditableBlock';
 
-const MoveTargetBlock=({ pages,pagesId,page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText, moveBlock  ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand ,setTargetPageId  ,openComment ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock, closeMenu,templateHtml ,setSelection
+const MoveTargetBlock=({ pages,pagesId,page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,fontSize, moveBlock  ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand ,setTargetPageId  ,openComment ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock, closeMenu,templateHtml ,setSelection
 }:EditableBlockProps)=>{
   return(
     <div 
@@ -13,7 +13,7 @@ const MoveTargetBlock=({ pages,pagesId,page, block , editBlock, addBlock,changeT
             <div 
             id={`moveTarget_block_${block.id}`}
             className={`${block.type} block`}
-            style={changeFontSizeBySmallText(block, smallText)}
+            style={changeFontSizeBySmallText(block, fontSize)}
             >
               <div  className="mainBlock">
                 <div className='mainBlock_block'>
@@ -48,7 +48,7 @@ const MoveTargetBlock=({ pages,pagesId,page, block , editBlock, addBlock,changeT
         changeToSub={changeToSub}
         raiseBlock={raiseBlock}
         deleteBlock={deleteBlock}
-        smallText={smallText}
+        fontSize={fontSize}
         moveBlock={moveBlock}
         setMoveTargetBlock={setMoveTargetBlock}
         pointBlockToMoveBlock={pointBlockToMoveBlock}

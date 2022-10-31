@@ -17,7 +17,7 @@ export type EditableBlockProps ={
   changeToSub: (pageId: string, block: Block, newParentBlockId: string) => void,
   raiseBlock: (pageId: string, block: Block) => void,
   deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
-  smallText:boolean,
+  fontSize:number,
   moveBlock:MutableRefObject<boolean>,
   setMoveTargetBlock :Dispatch<SetStateAction<Block | null>>,
   pointBlockToMoveBlock:MutableRefObject<Block | null>,
@@ -37,8 +37,8 @@ export   type CommentOpenType ={
   open:boolean,
   targetId: string | null,
 };
-export const changeFontSizeBySmallText=(block:Block, smallText:boolean):CSSProperties=>{
-  const baseSize = smallText? 16 :17; 
+export const changeFontSizeBySmallText=(block:Block, fontSize:number):CSSProperties=>{
+  const baseSize = fontSize; 
   let ratio =1;
   switch (block.type) {
     case "h1":
@@ -65,7 +65,7 @@ export const changeFontSizeBySmallText=(block:Block, smallText:boolean):CSSPrope
   return style 
 };
 
-const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,smallText, moveBlock ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand , openComment, setTargetPageId ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock,closeMenu ,templateHtml ,setSelection
+const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,fontSize, moveBlock ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand , openComment, setTargetPageId ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock,closeMenu ,templateHtml ,setSelection
 
 }:EditableBlockProps)=>{  
   const className = block.type !== "toggle" ?
@@ -249,7 +249,7 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
               changeToSub={changeToSub}
               raiseBlock={raiseBlock}
               deleteBlock={deleteBlock}
-              smallText={smallText}
+              fontSize={fontSize}
               moveBlock={moveBlock}
               setMoveTargetBlock={setMoveTargetBlock}
               pointBlockToMoveBlock={pointBlockToMoveBlock}
@@ -282,7 +282,7 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
           <div 
             id={`block_${block.id}`}
             className={className} 
-            style={changeFontSizeBySmallText(block, smallText)}
+            style={changeFontSizeBySmallText(block ,fontSize)}
           > 
 
             {block.type.includes("ListArry") ?
@@ -392,7 +392,7 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
                     changeToSub={changeToSub}
                     raiseBlock={raiseBlock}
                     deleteBlock={deleteBlock}
-                    smallText={smallText}
+                    fontSize={fontSize}
                     moveBlock={moveBlock}
                     setMoveTargetBlock={setMoveTargetBlock}
                     pointBlockToMoveBlock={pointBlockToMoveBlock}

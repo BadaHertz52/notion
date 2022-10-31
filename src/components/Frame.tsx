@@ -117,21 +117,21 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   const pointBlockToMoveBlock =useRef<Block|null>(null);
   const [selection, setSelection]=useState<selectionType|null>(null);
   const maxWidth = innerWidth -60;
-  const fontSize = openTemplates? "20px": ( smallText? "16px": "17px")
+  const fontSize:number = openTemplates? 20: ( smallText? 14: 16);
   const frameInnerStyle:CSSProperties={
     fontFamily:fontStyle ,
-    fontSize: fontSize,
+    fontSize: `${fontSize}px`,
     width: openTemplates? "100%": (fullWidth?  `${maxWidth}px`: ( innerWidth>900?  '900px' : "75%") ) ,
   };
   const pageCommentStyle:CSSProperties ={
-    fontSize:fontSize
+    fontSize:`${fontSize}px`
   }
   const headerStyle: CSSProperties ={
     marginTop: page.header.cover !==null? "10px": "30px" ,
     
   };
   const pageTitleStyle :CSSProperties ={
-    fontSize:smallText? '43px': '48px'
+    fontSize:`${fontSize * 3}px`
   };
   const size = page.header.iconType=== null? (innerWidth>= 768? 72 : 48) :( innerWidth>= 768? 124: 72);
   const pageIconStyle :CSSProperties={
@@ -902,7 +902,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
                     changeToSub={changeToSub}
                     raiseBlock={raiseBlock}
                     deleteBlock={deleteBlock}
-                    smallText={smallText}
+                    fontSize={fontSize}
                     moveBlock={moveBlock}
                     setMoveTargetBlock={setMoveTargetBlock}
                     pointBlockToMoveBlock={pointBlockToMoveBlock}
@@ -1075,7 +1075,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           changeToSub={changeToSub}
           raiseBlock={raiseBlock}
           deleteBlock={deleteBlock}
-          smallText={smallText}
+          fontSize={fontSize}
           moveBlock={moveBlock}
           setMoveTargetBlock={setMoveTargetBlock}
           pointBlockToMoveBlock={pointBlockToMoveBlock}
