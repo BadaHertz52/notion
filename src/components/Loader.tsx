@@ -80,16 +80,31 @@ const Loader =({block, page, editBlock ,editPage ,frameHtml,setOpenLoader ,setLo
   })
   function changeLoaderStyle(){
     if(block !==null){
-      const blockDom = document.getElementById(`block_${block.id}`);
-      const blockDomRect = blockDom?.getClientRects()[0];
-      if(blockDomRect!==undefined && frameHtml!==null ){
+      const blockHtml = document.getElementById(`block_${block.id}`);
+      const blockDomRect = blockHtml?.getClientRects()[0];
+      const editorHtml =document.querySelector(".editor"); 
+      const editorDomRect = editorHtml?.getClientRects()[0];
+      
+      if(blockDomRect!==undefined && frameHtml!==null  && editorDomRect!==undefined){
         const frameDomRect =frameHtml.getClientRects()[0];
-        const frameInner =frameHtml.querySelector(".frame_inner") as Element;
-          const style:CSSProperties={
+        const frameInner =frameHtml.getElementsByClassName("frame_inner")[0] as HTMLElement;
+        const frameInnerDomRect =frameInner.getClientRects()[0];
+
+        const top =blockDomRect.bottom - frameDomRect.top + blockDomRect.height +10 ;
+        const remainHeight = frameDomRect.height - top; 
+        const left = (frameDomRect.width -frameInner.offsetWidth)* 0.5 +(blockDomRect.left-frameInnerDomRect.left) -editorDomRect.left;
+        const basicStyle :CSSProperties={
           position:"absolute",
-          top:blockDomRect.bottom - frameDomRect.top + blockDomRect.height +10 ,
-          left: blockDomRect.x -frameDomRect.x +((frameDomRect.width -frameInner.clientWidth) *0.5) ,
+          left: left,
           width: blockDomRect.width
+        }
+          const style:CSSProperties= remainHeight > 135? {
+            ...basicStyle,
+            top:top
+        }:
+        {
+          ...basicStyle,
+          bottom: frameDomRect.height- blockDomRect.top + blockDomRect.height +10 
         };
         setLoaderStyle(style);};
     }else{
