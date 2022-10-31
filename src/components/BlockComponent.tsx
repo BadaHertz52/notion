@@ -1,4 +1,4 @@
-import React, { Dispatch,MouseEvent, SetStateAction, SyntheticEvent, useEffect, useRef} from 'react';
+import React, { ChangeEvent, Dispatch,KeyboardEvent,MouseEvent, SetStateAction, SyntheticEvent, useEffect, useRef} from 'react';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import { IoChatboxOutline } from 'react-icons/io5';
 import { MdOutlinePhotoSizeSelectActual } from 'react-icons/md';
@@ -74,9 +74,17 @@ export const BlockComment =({block , onClickCommentBtn}:BlockCommentProps)=>{
 const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,command, setCommand  ,onClickCommentBtn ,setOpenComment ,setTargetPageId ,setOpenLoader, setLoaderTargetBlock ,closeMenu ,templateHtml, setSelection }:BlockComponentProps)=>{
   const editTime =JSON.stringify(Date.now);
   const contentEditableRef= useRef<HTMLElement>(null);
+  /**
+   * 키보드 방향키(위/아래)로 이동 가능한 블럭
+   */
   const possibleBlocks :Block[]|null = page.blocks !== null? page.blocks.filter((block:Block)=> block.type !=="image media" && block.type !=="page") : null;
   const possibleBlocksId :string[]|null = possibleBlocks !==null? possibleBlocks.map((block:Block)=> block.id ) : null;
-  const findTargetBlock =(event:ContentEditableEvent|React.KeyboardEvent<HTMLDivElement>|MouseEvent| SyntheticEvent<HTMLDivElement>):Block=>{
+  /**
+   * 키보드, 마우스, select 이벤트의 타켓이 되는 block를 찾아서 반환하는 함수 
+   * @param event type: ContentEditableEvent|KeyboardEvent<HTMLDivElement>|MouseEvent| SyntheticEvent<HTMLDivElement>
+   * @returns block 
+   */
+  const findTargetBlock =(event:ContentEditableEvent|KeyboardEvent<HTMLDivElement>|MouseEvent| SyntheticEvent<HTMLDivElement>):Block=>{
     const target =event.currentTarget.parentElement as HTMLElement;
     const targetId= target.id;
     const end =targetId.indexOf("_contents");
@@ -84,6 +92,10 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
     const targetBlock = findBlock(page, blockId).BLOCK;
     return targetBlock;
   };
+  /**
+   * 마우스가 block위를 움직일 경우, 해당 block의 element 옆에 blockFn compnent를 보여주는 함수 
+   * @param event mouseEvent
+   */
   const showBlockFn=(event: MouseEvent)=>{
     closeMenu(event)
     const blockHtml =document.getElementById(`block_${block.id}`);
@@ -92,6 +104,7 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
       blockHtml.parentElement?.parentElement
       :blockHtml.querySelector('.mainBlock');
       const domRect =mainBlock?.getClientRects()[0];
+      //console.log("domRect", domRect);
       const editor = document.getElementsByClassName("editor")[0] ;
       const blockFn =templateHtml ==null? editor.querySelector(".blockFn"): templateHtml.querySelector('.blockFn');
       blockFn?.classList.toggle("on");
@@ -115,13 +128,19 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
       }
     } 
   };
-
+  /**
+   * ContentEditable에서 block 의 content을 수정하는 함수 
+   * @param event ContentEditableEvent
+   */
   const onChangeContents=(event:ContentEditableEvent)=>{
     if(page.blocks!==null && page.blocksId!==null){
       setTemplateItem(templateHtml, page);
       const value =event.target.value;
       const targetBlock= findTargetBlock(event);
       const targetBlockIndex= page.blocksId.indexOf(targetBlock.id);
+      /**
+       * value값에 따라 새로운 블록을 생성하거나 기존 block의 content를 수정하는 함수 
+       */
       const changeBlockContent =()=>{
         if(value.includes("<div>")){
           //enter 시에 새로운 블록 생성 
@@ -178,6 +197,7 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
       if(!value.startsWith("/")){
         changeBlockContent();
       }else{
+        // 타입 변경 명령어로 commandBlock 을 엶
         setOpenComment(false);
         setCommand({
           boolean:true, 
@@ -187,8 +207,14 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
       }
     }
   };
-
-  const onKeyDownContents=(event:React.KeyboardEvent<HTMLDivElement>)=>{
+/**
+ * 유저가 누른 키보드 키(tab,backspace,arrwoup,arrowdown)에 따라 서로 다른 함수를 작동시키는 함수 
+ * tab 키 : 들여쓰기 (해당 이벤트가 일어난 block을 이전 block의 subBlock으로 변경)
+ * backspace키 : block 의 contents를 수정, contents가 없을 경우에는 block을 삭제
+ * arrowup, arrowdown: block을 기준으로 커셔의 위치를 이동 시킴
+ * @param event KeyboardEvent<HTMLDivElement>
+ */
+  const onKeyDownContents=(event:KeyboardEvent<HTMLDivElement>)=>{
     const code =event.code.toLowerCase();
     const targetBlock= findTargetBlock(event);
     /**
@@ -362,7 +388,7 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
         break;
     };
   }; 
-  //Selection 
+  //Selection - onSelection 이벤트
   /**
    * node가 contentEditable.current의 childNodes의 하위일 경우,childNodes중에  해당 node의 상위 node를 찾는 함수 
    * @param node 
@@ -414,7 +440,6 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
           return value;
       });
       totalSentence = array.join("");
-      console.log("totalsentence", totalSentence)
     }else{
       console.log("Can't find contentEditable children")
     };
@@ -684,7 +709,9 @@ function updateMiddleChildren(startIndex:number, endIndex:number,endNode:Node, c
   middleChildren.forEach((c:Node)=>contentEditableRef.current?.removeChild(c));
   contentEditableRef.current?.insertBefore(newSpan, endNode);
  };
-  
+  /**
+   *block의 content 를 마우스로 선택 시, block의 content를 선택된 부분(class 가 selected인 span element)과 아닌 부분으로 수정하는 함수
+   */
   const onSelectContents =(event:SyntheticEvent<HTMLDivElement>)=>{
     const SELECTION = window.getSelection(); 
     /**
@@ -811,15 +838,9 @@ function updateMiddleChildren(startIndex:number, endIndex:number,endNode:Node, c
     }
 
   };
-  const onMouseDownContents=(event:MouseEvent)=>{
-    const selectedHtml =document.querySelector(".selected");
-    if(selectedHtml!==null){
-      selectedHtml.classList.remove("selected");
-      const targetBlock = findTargetBlock(event);
-      const originBlock =getContent(targetBlock);
-      editBlock(page.id, originBlock)
-    };
-  };
+  /**
+   * BlockComponent 중 link 가 있는 element를 클릭 했을 경우 , 해당 링크를 여는 함수 
+   */
   const onClickLinkInContents=(event:MouseEvent)=>{
     const target =event.target as HTMLElement;
     if(target.className==="link"){
@@ -829,7 +850,11 @@ function updateMiddleChildren(startIndex:number, endIndex:number,endNode:Node, c
       window.open(href,openType);
     };
   };
-  function commandChange (event:React.ChangeEvent<HTMLInputElement>){
+  /**
+   * input 창을 통해 command의 값을 변경 시키는 함수 
+   * @param event ChangeEvent<HTMLInputElement>
+   */
+  function commandChange (event:ChangeEvent<HTMLInputElement>){
     setTemplateItem(templateHtml, page);
     const value = event.target.value;
     const trueOrFale = value.startsWith("/");
@@ -848,7 +873,11 @@ function updateMiddleChildren(startIndex:number, endIndex:number,endNode:Node, c
     };
 
   };
-  function commandKeyUp(event:React.KeyboardEvent<HTMLInputElement>){
+  /**
+   * enter 키를 누르면 block 의 type을 commandBlock 에서 현재 제일 위에 있는 type으로 변경하는 함수  
+   * @param event KeyboardEvent<HTMLInputElement>
+   */
+  function commandKeyUp(event:KeyboardEvent<HTMLInputElement>){
     const code= event.code;
     const firstOn =document.querySelector(".command_btn.on.first");
     if(code ==="Enter" && command.targetBlock!==null  ){
@@ -867,9 +896,15 @@ function updateMiddleChildren(startIndex:number, endIndex:number,endNode:Node, c
         setTemplateItem(templateHtml, page);
     }
   };
+  /**
+   * block type이 page인 block에 대한 BlockComponent를 클릭 할 경우, 해당 page로 이동하는 함수 
+   */
   const onClickBlockContents =()=>{
     block.type=== "page" &&setTargetPageId(block.id);
   };
+  /**
+   * image tyoe의 block에 넣은 이미지 파일을 선택하기 위한 버튼을 클릭한 경우 작동하는 함수로, Loader componenet를 엶
+   */
   const onClickAddFileBtn =()=>{
     setOpenLoader(true);
     setLoaderTargetBlock(block);
@@ -905,7 +940,6 @@ function updateMiddleChildren(startIndex:number, endIndex:number,endNode:Node, c
           onChange={(event)=> onChangeContents(event )}
           onKeyDown={(event)=> onKeyDownContents(event)}
           onSelect={(event)=>onSelectContents(event)}
-          onMouseDown={(event)=>onMouseDownContents(event)}
           onClick={(event)=>onClickLinkInContents(event)}
         /> 
         :
