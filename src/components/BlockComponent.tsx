@@ -104,7 +104,6 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
       blockHtml.parentElement?.parentElement
       :blockHtml.querySelector('.mainBlock');
       const domRect =mainBlock?.getClientRects()[0];
-      //console.log("domRect", domRect);
       const editor = document.getElementsByClassName("editor")[0] ;
       const blockFn =templateHtml ==null? editor.querySelector(".blockFn"): templateHtml.querySelector('.blockFn');
       blockFn?.classList.toggle("on");

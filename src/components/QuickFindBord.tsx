@@ -145,7 +145,6 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId ,setTargetPageId, c
    */
   const checkOptionBtnClicked =(event:React.MouseEvent)=>{  
     const eventTarget =event.target as HTMLElement;
-    console.log("target", eventTarget, eventTarget.tagName);
     let optionBtnIsClicked :boolean =false;
     const changeReturnValue =(condition:boolean)=>{
       if(condition){
@@ -178,7 +177,6 @@ const QuickFindBord =({userName,recentPagesId, pages,pagesId ,setTargetPageId, c
       const isInBord =detectRange(event, innerDomRect);
       if(!isInBord){
         const optionBtnIsClicked =checkOptionBtnClicked(event);
-        console.log("optionBtnIsClicked",optionBtnIsClicked);
         !optionBtnIsClicked && setOpenQF(false);
       };
     };

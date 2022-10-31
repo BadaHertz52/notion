@@ -409,7 +409,6 @@ export const CommentInput =({userName, pageId, page ,mainComment, subComment,edi
   };
   const editComment =(event:MouseEvent)=>{  
     event.preventDefault();
-    console.log("click editcomment");
     if(commentBlock !==null){
       mainComment !==null ?
       editMainComment():

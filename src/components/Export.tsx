@@ -47,7 +47,6 @@ const Export =({page,pagesId,pages,firstlist, recentPagesId ,setOpenExport, user
     };
   };
   function exportDocument (targetPageTitle:string,targetHtml:string, type:string, format:Format){
-    console.log("export document");
     const blob = new Blob([targetHtml], {type:type});
     const url = URL.createObjectURL(blob);
     const  a = document.createElement("a");
@@ -72,7 +71,6 @@ const Export =({page,pagesId,pages,firstlist, recentPagesId ,setOpenExport, user
   };
   const onClickExportBtn=()=>{
     const includeSubpagesSlider =document.getElementById("includeSubPagesSlider");
-    console.log("click export btn", includeSubpagesSlider);
     if( includeSubpagesSlider !==null){
         const frame =document.getElementsByClassName("frame")[0] as HTMLElement;
         const styleTag= [...document.querySelectorAll("style")];

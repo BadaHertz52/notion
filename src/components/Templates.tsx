@@ -106,7 +106,6 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist ,recentPages
   };
 
   const onClickDeleteTemplateBtn=()=>{
-    console.log("template", template);
     if(template!==null && templatesId!==null && templates!==null){
       const index= templatesId?.indexOf(template.id);
       if(templatesId.length>1){

@@ -1135,7 +1135,6 @@ export default function notion (state:Notion =initialState , action :NotionActio
  */
   const editBlockData =(index:number ,block:Block)=>{
     targetPage?.blocks?.splice(index,1,block);
-    console.log("editBlockData",  block, targetPage?.blocks);
     //firstBlock 변경에 띠른 page.firstBlocksId 뱐경은 editPage로 
   };
   /**
@@ -1161,10 +1160,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
           subBlocksId:subBlocksId !==null ? subBlocksId : [subBlock.id]
         };
         //update parentBlock
-        targetPage?.blocks?.splice(parentBlockIndex,1,editedParentBlock);
-        console.log("updateparent", parentBlock, editedParentBlock);
-        
-        
+        targetPage?.blocks?.splice(parentBlockIndex,1,editedParentBlock);        
     }else{
       console.log("can't find parentBlocks of this block")
     }
@@ -1217,7 +1213,6 @@ export default function notion (state:Notion =initialState , action :NotionActio
           firstBlock:blockDelete? block.firstBlock : false, 
           editTime:editTime
         };
-        console.log( "originblock",subBlock,"raisedblock", raisedSubBlock)
         const index = page.blocksId?.indexOf(subBlock.id) as number;
         editBlockData(index, raisedSubBlock);
         subBlock.subBlocksId !==null && raiseSubBlock(page, subBlock, blockDelete);
@@ -1288,7 +1283,6 @@ export default function notion (state:Notion =initialState , action :NotionActio
         
         pages.splice(parentPageIndex,1, editedParentPage);
       };  
-      console.log("add new page", pages, firstPagesId);
     } ;
   };
   if(targetPage !==null && pagesId !==null && pages !==null && firstPagesId!==null ){
@@ -1364,7 +1358,6 @@ export default function notion (state:Notion =initialState , action :NotionActio
             editPage(editedParentPage);
           }
         };
-        console.log( "addBlock", targetPage)
         return {
           pages:pages,
           firstPagesId:firstPagesId,
@@ -1374,7 +1367,6 @@ export default function notion (state:Notion =initialState , action :NotionActio
         };
         case EDIT_BLOCK:
         editBlockData(blockIndex, action.block);
-        console.log("edit",action.block  ,targetPage.blocks )
         return {
           pages:pages,
           firstPagesId:firstPagesId,
@@ -1438,8 +1430,6 @@ export default function notion (state:Notion =initialState , action :NotionActio
           createTime: changedTypeBlock.createTime,
         };
         addPage(newPage);
-  
-        console.log("change block type to page", targetPage, newPage)
         return {
           pages:pages,
           firstPagesId:firstPagesId,
@@ -1475,8 +1465,6 @@ export default function notion (state:Notion =initialState , action :NotionActio
           };
           editPage(editedTargetPage);
         }
-
-        console.log("changePagetoBlock",targetPage, pages, pages[pageIndex],pagesId);
         return {
           pages:pages,
           firstPagesId:firstPagesId,
@@ -1522,7 +1510,6 @@ export default function notion (state:Notion =initialState , action :NotionActio
           };
           editBlockData(index, edtitedPreviousParentBlock);
         };
-        console.log("CHANGE subBlock", targetPage.blocks);
         return {
           pages:pages,
           firstPagesId:firstPagesId,
@@ -1552,7 +1539,6 @@ export default function notion (state:Notion =initialState , action :NotionActio
                * @param parentBlockIndex :previoustBlock이 parentBlock일 경우를 위한 param
                */
               const combineContents=(parentBlock:Block|null, parentBlockIndex:number|null)=>{
-                console.log("content combine")
                 const editedPreBlockInDoc :Block ={
                   ...previousBlockInDoc,
                   contents: `${previousBlockInDoc.contents}${targetBlock.contents}`,
@@ -1595,7 +1581,6 @@ export default function notion (state:Notion =initialState , action :NotionActio
                * @param parentBlockIndex: block의 parentBlock의  page.blocks에서의 index
                */
               const pullBlock=(subBlocksId:string[], targetBlockIndexInSubBlocks:number, parentBlock:Block, parentBlockIndex:number)=>{
-                console.log("pull");
                     raiseSubBlock(targetPage, action.block, false);
                     const editedTargetBlock :Block ={
                       ...targetBlock,
@@ -1615,7 +1600,6 @@ export default function notion (state:Notion =initialState , action :NotionActio
                       if(parentBlock.firstBlock && targetPage.firstBlocksId!==null){
                         const firstIndex= targetPage.firstBlocksId.indexOf(parentBlock.id);
                         targetPage.firstBlocksId.splice(firstIndex+1,0, targetBlock.id);
-                        console.log("firsindex", firstIndex);
                       };
                     
                       if(parentBlock.parentBlocksId !==null){
@@ -1632,7 +1616,6 @@ export default function notion (state:Notion =initialState , action :NotionActio
                               subBlocksId:grandSubsId,
                               editTime:editTime
                             };
-                            console.log("grandParent")
                             editBlockData(grandParentBlockIndex, newGrandParentBlock);
                           }
                       }
@@ -1661,7 +1644,6 @@ export default function notion (state:Notion =initialState , action :NotionActio
                 };
               };
           };
-          console.log("raiseBlock", pages[pageIndex]);
         return {
           pages:pages,
           firstPagesId:firstPagesId,
@@ -1708,7 +1690,6 @@ export default function notion (state:Notion =initialState , action :NotionActio
         if(action.block.type ==="page"){
           deletePage(action.block.id, false);
         }
-        console.log("delete", pages[pageIndex]);
         return {
           pages:pages,
           firstPagesId:firstPagesId,
@@ -1730,7 +1711,6 @@ export default function notion (state:Notion =initialState , action :NotionActio
             const title = slicedPages[i].header.title;
             if(title === `${targetPage.header.title}(${i+1})`){
               number = (i+2).toString();
-              console.log("number", number)
             }else{
               stop= true;
             }
@@ -1788,7 +1768,6 @@ export default function notion (state:Notion =initialState , action :NotionActio
           };
           const pageIndex =pagesId.indexOf(newPage.id);
           pages.splice(pageIndex,1,newPage)
-          console.log("edit page",pages);
         }
       };
       editPage(action.newPage);
@@ -1924,9 +1903,7 @@ export default function notion (state:Notion =initialState , action :NotionActio
         destinationPage.subPagesId.concat(editedMoveTargetPage.id) :
         [editedMoveTargetPage.id]
       };
-      pages.splice(destinationPageIndex,1, editedDestinationPage);
-  
-      console.log("move page to other page",editedDestinationPage, "pages", pages); 
+      pages.splice(destinationPageIndex,1, editedDestinationPage); 
       return{
         pages:pages,
         firstPagesId:firstPagesId,
@@ -1962,7 +1939,6 @@ export default function notion (state:Notion =initialState , action :NotionActio
                 }
               }
             }
-            console.log("parent", parentPage);
           }
         }else{
           //firstPage 일 경우
@@ -2001,7 +1977,6 @@ export default function notion (state:Notion =initialState , action :NotionActio
             trash.pagesId.concat(deletedTargetPage.id),
             pages: trash.pages ==null? [trashTargetPage] : trash.pages.concat(trashTargetPage)
           };
-          console.log("delete page", pages ,trash);
         }
       }
       deletePage(action.pageId, true);
@@ -2039,7 +2014,6 @@ export default function notion (state:Notion =initialState , action :NotionActio
         const templageIndexInTemplates =templatesId.indexOf(`${action.pageId}`);
         templatesId.splice(templageIndexInTemplates,1);
       };
-      console.log("delete template", "pages",pages,"templatesId", templatesId); 
       return{
         pages:pages,
         firstPagesId:firstPagesId,
@@ -2124,7 +2098,6 @@ export default function notion (state:Notion =initialState , action :NotionActio
           pagesId:null
         }
       };
-      console.log("restore",newNotion)
       return newNotion  ;
     case CLEAN_TRASH:
       trash.pages?.splice(pageIndex,1);
@@ -2135,7 +2108,6 @@ export default function notion (state:Notion =initialState , action :NotionActio
         pagesId:trash.pagesId?.[0]!==undefined? 
         trash.pagesId:null,
       };
-      console.log("clean trash", cleanedTrash)
       return{
         ...state,
         trash:cleanedTrash

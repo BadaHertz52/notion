@@ -390,7 +390,6 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
           const commandBlockHtml = document.getElementById("block_commandBlock");
           const mainMenu =document.getElementById("mainMenu");
           const linkLoaderHtml = document.getElementById("linkLoader");
-          console.log("click",colorMenuHtml,commandBlockHtml,mainMenu,linkLoaderHtml );
           if(colorMenuHtml==null && commandBlockHtml===null && mainMenu===null && linkLoaderHtml ==null){
             removeSelected();
           }else{

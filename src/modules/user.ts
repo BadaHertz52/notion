@@ -74,13 +74,11 @@ export default function user (state:UserState =initialState, action:UserAction):
         };
         recentPagesId.splice(0,0,action.itemId);
       };
-      console.log("add recent Page", recentPagesId)
       return {
         ...state,
         recentPagesId:recentPagesId
       };
     case CLEAN_RECENT_PAGE :
-      console.log("clean recent pages", {...state, recentPagesId:null});
       return {
         ...state,
         recentPagesId:null
