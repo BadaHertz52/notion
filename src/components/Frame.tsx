@@ -90,7 +90,8 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   const frameHtml =frameRef.current;
   const [templateHtml,setTemplateHtml]=useState<HTMLElement|null>(null);
   const editTime =JSON.stringify(Date.now());
-  const [firstBlocksId, setFirstBlocksId]=useState<string[]|null>(page.firstBlocksId);
+  const [firstBlocksId, setFirstBlocksId]=useState<string[]|null>(null);
+  const [firstBlocks, setFirstBlocks]=useState<Block[]|null>(null);
   const [newPageFram, setNewPageFrame]=useState<boolean>(false);
   const [openLoaaderForCover, setOpenLoaderForCover] =useState<boolean>(false);
   const [decoOpen ,setdecoOpen] =useState<boolean>(false);
@@ -684,16 +685,26 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   },[openTemplates]);
 
   useEffect(()=>{
+    if(page.firstBlocksId!==null){
+      const blocks = page.firstBlocksId.map((id:string)=>findBlock(page, id).BLOCK );
+      setFirstBlocks(blocks);
+      setNewPageFrame(false);
+    }else{
+      setNewPageFrame(true);
+    }
     setFirstBlocksId(page.firstBlocksId); 
   },[page.firstBlocksId]);
 
   useEffect(()=>{
-    if(firstBlocksId==null){
-    setNewPageFrame(true)
+    if(firstBlocksId !==null){
+      if(page.firstBlocksId !== firstBlocksId){
+        const blockArry :Block[] = firstBlocksId.map((id:string)=> findBlock(page, id).BLOCK);
+        setFirstBlocks(blockArry);
+      } 
     }else{
-      setNewPageFrame(false);
+      setFirstBlocks(null);
     }
-  },[firstBlocksId]);
+    },[firstBlocksId, page]);
 
   useEffect(()=>{
     if(!newPageFram && firstBlocksId?.[0]!==undefined){
@@ -889,8 +900,9 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
             onMouseMove={onMouseMoveToMoveBlock}
             onMouseUp={onMouseUpToMoveBlock}
             >
-            {firstBlocksId!==null &&
-              firstBlocksId.map((id:string)=> findBlock(page,id).BLOCK).map((block:Block)=>{
+            {firstBlocks!== null &&
+            firstBlocks[0]!==undefined &&
+              firstBlocks.map((block:Block)=>{
                 return (
                   <EditableBlock
                     key={block.id}
@@ -921,7 +933,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
                   />
                 )
               }
-            )
+              )
             }
           </div>
           :

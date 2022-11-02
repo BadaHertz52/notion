@@ -1014,9 +1014,16 @@ export const getBlockText =(block:Block)=>{
  * @returns index: block의 page.blocks에서의 index, BLOCK: 찾는 block
  */
 export function findBlock( page:Page,blockId: string):{index: number ,BLOCK:Block} {
-  const index = page.blocksId?.indexOf(blockId) as number;
-  const blocks =page.blocks as Block[];
-  const block:Block = blocks[index];
+  let index =0;
+  let block =blockSample;
+  if(page.blocks!==null && page.blocksId !==null){
+    index = page.blocksId.indexOf(blockId);
+    block = page.blocks[index];
+    page.type ==="template" && console.log("find block ", "page",page,"block", block, "index",index, "block id", blockId);
+  }else{
+    console.log(`page(id:${page.id}, title:${page.header.title}) doesn't have blocks`)
+  };
+
   return {
     index: index,
     BLOCK:block,
