@@ -11,6 +11,10 @@ import PageIcon from './PageIcon';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import PageMenu from './PageMenu';
 import { PopupType } from '../containers/EditorContainer';
+import { setTemplateItem } from './BlockComponent';
+import { fontStyleType } from '../containers/NotionRouter';
+import BlockStyler from './BlockStyler';
+import MoveTargetBlock from './MoveTargetBlock';
 
 //icon
 import { BiMessageDetail } from 'react-icons/bi';
@@ -18,10 +22,7 @@ import { BsFillEmojiSmileFill} from 'react-icons/bs';
 import {GrDocumentText ,GrDocument} from 'react-icons/gr';
 import { MdInsertPhoto } from 'react-icons/md';
 import { HiTemplate } from 'react-icons/hi';
-import { setTemplateItem } from './BlockComponent';
-import { fontStyleType } from '../containers/NotionRouter';
-import BlockStyler from './BlockStyler';
-import MoveTargetBlock from './MoveTargetBlock';
+
 
 export type Command ={
   boolean:boolean,
@@ -45,13 +46,13 @@ export type Template_Frame_SAME_Props ={
   editPage :(pageId:string,newPage:Page ,)=>void,
   duplicatePage:(targetPageId: string) => void,
   movePageToPage:(targetPageId: string, destinationPageId: string) => void,
-  setTargetPageId: React.Dispatch<React.SetStateAction<string>>,
-  setRoutePage: React.Dispatch<React.SetStateAction<Page | null>>,
+  setTargetPageId:Dispatch<React.SetStateAction<string>>,
+  setRoutePage: Dispatch<React.SetStateAction<Page | null>>,
   commentBlock: Block | null,
   openComment :boolean, 
   setOpenComment: Dispatch<SetStateAction<boolean>>,
   openTemplates:boolean,
-  setOpenTemplates: React.Dispatch<React.SetStateAction<boolean>>
+  setOpenTemplates: Dispatch<React.SetStateAction<boolean>>
   setCommentBlock: Dispatch<SetStateAction<Block | null>>,
   showAllComments:boolean,
   smallText: boolean, 
