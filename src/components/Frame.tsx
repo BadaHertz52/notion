@@ -90,7 +90,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   const frameHtml =frameRef.current;
   const [templateHtml,setTemplateHtml]=useState<HTMLElement|null>(null);
   const editTime =JSON.stringify(Date.now());
-  const [firstBlocksId, setFirstBlocksId]=useState<string[]|null>(null);
   const [firstBlocks, setFirstBlocks]=useState<Block[]|null>(null);
   const [newPageFram, setNewPageFrame]=useState<boolean>(false);
   const [openLoaaderForCover, setOpenLoaderForCover] =useState<boolean>(false);
@@ -269,8 +268,8 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
    * 마우스 드래그로 블록의 위치를 변경하고, 변경된 위치에 따라 page의 data도 변경하는 함수 
    */
   const changeBlockPosition =()=>{
-    if(pointBlockToMoveBlock.current!==null && moveTargetBlock!==null && page.blocksId!== null && page.blocks!==null && firstBlocksId!==null){
-      const FIRST_BLOCKS_ID=[...firstBlocksId];
+    if(pointBlockToMoveBlock.current!==null && moveTargetBlock!==null && page.blocksId!== null && page.blocks!==null && page.firstBlocksId!==null){
+      const FIRST_BLOCKS_ID=[...page.firstBlocksId];
       setTemplateItem(templateHtml,page);
       //editblock
         const editTime =JSON.stringify(Date.now());
@@ -463,7 +462,8 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
         };
         setTemplateItem(templateHtml,page);
         editPage(page.id, newPage);
-        setFirstBlocksId(FIRST_BLOCKS_ID);
+        const newFirstBlocks =FIRST_BLOCKS_ID.map((id:string)=> findBlock(page,id).BLOCK);
+        setFirstBlocks(newFirstBlocks);
     };
   };
   
@@ -691,30 +691,19 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
       setNewPageFrame(false);
     }else{
       setNewPageFrame(true);
-    }
-    setFirstBlocksId(page.firstBlocksId); 
-  },[page.firstBlocksId]);
-
-  useEffect(()=>{
-    if(firstBlocksId !==null){
-      if(page.firstBlocksId !== firstBlocksId){
-        const blockArry :Block[] = firstBlocksId.map((id:string)=> findBlock(page, id).BLOCK);
-        setFirstBlocks(blockArry);
-      } 
-    }else{
       setFirstBlocks(null);
     }
-    },[firstBlocksId, page]);
+  },[page.id]);
 
   useEffect(()=>{
-    if(!newPageFram && firstBlocksId?.[0]!==undefined){
-      const newFirstBlockHtml = document.getElementById(`${firstBlocksId[0]}_contents`);
+    if(!newPageFram && firstBlocks?.[0]!==undefined){
+      const newFirstBlockHtml = document.getElementById(`${firstBlocks[0].id}_contents`);
       const contenteditableHtml =newFirstBlockHtml?.firstElementChild as HTMLElement|null|undefined ;
       if(contenteditableHtml!==null && contenteditableHtml!==undefined){
         contenteditableHtml.focus();
       }
     } 
-  },[newPageFram, firstBlocksId]);
+  },[newPageFram, firstBlocks]);
   useEffect(()=>{
     changeCBSposition();
   },[command.boolean ,command.targetBlock, openTemplates]);
@@ -901,7 +890,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
             onMouseUp={onMouseUpToMoveBlock}
             >
             {firstBlocks!== null &&
-            firstBlocks[0]!==undefined &&
               firstBlocks.map((block:Block)=>{
                 return (
                   <EditableBlock

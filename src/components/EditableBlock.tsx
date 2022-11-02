@@ -179,6 +179,7 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
     return(
       <>
         {subBlocks !== undefined  && 
+          subBlocks[0]!==undefined &&
           subBlocks.map((block:Block)=>(
           <div className='listItem'>
           <div 
@@ -377,6 +378,7 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
               }
             </div>
             {subBlocks!==undefined&&
+              subBlocks[0] !==undefined &&
               <div 
                 className='subBlocks'
               >
