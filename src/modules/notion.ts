@@ -1,4 +1,3 @@
-import { getContent } from '../components/BlockStyler';
 import { Emoji, emojis } from '../components/IconPopup';
 export const emojiPath ="https://raw.githubusercontent.com/BadaHertz52/notion/master/image/emoji/";
 const catImg = 'https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assests/img/michael-sum-LEpfefQf4rU-unsplash.jpg' ;
@@ -485,9 +484,22 @@ const template2 :Page ={
     cover: null,
     comments:  null,
   },
-  firstBlocksId :templateBlocksId,
-  blocks :  [...templateBlocks, ...templateSubBlocks], 
-  blocksId :  [...templateBlocksId, ...templateSubBlocksId], 
+  firstBlocksId : ["template2_block1"],
+  blocks : [{
+    id:`template2_block1`,
+    contents:"check meeting",
+    firstBlock:true,
+    subBlocksId:null,
+    parentBlocksId:null,
+    type:todo,
+    iconType:null,
+    icon:null,
+    editTime:editTime,
+    createTime:JSON.stringify(Date.now()),
+    style :basicBlockStyle,
+    comments:null
+  }], 
+  blocksId : ["template2_block1"] , 
   subPagesId: null,
   parentsId:  null ,
   editTime:Date.parse("2022-8-23-15:00").toString(),
@@ -1019,7 +1031,6 @@ export function findBlock( page:Page,blockId: string):{index: number ,BLOCK:Bloc
   if(page.blocks!==null && page.blocksId !==null){
     index = page.blocksId.indexOf(blockId);
     block = page.blocks[index];
-    page.type ==="template" && console.log("find block ", "page",page,"block", block, "index",index, "block id", blockId);
   }else{
     console.log(`page(id:${page.id}, title:${page.header.title}) doesn't have blocks`)
   };
