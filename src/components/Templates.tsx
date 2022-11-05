@@ -91,13 +91,18 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist ,recentPages
   };
 
   const onClickMakeTemplateBtn=()=>{
+    const date = JSON.stringify(Date.now());
+    const id =templatesId==null? `template1_${date}` :`template${templatesId.length +1}_${date}`
     const newTemplate:Page={
       ...pageSample,
+      id:id, 
       header: {
         ...pageSample.header,
         title:"new template"
       },
-      type:"template"
+      type:"template",
+      createTime:date,
+      editTime:date
     };
     
     addTemplate(newTemplate);
