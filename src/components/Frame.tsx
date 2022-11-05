@@ -90,6 +90,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   const frameHtml =frameRef.current;
   const [templateHtml,setTemplateHtml]=useState<HTMLElement|null>(null);
   const editTime =JSON.stringify(Date.now());
+  const pageId= useRef<string>("");
   const [firstBlocksId, setFirstBlocksId]=useState<string[]|null>(null);
   const [newPageFram, setNewPageFrame]=useState<boolean>(false);
   const [openLoaaderForCover, setOpenLoaderForCover] =useState<boolean>(false);
@@ -683,6 +684,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   },[openTemplates]);
 
   useEffect(()=>{
+    pageId.current =page.id; 
     setFirstBlocksId(page.firstBlocksId);
     if(page.firstBlocksId!==null){
       setNewPageFrame(false);
@@ -886,6 +888,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
             onMouseUp={onMouseUpToMoveBlock}
             >
             {firstBlocksId!== null &&
+              pageId.current === page.id&&
               firstBlocksId.map((id:string)=>findBlock(page,id).BLOCK)
               .map((block:Block)=>{
                 return (
