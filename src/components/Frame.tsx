@@ -221,7 +221,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   };
   const onChangePageTitle =(event:ContentEditableEvent)=>{
     const value =event.target.value; 
-    setTemplateItem(templateHtml,page);
+    openTemplates && setTemplateItem(templateHtml,page);
     editPage(page.id,{
       ...page, 
       header:{
@@ -243,7 +243,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
       },
       editTime:editTime
     };
-    setTemplateItem(templateHtml,page);
+    openTemplates &&  setTemplateItem(templateHtml,page);
     editPage(page.id, newPageWithIcon);
   };
 
@@ -256,7 +256,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
       },
       editTime:editTime
     };
-    setTemplateItem(templateHtml,page);
     editPage(page.id, editedPage)
   };
   const onMouseMoveToMoveBlock=()=>{
@@ -551,12 +550,12 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
         iconType:"emoji"
       }
     };
-    setTemplateItem(templateHtml,page);
+    setOpenTemplates(false);
     editPage(page.id, newPageWithIcon);
     setRoutePage(newPageWithIcon);
   };
   const onClickEmpty =()=>{
-    setTemplateItem(templateHtml,page);
+    setOpenTemplates(false);
     editPage(page.id ,newPage);
     setRoutePage(newPage);
   };
@@ -693,7 +692,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
       setNewPageFrame(true);
       setFirstBlocks(null);
     }
-  },[page.id]);
+  },[page.id, page.firstBlocksId]);
 
   useEffect(()=>{
     if(!newPageFram && firstBlocks?.[0]!==undefined){
@@ -938,12 +937,15 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
               <GrDocument/>
               <span>Empty</span>
             </button>
-            <button
+            {
+              page.type !=="template" &&
+              <button
               onClick={onClickTemplateBtn}
             >
               <HiTemplate/>
               <span>Templates</span>
             </button>
+            }
           </div>
           }
         </div>
