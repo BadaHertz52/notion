@@ -90,7 +90,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   const frameHtml =frameRef.current;
   const [templateHtml,setTemplateHtml]=useState<HTMLElement|null>(null);
   const editTime =JSON.stringify(Date.now());
-  const [firstBlocks, setFirstBlocks]=useState<Block[]|null>(null);
+  const [firstBlocksId, setFirstBlocksId]=useState<string[]|null>(null);
   const [newPageFram, setNewPageFrame]=useState<boolean>(false);
   const [openLoaaderForCover, setOpenLoaderForCover] =useState<boolean>(false);
   const [decoOpen ,setdecoOpen] =useState<boolean>(false);
@@ -461,8 +461,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
         };
         setTemplateItem(templateHtml,page);
         editPage(page.id, newPage);
-        const newFirstBlocks =FIRST_BLOCKS_ID.map((id:string)=> findBlock(page,id).BLOCK);
-        setFirstBlocks(newFirstBlocks);
+        setFirstBlocksId(FIRST_BLOCKS_ID);
     };
   };
   
@@ -684,25 +683,23 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   },[openTemplates]);
 
   useEffect(()=>{
+    setFirstBlocksId(page.firstBlocksId);
     if(page.firstBlocksId!==null){
-      const blocks = page.firstBlocksId.map((id:string)=>findBlock(page, id).BLOCK );
-      setFirstBlocks(blocks);
       setNewPageFrame(false);
     }else{
       setNewPageFrame(true);
-      setFirstBlocks(null);
     }
   },[page.id, page.firstBlocksId]);
 
   useEffect(()=>{
-    if(!newPageFram && firstBlocks?.[0]!==undefined){
-      const newFirstBlockHtml = document.getElementById(`${firstBlocks[0].id}_contents`);
+    if(!newPageFram && firstBlocksId !==null){
+      const newFirstBlockHtml = document.getElementById(`${firstBlocksId[0]}_contentsId`);
       const contenteditableHtml =newFirstBlockHtml?.firstElementChild as HTMLElement|null|undefined ;
       if(contenteditableHtml!==null && contenteditableHtml!==undefined){
         contenteditableHtml.focus();
       }
     } 
-  },[newPageFram, firstBlocks]);
+  },[newPageFram, firstBlocksId]);
   useEffect(()=>{
     changeCBSposition();
   },[command.boolean ,command.targetBlock, openTemplates]);
@@ -888,8 +885,9 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
             onMouseMove={onMouseMoveToMoveBlock}
             onMouseUp={onMouseUpToMoveBlock}
             >
-            {firstBlocks!== null &&
-              firstBlocks.map((block:Block)=>{
+            {firstBlocksId!== null &&
+              firstBlocksId.map((id:string)=>findBlock(page,id).BLOCK)
+              .map((block:Block)=>{
                 return (
                   <EditableBlock
                     key={block.id}
