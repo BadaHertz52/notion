@@ -90,7 +90,8 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   const frameHtml =frameRef.current;
   const [templateHtml,setTemplateHtml]=useState<HTMLElement|null>(null);
   const editTime =JSON.stringify(Date.now());
-  const firstBlocksId =page.firstBlocksId;
+  const firstBlocksId =page.firstBlocksId ;
+  const firstBlocks = firstBlocksId !== null? firstBlocksId.map((id:string)=>findBlock(page,id).BLOCK) :null;
   const newPageFram :boolean = page.firstBlocksId===null;
   const [openLoaaderForCover, setOpenLoaderForCover] =useState<boolean>(false);
   const [decoOpen ,setdecoOpen] =useState<boolean>(false);
@@ -875,8 +876,8 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
             onMouseMove={onMouseMoveToMoveBlock}
             onMouseUp={onMouseUpToMoveBlock}
             >
-            {firstBlocksId!== null &&
-              firstBlocksId.map((id:string)=>findBlock(page,id).BLOCK)
+            {firstBlocks!== null &&
+              firstBlocks
               .map((block:Block)=>{
                 return (
                   <EditableBlock
