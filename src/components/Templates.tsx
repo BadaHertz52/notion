@@ -2,10 +2,13 @@ import React, { Dispatch, MouseEvent, SetStateAction, useState } from 'react';
 import { AiOutlineExpandAlt, AiOutlinePlus, AiOutlineShrink } from 'react-icons/ai';
 import { BsTrash } from 'react-icons/bs';
 import { findPage, Page, pageSample } from '../modules/notion';
+import { UserState } from '../modules/user';
 import Frame, { Template_Frame_SAME_Props } from './Frame';
 import PageIcon from './PageIcon';
 
 type TemplatesProps = Template_Frame_SAME_Props &{
+  routePageId:string,
+  user:UserState,
   templatesId: string[]|null,
   addTemplate: (template: Page) => void,
   cancleEditTemplate: (templateId: string) => void,
@@ -13,7 +16,7 @@ type TemplatesProps = Template_Frame_SAME_Props &{
   setRoutePage:Dispatch<SetStateAction<Page|null>>,
   setOpenTemplates: Dispatch<SetStateAction<boolean>>
 };
-const Templates =({ templatesId,userName, pagesId, pages, firstlist ,recentPagesId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage , addTemplate,cancleEditTemplate, deleteTemplate, setRoutePage ,setTargetPageId,commentBlock,openComment , openTemplates ,setOpenTemplates ,setOpenComment , setCommentBlock ,showAllComments ,smallText , fullWidth  ,discardEdit,setDiscardEdit, fontStyle }:TemplatesProps)=>{
+const Templates =({routePageId ,user ,templatesId,userName, pagesId, pages, firstlist ,recentPagesId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage , addTemplate,cancleEditTemplate, deleteTemplate, setRoutePage ,setTargetPageId,commentBlock,openComment , openTemplates ,setOpenTemplates ,setOpenComment , setCommentBlock ,showAllComments ,smallText , fullWidth  ,discardEdit,setDiscardEdit, fontStyle }:TemplatesProps)=>{
   const templates = templatesId !==null ? templatesId.map((id:string)=> findPage(pagesId, pages, id))  :null;
   const [template, setTemplate]= useState<Page|null>(templates==null? null : templates[0]);
   const [openEditAlert, setOpenEditAlert]=useState<boolean>(false);
@@ -122,6 +125,24 @@ const Templates =({ templatesId,userName, pagesId, pages, firstlist ,recentPages
         }
       }else{
         setOpenTemplates(false);
+        if(routePageId=== template.id){
+          const recentPagesId =user.recentPagesId;
+          if(recentPagesId!==null){
+            const lastPageId =recentPagesId[recentPagesId.length-2];
+            const recentPageIndex = pagesId.indexOf(lastPageId);
+            const recentPage =pages[recentPageIndex];
+            setRoutePage(recentPage);
+          }else{
+            const favorites =user.favorites;
+            if(favorites!==null){
+              const favoritePageIndex= pagesId.indexOf(favorites[0]);
+              const favoritePage =pages[favoritePageIndex];
+              setRoutePage(favoritePage);
+            }else{
+              setRoutePage(pages[0]);
+            };
+          }
+        };
       };
       deleteTemplate(template.id);
     };

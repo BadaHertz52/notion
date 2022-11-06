@@ -460,6 +460,8 @@ const NotionRouter =()=>{
           }
           {openTemplates &&
             <Templates
+              routePageId={routePage.id}
+              user={user}
               templatesId={templatesId}
               userName={user.userName}
               pagesId={pagesId}
