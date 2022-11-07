@@ -529,18 +529,28 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
 
   };
   //new Frame
-  const newPage :Page ={
-    ...page,
-    header:{
-      ...page.header,
-    },
-    blocks:[blockSample],
-    blocksId:[blockSample.id],
-    firstBlocksId:[blockSample.id],
-    editTime:editTime
+  /**
+   * 새로 만든 페이지에 fistblock을 생성하면서 페이지에 내용을 작성할 수 있도록 하는 함수 
+   * @returns page 
+   */
+  const startNewPage=():Page=>{
+    const firstBlock = makeNewBlock(page, null,"");
+    const newPage :Page ={
+      ...page,
+      header:{
+        ...page.header,
+      },
+      blocks:[firstBlock],
+      blocksId:[firstBlock.id],
+      firstBlocksId:[firstBlock.id],
+      editTime:editTime
+    };
+    return newPage
   };
+  
   const onClickEmptyWithIconBtn=()=>{
     const icon =randomIcon();
+    const newPage =startNewPage();
     const newPageWithIcon:Page ={
       ...newPage,
       header:{
@@ -554,6 +564,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
     setRoutePage(newPageWithIcon);
   };
   const onClickEmpty =()=>{
+    const newPage =startNewPage();
     setOpenTemplates(false);
     editPage(page.id ,newPage);
     setRoutePage(newPage);
