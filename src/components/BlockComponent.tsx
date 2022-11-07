@@ -3,7 +3,6 @@ import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import { IoChatboxOutline } from 'react-icons/io5';
 import { MdOutlinePhotoSizeSelectActual } from 'react-icons/md';
 import {  Block,BlockType,blockTypes,findBlock,findPage,findParentBlock,findPreviousBlockInDoc,makeNewBlock,Page, toggle } from '../modules/notion';
-import { getContent } from './BlockStyler';
 import { Command, selectionType } from './Frame';
 import ImageContent from './ImageContent';
 /**
@@ -98,34 +97,32 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
    */
   const showBlockFn=(event: MouseEvent)=>{
     closeMenu(event)
-    const blockHtml =document.getElementById(`block_${block.id}`);
-    if(blockHtml!==null){
-      const mainBlock= block.type.includes("List")? 
-      blockHtml.parentElement?.parentElement
-      :blockHtml.querySelector('.mainBlock');
-      const domRect =mainBlock?.getClientRects()[0];
-      const editor = document.getElementsByClassName("editor")[0] ;
-      const blockFn =templateHtml ==null? editor.querySelector(".blockFn"): templateHtml.querySelector('.blockFn');
-      blockFn?.classList.toggle("on");
-      blockFn?.classList.contains("on")?
-      sessionStorage.setItem("blockFnTargetBlock", JSON.stringify(block))
-      :
-      sessionStorage.removeItem("blockFnTargetBlock");
-      if(domRect!==undefined){
-        if(templateHtml==null){
-          const editorDomRect =editor.getClientRects()[0];
-          const top =domRect.top +editor.scrollTop ;
-          const left = domRect.x - editorDomRect.x - 45;
-          const blockFnStyle =`top:${top}px; left:${left}px`;
-          blockFn?.setAttribute("style",blockFnStyle);
-        }else{
-          const templateDomRect =templateHtml.getClientRects()[0];
-            const top = domRect.top - templateDomRect.top ;
-            const left =domRect.x - templateDomRect.x -45;
-            blockFn?.setAttribute("style", `top:${top}px; left:${left}px`);
+      const currentTarget =event.currentTarget;
+      const mainBlock= currentTarget.parentElement?.parentElement?.parentElement;
+      if(mainBlock!==null && mainBlock!==undefined){
+        const mainBlockDomRect =mainBlock?.getClientRects()[0];
+        const editor = document.getElementsByClassName("editor")[0] ;
+        const blockFn =templateHtml ==null? editor.querySelector(".blockFn"): templateHtml.querySelector('.blockFn');
+        blockFn?.classList.toggle("on");
+        blockFn?.classList.contains("on")?
+        sessionStorage.setItem("blockFnTargetBlock", JSON.stringify(block))
+        :
+        sessionStorage.removeItem("blockFnTargetBlock");
+        if(mainBlockDomRect!==undefined){
+          if(templateHtml==null){
+            const editorDomRect =editor.getClientRects()[0];
+            const top =mainBlockDomRect.top +editor.scrollTop ;
+            const left = mainBlockDomRect.x - editorDomRect.x - 45;
+            const blockFnStyle =`top:${top}px; left:${left}px`;
+            blockFn?.setAttribute("style",blockFnStyle);
+          }else{
+            const templateDomRect =templateHtml.getClientRects()[0];
+              const top = mainBlockDomRect.top - templateDomRect.top ;
+              const left =mainBlockDomRect.x - templateDomRect.x -45;
+              blockFn?.setAttribute("style", `top:${top}px; left:${left}px`);
+          }
         }
-      }
-    } 
+      };
   };
   /**
    * ContentEditable에서 block 의 content을 수정하는 함수 
@@ -958,8 +955,8 @@ function updateMiddleChildren(startIndex:number, endIndex:number,endNode:Node, c
 
   return(
     <div
-      onClick={onClickBlockContents}
       className ={`${block.type}_blockComponent blockComponent`}
+      onClick={onClickBlockContents}
       onMouseOver={showBlockFn}
     >
       {block.type === "page" ?
