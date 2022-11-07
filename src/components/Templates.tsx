@@ -1,4 +1,4 @@
-import React, { Dispatch, MouseEvent, SetStateAction, useState } from 'react';
+import React, { Dispatch, MouseEvent, SetStateAction, useRef, useState } from 'react';
 import { AiOutlineExpandAlt, AiOutlinePlus, AiOutlineShrink } from 'react-icons/ai';
 import { BsTrash } from 'react-icons/bs';
 import { findPage, Page, pageSample } from '../modules/notion';
@@ -19,6 +19,7 @@ type TemplatesProps = Template_Frame_SAME_Props &{
 const Templates =({routePageId ,user ,templatesId,userName, pagesId, pages, firstlist ,recentPagesId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage , addTemplate,cancleEditTemplate, deleteTemplate, setRoutePage ,setTargetPageId,commentBlock,openComment , openTemplates ,setOpenTemplates ,setOpenComment , setCommentBlock ,showAllComments ,smallText , fullWidth  ,discardEdit,setDiscardEdit, fontStyle }:TemplatesProps)=>{
   const templates = templatesId !==null ? templatesId.map((id:string)=> findPage(pagesId, pages, id))  :null;
   const [template, setTemplate]= useState<Page|null>(templates==null? null : templates[0]);
+  const openTarget =useRef<Page|null>(null);
   const [openEditAlert, setOpenEditAlert]=useState<boolean>(false);
   const [openDeleteAlert, setOpenDeleteAlert]=useState<boolean>(false);
   const [expand ,setExpand]=useState<boolean>(false);
@@ -71,6 +72,7 @@ const Templates =({routePageId ,user ,templatesId,userName, pagesId, pages, firs
   const showOtherTemplate=(otherTemplate:Page)=>{
     if(template!==null){
       const item =sessionStorage.getItem("originTemplate");
+      openTarget.current = otherTemplate;
       if(item==null){
         setTemplate(otherTemplate);
       }else{
@@ -84,12 +86,25 @@ const Templates =({routePageId ,user ,templatesId,userName, pagesId, pages, firs
     setOpenEditAlert(false);
     setOpenTemplates(false);
   };
+  /**
+   * editAlert 창을 닫고, templates에서  다른  template (=openTarget.current)을 연다 
+   */
+  const closeAlertOpenOther =()=>{
+    setOpenEditAlert(false);
+    setTemplate(openTarget.current);
+  };
+  /**
+   * editAlert에서 수정 사항을 취소하거나 저장한 후에, openTarget.current의 값에 따라 templates창을 닫거나, 다른 template을 연다.
+   */
+  const afterEditAlert =()=>{
+    openTarget.current ===null? closeTemplate() : closeAlertOpenOther();
+  };
   const onClickDiscardBtn=()=>{
     if(template!==null){
       const item =sessionStorage.getItem("originTemplate");
       if(item !==null){
         cancleEditTemplate(template.id);
-        closeTemplate();
+        afterEditAlert();
       }};
   };
 
@@ -303,7 +318,7 @@ const Templates =({routePageId ,user ,templatesId,userName, pagesId, pages, firs
         </div>
         <button 
           className='saveBtn'
-          onClick={closeTemplate}
+          onClick={afterEditAlert}
         >
           Save
         </button>
