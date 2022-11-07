@@ -59,6 +59,7 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
   const blockStylerHtml = document.getElementById("blockStyler");
   const [menuStyle , setMenuStyle]= useState<CSSProperties|undefined>(style ===undefined? changeMenuStyle():style);
   const [sideMenuStyle, setSideMenuStyle]=useState<CSSProperties|undefined>(undefined);
+
   function changeMenuStyle (){
     const menu = document.querySelector(".menu");
     const menuHeight =menu? menu.clientHeight: 400;
@@ -66,30 +67,33 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
     const frameDomRect= frameHtml?.getClientRects()[0];
     let style:CSSProperties ={};
       if(blockFnElement!==null && frameDomRect!==undefined){
-        const blockFnTop = blockFnElement.getClientRects()[0].top as number;
-        const overHeight = ( blockFnTop + menuHeight ) >= frameDomRect.height;
+        const blockFnDomRect =blockFnElement.getClientRects()[0]
+        const blockFnTop = blockFnDomRect.top as number;
+        const overHeight = ( blockFnTop + menuHeight ) >= frameDomRect.height + 100;
         const bottom =(blockFnElement.offsetHeight) *0.5 ;
         const top =(blockFnElement.offsetHeight)  
         style =
         overHeight? {
           bottom: `${bottom}px`,
           left: innerWidth >767 ?'2rem' : '1rem',
+          maxHeight :`${blockFnDomRect.top-frameDomRect.top}px`
         } :
         {
           top:  `${top}px`,
           left: innerWidth >767 ?'2rem' : '1rem',
+          maxHeight :`${frameDomRect.bottom -blockFnDomRect.bottom}px`
         };
-
       };
+
     return style
   };
   function changeSideMenuStyle(){
     const mainMenu= document.getElementById("mainMenu");
     const innerWidth= window.innerWidth;
-    const innerHeight =window.innerHeight;
-    if(mainMenu !==null && menuRef.current!==null){
+    if(mainMenu !==null && menuRef.current!==null && frameHtml!==null){
       const menuTop =menuRef.current.getClientRects()[0].top;
-      const maxHeight = innerHeight - menuTop -100;
+      const frameBottom =frameHtml.getClientRects()[0].bottom;
+      const maxHeight =frameBottom - menuTop - 32;
       const left =(mainMenu?.clientWidth)* 0.7;
       const style :CSSProperties= {
         top: innerWidth >767? '-10px' :
