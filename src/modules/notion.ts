@@ -69,7 +69,7 @@ export type MainCommentType = SubCommentType &{
   subCommentsId : string[] |null,
 };
 export type Block ={
-  /** 새로 만들어진 block.id 는 `${page.id}_${number}_${editTime}` 형식 */
+  /** 새로 만들어진 block.id 는 `${page.id}_${page.blocks.length}_${editTime}` 형식 */
   id:string,
   contents:string, 
   firstBlock:boolean,
@@ -107,9 +107,9 @@ export  const blockSample:Block ={
  */
 export function makeNewBlock(page:Page, targetBlock:Block|null, newBlockContents :string):Block{
   const editTime= JSON.stringify(Date.now());
-  const randomNumber =Math.floor(Math.random() * (1000000000 - 1) + 1);
+  const blockNumber =page.blocks ==null? 0 : page.blocks.length ;
   const newBlock:Block ={
-    id: `${page.id}_${editTime}_${randomNumber}`,
+    id: `${page.id}_${blockNumber}_${editTime}`,
     editTime:editTime,
     createTime:editTime,
     type:targetBlock!==null? targetBlock.type: "text",
