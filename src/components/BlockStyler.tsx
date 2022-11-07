@@ -1,4 +1,4 @@
-import React, { Dispatch, HtmlHTMLAttributes, SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { BsChatLeftText, BsThreeDots } from 'react-icons/bs';
 import { IoIosArrowDown } from 'react-icons/io';
 import {ImArrowUpRight2} from 'react-icons/im';

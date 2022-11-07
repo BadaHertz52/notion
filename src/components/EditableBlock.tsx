@@ -293,7 +293,7 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
             <div 
               className="mainBlock"
               onMouseOver={(event)=>onMouseOverToMoveBlock(event, block)}
-              onMouseLeave={(event)=>onMouseLeaveToMoveBlock(event)}
+              onMouseLeave={onMouseLeaveToMoveBlock}
             >
               <div className='mainBlock_block'>
               {block.type ==="todo" &&
