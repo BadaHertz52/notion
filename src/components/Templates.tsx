@@ -81,8 +81,6 @@ const Templates =({routePageId ,user ,templatesId,userName, pagesId, pages, firs
     }
   };
   const closeTemplate=()=>{
-    template!==null&&
-    sessionStorage.removeItem("originTemplate");
     setOpenEditAlert(false);
     setOpenTemplates(false);
   };
@@ -97,6 +95,8 @@ const Templates =({routePageId ,user ,templatesId,userName, pagesId, pages, firs
    * editAlert에서 수정 사항을 취소하거나 저장한 후에, openTarget.current의 값에 따라 templates창을 닫거나, 다른 template을 연다.
    */
   const afterEditAlert =()=>{
+    template!==null&&
+    sessionStorage.removeItem("originTemplate");
     openTarget.current ===null? closeTemplate() : closeAlertOpenOther();
   };
   const onClickDiscardBtn=()=>{
