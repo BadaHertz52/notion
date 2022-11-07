@@ -49,7 +49,8 @@ type MenuProps
 };
 
 const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,changeBlockToPage,changePageToBlock ,editBlock, deleteBlock ,duplicatePage,movePageToPage,editPage ,setPopup ,popup ,setCommentBlock ,setTargetPageId ,setOpenRename ,frameHtml,setSelection, style }:MenuProps)=>{
-  const blockFnElement = document.getElementById("blockFn") ;
+  const templateHtml= document.getElementById("template");
+  const blockFnElement = templateHtml !==null? templateHtml.querySelector(".blockFn") as HTMLElement|null : document.querySelector(".blockFn") as HTMLElement|null ;
   const menuRef =useRef<HTMLDivElement>(null);
   const [editBtns, setEditBtns]= useState<Element[]|null>(null);
   const [turnInto, setTurnInto]= useState<boolean>(false);
@@ -58,7 +59,6 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
   const blockStylerHtml = document.getElementById("blockStyler");
   const [menuStyle , setMenuStyle]= useState<CSSProperties|undefined>(style ===undefined? changeMenuStyle():style);
   const [sideMenuStyle, setSideMenuStyle]=useState<CSSProperties|undefined>(undefined);
-  const templateHtml= document.getElementById("template");
   function changeMenuStyle (){
     const menu = document.querySelector(".menu");
     const menuHeight =menu? menu.clientHeight: 400;
