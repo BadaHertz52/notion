@@ -134,7 +134,8 @@ const LinkLoader=({recentPagesId, pages,page,pagesId, block,editBlock, setOpenLi
     }else{
       //page link
       const originLocation =window.location.origin;
-      const path =`${originLocation}/#/${link}`;
+      const location=`${originLocation}/notion`;
+      const path =`${location}/#/${link}`;
       element.setAttribute("href",`${path}`);
   };
   }
