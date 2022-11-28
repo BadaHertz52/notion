@@ -25,7 +25,7 @@
 }
 .sideBar_close {
   .sideBar{
-    transform: translate(-300px, 0)
+    transform: translate(-(100%), 0)
   }
 }
 .sideBar_float,
@@ -54,7 +54,7 @@
 .sideBar{
   display: block;
   width: 250px;
-  height: 100%;
+  height: 100vh;
   background-color:$pistachioshell;
   transition: transform 2000ms cubic-bezier(0.4, 0, 0.2, 1);
   &_inner{  
@@ -144,8 +144,11 @@
       padding: 10px 14px ;
       & > div{
         display: flex;
-
+        align-items: center;
       }
+    }
+    .trashBtn{
+      display: none;
     }
   }
   .record-icon{
@@ -162,6 +165,16 @@
   }
   .user{
     display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .userEmail{
+    display: none;
+  }
+  .userId{
+    display: flex;
+    align-items: center;
+    height: 18px;
     div:first-child{
       font-weight: 500;
     }
@@ -358,4 +371,76 @@
 #sideBar_pageMenu{
   width: fit-content;
   padding:0;
+}
+
+
+@media screen and (max-width:780px) {
+  .sideBar{
+    background-color: rgb(240, 240, 240);
+    width: 100vw;
+    .closeSideBarBtn {
+      display: none;
+    }
+    .itemInner{
+      padding: 0.5rem 1rem;
+    }
+    .srcoller{
+      height: calc(80vh - 1.5rem);
+    }
+    .switcher .itemInner,.srcoller .header{
+      font-size: 1rem;
+    }
+    .switcher {
+      .itemInner{
+        padding-top:1rem;
+      }
+      .trashBtn{
+        display: block;
+        &:hover{
+          svg{
+            fill: black;
+          }
+        }
+      }
+    } 
+    .user , .record-icon{
+      height: 40px;
+    }
+    .record-icon {
+      background-color: black;
+      color:#ffff;
+    }
+    .itemInner svg{
+      font-size: 1rem;
+      color:$darkgrey;
+    }
+    .userEmail{
+      margin-top: 4px;
+      font-size: 14px;
+    }
+    .record-icon {
+      width: 40px;
+      div {
+        font-size: 1.8rem;
+        width:100%;
+        height: 100%;
+      }
+    }
+    .userEmail{
+      display: block;
+    }
+    .itemInner{
+      font-size: 14px;
+    }
+    .private .header svg{
+      color:$darkgrey
+    }
+    .pageLink:hover{
+      background-color:rgba(222, 222, 222, 0.833) ;
+    }
+    .fun1, .fun2, .addNewPageBtn{
+      display: none;
+    }
+  }
+
 }

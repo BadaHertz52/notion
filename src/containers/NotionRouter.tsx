@@ -315,17 +315,31 @@ const NotionRouter =()=>{
   },[targetPageId, notion.pagesId]);
 
   useEffect(()=>{
+    const innerWidth = window.innerWidth;
     if(showAllComments){
+      innerWidth > 780 ?
       setAllCommentsStyle({
         transform:`translateX(0)`,
-      });
+      })
+      :
+      setAllCommentsStyle({
+        transform:`translateY(0)`,
+      })
+      ;
     }else{
       const allCommentsHtml =document.getElementById("allComments");
       const width =allCommentsHtml?.clientWidth;
-      width !==undefined && 
-      setAllCommentsStyle({
-        transform:`translateX(${width + 50 }px)`,
-      });
+      if(innerWidth >780){
+        width !==undefined && 
+        setAllCommentsStyle({
+          transform:`translateX(${width + 50 }px)`,
+        });
+      }else{
+        setAllCommentsStyle({
+          transform:`translateY(${window.innerHeight + 50 }px)`,
+        });
+      }
+
     }
   },[showAllComments]);
   return(

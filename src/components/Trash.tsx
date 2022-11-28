@@ -118,15 +118,23 @@ const Trash=({style,trashPages, trashPagesId ,pagesId, restorePage, cleanTrash ,
     >
       <div className='inner'>
         <div className='header'>
-          <button
-            onClick={()=>setSort("all")}
+          <div className='range'>
+            <button
+              onClick={()=>setSort("all")}
+            >
+              All Pages
+            </button>
+            <button
+              onClick={()=>setSort("current")}
+            >
+              In current page
+            </button>
+          </div>
+          <button 
+            className='closeTrashBtn'
+            onClick={()=>setOpenTrash(false)}
           >
-            All Pages
-          </button>
-          <button
-            onClick={()=>setSort("current")}
-          >
-            In current page
+            close
           </button>
         </div>
         <div className='search'>

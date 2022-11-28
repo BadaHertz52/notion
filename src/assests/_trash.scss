@@ -11,14 +11,21 @@
   box-sizing: border-box;
   .header{
     display: flex;
+    justify-content: space-between;
     margin-bottom: 10px;
     margin-left: 5px;
     width: calc(100% - 5px);
-    button{
+    .range button{
       margin-right: 2rem;
       z-index: 15;
       &:hover {
         background-color: $itemHover;
+      }
+    }
+    .closeTrashBtn{
+      color:$itemText;
+      &:hover{
+        color:black
       }
     }
   }
@@ -66,9 +73,16 @@
   }
 }
 
-@media screen and (max-width:767px) {
+@media screen and (max-width:780px) {
   #trash{
-    width:  60%;
-    left:20%
+    max-width: 100vw;
+    max-height: 100vh;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top:0;
+    left:0;
+    transform: translateY(200vh);
+    transition: transform 1000ms ease;
   }
 }

@@ -11,7 +11,7 @@ import PageMenu from './PageMenu';
 import {FiCode ,FiChevronsLeft} from 'react-icons/fi';
 import {AiOutlineClockCircle,  AiOutlinePlus, AiOutlineStar} from 'react-icons/ai';
 import {BiSearchAlt2} from 'react-icons/bi';
-import {BsFillTrash2Fill, BsPencilSquare, BsThreeDots} from 'react-icons/bs';
+import {BsFillTrash2Fill, BsPencilSquare, BsThreeDots, BsTrash} from 'react-icons/bs';
 import {IoIosSettings} from 'react-icons/io';
 import { HiOutlineDuplicate, HiTemplate} from 'react-icons/hi';
 import { MdPlayArrow } from 'react-icons/md';
@@ -19,6 +19,7 @@ import { RiDeleteBin6Line } from 'react-icons/ri';
 import { IoArrowRedoOutline } from 'react-icons/io5';
 import PageIcon from './PageIcon';
 import { SideBarContainerProp } from '../containers/SideBarContainer';
+import { SideAppear } from '../modules/side';
 
 export const closePopup =(elementId:string ,setState:Dispatch<SetStateAction<boolean>> , event:MouseEvent)=>{
   const eventTarget =event.target as Element|null;
@@ -40,6 +41,7 @@ type ItemTemplageProp ={
   setTargetPageId: Dispatch<SetStateAction<string>>,
   onClickMoreBtn :(item: listItem, target: HTMLElement) => void, 
   addNewSubPage : (item: listItem) => void,
+  changeSide: (appear: SideAppear) => void
 };
 type ListTemplateProp ={
   notion:Notion,
@@ -47,8 +49,9 @@ type ListTemplateProp ={
   setTargetPageId: Dispatch<SetStateAction<string>>,
   onClickMoreBtn :(item: listItem, target: HTMLElement) => void, 
   addNewSubPage : (item: listItem) => void,
+  changeSide: (appear: SideAppear) => void
 };
-const ItemTemplate =({item,setTargetPageId ,onClickMoreBtn, addNewSubPage  }:ItemTemplageProp)=>{
+const ItemTemplate =({item,setTargetPageId ,onClickMoreBtn, addNewSubPage, changeSide  }:ItemTemplageProp)=>{
   const [toggleStyle ,setToggleStyle]=useState<CSSProperties>({
     transform : "rotate(0deg)" 
   });
@@ -97,7 +100,13 @@ const ItemTemplate =({item,setTargetPageId ,onClickMoreBtn, addNewSubPage  }:Ite
       sideBarPageFn.current.classList.contains("on")&&
       sideBarPageFn.current.classList.remove("on")
     }
-  }
+  };
+  const onClickPageName =()=>{
+    setTargetPageId(item.id);
+    if(window.innerWidth<=780){
+      changeSide("close");
+    }
+  };
   return (
   <div 
     className='itemInner pageLink'
@@ -114,7 +123,7 @@ const ItemTemplate =({item,setTargetPageId ,onClickMoreBtn, addNewSubPage  }:Ite
       </button>
       <button 
         className='pageName'
-            onClick={()=>{setTargetPageId(item.id) }}
+        onClick={onClickPageName}
       >
         <PageIcon
           icon ={item.icon}
@@ -153,7 +162,7 @@ const ItemTemplate =({item,setTargetPageId ,onClickMoreBtn, addNewSubPage  }:Ite
   )
 };
 
-const ListTemplate =({notion,targetList ,setTargetPageId , onClickMoreBtn, addNewSubPage}:ListTemplateProp)=>{
+const ListTemplate =({notion,targetList ,setTargetPageId , onClickMoreBtn, addNewSubPage ,changeSide}:ListTemplateProp)=>{
   const findSubPage =(id:string, pagesId:string[], pages:Page[]):listItem=>{
     const index =pagesId.indexOf(id);
     const subPage:Page =pages[index];
@@ -186,6 +195,7 @@ const ListTemplate =({notion,targetList ,setTargetPageId , onClickMoreBtn, addNe
             setTargetPageId={setTargetPageId}
             onClickMoreBtn={onClickMoreBtn}
             addNewSubPage={addNewSubPage}
+            changeSide={changeSide}
           />
         </div>
         { notion.pages!==null && notion.pagesId!==null &&(
@@ -197,6 +207,7 @@ const ListTemplate =({notion,targetList ,setTargetPageId , onClickMoreBtn, addNe
             setTargetPageId={setTargetPageId} 
             onClickMoreBtn={onClickMoreBtn}
             addNewSubPage={addNewSubPage}
+            changeSide={changeSide}
           />
         </div>
         :
@@ -374,14 +385,21 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
     }
   };
   const changeTrashStyle =()=>{
-    if(trashBtn.current){
-      const domRect =trashBtn.current.getClientRects()[0];
+    const innerWidth =window.innerWidth;
+    if(innerWidth>780){
+      if(trashBtn.current){
+        const domRect =trashBtn.current.getClientRects()[0];
+        setTrashStyle({
+          position:"absolute",
+          top: domRect.top - 100,
+          left: window.innerWidth >=768? domRect.right + 50 : window.innerWidth * 0.2
+        })
+      }
+    }else{
       setTrashStyle({
-        position:"absolute",
-        top: domRect.top - 100,
-        left: window.innerWidth >=768? domRect.right + 50 : window.innerWidth * 0.2
+        transform: "translateY(0)"
       })
-    }
+    };
   };
 
   window.onresize =()=>{
@@ -405,6 +423,19 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
     }
   },[targetItem,pages,pagesId]);
 
+  useEffect(()=>{
+    if(!openTrash){
+      const innerWidth =window.innerWidth;
+      innerWidth >780?
+      setTrashStyle({display:"none"}):
+      setTrashStyle(undefined);
+    }
+  },[openTrash]);
+  useEffect(()=>{
+    if(sideAppear==="close"){
+      setOpenTrash(false);
+    }
+  },[sideAppear])
   return(
   <div
   onMouseLeave={onMouseOutSideBar}
@@ -425,8 +456,13 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
 
               </div>
               <div className='user'>
-                <div>{user.userName}'s Notion</div>
-                <div><FiCode/></div>
+                <div className='userId'>
+                  <div>{user.userName}'s Notion</div>
+                  <div><FiCode/></div>
+                </div>
+                <div className='userEmail'>
+                  <div>{user.userEmail}</div>
+                </div>
               </div>
             </div>
             <button 
@@ -434,6 +470,13 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
               onClick={()=>changeSide("close")}
             >
               <FiChevronsLeft/>
+            </button>
+            <button
+              className='trashBtn'
+              onClick={onClickTrashBtn}
+              ref={trashBtn}
+            >
+                <BsTrash/>
             </button>
           </div>
         </div>
@@ -472,6 +515,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
                 setTargetPageId={setTargetPageId}
                 onClickMoreBtn={onClickMoreBtn}
                 addNewSubPage={addNewSubPage}
+                changeSide={changeSide}
               />
             </div>
             }
@@ -496,6 +540,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
                 setTargetPageId={setTargetPageId}
                 onClickMoreBtn={onClickMoreBtn}
                 addNewSubPage={addNewSubPage}
+                changeSide={changeSide}
               /> }
             </div>
             }
@@ -636,7 +681,6 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
         setOpenRename={setOpenRename}
       />
     }
-    {openTrash &&
       <Trash
         style={trashStyle}
         trashPagesId={trashPagesId}
@@ -647,7 +691,6 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
         setTargetPageId={setTargetPageId}
         setOpenTrash={setOpenTrash}
       />
-    }
   </div>
   )
 };

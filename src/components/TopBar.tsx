@@ -70,16 +70,19 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages,pagePath, addBlock,
         target.parentElement?.id==="sideBarBtn" && changeSide("lock");
         break;
       case "path":
-        target.parentElement?.parentElement?.id=== "sideBarBt" && changeSide("lock");
+        target.parentElement?.parentElement?.id=== "sideBarBtn" && changeSide("lock");
         break;
       default:
         break;
     }
   };
   const onMouseEnterSidBarBtn=()=>{
-    (sideAppear ==="close" || sideAppear==="floatHide") ?
-    changeSide("float"):
-    changeSide("floatHide");
+    const innerWidth =window.innerWidth;
+    if(innerWidth >780){
+      (sideAppear ==="close" || sideAppear==="floatHide") ?
+      changeSide("float"):
+      changeSide("floatHide");
+    };
   };
 
   const addOrRemoveFavorite=()=>{
@@ -168,10 +171,10 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages,pagePath, addBlock,
 
   useEffect(()=>{
     if(sideAppear ==="float"){
-      setTitle("Lock sideBar open")
+      setTitle("Lock sideBar ")
     }
     if(sideAppear ==="close"){
-      setTitle("Float sideBar ")
+      setTitle("Open sideBar ")
     }
   },[sideAppear]);
 

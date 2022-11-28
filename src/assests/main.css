@@ -232,7 +232,7 @@ a:link, a:active, a:visited {
   font-size: 14px;
 }
 
-@media screen and (max-width: 385px) {
+@media screen and (max-width: 780px) {
   #allComments {
     width: 100%;
     border-left: none;
@@ -2990,7 +2990,7 @@ a:link, a:active, a:visited {
 }
 
 .sideBar_close .sideBar {
-  transform: translate(-300px, 0);
+  transform: translate(-100%, 0);
 }
 
 .sideBar_float .sideBar,
@@ -3037,7 +3037,7 @@ a:link, a:active, a:visited {
 .sideBar {
   display: block;
   width: 250px;
-  height: 100%;
+  height: 100vh;
   background-color: rgb(242, 241, 238);
   transition: transform 2000ms cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -3122,6 +3122,10 @@ a:link, a:active, a:visited {
 }
 .sideBar .switcher .itemInner > div {
   display: flex;
+  align-items: center;
+}
+.sideBar .switcher .trashBtn {
+  display: none;
 }
 .sideBar .record-icon {
   background-color: #B9B8B6;
@@ -3137,15 +3141,25 @@ a:link, a:active, a:visited {
 }
 .sideBar .user {
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
-.sideBar .user div:first-child {
+.sideBar .userEmail {
+  display: none;
+}
+.sideBar .userId {
+  display: flex;
+  align-items: center;
+  height: 18px;
+}
+.sideBar .userId div:first-child {
   font-weight: 500;
 }
-.sideBar .user div:nth-child(2) {
+.sideBar .userId div:nth-child(2) {
   margin-top: -5px;
   transform: rotate(90deg);
 }
-.sideBar .user div:nth-child(2) svg {
+.sideBar .userId div:nth-child(2) svg {
   margin-right: 0;
   color: #a3a3a2;
   font-weight: bolder;
@@ -3371,6 +3385,71 @@ a:link, a:active, a:visited {
   padding: 0;
 }
 
+@media screen and (max-width: 780px) {
+  .sideBar {
+    background-color: rgb(240, 240, 240);
+    width: 100vw;
+  }
+  .sideBar .closeSideBarBtn {
+    display: none;
+  }
+  .sideBar .itemInner {
+    padding: 0.5rem 1rem;
+  }
+  .sideBar .srcoller {
+    height: calc(80vh - 1.5rem);
+  }
+  .sideBar .switcher .itemInner, .sideBar .srcoller .header {
+    font-size: 1rem;
+  }
+  .sideBar .switcher .itemInner {
+    padding-top: 1rem;
+  }
+  .sideBar .switcher .trashBtn {
+    display: block;
+  }
+  .sideBar .switcher .trashBtn:hover svg {
+    fill: black;
+  }
+  .sideBar .user, .sideBar .record-icon {
+    height: 40px;
+  }
+  .sideBar .record-icon {
+    background-color: black;
+    color: white;
+  }
+  .sideBar .itemInner svg {
+    font-size: 1rem;
+    color: rgb(112, 112, 112);
+  }
+  .sideBar .userEmail {
+    margin-top: 4px;
+    font-size: 14px;
+  }
+  .sideBar .record-icon {
+    width: 40px;
+  }
+  .sideBar .record-icon div {
+    font-size: 1.8rem;
+    width: 100%;
+    height: 100%;
+  }
+  .sideBar .userEmail {
+    display: block;
+  }
+  .sideBar .itemInner {
+    font-size: 14px;
+  }
+  .sideBar .private .header svg {
+    color: rgb(112, 112, 112);
+  }
+  .sideBar .pageLink:hover {
+    background-color: rgba(222, 222, 222, 0.833);
+  }
+  .sideBar .fun1, .sideBar .fun2, .sideBar .addNewPageBtn {
+    display: none;
+  }
+}
 .switchBtn {
   position: relative;
   width: 30px;
@@ -3872,16 +3951,23 @@ a:link, a:active, a:visited {
 }
 #trash .header {
   display: flex;
+  justify-content: space-between;
   margin-bottom: 10px;
   margin-left: 5px;
   width: calc(100% - 5px);
 }
-#trash .header button {
+#trash .header .range button {
   margin-right: 2rem;
   z-index: 15;
 }
-#trash .header button:hover {
+#trash .header .range button:hover {
   background-color: #EDECE9;
+}
+#trash .header .closeTrashBtn {
+  color: rgb(141, 141, 141);
+}
+#trash .header .closeTrashBtn:hover {
+  color: black;
 }
 #trash .search input {
   width: 90%;
@@ -3945,10 +4031,17 @@ a:link, a:active, a:visited {
   text-align: center;
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 780px) {
   #trash {
-    width: 60%;
-    left: 20%;
+    max-width: 100vw;
+    max-height: 100vh;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateY(200vh);
+    transition: transform 1000ms ease;
   }
 }
 .switchBtn {
@@ -4365,14 +4458,16 @@ a:link, a:active, a:visited {
   display: none;
 }
 
-body {
+body, #root, #inner {
   overflow-x: hidden;
+  overflow-y: hidden;
+  width: 100vw;
+  height: 100vh;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
 }
 
 #inner {
-  width: 100vw;
-  height: 100vh;
-  overflow-x: hidden;
   display: flex;
   color: rgb(55, 54, 47);
   font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
