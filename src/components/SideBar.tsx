@@ -20,6 +20,7 @@ import { IoArrowRedoOutline } from 'react-icons/io5';
 import PageIcon from './PageIcon';
 import { SideBarContainerProp } from '../containers/SideBarContainer';
 import { SideAppear } from '../modules/side';
+import MobileMenu from './MobileMenu';
 
 export const closePopup =(elementId:string ,setState:Dispatch<SetStateAction<boolean>> , event:MouseEvent)=>{
   const eventTarget =event.target as Element|null;
@@ -221,7 +222,7 @@ const ListTemplate =({notion,targetList ,setTargetPageId , onClickMoreBtn, addNe
   )
 };
 
-const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,changeBlockToPage,addPage ,duplicatePage,editPage,deletePage,movePageToPage, cleanTrash, restorePage, addFavorites, removeFavorites, changeSide,setTargetPageId ,setOpenQF ,setOpenTemplates ,showAllComments
+const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,changeBlockToPage,addPage ,duplicatePage,editPage,deletePage,movePageToPage, cleanTrash, restorePage, addFavorites, removeFavorites, changeSide,setTargetPageId ,openQF ,setOpenQF ,setOpenTemplates ,showAllComments
 }:SideBarProps)=>{
   const inner =document.getElementById("inner");
   const pages =notion.pages;
@@ -562,7 +563,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
                 <span>Trash</span>
               </div>
             </button>
-          </div>
+        </div>
       </div>
       {/* <a href="https://icons8.com/icon/11732/페이지-개요">페이지 개요 icon by Icons8</a> */}
       <div className= "addNewPageBtn">
@@ -573,6 +574,13 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
           <span>New page</span>
         </button>
       </div>
+      <MobileMenu
+        sideAppear ={sideAppear}
+        changeSide ={changeSide}
+        addPage ={addPage}
+        openQF ={openQF}
+        setOpenQF ={setOpenQF}
+      />
     </div>
     </div>
     {openSideMoreMenu && targetItem !==null &&
@@ -681,16 +689,16 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
         setOpenRename={setOpenRename}
       />
     }
-      <Trash
-        style={trashStyle}
-        trashPagesId={trashPagesId}
-        trashPages={trashPages}
-        pagesId={pagesId}
-        cleanTrash={cleanTrash}
-        restorePage={restorePage}
-        setTargetPageId={setTargetPageId}
-        setOpenTrash={setOpenTrash}
-      />
+    <Trash
+      style={trashStyle}
+      trashPagesId={trashPagesId}
+      trashPages={trashPages}
+      pagesId={pagesId}
+      cleanTrash={cleanTrash}
+      restorePage={restorePage}
+      setTargetPageId={setTargetPageId}
+      setOpenTrash={setOpenTrash}
+    />
   </div>
   )
 };

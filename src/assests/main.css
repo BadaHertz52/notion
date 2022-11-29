@@ -2860,6 +2860,28 @@ a:link, a:active, a:visited {
   background-color: white;
 }
 
+.mobileMenu {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 10vh;
+  width: 100vw;
+  padding: 10px 10%;
+  border-top: 1px solid #B9B8B6;
+}
+.mobileMenu svg {
+  font-size: 1.5rem;
+  fill: rgb(112, 112, 112);
+}
+.mobileMenu button:hover svg, .mobileMenu button:focus svg {
+  fill: black;
+}
+
+@media screen and (min-width: 781px) {
+  .mobileMenu {
+    display: none;
+  }
+}
 .switchBtn {
   position: relative;
   width: 30px;
@@ -3448,6 +3470,9 @@ a:link, a:active, a:visited {
   }
   .sideBar .fun1, .sideBar .fun2, .sideBar .addNewPageBtn {
     display: none;
+  }
+  .sideBar_inner_top {
+    height: 90vh;
   }
 }
 .switchBtn {

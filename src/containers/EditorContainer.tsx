@@ -2,6 +2,7 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import {useDispatch, useSelector } from 'react-redux';
 import { CSSProperties } from 'styled-components';
 import Frame from '../components/Frame';
+import MobileMenu from '../components/MobileMenu';
 import TopBar from '../components/TopBar';
 import { RootState } from '../modules';
 import  {  Block, Page,  change_to_sub, raise_block, listItem } from '../modules/notion';
@@ -74,9 +75,11 @@ type EditorContainerProps = NotionActionProps &{
   setOpenTemplates: Dispatch<SetStateAction<boolean>>,
   fontStyle:fontStyleType,
   setFontStyle:Dispatch<SetStateAction<fontStyleType>>,
+  openQF:boolean,
+  setOpenQF: Dispatch<SetStateAction<boolean>>,
 };
 
-const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,recentPagesId ,isInTrash, makePagePath,changeSide,addBlock,editBlock ,changeBlockToPage, changePageToBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId, setRoutePage ,openComment,setOpenComment,commentBlock,setCommentBlock,smallText,setSmallText,fullWidth,setFullWidth,showAllComments,  setShowAllComments ,discardEdit , setDiscardEdit,setOpenExport, openTemplates, setOpenTemplates, fontStyle, setFontStyle}:EditorContainerProps)=>{
+const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,recentPagesId ,isInTrash, makePagePath,changeSide,addBlock,editBlock ,changeBlockToPage, changePageToBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId, setRoutePage ,openComment,setOpenComment,commentBlock,setCommentBlock,smallText,setSmallText,fullWidth,setFullWidth,showAllComments,  setShowAllComments ,discardEdit , setDiscardEdit,setOpenExport, openTemplates, setOpenTemplates, fontStyle, setFontStyle , openQF, setOpenQF}:EditorContainerProps)=>{
   const dispatch =useDispatch();
   const user =useSelector((state:RootState)=>state.user);
   const [editorStyle, setEditorStyle]=useState<CSSProperties|undefined>(undefined);
@@ -189,6 +192,13 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,rece
         openTemplates={openTemplates}
         setOpenTemplates={setOpenTemplates}
         fontStyle={fontStyle}
+      />
+      <MobileMenu
+        sideAppear ={sideAppear}
+        changeSide ={changeSide}
+        addPage ={addPage}
+        openQF ={openQF}
+        setOpenQF ={setOpenQF}
       />
     </div>
   )

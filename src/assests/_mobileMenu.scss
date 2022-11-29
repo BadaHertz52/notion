@@ -1,0 +1,24 @@
+
+.mobileMenu{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height:10vh;
+  width: 100vw;
+  padding: 10px 10%;
+  border-top: 1px solid $mud;
+  svg{
+    font-size: 1.5rem;
+    fill:$darkgrey;
+  }
+  button:hover, button:focus{
+    svg{
+      fill:black;
+    }
+  }
+}
+@media screen and (min-width:781px) {
+  .mobileMenu{
+    display: none;
+  }
+}
