@@ -4,7 +4,11 @@ import { pathType } from '../containers/NotionRouter';
 import {   Block, listItem, Page } from '../modules/notion';
 import {  SideAppear } from '../modules/side';
 import PageMenu from './PageMenu';
-
+import { CSSProperties } from 'styled-components';
+import PageIcon from './PageIcon';
+import { detectRange } from './BlockFn';
+import { defaultFontFamily, fontStyleType, monoFontFamily, serifFontFamily } from '../containers/NotionRouter';
+import { IoIosArrowBack } from 'react-icons/io';
 import { AiOutlineMenu} from 'react-icons/ai';
 import { FiChevronsLeft } from 'react-icons/fi';
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
@@ -13,11 +17,6 @@ import { BsThreeDots } from "react-icons/bs";
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { IoArrowRedoOutline } from 'react-icons/io5';
 import { GrDocumentUpload } from 'react-icons/gr';
-import { CSSProperties } from 'styled-components';
-import PageIcon from './PageIcon';
-import { detectRange } from './BlockFn';
-import { defaultFontFamily, fontStyleType, monoFontFamily, serifFontFamily } from '../containers/NotionRouter';
-
 type TopBarProps ={
   firstlist:listItem[],
   favorites:string[]|null,
@@ -204,7 +203,11 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages,pagePath, addBlock,
             <FiChevronsLeft
             />
             :
-            <AiOutlineMenu/>
+            (window.innerWidth>780?
+              <AiOutlineMenu/>
+              :
+              <IoIosArrowBack/>
+            )
             }
           </button>
 
