@@ -439,14 +439,15 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
   },[sideAppear])
   return(
   <div
-  onMouseLeave={onMouseOutSideBar}
+    className='sideBarOutBox'
+    onMouseLeave={onMouseOutSideBar}
   >
     <div 
       className="sideBar"
 
     >
     <div className="sideBar_inner">
-      <div>
+      <div className='sideBar_inner_top'>
         <div className="switcher">
           <div className='itemInner'>
             <div>
