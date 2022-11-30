@@ -324,12 +324,21 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
     setOpenSideMoreMenu(true); 
     setTargetItem(item);
     setTarget(target);
+    if(window.innerWidth>768){
       const position = target.getClientRects()[0];
       setMoreFnStyle({
+        display:"block" ,
         position: "absolute",
         top: position.top,
         left: position.right,
       });
+    }else{
+      setMoreFnStyle({
+        display:"block",
+        transform: "translateY(calc(100vh - 100%))",
+      })
+    }
+
   };
 
 
@@ -353,13 +362,18 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
   const onClickMoveToBtn =()=>{
     setOpenPageMenu(true); 
     setOpenSideMoreMenu(false);
-    if(moreFnStyle!==undefined){
-      setPageMenuStyle({
-        position:"absolute",
-        top: moreFnStyle.top,
-        left: moreFnStyle.left
-      })
+    if(window.innerWidth>768){
+      if(moreFnStyle!==undefined){
+        setPageMenuStyle({
+          position:"absolute",
+          top: moreFnStyle.top,
+          left: moreFnStyle.left
+        })
+      }
+    }else{
+
     }
+
   };
   const onClickToAddFavorite=()=>{ 
     setOpenSideMoreMenu(false);
@@ -413,6 +427,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
     if(window.innerWidth <800 && sideAppear==="lock" && showAllComments){
       changeSide("close");
     }
+    openTrash &&
     changeTrashStyle();
   }
   const onClickTrashBtn=(event:React.MouseEvent)=>{
@@ -453,7 +468,6 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
   >
     <div 
       className="sideBar"
-
     >
     <div className="sideBar_inner">
       <div className='sideBar_inner_top'>
@@ -631,82 +645,104 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
       />
     </div>
     </div>
-    {openSideMoreMenu && targetItem !==null &&
-      <div 
-        id='moreFn'
-        style={moreFnStyle}
+    
+    <div 
+      id='moreFn'
+      style={moreFnStyle}
+    >
+      <button
+        className='resizeBar'
       >
-        <button
-          className='moreFn_fn'
-          onClick={onClickToDelete}
+        <div></div>
+      </button>
+      {targetItem!==null &&
+        <div
+          className='pageInform_mobile'
         >
-          <div>
-            <RiDeleteBin6Line/>
-            <span >
-              Delete
-            </span>
+          <PageIcon
+            icon ={targetItem.icon}
+            iconType={targetItem.iconType}
+            style={undefined}
+          />
+          <div
+            className='pageTitle'
+          >
+            {targetItem.title}
           </div>
-        </button>
-        {user.favorites?.includes(targetItem.id) ?
-            <button
-            className='moreFn_fn'
-            onClick={onClickToRemoveFavorite}
-          >  
-            <div>
-              <AiOutlineStar/>
-              <span>Remove to Favorites</span>
-            </div>
-          </button>
-        :
+        </div>
+      }
+      <button
+        className='moreFn_fn deleteBtn'
+        onClick={onClickToDelete}
+      >
+        <div>
+          <RiDeleteBin6Line/>
+          <span >
+            Delete
+          </span>
+        </div>
+      </button>
+      { targetItem !==null && user.favorites?.includes(targetItem.id) ?
           <button
           className='moreFn_fn'
-          onClick={onClickToAddFavorite}
-          >  
-            <div>
-              <AiOutlineStar/>
-              <span>Add to Favorites</span>
-            </div>
-          </button>
-        }
-
-        <button
-          className='moreFn_fn'
-          onClick={onClickToDuplicate}
-        >
+          onClick={onClickToRemoveFavorite}
+        >  
           <div>
-            <HiOutlineDuplicate/>
-            <span>Duplicate</span>
-            <span></span>
+            <AiOutlineStar/>
+            <span>Remove to Favorites</span>
           </div>
         </button>
+      :
         <button
-          className='moreFn_fn'
-          onClick={onClickToRename}
-        >
+        className='moreFn_fn'
+        onClick={onClickToAddFavorite}
+        >  
           <div>
-            <BsPencilSquare/>
-            <span>Rename</span>
+            <AiOutlineStar/>
+            <span>Add to Favorites</span>
           </div>
         </button>
-        <button 
-          className='moreFn_fn'
-          onClick={onClickMoveToBtn}
-        >
-          <div> 
-            <IoArrowRedoOutline/>
-            <span>Move to</span>
-          </div>
-        </button>
-        <div className='edit_inform'>
-          <p>
-            Last edited by {user.userName} 
-          </p>
-            <Time 
-              editTime={targetItem.editTime}
-            />
+      }
+      <button
+        className='moreFn_fn'
+        onClick={onClickToDuplicate}
+      >
+        <div>
+          <HiOutlineDuplicate/>
+          <span>Duplicate</span>
+          <span></span>
         </div>
+      </button>
+      <button
+        className='moreFn_fn'
+        onClick={onClickToRename}
+      >
+        <div>
+          <BsPencilSquare/>
+          <span>Rename</span>
+        </div>
+      </button>
+      <button 
+        className='moreFn_fn'
+        onClick={onClickMoveToBtn}
+      >
+        <div> 
+          <IoArrowRedoOutline/>
+          <span>Move to</span>
+        </div>
+      </button>
+      <div className='edit_inform'>
+        <p>
+          Last edited by {user.userName} 
+        </p>
+        {targetItem!==null &&
+          <Time 
+            editTime={targetItem.editTime}
+          />
+        }
       </div>
-    }
+    </div>
+    
     {openPageMenu && targetItem !==null && firstlist !==null && pages!==null && pagesId!==null &&
     <div 
       id ="sideBar_pageMenu"
