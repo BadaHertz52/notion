@@ -2877,7 +2877,7 @@ a:link, a:active, a:visited {
   fill: black;
 }
 
-@media screen and (min-width: 781px) {
+@media screen and (min-width: 768px) {
   .mobileMenu {
     display: none;
   }
@@ -3186,6 +3186,9 @@ a:link, a:active, a:visited {
   color: #a3a3a2;
   font-weight: bolder;
 }
+.sideBar .recentPages {
+  display: none;
+}
 .sideBar .fun1 {
   border-top: none;
   padding-bottom: 20px;
@@ -3194,6 +3197,14 @@ a:link, a:active, a:visited {
   font-size: 12px;
   color: rgba(25, 23, 17, 0.753);
   font-weight: initial;
+}
+.sideBar .srcoller .header, .sideBar .recentPages .header {
+  padding: 0 14px;
+  margin-bottom: 10px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #a3a3a2;
+  fill: #a3a3a2;
 }
 .sideBar .srcoller {
   padding: 16px 0;
@@ -3222,14 +3233,6 @@ a:link, a:active, a:visited {
 .sideBar .srcoller .favorites,
 .sideBar .srcoller .private {
   margin-bottom: 20px;
-}
-.sideBar .srcoller .header {
-  padding: 0 14px;
-  margin-bottom: 10px;
-  font-size: 11px;
-  font-weight: 500;
-  color: #a3a3a2;
-  fill: #a3a3a2;
 }
 .sideBar .srcoller .list .page {
   width: 100%;
@@ -3354,6 +3357,7 @@ a:link, a:active, a:visited {
   z-index: 10;
   border-radius: 8px;
   box-shadow: 0px 0px 23px -5px #ababab;
+  display: none;
   z-index: 20;
   width: 230px;
 }
@@ -3362,6 +3366,9 @@ a:link, a:active, a:visited {
 }
 #moreFn::-webkit-scrollbar-track {
   background: #EDECE9;
+}
+#moreFn .resizeBar {
+  display: none;
 }
 #moreFn button {
   padding: 3%;
@@ -3407,7 +3414,7 @@ a:link, a:active, a:visited {
   padding: 0;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 426px) {
   .sideBar {
     background-color: rgb(240, 240, 240);
     width: 100vw;
@@ -3418,10 +3425,10 @@ a:link, a:active, a:visited {
   .sideBar .itemInner {
     padding: 0.5rem 1rem;
   }
-  .sideBar .srcoller {
+  .sideBar .scroller {
     height: calc(80vh - 1.5rem);
   }
-  .sideBar .switcher .itemInner, .sideBar .srcoller .header {
+  .sideBar .switcher .itemInner, .sideBar .srcoller .header, .sideBar .recentPages .header {
     font-size: 1rem;
   }
   .sideBar .switcher .itemInner {
@@ -3471,8 +3478,131 @@ a:link, a:active, a:visited {
   .sideBar .fun1, .sideBar .fun2, .sideBar .addNewPageBtn {
     display: none;
   }
+  .sideBar .recentPages {
+    display: block;
+  }
+  .sideBar .recentPages .list {
+    padding: 0 14px;
+    display: flex;
+  }
+  .sideBar .recentPages .item {
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    margin: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    pointer-events: auto;
+    transform: matrix(1, 0, 0, 1, 0, 0);
+    z-index: 10;
+    border-radius: 8px;
+    box-shadow: 0px 0px 23px -5px #ababab;
+    position: relative;
+    height: 25vw;
+    width: 25vw;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    margin-right: 14px;
+  }
+  .sideBar .recentPages .item::-webkit-scrollbar-thumb {
+    background: #D3D1CB;
+  }
+  .sideBar .recentPages .item::-webkit-scrollbar-track {
+    background: #EDECE9;
+  }
+  .sideBar .recentPages .item .cover {
+    width: 100%;
+    height: 50%;
+  }
+  .sideBar .recentPages .item .cover.none {
+    background-color: rgb(224, 224, 224);
+  }
+  .sideBar .recentPages .item .pageIcon {
+    width: 20%;
+    height: 20%;
+    position: absolute;
+    top: 40%;
+    left: 10%;
+  }
+  .sideBar .recentPages .item .pageImgIcon {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+  .sideBar .recentPages .item .title {
+    text-align: center;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 5px;
+    padding-top: 15%;
+    height: 50%;
+    width: 100%;
+    font-size: 14px;
+    font-weight: bolder;
+  }
   .sideBar_inner_top {
     height: 90vh;
+  }
+  #moreFn {
+    display: block;
+    position: absolute;
+    transform: translateY(100vh);
+    top: 0;
+    width: 100vw;
+    transition: transform 1000ms ease;
+    background-color: rgb(240, 240, 240);
+  }
+  #moreFn .resizeBar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    background-color: none;
+  }
+  #moreFn .resizeBar div {
+    width: 3rem;
+    height: 3px;
+    border-radius: 20px;
+    background-color: rgb(217, 215, 215);
+  }
+  #moreFn .edit_inform {
+    display: none;
+  }
+  #moreFn .pageInform_mobile {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    padding: 10px 1rem;
+  }
+  #moreFn .pageInform_mobile .pageIcon {
+    height: 2.2rem;
+    width: 2.2rem;
+  }
+  #moreFn .pageInform_mobile .pageImgIcon {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+  }
+  #moreFn .pageInform_mobile .pageTitle {
+    margin-left: 1rem;
+    font-size: 1.2rem;
+    text-align: center;
+  }
+  #moreFn button {
+    padding: 0;
+    margin: 10px 1rem;
+  }
+  #moreFn button > div {
+    width: calc(100% - 2rem);
+    padding: 5px;
+    background-color: #fff;
+    border-radius: 10px;
+  }
+  #moreFn .deleteBtn {
+    color: red;
   }
 }
 .switchBtn {
@@ -4500,4 +4630,10 @@ body, #root, #inner {
 
 .editor {
   overflow-y: hidden;
+}
+
+@media screen and (max-width: 768px) {
+  #inner {
+    overflow-y: hidden;
+  }
 }/*# sourceMappingURL=main.css.map */
