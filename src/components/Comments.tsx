@@ -987,8 +987,8 @@ const Comments =({pageId,block,page, userName ,editBlock ,editPage ,frameHtml ,o
         const top =blockDocDomRect.bottom ;
         const overHeight = (top + 200 )>= window.innerHeight;
         const bottom = innerHeight - blockDocDomRect.top +10;
-        const left =innerWidth >=425? editableBlockDomRect.x - frameDomRect.x : innerWidth * 0.1 ;
-        const width =innerWidth>=425? editableBlock.clientWidth - paddingValue : innerWidth*0.8;
+        const left =innerWidth >=768? editableBlockDomRect.x - frameDomRect.x : innerWidth * 0.1 ;
+        const width =innerWidth>=768? editableBlock.clientWidth - paddingValue : innerWidth*0.8;
         
         const basicStyle:CSSProperties ={
           display:"flex",

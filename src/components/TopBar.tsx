@@ -77,7 +77,7 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages,pagePath, addBlock,
   };
   const onMouseEnterSidBarBtn=()=>{
     const innerWidth =window.innerWidth;
-    if(innerWidth >780){
+    if(innerWidth >768){
       (sideAppear ==="close" || sideAppear==="floatHide") ?
       changeSide("float"):
       changeSide("floatHide");
@@ -203,7 +203,7 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages,pagePath, addBlock,
             <FiChevronsLeft
             />
             :
-            (window.innerWidth>780?
+            (window.innerWidth>768?
               <AiOutlineMenu/>
               :
               <IoIosArrowBack/>

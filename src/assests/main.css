@@ -232,7 +232,7 @@ a:link, a:active, a:visited {
   font-size: 14px;
 }
 
-@media screen and (max-width: 780px) {
+@media screen and (max-width: 768px) {
   #allComments {
     width: 100%;
     border-left: none;
@@ -3407,7 +3407,7 @@ a:link, a:active, a:visited {
   padding: 0;
 }
 
-@media screen and (max-width: 780px) {
+@media screen and (max-width: 768px) {
   .sideBar {
     background-color: rgb(240, 240, 240);
     width: 100vw;
@@ -4056,7 +4056,7 @@ a:link, a:active, a:visited {
   text-align: center;
 }
 
-@media screen and (max-width: 780px) {
+@media screen and (max-width: 768px) {
   #trash {
     max-width: 100vw;
     max-height: 100vh;

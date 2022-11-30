@@ -104,7 +104,7 @@ const ItemTemplate =({item,setTargetPageId ,onClickMoreBtn, addNewSubPage, chang
   };
   const onClickPageName =()=>{
     setTargetPageId(item.id);
-    if(window.innerWidth<=780){
+    if(window.innerWidth<=768){
       changeSide("close");
     }
   };
@@ -387,7 +387,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
   };
   const changeTrashStyle =()=>{
     const innerWidth =window.innerWidth;
-    if(innerWidth>780){
+    if(innerWidth>768){
       if(trashBtn.current){
         const domRect =trashBtn.current.getClientRects()[0];
         setTrashStyle({
@@ -427,7 +427,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
   useEffect(()=>{
     if(!openTrash){
       const innerWidth =window.innerWidth;
-      innerWidth >780?
+      innerWidth >768?
       setTrashStyle({display:"none"}):
       setTrashStyle(undefined);
     }

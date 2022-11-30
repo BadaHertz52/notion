@@ -318,7 +318,7 @@ const NotionRouter =()=>{
   useEffect(()=>{
     const innerWidth = window.innerWidth;
     if(showAllComments){
-      innerWidth > 780 ?
+      innerWidth > 768 ?
       setAllCommentsStyle({
         transform:`translateX(0)`,
       })
@@ -330,7 +330,7 @@ const NotionRouter =()=>{
     }else{
       const allCommentsHtml =document.getElementById("allComments");
       const width =allCommentsHtml?.clientWidth;
-      if(innerWidth >780){
+      if(innerWidth >768){
         width !==undefined && 
         setAllCommentsStyle({
           transform:`translateX(${width + 50 }px)`,
