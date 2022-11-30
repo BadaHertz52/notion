@@ -454,12 +454,17 @@
     }
     .recentPages{
       display: block;
+      margin: 10px 0;
+      .header{
+        margin-bottom: 1rem;
+      }
       .list{
-        padding: 0 14px ;
+        padding: 0 1rem ;
         display: flex;
       }
       .item{
         @include popupMenu;
+        box-shadow:rgba(15, 15, 15, 0.251) 0px 0px 4px inset  ;
         position: relative;
         height: 25vw;
         width: 25vw;
@@ -487,6 +492,7 @@
           border-radius: 50%;
         }
         .title{
+          background-color: #fff;
           text-align: center;
           text-overflow: ellipsis;
           overflow: hidden;

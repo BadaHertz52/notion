@@ -3480,9 +3480,13 @@ a:link, a:active, a:visited {
   }
   .sideBar .recentPages {
     display: block;
+    margin: 10px 0;
+  }
+  .sideBar .recentPages .header {
+    margin-bottom: 1rem;
   }
   .sideBar .recentPages .list {
-    padding: 0 14px;
+    padding: 0 1rem;
     display: flex;
   }
   .sideBar .recentPages .item {
@@ -3498,6 +3502,7 @@ a:link, a:active, a:visited {
     z-index: 10;
     border-radius: 8px;
     box-shadow: 0px 0px 23px -5px #ababab;
+    box-shadow: rgba(15, 15, 15, 0.251) 0px 0px 4px inset;
     position: relative;
     height: 25vw;
     width: 25vw;
@@ -3532,6 +3537,7 @@ a:link, a:active, a:visited {
     border-radius: 50%;
   }
   .sideBar .recentPages .item .title {
+    background-color: #fff;
     text-align: center;
     text-overflow: ellipsis;
     overflow: hidden;
