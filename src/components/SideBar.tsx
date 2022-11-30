@@ -227,6 +227,9 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
   const inner =document.getElementById("inner");
   const pages =notion.pages;
   const pagesId =notion.pagesId;
+  const recentPages = (pages !==null && pagesId !==null && user.recentPagesId !==null)?  
+  user.recentPagesId.map((pageId:string)=> findPage(pagesId,pages,pageId)as Page) 
+  :null;
   const trashPages=notion.trash.pages;
   const trashPagesId=notion.trash.pagesId;
   const firstPagesId =notion.firstPagesId;
@@ -331,7 +334,10 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
 
 
   inner?.addEventListener("click", (event)=>{
-    openSideMoreMenu && closePopup("moreFn",setOpenSideMoreMenu, event );
+    if(openSideMoreMenu){
+      closePopup("moreFn",setOpenSideMoreMenu, event );
+      setMoreFnStyle(undefined);
+    }
     openPageMenu && closePopup("pageMenu", setOpenPageMenu, event);
     openRename && closePopup("rename", setOpenRename ,event);
 
@@ -416,7 +422,10 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
   const onMouseOutSideBar =()=>{
     sideAppear ==="float" && changeSide("floatHide"); 
   };
-
+  const onClickRecentPageItem =(pageId:string)=>{
+    setTargetPageId(pageId);
+    changeSide("close");
+  };
   useEffect(()=>{
     if(targetItem!==null && pagesId!==null && pages!==null){
       const page =findPage(pagesId,pages, targetItem.id);
@@ -481,6 +490,44 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
                 <BsTrash/>
             </button>
           </div>
+        </div>
+        <div className='recentPages'>
+          <div className="header">
+                <span>RECENTLY VISITED PAGE </span>
+          </div>
+          <div className='list'>
+            {recentPages==null?
+              <div>No pages visited recently </div>
+              :
+              recentPages.map((page:Page)=>
+              <button
+                id={`item_${page.id}`}
+                className='item'
+                onClick={()=>onClickRecentPageItem(page.id)}
+                >
+                {page.header.cover !==null?
+                  <img
+                    className='cover'
+                    src={page.header.cover}
+                    alt="pageCover"
+                  />
+                  :
+                  <div className='cover none'>
+                  </div>
+                }
+                <PageIcon
+                  icon ={page.header.icon}
+                  iconType={page.header.iconType}
+                  style={undefined}
+                />
+                <div className='title'>
+                  {page.header.title}
+                </div>
+              </button>
+              )
+            }
+          </div>
+
         </div>
         <div className="fun1">
           <button

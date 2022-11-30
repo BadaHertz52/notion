@@ -189,6 +189,10 @@
     }
   }
   // ---switcher 
+  //recentPages 
+  .recentPages{
+    display: none;
+  }
   // fun1--
   .fun1{
     border-top: none;
@@ -200,6 +204,19 @@
     }
   } 
   // --fun1
+  .srcoller,.recentPages{
+    .header{
+      padding : 0 14px;
+      margin-bottom: 10px;
+      font : {
+        size: 11px;
+        weight:500;
+      }
+      color: $itemSvg;
+      fill: $itemSvg;
+
+    }
+  }
   //scroller--
   .srcoller{
     padding: 16px 0;
@@ -219,17 +236,7 @@
     .private{
       margin-bottom: 20px;
     }
-    .header{
-      padding : 0 14px;
-      margin-bottom: 10px;
-      font : {
-        size: 11px;
-        weight:500;
-      }
-      color: $itemSvg;
-      fill: $itemSvg;
 
-    }
     .list .page {
       width: 100%;
     }
@@ -374,7 +381,7 @@
 }
 
 
-@media screen and (max-width:768px) {
+@media screen and (max-width:426px) {
   .sideBar{
     background-color: rgb(240, 240, 240);
     width: 100vw;
@@ -384,10 +391,10 @@
     .itemInner{
       padding: 0.5rem 1rem;
     }
-    .srcoller{
+    .scroller{
       height: calc(80vh - 1.5rem);
     }
-    .switcher .itemInner,.srcoller .header{
+    .switcher .itemInner,.srcoller .header , .recentPages .header{
       font-size: 1rem;
     }
     .switcher {
@@ -440,6 +447,56 @@
     }
     .fun1, .fun2, .addNewPageBtn{
       display: none;
+    }
+    .recentPages{
+      display: block;
+      .list{
+        padding: 0 14px ;
+        display: flex;
+      }
+      .item{
+        @include popupMenu;
+        position: relative;
+        height: 25vw;
+        width: 25vw;
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        margin-right: 14px;
+        .cover{
+          width: 100%;
+          height: 50%;
+        }
+        .cover.none{
+          background-color:rgb(224, 224, 224);
+        }
+        .pageIcon {
+          width: 20%;
+          height: 20% ;
+          position: absolute;
+          top:40%;
+          left:10%;
+        }
+        .pageImgIcon{
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+        }
+        .title{
+          text-align: center;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
+          padding: 5px ;
+          padding-top: 15%;
+          height: 50%;
+          width: 100%;
+          font: {
+            size: 14px;
+            weight:bolder;
+          };
+        }
+      }
     }
   }
   .sideBar_inner_top{
