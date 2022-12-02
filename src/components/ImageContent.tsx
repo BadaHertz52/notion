@@ -1,4 +1,4 @@
-import React, { MouseEvent,  useRef, useState } from 'react';
+import React, { MouseEvent,  TouchEvent,  useRef, useState } from 'react';
 import { CSSProperties } from 'styled-components';
 import { Block, Page } from '../modules/notion';
 import { setTemplateItem } from './BlockComponent';
@@ -20,36 +20,51 @@ const ImageContent =({page,block,editBlock}:ImageContentProps)=>{
   const dragBtn= useRef<dragBtnName>(left);
   const [imageStyle ,setImageStyle] =useState<CSSProperties>();
   const targetImgContent =document.getElementById(`${block.id}_contents`);
-  const onMouseMove =(event:globalThis.MouseEvent)=>{
-    if(drag.current){
-      const changeX = event.clientX - previousClientX.current;
-      const changeY = event.clientX - previousClientX.current;
-      previousClientX.current =event.clientX;
-      previousClientY.current =event.clientY;
-      if( changeX !==0 || changeY!==0){
-        const imgDomRect = targetImgContent?.getClientRects()[0];
-        if(imgDomRect!==undefined){
-          const imgWidth =imgDomRect.width;
-          const imgHeight =imgDomRect.height;
-          const width =dragBtn.current === right? 
-          imgWidth + changeX : 
-          imgWidth -changeX  ;
-          const height = dragBtn.current === left? imgHeight - changeY : imgHeight +changeY;
-          const changedStyle ={
-            width: dragBtn.current !== bottom? `${width}px` : block.style.width ,
-            height:`${height}px`,
-          };
-          setImageStyle(changedStyle);
-        }
+  const resizeImage =(clientX:number ,clientY:number)=>{
+    const changeX = clientX - previousClientX.current;
+    const changeY = clientX - previousClientX.current;
+    previousClientX.current =clientX;
+    previousClientY.current =clientY;
+    if( changeX !==0 || changeY!==0){
+      const imgDomRect = targetImgContent?.getClientRects()[0];
+      if(imgDomRect!==undefined){
+        const imgWidth =imgDomRect.width;
+        const imgHeight =imgDomRect.height;
+        const width =dragBtn.current === right? 
+        imgWidth + changeX : 
+        imgWidth -changeX  ;
+        const height = dragBtn.current === left? imgHeight - changeY : imgHeight +changeY;
+        const changedStyle ={
+          width: dragBtn.current !== bottom? `${width}px` : block.style.width ,
+          height:`${height}px`,
+        };
+        setImageStyle(changedStyle);
       }
     }
   };
-  const onMouseDownSizeBtn=(event:MouseEvent<HTMLButtonElement>, btnName:dragBtnName)=>{
-    previousClientX.current =event.clientX;
+  const onMouseMove =(event:globalThis.MouseEvent)=>{
+    if(drag.current){
+      resizeImage(event.clientX, event.clientY);
+    }
+  };
+  const onTouchMove=(event:globalThis.TouchEvent)=>{
+    if(drag.current){
+      resizeImage(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
+    }
+  };
+
+  const onMouseDownSizeBtn=(event:MouseEvent<HTMLButtonElement>)=>{
+    previousClientX.current = event.clientX;
     previousClientY.current =event.clientY;
     drag.current=true; 
   };
-  const onMouseUp=(event:globalThis.MouseEvent)=>{
+  const onTouchStartSizeBtn =(event:TouchEvent<HTMLButtonElement>)=>{
+    previousClientX.current = event.changedTouches[0].clientX;
+    previousClientY.current =event.changedTouches[0].clientY;
+    drag.current=true; 
+  };
+
+  const onMouseUp=()=>{
     if(drag.current){
       previousClientX.current =0;
       previousClientY.current =0;
@@ -74,7 +89,9 @@ const ImageContent =({page,block,editBlock}:ImageContentProps)=>{
   };
 
   imageContent?.addEventListener("mousemove", (event)=> onMouseMove(event));
-  imageContent?.addEventListener("mouseup", (event)=> onMouseUp(event))
+  imageContent?.addEventListener("touchmove", (event)=>onTouchMove(event));
+  imageContent?.addEventListener("mouseup", onMouseUp);
+  imageContent?.addEventListener("touchend", onMouseUp);
   return(
     <div 
       className="imageContent"
@@ -83,19 +100,22 @@ const ImageContent =({page,block,editBlock}:ImageContentProps)=>{
       > 
       <button 
         className='sizeBtn length left'
-        onMouseDown={(event)=>onMouseDownSizeBtn(event,left)}
+        onMouseDown={(event)=>onMouseDownSizeBtn(event)}
+        onTouchStart={(event)=>onTouchStartSizeBtn(event)}
       >
         <span></span>
       </button>
       <button 
         className='sizeBtn length right'
-        onMouseDown={(event)=>onMouseDownSizeBtn(event, right)}
+        onMouseDown={(event)=>onMouseDownSizeBtn(event)}
+        onTouchStart={(event)=>onTouchStartSizeBtn(event)}
       >
         <span></span>
       </button>
       <button 
         className='sizeBtn tranverse bottom '
-        onMouseDown={(event)=>onMouseDownSizeBtn(event, bottom)}
+        onMouseDown={(event)=>onMouseDownSizeBtn(event)}
+        onTouchStart={(event)=>onTouchStartSizeBtn(event)}
       >
         <span></span>
       </button>
