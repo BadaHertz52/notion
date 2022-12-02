@@ -2877,7 +2877,7 @@ a:link, a:active, a:visited {
   fill: black;
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 425px) {
   .mobileMenu {
     display: none;
   }
@@ -3558,7 +3558,9 @@ a:link, a:active, a:visited {
     transform: translateY(100vh);
     top: 0;
     width: 100vw;
-    transition: transform 1000ms ease;
+    height: 100vh;
+    min-height: 10vh;
+    transition: transform 500ms ease;
     background-color: rgb(240, 240, 240);
   }
   #moreFn .resizeBar {

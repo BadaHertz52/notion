@@ -1,4 +1,4 @@
-import React, {  CSSProperties, Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import React, {  CSSProperties, Dispatch, SetStateAction, useEffect, useRef, useState, MouseEvent, TouchEvent } from 'react';
 import { Block, blockSample, findPage, listItem, Notion, Page, pageSample } from '../modules/notion';
 import { detectRange } from './BlockFn';
 import { UserState } from '../modules/user';
@@ -6,6 +6,10 @@ import Trash from './Trash';
 import Rename from './Rename';
 import Time from './Time';
 import PageMenu from './PageMenu';
+import PageIcon from './PageIcon';
+import { SideBarContainerProp } from '../containers/SideBarContainer';
+import { SideAppear } from '../modules/side';
+import MobileMenu from './MobileMenu';
 
 //react-icon
 import {FiCode ,FiChevronsLeft} from 'react-icons/fi';
@@ -17,12 +21,10 @@ import { HiOutlineDuplicate, HiTemplate} from 'react-icons/hi';
 import { MdPlayArrow } from 'react-icons/md';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { IoArrowRedoOutline } from 'react-icons/io5';
-import PageIcon from './PageIcon';
-import { SideBarContainerProp } from '../containers/SideBarContainer';
-import { SideAppear } from '../modules/side';
-import MobileMenu from './MobileMenu';
 
-export const closePopup =(elementId:string ,setState:Dispatch<SetStateAction<boolean>> , event:MouseEvent)=>{
+
+
+export const closePopup =(elementId:string ,setState:Dispatch<SetStateAction<boolean>> , event:globalThis.MouseEvent)=>{
   const eventTarget =event.target as Element|null;
   if(eventTarget?.id !=="imageIconInput"){
     const element = document.getElementById(elementId);
@@ -263,7 +265,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
   const [pageMenuStyle, setPageMenuStyle]=useState<CSSProperties>();
 
   const recordIcon =user.userName.substring(0,1);
-
+  const touchResizeBar =useRef<boolean>(false);
   const makeFavoriteList =(favorites:string[] |null, pagesId:string[], pages:Page[]):listItem[]|null=>{
     const list :listItem[]|null =favorites !==null? 
                                 favorites.map((id: string)=> {
@@ -335,7 +337,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
     }else{
       setMoreFnStyle({
         display:"block",
-        transform: "translateY(calc(100vh - 100%))",
+        transform: "translateY(50vh)",
       })
     }
 
@@ -344,9 +346,12 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
 
   inner?.addEventListener("click", (event)=>{
     if(openSideMoreMenu){
-      closePopup("moreFn",setOpenSideMoreMenu, event );
-      setMoreFnStyle(undefined);
-    }
+      const target =event.target as HTMLElement|null; 
+      if(target?.parentElement?.className !=="resizeBar"){
+        closePopup("moreFn",setOpenSideMoreMenu, event );
+        setMoreFnStyle(undefined);
+      }
+    };
     openPageMenu && closePopup("pageMenu", setOpenPageMenu, event);
     openRename && closePopup("rename", setOpenRename ,event);
 
@@ -441,6 +446,30 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
     setTargetPageId(pageId);
     changeSide("close");
   };
+  const onTouchStartResizeBar =(event:TouchEvent<HTMLElement>)=>{
+    touchResizeBar.current =true
+
+  };
+  const onTouchMoveSideBar=(event:TouchEvent<HTMLDivElement>)=>{
+    console.log("touch", touchResizeBar.current);
+    if(touchResizeBar.current){
+      const clientY =event.changedTouches[0].clientY;
+      const innerHeight =window.innerHeight;
+      console.log("innerheight",innerHeight,"clienty",clientY)
+      if(innerHeight -50 <= clientY){
+        console.log("close")
+        setMoreFnStyle(undefined);
+        touchResizeBar.current =false;
+      }else{
+        setMoreFnStyle({
+          display:"block",
+          transform: `translateY(${clientY}px)`
+        })
+      }
+
+    };
+    
+  }
   useEffect(()=>{
     if(targetItem!==null && pagesId!==null && pages!==null){
       const page =findPage(pagesId,pages, targetItem.id);
@@ -645,13 +674,14 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
       />
     </div>
     </div>
-    
     <div 
       id='moreFn'
       style={moreFnStyle}
+      onTouchMove={onTouchMoveSideBar}
     >
       <button
         className='resizeBar'
+        onTouchStart={onTouchStartResizeBar}
       >
         <div></div>
       </button>

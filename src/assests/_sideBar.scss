@@ -519,7 +519,9 @@
     transform: translateY(100vh);
     top:0;
     width: 100vw;
-    transition: transform 1000ms ease;
+    height: 100vh;
+    min-height: 10vh;
+    transition: transform 500ms ease;
     background-color:  rgb(240, 240, 240);
     .resizeBar{
       display: flex;
