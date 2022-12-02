@@ -1,4 +1,3 @@
-
 .mobileMenu{
   display: flex;
   justify-content: space-around;
@@ -17,7 +16,7 @@
     }
   }
 }
-@media screen and (min-width:768px) {
+@media screen and (min-width:425px) {
   .mobileMenu{
     display: none;
   }
