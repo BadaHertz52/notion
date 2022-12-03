@@ -16,7 +16,8 @@
 * <a href="data">2) Data</a>
 
 *  <a href="function">3) Function</a>
-
+*  
+#### <a href="#update">4. Update </a>
 -------------------------------------
 ## <div id="builtWith">1. Tech skill & Built with </div>
 ### 1) Tech skill
@@ -66,6 +67,13 @@ npm install --save react-icon react-contenteditable styled-component
 * Template
   
 <img src="./image/readMeFile/template.png" width="450px" height="auto">
+<br/>
+
+* Resposible web - Mobile 화면
+  <br/>
+  <video controls width="auto" height="300px" preload="Video showing how to work on mobile of which width is under 425px" >
+    <source src="./image/readMeFile/mobile_ver.mp4" type="video/mp4">
+  </video>
 
 ## <div id="data">2) Data </div>
 ## A. State 
@@ -304,7 +312,10 @@ npm install --save react-icon react-contenteditable styled-component
 
 * Menu
   * block에 대한 복제,삭제,이동,타입 변경,comment 추가,color 변경등을 할 수 있는 component
-
+  
+* MobileMenu 
+  * 화면 너비가 425px이하인 기기에서 sideBar,quickBar를 조정하고 새로운 페이지를 추가할 수 있는 기능을 담당
+  
 * MoveTargetBlock
   * block의 위치를 이동 시킬 때, 이동되는 block을 화면상에 보여주는 component
 
@@ -415,5 +426,8 @@ npm install --save react-icon react-contenteditable styled-component
    * 블럭을 다른 페이지로 이동
 
 -------------------------------------
-
+## <div id="update">4. Update </div>
+* 2022.12 모바일 환경에 더 적합하도록 업데이트
+  * sideBar,allComment 변경, MoblieMenu 추가, 모바일에서도 ImageContent 사이즈 변경가능하도록 수정
+-------------------------------------
 * 🔎 [Notion 프로젝트 후기 보러가기](https://velog.io/@badahertz52/Notion-프로젝트-후기)
