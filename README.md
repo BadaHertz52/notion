@@ -71,9 +71,12 @@ npm install --save react-icon react-contenteditable styled-component
 
 * Resposible web - Mobile 화면
   <br/>
-  <video controls width="auto" height="300px" preload="Video showing how to work on mobile of which width is under 425px" >
-    <source src="./image/readMeFile/mobile_ver.mp4" type="video/mp4">
-  </video>
+  <img 
+    height="400px"
+    width="auto"
+    src="https://user-images.githubusercontent.com/69838872/209685633-d05154ff-0d19-4dfd-b9a6-415b36033e8e.gif"
+    alt="mobile web simulation"
+  />
 
 ## <div id="data">2) Data </div>
 ## A. State 
@@ -349,22 +352,23 @@ npm install --save react-icon react-contenteditable styled-component
 ## <div id="function"> 3) Function </div>
 레이아웃을 기준으로 notion에서 사용할 수 있는 기능들을 설명하겠습니다. 
 ### A. Sidebar 
-  #### 📼 Sidebar 영상
-  <video controls height="auto" width="450px" preload="Video showing features that work on sidebar" >
-    <source src="./image/readMeFile/sidebar.mp4" type="video/mp4">
-  </video>
-
+  ####  Sidebar simulation
+  <img 
+    width="50%"
+    src="https://user-images.githubusercontent.com/69838872/209685169-45d452ab-54d5-461b-927e-13ee3c5964f6.gif"
+  />
 * 사이드바 모양 변경(왼쪽에 고정, 감추기, 띄우기)
 * Quik Find: 페이지 찾기
 * 페이지옆에 생성되는 메뉴버튼: 페이지 생성,삭제,페이지 타이틀이나 아이콘 변경, 다른 페이지로 이동, 즐겨찾기에 추가 또는 삭제
 * 휴지통 : 삭제된 페이지 영구 삭제 또는 복구
   
 ### B. Templates 
-  #### 📼 Templates 영상
-  <video controls height="auto" width="450px" preload="Video showing features that work on templates" >
-    <source src="./image/readMeFile/template.mp4" type="video/mp4">
-  </video>
-
+  #### 📼 Templates simulation
+  <img 
+    width="50%"
+    src="https://user-images.githubusercontent.com/69838872/209685278-9f897fc7-e176-4e37-8e71-d135479a693a.gif"
+  />
+ 
   * template 열기
   * template 수정 
   * template 생성
@@ -372,17 +376,20 @@ npm install --save react-icon react-contenteditable styled-component
   * template 이용
     * use template 버튼을 누르면 현재 오픈된 페이지의 내용이 template의 내용으로 교체됨
 ### C. Editor
-  #### 📼 Editor 영상
-  <video controls height="auto" width="450px" preload="Video showing features that work on editor" >
-    <source src="./image/readMeFile/editor.mp4" type="video/mp4">
-  </video>
 
-  #### 📼 Export page to PDF or Html or Markdown 영상
-  <video controls height="auto" width="450px" preload="Video showing exporting a page to another file" >
-    <source src="./image/readMeFile/export.mp4" type="video/mp4">
-  </video>
+  #### 📼 Export page to PDF or Html or Markdown simulation
+   <img 
+    width="50%"
+    src="https://user-images.githubusercontent.com/69838872/209685375-979f13b7-2617-425a-bdba-23f2ef21278a.gif"
+  />
 
   ### <div id="topbar_function"> a. Topbar </div>
+  #### 📼 Topbar simualtion
+   <img 
+    width="50%"
+    src="https://user-images.githubusercontent.com/69838872/209687505-9ab35431-a35c-4024-af93-6838335751f6.gif"
+    />
+  
   * 페이지 경로 표시, 다른 페이지로 이동
   * 현재 페이지내 모든 코멘트 보기
   * 즐겨찾기 추가, 삭제
@@ -390,9 +397,20 @@ npm install --save react-icon react-contenteditable styled-component
   * 페이지 삭제
   * 현재 페이지를 다른 페이지로 이동
   * 현재 페이지를 pdf,html,markdown 형태로 저장 (현재 페이지 내의 이미지 파일 포함여부와 현재 페이지 내의 다른 페이지도 저장하는 지 여부 선택할 수 있음)
+  
   ### b. Frame 
   ### a) PageHeader
+  
   * 현재 page의 타이틀, 아이콘, 커버, comment 추가/변경/삭제 가능
+  
+  #### 📼 pageHeader simulation 
+  
+  <img 
+    width="50%"
+    src="https://user-images.githubusercontent.com/69838872/209689304-6b513038-aacc-4024-a926-cd80d4a374e2.gif"
+  />
+
+
   ### b) PageContent
   * 새로운 페이지 작성 시 옵션 선택 
     * 옵션
@@ -425,7 +443,57 @@ npm install --save react-icon react-contenteditable styled-component
    * 키보드 방향키를 통한 블록간의 커서 이동
    * 블럭을 다른 페이지로 이동
 
--------------------------------------
+#### 📼 PageContent simulation 
+
+* block 생성 및 타입 변경
+
+ <img 
+    alt="make newBlock and change block type"
+    width="50%"
+    src="https://user-images.githubusercontent.com/69838872/209687777-fb568d78-b367-4437-9e0a-03c909882a70.gif"
+  />
+
+* image 타입 블럭 생성 및 image 사이즈 변경
+
+  <img 
+    alt="imgBlock"
+    width="50%"
+    src="https://user-images.githubusercontent.com/69838872/209687927-d5d5ea4b-2865-4ddb-ab30-b8020c0597dc.gif"
+  />
+ 
+ * blockStyler 
+ 
+   <img 
+    alt="blockStyler"
+    width="50%"
+    src="https://user-images.githubusercontent.com/69838872/209688273-bc6bd45b-bf0b-48be-aa1d-1020963f193d.gif"
+  />
+
+* 다른 페이지로 블럭 이동
+
+   <img 
+    alt="move block to other page"
+    width="50%"
+    src="https://user-images.githubusercontent.com/69838872/209688356-e2cedb8f-dd72-47dc-9661-1cb6b36b5376.gif"
+  />
+
+* 블록 위치 변경 
+
+   <img 
+    ait="changePosition"
+    width="50%"
+    src="https://user-images.githubusercontent.com/69838872/209688434-5db37fcc-7987-460b-80a7-43db53d410c3.gif"
+  />
+
+ * 기타: 키보드를 통한 조작, 블럭 삭제, 블럭 내용 선택등등
+ 
+  <img 
+    width="50%"
+    alt="etc function"
+    src="https://user-images.githubusercontent.com/69838872/209688197-d6aacef5-a7af-438c-8543-e9e40d16a8bb.gif"
+  />
+  
+--------------------------
 ## <div id="update">4. Update </div>
 * 2022.12 모바일 환경에 더 적합하도록 업데이트
   * sideBar,allComment 변경, MoblieMenu 추가, 모바일에서도 ImageContent 사이즈 변경가능하도록 수정
