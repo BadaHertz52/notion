@@ -2,6 +2,7 @@
 
 #trash{
   @include popupMenu;
+  display: none;
   width: 400px;
   min-width: 180px;
   max-width: calc(100vw - 24px);

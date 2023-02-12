@@ -75,7 +75,6 @@ button {
   padding: 0;
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
@@ -227,6 +226,7 @@ a:link, a:active, a:visited {
 }
 #allComments .noResult p:first-child {
   font-size: 1.5rem;
+  margin-bottom: 8px;
 }
 #allComments .noResult p:last-child {
   font-size: 14px;
@@ -315,7 +315,6 @@ button {
   padding: 0;
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
@@ -354,7 +353,6 @@ a:link, a:active, a:visited {
   box-shadow: 0px 0px 23px -5px #ababab;
   height: 32px;
   border-radius: 5px;
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
 }
@@ -501,7 +499,6 @@ button {
   padding: 0;
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
@@ -585,7 +582,6 @@ a:link, a:active, a:visited {
   line-height: 120%;
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   text-transform: uppercase;
 }
@@ -664,7 +660,6 @@ a:link, a:active, a:visited {
   display: none;
   color: rgba(55, 53, 47, 0.65);
   padding: 2% 10%;
-  height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
 }
@@ -746,7 +741,6 @@ button {
   padding: 0;
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
@@ -846,7 +840,6 @@ button {
   padding: 0;
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
@@ -915,6 +908,7 @@ a:link, a:active, a:visited {
   height: inherit;
   box-sizing: border-box;
   align-items: center;
+  justify-content: center;
   border-radius: 50%;
   border: 1px solid black;
   color: black;
@@ -925,8 +919,6 @@ a:link, a:active, a:visited {
 }
 .commentBlock .firstLetter div,
 .commentInput .firstLetter div {
-  width: 20px;
-  height: 20px;
   font-size: 14px;
   font-weight: initial;
 }
@@ -1071,7 +1063,6 @@ a:link, a:active, a:visited {
   height: 20px;
 }
 .commentBlock .comment_header .commentTool button {
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   color: #a3a3a2;
@@ -1102,7 +1093,6 @@ a:link, a:active, a:visited {
   font-size: 14px;
 }
 .commentBlock .comment_block {
-  height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
   display: flex;
@@ -1192,9 +1182,6 @@ a:link, a:active, a:visited {
   font-size: 14px;
 }
 .commentInput input[type=text]::-moz-placeholder {
-  color: #B9B8B6;
-}
-.commentInput input[type=text]:-ms-input-placeholder {
   color: #B9B8B6;
 }
 .commentInput input[type=text]::placeholder {
@@ -1341,7 +1328,6 @@ button {
   padding: 0;
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
@@ -1384,7 +1370,6 @@ a:link, a:active, a:visited {
   z-index: 10;
   border-radius: 8px;
   box-shadow: 0px 0px 23px -5px #ababab;
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
 }
@@ -1453,9 +1438,6 @@ a:link, a:active, a:visited {
   box-shadow: rgba(15, 15, 15, 0.162) 0px 0px 1px inset;
 }
 #mainMenu .menu_search input::-moz-placeholder {
-  color: #B9B8B6;
-}
-#mainMenu .menu_search input:-ms-input-placeholder {
   color: #B9B8B6;
 }
 #mainMenu .menu_search input::placeholder {
@@ -1578,6 +1560,7 @@ a:link, a:active, a:visited {
 }
 .menu_color .colorInform span {
   height: 22px;
+  line-height: 22px;
 }
 .menu_color .colorIcon {
   border: 1px solid #d6d6d6;
@@ -1588,7 +1571,6 @@ a:link, a:active, a:visited {
 
 #sideMenu #pageMenu .inner {
   width: 100%;
-  height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
 }
@@ -1611,7 +1593,6 @@ a:link, a:active, a:visited {
   border-radius: 8px;
   box-shadow: 0px 0px 23px -5px #ababab;
   background-color: initial;
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
 }
@@ -1642,9 +1623,6 @@ a:link, a:active, a:visited {
   font-size: 14px;
 }
 #pageMenu .search input::-moz-placeholder {
-  color: #B9B8B6;
-}
-#pageMenu .search input:-ms-input-placeholder {
   color: #B9B8B6;
 }
 #pageMenu .search input::placeholder {
@@ -1850,7 +1828,6 @@ a:link, a:active, a:visited {
   margin-right: 5px;
 }
 .editor .pagePath {
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   font-size: 14px;
@@ -1876,7 +1853,6 @@ a:link, a:active, a:visited {
   text-align: center;
 }
 .editor .pathTitle {
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   height: 14px;
@@ -1957,7 +1933,6 @@ a:link, a:active, a:visited {
   align-items: center;
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   transition: color 300ms ease 0s, border 300ms ease 0s;
   cursor: pointer;
@@ -2011,7 +1986,6 @@ a:link, a:active, a:visited {
 }
 .editor .pageMoreFun .function button .label {
   text-align: left;
-  min-width: -webkit-fit-content;
   min-width: -moz-fit-content;
   min-width: fit-content;
 }
@@ -2196,7 +2170,6 @@ button {
   padding: 0;
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
@@ -2234,7 +2207,6 @@ a:link, a:active, a:visited {
   z-index: 3;
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
 }
 #export .inner {
@@ -2304,7 +2276,6 @@ a:link, a:active, a:visited {
   box-shadow: rgba(15, 15, 15, 0.05) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 3px 6px, rgba(15, 15, 15, 0.2) 0px 9px 24px;
   z-index: 10;
   padding: 6px 5px;
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   box-sizing: border-box;
@@ -2417,7 +2388,6 @@ button {
   padding: 0;
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
@@ -2472,7 +2442,6 @@ a:link, a:active, a:visited {
 }
 #iconPopup .header {
   width: 100%;
-  height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
   padding-bottom: 0px;
@@ -2496,7 +2465,6 @@ a:link, a:active, a:visited {
   padding-bottom: 6px;
 }
 #iconPopup .header .categoryBtn {
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   display: flex;
@@ -2546,7 +2514,7 @@ a:link, a:active, a:visited {
 }
 #iconPopup .imageIconInputLabel {
   width: 80%;
-  padding: 2px;
+  padding: 5px;
   background-color: rgb(46, 170, 220);
   color: white;
   font-weight: 600;
@@ -2687,7 +2655,6 @@ button {
   padding: 0;
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
@@ -2736,7 +2703,6 @@ a:link, a:active, a:visited {
   font-size: inherit;
 }
 #loader .inner {
-  height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
   min-height: 100px;
@@ -2820,16 +2786,7 @@ a:link, a:active, a:visited {
   border-radius: 50%;
   width: 100%;
   height: 100%;
-  -webkit-animation: loading 2s linear infinite;
-          animation: loading 2s linear infinite;
-}
-@-webkit-keyframes loading {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+  animation: loading 2s linear infinite;
 }
 @keyframes loading {
   0% {
@@ -2959,7 +2916,6 @@ button {
   padding: 0;
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
@@ -3033,7 +2989,6 @@ a:link, a:active, a:visited {
   left: 0;
   background-color: white;
   width: 230px;
-  height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
 }
@@ -3111,7 +3066,6 @@ a:link, a:active, a:visited {
   padding-top: 5px;
 }
 .sideBar .sideBarPageFn.on button {
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   font-size: 12px;
@@ -3119,7 +3073,6 @@ a:link, a:active, a:visited {
   fill: #a3a3a2;
 }
 .sideBar .sideBarPageFn.on button svg {
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   margin-right: 0;
@@ -3406,9 +3359,11 @@ a:link, a:active, a:visited {
   padding: 3%;
   color: rgb(141, 141, 141);
 }
+#moreFn .pageInform {
+  display: none;
+}
 
 #sideBar_pageMenu {
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   padding: 0;
@@ -3579,22 +3534,23 @@ a:link, a:active, a:visited {
   #moreFn .edit_inform {
     display: none;
   }
-  #moreFn .pageInform_mobile {
+  #moreFn .pageInform {
     width: 100%;
     display: flex;
     flex-direction: row;
     padding: 10px 1rem;
   }
-  #moreFn .pageInform_mobile .pageIcon {
+  #moreFn .pageInform .pageIcon {
     height: 2.2rem;
     width: 2.2rem;
   }
-  #moreFn .pageInform_mobile .pageImgIcon {
-    width: 100%;
-    height: 100%;
+  #moreFn .pageInform .pageImgIcon {
     border-radius: 10px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
   }
-  #moreFn .pageInform_mobile .pageTitle {
+  #moreFn .pageInform .pageTitle {
     margin-left: 1rem;
     font-size: 1.2rem;
     text-align: center;
@@ -3690,7 +3646,6 @@ button {
   padding: 0;
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
@@ -3841,7 +3796,6 @@ a:link, a:active, a:visited {
 #templates_side .useTemplateBtn {
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   transition: background-color 20ms ease-in 0s;
   cursor: pointer;
@@ -4060,7 +4014,6 @@ button {
   padding: 0;
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
@@ -4096,10 +4049,10 @@ a:link, a:active, a:visited {
   z-index: 10;
   border-radius: 8px;
   box-shadow: 0px 0px 23px -5px #ababab;
+  display: none;
   width: 400px;
   min-width: 180px;
   max-width: calc(100vw - 24px);
-  min-height: -webkit-fit-content;
   min-height: -moz-fit-content;
   min-height: fit-content;
   max-height: 70vh;
@@ -4150,9 +4103,6 @@ a:link, a:active, a:visited {
   font-size: 14px;
 }
 #trash .search input::-moz-placeholder {
-  color: #B9B8B6;
-}
-#trash .search input:-ms-input-placeholder {
   color: #B9B8B6;
 }
 #trash .search input::placeholder {
@@ -4284,7 +4234,6 @@ button {
   padding: 0;
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
@@ -4333,7 +4282,6 @@ a:link, a:active, a:visited {
   box-shadow: rgba(15, 15, 15, 0.039) 0px 0px 0px 1px;
 }
 #quickFindBord .inner {
-  height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
   width: 300px;
@@ -4370,10 +4318,6 @@ a:link, a:active, a:visited {
   color: #B9B8B6;
   text-overflow: ellipsis;
 }
-#quickFindBord .qf_search input:-ms-input-placeholder {
-  color: #B9B8B6;
-  text-overflow: ellipsis;
-}
 #quickFindBord .qf_search input::placeholder {
   color: #B9B8B6;
   text-overflow: ellipsis;
@@ -4382,7 +4326,6 @@ a:link, a:active, a:visited {
   outline: none;
 }
 #quickFindBord .qf_results {
-  min-height: -webkit-min-content;
   min-height: -moz-min-content;
   min-height: min-content;
 }
@@ -4395,7 +4338,6 @@ a:link, a:active, a:visited {
   justify-content: space-between;
   font-size: 12px;
   color: rgb(141, 141, 141);
-  height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
   padding-left: 5px;
@@ -4573,13 +4515,11 @@ a:link, a:active, a:visited {
 .result {
   display: flex;
   font-size: 14px;
-  height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
   padding: 8px 5px;
 }
 .result .pageTitle {
-  min-width: -webkit-fit-content;
   min-width: -moz-fit-content;
   min-width: fit-content;
   line-height: 1rem;

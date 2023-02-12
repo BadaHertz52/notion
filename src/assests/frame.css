@@ -75,7 +75,6 @@ button {
   padding: 0;
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
@@ -175,7 +174,6 @@ button {
   padding: 0;
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
@@ -202,7 +200,6 @@ a:link, a:active, a:visited {
   box-sizing: border-box;
   position: relative;
   width: 100%;
-  height: -webkit-min-content;
   height: -moz-min-content;
   height: min-content;
   margin-top: 1rem;
@@ -215,7 +212,6 @@ a:link, a:active, a:visited {
 }
 .editableBlock .listItem_marker,
 .editableBlock .commentsBubble {
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
 }
@@ -478,7 +474,6 @@ a:link, a:active, a:visited {
 
 .blockContents {
   width: 100%;
-  height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
   text-align: left;
@@ -616,7 +611,6 @@ button {
   padding: 0;
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
@@ -685,6 +679,7 @@ a:link, a:active, a:visited {
   height: inherit;
   box-sizing: border-box;
   align-items: center;
+  justify-content: center;
   border-radius: 50%;
   border: 1px solid black;
   color: black;
@@ -695,8 +690,6 @@ a:link, a:active, a:visited {
 }
 .commentBlock .firstLetter div,
 .commentInput .firstLetter div {
-  width: 20px;
-  height: 20px;
   font-size: 14px;
   font-weight: initial;
 }
@@ -841,7 +834,6 @@ a:link, a:active, a:visited {
   height: 20px;
 }
 .commentBlock .comment_header .commentTool button {
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   color: #a3a3a2;
@@ -872,7 +864,6 @@ a:link, a:active, a:visited {
   font-size: 14px;
 }
 .commentBlock .comment_block {
-  height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
   display: flex;
@@ -962,9 +953,6 @@ a:link, a:active, a:visited {
   font-size: 14px;
 }
 .commentInput input[type=text]::-moz-placeholder {
-  color: #B9B8B6;
-}
-.commentInput input[type=text]:-ms-input-placeholder {
   color: #B9B8B6;
 }
 .commentInput input[type=text]::placeholder {
@@ -1111,7 +1099,6 @@ button {
   padding: 0;
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
@@ -1189,9 +1176,6 @@ a:link, a:active, a:visited {
   box-sizing: border-box;
 }
 #linkLoader input::-moz-placeholder {
-  color: #B9B8B6;
-}
-#linkLoader input:-ms-input-placeholder {
   color: #B9B8B6;
 }
 #linkLoader input::placeholder {
@@ -1391,10 +1375,8 @@ a:link, a:active, a:visited {
   position: relative;
 }
 .pageHeader .pageIcon {
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
-  height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
 }
@@ -1412,7 +1394,6 @@ a:link, a:active, a:visited {
   height: 24px;
 }
 .pageHeader .deco div button {
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   height: 100%;
@@ -1458,7 +1439,6 @@ a:link, a:active, a:visited {
 }
 
 .pageContent {
-  height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
   padding-bottom: 50px;
@@ -1509,12 +1489,12 @@ a:link, a:active, a:visited {
     height: 100px;
   }
   .pageHeader_notCover,
-.pageContent {
+  .pageContent {
     padding-left: 1rem;
   }
   .pageHeader .pageTitle,
-.editableBlock,
-.pageHeader .comments {
+  .editableBlock,
+  .pageHeader .comments {
     padding-right: 2rem;
   }
   .editableBlock {

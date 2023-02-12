@@ -416,6 +416,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
       if(trashBtn.current){
         const domRect =trashBtn.current.getClientRects()[0];
         setTrashStyle({
+          display:"flex" ,
           position:"absolute",
           top: domRect.top - 100,
           left: window.innerWidth >=768? domRect.right + 50 : window.innerWidth * 0.2
@@ -687,7 +688,7 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
       </button>
       {targetItem!==null &&
         <div
-          className='pageInform_mobile'
+          className='pageInform'
         >
           <PageIcon
             icon ={targetItem.icon}

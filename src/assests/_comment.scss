@@ -45,6 +45,7 @@
     height: inherit;
     box-sizing: border-box;
     align-items: center;
+    justify-content: center;
     border-radius: 50%;
     border :1px solid black;
     color: black;
@@ -53,8 +54,6 @@
     flex-shrink: 0;
     margin-right: 5px;
     div{
-      width: 20px;
-      height: 20px;
       font : {
         size:14px ;
         weight: initial;
