@@ -1,16 +1,14 @@
 {
   "files": {
-    "main.css": "/notion/static/css/main.73473351.css",
-    "main.js": "/notion/static/js/main.81e197b1.js",
-    "static/js/787.27b170a4.chunk.js": "/notion/static/js/787.27b170a4.chunk.js",
+    "main.css": "/notion/static/css/main.c845210a.css",
+    "main.js": "/notion/static/js/main.de2c389a.js",
     "static/media/vincent-van-gogh-ge1323790d_640.jpg": "/notion/static/media/vincent-van-gogh-ge1323790d_640.692c91b79db1462ea21a.jpg",
     "index.html": "/notion/index.html",
-    "main.73473351.css.map": "/notion/static/css/main.73473351.css.map",
-    "main.81e197b1.js.map": "/notion/static/js/main.81e197b1.js.map",
-    "787.27b170a4.chunk.js.map": "/notion/static/js/787.27b170a4.chunk.js.map"
+    "main.c845210a.css.map": "/notion/static/css/main.c845210a.css.map",
+    "main.de2c389a.js.map": "/notion/static/js/main.de2c389a.js.map"
   },
   "entrypoints": [
-    "static/css/main.73473351.css",
-    "static/js/main.81e197b1.js"
+    "static/css/main.c845210a.css",
+    "static/js/main.de2c389a.js"
   ]
 }
