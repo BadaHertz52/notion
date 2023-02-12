@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from 'react';
 import { BsChatLeftText, BsThreeDots } from 'react-icons/bs';
 import { IoIosArrowDown } from 'react-icons/io';
 import {ImArrowUpRight2} from 'react-icons/im';
@@ -98,6 +98,24 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
   const color ="color";
   const menu ="menu";
   type menuType =typeof color| typeof menu ;
+  const closeOtherBtns=(event:MouseEvent<HTMLDivElement>)=>{
+    const target =event.target as HTMLElement|null; 
+    if(target !==null){
+      const clickTypeBtn = target.closest(".typeBtn");
+      const clickLinkBtn =target.closest(".linkBtn");
+      const clickMenuBtn =target.closest(".menuBtn");
+      const clickColorBtn =target.closest(".colorBtn");
+      !clickTypeBtn && setCommand({
+        boolean:false,
+        command:null,
+        targetBlock:null
+      });
+
+      !clickLinkBtn && setOpenLink(false);
+      !clickMenuBtn && setOpenMenu(false);
+      !clickColorBtn && setOpenColor(false);
+    }
+  };
   /**
    * BlockStyler의 타켓인 block에 대한 내용을 담고 있는 element중 mainBlock element의 domRect을 반환하는 함수 
    * @returns DOMRect | undefined
@@ -409,6 +427,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
       }
     }
   };
+
   useEffect(()=>{
     changeBlockStylerStyle();
     if(selection.change){
@@ -427,6 +446,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
     <div 
       id="blockStyler"
       style={blockStylerStyle}
+      onClick={(event)=>closeOtherBtns(event)}
     >
       <div className='inner'>
 
