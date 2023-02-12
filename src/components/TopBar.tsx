@@ -90,8 +90,13 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages,pagePath, addBlock,
     addFavorites(page.id);
   }
   const onClickViewAllComments=()=>{
+    setOpenPageMoreFun(false);
     setShowAllComments(!showAllComments)
     changeAllCommentAndTopBarStyle()
+  };
+  const onClickMoreBtn =()=>{
+    setOpenPageMoreFun(!openPageMoreFun);
+    setShowAllComments(false);
   };
   const defaultStyle ="default";
   const serif ="serif"; 
@@ -289,7 +294,7 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages,pagePath, addBlock,
         </button>
         <button
           title=" Style, export, and more"
-          onClick={()=>setOpenPageMoreFun(!openPageMoreFun)}
+          onClick={onClickMoreBtn}
         >
           <BsThreeDots/>
         </button>
