@@ -899,7 +899,7 @@ function updateMiddleChildren(startIndex:number, endIndex:number,endNode:Node, c
     block.type=== "page" &&setTargetPageId(block.id);
   };
   /**
-   * image tyoe의 block에 넣은 이미지 파일을 선택하기 위한 버튼을 클릭한 경우 작동하는 함수로, Loader componenet를 엶
+   * image type의 block에 넣은 이미지 파일을 선택하기 위한 버튼을 클릭한 경우 작동하는 함수로, Loader componenet를 엶
    */
   const onClickAddFileBtn =()=>{
     setOpenLoader(true);
