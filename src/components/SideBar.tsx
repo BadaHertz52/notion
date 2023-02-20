@@ -1,4 +1,4 @@
-import React, {  CSSProperties, Dispatch, SetStateAction, useEffect, useRef, useState, MouseEvent, TouchEvent } from 'react';
+import React, {  CSSProperties, Dispatch, SetStateAction, useEffect, useRef, useState, TouchEvent } from 'react';
 import { Block, blockSample, findPage, listItem, Notion, Page, pageSample } from '../modules/notion';
 import { detectRange } from './BlockFn';
 import { UserState } from '../modules/user';
@@ -9,7 +9,7 @@ import PageMenu from './PageMenu';
 import PageIcon from './PageIcon';
 import { SideBarContainerProp } from '../containers/SideBarContainer';
 import { SideAppear } from '../modules/side';
-import MobileMenu from './MobileMenu';
+
 
 //react-icon
 import {FiCode ,FiChevronsLeft} from 'react-icons/fi';
@@ -666,13 +666,6 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
           <span>New page</span>
         </button>
       </div>
-      <MobileMenu
-        sideAppear ={sideAppear}
-        changeSide ={changeSide}
-        addPage ={addPage}
-        openQF ={openQF}
-        setOpenQF ={setOpenQF}
-      />
     </div>
     </div>
     <div 

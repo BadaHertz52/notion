@@ -316,9 +316,7 @@ npm install --save react-icon react-contenteditable styled-component
 * Menu
   * block에 대한 복제,삭제,이동,타입 변경,comment 추가,color 변경등을 할 수 있는 component
   
-* MobileMenu 
-  * 화면 너비가 425px이하인 기기에서 sideBar,quickBar를 조정하고 새로운 페이지를 추가할 수 있는 기능을 담당
-  
+
 * MoveTargetBlock
   * block의 위치를 이동 시킬 때, 이동되는 block을 화면상에 보여주는 component
 
