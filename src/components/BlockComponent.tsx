@@ -1,9 +1,9 @@
-import React, { ChangeEvent, Dispatch,KeyboardEvent,MouseEvent, SetStateAction, SyntheticEvent, useEffect, useRef} from 'react';
+import React, { ChangeEvent, Dispatch,KeyboardEvent,MouseEvent, SetStateAction, SyntheticEvent,  useEffect, useRef} from 'react';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import { IoChatboxOutline } from 'react-icons/io5';
 import { MdOutlinePhotoSizeSelectActual } from 'react-icons/md';
 import {  Block,BlockType,blockTypes,findBlock,findPage,findParentBlock,findPreviousBlockInDoc,makeNewBlock,Page, toggle } from '../modules/notion';
-import { Command, selectionType } from './Frame';
+import { Command, selectionType} from './Frame';
 import ImageContent from './ImageContent';
 /**
  * template 수정 시에 수정 이전 버전을 session storage에 저장하는 함수 (page의 내용을 변경하는 모든 함수에서 사용됨)
@@ -39,7 +39,8 @@ type  BlockComponentProps ={
   setLoaderTargetBlock : Dispatch<SetStateAction<Block | null>>,
   closeMenu: (event: globalThis.MouseEvent| MouseEvent) => void,
   templateHtml:HTMLElement|null,
-  setSelection:Dispatch<SetStateAction<selectionType|null>>
+  setSelection:Dispatch<SetStateAction<selectionType|null>>,
+  setOpenMM :Dispatch<SetStateAction<boolean>>
 };
 type BlockCommentProps={
   block:Block,
@@ -70,7 +71,7 @@ export const BlockComment =({block , onClickCommentBtn}:BlockCommentProps)=>{
   )
 };
 
-const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,command, setCommand  ,onClickCommentBtn ,setOpenComment ,setTargetPageId ,setOpenLoader, setLoaderTargetBlock ,closeMenu ,templateHtml, setSelection }:BlockComponentProps)=>{
+const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,command, setCommand  ,onClickCommentBtn ,setOpenComment ,setTargetPageId ,setOpenLoader, setLoaderTargetBlock ,closeMenu ,templateHtml, setSelection ,setOpenMM }:BlockComponentProps)=>{
   const editTime =JSON.stringify(Date.now);
   const contentEditableRef= useRef<HTMLElement>(null);
   /**

@@ -31,7 +31,8 @@ export type EditableBlockProps ={
   setLoaderTargetBlock : Dispatch<SetStateAction<Block | null>>,
   closeMenu:(event: globalThis.MouseEvent |MouseEvent) => void,
   templateHtml: HTMLElement | null,
-  setSelection:Dispatch<SetStateAction<selectionType|null>>
+  setSelection:Dispatch<SetStateAction<selectionType|null>>,
+  setOpenMM:Dispatch<SetStateAction<boolean>>,
 };
 export   type CommentOpenType ={
   open:boolean,
@@ -65,7 +66,7 @@ export const changeFontSizeBySmallText=(block:Block, fontSize:number):CSSPropert
   return style 
 };
 
-const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,fontSize, moveBlock ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand , openComment, setTargetPageId ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock,closeMenu ,templateHtml ,setSelection
+const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,fontSize, moveBlock ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand , openComment, setTargetPageId ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock,closeMenu ,templateHtml ,setSelection ,setOpenMM
 
 }:EditableBlockProps)=>{  
   const className = block.type !== "toggle" ?
@@ -226,6 +227,7 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
                 closeMenu={closeMenu}
                 templateHtml={templateHtml}
                 setSelection={setSelection}
+                setOpenMM={setOpenMM}
               />
             </div>
             </div>
@@ -265,6 +267,7 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
               closeMenu={closeMenu}
               templateHtml={templateHtml}
               setSelection={setSelection}
+              setOpenMM={setOpenMM}
               />
             )}
           </div>
@@ -367,6 +370,7 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
                 closeMenu={closeMenu}
                 templateHtml= {templateHtml}
                 setSelection={setSelection}
+                setOpenMM={setOpenMM}
                 />
               </div>
               </div>
@@ -409,6 +413,7 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
                     closeMenu={closeMenu}
                     templateHtml={templateHtml}
                     setSelection={setSelection}
+                    setOpenMM={setOpenMM}
                   />
                 )
                 }

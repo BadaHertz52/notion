@@ -23,7 +23,6 @@ import {GrDocumentText ,GrDocument} from 'react-icons/gr';
 import { MdInsertPhoto } from 'react-icons/md';
 import { HiTemplate } from 'react-icons/hi';
 
-
 export type Command ={
   boolean:boolean,
   command:string | null,
@@ -74,7 +73,8 @@ export type selectionType={
    * blockStyler에 의한 block data의 변화가 있는 지 여부 
    */
   change:boolean
-}
+};
+
 const basicPageCover ='https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assests/img/artificial-turf-g6e884a1d4_1920.jpg';;
 /**
  * mouse drag로 위치를 변경시킬 블록의 내용을 보여주는 component 
@@ -118,6 +118,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   /** block 이동 시, 이동 할 위치의 기준이 되는 block(block 은 pointBlockToMoveBlock.current의 앞에 위치하게됨) */
   const pointBlockToMoveBlock =useRef<Block|null>(null);
   const [selection, setSelection]=useState<selectionType|null>(null);
+  const [openMobileMenu, setOpenMM]=useState<boolean>(false);
   const maxWidth = innerWidth -60;
   const fontSize:number = openTemplates? 20: ( smallText? 14: 16);
   const frameInnerStyle:CSSProperties={
@@ -917,6 +918,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
                     closeMenu={closeMenu}
                     templateHtml={templateHtml}
                     setSelection={setSelection}
+                    setOpenMM ={setOpenMM}
                   />
                 )
               }
@@ -1093,9 +1095,10 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           closeMenu={closeMenu}
           templateHtml={templateHtml}
           setSelection={setSelection}
+          setOpenMM={setOpenMM}
         />
       }
-      {selection !==null &&
+      {selection !==null && !openMobileMenu &&
         <BlockStyler
           pages={pages}
           pagesId={pagesId}
