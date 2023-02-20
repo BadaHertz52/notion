@@ -276,6 +276,9 @@ a:link, a:active, a:visited {
   white-space: normal;
   word-break: break-all;
   overflow: hidden;
+  -webkit-user-select: text;
+     -moz-user-select: text;
+          user-select: text;
   font-size: inherit;
 }
 .contentEditable:focus-visible {
