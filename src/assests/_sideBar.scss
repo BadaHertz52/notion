@@ -388,7 +388,7 @@
 }
 
 
-@media screen and (max-width:426px) {
+@media screen and (max-width:425px) {
   .sideBar{
     background-color: rgb(240, 240, 240);
     width: 100vw;
@@ -434,10 +434,11 @@
     }
     .record-icon {
       width: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       div {
         font-size: 1.8rem;
-        width:100%;
-        height: 100%;
       }
     }
     .userEmail{
@@ -511,9 +512,6 @@
         }
       }
     }
-  }
-  .sideBar_inner_top{
-    height: 90vh;
   }
 
   #moreFn {
