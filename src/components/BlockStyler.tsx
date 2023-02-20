@@ -9,6 +9,39 @@ import Menu, { MenuAndBlockStylerCommonProps } from './Menu';
 import { Block} from '../modules/notion';
 import { detectRange } from './BlockFn';
 import LinkLoader from './LinkLoader';
+  /**
+   * BlockStyler의 타켓인 block에 대한 내용을 담고 있는 element중 mainBlock element의 domRect을 반환하는 함수 
+   * @returns DOMRect | undefined
+   */
+  export const getMainBlockDomRect=(frameHtml:HTMLDivElement | null , block:Block):DOMRect | undefined=>{
+    const blockHtml = frameHtml?.querySelector(`#block_${block.id}`);
+    const mainBlockHtml= block.type.includes("List")? 
+      blockHtml?.parentElement?.parentElement
+      :blockHtml?.querySelector('.mainBlock');
+    const mainBlockDomRect = mainBlockHtml?.getClientRects()[0];
+      return mainBlockDomRect
+  }
+  export const changeStylerStyle=(frameHtml:HTMLDivElement | null , block:Block , setStyle:Dispatch<SetStateAction<CSSProperties|undefined>>)=>{
+    const mainBlockDomRect =getMainBlockDomRect(frameHtml, block);
+    if(frameHtml!==undefined && frameHtml!==null && mainBlockDomRect!==undefined){
+      const pageContentInner =frameHtml.querySelector(".pageContent_inner") as Element;
+      const frameDomRect = frameHtml.getClientRects()[0]; 
+      const top = mainBlockDomRect.top - frameDomRect.top;
+      const left =mainBlockDomRect.left -frameDomRect.left - pageContentInner.clientLeft;
+      if(left + 450 > frameDomRect.width){
+        setStyle({
+          top:`${top}px`,
+          left:`${(frameDomRect.width - 450)/2}px`
+        })
+      }else{
+        setStyle({
+          top:`${top}px`,
+          left:`${left}px`
+        })
+      }
+      
+    }
+  };
 /**
  *  select 하거나, 이를 취소한 경우, 변경된 블럭의 contents를 가져오는  함수로 만약 BlockStyler로 스타일을 변경하다면, 스타일 변경 후에 해당 함수를 사용해야 한다.
  * @param block  
@@ -116,39 +149,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
       !clickColorBtn && setOpenColor(false);
     }
   };
-  /**
-   * BlockStyler의 타켓인 block에 대한 내용을 담고 있는 element중 mainBlock element의 domRect을 반환하는 함수 
-   * @returns DOMRect | undefined
-   */
-  const getMainBlockDomRect=():DOMRect | undefined=>{
-    const blockHtml = frameHtml?.querySelector(`#block_${block.id}`);
-    const mainBlockHtml= block.type.includes("List")? 
-      blockHtml?.parentElement?.parentElement
-      :blockHtml?.querySelector('.mainBlock');
-    const mainBlockDomRect = mainBlockHtml?.getClientRects()[0];
-      return mainBlockDomRect
-  }
-  const changeBlockStylerStyle=()=>{
-    const mainBlockDomRect =getMainBlockDomRect();
-    if(frameHtml!==undefined && frameHtml!==null && mainBlockDomRect!==undefined){
-      const pageContentInner =frameHtml.querySelector(".pageContent_inner") as Element;
-      const frameDomRect = frameHtml.getClientRects()[0]; 
-      const top = mainBlockDomRect.top - frameDomRect.top;
-      const left =mainBlockDomRect.left -frameDomRect.left - pageContentInner.clientLeft;
-      if(left + 450 > frameDomRect.width){
-        setBlockStylerStyle({
-          top:`${top}px`,
-          left:`${(frameDomRect.width - 450)/2}px`
-        })
-      }else{
-        setBlockStylerStyle({
-          top:`${top}px`,
-          left:`${left}px`
-        })
-      }
-      
-    }
-  };
+
   const onClickTypeBtn=()=>{
     command.boolean?
     setCommand({
@@ -164,7 +165,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
     })
   };
   const changeCommentStyle =()=>{
-    const mainBlockDomRect =getMainBlockDomRect();
+    const mainBlockDomRect =getMainBlockDomRect(frameHtml, block);
     if(mainBlockDomRect!==undefined && 
       frameHtml!==null && frameHtml !==undefined ){
       const pageContentDomRect= pageContent?.getClientRects()[0];
@@ -253,7 +254,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
   };
   
   window.onresize=()=>{
-    changeBlockStylerStyle();
+    changeStylerStyle(frameHtml,block,setBlockStylerStyle);
     openMenu && changeMenuStyle(menu);
     openColor && changeMenuStyle(color);
   };
@@ -429,7 +430,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
   };
 
   useEffect(()=>{
-    changeBlockStylerStyle();
+    changeStylerStyle(frameHtml, block, setBlockStylerStyle);
     if(selection.change){
       openColor && setOpenColor(false);
       openLink && setOpenLink(false);
