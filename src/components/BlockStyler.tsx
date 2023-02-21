@@ -74,7 +74,7 @@ if(contentEditableHtml!==null&& contentEditableHtml!==undefined){
 };
 return newBlock
 };
-type BlockStylerProps = MenuAndBlockStylerCommonProps& {
+export type BlockStylerProps = MenuAndBlockStylerCommonProps& {
   pagesId:string[],
   recentPagesId:string[]|null,
   selection:selectionType,
