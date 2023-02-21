@@ -4,6 +4,7 @@ import { CSSProperties } from 'styled-components';
 import { makeNewBlock } from '../modules/notion';
 import { selectionType } from './Frame';
 import Menu, {  MenuAndBlockStylerCommonProps} from './Menu';
+import MobileStyler from './MobileStyler';
 
 type MobileBlockMenuProps = MenuAndBlockStylerCommonProps & {
   setSelection : Dispatch<SetStateAction<selectionType|null>>,
@@ -15,6 +16,8 @@ const MobileBlockMenu =({pages,firstlist, page, block, userName,addBlock,changeB
   const [moreStyle, setMoreStyle] =useState<CSSProperties>({
     transform: "translateY(-100vh)"
   });
+  const [openStyler, setOpenStyler] =useState<boolean>(false);
+  const [mobileSelection , setMobileSelection]= useState<Selection|null>(null)
   /**
    * MobileBlockMenu 창을 닫는 함수 
    */
@@ -35,45 +38,59 @@ const MobileBlockMenu =({pages,firstlist, page, block, userName,addBlock,changeB
       transform: 'translateY(0)'
     })
   };
+  document.onselectionchange = (event)=>{
+    const SELECTION = document.getSelection();
+    const notSelect = (SELECTION?.anchorNode === SELECTION?.focusNode && SELECTION?.anchorOffset === SELECTION?.focusOffset);
+    console.log("selectionchange", notSelect)
+    if(!notSelect){
+      setOpenStyler(true);
+    }
+  }
   return(
     <div id="mobileBlockMenu">
       <div className="inner">
-        <button
-          onClick={addNewBlock}
-          title="Click  to add a block below"
-          >
-          <AiOutlinePlus/>
-        </button>
-        <Menu
-          pages={pages}
-          block={selection.block}
-          firstlist={firstlist}
-          page={page}
-          userName={userName}
-          setOpenMenu={setOpenMM}
-          addBlock={addBlock}
-          editBlock={editBlock}
-          changeBlockToPage={changeBlockToPage}
-          changePageToBlock={changePageToBlock}
-          deleteBlock={deleteBlock}
-          editPage={editPage}
-          duplicatePage={duplicatePage}
-          movePageToPage={movePageToPage}
-          popup={popup}
-          setPopup={setPopup}
-          setCommentBlock={setCommentBlock}
-          setTargetPageId={setTargetPageId}
-          setOpenRename= {null}
-          setSelection={null}
-          frameHtml={frameHtml}
-          style ={undefined}
-        />
-        <button
-          aria-details='open menu'
-          onClick={openMore}
-        >
-          more
-        </button>
+        {!openStyler ?
+          <>
+            <button
+              onClick={addNewBlock}
+              title="Click  to add a block below"
+              >
+              <AiOutlinePlus/>
+            </button>
+            <Menu
+              pages={pages}
+              block={selection.block}
+              firstlist={firstlist}
+              page={page}
+              userName={userName}
+              setOpenMenu={setOpenMM}
+              addBlock={addBlock}
+              editBlock={editBlock}
+              changeBlockToPage={changeBlockToPage}
+              changePageToBlock={changePageToBlock}
+              deleteBlock={deleteBlock}
+              editPage={editPage}
+              duplicatePage={duplicatePage}
+              movePageToPage={movePageToPage}
+              popup={popup}
+              setPopup={setPopup}
+              setCommentBlock={setCommentBlock}
+              setTargetPageId={setTargetPageId}
+              setOpenRename= {null}
+              setSelection={null}
+              frameHtml={frameHtml}
+              style ={undefined}
+            />
+            <button
+              aria-details='open menu'
+              onClick={openMore}
+            >
+              more
+            </button>
+          </>
+        :
+          <MobileStyler/>
+        }
       </div>
       <div className="more" style={moreStyle}>
         <Menu

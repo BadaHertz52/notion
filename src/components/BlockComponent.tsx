@@ -841,37 +841,25 @@ const selectContent =(SELECTION:Selection|null ,targetBlock:Block)=>{
    *block의 content 를 마우스로 선택 시, block의 content를 선택된 부분(class 가 selected인 span element)과 아닌 부분으로 수정하는 함수
    */
   const onSelectInPC =(event:SyntheticEvent<HTMLDivElement>)=>{
-    if(!isMobile()){
       const SELECTION = window.getSelection(); 
       const targetBlock = findTargetBlock(event);
       if(targetBlock !==null){
         selectContent(SELECTION, targetBlock);
       }
-      
-    }
   };
-  const onTouchEnd =(event:TouchEvent<HTMLDivElement>)=>{
-    const SELECTION = document.getSelection();
-    const notSelect = (SELECTION?.anchorNode === SELECTION?.focusNode && SELECTION?.anchorOffset === SELECTION?.focusOffset);
-    const targetBlock =findTargetBlock(event);
-    console.log("touch", event);
-    if(notSelect && targetBlock !==null){
-      setOpenMM(true);
-      setSelection({
-        block:targetBlock,
-        change:false,
-      })
-    }
-  };
-  const detectSelectionInMobile =(event:globalThis.TouchEvent)=>{
-    const SELECTION = document.getSelection();
-    const notSelect = (SELECTION?.anchorNode === SELECTION?.focusNode && SELECTION?.anchorOffset === SELECTION?.focusOffset);
-    if(!notSelect){
+  const onSelectInMobile =(event :SyntheticEvent<HTMLDivElement>)=>{
+    if(!openMobileMenu){
       const targetBlock = findTargetBlock(event);
-      console.log("movile", notSelect, SELECTION ,targetBlock, event)
-      targetBlock !==null && selectContent(SELECTION, targetBlock);
-    };
-  };
+      if(targetBlock!==null){
+        setSelection({
+          block:targetBlock,
+          change:false
+        })
+        setOpenMM(true);
+      }
+    } 
+
+  }
   /**
    * BlockComponent 중 link 가 있는 element를 클릭 했을 경우 , 해당 링크를 여는 함수 
    */
@@ -963,14 +951,6 @@ const selectContent =(SELECTION:Selection|null ,targetBlock:Block)=>{
         }
       }
     },[]);
-    // useEffect(()=>{
-    //   frameInnerDocument?.addEventListener('touchend', (event)=>{
-    //     if(isMobile()){
-    //       detectSelectionInMobile(event);
-    //     }
-        
-    //   })
-    // },[frameInnerDocument])
     return(
       <>
       {!command.command || (command.targetBlock !==null && command.targetBlock.id !== block.id) ? 
@@ -981,8 +961,7 @@ const selectContent =(SELECTION:Selection|null ,targetBlock:Block)=>{
           innerRef={contentEditableRef}
           onChange={(event)=> onChangeContents(event )}
           onKeyDown={(event)=> onKeyDownContents(event)}
-          onSelect={(event)=>  onSelectInPC(event)}
-          onTouchEnd={(event)=> onTouchEnd(event)}
+          onSelect={(event)=> isMobile() ? onSelectInMobile(event) : onSelectInPC(event)}
           onClick={(event)=>onClickLinkInContents(event)}
         /> 
         :
