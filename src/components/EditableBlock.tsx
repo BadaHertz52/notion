@@ -32,6 +32,7 @@ export type EditableBlockProps ={
   closeMenu:(event: globalThis.MouseEvent |MouseEvent) => void,
   templateHtml: HTMLElement | null,
   setSelection:Dispatch<SetStateAction<selectionType|null>>,
+  openMobileMenu:boolean,
   setOpenMM:Dispatch<SetStateAction<boolean>>,
 };
 export   type CommentOpenType ={
@@ -66,7 +67,7 @@ export const changeFontSizeBySmallText=(block:Block, fontSize:number):CSSPropert
   return style 
 };
 
-const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,fontSize, moveBlock ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand , openComment, setTargetPageId ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock,closeMenu ,templateHtml ,setSelection ,setOpenMM
+const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,fontSize, moveBlock ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand , openComment, setTargetPageId ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock,closeMenu ,templateHtml ,setSelection ,setOpenMM ,openMobileMenu
 
 }:EditableBlockProps)=>{  
   const className = block.type !== "toggle" ?
@@ -228,6 +229,7 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
                 templateHtml={templateHtml}
                 setSelection={setSelection}
                 setOpenMM={setOpenMM}
+                openMobileMenu={openMobileMenu}
               />
             </div>
             </div>
@@ -268,6 +270,7 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
               templateHtml={templateHtml}
               setSelection={setSelection}
               setOpenMM={setOpenMM}
+              openMobileMenu={openMobileMenu}
               />
             )}
           </div>
@@ -371,6 +374,7 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
                 templateHtml= {templateHtml}
                 setSelection={setSelection}
                 setOpenMM={setOpenMM}
+                openMobileMenu={openMobileMenu}
                 />
               </div>
               </div>
@@ -414,6 +418,7 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
                     templateHtml={templateHtml}
                     setSelection={setSelection}
                     setOpenMM={setOpenMM}
+                    openMobileMenu={openMobileMenu}
                   />
                 )
                 }

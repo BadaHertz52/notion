@@ -514,60 +514,61 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
         </button>
       </div>
     </div>
-    {openLink &&
-      <LinkLoader
-        recentPagesId={recentPagesId}
-        pages={pages}
-        pagesId={pagesId}
-        page={page}
-        block={selection.block}
-        editBlock={editBlock}
-        setOpenLink={setOpenLink}
-        blockStylerStyle={blockStylerStyle}
-        setSelection={setSelection}
-        />
-    }
-      {openColor &&
-      <div 
-        id="blockStylerColor"
-        style={menuStyle}
-      >
-          <ColorMenu
-            page={page}
-            block={selection.block}
-            editBlock={editBlock}
-            selection={selection}
-            setSelection ={setSelection}
-          />
-      </div>
-
-      }
-      {openMenu&&
-        <Menu
+    <div className="sideMenu">
+      {openLink &&
+        <LinkLoader
+          recentPagesId={recentPagesId}
           pages={pages}
-          firstlist={firstlist}
+          pagesId={pagesId}
           page={page}
           block={selection.block}
-          userName={userName}
-          setOpenMenu={setOpenMenu}
-          addBlock={addBlock}
           editBlock={editBlock}
-          changeBlockToPage={changeBlockToPage}
-          changePageToBlock={changePageToBlock}
-          deleteBlock={deleteBlock}
-          editPage={editPage}
-          duplicatePage={duplicatePage}
-          movePageToPage={movePageToPage}
-          popup={popup}
-          setPopup={setPopup}
-          setCommentBlock={setCommentBlock}
-          setTargetPageId={setTargetPageId}
-          setOpenRename= {null}
+          setOpenLink={setOpenLink}
+          blockStylerStyle={blockStylerStyle}
           setSelection={setSelection}
-          frameHtml={frameHtml}
-          style={menuStyle}
-        />
+          />
       }
+        {openColor &&
+        <div 
+          id="blockStylerColor"
+          style={menuStyle}
+        >
+            <ColorMenu
+              page={page}
+              block={selection.block}
+              editBlock={editBlock}
+              selection={selection}
+              setSelection ={setSelection}
+            />
+        </div>
+        }
+        {openMenu&&
+          <Menu
+            pages={pages}
+            firstlist={firstlist}
+            page={page}
+            block={selection.block}
+            userName={userName}
+            setOpenMenu={setOpenMenu}
+            addBlock={addBlock}
+            editBlock={editBlock}
+            changeBlockToPage={changeBlockToPage}
+            changePageToBlock={changePageToBlock}
+            deleteBlock={deleteBlock}
+            editPage={editPage}
+            duplicatePage={duplicatePage}
+            movePageToPage={movePageToPage}
+            popup={popup}
+            setPopup={setPopup}
+            setCommentBlock={setCommentBlock}
+            setTargetPageId={setTargetPageId}
+            setOpenRename= {null}
+            setSelection={setSelection}
+            frameHtml={frameHtml}
+            style={menuStyle}
+          />
+        }
+    </div>
     </>
   )
 };

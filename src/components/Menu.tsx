@@ -16,7 +16,7 @@ import {TiArrowSortedDown} from 'react-icons/ti';
 import {IoArrowRedoOutline} from 'react-icons/io5';
 import {RiDeleteBin6Line } from 'react-icons/ri';
 import { AiOutlineFormatPainter } from 'react-icons/ai';
-import { setTemplateItem } from './BlockComponent';
+import { isMobile, setTemplateItem } from './BlockComponent';
 import { selectionType } from './Frame';
 export type MenuAndBlockStylerCommonProps={
   pages:Page[],
@@ -37,10 +37,9 @@ export type MenuAndBlockStylerCommonProps={
   setCommentBlock: React.Dispatch<React.SetStateAction<Block | null>>,
   setTargetPageId: Dispatch<SetStateAction<string>>,
   frameHtml: HTMLDivElement | null,
-  
 }
 
-type MenuProps
+export type MenuProps
 =MenuAndBlockStylerCommonProps& {
   setOpenMenu : Dispatch<SetStateAction<boolean>>,
   setOpenRename:Dispatch<SetStateAction<boolean>>|null,
@@ -88,28 +87,39 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
     return style
   };
   function changeSideMenuStyle(){
-    const mainMenu= document.getElementById("mainMenu");
-    const innerWidth= window.innerWidth;
-    if(mainMenu !==null && menuRef.current!==null && frameHtml!==null){
-      const menuTop =menuRef.current.getClientRects()[0].top;
-      const frameBottom =frameHtml.getClientRects()[0].bottom;
-      const maxHeight =frameBottom - menuTop - 32;
-      const left =(mainMenu?.clientWidth)* 0.7;
-      const style :CSSProperties= {
-        top: innerWidth >767? '-10px' :
-        "10px",
-        left: innerWidth> 767? left : `${mainMenu.clientWidth * (innerWidth >=375 ? 0.5: 0.3)}px`,
-        maxHeight:`${maxHeight}px`,
-      };
-      setSideMenuStyle(style);
+    if(! isMobile()){
+      const mainMenu= document.getElementById("mainMenu");
+      const innerWidth= window.innerWidth;
+      if(mainMenu !==null && menuRef.current!==null && frameHtml!==null){
+        const menuTop =menuRef.current.getClientRects()[0].top;
+        const frameBottom =frameHtml.getClientRects()[0].bottom;
+        const maxHeight =frameBottom - menuTop - 32;
+        const left =(mainMenu?.clientWidth)* 0.7;
+        const style :CSSProperties= {
+          top: innerWidth >767? '-10px' :
+          "10px",
+          left: innerWidth> 767? left : `${mainMenu.clientWidth * (innerWidth >=375 ? 0.5: 0.3)}px`,
+          maxHeight:`${maxHeight}px`,
+        };
+        setSideMenuStyle(style);
+      }
+    }else{
+      //mobile
+      setSideMenuStyle({
+        transform:"translateY(0)"
+      })
     }
   };
   window.onresize =()=>{
-    if(blockStylerHtml ===null){
-      const style =changeMenuStyle();
-      setMenuStyle(style);
-    };
-    changeSideMenuStyle();
+    if(!isMobile()){
+      if(blockStylerHtml ===null){
+        const style =changeMenuStyle();
+        setMenuStyle(style);
+      };
+      if(turnInToPage|| turnInto||color){
+        changeSideMenuStyle();
+      }
+    }
   };
   useEffect(()=>{
     if(turnInToPage|| turnInto||color){

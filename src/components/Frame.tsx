@@ -11,7 +11,7 @@ import PageIcon from './PageIcon';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import PageMenu from './PageMenu';
 import { PopupType } from '../containers/EditorContainer';
-import { setTemplateItem } from './BlockComponent';
+import { isMobile, setTemplateItem } from './BlockComponent';
 import { fontStyleType } from '../containers/NotionRouter';
 import BlockStyler from './BlockStyler';
 import MoveTargetBlock from './MoveTargetBlock';
@@ -22,6 +22,7 @@ import { BsFillEmojiSmileFill} from 'react-icons/bs';
 import {GrDocumentText ,GrDocument} from 'react-icons/gr';
 import { MdInsertPhoto } from 'react-icons/md';
 import { HiTemplate } from 'react-icons/hi';
+import MobileBlockMen from './MobileBlockMen';
 
 export type Command ={
   boolean:boolean,
@@ -726,6 +727,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
     >
       <div 
         className='frame_inner'
+        id={`page_${page.id}`}
         style={frameInnerStyle}
         onMouseMove={showMoveTargetBlock}
       >
@@ -919,6 +921,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
                     templateHtml={templateHtml}
                     setSelection={setSelection}
                     setOpenMM ={setOpenMM}
+                    openMobileMenu={openMobileMenu}
                   />
                 )
               }
@@ -986,33 +989,36 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
         setLoaderTargetBlock={setLoaderTargetBlock}
       />
       }
-      <BlockFn
-        page={page}
-        pages={pages}
-        pagesId={pagesId}
-        firstlist={firstlist}
-        userName={userName}
-        addBlock={addBlock}
-        editBlock={editBlock}
-        changeBlockToPage={changeBlockToPage}
-        changePageToBlock={changePageToBlock}
-        deleteBlock={deleteBlock}
-        addPage={addPage}
-        editPage={editPage}
-        duplicatePage={duplicatePage}
-        movePageToPage={movePageToPage}
-        frameHtml={frameHtml}
-        commentBlock={commentBlock}
-        setCommentBlock={setCommentBlock}
-        moveTargetBlock={moveTargetBlock}
-        setMoveTargetBlock={setMoveTargetBlock}
-        popup={popup}
-        setPopup={setPopup}
-        menuOpen={menuOpen}
-        setOpenMenu={setOpenMenu}
-        setPopupStyle={setPopupStyle}
-        setTargetPageId={setTargetPageId}
-      />
+      {!isMobile()&&
+            <BlockFn
+            page={page}
+            pages={pages}
+            pagesId={pagesId}
+            firstlist={firstlist}
+            userName={userName}
+            addBlock={addBlock}
+            editBlock={editBlock}
+            changeBlockToPage={changeBlockToPage}
+            changePageToBlock={changePageToBlock}
+            deleteBlock={deleteBlock}
+            addPage={addPage}
+            editPage={editPage}
+            duplicatePage={duplicatePage}
+            movePageToPage={movePageToPage}
+            frameHtml={frameHtml}
+            commentBlock={commentBlock}
+            setCommentBlock={setCommentBlock}
+            moveTargetBlock={moveTargetBlock}
+            setMoveTargetBlock={setMoveTargetBlock}
+            popup={popup}
+            setPopup={setPopup}
+            menuOpen={menuOpen}
+            setOpenMenu={setOpenMenu}
+            setPopupStyle={setPopupStyle}
+            setTargetPageId={setTargetPageId}
+          />
+      }
+
       {popup.popup && 
           <div 
             id="popupMenu"
@@ -1096,9 +1102,11 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           templateHtml={templateHtml}
           setSelection={setSelection}
           setOpenMM={setOpenMM}
+          openMobileMenu={openMobileMenu}
         />
       }
-      {selection !==null && !openMobileMenu &&
+      {selection !==null && 
+      (!openMobileMenu ?
         <BlockStyler
           pages={pages}
           pagesId={pagesId}
@@ -1126,6 +1134,31 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           setSelection={setSelection}
           frameHtml={frameHtml}
         />
+        :
+        <MobileBlockMen
+          pages={pages}
+          firstlist={firstlist}
+          page={page}
+          block={selection.block}
+          userName={userName}
+          addBlock={addBlock}
+          changeBlockToPage={changeBlockToPage}
+          changePageToBlock={changePageToBlock}
+          editBlock={editBlock}
+          deleteBlock={deleteBlock}
+          duplicatePage={duplicatePage}
+          movePageToPage={movePageToPage}
+          editPage={editPage}
+          setPopup={setPopup}
+          popup={popup}
+          setCommentBlock={setCommentBlock}
+          setTargetPageId={setTargetPageId}
+          frameHtml={frameHtml}
+          selection={selection}
+          setSelection ={setSelection}
+          setOpenMM ={setOpenMM}
+        />
+      )
       }
     </div>
   )

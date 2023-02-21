@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Dispatch,KeyboardEvent,MouseEvent, SetStateAction, SyntheticEvent,  useEffect, useRef} from 'react';
+import React, { ChangeEvent, Dispatch,KeyboardEvent,MouseEvent, SetStateAction, SyntheticEvent,  TouchEvent,  useEffect, useRef} from 'react';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import { IoChatboxOutline } from 'react-icons/io5';
 import { MdOutlinePhotoSizeSelectActual } from 'react-icons/md';
@@ -18,6 +18,9 @@ export const setTemplateItem=(templateHtml:HTMLElement|null, page:Page)=>{
       sessionStorage.setItem("originTemplate", originTemplate);
     }
   };
+};
+export const isMobile = () => {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 };
 
 type  BlockComponentProps ={
@@ -40,6 +43,7 @@ type  BlockComponentProps ={
   closeMenu: (event: globalThis.MouseEvent| MouseEvent) => void,
   templateHtml:HTMLElement|null,
   setSelection:Dispatch<SetStateAction<selectionType|null>>,
+  openMobileMenu:boolean,
   setOpenMM :Dispatch<SetStateAction<boolean>>
 };
 type BlockCommentProps={
@@ -71,7 +75,9 @@ export const BlockComment =({block , onClickCommentBtn}:BlockCommentProps)=>{
   )
 };
 
-const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,command, setCommand  ,onClickCommentBtn ,setOpenComment ,setTargetPageId ,setOpenLoader, setLoaderTargetBlock ,closeMenu ,templateHtml, setSelection ,setOpenMM }:BlockComponentProps)=>{
+const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,command, setCommand  ,onClickCommentBtn ,setOpenComment ,setTargetPageId ,setOpenLoader, setLoaderTargetBlock ,closeMenu ,templateHtml, setSelection  ,openMobileMenu,setOpenMM }:BlockComponentProps)=>{
+  const frameInnerDocument = document.getElementById(`page_${page.id}`);
+  
   const editTime =JSON.stringify(Date.now);
   const contentEditableRef= useRef<HTMLElement>(null);
   /**
@@ -84,13 +90,28 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
    * @param event type: ContentEditableEvent|KeyboardEvent<HTMLDivElement>|MouseEvent| SyntheticEvent<HTMLDivElement>
    * @returns block 
    */
-  const findTargetBlock =(event:ContentEditableEvent|KeyboardEvent<HTMLDivElement>|MouseEvent| SyntheticEvent<HTMLDivElement>):Block=>{
-    const target =event.currentTarget.parentElement as HTMLElement;
-    const targetId= target.id;
-    const end =targetId.indexOf("_contents");
-    const blockId = targetId.slice(0, end);
-    const targetBlock = findBlock(page, blockId).BLOCK;
-    return targetBlock;
+  const findTargetBlock =(event:ContentEditableEvent|KeyboardEvent<HTMLDivElement>|MouseEvent| SyntheticEvent<HTMLDivElement>|
+  TouchEvent<HTMLDivElement>|
+  globalThis.TouchEvent):Block|null=>{
+    const select_or_touch = (event.type === "touchend" || event.type === "select");
+    let targetElement = null;
+    if(!select_or_touch){
+      const target =event.currentTarget as HTMLElement|null;
+      targetElement = target;
+    }else{
+      const target = event.target as HTMLElement|null;
+      targetElement = target?.closest('.contents');
+    };
+    if(targetElement !==null && targetElement!== undefined){
+      const targetId= targetElement.id;
+      const end =targetId.indexOf("_contents");
+      const blockId = targetId.slice(0, end);
+      const targetBlock = findBlock(page, blockId).BLOCK;
+      console.log("targetBlock", targetBlock);
+      return targetBlock;
+    }else{
+      return null
+    }
   };
   /**
    * 마우스가 block위를 움직일 경우, 해당 block의 element 옆에 blockFn compnent를 보여주는 함수 
@@ -130,10 +151,10 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
    * @param event ContentEditableEvent
    */
   const onChangeContents=(event:ContentEditableEvent)=>{
-    if(page.blocks!==null && page.blocksId!==null){
+    const targetBlock= findTargetBlock(event);
+    if(page.blocks!==null && page.blocksId!==null && targetBlock!==null){
       setTemplateItem(templateHtml, page);
       const value =event.target.value;
-      const targetBlock= findTargetBlock(event);
       const targetBlockIndex= page.blocksId.indexOf(targetBlock.id);
       /**
        * value값에 따라 새로운 블록을 생성하거나 기존 block의 content를 수정하는 함수 
@@ -204,6 +225,20 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
       }
     }
   };
+  /**
+ * focus를 화면 상의 다음 블록의 contentEditable 에 옮기는 함수 
+ * @param nextBlockId 화면상의 다음 블록의 아이디 
+ * @param targetBlock
+ */
+  const moveFocus=(nextBlockId:string , targetBlock:Block)=>{
+    const contentsHtml = document.getElementById(`${nextBlockId}_contents`);
+    if(contentsHtml!==null){
+      const focusTargetHtml = contentsHtml.firstElementChild as HTMLElement;
+      focusTargetHtml.focus();
+    }else{
+      console.log(`Can't find .${targetBlock.id}_contents html`);
+    };
+};
 /**
  * 유저가 누른 키보드 키(tab,backspace,arrwoup,arrowdown)에 따라 서로 다른 함수를 작동시키는 함수 
  * tab 키 : 들여쓰기 (해당 이벤트가 일어난 block을 이전 block의 subBlock으로 변경)
@@ -214,176 +249,164 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
   const onKeyDownContents=(event:KeyboardEvent<HTMLDivElement>)=>{
     const code =event.code.toLowerCase();
     const targetBlock= findTargetBlock(event);
-    /**
-     * focus를 화면 상의 다음 블록의 contentEditable 에 옮기는 함수 
-     * @param nextBlockId 화면상의 다음 블록의 아이디 
-     */
-    const moveFocus=(nextBlockId:string)=>{
-        const contentsHtml = document.getElementById(`${nextBlockId}_contents`);
-        if(contentsHtml!==null){
-          const focusTargetHtml = contentsHtml.firstElementChild as HTMLElement;
-          focusTargetHtml.focus();
-        }else{
-          console.log(`Can't find .${targetBlock.id}_contents html`);
-        };
-    };
-
-    switch (code) {
-      case "tab":
-        event.preventDefault();
-        setTemplateItem(templateHtml, page);
-        const previousBlockIdInDoc =findPreviousBlockInDoc(page,targetBlock).previousBlockInDoc.id;
-        if(previousBlockIdInDoc !==undefined){
-          changeToSub(page.id, targetBlock, previousBlockIdInDoc);
-        }else{
-          console.log(`Cant' find block in front of ${targetBlock.id}block on screen`)
-        }
-
-        break;
-      case "backspace":
-        setTemplateItem(templateHtml, page);
-        const text =event.currentTarget.innerText;
-        const cursor = document.getSelection();
-        const offset =cursor?.anchorOffset;
-        if(offset===0 && text===""){
-          deleteBlock(page.id, targetBlock, false);
-        }
-        if(offset===0 && text!==""){
-          raiseBlock(page.id, targetBlock )
-        }
-
-        break;
-      case "arrowup":
-          if(page.firstBlocksId!==null && page.firstBlocksId[0]!== targetBlock.id){
-            let doing:boolean = true;
-            let referenceBlock:Block = targetBlock;
-            while (doing) {
-              let previousBlockInDoc = findPreviousBlockInDoc(page, referenceBlock).previousBlockInDoc;
-
-              if(previousBlockInDoc.type.includes("List")&& previousBlockInDoc.subBlocksId?.[0]===referenceBlock.id){
-                previousBlockInDoc =findPreviousBlockInDoc(page, previousBlockInDoc).previousBlockInDoc;
-              };
-
-              if(possibleBlocksId?.includes(previousBlockInDoc.id)){
-                if(previousBlockInDoc.type.includes("List")&& previousBlockInDoc.subBlocksId!==null){
-                  moveFocus(previousBlockInDoc.subBlocksId[previousBlockInDoc.subBlocksId.length-1]);
-                }else{
-                  moveFocus(previousBlockInDoc.id);
-                }
-                doing= false;
-              }else{
-                referenceBlock = previousBlockInDoc;
-              }
-          };
-          }
-
-        break;
-      case "arrowdown":
-        /**
-         * cursor이동이 가능한 다음 블록의 type에 따라 어디로 cursor를 이동할 지 결정하는 함수
-         * @param nextBlockId : 다음에 이동할 블록의 id
-         */
-        const setNextHtmlId =(nextBlockId:string)=>{
-          if(possibleBlocks!==null && possibleBlocksId!==null){
-            const index = possibleBlocksId.indexOf(nextBlockId);
-            const nextBlock = possibleBlocks[index];
-            if(nextBlock.type.includes("List")&& nextBlock.subBlocksId!==null){
-              moveFocus(nextBlock.subBlocksId[0]);
-            }else{
-            moveFocus(nextBlockId);
-            };
-          };
-
-        };
-        /**
-         * firstBlock== true 인 블록의 화면상의 다음 블록을 찾아 cursor를 해당 블록의 contentEditable로 옮겨줄 함수
-         * @param firstBlock : 기준이 되는 블록
-         */
-        const findNextBlockOfFirstBlock=(firstBlock:Block)=>{
-          if(possibleBlocks!==null && possibleBlocksId!==null){
-            if(page.firstBlocksId!==null){
-              if(firstBlock.subBlocksId===null){
-                const blockIndexAsFirstBlock = page.firstBlocksId.indexOf(firstBlock.id);
-                if(blockIndexAsFirstBlock < page.firstBlocksId.length-1){
-                  for (let i = 1; i < page.firstBlocksId.length-blockIndexAsFirstBlock; i++) {
-                    let 
-                    nextBlockId =page.firstBlocksId[blockIndexAsFirstBlock+i];
-                    if(possibleBlocksId.includes(nextBlockId)){
-                      setNextHtmlId(nextBlockId);
-                      i =page.firstBlocksId.length;
-                    };
-                  }
-                }
-              }else{
-                for (let i = 0; i < firstBlock.subBlocksId.length;  i++) {
-                  const firstSubBlockId = firstBlock.subBlocksId[i];
-                  if(possibleBlocksId.includes(firstSubBlockId)){
-                    setNextHtmlId(firstSubBlockId);
-                    i =firstBlock.subBlocksId.length;
-                  }
-                }
-              }
-  
-            }
-          }
-        };
-        /**
-         *  어떤 블록의 subBlock인 블록의 화면상의 다음 블록을 찾아 cursor를 해당 블록의 contentEditable로 옮겨줄 함수
-         * @param subBlock :  다음 블록을 찾을 기준이 되는 블록 
-         */
-        const findNextBlockOfSubBlock =(subBlock:Block)=>{
-          if(subBlock.subBlocksId==null){
-            const findNextBlockByParent=(block:Block)=>{
-              const parentBlock = findParentBlock(page,block).parentBlock;
-              if(parentBlock.subBlocksId!==null){
-                const blockIndexAsSubBlock = parentBlock.subBlocksId.indexOf(block.id);
-                if(blockIndexAsSubBlock === parentBlock.subBlocksId.length-1){
-                  if(parentBlock.firstBlock && page.firstBlocksId !==null){
-                    const parentBlockIndexAsFirst = page.firstBlocksId.indexOf(parentBlock.id);
-                    if(parentBlockIndexAsFirst < page.firstBlocksId.length){
-                      for (let i =1 ; i < page.firstBlocksId.length - parentBlockIndexAsFirst; i++) {
-                        const nextBlockId = page.firstBlocksId[parentBlockIndexAsFirst +i];
-                        if(possibleBlocksId?.includes(nextBlockId)){
-                          setNextHtmlId(nextBlockId);
-                          i= page.firstBlocksId.length-1;
-                        };
-                      }
-                    };
-                  }else{
-                    findNextBlockByParent(parentBlock);
-                  }
-                }else{
-                  for (let i = 1; i < parentBlock.subBlocksId.length-blockIndexAsSubBlock; i++) {
-                    const nextBlockId = parentBlock.subBlocksId[blockIndexAsSubBlock+i];
-                    if(possibleBlocksId?.includes(nextBlockId)){
-                      setNextHtmlId(nextBlockId);
-                      i =parentBlock.subBlocksId.length;
-                      
-                    };
-                  }
-                }
-              };
-            };
-
-            findNextBlockByParent(subBlock);
+    if(targetBlock !==null){
+      switch (code) {
+        case "tab":
+          event.preventDefault();
+          setTemplateItem(templateHtml, page);
+          const previousBlockIdInDoc =findPreviousBlockInDoc(page,targetBlock).previousBlockInDoc.id;
+          if(previousBlockIdInDoc !==undefined){
+            changeToSub(page.id, targetBlock, previousBlockIdInDoc);
           }else{
-            const firstSubBlockId= subBlock.subBlocksId[0];
-            if(possibleBlocksId?.includes(firstSubBlockId)){
-              moveFocus(firstSubBlockId);
-            };
+            console.log(`Cant' find block in front of ${targetBlock.id}block on screen`)
           }
-
-        };
-        if(targetBlock.firstBlock ){
-          findNextBlockOfFirstBlock(targetBlock);
-        }else{
-          findNextBlockOfSubBlock(targetBlock);
+  
+          break;
+        case "backspace":
+          setTemplateItem(templateHtml, page);
+          const text =event.currentTarget.innerText;
+          const cursor = document.getSelection();
+          const offset =cursor?.anchorOffset;
+          if(offset===0 && text===""){
+            deleteBlock(page.id, targetBlock, false);
+          }
+          if(offset===0 && text!==""){
+            raiseBlock(page.id, targetBlock )
+          }
+  
+          break;
+        case "arrowup":
+            if(page.firstBlocksId!==null && page.firstBlocksId[0]!== targetBlock.id){
+              let doing:boolean = true;
+              let referenceBlock:Block = targetBlock;
+              while (doing) {
+                let previousBlockInDoc = findPreviousBlockInDoc(page, referenceBlock).previousBlockInDoc;
+  
+                if(previousBlockInDoc.type.includes("List")&& previousBlockInDoc.subBlocksId?.[0]===referenceBlock.id){
+                  previousBlockInDoc =findPreviousBlockInDoc(page, previousBlockInDoc).previousBlockInDoc;
+                };
+  
+                if(possibleBlocksId?.includes(previousBlockInDoc.id)){
+                  if(previousBlockInDoc.type.includes("List")&& previousBlockInDoc.subBlocksId!==null){
+                    moveFocus(previousBlockInDoc.subBlocksId[previousBlockInDoc.subBlocksId.length-1] ,targetBlock);
+                  }else{
+                    moveFocus(previousBlockInDoc.id, targetBlock);
+                  }
+                  doing= false;
+                }else{
+                  referenceBlock = previousBlockInDoc;
+                }
+            };
+            }
+  
+          break;
+        case "arrowdown":
+          /**
+           * cursor이동이 가능한 다음 블록의 type에 따라 어디로 cursor를 이동할 지 결정하는 함수
+           * @param nextBlockId : 다음에 이동할 블록의 id
+           */
+          const setNextHtmlId =(nextBlockId:string)=>{
+            if(possibleBlocks!==null && possibleBlocksId!==null){
+              const index = possibleBlocksId.indexOf(nextBlockId);
+              const nextBlock = possibleBlocks[index];
+              if(nextBlock.type.includes("List")&& nextBlock.subBlocksId!==null){
+                moveFocus(nextBlock.subBlocksId[0] ,targetBlock);
+              }else{
+              moveFocus(nextBlockId ,targetBlock);
+              };
+            };
+  
           };
-
-        break;
-        default:
-        break;
-    };
+          /**
+           * firstBlock== true 인 블록의 화면상의 다음 블록을 찾아 cursor를 해당 블록의 contentEditable로 옮겨줄 함수
+           * @param firstBlock : 기준이 되는 블록
+           */
+          const findNextBlockOfFirstBlock=(firstBlock:Block)=>{
+            if(possibleBlocks!==null && possibleBlocksId!==null){
+              if(page.firstBlocksId!==null){
+                if(firstBlock.subBlocksId===null){
+                  const blockIndexAsFirstBlock = page.firstBlocksId.indexOf(firstBlock.id);
+                  if(blockIndexAsFirstBlock < page.firstBlocksId.length-1){
+                    for (let i = 1; i < page.firstBlocksId.length-blockIndexAsFirstBlock; i++) {
+                      let 
+                      nextBlockId =page.firstBlocksId[blockIndexAsFirstBlock+i];
+                      if(possibleBlocksId.includes(nextBlockId)){
+                        setNextHtmlId(nextBlockId);
+                        i =page.firstBlocksId.length;
+                      };
+                    }
+                  }
+                }else{
+                  for (let i = 0; i < firstBlock.subBlocksId.length;  i++) {
+                    const firstSubBlockId = firstBlock.subBlocksId[i];
+                    if(possibleBlocksId.includes(firstSubBlockId)){
+                      setNextHtmlId(firstSubBlockId);
+                      i =firstBlock.subBlocksId.length;
+                    }
+                  }
+                }
+    
+              }
+            }
+          };
+          /**
+           *  어떤 블록의 subBlock인 블록의 화면상의 다음 블록을 찾아 cursor를 해당 블록의 contentEditable로 옮겨줄 함수
+           * @param subBlock :  다음 블록을 찾을 기준이 되는 블록 
+           */
+          const findNextBlockOfSubBlock =(subBlock:Block)=>{
+            if(subBlock.subBlocksId==null){
+              const findNextBlockByParent=(block:Block)=>{
+                const parentBlock = findParentBlock(page,block).parentBlock;
+                if(parentBlock.subBlocksId!==null){
+                  const blockIndexAsSubBlock = parentBlock.subBlocksId.indexOf(block.id);
+                  if(blockIndexAsSubBlock === parentBlock.subBlocksId.length-1){
+                    if(parentBlock.firstBlock && page.firstBlocksId !==null){
+                      const parentBlockIndexAsFirst = page.firstBlocksId.indexOf(parentBlock.id);
+                      if(parentBlockIndexAsFirst < page.firstBlocksId.length){
+                        for (let i =1 ; i < page.firstBlocksId.length - parentBlockIndexAsFirst; i++) {
+                          const nextBlockId = page.firstBlocksId[parentBlockIndexAsFirst +i];
+                          if(possibleBlocksId?.includes(nextBlockId)){
+                            setNextHtmlId(nextBlockId);
+                            i= page.firstBlocksId.length-1;
+                          };
+                        }
+                      };
+                    }else{
+                      findNextBlockByParent(parentBlock);
+                    }
+                  }else{
+                    for (let i = 1; i < parentBlock.subBlocksId.length-blockIndexAsSubBlock; i++) {
+                      const nextBlockId = parentBlock.subBlocksId[blockIndexAsSubBlock+i];
+                      if(possibleBlocksId?.includes(nextBlockId)){
+                        setNextHtmlId(nextBlockId);
+                        i =parentBlock.subBlocksId.length;
+                        
+                      };
+                    }
+                  }
+                };
+              };
+  
+              findNextBlockByParent(subBlock);
+            }else{
+              const firstSubBlockId= subBlock.subBlocksId[0];
+              if(possibleBlocksId?.includes(firstSubBlockId)){
+                moveFocus(firstSubBlockId, targetBlock);
+              };
+            }
+  
+          };
+          if(targetBlock.firstBlock ){
+            findNextBlockOfFirstBlock(targetBlock);
+          }else{
+            findNextBlockOfSubBlock(targetBlock);
+            };
+  
+          break;
+          default:
+          break;
+      };
+    }
   }; 
   //Selection - onSelection 이벤트
   /**
@@ -706,18 +729,14 @@ function updateMiddleChildren(startIndex:number, endIndex:number,endNode:Node, c
   middleChildren.forEach((c:Node)=>contentEditableRef.current?.removeChild(c));
   contentEditableRef.current?.insertBefore(newSpan, endNode);
  };
-const isMobile = () => {
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-};
 
-const selectContent =(SELECTION:Selection|null ,event:SyntheticEvent<HTMLDivElement>)=>{
+const selectContent =(SELECTION:Selection|null ,targetBlock:Block)=>{
   const notSelect = (SELECTION?.anchorNode === SELECTION?.focusNode && SELECTION?.anchorOffset === SELECTION?.focusOffset);
   if(SELECTION !==null && !notSelect ){
     const anchorNode= SELECTION.anchorNode;
     const anchorOffset =SELECTION.anchorOffset;
     const focusNode =SELECTION.focusNode;
     const focusOffset= SELECTION.focusOffset;
-    const targetBlock = findTargetBlock(event);
     const contents =targetBlock.contents;
     if(anchorNode !==null && focusNode !==null && contentEditableRef.current!==null){
       const contentEditableChild = contentEditableRef.current.childNodes as NodeListOf<Node>;
@@ -822,16 +841,36 @@ const selectContent =(SELECTION:Selection|null ,event:SyntheticEvent<HTMLDivElem
    *block의 content 를 마우스로 선택 시, block의 content를 선택된 부분(class 가 selected인 span element)과 아닌 부분으로 수정하는 함수
    */
   const onSelectInPC =(event:SyntheticEvent<HTMLDivElement>)=>{
-    const SELECTION = window.getSelection(); 
-    selectContent(SELECTION, event);
+    if(!isMobile()){
+      const SELECTION = window.getSelection(); 
+      const targetBlock = findTargetBlock(event);
+      if(targetBlock !==null){
+        selectContent(SELECTION, targetBlock);
+      }
+      
+    }
   };
-  const onSelectInMobile =(event:SyntheticEvent<HTMLDivElement>)=>{
+  const onTouchEnd =(event:TouchEvent<HTMLDivElement>)=>{
+    const SELECTION = document.getSelection();
+    const notSelect = (SELECTION?.anchorNode === SELECTION?.focusNode && SELECTION?.anchorOffset === SELECTION?.focusOffset);
     const targetBlock =findTargetBlock(event);
-    console.log("select mobile", targetBlock , "event", event);
-    setSelection({
-      block:targetBlock,
-      change:false,
-    })
+    console.log("touch", event);
+    if(notSelect && targetBlock !==null){
+      setOpenMM(true);
+      setSelection({
+        block:targetBlock,
+        change:false,
+      })
+    }
+  };
+  const detectSelectionInMobile =(event:globalThis.TouchEvent)=>{
+    const SELECTION = document.getSelection();
+    const notSelect = (SELECTION?.anchorNode === SELECTION?.focusNode && SELECTION?.anchorOffset === SELECTION?.focusOffset);
+    if(!notSelect){
+      const targetBlock = findTargetBlock(event);
+      console.log("movile", notSelect, SELECTION ,targetBlock, event)
+      targetBlock !==null && selectContent(SELECTION, targetBlock);
+    };
   };
   /**
    * BlockComponent 중 link 가 있는 element를 클릭 했을 경우 , 해당 링크를 여는 함수 
@@ -924,6 +963,14 @@ const selectContent =(SELECTION:Selection|null ,event:SyntheticEvent<HTMLDivElem
         }
       }
     },[]);
+    // useEffect(()=>{
+    //   frameInnerDocument?.addEventListener('touchend', (event)=>{
+    //     if(isMobile()){
+    //       detectSelectionInMobile(event);
+    //     }
+        
+    //   })
+    // },[frameInnerDocument])
     return(
       <>
       {!command.command || (command.targetBlock !==null && command.targetBlock.id !== block.id) ? 
@@ -934,7 +981,8 @@ const selectContent =(SELECTION:Selection|null ,event:SyntheticEvent<HTMLDivElem
           innerRef={contentEditableRef}
           onChange={(event)=> onChangeContents(event )}
           onKeyDown={(event)=> onKeyDownContents(event)}
-          onSelect={(event)=> isMobile()? onSelectInMobile(event) : onSelectInPC(event)}
+          onSelect={(event)=>  onSelectInPC(event)}
+          onTouchEnd={(event)=> onTouchEnd(event)}
           onClick={(event)=>onClickLinkInContents(event)}
         /> 
         :
