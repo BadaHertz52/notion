@@ -115,7 +115,7 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
       const targetBlock = JSON.parse(sessionItem);
       setBlockFnTargetBlock(targetBlock);
       setOpenMenu(true);
-      sessionStorage.remove("blockFnTargetBlock");
+      sessionStorage.removeItem("blockFnTargetBlock");
     }else{
       console.log("BlockFn-openMenu error: there is no session item")
     } ;
