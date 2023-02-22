@@ -848,17 +848,14 @@ const selectContent =(SELECTION:Selection|null ,targetBlock:Block)=>{
       }
   };
   const onSelectInMobile =(event :SyntheticEvent<HTMLDivElement>)=>{
-    if(!openMobileMenu){
-      const targetBlock = findTargetBlock(event);
-      if(targetBlock!==null){
-        setSelection({
-          block:targetBlock,
-          change:false
-        })
-        setOpenMM(true);
-      }
-    } 
-
+    const targetBlock = findTargetBlock(event);
+    if(targetBlock!==null){
+      setSelection({
+        block:targetBlock,
+        change:false
+      });
+      setOpenMM(true);
+    }
   }
   /**
    * BlockComponent 중 link 가 있는 element를 클릭 했을 경우 , 해당 링크를 여는 함수 
