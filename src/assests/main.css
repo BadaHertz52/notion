@@ -2509,7 +2509,8 @@ a:link, a:active, a:visited {
   z-index: 30;
 }
 #popupMenu .commentInput {
-  width: 300px;
+  width: calc(100% - 20px);
+  max-width: 300px;
   margin: 10PX;
   box-sizing: border-box;
 }
@@ -2928,6 +2929,11 @@ a:link, a:active, a:visited {
   border-radius: 8px;
   box-shadow: 0px 0px 23px -5px #ababab;
   position: absolute;
+  left: 5%;
+  width: 80%;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  padding: 0 5px;
 }
 #mobileBlockMenu::-webkit-scrollbar-thumb {
   background: #D3D1CB;
@@ -2935,22 +2941,93 @@ a:link, a:active, a:visited {
 #mobileBlockMenu::-webkit-scrollbar-track {
   background: #EDECE9;
 }
-#mobileBlockMenu button {
-  width: 24px;
-  height: 24px;
-}
-#mobileBlockMenu .menu_editBtn.turnIntoBtn,
-#mobileBlockMenu .menu_editBtn.colorBtn {
-  width: 70px;
-}
 #mobileBlockMenu .inner {
   display: flex;
-  flex-direction: row;
-  padding: 5px;
+  justify-content: space-between;
 }
-#mobileBlockMenu .menu {
+#mobileBlockMenu button {
+  height: 28px;
+  min-width: 18px;
+  font-size: 14px;
+  border-right: 1px solid rgb(212, 212, 212);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#mobileBlockMenu button .text {
+  font-size: 12px;
+}
+#mobileBlockMenu button .btn_inner {
+  height: calc(100% - 10px);
+  margin: 5px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#mobileBlockMenu button .btn_inner div {
+  height: 100%;
+  line-height: 18px;
+  margin-left: 4px;
+}
+#mobileBlockMenu button .btn_inner .arrowDown {
+  margin-left: 0;
+}
+#mobileBlockMenu button:last-child {
+  border-right: none;
+}
+#mobileBlockMenu .arrowDown {
+  color: grey;
+  display: inline-flex;
+  align-items: end;
+}
+#mobileBlockMenu .arrowDown svg {
+  height: -moz-fit-content;
+  height: fit-content;
+}
+
+#mobileSideMenu {
+  position: absolute;
+  z-index: 50;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(240, 240, 240);
+}
+#mobileSideMenu .inner {
+  position: relative;
+}
+#mobileSideMenu .top {
+  height: 2rem;
+  background-color: white;
+  text-align: center;
+  position: relative;
+}
+#mobileSideMenu .top div {
+  line-height: 2rem;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+#mobileSideMenu .top div, #mobileSideMenu .top button {
+  height: 100%;
+}
+#mobileSideMenu .top button {
+  position: absolute;
+  top: 0;
+  right: 1rem;
+  font-size: 1rem;
+}
+#mobileSideMenu .content {
+  width: inherit;
+  height: calc(100vh - 1.5rem);
+}
+#mobileSideMenu #commandBlock,
+#mobileSideMenu #pageMenu,
+#mobileSideMenu .menu_color,
+#mobileSideMenu .menu,
+#mobileSideMenu .menu .mainMenu,
+#mobileSideMenu .menu .sideMenu {
   width: initial;
-  display: initial;
+  display: block;
   flex-direction: initial;
   background-color: initial;
   margin: 0;
@@ -2962,50 +3039,57 @@ a:link, a:active, a:visited {
   border-radius: 0;
   box-shadow: none;
   position: relative;
+  width: 100vw;
+  height: inherit;
 }
-#mobileBlockMenu .menu::-webkit-scrollbar-thumb {
+#mobileSideMenu #commandBlock::-webkit-scrollbar-thumb,
+#mobileSideMenu #pageMenu::-webkit-scrollbar-thumb,
+#mobileSideMenu .menu_color::-webkit-scrollbar-thumb,
+#mobileSideMenu .menu::-webkit-scrollbar-thumb,
+#mobileSideMenu .menu .mainMenu::-webkit-scrollbar-thumb,
+#mobileSideMenu .menu .sideMenu::-webkit-scrollbar-thumb {
   background: initial;
 }
-#mobileBlockMenu .menu::-webkit-scrollbar-track {
+#mobileSideMenu #commandBlock::-webkit-scrollbar-track,
+#mobileSideMenu #pageMenu::-webkit-scrollbar-track,
+#mobileSideMenu .menu_color::-webkit-scrollbar-track,
+#mobileSideMenu .menu::-webkit-scrollbar-track,
+#mobileSideMenu .menu .mainMenu::-webkit-scrollbar-track,
+#mobileSideMenu .menu .sideMenu::-webkit-scrollbar-track {
   background: initial;
 }
-#mobileBlockMenu .menu .mainMenu {
-  width: initial;
-  display: initial;
-  flex-direction: initial;
-  background-color: initial;
-  margin: 0;
-  overflow-x: initial;
-  overflow-y: initial;
-  pointer-events: initial;
-  transform: initial;
-  z-index: 0;
-  border-radius: 0;
-  box-shadow: none;
+#mobileSideMenu .menu .menu_inner, #mobileSideMenu .menu .menu_edit {
+  width: 100vw;
+  height: inherit;
 }
-#mobileBlockMenu .menu .mainMenu::-webkit-scrollbar-thumb {
-  background: initial;
-}
-#mobileBlockMenu .menu .mainMenu::-webkit-scrollbar-track {
-  background: initial;
-}
-#mobileBlockMenu .menu .mainMenu .menu_inner {
-  padding: 0;
-}
-#mobileBlockMenu .menu .mainMenu .menu_editBtns > button > div {
-  width: initial;
-  display: block;
-}
-#mobileBlockMenu .menu .menu_editBtns {
-  display: flex;
-}
-#mobileBlockMenu .menu_search, #mobileBlockMenu .edit_inform, #mobileBlockMenu .menu_editBtn, #mobileBlockMenu .menu_editBtn.turnIntoBtn svg, #mobileBlockMenu .menu_editBtn.colorBtn svg, #mobileBlockMenu .menu .label {
+#mobileSideMenu .menu .menu_search {
   display: none;
 }
-#mobileBlockMenu .menu_editBtn.mbm_btn,
-#mobileBlockMenu .menu_editBtn.turnIntoBtn .label,
-#mobileBlockMenu .menu_editBtn.colorBtn .label {
-  display: block;
+#mobileSideMenu .menu .mainMenu .menu_inner {
+  padding: 0;
+}
+#mobileSideMenu .menu .menu_edit {
+  position: relative;
+}
+#mobileSideMenu .menu .menu_editBtns {
+  padding-top: 14px;
+}
+#mobileSideMenu .menu .edit_inform {
+  position: absolute;
+  bottom: 3rem;
+  left: 0;
+  width: 100vw;
+  font-size: 14px;
+}
+#mobileSideMenu .menu .sideMenu {
+  position: absolute;
+  background-color: rgb(240, 240, 240);
+  top: 0;
+  left: 0;
+  z-index: 60;
+  width: inherit;
+  height: inherit;
+  overflow-y: scroll;
 }
 
 .switchBtn {
