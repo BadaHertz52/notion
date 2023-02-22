@@ -9,7 +9,7 @@ type ExportProps= FrameProps &{
   setOpenExport:Dispatch<SetStateAction<boolean>>
 }
 const Export =({page,pagesId,pages,firstlist, recentPagesId ,setOpenExport, userName,editBlock,addBlock,changeBlockToPage,changePageToBlock,changeToSub,raiseBlock,deleteBlock,addPage,editPage, duplicatePage ,movePageToPage ,commentBlock,openComment ,setTargetPageId, setRoutePage, 
-  setOpenComment,setCommentBlock , showAllComments,smallText,fullWidth,discardEdit,setDiscardEdit, openTemplates , setOpenTemplates, fontStyle}:ExportProps)=>{
+  setOpenComment,setCommentBlock , popup,setPopup, showAllComments,smallText,fullWidth,discardEdit,setDiscardEdit, openTemplates , setOpenTemplates, fontStyle ,mobileSideMenuOpen, setMobileSideMenuOpen, setMobileSideMenu}:ExportProps)=>{
   const html ="HTML";
   const pdf="PDF";
   const markdown="Markdown";
@@ -132,6 +132,8 @@ const Export =({page,pagesId,pages,firstlist, recentPagesId ,setOpenExport, user
                 movePageToPage={movePageToPage}
                 commentBlock={commentBlock}
                 openComment={openComment}
+                popup={popup}
+                setPopup={setPopup}
                 setRoutePage={setRoutePage}
                 setTargetPageId={setTargetPageId}
                 setOpenComment={setOpenComment}
@@ -144,6 +146,9 @@ const Export =({page,pagesId,pages,firstlist, recentPagesId ,setOpenExport, user
                 openTemplates={openTemplates}
                 setOpenTemplates={setOpenTemplates}
                 fontStyle={fontStyle}
+                setMobileSideMenu={setMobileSideMenu}
+                setMobileSideMenuOpen={setMobileSideMenuOpen}
+                mobileSideMenuOpen={mobileSideMenuOpen}
               />;
               return { jsx:frameComponent, title:subPage.header.title};
           });

@@ -251,7 +251,8 @@ const CommandBlock =({ page ,block , editBlock,changeBlockToPage,changePageToBlo
       boolean:false, 
       command:null,
       targetBlock:null
-    })
+    });
+    setTurnInto !==null && setTurnInto(false);
   };
 
   useEffect(()=>{

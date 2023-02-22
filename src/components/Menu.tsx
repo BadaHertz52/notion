@@ -34,7 +34,7 @@ export type MenuAndBlockStylerCommonProps={
   movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
   setPopup :Dispatch<SetStateAction<PopupType>> ,
   popup:PopupType,
-  setCommentBlock: React.Dispatch<React.SetStateAction<Block | null>>,
+  setCommentBlock: Dispatch<SetStateAction<Block | null>>,
   setTargetPageId: Dispatch<SetStateAction<string>>,
   frameHtml: HTMLDivElement | null,
 }
@@ -126,7 +126,7 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
   useEffect(()=>{
     if(turnInToPage|| turnInto||color){
       changeSideMenuStyle();
-    }
+    };
   },[turnInToPage, turnInto, color]);
 
   const popupStyle = blockFnElement?.getAttribute("style");
@@ -226,6 +226,13 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
     setOpenRename!==null&&  setOpenRename(true);
     setOpenMenu(false);
   };
+  useEffect(()=>{
+    if(!turnInto && !color && !turnInToPage && isMobile() ){
+      setSideMenuStyle({
+        transform: "translateY(110%)"
+      })
+    }
+  },[turnInto, color,turnInToPage])
   return(
   <div 
     className="menu"
@@ -380,6 +387,7 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
             editBlock={editBlock}
             selection={null}
             setSelection={null}
+            setOpenMenu={null}
           />
         }
         {turnInToPage &&

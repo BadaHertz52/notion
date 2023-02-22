@@ -10,9 +10,8 @@ import Loader from './Loader';
 import PageIcon from './PageIcon';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import PageMenu from './PageMenu';
-import { PopupType } from '../containers/EditorContainer';
 import { isMobile, setTemplateItem } from './BlockComponent';
-import { fontStyleType } from '../containers/NotionRouter';
+import { fontStyleType, mobileSideMenuType } from '../containers/NotionRouter';
 import BlockStyler from './BlockStyler';
 import MoveTargetBlock from './MoveTargetBlock';
 
@@ -22,7 +21,8 @@ import { BsFillEmojiSmileFill} from 'react-icons/bs';
 import {GrDocumentText ,GrDocument} from 'react-icons/gr';
 import { MdInsertPhoto } from 'react-icons/md';
 import { HiTemplate } from 'react-icons/hi';
-import MobileBlockMen from './MobileBlockMen';
+import MobileBlockMenu from './MobileBlockMenu';
+import { PopupType } from '../containers/EditorContainer';
 
 export type Command ={
   boolean:boolean,
@@ -52,14 +52,20 @@ export type Template_Frame_SAME_Props ={
   openComment :boolean, 
   setOpenComment: Dispatch<SetStateAction<boolean>>,
   openTemplates:boolean,
-  setOpenTemplates: Dispatch<React.SetStateAction<boolean>>
+  setOpenTemplates: Dispatch<React.SetStateAction<boolean>>,
+  popup:PopupType,
+  setPopup:Dispatch<SetStateAction<PopupType>>,
   setCommentBlock: Dispatch<SetStateAction<Block | null>>,
   showAllComments:boolean,
   smallText: boolean, 
   fullWidth: boolean, 
   discardEdit:boolean,
   setDiscardEdit:Dispatch<SetStateAction<boolean>>,
-  fontStyle: fontStyleType
+  fontStyle: fontStyleType,
+  setMobileSideMenu:Dispatch<SetStateAction<mobileSideMenuType>>,
+  mobileSideMenuOpen:boolean,
+  setMobileSideMenuOpen:Dispatch<SetStateAction<boolean>>
+
 };
 export type FrameProps = Template_Frame_SAME_Props &{
   page:Page,
@@ -83,8 +89,8 @@ const basicPageCover ='https://raw.githubusercontent.com/BadaHertz52/notion/mast
  * @returns 
  */
 
-const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,commentBlock,openComment, setRoutePage ,setTargetPageId ,setOpenComment , setCommentBlock ,
-  showAllComments ,smallText , fullWidth  ,discardEdit,setDiscardEdit , openTemplates,  setOpenTemplates, fontStyle}:FrameProps)=>{
+const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,commentBlock,openComment, setRoutePage ,setTargetPageId ,setOpenComment , setCommentBlock ,popup, setPopup,
+  showAllComments ,smallText , fullWidth  ,discardEdit,setDiscardEdit , openTemplates,  setOpenTemplates, fontStyle , setMobileSideMenu, setMobileSideMenuOpen}:FrameProps)=>{
   const innerWidth =window.innerWidth; 
   const inner =document.getElementById("inner");
   const frameRef= useRef<HTMLDivElement>(null);
@@ -109,10 +115,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   const [commandBlockPositon, setCBPositon]=useState<CSSProperties>();
   const [commandBlockStyle, setCommandBlockStyle]=useState<CSSProperties|undefined>(undefined);
   const [menuOpen, setOpenMenu]= useState<boolean>(false);
-  const [popup, setPopup]=useState<PopupType>({
-    popup:false,
-    what:null
-  });
+
   const [popupStyle, setPopupStyle]=useState<CSSProperties |undefined>(undefined); 
   const [moveTargetBlock, setMoveTargetBlock]=useState<Block|null>(null);
   const moveBlock =useRef<boolean>(false);

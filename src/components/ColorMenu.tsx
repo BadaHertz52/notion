@@ -17,7 +17,8 @@ type ColorInformProps ={
   editBlock:(pageId: string, block: Block) => void,
   templateHtml:HTMLElement|null,
   selection:selectionType|null,
-  setSelection: Dispatch<SetStateAction<selectionType | null>>|null
+  setSelection: Dispatch<SetStateAction<selectionType | null>>|null ,
+  setOpenMenu :Dispatch<SetStateAction<boolean>>|null
 };
 const StyleColorInform =styled.span`
   color:${(props:StyleColorInformProps) =>props.color !== undefined? props.color: "initial"};
@@ -29,7 +30,7 @@ const StyleColorInform =styled.span`
   border-radius: 20%;
 `; 
 
-const ColorInform=({color ,background, colorName ,page, block ,editBlock, templateHtml,  selection, setSelection}:ColorInformProps)=>{
+const ColorInform=({color ,background, colorName ,page, block ,editBlock, templateHtml,  selection, setSelection , setOpenMenu}:ColorInformProps)=>{
 
   const changeContentStyle=(colorName:string)=>{
     if(selection !==null &&setSelection !==null ){
@@ -120,7 +121,8 @@ const ColorInform=({color ,background, colorName ,page, block ,editBlock, templa
       }else{
         changeContentStyle(colorName);
       }
-    }
+    };
+    setOpenMenu !==null && setOpenMenu(false);
   };
 
   return(
@@ -151,9 +153,10 @@ type ColorMenuProps = {
   block:Block,
   editBlock : (pageId: string, block: Block) => void,
   selection:selectionType|null,
-  setSelection:Dispatch<SetStateAction<selectionType | null>>|null
+  setSelection:Dispatch<SetStateAction<selectionType | null>>|null,
+  setOpenMenu : Dispatch<SetStateAction<boolean>>|null
 };
-const ColorMenu=({page, block, editBlock, selection, setSelection}:ColorMenuProps)=>{
+const ColorMenu=({page, block, editBlock, selection, setSelection , setOpenMenu}:ColorMenuProps)=>{
   const templateHtml=document.getElementById("template");
   return(
     <div className="menu_color"  >
@@ -170,6 +173,7 @@ const ColorMenu=({page, block, editBlock, selection, setSelection}:ColorMenuProp
             templateHtml={templateHtml}
             selection={selection}
             setSelection={setSelection}
+            setOpenMenu={setOpenMenu}
           />
           <ColorInform
             colorName='Grey'
@@ -181,6 +185,7 @@ const ColorMenu=({page, block, editBlock, selection, setSelection}:ColorMenuProp
             templateHtml={templateHtml}
             selection={selection}
             setSelection={setSelection}
+            setOpenMenu={setOpenMenu}
           />
           <ColorInform
             colorName='Orange'
@@ -192,6 +197,7 @@ const ColorMenu=({page, block, editBlock, selection, setSelection}:ColorMenuProp
             templateHtml={templateHtml}
             selection={selection}
             setSelection={setSelection}
+            setOpenMenu={setOpenMenu}
           />
           <ColorInform
             colorName='Green'
@@ -203,6 +209,7 @@ const ColorMenu=({page, block, editBlock, selection, setSelection}:ColorMenuProp
             templateHtml={templateHtml}
             selection={selection}
             setSelection={setSelection}
+            setOpenMenu={setOpenMenu}
           />
           <ColorInform
             colorName='Blue'
@@ -214,6 +221,7 @@ const ColorMenu=({page, block, editBlock, selection, setSelection}:ColorMenuProp
             templateHtml={templateHtml}
             selection={selection}
             setSelection={setSelection}
+            setOpenMenu={setOpenMenu}
           /> 
           <ColorInform
             colorName='Red'
@@ -225,6 +233,7 @@ const ColorMenu=({page, block, editBlock, selection, setSelection}:ColorMenuProp
             templateHtml={templateHtml}
             selection={selection}
             setSelection={setSelection}
+            setOpenMenu={setOpenMenu}
           />
         </div>
       </section>
@@ -241,6 +250,7 @@ const ColorMenu=({page, block, editBlock, selection, setSelection}:ColorMenuProp
             templateHtml={templateHtml}
             selection={selection}
             setSelection={setSelection}
+            setOpenMenu={setOpenMenu}
           />
           <ColorInform
             colorName='Grey'
@@ -252,6 +262,7 @@ const ColorMenu=({page, block, editBlock, selection, setSelection}:ColorMenuProp
             templateHtml={templateHtml}
             selection={selection}
             setSelection={setSelection}
+            setOpenMenu={setOpenMenu}
           />
           <ColorInform
             colorName='Yellow'
@@ -263,6 +274,7 @@ const ColorMenu=({page, block, editBlock, selection, setSelection}:ColorMenuProp
             templateHtml={templateHtml}
             selection={selection}
             setSelection={setSelection}
+            setOpenMenu={setOpenMenu}
             />
           <ColorInform
             colorName='Green'
@@ -274,6 +286,7 @@ const ColorMenu=({page, block, editBlock, selection, setSelection}:ColorMenuProp
             templateHtml={templateHtml}
             selection={selection}
             setSelection={setSelection}
+            setOpenMenu={setOpenMenu}
           />
           <ColorInform
             colorName='Blue'
@@ -285,6 +298,7 @@ const ColorMenu=({page, block, editBlock, selection, setSelection}:ColorMenuProp
             templateHtml={templateHtml}
             selection={selection}
             setSelection={setSelection}
+            setOpenMenu={setOpenMenu}
           />
           <ColorInform
             colorName='Pink'
@@ -296,6 +310,7 @@ const ColorMenu=({page, block, editBlock, selection, setSelection}:ColorMenuProp
             templateHtml={templateHtml}
             selection={selection}
             setSelection={setSelection}
+            setOpenMenu={setOpenMenu}
           />
         </div>
       </section>
