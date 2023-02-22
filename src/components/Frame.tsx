@@ -120,6 +120,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   const pointBlockToMoveBlock =useRef<Block|null>(null);
   const [selection, setSelection]=useState<selectionType|null>(null);
   const [openMobileMenu, setOpenMM]=useState<boolean>(false);
+  const [mobileMenuBlock, setMobileMenuBlock]=useState<Block|null>(null);
   const maxWidth = innerWidth -60;
   const fontSize:number = openTemplates? 20: ( smallText? 14: 16);
   const frameInnerStyle:CSSProperties={
@@ -921,6 +922,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
                     setSelection={setSelection}
                     setOpenMM ={setOpenMM}
                     openMobileMenu={openMobileMenu}
+                    setMobileMenuBlock={setMobileMenuBlock}
                   />
                 )
               }
@@ -1102,10 +1104,10 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           setSelection={setSelection}
           setOpenMM={setOpenMM}
           openMobileMenu={openMobileMenu}
+          setMobileMenuBlock={setMobileMenuBlock}
         />
       }
       {selection !==null && 
-      (!openMobileMenu ?
         <BlockStyler
           pages={pages}
           pagesId={pagesId}
@@ -1133,31 +1135,22 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           setSelection={setSelection}
           frameHtml={frameHtml}
         />
-        :
-        <MobileBlockMen
-          pages={pages}
-          firstlist={firstlist}
+      }
+      {openMobileMenu && mobileMenuBlock !==null &&
+      <MobileBlockMenu
           page={page}
-          block={selection.block}
-          userName={userName}
+          block={mobileMenuBlock}
           addBlock={addBlock}
-          changeBlockToPage={changeBlockToPage}
-          changePageToBlock={changePageToBlock}
-          editBlock={editBlock}
           deleteBlock={deleteBlock}
-          duplicatePage={duplicatePage}
-          movePageToPage={movePageToPage}
-          editPage={editPage}
           setPopup={setPopup}
-          popup={popup}
+          setPoupStyle={setPopupStyle}
           setCommentBlock={setCommentBlock}
-          setTargetPageId={setTargetPageId}
           frameHtml={frameHtml}
-          selection={selection}
-          setSelection ={setSelection}
           setOpenMM ={setOpenMM}
+          setMobileMenuBlock={setMobileMenuBlock}
+          setMobileSideMenu={setMobileSideMenu}
+          setMobileSideMenuOpen={setMobileSideMenuOpen}
         />
-      )
       }
     </div>
   )
