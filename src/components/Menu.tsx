@@ -232,7 +232,7 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
     ref={menuRef}
     style={menuStyle}
   >
-      <div className='mainMenu' >
+      <div id="menu_main" className='mainMenu' >
         <div className="menu_inner">
           <div className='menu_search'>
             <input
@@ -353,7 +353,8 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
                 
         </div>
       </div>
-      <div 
+      <div
+        id="menu_side" 
         className="sideMenu"
         style={sideMenuStyle}
       >

@@ -169,11 +169,10 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   };
 
   const closeMenu =(event:globalThis.MouseEvent| MouseEvent)=>{
-    const mainMenu =document.getElementById("mainMenu");
-    const sideMenu =document.getElementById("sideMenu")?.firstElementChild;
+    const mainMenu =document.getElementById("menu_main");
+    const sideMenu =document.getElementById("menu_side")?.firstElementChild;
     const mainMenuArea =mainMenu?.getClientRects()[0] ;
     const sideMenuArea =sideMenu?.getClientRects()[0] ;
-
     const isInrMain = detectRange(event, mainMenuArea);
     const isInSide =detectRange(event, sideMenuArea );
 
