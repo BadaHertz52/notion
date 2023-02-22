@@ -15,7 +15,8 @@
   padding: 3px;
   z-index: 30;
   .commentInput{
-    width: 300px;
+    width: calc(100% - 20px);
+    max-width: 300px;
     margin: 10PX;
     box-sizing: border-box
   }

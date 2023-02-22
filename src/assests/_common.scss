@@ -137,7 +137,7 @@ $black :rgb(55,54,47);
 }
 @mixin resetPopupMenu {
   width:initial ;
-  display:initial;
+  display:block;
   flex-direction: initial;
   background-color:initial;
   margin: 0;
