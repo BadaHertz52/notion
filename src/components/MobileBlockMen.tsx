@@ -47,52 +47,54 @@ const MobileBlockMenu =({pages,firstlist, page, block, userName,addBlock,changeB
     }
   }
   return(
-    <div id="mobileBlockMenu">
-      <div className="inner">
-        {!openStyler ?
-          <>
-            <button
-              onClick={addNewBlock}
-              title="Click  to add a block below"
+    <>
+      <div id="mobileBlockMenu" style={mbmStyle}>
+        <div className="inner">
+          {!openStyler ?
+            <>
+              <button
+                onClick={addNewBlock}
+                title="Click  to add a block below"
+                >
+                <AiOutlinePlus/>
+              </button>
+              <Menu
+                pages={pages}
+                block={selection.block}
+                firstlist={firstlist}
+                page={page}
+                userName={userName}
+                setOpenMenu={setOpenMM}
+                addBlock={addBlock}
+                editBlock={editBlock}
+                changeBlockToPage={changeBlockToPage}
+                changePageToBlock={changePageToBlock}
+                deleteBlock={deleteBlock}
+                editPage={editPage}
+                duplicatePage={duplicatePage}
+                movePageToPage={movePageToPage}
+                popup={popup}
+                setPopup={setPopup}
+                setCommentBlock={setCommentBlock}
+                setTargetPageId={setTargetPageId}
+                setOpenRename= {null}
+                setSelection={null}
+                frameHtml={frameHtml}
+                style ={undefined}
+              />
+              <button
+                aria-details='open menu'
+                onClick={openMore}
               >
-              <AiOutlinePlus/>
-            </button>
-            <Menu
-              pages={pages}
-              block={selection.block}
-              firstlist={firstlist}
-              page={page}
-              userName={userName}
-              setOpenMenu={setOpenMM}
-              addBlock={addBlock}
-              editBlock={editBlock}
-              changeBlockToPage={changeBlockToPage}
-              changePageToBlock={changePageToBlock}
-              deleteBlock={deleteBlock}
-              editPage={editPage}
-              duplicatePage={duplicatePage}
-              movePageToPage={movePageToPage}
-              popup={popup}
-              setPopup={setPopup}
-              setCommentBlock={setCommentBlock}
-              setTargetPageId={setTargetPageId}
-              setOpenRename= {null}
-              setSelection={null}
-              frameHtml={frameHtml}
-              style ={undefined}
-            />
-            <button
-              aria-details='open menu'
-              onClick={openMore}
-            >
-              more
-            </button>
-          </>
-        :
-          <MobileStyler/>
-        }
+                more
+              </button>
+            </>
+          :
+            <MobileStyler/>
+          }
+        </div>
       </div>
-      <div className="more" style={moreStyle}>
+      <div id="mbm_more" style={moreStyle}>
         <Menu
           pages={pages}
           block={selection.block}
@@ -118,7 +120,7 @@ const MobileBlockMenu =({pages,firstlist, page, block, userName,addBlock,changeB
           style ={undefined}
         />
       </div>
-    </div>
+    </>
   )
 };
 
