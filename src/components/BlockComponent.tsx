@@ -37,14 +37,14 @@ type  BlockComponentProps ={
   setCommand:Dispatch<SetStateAction<Command>>,
   onClickCommentBtn: (block: Block) => void,
   setOpenComment :Dispatch<SetStateAction<boolean>>,
-  setTargetPageId: React.Dispatch<React.SetStateAction<string>>,
+  setTargetPageId: Dispatch<SetStateAction<string>>,
   setOpenLoader:Dispatch<SetStateAction<boolean>>,
   setLoaderTargetBlock : Dispatch<SetStateAction<Block | null>>,
   closeMenu: (event: globalThis.MouseEvent| MouseEvent) => void,
   templateHtml:HTMLElement|null,
   setSelection:Dispatch<SetStateAction<selectionType|null>>,
-  openMobileMenu:boolean,
-  setOpenMM :Dispatch<SetStateAction<boolean>>
+  setOpenMM :Dispatch<SetStateAction<boolean>>,
+  setMobileMenuBlock: Dispatch<SetStateAction<Block | null>>
 };
 type BlockCommentProps={
   block:Block,
@@ -75,7 +75,7 @@ export const BlockComment =({block , onClickCommentBtn}:BlockCommentProps)=>{
   )
 };
 
-const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,command, setCommand  ,onClickCommentBtn ,setOpenComment ,setTargetPageId ,setOpenLoader, setLoaderTargetBlock ,closeMenu ,templateHtml, setSelection  ,openMobileMenu,setOpenMM }:BlockComponentProps)=>{
+const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,command, setCommand  ,onClickCommentBtn ,setOpenComment ,setTargetPageId ,setOpenLoader, setLoaderTargetBlock ,closeMenu ,templateHtml, setSelection  ,setOpenMM , setMobileMenuBlock }:BlockComponentProps)=>{
   const frameInnerDocument = document.getElementById(`page_${page.id}`);
   
   const editTime =JSON.stringify(Date.now);
@@ -107,7 +107,6 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
       const end =targetId.indexOf("_contents");
       const blockId = targetId.slice(0, end);
       const targetBlock = findBlock(page, blockId).BLOCK;
-      console.log("targetBlock", targetBlock);
       return targetBlock;
     }else{
       return null
@@ -841,19 +840,18 @@ const selectContent =(SELECTION:Selection|null ,targetBlock:Block)=>{
    *block의 content 를 마우스로 선택 시, block의 content를 선택된 부분(class 가 selected인 span element)과 아닌 부분으로 수정하는 함수
    */
   const onSelectInPC =(event:SyntheticEvent<HTMLDivElement>)=>{
+    if(!isMobile()){
       const SELECTION = window.getSelection(); 
       const targetBlock = findTargetBlock(event);
       if(targetBlock !==null){
         selectContent(SELECTION, targetBlock);
       }
+    }
   };
-  const onSelectInMobile =(event :SyntheticEvent<HTMLDivElement>)=>{
+  const onTouchEnd =(event :TouchEvent<HTMLDivElement>)=>{
     const targetBlock = findTargetBlock(event);
     if(targetBlock!==null){
-      setSelection({
-        block:targetBlock,
-        change:false
-      });
+      setMobileMenuBlock(targetBlock);
       setOpenMM(true);
     }
   }
@@ -958,7 +956,8 @@ const selectContent =(SELECTION:Selection|null ,targetBlock:Block)=>{
           innerRef={contentEditableRef}
           onChange={(event)=> onChangeContents(event )}
           onKeyDown={(event)=> onKeyDownContents(event)}
-          onSelect={(event)=> isMobile() ? onSelectInMobile(event) : onSelectInPC(event)}
+          onSelect={(event)=>  onSelectInPC(event)}
+          onTouchEnd={(event)=>{onTouchEnd(event)}}
           onClick={(event)=>onClickLinkInContents(event)}
         /> 
         :
