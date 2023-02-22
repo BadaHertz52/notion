@@ -23,23 +23,17 @@ import LinkLoader from './LinkLoader';
   }
   export const changeStylerStyle=(frameHtml:HTMLDivElement | null , block:Block , setStyle:Dispatch<SetStateAction<CSSProperties|undefined>>)=>{
     const mainBlockDomRect =getMainBlockDomRect(frameHtml, block);
-    if(frameHtml!==null && mainBlockDomRect!==undefined){
-      const pageContentInner =frameHtml.querySelector(".pageContent_inner") as Element;
+    const pageContentInner =frameHtml?.querySelector(".pageContent_inner");
+    const pageContentDomRect = pageContentInner?.getClientRects()[0];
+    if(frameHtml!==null && mainBlockDomRect!==undefined && pageContentDomRect !==undefined){
       const frameDomRect = frameHtml.getClientRects()[0]; 
       const top = mainBlockDomRect.top - frameDomRect.top;
-      const left =mainBlockDomRect.left -frameDomRect.left - pageContentInner.clientLeft;
-      if(left + 450 > frameDomRect.width){
-        setStyle({
-          top:`${top}px`,
-          left:`${(frameDomRect.width - 450)/2}px`
-        })
-      }else{
-        setStyle({
-          top:`${top}px`,
-          left:`${left}px`
-        })
-      }
-      
+      const left =mainBlockDomRect.left -frameDomRect.left;
+      setStyle({
+        top:`${top}px`,
+        left:`${left}px`,
+        width: window.innerWidth < 768 ?  `${pageContentDomRect.width}px` : 'fit-content'
+      })
     }
   };
 /**
@@ -539,6 +533,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
               editBlock={editBlock}
               selection={selection}
               setSelection ={setSelection}
+              setOpenMenu={null}
             />
         </div>
         }
