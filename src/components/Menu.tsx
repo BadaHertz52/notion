@@ -57,7 +57,9 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
   const [turnInToPage ,setTurnIntoPage] = useState<boolean>(false);
   const blockStylerHtml = document.getElementById("blockStyler");
   const [menuStyle , setMenuStyle]= useState<CSSProperties|undefined>(style ===undefined? changeMenuStyle():style);
-  const [sideMenuStyle, setSideMenuStyle]=useState<CSSProperties|undefined>(undefined);
+  const [sideMenuStyle, setSideMenuStyle]=useState<CSSProperties|undefined>(isMobile()?{
+    transform: 'translateY(110%)'
+  } : undefined);
 
   function changeMenuStyle (){
     const menu = document.querySelector(".menu");
@@ -87,10 +89,10 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
     return style
   };
   function changeSideMenuStyle(){
-    if(! isMobile()){
-      const mainMenu= document.getElementById("mainMenu");
+    if(! isMobile()&& menuRef.current !==null){
+      const mainMenu= menuRef.current.firstElementChild;
       const innerWidth= window.innerWidth;
-      if(mainMenu !==null && menuRef.current!==null && frameHtml!==null){
+      if(mainMenu !==null && frameHtml!==null){
         const menuTop =menuRef.current.getClientRects()[0].top;
         const frameBottom =frameHtml.getClientRects()[0].bottom;
         const maxHeight =frameBottom - menuTop - 32;
@@ -230,8 +232,7 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
     ref={menuRef}
     style={menuStyle}
   >
-
-      <div id='mainMenu' >
+      <div className='mainMenu' >
         <div className="menu_inner">
           <div className='menu_search'>
             <input
@@ -244,7 +245,7 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
             />
           </div>
             <div className="menu_edit">
-              <div id="menu_editBtns">
+              <div className="menu_editBtns">
                 <button
                   className='menu_editBtn'
                   onClick ={removeBlock}
@@ -353,7 +354,7 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
         </div>
       </div>
       <div 
-        id="sideMenu"
+        className="sideMenu"
         style={sideMenuStyle}
       >
         {turnInto &&

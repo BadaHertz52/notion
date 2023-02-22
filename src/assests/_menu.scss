@@ -3,8 +3,8 @@
   font-weight: initial;
   position: absolute;
 }
-#mainMenu,
-#sideMenu,
+.mainMenu,
+.sideMenu,
 #popupMenu{
   @include popupMenu;
   width: fit-content
@@ -20,7 +20,7 @@
     box-sizing: border-box
   }
 }
-#mainMenu {
+.mainMenu {
   @include popupMenu;
   width:240px;
   max-height: inherit;
@@ -34,13 +34,13 @@
       @include searchInput
     }
   }
-  #menu_editBtns > button >div ,
+  .menu_editBtns > button >div ,
   .menu_edit_inform{
     width: 90%;
     margin: 3% 5%;
   }
 
-  #menu_editBtns .menu_editBtn {
+  .menu_editBtns .menu_editBtn {
     @include editMenuBtns ;
     &.off{
       display: none;
@@ -54,7 +54,7 @@
   }
 }
 
-#sideMenu  {
+.sideMenu  {
   display: block;
   position:absolute;
   z-index:20;
@@ -115,7 +115,7 @@
   }
 
 }
-#sideMenu #pageMenu{
+.sideMenu #pageMenu{
   .inner{
     width: 100%;
     height: fit-content
@@ -127,7 +127,6 @@
 #pageMenu {
   @include popupMenu;
   background-color: initial;
-  width: fit-content;
   .inner{
     width: 100%;
     box-sizing: border-box;
@@ -206,10 +205,10 @@
 }
 
 @media screen and (max-width:767px){
-  #mainMenu , #sideMenu{
+  .mainMenu , .sideMenu{
     width: 200px;
   }
-  #sideMenu >div{
+  .sideMenu >div{
     width: 100%;
   }
 }
