@@ -1,0 +1,44 @@
+@import './common';
+#mobileBlockMenu{
+  @include popupMenu;
+  position:absolute;
+  button{
+    width: 24px;
+    height: 24px;
+  }
+  .menu_editBtn.turnIntoBtn ,
+  .menu_editBtn.colorBtn {
+    width: 70px
+  }
+  .inner{
+    display: flex;
+    flex-direction: row;
+    padding:5px;
+  }
+  .menu{
+    @include resetPopupMenu;
+    position: relative;
+    .mainMenu {
+      @include resetPopupMenu;
+      .menu_inner{
+        padding:0
+      }
+      .menu_editBtns > button > div{
+        width: initial;
+        display: block;
+      }
+    }
+    .menu_editBtns{
+      display: flex;
+    }
+  }
+  .menu_search, .edit_inform , .menu_editBtn , .menu_editBtn.turnIntoBtn svg , .menu_editBtn.colorBtn svg , .menu .label{
+    display: none
+  }
+  .menu_editBtn.mbm_btn,
+  .menu_editBtn.turnIntoBtn .label ,
+  .menu_editBtn.colorBtn .label
+  {
+    display: block
+  }
+};
