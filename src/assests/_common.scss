@@ -135,6 +135,28 @@ $black :rgb(55,54,47);
     background: #EDECE9;
   }
 }
+@mixin resetPopupMenu {
+  width:initial ;
+  display:initial;
+  flex-direction: initial;
+  background-color:initial;
+  margin: 0;
+  overflow-x: initial;
+  overflow-y: initial;
+  pointer-events: initial;
+  transform: initial;
+  z-index: 0;
+  border-radius: 0;
+  -webkit-box-shadow: none; 
+  box-shadow: none;
+  
+  &::-webkit-scrollbar-thumb {
+    background: initial;
+  }
+  &::-webkit-scrollbar-track{
+    background:initial;
+  }
+}
 @mixin editMenuBtns{
   position: relative;
   display: flex;
