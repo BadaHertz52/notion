@@ -23,7 +23,7 @@ import LinkLoader from './LinkLoader';
   }
   export const changeStylerStyle=(frameHtml:HTMLDivElement | null , block:Block , setStyle:Dispatch<SetStateAction<CSSProperties|undefined>>)=>{
     const mainBlockDomRect =getMainBlockDomRect(frameHtml, block);
-    if(frameHtml!==undefined && frameHtml!==null && mainBlockDomRect!==undefined){
+    if(frameHtml!==null && mainBlockDomRect!==undefined){
       const pageContentInner =frameHtml.querySelector(".pageContent_inner") as Element;
       const frameDomRect = frameHtml.getClientRects()[0]; 
       const top = mainBlockDomRect.top - frameDomRect.top;
