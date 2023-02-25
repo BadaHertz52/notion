@@ -65,8 +65,9 @@ export type Template_Frame_SAME_Props ={
   fontStyle: fontStyleType,
   setMobileSideMenu:Dispatch<SetStateAction<mobileSideMenuType>>,
   mobileSideMenuOpen:boolean,
-  setMobileSideMenuOpen:Dispatch<SetStateAction<boolean>>
-
+  setMobileSideMenuOpen:Dispatch<SetStateAction<boolean>>,
+  selection:selectionType|null,
+  setSelection:Dispatch<SetStateAction<selectionType|null>>
 };
 export type FrameProps = Template_Frame_SAME_Props &{
   page:Page,
