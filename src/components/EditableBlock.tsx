@@ -1,12 +1,12 @@
 import React, { CSSProperties, Dispatch, MouseEvent, MutableRefObject, SetStateAction, useEffect, useRef} from 'react';
 import { Block, MainCommentType, findBlock, Page,  } from '../modules/notion';
 import { Command, selectionType } from './Frame';
-import BlockComponent, { BlockComment, setTemplateItem } from './BlockComponent';
+import BlockComponent, { setTemplateItem } from './BlockComponent';
 import { GoPrimitiveDot } from 'react-icons/go';
 import { GrCheckbox, GrCheckboxSelected } from 'react-icons/gr';
 import {  MdPlayArrow } from 'react-icons/md';
 import PageIcon from './PageIcon';
-
+import BlockComment  from './BlockComment';
 export type EditableBlockProps ={
   pages:Page[],
   pagesId:string[],
@@ -221,7 +221,6 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
                 deleteBlock={deleteBlock}
                 command={command}
                 setCommand={setCommand}
-                onClickCommentBtn={onClickCommentBtn}
                 setOpenComment={setOpenComment}
                 setTargetPageId={setTargetPageId}
                 setOpenLoader={setOpenLoader}
@@ -229,6 +228,7 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
                 closeMenu={closeMenu}
                 templateHtml={templateHtml}
                 setSelection={setSelection}
+                openMobileMenu={openMobileMenu}
                 setOpenMM={setOpenMM}
                 setMobileMenuBlock={setMobileMenuBlock}
               />
@@ -375,6 +375,7 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
                 closeMenu={closeMenu}
                 templateHtml= {templateHtml}
                 setSelection={setSelection}
+                openMobileMenu={openMobileMenu}
                 setOpenMM={setOpenMM}
                 setMobileMenuBlock={setMobileMenuBlock}
                 />

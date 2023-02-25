@@ -46,34 +46,6 @@ type  BlockComponentProps ={
   setOpenMM :Dispatch<SetStateAction<boolean>>,
   setMobileMenuBlock: Dispatch<SetStateAction<Block | null>>
 };
-type BlockCommentProps={
-  block:Block,
-  onClickCommentBtn: (block: Block) => void
-}
-export type itemType ={
-  block:Block,
-  blockIndex:number ,
-};
-export const BlockComment =({block , onClickCommentBtn}:BlockCommentProps)=>{
-  return (
-      <div 
-        id={`${block.id}_comments`}
-        className="commentsBubble"
-        >
-        <button 
-          className='commentBtn btnIcon'
-          name={block.id}
-          onClick={()=>onClickCommentBtn(block)}
-        >
-          <IoChatboxOutline/>
-          <span className="commentLength">
-            {block.comments?.length}
-          </span>
-        </button>
-      </div>
-
-  )
-};
 
 const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,command, setCommand  ,onClickCommentBtn ,setOpenComment ,setTargetPageId ,setOpenLoader, setLoaderTargetBlock ,closeMenu ,templateHtml, setSelection  ,setOpenMM , setMobileMenuBlock }:BlockComponentProps)=>{
   const frameInnerDocument = document.getElementById(`page_${page.id}`);
