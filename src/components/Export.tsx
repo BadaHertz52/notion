@@ -9,7 +9,7 @@ type ExportProps= FrameProps &{
   setOpenExport:Dispatch<SetStateAction<boolean>>
 }
 const Export =({page,pagesId,pages,firstlist, recentPagesId ,setOpenExport, userName,editBlock,addBlock,changeBlockToPage,changePageToBlock,changeToSub,raiseBlock,deleteBlock,addPage,editPage, duplicatePage ,movePageToPage ,commentBlock,openComment ,setTargetPageId, setRoutePage, 
-  setOpenComment,setCommentBlock , popup,setPopup, showAllComments,smallText,fullWidth,discardEdit,setDiscardEdit, openTemplates , setOpenTemplates, fontStyle ,mobileSideMenuOpen, setMobileSideMenuOpen, setMobileSideMenu}:ExportProps)=>{
+  setOpenComment,setCommentBlock , popup,setPopup, showAllComments,smallText,fullWidth,discardEdit,setDiscardEdit, openTemplates , setOpenTemplates, fontStyle ,mobileSideMenuOpen, setMobileSideMenuOpen, setMobileSideMenu ,selection, setSelection}:ExportProps)=>{
   const html ="HTML";
   const pdf="PDF";
   const markdown="Markdown";
@@ -149,6 +149,8 @@ const Export =({page,pagesId,pages,firstlist, recentPagesId ,setOpenExport, user
                 setMobileSideMenu={setMobileSideMenu}
                 setMobileSideMenuOpen={setMobileSideMenuOpen}
                 mobileSideMenuOpen={mobileSideMenuOpen}
+                selection={selection}
+                setSelection={setSelection}
               />;
               return { jsx:frameComponent, title:subPage.header.title};
           });
