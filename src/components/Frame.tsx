@@ -1127,22 +1127,42 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           selection={selection}
           setSelection={setSelection}
           frameHtml={frameHtml}
-        />
-      }
-      {openMobileMenu && mobileMenuBlock !==null &&
-      <MobileBlockMenu
-          page={page}
-          block={mobileMenuBlock}
-          addBlock={addBlock}
-          deleteBlock={deleteBlock}
-          setPopup={setPopup}
-          setPoupStyle={setPopupStyle}
-          setCommentBlock={setCommentBlock}
-          frameHtml={frameHtml}
-          setOpenMM ={setOpenMM}
-          setMobileMenuBlock={setMobileMenuBlock}
           setMobileSideMenu={setMobileSideMenu}
           setMobileSideMenuOpen={setMobileSideMenuOpen}
+        />
+      }
+      {openMobileMenu && 
+      selection ==null &&
+      mobileMenuBlock !==null && 
+      <MobileBlockMenu
+          pages={pages}
+          pagesId={pagesId}
+          firstlist={firstlist}
+          userName={userName}
+          page={page}
+          recentPagesId={recentPagesId}
+          block={mobileMenuBlock}
+          addBlock={addBlock}
+          editBlock={editBlock}
+          changeBlockToPage={changeBlockToPage}
+          changePageToBlock={changePageToBlock}
+          deleteBlock={deleteBlock}
+          editPage={editPage}
+          duplicatePage={duplicatePage}
+          movePageToPage={movePageToPage}
+          popup={popup}
+          setPopup={setPopup}
+          setPopupStyle={setPopupStyle}
+          command={command}
+          setCommand={setCommand}
+          setCommentBlock={setCommentBlock}
+          setTargetPageId={setTargetPageId}
+          frameHtml={frameHtml}
+          setMobileSideMenu={setMobileSideMenu}
+          setMobileSideMenuOpen={setMobileSideMenuOpen}
+          setOpenMM ={setOpenMM}
+          setMobileMenuBlock={setMobileMenuBlock}
+          detectSelectionInMobile={detectSelectionInMobile}
         />
       }
     </div>

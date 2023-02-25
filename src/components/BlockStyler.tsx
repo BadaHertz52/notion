@@ -10,6 +10,7 @@ import Menu, { MenuAndBlockStylerCommonProps } from './Menu';
 import { Block} from '../modules/notion';
 import { detectRange } from './BlockFn';
 import LinkLoader from './LinkLoader';
+import { mobileSideMenuType } from '../containers/NotionRouter';
   /**
    * BlockStyler의 타켓인 block에 대한 내용을 담고 있는 element중 mainBlock element의 domRect을 반환하는 함수 
    * @returns DOMRect | undefined
@@ -69,16 +70,20 @@ if(contentEditableHtml!==null&& contentEditableHtml!==undefined){
 };
 return newBlock
 };
-export type BlockStylerProps = MenuAndBlockStylerCommonProps& {
+export type StylerCommonProps = MenuAndBlockStylerCommonProps& {
   pagesId:string[],
   recentPagesId:string[]|null,
-  selection:selectionType,
-  setSelection:Dispatch<SetStateAction<selectionType|null>>,
   setPopupStyle:Dispatch<React.SetStateAction<React.CSSProperties | undefined>>,
   setCommand: React.Dispatch<React.SetStateAction<Command>>,
-  command: Command
+  command: Command,
+  setMobileSideMenuOpen:Dispatch<SetStateAction<boolean>>,
+  setMobileSideMenu:Dispatch<SetStateAction<mobileSideMenuType>>
 }
-const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, block, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage, editPage,popup,setPopup, setCommentBlock,setTargetPageId,selection,setSelection ,setPopupStyle,command ,setCommand, frameHtml}:BlockStylerProps)=>{
+type BlockStylerProps = StylerCommonProps& {
+  selection:selectionType,
+  setSelection:Dispatch<SetStateAction<selectionType|null>>,
+}
+const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, block, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage, editPage,popup,setPopup, setCommentBlock,setTargetPageId,selection,setSelection ,setPopupStyle,command ,setCommand, frameHtml ,  setMobileSideMenu, setMobileSideMenuOpen}:BlockStylerProps)=>{
   const bold="bold";
   const initial="initial";
   const italic= "italic";
