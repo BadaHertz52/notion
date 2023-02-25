@@ -2943,11 +2943,10 @@ a:link, a:active, a:visited {
 }
 #mobileBlockMenu .inner {
   display: flex;
-  justify-content: space-between;
 }
 #mobileBlockMenu button {
   height: 28px;
-  min-width: 18px;
+  min-width: 24px;
   font-size: 14px;
   border-right: 1px solid rgb(212, 212, 212);
   display: flex;
@@ -3092,6 +3091,11 @@ a:link, a:active, a:visited {
   overflow-y: scroll;
 }
 
+@media screen and (min-width: 375px) {
+  #mobileBlockMenu button {
+    min-width: 32px;
+  }
+}
 .switchBtn {
   position: relative;
   width: 30px;

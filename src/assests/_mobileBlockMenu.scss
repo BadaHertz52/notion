@@ -9,11 +9,10 @@
   padding:0 5px;
   .inner{
     display: flex;
-    justify-content: space-between;
   }
   button{
     height: 28px;
-    min-width: 18px;
+    min-width: 24px;
     font-size: 14px;
     border-right: 1px solid rgb(212, 212, 212);
     display: flex;
@@ -132,5 +131,13 @@
     width: inherit;
     height: inherit;
     overflow-y: scroll;
+  }
+}
+
+@media screen and (min-width:375px) {
+  #mobileBlockMenu{
+    button{
+      min-width: 32px;
+    }
   }
 }
