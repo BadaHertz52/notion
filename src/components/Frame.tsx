@@ -11,7 +11,7 @@ import Loader from './Loader';
 import PageIcon from './PageIcon';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import PageMenu from './PageMenu';
-import { isMobile, setTemplateItem } from './BlockComponent';
+import { isMobile, selectContent, setTemplateItem } from './BlockComponent';
 import { fontStyleType, mobileSideMenuType } from '../containers/NotionRouter';
 import BlockStyler from './BlockStyler';
 import MoveTargetBlock from './MoveTargetBlock';
@@ -712,8 +712,57 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
       frameRef.current?.classList.contains("stop") &&
       frameRef.current?.classList.remove("stop");
     }
-  },[popup.popup, command.command, openLoader, openComment, moveTargetBlock,selection])
+  },[popup.popup, command.command, openLoader, openComment, moveTargetBlock,selection]);
 
+  const detectSelectionInMobile =()=>{
+    const SELECTION = document.getSelection();
+
+    const notSelect = (SELECTION?.anchorNode === SELECTION?.focusNode && SELECTION?.anchorOffset === SELECTION?.focusOffset);
+    if(!notSelect && SELECTION!==null){
+      const anchorNode =SELECTION.anchorNode;
+      let contentEditableElement : HTMLElement|null|undefined = null ;
+      switch (anchorNode?.nodeType) {
+        case 3 :
+          //text node
+          const parentElement = anchorNode.parentElement;
+          contentEditableElement = parentElement?.closest('.contentEditable');
+
+          break;
+        case 1:
+          //element node
+          break;
+        default:
+          break;
+      };
+      if(contentEditableElement !==null && contentEditableElement !==undefined){
+        const blockContnetElement = contentEditableElement?.closest('.contents');
+        if(blockContnetElement!==null){
+          const id =blockContnetElement.id;
+          const index= id.indexOf('_contents');
+          const blockId = id.slice(0, index);
+          const block= findBlock(page, blockId).BLOCK;
+          selectContent(SELECTION, block, contentEditableElement,editBlock,page,setSelection);
+        } ;
+      }
+    }
+  };
+  useEffect(()=>{
+    if(isMobile() && openComment){
+      document.onselectionchange =(event:Event)=>{
+        const SELECTION = document.getSelection();
+        const notSelect = (SELECTION?.anchorNode === SELECTION?.focusNode && SELECTION?.anchorOffset === SELECTION?.focusOffset);
+        if(!notSelect){
+          setOpenComment(false);
+          setCommentBlock(null);
+          detectSelectionInMobile();
+        }else{
+          setSelection(null);
+          mobileMenuBlock !==null && setMobileMenuBlock(null);
+          openMobileMenu  && setOpenMM(false);
+        }
+      }
+    }
+  },[openComment])
   return(
     <div 
       className={newPageFram? "newPageFrame frame" :'frame'}

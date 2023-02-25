@@ -4,30 +4,20 @@ import { BiCommentDetail } from 'react-icons/bi';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { TiArrowSortedDown } from 'react-icons/ti';
 import { CSSProperties } from 'styled-components';
-import { PopupType } from '../containers/EditorContainer';
-import { mobileSideMenuType, msmWhatType, ms_color, ms_moreMenu, ms_turnInto } from '../containers/NotionRouter';
-import { Block, makeNewBlock, Page } from '../modules/notion';
-import MobileStyler from './MobileStyler';
+import { msmWhatType, ms_color, ms_moreMenu, ms_turnInto } from '../containers/NotionRouter';
+import { Block, makeNewBlock} from '../modules/notion';
+import  { StylerCommonProps } from './BlockStyler';
 
-type MobileBlockMenuProps =  {
-  page:Page,
-  block:Block,
-  addBlock:(pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
-  deleteBlock:(pageId: string, block: Block ,isInMenu:boolean) => void,
-  setPopup:Dispatch<SetStateAction<PopupType>>,
-  setPoupStyle:Dispatch<SetStateAction<CSSProperties|undefined>>,
-  setCommentBlock:Dispatch<SetStateAction<Block | null>>,
-  frameHtml:HTMLDivElement|null,
+
+type MobileBlockMenuProps = StylerCommonProps & {
   setMobileMenuBlock:Dispatch<SetStateAction<Block|null>>,
   setOpenMM :Dispatch<SetStateAction<boolean>>,
-  setMobileSideMenu:Dispatch<SetStateAction<mobileSideMenuType>>,
-  setMobileSideMenuOpen:Dispatch<SetStateAction<boolean>>
+  detectSelectionInMobile: () => void
 };
 
-const MobileBlockMenu =({ page, block,addBlock, deleteBlock ,setPopup  , setPoupStyle ,setCommentBlock ,frameHtml, setMobileMenuBlock, setOpenMM ,setMobileSideMenu, setMobileSideMenuOpen }:MobileBlockMenuProps)=>{
+const MobileBlockMenu =({pages, pagesId, firstlist, userName, page,recentPagesId, block, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage, editPage,popup,setPopup, setCommentBlock,setTargetPageId,setPopupStyle,command ,setCommand, frameHtml ,setMobileSideMenu, setMobileSideMenuOpen, setMobileMenuBlock, setOpenMM ,detectSelectionInMobile }:MobileBlockMenuProps)=>{
   const [mbmStyle,setMBMstyle]=useState<CSSProperties|undefined>(undefined)
-
-  const [openStyler, setOpenStyler] =useState<boolean>(false);
+  
   const inner = document.getElementById('inner');
   inner?.addEventListener('click', (event)=>{
     const target =event.target as HTMLElement|null;
@@ -86,15 +76,11 @@ const MobileBlockMenu =({ page, block,addBlock, deleteBlock ,setPopup  , setPoup
       popup:true,
       what:'popupComment'
     });
-    setPoupStyle(mbmStyle);
+    setPopupStyle(mbmStyle);
     closeMM();
-  }
+  };
   document.onselectionchange = (event)=>{
-    const SELECTION = document.getSelection();
-    const notSelect = (SELECTION?.anchorNode === SELECTION?.focusNode && SELECTION?.anchorOffset === SELECTION?.focusOffset);
-    if(!notSelect){
-      setOpenStyler(true);
-    }
+    detectSelectionInMobile();
   };
 
   useEffect(()=>{
