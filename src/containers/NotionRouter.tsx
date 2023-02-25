@@ -17,7 +17,8 @@ import SideBarContainer from './SideBarContainer';
 export const ms_turnInto ='ms_turnInto';
 export const ms_color ='ms_color';
 export const ms_moreMenu ='ms_moreMenu';
-export type msmWhatType = typeof ms_turnInto|typeof ms_color|typeof ms_moreMenu| undefined;
+export const ms_link ="ms_link";
+export type msmWhatType = typeof ms_turnInto|typeof ms_color|typeof ms_moreMenu|typeof ms_link| undefined;
 export type mobileSideMenuType ={
   block:Block|null,
   what:msmWhatType
