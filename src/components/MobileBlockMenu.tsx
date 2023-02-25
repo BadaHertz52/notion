@@ -105,9 +105,7 @@ const MobileBlockMenu =({ page, block,addBlock, deleteBlock ,setPopup  , setPoup
   return(
     <>
       <div id="mobileBlockMenu" style={mbmStyle}>
-        <div className="inner">
-          {!openStyler ?
-            <>
+            <div className='inner'>
               <button
                 onClick={addNewBlock}
                 title="Click  to add a block below"
@@ -169,11 +167,7 @@ const MobileBlockMenu =({ page, block,addBlock, deleteBlock ,setPopup  , setPoup
                   </div>
                 </div>
               </button>
-            </>
-          :
-            <MobileStyler/>
-          }
-        </div>
+            </div>
       </div>
 
     </>

@@ -1,6 +1,7 @@
 import React, { CSSProperties, Dispatch, MouseEvent, MutableRefObject, SetStateAction, useEffect, useRef} from 'react';
 import { Block, MainCommentType, findBlock, Page,  } from '../modules/notion';
-import { Command, selectionType } from './Frame';
+import { Command } from './Frame';
+import {selectionType} from '../containers/NotionRouter';
 import BlockComponent, { setTemplateItem } from './BlockComponent';
 import { GoPrimitiveDot } from 'react-icons/go';
 import { GrCheckbox, GrCheckboxSelected } from 'react-icons/gr';

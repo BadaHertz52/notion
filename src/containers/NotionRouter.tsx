@@ -30,7 +30,17 @@ export type pathType={
 };
 export   type DiscardItemType ={
   discard:boolean
-}
+};
+export type selectionType={
+  /**
+   * origin block data (수정이전에 block data)
+   */
+  block:Block,
+  /**
+   * blockStyler에 의한 block data의 변화가 있는 지 여부 
+   */
+  change:boolean
+};
 export const defaultFontFamily ='ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"' ;
 export const serifFontFamily ='Lyon-Text, Georgia, ui-serif, serif';
 export const monoFontFamily ='iawriter-mono, Nitti, Menlo, Courier, monospace'; 
@@ -115,6 +125,7 @@ const NotionRouter =()=>{
     popup:false,
     what:null
   });
+  const [selection, setSelection]=useState<selectionType|null>(null);
   const [mobileSideMenu, setMobileSideMenu]=useState<mobileSideMenuType>({
     block:null,
     what:undefined
@@ -452,6 +463,8 @@ const NotionRouter =()=>{
                       setOpenTemplates={setOpenTemplates}
                       fontStyle={fontStyle}
                       setFontStyle={setFontStyle}
+                      selection ={selection}
+                      setSelection={setSelection}
                       mobileSideMenu={mobileSideMenu}
                       setMobileSideMenu={setMobileSideMenu}
                       mobileSideMenuOpen={mobileSideMenuOpen}
@@ -499,6 +512,8 @@ const NotionRouter =()=>{
             mobileSideMenuOpen={mobileSideMenuOpen}
             setMobileSideMenu={setMobileSideMenu}
             setMobileSideMenuOpen={setMobileSideMenuOpen}
+            selection={selection}
+            setSelection={setSelection}
           />
           }
           {openTemplates &&
@@ -544,6 +559,8 @@ const NotionRouter =()=>{
               mobileSideMenuOpen={mobileSideMenuOpen}
               setMobileSideMenu={setMobileSideMenu}
               setMobileSideMenuOpen={setMobileSideMenuOpen}
+              selection={selection}
+              setSelection={setSelection}
             />
           }
           {routePage !==null &&

@@ -1,9 +1,9 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import {useDispatch, useSelector } from 'react-redux';
 import { CSSProperties } from 'styled-components';
-import Frame from '../components/Frame';
+import Frame  from '../components/Frame';
 import MobileSideMenu from '../components/MobileSideMenu';
-
+import {selectionType} from './NotionRouter';
 import TopBar from '../components/TopBar';
 import { RootState } from '../modules';
 import  {  Block, Page,  change_to_sub, raise_block, listItem } from '../modules/notion';
@@ -78,13 +78,15 @@ type EditorContainerProps = NotionActionProps &{
   setOpenTemplates: Dispatch<SetStateAction<boolean>>,
   fontStyle:fontStyleType,
   setFontStyle:Dispatch<SetStateAction<fontStyleType>>,
+  selection:selectionType|null,
+  setSelection:Dispatch<SetStateAction<selectionType|null>>,
   mobileSideMenu:mobileSideMenuType,
   setMobileSideMenu:Dispatch<SetStateAction<mobileSideMenuType>>,
   mobileSideMenuOpen:boolean,
   setMobileSideMenuOpen:Dispatch<SetStateAction<boolean>>
 };
 
-const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,recentPagesId ,isInTrash, makePagePath,changeSide,addBlock,editBlock ,changeBlockToPage, changePageToBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId, setRoutePage ,openComment,setOpenComment,commentBlock,setCommentBlock,smallText,setSmallText,fullWidth,setFullWidth,showAllComments,  setShowAllComments ,discardEdit , setDiscardEdit,setOpenExport, openTemplates, setOpenTemplates, fontStyle, setFontStyle , popup,setPopup,  mobileSideMenu ,setMobileSideMenu,mobileSideMenuOpen, setMobileSideMenuOpen}:EditorContainerProps)=>{
+const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,recentPagesId ,isInTrash, makePagePath,changeSide,addBlock,editBlock ,changeBlockToPage, changePageToBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId, setRoutePage ,openComment,setOpenComment,commentBlock,setCommentBlock,smallText,setSmallText,fullWidth,setFullWidth,showAllComments,  setShowAllComments ,discardEdit , setDiscardEdit,setOpenExport, openTemplates, setOpenTemplates, fontStyle, setFontStyle , popup,setPopup,  mobileSideMenu ,setMobileSideMenu,mobileSideMenuOpen, setMobileSideMenuOpen , selection, setSelection}:EditorContainerProps)=>{
   const dispatch =useDispatch();
   const user =useSelector((state:RootState)=>state.user);
   const [editorStyle, setEditorStyle]=useState<CSSProperties|undefined>(undefined);
@@ -204,11 +206,15 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,rece
         setMobileSideMenu={setMobileSideMenu}
         setMobileSideMenuOpen={setMobileSideMenuOpen}
         mobileSideMenuOpen={mobileSideMenuOpen}
+        selection={selection}
+        setSelection={setSelection}
       />
       {mobileSideMenuOpen && 
         mobileSideMenu.block !==null &&
         <MobileSideMenu
         pages={pages}
+        pagesId={pagesId}
+        recentPagesId={recentPagesId}
         firstlist={firstlist}
         userName={userName}
         page={page}
@@ -229,7 +235,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,rece
         mobileSideMenu ={mobileSideMenu}
         setMobileSideMenu={setMobileSideMenu}
         mobileSideMenuOpen ={mobileSideMenuOpen}setMobileSideMenuOpen ={setMobileSideMenuOpen}
-        
+        setSelection={setSelection}
         />
       }
     </div>

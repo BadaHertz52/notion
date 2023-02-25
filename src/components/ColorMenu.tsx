@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
 import { BgColorType, bg_blue, bg_default, bg_green, bg_grey, bg_yellow, bg_pink, Block, blue, ColorType, defaultColor, green, grey, orange, Page, red } from '../modules/notion';
 import { setTemplateItem } from './BlockComponent';
-import { selectionType } from './Frame';
+import {selectionType} from '../containers/NotionRouter';
 
 type StyleColorInformProps ={
   color:ColorType | undefined,

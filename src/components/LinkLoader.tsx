@@ -5,7 +5,7 @@ import { IoTrashOutline } from 'react-icons/io5';
 import { CSSProperties } from 'styled-components';
 import {  makePagePath, makeRoutePath, pathType } from '../containers/NotionRouter';
 import { Block, findPage, Page } from '../modules/notion';
-import { selectionType } from './Frame';
+import {selectionType} from '../containers/NotionRouter';
 import PageIcon from './PageIcon';
 
 type LinkLoaderProps={

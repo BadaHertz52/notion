@@ -1,6 +1,7 @@
 import '../assests/frame.css';
 import React, { CSSProperties, Dispatch,  MouseEvent,  SetStateAction, useEffect, useRef, useState } from 'react';
 import { Block, MainCommentType, blockSample,  findBlock, findParentBlock, listItem, Page,  makeNewBlock, findPage } from '../modules/notion';
+import {selectionType} from '../containers/NotionRouter';
 import EditableBlock from './EditableBlock';
 import IconPopup, { randomIcon } from './IconPopup';
 import CommandBlock from './CommandBlock';
@@ -71,17 +72,6 @@ export type FrameProps = Template_Frame_SAME_Props &{
   page:Page,
 
 };
-export type selectionType={
-  /**
-   * origin block data (수정이전에 block data)
-   */
-  block:Block,
-  /**
-   * blockStyler에 의한 block data의 변화가 있는 지 여부 
-   */
-  change:boolean
-};
-
 const basicPageCover ='https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assests/img/artificial-turf-g6e884a1d4_1920.jpg';;
 /**
  * mouse drag로 위치를 변경시킬 블록의 내용을 보여주는 component 
@@ -89,7 +79,7 @@ const basicPageCover ='https://raw.githubusercontent.com/BadaHertz52/notion/mast
  * @returns 
  */
 
-const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,commentBlock,openComment, setRoutePage ,setTargetPageId ,setOpenComment , setCommentBlock ,popup, setPopup,
+const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,commentBlock,openComment, setRoutePage ,setTargetPageId ,setOpenComment , setCommentBlock ,popup, setPopup,selection,setSelection,
   showAllComments ,smallText , fullWidth  ,discardEdit,setDiscardEdit , openTemplates,  setOpenTemplates, fontStyle , setMobileSideMenu, setMobileSideMenuOpen}:FrameProps)=>{
   const innerWidth =window.innerWidth; 
   const inner =document.getElementById("inner");
@@ -121,7 +111,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   const moveBlock =useRef<boolean>(false);
   /** block 이동 시, 이동 할 위치의 기준이 되는 block(block 은 pointBlockToMoveBlock.current의 앞에 위치하게됨) */
   const pointBlockToMoveBlock =useRef<Block|null>(null);
-  const [selection, setSelection]=useState<selectionType|null>(null);
+
   const [openMobileMenu, setOpenMM]=useState<boolean>(false);
   const [mobileMenuBlock, setMobileMenuBlock]=useState<Block|null>(null);
   const maxWidth = innerWidth -60;

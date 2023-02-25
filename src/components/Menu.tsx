@@ -17,7 +17,7 @@ import {IoArrowRedoOutline} from 'react-icons/io5';
 import {RiDeleteBin6Line } from 'react-icons/ri';
 import { AiOutlineFormatPainter } from 'react-icons/ai';
 import { isMobile, setTemplateItem } from './BlockComponent';
-import { selectionType } from './Frame';
+import {selectionType} from '../containers/NotionRouter';
 export type MenuAndBlockStylerCommonProps={
   pages:Page[],
   firstlist:listItem[],
