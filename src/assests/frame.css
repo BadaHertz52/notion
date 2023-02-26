@@ -1447,6 +1447,10 @@ a:link, a:active, a:visited {
   padding-bottom: 50px;
 }
 
+.frame.mobile .pageContent {
+  padding-bottom: 100px;
+}
+
 .pageContent_inner {
   position: relative;
   width: 100%;
