@@ -752,17 +752,24 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
     }
   },[popup.popup, command.command, openLoader, openComment, moveTargetBlock,selection]);
 
+  document.onselectionchange =(event:Event)=>{
+    if(isMobile()){
+      const SELECTION = document.getSelection();
+      const notSelect = (SELECTION?.anchorNode === SELECTION?.focusNode && SELECTION?.anchorOffset === SELECTION?.focusOffset);
+      if(!notSelect){
+        if(openComment){
           setOpenComment(false);
           setCommentBlock(null);
-          detectSelectionInMobile();
-        }else{
-          setSelection(null);
-          mobileMenuBlock !==null && setMobileMenuBlock(null);
-          openMobileMenu  && setOpenMM(false);
-        }
+        };
+        detectSelectionInMobile();
+      }else{
+        selection !==null && setSelection(null);
+        mobileMenuBlock !==null && setMobileMenuBlock(null);
+        openMobileMenu  && setOpenMM(false);
       }
-    }
-  },[openComment])
+    };
+  }
+
   return(
     <div 
       className={newPageFram? "newPageFrame frame" :'frame'}
