@@ -662,6 +662,44 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   window.onresize = ()=>{
     changeCBSposition();
   };
+  /**
+   * 모바일 환경에서 Selection 객체 여부를 탐색하고, 유의미한 Selection일 경우 BlockStyler를 열기 위한 작업(mobileMenu 나 BlockComment 창 닫기, selection state 변경, 선택된 내용을 표시할 수 있도록 block content 변경)을 시행함
+   */
+  const detectSelectionInMobile =()=>{
+    const SELECTION = document.getSelection();
+
+    const notSelect = (SELECTION?.anchorNode === SELECTION?.focusNode && SELECTION?.anchorOffset === SELECTION?.focusOffset);
+    if(!notSelect && SELECTION!==null){
+      const anchorNode =SELECTION.anchorNode;
+      let contentEditableElement : HTMLElement|null|undefined = null ;
+      switch (anchorNode?.nodeType) {
+        case 3 :
+          //text node
+          const parentElement = anchorNode.parentElement;
+          contentEditableElement = parentElement?.closest('.contentEditable');
+
+          break;
+        case 1:
+          //element node
+          break;
+        default:
+          break;
+      };
+      if(contentEditableElement !==null && contentEditableElement !==undefined){
+        const blockContnetElement = contentEditableElement?.closest('.contents');
+        if(blockContnetElement!==null){
+          const id =blockContnetElement.id;
+          const index= id.indexOf('_contents');
+          const blockId = id.slice(0, index);
+          const block= findBlock(page, blockId).BLOCK;
+          selectContent(SELECTION, block, contentEditableElement,editBlock,page,setSelection);
+          //close mobileMenu
+          openMobileMenu && setOpenMM(false);
+          mobileMenuBlock !==null && setMobileMenuBlock(null);
+        } ;
+      }
+    }
+  };
   inner?.addEventListener("keyup",updateBlock);
   inner?.addEventListener("click",(event:globalThis.MouseEvent)=>{
     updateBlock();
@@ -714,44 +752,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
     }
   },[popup.popup, command.command, openLoader, openComment, moveTargetBlock,selection]);
 
-  const detectSelectionInMobile =()=>{
-    const SELECTION = document.getSelection();
-
-    const notSelect = (SELECTION?.anchorNode === SELECTION?.focusNode && SELECTION?.anchorOffset === SELECTION?.focusOffset);
-    if(!notSelect && SELECTION!==null){
-      const anchorNode =SELECTION.anchorNode;
-      let contentEditableElement : HTMLElement|null|undefined = null ;
-      switch (anchorNode?.nodeType) {
-        case 3 :
-          //text node
-          const parentElement = anchorNode.parentElement;
-          contentEditableElement = parentElement?.closest('.contentEditable');
-
-          break;
-        case 1:
-          //element node
-          break;
-        default:
-          break;
-      };
-      if(contentEditableElement !==null && contentEditableElement !==undefined){
-        const blockContnetElement = contentEditableElement?.closest('.contents');
-        if(blockContnetElement!==null){
-          const id =blockContnetElement.id;
-          const index= id.indexOf('_contents');
-          const blockId = id.slice(0, index);
-          const block= findBlock(page, blockId).BLOCK;
-          selectContent(SELECTION, block, contentEditableElement,editBlock,page,setSelection);
-        } ;
-      }
-    }
-  };
-  useEffect(()=>{
-    if(isMobile() && openComment){
-      document.onselectionchange =(event:Event)=>{
-        const SELECTION = document.getSelection();
-        const notSelect = (SELECTION?.anchorNode === SELECTION?.focusNode && SELECTION?.anchorOffset === SELECTION?.focusOffset);
-        if(!notSelect){
           setOpenComment(false);
           setCommentBlock(null);
           detectSelectionInMobile();
