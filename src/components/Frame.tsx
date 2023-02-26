@@ -772,7 +772,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
 
   return(
     <div 
-      className={ `frame ${newPageFram ? 'newPageFrame': ''} ${isMobile()? 'mobile' : ''}`}
+      className={ `frame ${newPageFram ? 'newPageFrame': ''} ${isMobile()? 'mobile' : 'web'}`}
       ref={frameRef}
     >
       <div 
