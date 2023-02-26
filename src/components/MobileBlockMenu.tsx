@@ -4,22 +4,29 @@ import { BiCommentDetail } from 'react-icons/bi';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { TiArrowSortedDown } from 'react-icons/ti';
 import { CSSProperties } from 'styled-components';
-import { msmWhatType, ms_color, ms_moreMenu, ms_turnInto, selectionType } from '../containers/NotionRouter';
-import { Block, makeNewBlock} from '../modules/notion';
-import  BlockStyler, { StylerCommonProps } from './BlockStyler';
+import { PopupType } from '../containers/EditorContainer';
+import { mobileSideMenuType, msmWhatType, ms_color, ms_moreMenu, ms_turnInto, selectionType } from '../containers/NotionRouter';
+import { Block, findBlock, makeNewBlock, Page} from '../modules/notion';
 import MobileBlockStyler from './MobileBlockStyler';
-
-
-type MobileBlockMenuProps = StylerCommonProps & {
-  setMobileMenuBlock:Dispatch<SetStateAction<Block|null>>,
-  setOpenMM :Dispatch<SetStateAction<boolean>>,
+export   type mobileSelectionType = selectionType & {
+  selection: Selection
+}; 
+type MobileBlockMenuProps = {
+  page:Page
+  addBlock:(pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
+  deleteBlock:(pageId: string, block: Block, isInMenu: boolean) => void,
+  setPopup:Dispatch<SetStateAction<PopupType>>, 
+  setCommentBlock :Dispatch<SetStateAction<Block | null>>,
+  setPopupStyle :Dispatch<SetStateAction<CSSProperties | undefined>>,
+  frameHtml:HTMLElement|null ,
+  setMobileSideMenu:Dispatch<SetStateAction<mobileSideMenuType>>, 
+  setMobileSideMenuOpen: Dispatch<SetStateAction<boolean>>,
+  setOpenMM :Dispatch<SetStateAction<boolean>>
 };
 
-const MobileBlockMenu =({pages, pagesId, firstlist, userName, page,recentPagesId, block, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage, editPage,popup,setPopup, setCommentBlock,setTargetPageId,setPopupStyle,command ,setCommand, frameHtml ,setMobileSideMenu, setMobileSideMenuOpen, setMobileMenuBlock, setOpenMM  }:MobileBlockMenuProps)=>{
+const MobileBlockMenu =({ page, addBlock,deleteBlock,setPopup, setCommentBlock,setPopupStyle, frameHtml ,setMobileSideMenu, setMobileSideMenuOpen, setOpenMM }:MobileBlockMenuProps)=>{
+  const item = sessionStorage.getItem('mobileMenuBlock');
   const [mbmStyle,setMBMstyle]=useState<CSSProperties|undefined>(undefined);
-  type mobileSelectionType = selectionType & {
-    selection: Selection
-  }; 
   const [mobileSelection ,setMobileSelection]= useState<mobileSelectionType|null>(null) ;
   const [block, setBlock]= useState<Block|null>(null);
   const inner = document.getElementById('inner');
@@ -202,8 +209,9 @@ const MobileBlockMenu =({pages, pagesId, firstlist, userName, page,recentPagesId
             </div>
           : 
             <MobileBlockStyler
-                
-            
+                page={page}
+              mobileSelection={mobileSelection}
+              setMobileSelection={setMobileSelection}
             />
         }
       </div>
