@@ -290,10 +290,10 @@ a:link, a:active, a:visited {
   color: #B9B8B6;
 }
 
-.selected, .editableBlock .selected a:link, .editableBlock a:link .selected {
+.frame.web .selected, .frame.web .editableBlock .selected a:link, .frame.web .editableBlock a:link .selected {
   background-color: #BDE6F1;
 }
-.selected .bg_default, .selected .bg_yellow, .selected .bg_blue, .selected .bg_green, .selected .bg_grey, .selected .bg_pink, .editableBlock .selected a:link .bg_default, .editableBlock .selected a:link .bg_yellow, .editableBlock .selected a:link .bg_blue, .editableBlock .selected a:link .bg_green, .editableBlock .selected a:link .bg_grey, .editableBlock .selected a:link .bg_pink, .editableBlock a:link .selected .bg_default, .editableBlock a:link .selected .bg_yellow, .editableBlock a:link .selected .bg_blue, .editableBlock a:link .selected .bg_green, .editableBlock a:link .selected .bg_grey, .editableBlock a:link .selected .bg_pink {
+.frame.web .selected .bg_default, .frame.web .selected .bg_yellow, .frame.web .selected .bg_blue, .frame.web .selected .bg_green, .frame.web .selected .bg_grey, .frame.web .selected .bg_pink, .frame.web .editableBlock .selected a:link .bg_default, .frame.web .editableBlock .selected a:link .bg_yellow, .frame.web .editableBlock .selected a:link .bg_blue, .frame.web .editableBlock .selected a:link .bg_green, .frame.web .editableBlock .selected a:link .bg_grey, .frame.web .editableBlock .selected a:link .bg_pink, .frame.web .editableBlock a:link .selected .bg_default, .frame.web .editableBlock a:link .selected .bg_yellow, .frame.web .editableBlock a:link .selected .bg_blue, .frame.web .editableBlock a:link .selected .bg_green, .frame.web .editableBlock a:link .selected .bg_grey, .frame.web .editableBlock a:link .selected .bg_pink {
   background-color: #BDE6F1;
 }
 
