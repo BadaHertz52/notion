@@ -665,11 +665,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   /**
    * 모바일 환경에서 Selection 객체 여부를 탐색하고, 유의미한 Selection일 경우 BlockStyler를 열기 위한 작업(mobileMenu 나 BlockComment 창 닫기, selection state 변경, 선택된 내용을 표시할 수 있도록 block content 변경)을 시행함
    */
-  const detectSelectionInMobile =()=>{
-    const SELECTION = document.getSelection();
-
-    const notSelect = (SELECTION?.anchorNode === SELECTION?.focusNode && SELECTION?.anchorOffset === SELECTION?.focusOffset);
-    if(!notSelect && SELECTION!==null){
+  const detectSelectionInMobile =(SELECTION :Selection)=>{
       const anchorNode =SELECTION.anchorNode;
       let contentEditableElement : HTMLElement|null|undefined = null ;
       switch (anchorNode?.nodeType) {
@@ -692,13 +688,10 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           const index= id.indexOf('_contents');
           const blockId = id.slice(0, index);
           const block= findBlock(page, blockId).BLOCK;
-          selectContent(SELECTION, block, contentEditableElement,editBlock,page,setSelection);
-          //close mobileMenu
-          openMobileMenu && setOpenMM(false);
-          mobileMenuBlock !==null && setMobileMenuBlock(null);
+          setMobileMenuBlock(block);
+          setOpenMM(true);
         } ;
       }
-    }
   };
   inner?.addEventListener("keyup",updateBlock);
   inner?.addEventListener("click",(event:globalThis.MouseEvent)=>{
@@ -753,19 +746,15 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   },[popup.popup, command.command, openLoader, openComment, moveTargetBlock,selection]);
 
   document.onselectionchange =(event:Event)=>{
-    if(isMobile()){
+    if(isMobile() && openComment){
       const SELECTION = document.getSelection();
       const notSelect = (SELECTION?.anchorNode === SELECTION?.focusNode && SELECTION?.anchorOffset === SELECTION?.focusOffset);
-      if(!notSelect){
+      if(!notSelect && SELECTION !==null){
         if(openComment){
           setOpenComment(false);
           setCommentBlock(null);
         };
-        detectSelectionInMobile();
-      }else{
-        selection !==null && setSelection(null);
-        mobileMenuBlock !==null && setMobileMenuBlock(null);
-        openMobileMenu  && setOpenMM(false);
+        detectSelectionInMobile(SELECTION);
       }
     };
   }
@@ -1189,7 +1178,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
         />
       }
       {openMobileMenu && 
-      selection ==null &&
       mobileMenuBlock !==null && 
       <MobileBlockMenu
           pages={pages}
@@ -1219,7 +1207,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           setMobileSideMenuOpen={setMobileSideMenuOpen}
           setOpenMM ={setOpenMM}
           setMobileMenuBlock={setMobileMenuBlock}
-          detectSelectionInMobile={detectSelectionInMobile}
         />
       }
     </div>
