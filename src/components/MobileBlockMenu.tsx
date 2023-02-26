@@ -1,4 +1,4 @@
-import  React, { Dispatch, SetStateAction, useState ,useEffect } from 'react';
+import  React, { Dispatch, SetStateAction, useState ,useEffect , useRef } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { BiCommentDetail } from 'react-icons/bi';
 import { RiDeleteBin6Line } from 'react-icons/ri';
@@ -21,10 +21,12 @@ type MobileBlockMenuProps = {
   frameHtml:HTMLElement|null ,
   setMobileSideMenu:Dispatch<SetStateAction<mobileSideMenuType>>, 
   setMobileSideMenuOpen: Dispatch<SetStateAction<boolean>>,
-  setOpenMM :Dispatch<SetStateAction<boolean>>
+  setOpenMM :Dispatch<SetStateAction<boolean>>,
+  initialInnerHeight:number
 };
 
-const MobileBlockMenu =({ page, addBlock,deleteBlock,setPopup, setCommentBlock,setPopupStyle, frameHtml ,setMobileSideMenu, setMobileSideMenuOpen, setOpenMM }:MobileBlockMenuProps)=>{
+const MobileBlockMenu =({ page, addBlock,deleteBlock,setPopup, setCommentBlock,setPopupStyle, frameHtml ,setMobileSideMenu, setMobileSideMenuOpen, setOpenMM , initialInnerHeight }:MobileBlockMenuProps)=>{
+  const pageHtml = frameHtml?.querySelector('.page');
   const item = sessionStorage.getItem('mobileMenuBlock');
   const [mbmStyle,setMBMstyle]=useState<CSSProperties|undefined>(undefined);
   const [mobileSelection ,setMobileSelection]= useState<mobileSelectionType|null>(null) ;
@@ -39,21 +41,46 @@ const MobileBlockMenu =({ page, addBlock,deleteBlock,setPopup, setCommentBlock,s
   });
 
   const changeMBMstyle =(targetBlock:Block)=>{
+    const innerHeight = window.innerHeight;
+    const heightGap = initialInnerHeight - innerHeight; 
     const blockElement = document.getElementById(`${targetBlock.id}_contents`);
     const blockElementDomRect =blockElement?.getClientRects()[0];
     const pageContentInner =frameHtml?.querySelector(".pageContent_inner") ;
     const pageContentInnerDomRect =pageContentInner?.getClientRects()[0];
     const frameDomRect = frameHtml?.getClientRects()[0];
-    if(frameDomRect !==undefined && pageContentInnerDomRect !==undefined&&  blockElementDomRect !==undefined ){
+    
+    if(frameHtml !==null && frameDomRect !==undefined && 
+      pageContentInnerDomRect !==undefined&&  
+      blockElement !==null &&
+      blockElementDomRect !==undefined ){
       const top = blockElementDomRect.bottom + 8 ;
       const left = pageContentInnerDomRect.left - frameDomRect.left ;
-      setMBMstyle({
-        top:`${top}px`,
-        left:`${left}px`,
-        width: pageContentInnerDomRect.width > 260 ? "260px" : `${pageContentInnerDomRect.width  }px`
-      })
-    }
+      let newTop = top;
+      /**
+       * 가상 키보드롤 인해 가려지는 부분의 y축 시작점
+       */
+      const pointBlinding = frameDomRect.height - heightGap;
+      if(pageHtml !==null && pageHtml !==undefined){
+        if(top >= pointBlinding){
+          const widthOfMovement = top - pointBlinding + 32;
+          pageHtml.setAttribute("style", `transform:translateY( -${widthOfMovement}px)`);
+          newTop = blockElement.getClientRects()[0].bottom + 8;
+        };
+          setMBMstyle({
+            top:`${newTop}px`,
+            left:`${left}px`,
+            width: pageContentInnerDomRect.width > 260 ? "260px" : `${pageContentInnerDomRect.width  }px`
+          })
+      }
+    };
   };
+  window.addEventListener('resize', ()=>{
+    const innerHeight =window.innerHeight;
+    if(innerHeight === initialInnerHeight && pageHtml !==null && pageHtml!==undefined){
+      pageHtml.setAttribute("style", 'transform:traslateY(0)');
+      block !==null && changeMBMstyle(block);
+    }
+  });
   const openMobileSideMenu =(what:msmWhatType)=>{
     setMobileSideMenu({
       block:block,
