@@ -4,20 +4,23 @@ import { BiCommentDetail } from 'react-icons/bi';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { TiArrowSortedDown } from 'react-icons/ti';
 import { CSSProperties } from 'styled-components';
-import { msmWhatType, ms_color, ms_moreMenu, ms_turnInto } from '../containers/NotionRouter';
+import { msmWhatType, ms_color, ms_moreMenu, ms_turnInto, selectionType } from '../containers/NotionRouter';
 import { Block, makeNewBlock} from '../modules/notion';
-import  { StylerCommonProps } from './BlockStyler';
+import  BlockStyler, { StylerCommonProps } from './BlockStyler';
+import MobileBlockStyler from './MobileBlockStyler';
 
 
 type MobileBlockMenuProps = StylerCommonProps & {
   setMobileMenuBlock:Dispatch<SetStateAction<Block|null>>,
   setOpenMM :Dispatch<SetStateAction<boolean>>,
-  detectSelectionInMobile: () => void
 };
 
-const MobileBlockMenu =({pages, pagesId, firstlist, userName, page,recentPagesId, block, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage, editPage,popup,setPopup, setCommentBlock,setTargetPageId,setPopupStyle,command ,setCommand, frameHtml ,setMobileSideMenu, setMobileSideMenuOpen, setMobileMenuBlock, setOpenMM ,detectSelectionInMobile }:MobileBlockMenuProps)=>{
-  const [mbmStyle,setMBMstyle]=useState<CSSProperties|undefined>(undefined)
-  
+const MobileBlockMenu =({pages, pagesId, firstlist, userName, page,recentPagesId, block, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage, editPage,popup,setPopup, setCommentBlock,setTargetPageId,setPopupStyle,command ,setCommand, frameHtml ,setMobileSideMenu, setMobileSideMenuOpen, setMobileMenuBlock, setOpenMM  }:MobileBlockMenuProps)=>{
+  const [mbmStyle,setMBMstyle]=useState<CSSProperties|undefined>(undefined);
+  type mobileSelectionType = selectionType & {
+    selection: Selection
+  }; 
+  const [mobileSelection ,setMobileSelection]= useState<mobileSelectionType|null>(null) ;
   const inner = document.getElementById('inner');
   inner?.addEventListener('click', (event)=>{
     const target =event.target as HTMLElement|null;
@@ -25,7 +28,8 @@ const MobileBlockMenu =({pages, pagesId, firstlist, userName, page,recentPagesId
     if((contentEditableElement ===null ||contentEditableElement===undefined ) && target?.className !== "contentEditable"){
       closeMM();
     }
-  })
+  });
+
   const changeMBMstyle =()=>{
     const blockElement = document.getElementById(`${block.id}_contents`);
     const blockElementDomRect =blockElement?.getClientRects()[0];
@@ -80,7 +84,15 @@ const MobileBlockMenu =({pages, pagesId, firstlist, userName, page,recentPagesId
     closeMM();
   };
   document.onselectionchange = (event)=>{
-    detectSelectionInMobile();
+    const SELECTION = document.getSelection();
+    const notSelect = (SELECTION?.anchorNode === SELECTION?.focusNode && SELECTION?.anchorOffset === SELECTION?.focusOffset);
+    if(SELECTION !==null && !notSelect){
+      setMobileSelection({
+        block:block,
+        change:false,
+        selection:SELECTION
+      })
+    }
   };
 
   useEffect(()=>{
@@ -91,6 +103,7 @@ const MobileBlockMenu =({pages, pagesId, firstlist, userName, page,recentPagesId
   return(
     <>
       <div id="mobileBlockMenu" style={mbmStyle}>
+        {mobileSelection ==null ?
             <div className='inner'>
               <button
                 onClick={addNewBlock}
@@ -154,6 +167,12 @@ const MobileBlockMenu =({pages, pagesId, firstlist, userName, page,recentPagesId
                 </div>
               </button>
             </div>
+          : 
+            <MobileBlockStyler
+                
+            
+            />
+        }
       </div>
 
     </>
