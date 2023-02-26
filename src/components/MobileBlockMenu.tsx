@@ -21,6 +21,7 @@ const MobileBlockMenu =({pages, pagesId, firstlist, userName, page,recentPagesId
     selection: Selection
   }; 
   const [mobileSelection ,setMobileSelection]= useState<mobileSelectionType|null>(null) ;
+  const [block, setBlock]= useState<Block|null>(null);
   const inner = document.getElementById('inner');
   inner?.addEventListener('click', (event)=>{
     const target =event.target as HTMLElement|null;
@@ -30,8 +31,8 @@ const MobileBlockMenu =({pages, pagesId, firstlist, userName, page,recentPagesId
     }
   });
 
-  const changeMBMstyle =()=>{
-    const blockElement = document.getElementById(`${block.id}_contents`);
+  const changeMBMstyle =(targetBlock:Block)=>{
+    const blockElement = document.getElementById(`${targetBlock.id}_contents`);
     const blockElementDomRect =blockElement?.getClientRects()[0];
     const pageContentInner =frameHtml?.querySelector(".pageContent_inner") ;
     const pageContentInnerDomRect =pageContentInner?.getClientRects()[0];
@@ -59,11 +60,10 @@ const MobileBlockMenu =({pages, pagesId, firstlist, userName, page,recentPagesId
    * MobileBlockMenu 창을 닫는 함수 
    */
   const closeMM =()=>{
-    setMobileMenuBlock(null);
     setOpenMM(false);
   };
   const addNewBlock =()=>{
-    if(page.blocksId!==null){
+    if(page.blocksId!==null && block !==null){
       const blockIndex = page.blocksId.indexOf(block.id);
       const newBlock =makeNewBlock(page, block,"");
       addBlock(page.id, newBlock, blockIndex+1, block.id);
@@ -71,7 +71,7 @@ const MobileBlockMenu =({pages, pagesId, firstlist, userName, page,recentPagesId
     };
   };
   const removeBlock =()=>{
-    deleteBlock(page.id, block, true);
+    block !==null && deleteBlock(page.id, block, true);
     closeMM();
   };
   const onClickCommentBtn =()=>{
@@ -86,20 +86,53 @@ const MobileBlockMenu =({pages, pagesId, firstlist, userName, page,recentPagesId
   document.onselectionchange = (event)=>{
     const SELECTION = document.getSelection();
     const notSelect = (SELECTION?.anchorNode === SELECTION?.focusNode && SELECTION?.anchorOffset === SELECTION?.focusOffset);
-    if(SELECTION !==null && !notSelect){
-      setMobileSelection({
-        block:block,
-        change:false,
-        selection:SELECTION
-      })
+    if(notSelect && SELECTION !==null){
+      detectSelectionInMobile(SELECTION)
     }
+    if(SELECTION !==null && !notSelect && block !==null){
+        setMobileSelection({
+          block:block,
+          change:false,
+          selection:SELECTION
+        })
+      }
   };
+  function detectSelectionInMobile (SELECTION :Selection){
+    const anchorNode =SELECTION.anchorNode;
+    let contentEditableElement : HTMLElement|null|undefined = null ;
+    switch (anchorNode?.nodeType) {
+      case 3 :
+        //text node
+        const parentElement = anchorNode.parentElement;
+        contentEditableElement = parentElement?.closest('.contentEditable');
 
-  useEffect(()=>{
-    changeMBMstyle();
-  },[block.id]);
-
-  
+        break;
+      case 1:
+        //element node
+        break;
+      default:
+        break;
+    };
+    if(contentEditableElement !==null && contentEditableElement !==undefined){
+      const blockContnetElement = contentEditableElement?.closest('.contents');
+      if(blockContnetElement!==null){
+        const id =blockContnetElement.id;
+        const index= id.indexOf('_contents');
+        const blockId = id.slice(0, index);
+        const targetBlock= findBlock(page, blockId).BLOCK;
+        setBlock(targetBlock);
+        changeMBMstyle(targetBlock);
+      } ;
+    }
+};
+ useEffect(()=>{
+  if(item !==null){
+    const targetBlock = JSON.parse(item);
+    setBlock(targetBlock);
+    changeMBMstyle(targetBlock);
+    sessionStorage.removeItem('mobileMenuBlock')
+  }
+ },[item])
   return(
     <>
       <div id="mobileBlockMenu" style={mbmStyle}>
@@ -113,7 +146,7 @@ const MobileBlockMenu =({pages, pagesId, firstlist, userName, page,recentPagesId
                   <AiOutlinePlus/>
                 </div>
               </button>
-              {block.type !== "page" &&
+              {block?.type !== "page" &&
                 <button
                   name="comment"
                   onClick={onClickCommentBtn}

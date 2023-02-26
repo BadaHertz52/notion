@@ -11,7 +11,7 @@ import Loader from './Loader';
 import PageIcon from './PageIcon';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import PageMenu from './PageMenu';
-import { isMobile, selectContent, setTemplateItem } from './BlockComponent';
+import { isMobile ,setTemplateItem } from './BlockComponent';
 import { fontStyleType, mobileSideMenuType } from '../containers/NotionRouter';
 import BlockStyler from './BlockStyler';
 import MoveTargetBlock from './MoveTargetBlock';
@@ -114,7 +114,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   const pointBlockToMoveBlock =useRef<Block|null>(null);
 
   const [openMobileMenu, setOpenMM]=useState<boolean>(false);
-  const [mobileMenuBlock, setMobileMenuBlock]=useState<Block|null>(null);
   const maxWidth = innerWidth -60;
   const fontSize:number = openTemplates? 20: ( smallText? 14: 16);
   const frameInnerStyle:CSSProperties={
@@ -665,7 +664,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   /**
    * 모바일 환경에서 Selection 객체 여부를 탐색하고, 유의미한 Selection일 경우 BlockStyler를 열기 위한 작업(mobileMenu 나 BlockComment 창 닫기, selection state 변경, 선택된 내용을 표시할 수 있도록 block content 변경)을 시행함
    */
-  const detectSelectionInMobile =(SELECTION :Selection)=>{
+  const setItemForMobileMenu =(SELECTION :Selection)=>{
       const anchorNode =SELECTION.anchorNode;
       let contentEditableElement : HTMLElement|null|undefined = null ;
       switch (anchorNode?.nodeType) {
@@ -688,7 +687,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           const index= id.indexOf('_contents');
           const blockId = id.slice(0, index);
           const block= findBlock(page, blockId).BLOCK;
-          setMobileMenuBlock(block);
+          sessionStorage.setItem("mobileMenuBlock", JSON.stringify(block));
           setOpenMM(true);
         } ;
       }
@@ -754,7 +753,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           setOpenComment(false);
           setCommentBlock(null);
         };
-        detectSelectionInMobile(SELECTION);
+        setItemForMobileMenu(SELECTION);
       }
     };
   }
@@ -961,7 +960,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
                     setSelection={setSelection}
                     setOpenMM ={setOpenMM}
                     openMobileMenu={openMobileMenu}
-                    setMobileMenuBlock={setMobileMenuBlock}
                   />
                 )
               }
@@ -1143,7 +1141,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           setSelection={setSelection}
           setOpenMM={setOpenMM}
           openMobileMenu={openMobileMenu}
-          setMobileMenuBlock={setMobileMenuBlock}
         />
       }
       {selection !==null && 
@@ -1178,7 +1175,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
         />
       }
       {openMobileMenu && 
-      mobileMenuBlock !==null && 
       <MobileBlockMenu
           pages={pages}
           pagesId={pagesId}
@@ -1186,7 +1182,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           userName={userName}
           page={page}
           recentPagesId={recentPagesId}
-          block={mobileMenuBlock}
           addBlock={addBlock}
           editBlock={editBlock}
           changeBlockToPage={changeBlockToPage}
@@ -1206,7 +1201,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           setMobileSideMenu={setMobileSideMenu}
           setMobileSideMenuOpen={setMobileSideMenuOpen}
           setOpenMM ={setOpenMM}
-          setMobileMenuBlock={setMobileMenuBlock}
         />
       }
     </div>

@@ -1,7 +1,7 @@
 import React from'react';
 import EditableBlock, { changeFontSizeBySmallText, EditableBlockProps } from './EditableBlock';
 
-const MoveTargetBlock=({ pages,pagesId,page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,fontSize, moveBlock  ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand ,setTargetPageId  ,openComment ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock, closeMenu,templateHtml ,setSelection , setOpenMM ,openMobileMenu ,setMobileMenuBlock
+const MoveTargetBlock=({ pages,pagesId,page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,fontSize, moveBlock  ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand ,setTargetPageId  ,openComment ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock, closeMenu,templateHtml ,setSelection , setOpenMM ,openMobileMenu 
 }:EditableBlockProps)=>{
   return(
     <div 
@@ -65,7 +65,6 @@ const MoveTargetBlock=({ pages,pagesId,page, block , editBlock, addBlock,changeT
         setSelection={setSelection}
         setOpenMM={setOpenMM}
         openMobileMenu={openMobileMenu}
-        setMobileMenuBlock={setMobileMenuBlock}
       />
       }
     </div>

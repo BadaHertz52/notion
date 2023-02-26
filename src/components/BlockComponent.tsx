@@ -473,7 +473,6 @@ type  BlockComponentProps ={
   setSelection:Dispatch<SetStateAction<selectionType|null>>,
   openMobileMenu:boolean, 
   setOpenMM :Dispatch<SetStateAction<boolean>>,
-  setMobileMenuBlock: Dispatch<SetStateAction<Block | null>>
 };
 
 export type itemType ={
@@ -482,7 +481,7 @@ export type itemType ={
 };
 
 
-const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,command, setCommand  ,setOpenComment ,onClickCommentBtn ,setTargetPageId ,setOpenLoader, setLoaderTargetBlock ,closeMenu ,templateHtml, setSelection ,openMobileMenu ,setOpenMM , setMobileMenuBlock }:BlockComponentProps)=>{  
+const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,command, setCommand  ,setOpenComment ,onClickCommentBtn ,setTargetPageId ,setOpenLoader, setLoaderTargetBlock ,closeMenu ,templateHtml, setSelection ,openMobileMenu ,setOpenMM }:BlockComponentProps)=>{  
   const editTime =JSON.stringify(Date.now);
   const contentEditableRef= useRef<HTMLElement>(null);
   /**
@@ -828,8 +827,8 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
   const onTouchEnd =(event :TouchEvent<HTMLDivElement>)=>{
     const targetBlock = findTargetBlock(event);
     if(targetBlock!==null){
-      if(targetBlock.comments ==null ){
-        setMobileMenuBlock(targetBlock);
+      if(targetBlock.comments ==null && !openMobileMenu ){
+        sessionStorage.setItem("mobileMenuBlock", JSON.stringify(targetBlock));
         setOpenMM(true);
         setSelection(null);
       };
