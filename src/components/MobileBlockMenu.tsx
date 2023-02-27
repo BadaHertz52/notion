@@ -34,8 +34,13 @@ const MobileBlockMenu =({ page, addBlock,deleteBlock,setPopup, setCommentBlock,s
   const inner = document.getElementById('inner');
   inner?.addEventListener('click', (event)=>{
     const target =event.target as HTMLElement|null;
+    const mobileBlockMenuElement =target?.closest("#mobileBlockMenu");
     const contentEditableElement =   target?.closest('.contentEditable');
-    if((contentEditableElement ===null ||contentEditableElement===undefined ) && target?.className !== "contentEditable"){
+    const conditionForClosing_notMobileBlock = (mobileBlockMenuElement === null || mobileBlockMenuElement === undefined) ;
+
+    const conditionForClosing_notContentEidtable =
+    (contentEditableElement ===null ||contentEditableElement===undefined )&& target?.className !== "contentEditable";
+    if( conditionForClosing_notMobileBlock && conditionForClosing_notContentEidtable){
       closeMM();
     }
   });
