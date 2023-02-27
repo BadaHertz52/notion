@@ -173,7 +173,7 @@ const MobileBlockMenu =({ page, addBlock,deleteBlock,setPopup, setCommentBlock,s
         {mobileSelection ==null ?
             <div className='inner'>
               <button
-                onClick={addNewBlock}
+                onTouchEnd={addNewBlock}
                 title="Click  to add a block below"
                 >
                 <div className='btn_inner'>
@@ -183,7 +183,7 @@ const MobileBlockMenu =({ page, addBlock,deleteBlock,setPopup, setCommentBlock,s
               {block?.type !== "page" &&
                 <button
                   name="comment"
-                  onClick={onClickCommentBtn}
+                  onTouchEnd={onClickCommentBtn}
                 >
                   <div className="btn_inner">
                     <BiCommentDetail/>
@@ -191,7 +191,7 @@ const MobileBlockMenu =({ page, addBlock,deleteBlock,setPopup, setCommentBlock,s
                 </button>
                 }
               <button
-                  onMouseOver={()=>openMobileSideMenu(ms_turnInto)}
+                  onTouchEnd={()=>openMobileSideMenu(ms_turnInto)}
                   name="turn into"
                 >
                   <div className="btn_inner">
@@ -202,7 +202,7 @@ const MobileBlockMenu =({ page, addBlock,deleteBlock,setPopup, setCommentBlock,s
                   </div>
                 </button>
               <button
-                  onClick ={removeBlock}
+                  onTouchEnd={removeBlock}
                   name="delete"
                 >
                   <div className="btn_inner">
@@ -212,7 +212,7 @@ const MobileBlockMenu =({ page, addBlock,deleteBlock,setPopup, setCommentBlock,s
               <button 
                   name='color'
                   className='underline menu_editBtn'
-                  onMouseOver={()=>openMobileSideMenu(ms_color)}
+                  onTouchEnd={()=>openMobileSideMenu(ms_color)}
                 >
                   <div className="btn_inner">
                     <div className='text'>Color</div>
@@ -225,7 +225,7 @@ const MobileBlockMenu =({ page, addBlock,deleteBlock,setPopup, setCommentBlock,s
                 </button>
               <button
                 aria-details='open menu'
-                onClick={()=>openMobileSideMenu(ms_moreMenu)}
+                onTouchEnd={()=>openMobileSideMenu(ms_moreMenu)}
               >
                 <div className="btn_inner">
                   <div className='text'> 
