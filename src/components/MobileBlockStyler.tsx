@@ -30,13 +30,13 @@ const MobileBlockStyler =({page, block, setOpenMobileStyler}:MobileBlockStylerPr
     const notSelect = (SELECTION?.anchorNode === SELECTION?.focusNode && SELECTION?.anchorOffset === SELECTION?.focusOffset);
     if(notSelect){
       setOpenMobileStyler(false);
+      selectedHtml.current =null
     }
   };
 
   return(
     <div id="mobileBlockStyler">
       <div className="inner">
-        selectedHtml {selectedHtml.current}
         <button
           name='commentBtn'
           onTouchEnd={onTouchCommentBtn}
@@ -46,7 +46,7 @@ const MobileBlockStyler =({page, block, setOpenMobileStyler}:MobileBlockStylerPr
         <div className='styles'>
           <button 
             className='boldBtn btn'
-            //onTouchStart={prepareForChange}
+            onTouchStart={prepareForChange}
             onTouchEnd={()=>onTouchFontStyleBtn('bold')}
           >
             B
