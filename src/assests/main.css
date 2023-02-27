@@ -355,6 +355,7 @@ a:link, a:active, a:visited {
   border-radius: 5px;
   width: -moz-fit-content;
   width: fit-content;
+  overflow-x: scroll;
 }
 #blockStyler::-webkit-scrollbar-thumb {
   background: #D3D1CB;
