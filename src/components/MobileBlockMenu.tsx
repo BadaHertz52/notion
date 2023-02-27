@@ -93,7 +93,7 @@ const MobileBlockMenu =({ page, addBlock,deleteBlock,setPopup, setCommentBlock,s
   /**
    * MobileBlockMenu 창을 닫는 함수 
    */
-  const closeMM =()=>{
+  function closeMM (){
     setOpenMM(false);
   };
   const addNewBlock =()=>{
@@ -117,21 +117,8 @@ const MobileBlockMenu =({ page, addBlock,deleteBlock,setPopup, setCommentBlock,s
     setPopupStyle(mbmStyle);
     closeMM();
   };
-  document.onselectionchange = (event)=>{
-    const SELECTION = document.getSelection();
-    const notSelect = (SELECTION?.anchorNode === SELECTION?.focusNode && SELECTION?.anchorOffset === SELECTION?.focusOffset);
-    if(notSelect && SELECTION !==null){
-      detectSelectionInMobile(SELECTION)
-    }
-    if(SELECTION !==null && !notSelect && block !==null){
-        setMobileSelection({
-          block:block,
-          change:false,
-          selection:SELECTION
-        })
-      }
-  };
-  function detectSelectionInMobile (SELECTION :Selection){
+
+const detectSelectionInMobile =(SELECTION :Selection)=>{
     const anchorNode =SELECTION.anchorNode;
     let contentEditableElement : HTMLElement|null|undefined = null ;
     switch (anchorNode?.nodeType) {
@@ -157,6 +144,16 @@ const MobileBlockMenu =({ page, addBlock,deleteBlock,setPopup, setCommentBlock,s
         setBlock(targetBlock);
         changeMBMstyle(targetBlock);
       } ;
+    }
+};
+document.onselectionchange = (event)=>{
+  const SELECTION = document.getSelection();
+  const notSelect = (SELECTION?.anchorNode === SELECTION?.focusNode && SELECTION?.anchorOffset === SELECTION?.focusOffset);
+  if(notSelect && SELECTION !==null){
+    detectSelectionInMobile(SELECTION)
+  }
+  if(SELECTION !==null && !notSelect && !openMobileStyler){
+      setOpenMobileStyler(true)
     }
 };
  useEffect(()=>{
