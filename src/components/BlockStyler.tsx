@@ -5,20 +5,44 @@ import {ImArrowUpRight2} from 'react-icons/im';
 import { CSSProperties } from 'styled-components';
 import ColorMenu from './ColorMenu';
 import { Command } from './Frame';
-import {selectionType} from '../containers/NotionRouter';
+import {msmWhatType, selectionType} from '../containers/NotionRouter';
 import Menu, { MenuAndBlockStylerCommonProps } from './Menu';
-import { Block} from '../modules/notion';
+import { Block, Page} from '../modules/notion';
 import { detectRange } from './BlockFn';
 import LinkLoader from './LinkLoader';
 import { mobileSideMenuType } from '../containers/NotionRouter';
-export const bold="bold";
-export const initial="initial";
-export const italic= "italic";
-export const underline="underline";
-export const lineThrough="lineThrough";
-export type fontWeightType =typeof bold|typeof initial;
-export type fontStyleType= typeof italic| typeof initial;
-export type textDecoType= typeof underline| typeof lineThrough ; 
+import { selectContent } from './BlockComponent';
+    /**
+     * block의 content에서 selected class를 삭제하는 함수 
+     */
+    export function removeSelected(frameHtml:HTMLElement|null, block:Block, editBlock:(pageId: string, block: Block) => void ,page:Page, setSelection: React.Dispatch<React.SetStateAction<selectionType | null>> | null){
+      // 변경된 내용이 있고, selected 만 제거하면 되는 경우
+      const blockContentHtml = frameHtml?.querySelector(`#${block.id}_contents`); 
+      const selecteds =blockContentHtml?.querySelectorAll(".selected") ;
+
+      if(selecteds !==undefined && selecteds[0] !== undefined){
+        selecteds.forEach((selectedHtml:Element)=>{
+          if(selectedHtml.classList.length >1){
+            selectedHtml?.classList.remove("selected");
+          }else{
+            selectedHtml.outerHTML =selectedHtml.innerHTML;
+          }
+        })    
+    }else{
+      const spanElements =blockContentHtml?.querySelectorAll("span");
+      if(spanElements!==undefined){
+        spanElements.forEach((element:HTMLSpanElement)=>{
+          if(element.className===""){
+            element.outerHTML =element.innerHTML;
+          };
+        });
+      }
+      
+    }
+    const editedBlock = getContent(block);
+    editBlock(page.id, editedBlock);
+    setSelection !==null && setSelection(null);
+  };
   /**
    * BlockStyler의 타켓인 block에 대한 내용을 담고 있는 element중 mainBlock element의 domRect을 반환하는 함수 
    * @returns DOMRect | undefined
@@ -84,16 +108,27 @@ export type StylerCommonProps = MenuAndBlockStylerCommonProps& {
   setPopupStyle:Dispatch<React.SetStateAction<React.CSSProperties | undefined>>,
   setCommand: React.Dispatch<React.SetStateAction<Command>>,
   command: Command,
-  setMobileSideMenuOpen:Dispatch<SetStateAction<boolean>>,
-  setMobileSideMenu:Dispatch<SetStateAction<mobileSideMenuType>>
+  openMobileBlockMenu:boolean,
+  setMobileSideMenu:Dispatch<SetStateAction<mobileSideMenuType>>, 
+  setMobileSideMenuOpen: Dispatch<SetStateAction<boolean>>,
+  setOpenMM :Dispatch<SetStateAction<boolean>>
 }
-type BlockStylerProps = StylerCommonProps& {
-  selection:selectionType,
-  setSelection:Dispatch<SetStateAction<selectionType|null>>,
+export type BlockStylerProps = StylerCommonProps& {
+  selection:selectionType|null,
+  setSelection:Dispatch<SetStateAction<selectionType|null>>|null,
+  setOpenMobileBlockStyler:Dispatch<SetStateAction<boolean>>|null
 }
-const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, block, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage, editPage,popup,setPopup, setCommentBlock,setTargetPageId,selection,setSelection ,setPopupStyle,command ,setCommand, frameHtml ,  setMobileSideMenu, setMobileSideMenuOpen}:BlockStylerProps)=>{
+const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, block, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage, editPage,popup,setPopup, setCommentBlock,setTargetPageId,selection,setSelection ,setPopupStyle,command ,setCommand, frameHtml ,openMobileBlockMenu ,setMobileSideMenu, setMobileSideMenuOpen, setOpenMM,setOpenMobileBlockStyler}:BlockStylerProps)=>{
 
-
+  const bold="bold";
+  const initial="initial";
+  const italic= "italic";
+  const underline="underline";
+  const lineThrough="lineThrough";
+  type fontWeightType =typeof bold|typeof initial;
+  type fontStyleType= typeof italic| typeof initial;
+  type textDecoType= typeof underline| typeof lineThrough 
+  ; 
   const getBlockType=()=> 
   {  
     const blockType = block.type ;
@@ -200,7 +235,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
       what:"popupComment"
     });
     setCommentBlock(block);
-    removeSelected();
+    removeSelected(frameHtml, block, editBlock, page, setSelection);
   };
 
   const changeMenuStyle=(param:menuType)=>{
@@ -256,9 +291,11 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
   };
   
   window.onresize=()=>{
-    changeStylerStyle(frameHtml,block,setBlockStylerStyle);
-    openMenu && changeMenuStyle(menu);
-    openColor && changeMenuStyle(color);
+    if(openMobileBlockMenu){
+      changeStylerStyle(frameHtml,block,setBlockStylerStyle);
+      openMenu && changeMenuStyle(menu);
+      openColor && changeMenuStyle(color);
+    };
   };
 
     /**
@@ -285,7 +322,6 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
   const onClickFontStyleBtn=(btnName:fontWeightType|fontStyleType|textDecoType)=>{
     const selecteds = document.querySelectorAll(".selected") as NodeListOf<HTMLElement>;
     if(selecteds[0]!==undefined){
-
       selecteds.forEach((selectedHtml:HTMLElement)=>{
         const selectedSpan =selectedHtml.querySelectorAll(btnName);
         if(selectedSpan[0]!==undefined){
@@ -313,49 +349,22 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
           selectedHtml.classList.add(btnName);
         };
       });
+      
       const editedBlock = getContent(block);
       editBlock(page.id, editedBlock);
-      setSelection({
+      console.log("editedblock content", editedBlock.contents)
+      setSelection !==null && setSelection({
         block:editedBlock,
         change:true
       });
     }
   };
-    /**
-     * block의 content에서 selected class를 삭제하는 함수 
-     */
-  function removeSelected(){
-      // 변경된 내용이 있고, selected 만 제거하면 되는 경우
-      const blockContentHtml = frameHtml?.querySelector(`#${block.id}_contents`); 
-      const selecteds =blockContentHtml?.querySelectorAll(".selected") ;
 
-      if(selecteds !==undefined && selecteds[0] !== undefined){
-        selecteds.forEach((selectedHtml:Element)=>{
-          if(selectedHtml.classList.length >1){
-            selectedHtml?.classList.remove("selected");
-          }else{
-            selectedHtml.outerHTML =selectedHtml.innerHTML;
-          }
-        })    
-    }else{
-      const spanElements =blockContentHtml?.querySelectorAll("span");
-      if(spanElements!==undefined){
-        spanElements.forEach((element:HTMLSpanElement)=>{
-          if(element.className===""){
-            element.outerHTML =element.innerHTML;
-          };
-        });
-      }
-      
-    }
-    const editedBlock = getContent(block);
-    editBlock(page.id, editedBlock);
-    setSelection(null);
-  };
 
   inner?.addEventListener("click", (event)=>{
     closeBlockStyler(event);
   });
+
   const closeCommandBlock=(event:globalThis.MouseEvent, commandBlockHtml:HTMLElement)=>{
     const commandBlockDomRect =commandBlockHtml.getClientRects()[0];
     const isIn =detectRange(event, commandBlockDomRect);
@@ -412,7 +421,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
           const mainMenu =document.getElementById("mainMenu");
           const linkLoaderHtml = document.getElementById("linkLoader");
           if(colorMenuHtml==null && commandBlockHtml===null && mainMenu===null && linkLoaderHtml ==null){
-            removeSelected();
+            removeSelected(frameHtml,block ,editBlock,page, setSelection);
           }else{
             if(colorMenuHtml!==null){
               closeColorMenu(event, colorMenuHtml);
@@ -430,18 +439,45 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
       }
     }
   };
+  //mobile 
+  const prepareForChange =()=>{
+    const mobileSelection = document.getSelection();
+    const contentEditableHtml = document.getElementById(`${block.id}_contents`)?.firstElementChild as HTMLElement|null|undefined;
+    if(mobileSelection !==null && contentEditableHtml!==null && 
+    contentEditableHtml !==undefined){
+      selectContent(mobileSelection, block, contentEditableHtml, null, page, null);
+    }
+  };
+  const openMobileSideMenu =(what:msmWhatType)=>{
+    setMobileSideMenuOpen(true);
+    setMobileSideMenu({
+      block:block,
+      what: what
+    });
+  };
+  document.onselectionchange =()=>{
+    if(!openMobileBlockMenu){
+      const SELECTION  =document.getSelection();
+      const notSelect = (SELECTION?.anchorNode === SELECTION?.focusNode && SELECTION?.anchorOffset === SELECTION?.focusOffset);
+      if(notSelect){
+        setOpenMobileBlockStyler !==null && setOpenMobileBlockStyler(false);
+      }
+    }
+  };
 
   useEffect(()=>{
-    changeStylerStyle(frameHtml, block, setBlockStylerStyle);
-    if(selection.change){
-      openColor && setOpenColor(false);
-      openLink && setOpenLink(false);
-      openMenu && setOpenMenu(false);
-      command.boolean && setCommand({
-        command:null,
-        targetBlock:null,
-        boolean:false
-      })
+    if(!openMobileBlockMenu){
+      changeStylerStyle(frameHtml, block, setBlockStylerStyle);
+      if(selection?.change){
+        openColor && setOpenColor(false);
+        openLink && setOpenLink(false);
+        openMenu && setOpenMenu(false);
+        command.boolean && setCommand({
+          command:null,
+          targetBlock:null,
+          boolean:false
+        })
+      };
     };
   },[selection]);
   return(
@@ -462,41 +498,53 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
         </button>
         <button 
           className='linkBtn btn'
-          onClick={()=>setOpenLink(!openLink)}
+          onClick={()=>{!openMobileBlockMenu &&setOpenLink(!openLink)}}
+          onTouchStart={prepareForChange}
+          onTouchEnd={()=>openMobileSideMenu('ms_link')}
         >
           <ImArrowUpRight2/>
-          Link
+          <span>Link</span>
           <IoIosArrowDown className='arrowDown'/>
         </button>
         <button 
           className='commentBtn btn'
           onClick={onClickCommentBtn}
+          onTouchStart={prepareForChange}
+          onTouchEnd={onClickCommentBtn}
         >
             <BsChatLeftText/>
-            Comment
+            <span>Comment</span>
         </button>
         <div className='styles'>
           <button 
             className='boldBtn btn'
-            onClick={()=>onClickFontStyleBtn(bold)}
+            onClick={()=>!openMobileBlockMenu &&onClickFontStyleBtn(bold)}
+            onTouchStart={prepareForChange}
+            onTouchEnd={()=>onClickFontStyleBtn(bold)}
           >
             B
           </button>
           <button 
           className='italicBtn btn'
-          onClick={()=>onClickFontStyleBtn(italic)}
+          onClick={()=> !openMobileBlockMenu && onClickFontStyleBtn(italic)}
+          onTouchStart={prepareForChange}
+          onTouchEnd={()=>onClickFontStyleBtn('italic')}
           >
             i
           </button>
           <button 
             className='underlineBtn btn'
-            onClick={()=>onClickFontStyleBtn(underline)}
+            onClick={()=> !openMobileBlockMenu && onClickFontStyleBtn(underline)}
+            onTouchStart={prepareForChange}
+            onTouchEnd={()=>onClickFontStyleBtn(underline)}
           >
             U
           </button>
           <button 
             className='lineThroughBtn btn'
-            onClick={()=>onClickFontStyleBtn(lineThrough)}
+            onClick={()=> !openMobileBlockMenu && onClickFontStyleBtn(lineThrough)}
+            onTouchStart={prepareForChange}
+            onTouchEnd={()=>onClickFontStyleBtn(lineThrough)}
           >
             S
           </button>
@@ -504,26 +552,31 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
         <button 
           className='colorBtn btn'
           onClick={onClickColorBtn}
+          onTouchStart={prepareForChange}
+          onTouchEnd={()=>{openMobileSideMenu(
+            'ms_color')}}
         >
-            A
+            <span>A</span>
             <IoIosArrowDown className='arrowDown'/>
         </button>
         <button 
           className='menuBtn btn'
           onClick={onClickMenuBtn}
+          onTouchStart={prepareForChange}
+          onTouchEnd={()=>{openMobileSideMenu(
+            'ms_moreMenu')}}
         >
             <BsThreeDots/>
         </button>
       </div>
     </div>
-    <div className="sideMenu">
-      {openLink &&
+      {openLink && 
         <LinkLoader
           recentPagesId={recentPagesId}
           pages={pages}
           pagesId={pagesId}
           page={page}
-          block={selection.block}
+          block={selection? selection.block : block}
           editBlock={editBlock}
           setOpenLink={setOpenLink}
           blockStylerStyle={blockStylerStyle}
@@ -537,7 +590,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
         >
             <ColorMenu
               page={page}
-              block={selection.block}
+              block={selection ? selection.block: block}
               editBlock={editBlock}
               selection={selection}
               setSelection ={setSelection}
@@ -550,7 +603,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
             pages={pages}
             firstlist={firstlist}
             page={page}
-            block={selection.block}
+            block={selection ? selection.block :block}
             userName={userName}
             setOpenMenu={setOpenMenu}
             addBlock={addBlock}
@@ -571,7 +624,6 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
             style={menuStyle}
           />
         }
-    </div>
     </>
   )
 };

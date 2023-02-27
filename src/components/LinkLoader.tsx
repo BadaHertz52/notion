@@ -17,7 +17,7 @@ type LinkLoaderProps={
   editBlock: (pageId: string, block: Block) => void,
   setOpenLink: Dispatch<SetStateAction<boolean>>,
   blockStylerStyle:CSSProperties|undefined,
-  setSelection: Dispatch<SetStateAction<selectionType | null>>,
+  setSelection: Dispatch<SetStateAction<selectionType | null>>|null,
 }
 const LinkLoader=({recentPagesId, pages,page,pagesId, block,editBlock, setOpenLink, blockStylerStyle,setSelection}:LinkLoaderProps)=>{
   const selectedHtml =document.querySelector(".selected");
@@ -107,7 +107,7 @@ const LinkLoader=({recentPagesId, pages,page,pagesId, block,editBlock, setOpenLi
       editTime:JSON.stringify(Date.now())
     };
     editBlock(page.id, newBlock);
-    setSelection({
+    setSelection !==null && setSelection({
       block:newBlock,
       change:true
     });

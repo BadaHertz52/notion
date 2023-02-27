@@ -1,36 +1,25 @@
-import  React, { Dispatch, SetStateAction, useState ,useEffect , useRef } from 'react';
+import  React, { useState ,useEffect  } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { BiCommentDetail } from 'react-icons/bi';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { TiArrowSortedDown } from 'react-icons/ti';
 import { CSSProperties } from 'styled-components';
-import { PopupType } from '../containers/EditorContainer';
-import { mobileSideMenuType, msmWhatType, ms_color, ms_moreMenu, ms_turnInto, selectionType } from '../containers/NotionRouter';
-import { Block, findBlock, makeNewBlock, Page} from '../modules/notion';
-import MobileBlockStyler from './MobileBlockStyler';
-export   type mobileSelectionType = selectionType & {
-  selection: Selection
-}; 
-type MobileBlockMenuProps = {
-  page:Page
-  addBlock:(pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
-  deleteBlock:(pageId: string, block: Block, isInMenu: boolean) => void,
-  setPopup:Dispatch<SetStateAction<PopupType>>, 
-  setCommentBlock :Dispatch<SetStateAction<Block | null>>,
-  setPopupStyle :Dispatch<SetStateAction<CSSProperties | undefined>>,
-  frameHtml:HTMLElement|null ,
-  setMobileSideMenu:Dispatch<SetStateAction<mobileSideMenuType>>, 
-  setMobileSideMenuOpen: Dispatch<SetStateAction<boolean>>,
-  setOpenMM :Dispatch<SetStateAction<boolean>>,
+import {  msmWhatType, ms_color, ms_moreMenu, ms_turnInto } from '../containers/NotionRouter';
+import { Block, findBlock, makeNewBlock} from '../modules/notion';
+import BlockStyler, { removeSelected, StylerCommonProps } from './BlockStyler';
+
+
+type MobileBlockMenuProps = Omit<StylerCommonProps , 'block'> & {
   initialInnerHeight:number
 };
 
-const MobileBlockMenu =({ page, addBlock,deleteBlock,setPopup, setCommentBlock,setPopupStyle, frameHtml ,setMobileSideMenu, setMobileSideMenuOpen, setOpenMM , initialInnerHeight }:MobileBlockMenuProps)=>{
+const MobileBlockMenu =({
+  pages, pagesId, firstlist, userName, page,recentPagesId, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage, editPage,popup,setPopup, setCommentBlock,setTargetPageId,setPopupStyle,command ,setCommand, frameHtml ,openMobileBlockMenu ,setMobileSideMenu, setMobileSideMenuOpen, setOpenMM  , initialInnerHeight }:MobileBlockMenuProps)=>{
   const pageHtml = frameHtml?.querySelector('.page');
   const item = sessionStorage.getItem('mobileMenuBlock');
   const [mbmStyle,setMBMstyle]=useState<CSSProperties|undefined>(undefined);
-  const [openMobileStyler, setOpenMobileStyler]= useState<boolean>(false);
   const [block, setBlock]= useState<Block|null>(null);
+  const [openMobileBlockStyler, setOpenMobileBlockStyler]= useState<boolean>(false);
   const inner = document.getElementById('inner');
   inner?.addEventListener('click', (event)=>{
     const target =event.target as HTMLElement|null;
@@ -100,6 +89,9 @@ const MobileBlockMenu =({ page, addBlock,deleteBlock,setPopup, setCommentBlock,s
    */
   function closeMM (){
     setOpenMM(false);
+    if(openMobileBlockStyler && block !==null){
+      removeSelected(frameHtml, block, editBlock,page,null);
+    }
   };
   const addNewBlock =()=>{
     if(page.blocksId!==null && block !==null){
@@ -160,8 +152,8 @@ document.onselectionchange = (event)=>{
   if(notSelect && SELECTION !==null){
     detectSelectionInMobile(SELECTION)
   }
-  if(SELECTION !==null && !notSelect && !openMobileStyler){
-      setOpenMobileStyler(true)
+  if(SELECTION !==null && !notSelect && !openMobileBlockStyler){
+      setOpenMobileBlockStyler(true)
     }
 };
  useEffect(()=>{
@@ -175,7 +167,7 @@ document.onselectionchange = (event)=>{
   return(
     <>
       <div id="mobileBlockMenu" style={mbmStyle}>
-        {!openMobileStyler ?
+        {!openMobileBlockStyler ?
             <div className='inner'>
               <button
                 onTouchEnd={addNewBlock}
@@ -241,11 +233,38 @@ document.onselectionchange = (event)=>{
             </div>
           : 
           block !==null &&
-            <MobileBlockStyler
-              page={page}
-              block={block}
-              setOpenMobileStyler={setOpenMobileStyler}
-            />
+          <BlockStyler
+          pages={pages}
+          pagesId={pagesId}
+          firstlist={firstlist}
+          userName={userName}
+          page={page}
+          recentPagesId={recentPagesId}
+          block={block}
+          addBlock={addBlock}
+          editBlock={editBlock}
+          changeBlockToPage={changeBlockToPage}
+          changePageToBlock={changePageToBlock}
+          deleteBlock={deleteBlock}
+          editPage={editPage}
+          duplicatePage={duplicatePage}
+          movePageToPage={movePageToPage}
+          popup={popup}
+          setPopup={setPopup}
+          setPopupStyle={setPopupStyle}
+          command={command}
+          setCommand={setCommand}
+          setCommentBlock={setCommentBlock}
+          setTargetPageId={setTargetPageId}
+          selection={null}
+          setSelection={null}
+          frameHtml={frameHtml}
+          openMobileBlockMenu={openMobileBlockMenu}
+          setMobileSideMenu={setMobileSideMenu}
+          setMobileSideMenuOpen={setMobileSideMenuOpen}
+          setOpenMM={setOpenMM}
+          setOpenMobileBlockStyler={setOpenMobileBlockStyler}
+          />
         }
       </div>
 
