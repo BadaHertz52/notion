@@ -154,6 +154,9 @@ const detectSelectionInMobile =(SELECTION :Selection)=>{
 document.onselectionchange = (event)=>{
   const SELECTION = document.getSelection();
   const notSelect = (SELECTION?.anchorNode === SELECTION?.focusNode && SELECTION?.anchorOffset === SELECTION?.focusOffset);
+  if(SELECTION===null){
+    closeMM();
+  }
   if(notSelect && SELECTION !==null){
     detectSelectionInMobile(SELECTION)
   }
