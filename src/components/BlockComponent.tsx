@@ -343,8 +343,7 @@ export function updateMiddleChildren(startIndex:number, endIndex:number,endNode:
   middleChildren.forEach((c:Node)=>contentEditableHtml?.removeChild(c));
   contentEditableHtml?.insertBefore(newSpan, endNode);
  };
-
-export const selectContent =(SELECTION:Selection|null ,targetBlock:Block, contentEditableHtml:HTMLElement|null ,editBlock: (pageId: string, block: Block) => void,page:Page,setSelection:Dispatch<SetStateAction<selectionType|null>>)=>{
+export const selectContent =(SELECTION:Selection|null ,targetBlock:Block, contentEditableHtml:HTMLElement|null ,editBlock: ((pageId: string, block: Block) => void) | null,page:Page,setSelection:Dispatch<SetStateAction<selectionType|null>>|null)=>{
   const notSelect = (SELECTION?.anchorNode === SELECTION?.focusNode && SELECTION?.anchorOffset === SELECTION?.focusOffset);
   if(SELECTION !==null && !notSelect ){
     const anchorNode= SELECTION.anchorNode;
@@ -393,16 +392,19 @@ export const selectContent =(SELECTION:Selection|null ,targetBlock:Block, conten
       const endOffset= startOffset=== anchorOffset ? focusOffset -1: anchorOffset -1 ;
       const startNodeText =startNode.textContent as string; 
       const endNodeText =endNode.textContent as string; 
+
       if(anchorNode.parentElement?.tagName !=="A" && focusNode.parentElement?.tagName !=="A"){
         const {preChangedContent, selectedStartIndex} =getFromStartNode(startNode, startOffset, targetBlock ,contentEditableHtml);
         const { afterChangedContent,
         selectedEndIndex} =getFromEndNode(endNode,endOffset, targetBlock ,contentEditableHtml);
         const newSelected = contents.slice(selectedStartIndex, selectedEndIndex+1);
         const newContents =`${preChangedContent}<span class="selected">${newSelected}</span>${afterChangedContent}`; 
-        editBlock(page.id, {
-          ...targetBlock,
-          contents: newContents
-        });
+          contentEditableHtml.innerHTML = newContents
+          editBlock !==null && editBlock(page.id, {
+            ...targetBlock,
+            contents: newContents
+          });
+        
       }else{
         const startParentIsA =startNode.parentElement?.tagName==="A";
         const endParentIsA = endNode.parentElement?.tagName==="A"
@@ -434,20 +436,24 @@ export const selectContent =(SELECTION:Selection|null ,targetBlock:Block, conten
           startParentNode!==null && updateStartParentNode(startOffset, startNode, startNodeText, startParentNode);
           endParentNode !==null && updateEndParentNode(endOffset, endNode, endNodeText, endParentNode);
         }
-        const newContents = document.getElementById(`${targetBlock.id}_contents`)?.firstElementChild?.innerHTML;
-        if(newContents !==null && newContents!==undefined){
-          const editedBlock:Block ={
-            ...targetBlock,
-            contents: newContents,
-            editTime:JSON.stringify(Date.now())
-          };
-          editBlock(page.id, editedBlock);
-        }
+          const newContents = document.getElementById(`${targetBlock.id}_contents`)?.firstElementChild?.innerHTML;
+          if(newContents !==null && newContents!==undefined){
+            const editedBlock:Block ={
+              ...targetBlock,
+              contents: newContents,
+              editTime:JSON.stringify(Date.now())
+            };
+            editBlock !== null && editBlock(page.id, editedBlock);
+          }
+        
       };
-      setSelection({
-        block:targetBlock,
-        change:false
-      });
+      if(!isMobile()){
+        setSelection !==null && setSelection({
+          block:targetBlock,
+          change:false
+        });
+      }
+
     }
   }
 };  
