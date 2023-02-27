@@ -72,3 +72,27 @@
   position: absolute;
   z-index: 30
 }
+
+#mobileBlockMenu {
+  #blockStyler{
+    position: relative;
+    width: 100%;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    svg{
+      font-size: 14px;
+      margin: 0;
+    }
+    .typeBtn{
+      display: none;
+    }
+    .commentBtn span{
+      display: none;
+    }
+    .commentBtn , 
+    .menuBtn {
+      padding: 0;
+      text-align: center;
+    }
+  }
+}

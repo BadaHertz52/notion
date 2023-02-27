@@ -423,6 +423,28 @@ a:link, a:active, a:visited {
   z-index: 30;
 }
 
+#mobileBlockMenu #blockStyler {
+  position: relative;
+  width: 100%;
+  overflow-y: hidden;
+  overflow-x: scroll;
+}
+#mobileBlockMenu #blockStyler svg {
+  font-size: 14px;
+  margin: 0;
+}
+#mobileBlockMenu #blockStyler .typeBtn {
+  display: none;
+}
+#mobileBlockMenu #blockStyler .commentBtn span {
+  display: none;
+}
+#mobileBlockMenu #blockStyler .commentBtn,
+#mobileBlockMenu #blockStyler .menuBtn {
+  padding: 0;
+  text-align: center;
+}
+
 .switchBtn {
   position: relative;
   width: 30px;

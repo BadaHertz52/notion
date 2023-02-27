@@ -297,6 +297,13 @@ a:link, a:active, a:visited {
   background-color: #BDE6F1;
 }
 
+.frame.mobile .selected, .frame.mobile .editableBlock .selected a:link, .frame.mobile .editableBlock a:link .selected {
+  background-color: rgba(125, 188, 252, 0.5411764706);
+}
+.frame.mobile .selected .bg_default, .frame.mobile .selected .bg_yellow, .frame.mobile .selected .bg_blue, .frame.mobile .selected .bg_green, .frame.mobile .selected .bg_grey, .frame.mobile .selected .bg_pink, .frame.mobile .editableBlock .selected a:link .bg_default, .frame.mobile .editableBlock .selected a:link .bg_yellow, .frame.mobile .editableBlock .selected a:link .bg_blue, .frame.mobile .editableBlock .selected a:link .bg_green, .frame.mobile .editableBlock .selected a:link .bg_grey, .frame.mobile .editableBlock .selected a:link .bg_pink, .frame.mobile .editableBlock a:link .selected .bg_default, .frame.mobile .editableBlock a:link .selected .bg_yellow, .frame.mobile .editableBlock a:link .selected .bg_blue, .frame.mobile .editableBlock a:link .selected .bg_green, .frame.mobile .editableBlock a:link .selected .bg_grey, .frame.mobile .editableBlock a:link .selected .bg_pink {
+  background-color: rgba(125, 188, 252, 0.5411764706);
+}
+
 .bg_default {
   background-color: none;
 }
