@@ -11,6 +11,14 @@ import { Block} from '../modules/notion';
 import { detectRange } from './BlockFn';
 import LinkLoader from './LinkLoader';
 import { mobileSideMenuType } from '../containers/NotionRouter';
+export const bold="bold";
+export const initial="initial";
+export const italic= "italic";
+export const underline="underline";
+export const lineThrough="lineThrough";
+export type fontWeightType =typeof bold|typeof initial;
+export type fontStyleType= typeof italic| typeof initial;
+export type textDecoType= typeof underline| typeof lineThrough ; 
   /**
    * BlockStyler의 타켓인 block에 대한 내용을 담고 있는 element중 mainBlock element의 domRect을 반환하는 함수 
    * @returns DOMRect | undefined
@@ -84,14 +92,8 @@ type BlockStylerProps = StylerCommonProps& {
   setSelection:Dispatch<SetStateAction<selectionType|null>>,
 }
 const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, block, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage, editPage,popup,setPopup, setCommentBlock,setTargetPageId,selection,setSelection ,setPopupStyle,command ,setCommand, frameHtml ,  setMobileSideMenu, setMobileSideMenuOpen}:BlockStylerProps)=>{
-  const bold="bold";
-  const initial="initial";
-  const italic= "italic";
-  const underline="underline";
-  const lineThrough="lineThrough";
-  type fontWeightType =typeof bold|typeof initial;
-  type fontStyleType= typeof italic| typeof initial;
-  type textDecoType= typeof underline| typeof lineThrough ; 
+
+
   const getBlockType=()=> 
   {  
     const blockType = block.type ;
