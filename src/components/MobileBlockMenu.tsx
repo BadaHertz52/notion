@@ -108,7 +108,7 @@ const MobileBlockMenu =({ page, addBlock,deleteBlock,setPopup, setCommentBlock,s
     block !==null && deleteBlock(page.id, block, true);
     closeMM();
   };
-  const onClickCommentBtn =()=>{
+  const onTouchCommentBtn =()=>{
     setCommentBlock(block);
     setPopup({
       popup:true,
@@ -180,7 +180,7 @@ document.onselectionchange = (event)=>{
               {block?.type !== "page" &&
                 <button
                   name="comment"
-                  onTouchEnd={onClickCommentBtn}
+                  onTouchEnd={onTouchCommentBtn}
                 >
                   <div className="btn_inner">
                     <BiCommentDetail/>
