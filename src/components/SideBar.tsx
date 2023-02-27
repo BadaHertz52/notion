@@ -452,11 +452,9 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
 
   };
   const onTouchMoveSideBar=(event:TouchEvent<HTMLDivElement>)=>{
-    console.log("touch", touchResizeBar.current);
     if(touchResizeBar.current){
       const clientY =event.changedTouches[0].clientY;
       const innerHeight =window.innerHeight;
-      console.log("innerheight",innerHeight,"clienty",clientY)
       if(innerHeight -50 <= clientY){
         console.log("close")
         setMoreFnStyle(undefined);
