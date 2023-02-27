@@ -2931,9 +2931,7 @@ a:link, a:active, a:visited {
   position: absolute;
   left: 5%;
   width: 80%;
-  overflow-x: scroll;
-  overflow-y: hidden;
-  padding: 0 5px;
+  overflow: hidden;
 }
 #mobileBlockMenu::-webkit-scrollbar-thumb {
   background: #D3D1CB;
@@ -2945,9 +2943,9 @@ a:link, a:active, a:visited {
   display: flex;
 }
 #mobileBlockMenu button {
-  height: 28px;
+  height: 2rem;
   min-width: 24px;
-  font-size: 14px;
+  font-size: 1rem;
   border-right: 1px solid rgb(212, 212, 212);
   display: flex;
   align-items: center;
