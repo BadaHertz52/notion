@@ -694,6 +694,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
       }
   };
   inner?.addEventListener("keyup",updateBlock);
+  inner?.addEventListener('touchstart', updateBlock);
   inner?.addEventListener("click",(event:globalThis.MouseEvent)=>{
     updateBlock();
     menuOpen &&closeMenu(event);
