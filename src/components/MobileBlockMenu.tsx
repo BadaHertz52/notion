@@ -29,7 +29,7 @@ const MobileBlockMenu =({ page, addBlock,deleteBlock,setPopup, setCommentBlock,s
   const pageHtml = frameHtml?.querySelector('.page');
   const item = sessionStorage.getItem('mobileMenuBlock');
   const [mbmStyle,setMBMstyle]=useState<CSSProperties|undefined>(undefined);
-  const [mobileSelection ,setMobileSelection]= useState<mobileSelectionType|null>(null) ;
+  const [openMobileStyler, setOpenMobileStyler]= useState<boolean>(false);
   const [block, setBlock]= useState<Block|null>(null);
   const inner = document.getElementById('inner');
   inner?.addEventListener('click', (event)=>{
@@ -167,7 +167,7 @@ document.onselectionchange = (event)=>{
   return(
     <>
       <div id="mobileBlockMenu" style={mbmStyle}>
-        {mobileSelection ==null ?
+        {!openMobileStyler ?
             <div className='inner'>
               <button
                 onTouchEnd={addNewBlock}
@@ -232,10 +232,11 @@ document.onselectionchange = (event)=>{
               </button>
             </div>
           : 
+          block !==null &&
             <MobileBlockStyler
-                page={page}
-              mobileSelection={mobileSelection}
-              setMobileSelection={setMobileSelection}
+              page={page}
+              block={block}
+              setOpenMobileStyler={setOpenMobileStyler}
             />
         }
       </div>
