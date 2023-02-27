@@ -7,6 +7,7 @@ import {selectionType} from '../containers/NotionRouter';
 import LinkLoader from './LinkLoader';
 
 import Menu, { MenuAndBlockStylerCommonProps } from './Menu';
+import { removeSelected } from './BlockStyler';
 type MobileSideMenuProps = MenuAndBlockStylerCommonProps & {
   recentPagesId :string[]|null,
   pagesId:string[],
@@ -17,7 +18,10 @@ type MobileSideMenuProps = MenuAndBlockStylerCommonProps & {
   setMobileSideMenuOpen:Dispatch<SetStateAction<boolean>>
 }
 const MobileSideMenu =({pages, pagesId, recentPagesId,firstlist, block, userName, page,  addBlock,changeBlockToPage,changePageToBlock ,editBlock, deleteBlock ,duplicatePage,movePageToPage,editPage ,setPopup ,popup  ,setCommentBlock , setTargetPageId ,frameHtml, mobileSideMenu  ,setMobileSideMenu,mobileSideMenuOpen, setMobileSideMenuOpen ,setSelection}:MobileSideMenuProps)=>{
-
+  const mobileSelection :selectionType ={
+    block:block,
+    change:false
+  }
   const [mobileSideMenuStyle, setMobileSideMenuStyle]=useState<CSSProperties>({transform:'translateY(110vh'});
   const getTitle = ()=>{
     switch (mobileSideMenu.what) {
@@ -46,7 +50,8 @@ const MobileSideMenu =({pages, pagesId, recentPagesId,firstlist, block, userName
       });
       setMobileSideMenuStyle({
         transform:'translateY(110%)'
-      })
+      });
+      removeSelected(frameHtml, block ,editBlock, page, null)
     }else{
       setMobileSideMenuStyle({transform:'translateY(0)'})
     };
@@ -95,7 +100,7 @@ const MobileSideMenu =({pages, pagesId, recentPagesId,firstlist, block, userName
                 page={page}
                 block={block}
                 editBlock={editBlock}
-                selection={null}
+                selection={mobileSelection}
                 setSelection={null}
                 setOpenMenu={setMobileSideMenuOpen}
               />
