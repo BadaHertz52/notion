@@ -11,13 +11,12 @@ import { removeSelected } from './BlockStyler';
 type MobileSideMenuProps = MenuAndBlockStylerCommonProps & {
   recentPagesId :string[]|null,
   pagesId:string[],
-  setSelection:Dispatch<SetStateAction<selectionType|null>>,
   mobileSideMenu:mobileSideMenuType
   setMobileSideMenu:Dispatch<SetStateAction<mobileSideMenuType>>,
   mobileSideMenuOpen:boolean,
   setMobileSideMenuOpen:Dispatch<SetStateAction<boolean>>
 }
-const MobileSideMenu =({pages, pagesId, recentPagesId,firstlist, block, userName, page,  addBlock,changeBlockToPage,changePageToBlock ,editBlock, deleteBlock ,duplicatePage,movePageToPage,editPage ,setPopup ,popup  ,setCommentBlock , setTargetPageId ,frameHtml, mobileSideMenu  ,setMobileSideMenu,mobileSideMenuOpen, setMobileSideMenuOpen ,setSelection}:MobileSideMenuProps)=>{
+const MobileSideMenu =({pages, pagesId, recentPagesId,firstlist, block, userName, page,  addBlock,changeBlockToPage,changePageToBlock ,editBlock, deleteBlock ,duplicatePage,movePageToPage,editPage ,setPopup ,popup  ,setCommentBlock , setTargetPageId ,frameHtml, mobileSideMenu  ,setMobileSideMenu,mobileSideMenuOpen, setMobileSideMenuOpen}:MobileSideMenuProps)=>{
   const mobileSelection :selectionType ={
     block:block,
     change:false
@@ -52,7 +51,6 @@ const MobileSideMenu =({pages, pagesId, recentPagesId,firstlist, block, userName
       setMobileSideMenuStyle({
         transform:'translateY(110%)'
       });
-      removeSelected(frameHtml, block ,editBlock, page, null)
     }else{
       setMobileSideMenuStyle({transform:'translateY(0)'})
     };
@@ -131,7 +129,7 @@ const MobileSideMenu =({pages, pagesId, recentPagesId,firstlist, block, userName
               editBlock={editBlock}
               setOpenLink={setMobileSideMenuOpen}
               blockStylerStyle={undefined}
-              setSelection={setSelection}
+              setSelection={null}
               />
             }
           </div>
