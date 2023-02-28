@@ -365,17 +365,18 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
       });
     }
   };
-
+  const operateCloseBlockStyler =(event:globalThis.MouseEvent|TouchEvent)=>{
+    const blockStylerHtml =document.getElementById("blockStyler");
+    const commentInputHtml =document.getElementById("popupMenu")?.querySelector(".commentInput");
+    (blockStylerHtml !== null || commentInputHtml!==null)&&
+    closeBlockStyler(event);
+  }
 
   inner?.addEventListener("click", (event)=>{
-    const blockStyler =document.getElementById("blockStyler");
-    blockStyler !== null &&
-    closeBlockStyler(event);
+    operateCloseBlockStyler(event);
   });
   inner?.addEventListener("touchend", (event)=>{
-    const blockStyler =document.getElementById("blockStyler");
-    blockStyler !== null &&
-    closeBlockStyler(event);
+    operateCloseBlockStyler(event);
   });
 
   /**
