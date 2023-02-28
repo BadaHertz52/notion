@@ -446,7 +446,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
     const contentEditableHtml = document.getElementById(`${block.id}_contents`)?.firstElementChild as HTMLElement|null|undefined;
     if(mobileSelection !==null && contentEditableHtml!==null && 
     contentEditableHtml !==undefined){
-      selectContent(mobileSelection, block, contentEditableHtml, null, page, null);
+      selectContent(mobileSelection, block, contentEditableHtml, editBlock, page, null);
     }
   };
   const openMobileSideMenu =(what:msmWhatType)=>{
