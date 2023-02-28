@@ -33,7 +33,7 @@ const StyleColorInform =styled.span`
 const ColorInform=({color ,background, colorName ,page, block ,editBlock, templateHtml,  selection, setSelection , setOpenMenu}:ColorInformProps)=>{
 
   const changeContentStyle=(colorName:string)=>{
-    if(selection !==null &&setSelection !==null ){
+    if(selection !==null ){
       const target = color ===undefined? "bg" :"color";
       const bg_colors=["bg_default","bg_grey"," bg_orange", "bg_green", " bg_blue",  "bg_pink"];
       const color_colors=[" color_default","color_grey"," color_orange", "color_green", " color_blue", "color_red" ];
@@ -124,7 +124,6 @@ const ColorInform=({color ,background, colorName ,page, block ,editBlock, templa
     };
     setOpenMenu !==null && setOpenMenu(false);
   };
-
   return(
     <button 
       className='colorInform'
