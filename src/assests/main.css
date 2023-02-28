@@ -2978,6 +2978,7 @@ a:link, a:active, a:visited {
   font-size: 14px;
   min-width: -moz-fit-content;
   min-width: fit-content;
+  margin-right: 4px;
 }
 #mobileBlockMenu button .btn_inner {
   height: calc(100% - 10px);

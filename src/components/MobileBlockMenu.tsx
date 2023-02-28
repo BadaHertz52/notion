@@ -64,7 +64,7 @@ const MobileBlockMenu =({
           setMBMstyle({
             top:`${newTop}px`,
             left:`${left}px`,
-            width: pageContentInnerDomRect.width > 260 ? "260px" : `${pageContentInnerDomRect.width  }px`
+            maxWidth: pageContentInnerDomRect.width > 260 ? "280px" : `${pageContentInnerDomRect.width  }px`
           })
       }
     };
