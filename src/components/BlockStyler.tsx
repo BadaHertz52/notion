@@ -362,7 +362,6 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
 
 
   inner?.addEventListener("click", (event)=>{
-    !openMobileBlockMenu &&
     closeBlockStyler(event);
   });
 
@@ -413,10 +412,11 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
    * @param event globalThis.MouseEvent
    */
     function closeBlockStyler(event:globalThis.MouseEvent){
-      const blockStylerDomRect =blockStyler?.getClientRects()[0];
-      if(blockStylerDomRect!==undefined){
-        const isInBlockStyler = detectRange(event, blockStylerDomRect);
-        if(!isInBlockStyler){
+      const target =event.target as HTMLElement|null ;
+      if(target !==null){
+        const isInBlockStyler = target.closest("#blockStyler") !== null;
+        const isInMobileSideMenu = target.closest("#mobileSideMenu") !==null;
+        if(!isInBlockStyler && !isInMobileSideMenu ){
           const colorMenuHtml = document.getElementById("blockStylerColor");
           const commandBlockHtml = document.getElementById("block_commandBlock");
           const mainMenu =document.getElementById("mainMenu");

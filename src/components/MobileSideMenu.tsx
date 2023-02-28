@@ -41,6 +41,7 @@ const MobileSideMenu =({pages, pagesId, recentPagesId,firstlist, block, userName
       what:undefined
     });
     setMobileSideMenuOpen(false);
+    removeSelected(frameHtml, block, editBlock ,page, null)
   };
   useEffect(()=>{
     if(!mobileSideMenuOpen){
