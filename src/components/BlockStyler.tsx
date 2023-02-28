@@ -435,6 +435,8 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
 
           if(colorMenuHtml==null && commandBlockHtml===null && mainMenu===null && linkLoaderHtml ==null ){ 
             removeSelected(frameHtml,block ,editBlock,page, setSelection);
+            setSelection !==null && setSelection(null);
+            openMenu && setOpenMM(false);
           }else{
             const eventTarget = event.target as HTMLElement|null;
             if (eventTarget!==null) {
@@ -446,8 +448,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
             
             }
           };
-          setSelection !==null && setSelection(null);
-          openMenu && setOpenMM(false);
+
       }
     }
   };
