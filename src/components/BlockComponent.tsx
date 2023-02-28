@@ -1,7 +1,7 @@
 import React, { ChangeEvent, Dispatch,KeyboardEvent,MouseEvent, SetStateAction, SyntheticEvent,  TouchEvent,  useEffect, useRef} from 'react';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import { MdOutlinePhotoSizeSelectActual } from 'react-icons/md';
-import {  Block,BlockType,blockTypes,findBlock,findPage,findParentBlock,findPreviousBlockInDoc,makeNewBlock,Page, toggle } from '../modules/notion';
+import {  Block,BlockType,blockTypes,findBlock,findPage,findParentBlock,findPreviousBlockInDoc,MainCommentType,makeNewBlock,Page, toggle } from '../modules/notion';
 import { Command} from './Frame';
 import ImageContent from './ImageContent';
 import {selectionType} from '../containers/NotionRouter';
@@ -470,7 +470,6 @@ type  BlockComponentProps ={
   command :Command,
   setCommand:Dispatch<SetStateAction<Command>>,
   setOpenComment :Dispatch<SetStateAction<boolean>>,
-  onClickCommentBtn: (block: Block) => void,
   setTargetPageId: Dispatch<SetStateAction<string>>,
   setOpenLoader:Dispatch<SetStateAction<boolean>>,
   setLoaderTargetBlock : Dispatch<SetStateAction<Block | null>>,
@@ -487,7 +486,7 @@ export type itemType ={
 };
 
 
-const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,command, setCommand  ,setOpenComment ,onClickCommentBtn ,setTargetPageId ,setOpenLoader, setLoaderTargetBlock ,closeMenu ,templateHtml, setSelection ,openMobileMenu ,setOpenMM }:BlockComponentProps)=>{  
+const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,command, setCommand  ,setOpenComment ,setTargetPageId ,setOpenLoader, setLoaderTargetBlock ,closeMenu ,templateHtml, setSelection ,openMobileMenu ,setOpenMM }:BlockComponentProps)=>{  
   const editTime =JSON.stringify(Date.now);
   const contentEditableRef= useRef<HTMLElement>(null);
   /**
@@ -970,53 +969,46 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
         <BlockContentEditable/>
         </button>
       :
-        (!block.comments ?
-          (block.type.includes("media") ?
-          (block.contents===""?
-            <button 
-              className='addBlockFile'
-              onClick={onClickAddFileBtn}
-            >
-              <span
-                className="addBlockFileIcon"
-              >
-                {block.type ==="image media" &&
-                  <MdOutlinePhotoSizeSelectActual/>
-                }
-              </span>
-              <span>
-                Add a {block.type.slice(0, block.type.indexOf("media"))}
-              </span>
-              
-            </button>
-            :
-            <>
-              {block.type==="image media" &&
-              <ImageContent
-                page={page}
-                block={block}
-                editBlock={editBlock}
-              />
-              }
-            </>
-          )
-          :
-          <div 
-            id={`${block.id}_contents`}
-            className="contents"
+        (block.type.includes("media") ?
+        (block.contents===""?
+          <button 
+            className='addBlockFile'
+            onClick={onClickAddFileBtn}
           >
-            <BlockContentEditable/>
-          </div>
-          )
-        :
-        <button 
-        id={`${block.id}_contents`}
-        className="contents commentBtn"
-        onClick={()=>onClickCommentBtn(block)}
-      >
-        <BlockContentEditable/>
-      </button>
+            <span
+              className="addBlockFileIcon"
+            >
+              {block.type ==="image media" &&
+                <MdOutlinePhotoSizeSelectActual/>
+              }
+            </span>
+            <span>
+              Add a {block.type.slice(0, block.type.indexOf("media"))}
+            </span>
+            
+          </button>
+          :
+          <>
+            {block.type==="image media" &&
+            <ImageContent
+              page={page}
+              block={block}
+              editBlock={editBlock}
+            />
+            }
+          </>
         )
+        :
+        <div 
+          id={`${block.id}_contents`}
+          className={`contents 
+          ${block.comments !==null && block.comments.map((m:MainCommentType)=> m.selectedText === null).includes(true)? "commentBtn" :""
+          }`}
+        >
+          <BlockContentEditable/>
+        </div>
+        )
+        
       }
     </div>
   )

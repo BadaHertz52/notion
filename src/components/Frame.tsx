@@ -898,6 +898,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
                     addOrEdit={"add"}
                     setEdit={setOpenPageCommentInput}
                     templateHtml={templateHtml}
+                    frameHtml={frameHtml}
                   />
                   :
                   newPageFram &&
@@ -1095,6 +1096,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
                 addOrEdit="add"
                 setEdit={null}
                 templateHtml={templateHtml}
+                frameHtml={frameHtml}
               />
             }
           </div>

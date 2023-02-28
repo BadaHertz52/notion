@@ -313,17 +313,26 @@
     outline: none
   }
 }
-.contents.commentBtn {
+.contents.commentBtn,
+.contents .commentBtn{
   color:inherit;
   text-decoration: inherit;
+  width: fit-content;
   font : {
     size: inherit;
     weight: inherit
   }
-  background-color: $comment;
   border-bottom: 2px solid $commentHover;
   &:hover{
     background-color: $commentHover;
+  }
+}
+.contents.commentBtn {
+  background-color: $comment;
+}
+.contents {
+  .commentBtn {
+    background-color: $comment_text;
   }
 }
 .commentsBubble .commentBtn{

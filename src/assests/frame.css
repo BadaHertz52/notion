@@ -521,16 +521,27 @@ a:link, a:active, a:visited {
   outline: none;
 }
 
-.contents.commentBtn {
+.contents.commentBtn,
+.contents .commentBtn {
   color: inherit;
   text-decoration: inherit;
+  width: -moz-fit-content;
+  width: fit-content;
   font-size: inherit;
   font-weight: inherit;
-  background-color: rgba(255, 212, 0, 0.14);
   border-bottom: 2px solid rgba(255, 212, 0, 0.8);
 }
-.contents.commentBtn:hover {
+.contents.commentBtn:hover,
+.contents .commentBtn:hover {
   background-color: rgba(255, 212, 0, 0.8);
+}
+
+.contents.commentBtn {
+  background-color: rgba(250, 238, 176, 0.731);
+}
+
+.contents .commentBtn {
+  background-color: rgb(254, 231, 115);
 }
 
 .commentsBubble .commentBtn {

@@ -65,6 +65,7 @@ export type SubCommentType ={
 }
 export type MainCommentType = SubCommentType &{
   type:"open"|"resolve",
+  selectedText: null| string,
   subComments:SubCommentType[]|null,
   subCommentsId : string[] |null,
 };
@@ -536,6 +537,7 @@ const initialState :Notion ={
         editTime: Date.parse("2022-5-20-12:00")
         .toString(),
         createTime: Date.parse("2022-5-20-12:00").toString(),
+        selectedText:null,
         subComments:null,
         subCommentsId:null,
       }],
@@ -564,6 +566,7 @@ const initialState :Notion ={
         content:"hi! ☺️", 
         editTime:(1654086822451).toString(),
         createTime: (Date.parse("2022-5-20-15:00")).toString(),
+        selectedText:null,
         subComments:null,
         subCommentsId:null,
       },]
@@ -637,6 +640,7 @@ const initialState :Notion ={
         content:"todo comments", 
         editTime:(Date.parse("2022-5-18-16:01:30")).toString(),
         createTime: (Date.parse("2022-5-21-14:00")).toString(),
+        selectedText:null,
         subComments:null,
         subCommentsId:null,
       },]
@@ -759,6 +763,7 @@ const initialState :Notion ={
       content:"subBlock comments",
       editTime:(Date.parse("2022-5-18-8:00")).toString(),
       createTime:(Date.parse("2022-5-18-8:00")).toString(),
+      selectedText:null,
       subComments:null,
       subCommentsId:null,
     },]
@@ -833,6 +838,7 @@ const initialState :Notion ={
       content:"comment n2", 
       editTime:(1654086822451).toString(),
       createTime:(1654086822451).toString(),
+      selectedText:null,
       subComments:null,
       subCommentsId:null,
     },]

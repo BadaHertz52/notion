@@ -107,7 +107,18 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
       setOpenComment(true);
     }
   };
-
+  const commentBtns = document.querySelectorAll('.commentBtn');
+  commentBtns.forEach(element => {
+    element.addEventListener("click", ()=>{
+      const contentsElement = element.classList.contains(".contents")? element : element.closest(".contents");
+      const index = contentsElement?.id.indexOf("_contents");
+      const blockId = contentsElement?.id.slice(0,index);
+      if(blockId !==undefined){
+        const targetBlock = findBlock(page,blockId).BLOCK;
+        onClickCommentBtn(targetBlock);
+      }
+    })
+  });
   const onClickTodoBtn =()=>{
     const editedTobo :Block ={
       ...block,
@@ -222,7 +233,6 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
                 command={command}
                 setCommand={setCommand}
                 setOpenComment={setOpenComment}
-                onClickCommentBtn={onClickCommentBtn}
                 setTargetPageId={setTargetPageId}
                 setOpenLoader={setOpenLoader}
                 setLoaderTargetBlock={setLoaderTargetBlock}
@@ -368,7 +378,6 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
                 setCommand={setCommand}
                 setTargetPageId={setTargetPageId}
                 setOpenComment={setOpenComment}
-                onClickCommentBtn={onClickCommentBtn}
                 setOpenLoader={setOpenLoader}
                 setLoaderTargetBlock={setLoaderTargetBlock}
                 closeMenu={closeMenu}

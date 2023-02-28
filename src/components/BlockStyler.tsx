@@ -235,7 +235,6 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
       what:"popupComment"
     });
     setCommentBlock(block);
-    removeSelected(frameHtml, block, editBlock, page, setSelection);
   };
 
   const changeMenuStyle=(param:menuType)=>{
@@ -421,7 +420,8 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
           const commandBlockHtml = document.getElementById("block_commandBlock");
           const mainMenu =document.getElementById("mainMenu");
           const linkLoaderHtml = document.getElementById("linkLoader");
-          if(colorMenuHtml==null && commandBlockHtml===null && mainMenu===null && linkLoaderHtml ==null){
+
+          if(colorMenuHtml==null && commandBlockHtml===null && mainMenu===null && linkLoaderHtml ==null && !popup){
             removeSelected(frameHtml,block ,editBlock,page, setSelection);
           }else{
             if(colorMenuHtml!==null){

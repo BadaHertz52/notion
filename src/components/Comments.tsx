@@ -1,6 +1,6 @@
 import React, {  Dispatch, FormEvent,SetStateAction,useEffect,useRef,useState, MouseEvent } from 'react';
 import { CSSProperties } from 'styled-components';
-import { Block, MainCommentType, SubCommentType, Page } from '../modules/notion';
+import { Block, MainCommentType, SubCommentType, Page} from '../modules/notion';
 import {  BsThreeDots } from 'react-icons/bs';
 import { HiOutlinePencil } from 'react-icons/hi';
 import { IoArrowUpCircleSharp, IoCheckmarkCircle, IoTrashOutline } from 'react-icons/io5';
@@ -9,6 +9,7 @@ import { detectRange } from './BlockFn';
 import { PopupType } from '../containers/EditorContainer';
 import { IoMdCloseCircle } from 'react-icons/io';
 import { setTemplateItem } from './BlockComponent';
+import { getContent, removeSelected } from './BlockStyler';
 const open="open";
 const resolve="resolve";
 type CommentsProps={
@@ -108,7 +109,8 @@ type CommentInputProps={
   setAllComments: Dispatch<SetStateAction<MainCommentType[] | null>>|null,
   setPopup:Dispatch<SetStateAction<PopupType>>| null,
   setEdit:Dispatch<SetStateAction<boolean>>|null,
-  templateHtml: HTMLElement | null
+  templateHtml: HTMLElement | null ,
+  frameHtml :HTMLElement|null
 }
 type CommentBlockProps ={
   comment: SubCommentType | MainCommentType,
@@ -174,7 +176,7 @@ const closeToolMore=(event:MouseEvent| globalThis.MouseEvent ,setMoreOpen:Dispat
   };
 };
 
-export const CommentInput =({userName, pageId, page ,mainComment, subComment,editBlock,editPage, commentBlock ,allComments, setAllComments,setPopup, addOrEdit,setEdit ,templateHtml}:CommentInputProps)=>{
+export const CommentInput =({userName, pageId, page ,mainComment, subComment,editBlock,editPage, commentBlock ,allComments, setAllComments,setPopup, addOrEdit,setEdit ,templateHtml ,frameHtml}:CommentInputProps)=>{
   const editTime =JSON.stringify(Date.now());
   const userNameFirstLetter =userName.substring(0,1).toUpperCase();
   const [editTargetComment, setEditTargetComment]=useState<MainCommentType|SubCommentType|null>(null) ;
@@ -188,15 +190,29 @@ export const CommentInput =({userName, pageId, page ,mainComment, subComment,edi
     border:"none"
   });
   const [text, setText]=useState<string>("");
-  
+  const selectedHtml = document.querySelector('.selected');
+
+  const selectedHtmlText = selectedHtml?.innerHTML ;  
+
   const updateBlock =(blockComments:MainCommentType[])=>{
     if(commentBlock !==null){
-      const editedBlock :Block ={
+      let editedBlock :Block ={
         ...commentBlock,
         comments: blockComments
       };
+      if(selectedHtml !==null){
+        const blockContentHtml = document.getElementById(`${commentBlock.id}_contents`);
+        const newBlockConent = blockContentHtml?.innerHTML; 
+        if(newBlockConent !==undefined){
+          editedBlock = {
+            ...editedBlock,
+            contents:newBlockConent
+          };
+        }
+      };
       editBlock(pageId,editedBlock);
       setAllComments !==null && setAllComments(blockComments);
+      removeSelected(frameHtml, editedBlock,editBlock, page, null);
     }
   };
   const findMainCommentIndex =(comments:MainCommentType[] ,mainComment:MainCommentType)=>{
@@ -235,12 +251,16 @@ export const CommentInput =({userName, pageId, page ,mainComment, subComment,edi
   const addMainComment =()=>{
     if(commentBlock !==null){
       const newId = `main_${editTime}`;
+      if(selectedHtml !== null){
+        selectedHtml.classList.replace('selected', 'commentBtn');
+      };
       const newBlockComment :MainCommentType ={
         id:newId,
         userName: userName,
         editTime:editTime,
         createTime:editTime,
         content: text ,
+        selectedText:selectedHtmlText === undefined ? null : selectedHtmlText,
         subComments:null,
         subCommentsId:null,
         type:"open"
@@ -295,6 +315,7 @@ export const CommentInput =({userName, pageId, page ,mainComment, subComment,edi
       editTime: editTime,
       createTime: editTime,
       type: "open" ,
+      selectedText:null,
       subComments: null,
       subCommentsId: null
     };
@@ -784,7 +805,8 @@ const CommentBlock =({comment ,mainComment ,block ,page ,pageId, userName,editBl
   const firstLetter = comment.userName.substring(0,1).toUpperCase();
   const [edit, setEdit]=useState<boolean>(false);
   const editCommentItem= sessionStorage.getItem("editComment");
-
+  const targetMainComment =mainComment ? comment as MainCommentType : null ;
+  const blockContent = document.getElementById(`${block?.id}_contents`)?.textContent;
   useEffect(()=>{
     // discard edit 
     if(editCommentItem!==null){
@@ -840,7 +862,12 @@ const CommentBlock =({comment ,mainComment ,block ,page ,pageId, userName,editBl
       <div 
         className='comment_block_content' 
       >
-        {block.contents}
+        {(targetMainComment?.selectedText !== null ) ?
+          targetMainComment?.selectedText
+          :
+          blockContent
+        } 
+        
       </div>
       }
     </section>
@@ -862,6 +889,7 @@ const CommentBlock =({comment ,mainComment ,block ,page ,pageId, userName,editBl
           addOrEdit="edit"
           setEdit={setEdit}
           templateHtml={templateHtml}
+          frameHtml={frameHtml}
         />
         :
         comment.content
@@ -941,6 +969,7 @@ const Comment =({userName,comment, block,page, pageId, editBlock ,editPage ,fram
         addOrEdit="add"
         setEdit={null}
         templateHtml={templateHtml}
+        frameHtml={frameHtml}
       />
     </div>
   )
