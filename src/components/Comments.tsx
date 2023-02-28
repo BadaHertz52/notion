@@ -212,7 +212,10 @@ export const CommentInput =({userName, pageId, page ,mainComment, subComment,edi
       };
       editBlock(pageId,editedBlock);
       setAllComments !==null && setAllComments(blockComments);
-      removeSelected(frameHtml, editedBlock,editBlock, page, null);
+      if(selectedHtml !==null){
+        removeSelected(frameHtml, editedBlock,editBlock, page, null);
+      }
+      
     }
   };
   const findMainCommentIndex =(comments:MainCommentType[] ,mainComment:MainCommentType)=>{
