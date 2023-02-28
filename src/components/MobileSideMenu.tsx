@@ -1,4 +1,4 @@
-import React , {Dispatch, SetStateAction , useEffect, useState} from 'react';
+import React , {Dispatch, SetStateAction , useEffect, useState ,useRef} from 'react';
 import { CSSProperties } from 'styled-components';
 import { mobileSideMenuType } from '../containers/NotionRouter';
 import ColorMenu from './ColorMenu';
@@ -20,7 +20,7 @@ const MobileSideMenu =({pages, pagesId, recentPagesId,firstlist, block, userName
   const mobileSelection :selectionType ={
     block:block,
     change:false
-  }
+  };
   const [mobileSideMenuStyle, setMobileSideMenuStyle]=useState<CSSProperties>({transform:'translateY(110vh'});
   const getTitle = ()=>{
     switch (mobileSideMenu.what) {
@@ -42,6 +42,13 @@ const MobileSideMenu =({pages, pagesId, recentPagesId,firstlist, block, userName
     setMobileSideMenuOpen(false);
     removeSelected(frameHtml, block, editBlock ,page, null)
   };
+  const onClickCloseBtn =()=>{
+    setMobileSideMenuStyle({
+      transform:'translateY(110vh)'});
+    setTimeout(() => {
+      closeSideMenu()
+    }, 1500);
+  };
   useEffect(()=>{
     if(!mobileSideMenuOpen){
       setMobileSideMenu({
@@ -61,7 +68,7 @@ const MobileSideMenu =({pages, pagesId, recentPagesId,firstlist, block, userName
           <div className="top">
             <div>{getTitle()}</div>
             <button
-              onClick={closeSideMenu}
+              onClick={onClickCloseBtn}
             >
               close
             </button>
