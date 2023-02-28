@@ -372,6 +372,11 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
     blockStyler !== null &&
     closeBlockStyler(event);
   });
+  inner?.addEventListener("touchend", (event)=>{
+    const blockStyler =document.getElementById("blockStyler");
+    blockStyler !== null &&
+    closeBlockStyler(event);
+  });
 
   /**
    * 유저가 blockStyler를 통해 여는 sideMenu의 영역 밖을을 클릭 할 경우 열려있는 sideMenu 창을 닫는 함수 
@@ -414,7 +419,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
    * 화면상에서 클릭한 곳이 blockStyler외의 곳일 경우, blockStyler 에 의한 변경사항의 여부에 따라 변경 사항이 있으면 블록의 contents 중 선택된 영역을 가리키는 selected 클래스를 제거하고, 변경이 없는 경우 원래의 블록으로 되돌린 후, selection 값은 null로 변경하여 BlockStyler component의 실행을 종료하는 함수   
    * @param event globalThis.MouseEvent
    */
-    function closeBlockStyler(event:globalThis.MouseEvent){
+    function closeBlockStyler(event:globalThis.MouseEvent|TouchEvent){
       const target =event.target as HTMLElement|null ;
       if(target !==null){
         const isInBlockStyler = target.closest("#blockStyler") !== null;
