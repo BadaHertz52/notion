@@ -19,7 +19,6 @@ import { selectContent } from './BlockComponent';
       // 변경된 내용이 있고, selected 만 제거하면 되는 경우
       const blockContentHtml = frameHtml?.querySelector(`#${block.id}_contents`); 
       const selecteds =blockContentHtml?.querySelectorAll(".selected") ;
-
       if(selecteds !==undefined && selecteds[0] !== undefined){
         selecteds.forEach((selectedHtml:Element)=>{
           if(selectedHtml.classList.length >1){
@@ -235,6 +234,8 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
       what:"popupComment"
     });
     setCommentBlock(block);
+    setSelection !==null && setSelection(null);
+    openMobileBlockMenu && setOpenMM(false);
   };
 
   const changeMenuStyle=(param:menuType)=>{
@@ -361,6 +362,8 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
 
 
   inner?.addEventListener("click", (event)=>{
+    const blockStyler =document.getElementById("blockStyler");
+    blockStyler !== null &&
     closeBlockStyler(event);
   });
 
@@ -415,13 +418,16 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
       if(target !==null){
         const isInBlockStyler = target.closest("#blockStyler") !== null;
         const isInMobileSideMenu = target.closest("#mobileSideMenu") !==null;
-        if(!isInBlockStyler && !isInMobileSideMenu ){
+        const isInCommentInput =target.closest(".commentInput");
+        if(!isInBlockStyler && !isInMobileSideMenu  &&
+          !isInCommentInput 
+          ){
           const colorMenuHtml = document.getElementById("blockStylerColor");
           const commandBlockHtml = document.getElementById("block_commandBlock");
           const mainMenu =document.getElementById("mainMenu");
           const linkLoaderHtml = document.getElementById("linkLoader");
 
-          if(colorMenuHtml==null && commandBlockHtml===null && mainMenu===null && linkLoaderHtml ==null && !popup){
+          if(colorMenuHtml==null && commandBlockHtml===null && mainMenu===null && linkLoaderHtml ==null ){ 
             removeSelected(frameHtml,block ,editBlock,page, setSelection);
           }else{
             if(colorMenuHtml!==null){
@@ -436,7 +442,9 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
             if(linkLoaderHtml!==null){
               closeLinkLoader(event, linkLoaderHtml);
             }
-          }
+          };
+          setSelection !==null && setSelection(null);
+          openMenu && setOpenMM(false);
       }
     }
   };
