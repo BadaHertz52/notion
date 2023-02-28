@@ -3,7 +3,6 @@ import {useDispatch, useSelector } from 'react-redux';
 import { CSSProperties } from 'styled-components';
 import Frame  from '../components/Frame';
 import MobileSideMenu from '../components/MobileSideMenu';
-import {selectionType} from './NotionRouter';
 import TopBar from '../components/TopBar';
 import { RootState } from '../modules';
 import  {  Block, Page,  change_to_sub, raise_block, listItem } from '../modules/notion';
