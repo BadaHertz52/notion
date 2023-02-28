@@ -48,7 +48,7 @@ const MobileBlockMenu =({
       pageContentInnerDomRect !==undefined&&  
       blockElement !==null &&
       blockElementDomRect !==undefined ){
-      const top = blockElementDomRect.bottom + 8 ;
+      const top = blockElementDomRect.bottom + 16 ;
       const left = pageContentInnerDomRect.left - frameDomRect.left ;
       let newTop = top;
       /**
@@ -59,7 +59,7 @@ const MobileBlockMenu =({
         if(top >= pointBlinding){
           const widthOfMovement = top - pointBlinding + 32;
           pageHtml.setAttribute("style", `transform:translateY( -${widthOfMovement}px)`);
-          newTop = blockElement.getClientRects()[0].bottom + 8;
+          newTop = blockElement.getClientRects()[0].bottom + 16;
         };
           setMBMstyle({
             top:`${newTop}px`,

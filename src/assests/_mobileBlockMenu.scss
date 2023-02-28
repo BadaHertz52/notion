@@ -4,12 +4,13 @@
   position:absolute;
   left:5%;
   width: 80%;
-  overflow: hidden;
+  overflow-y: hidden;
+  overflow-x: auto;
   .inner{
     display: flex;
   }
   button{
-    height: 2rem;
+    height: 2.2rem;
     min-width: 24px;
     font-size: 1rem;
     border-right: 1px solid rgb(212, 212, 212);
@@ -17,7 +18,8 @@
     align-items: center;
     justify-content: center;
     .text{
-       font-size: 12px;
+      font-size: 14px;
+      min-width: fit-content;
     }
     .btn_inner{
       height: calc(100% - 10px);
@@ -26,8 +28,6 @@
       align-items: center;
       justify-content: center;
       div{
-        height: 100%;
-        line-height: 18px;
         margin-left: 4px;
       }
       .arrowDown{

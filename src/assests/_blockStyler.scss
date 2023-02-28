@@ -77,8 +77,7 @@
   #blockStyler{
     position: relative;
     width: 100%;
-    overflow-y: hidden;
-    overflow-x: scroll;
+    overflow: hidden;
     svg{
       font-size: 14px;
       margin: 0;
