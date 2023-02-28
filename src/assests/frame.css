@@ -529,19 +529,24 @@ a:link, a:active, a:visited {
   width: fit-content;
   font-size: inherit;
   font-weight: inherit;
-  border-bottom: 2px solid rgba(255, 212, 0, 0.8);
+  border-bottom: 2px solid rgba(255, 234, 128, 0.8);
 }
 .contents.commentBtn:hover,
 .contents .commentBtn:hover {
-  background-color: rgba(255, 212, 0, 0.8);
+  background-color: rgba(255, 234, 128, 0.8);
 }
 
 .contents.commentBtn {
-  background-color: rgba(250, 238, 176, 0.731);
+  background-color: rgba(248, 244, 202, 0.904);
 }
 
 .contents .commentBtn {
-  background-color: rgb(254, 231, 115);
+  background-color: rgba(245, 240, 190, 0.904);
+}
+
+.mainBlock, .subBlocks {
+  display: flex;
+  align-items: center;
 }
 
 .commentsBubble .commentBtn {
@@ -553,6 +558,13 @@ a:link, a:active, a:visited {
 }
 .commentsBubble .commentBtn svg, .commentsBubble .commentBtn span {
   color: #a3a3a2;
+  height: 1.1rem;
+  line-height: 1.1rem;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+.commentsBubble .commentBtn span {
+  font-size: 12px;
 }
 
 .switchBtn {

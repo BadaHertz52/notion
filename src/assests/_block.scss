@@ -335,6 +335,10 @@
     background-color: $comment_text;
   }
 }
+.mainBlock , .subBlocks{
+  display: flex;
+  align-items: center;
+}
 .commentsBubble .commentBtn{
   display: flex;
   padding:3px;
@@ -343,6 +347,12 @@
   }
   svg,span{
     color: $itemSvg;
+    height: 1.1rem;
+    line-height: 1.1rem;
+    width: fit-content;
+  }
+  span{
+    font-size: 12px;
   }
 }
   
