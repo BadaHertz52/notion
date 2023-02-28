@@ -167,6 +167,13 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
   const color ="color";
   const menu ="menu";
   type menuType =typeof color| typeof menu ;
+  const colorMenuHtmlId = "blockStylerColor";
+  const commandBlockHtmlId ="block_commandBlock";
+  const linkLoaderHtmlId ="linkLoader";
+  const mainMenuHtmlId ="menu_mainMenu";
+
+  type sideMenuIdType = typeof colorMenuHtmlId| typeof commandBlockHtmlId | typeof linkLoaderHtmlId|typeof mainMenuHtmlId;
+
   const closeOtherBtns=(event:MouseEvent<HTMLDivElement>)=>{
     const target =event.target as HTMLElement|null; 
     if(target !==null  && !openMobileBlockMenu){
@@ -352,7 +359,6 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
       
       const editedBlock = getContent(block);
       editBlock(page.id, editedBlock);
-      console.log("editedblock content", editedBlock.contents)
       setSelection !==null && setSelection({
         block:editedBlock,
         change:true
@@ -367,47 +373,42 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
     closeBlockStyler(event);
   });
 
-  const closeCommandBlock=(event:globalThis.MouseEvent, commandBlockHtml:HTMLElement)=>{
-    const commandBlockDomRect =commandBlockHtml.getClientRects()[0];
-    const isIn =detectRange(event, commandBlockDomRect);
-    !isIn && setCommand({
-      boolean:false,
-      command:null,
-      targetBlock:null
-    })
-  };
   /**
-   * 유저가 colorMenuHtml 밖의 영역을 클릭 할 경우 openColor의 값을 false로 변경해 colorMenu 창을 닫는 함수 
-   * @param event globalThis.MouseEvent
-   * @param colorMenuHtml 
+   * 유저가 blockStyler를 통해 여는 sideMenu의 영역 밖을을 클릭 할 경우 열려있는 sideMenu 창을 닫는 함수 
+   * @param target event.target <HTMLElement>
+   * @param htmlId 
    */
-  const closeColorMenu=(event:globalThis.MouseEvent, colorMenuHtml:HTMLElement)=>{
-    const colorMenuDomRect =colorMenuHtml.getClientRects()[0];
-    const isIn =detectRange(event, colorMenuDomRect);
-    !isIn && setOpenColor(false);
-  };
-    /**
-   * 유저가 linkLoaderHtml 밖의 영역을 클릭 할 경우 openLinkLoader의 값을 false로 변경해 colorMenu 창을 닫는 함수 
-   * @param event globalThis.MouseEvent
-   * @param linkLoaderHtml 
-   */
-  const closeLinkLoader=(event:globalThis.MouseEvent, linkLoaderHtml:HTMLElement)=>{
-    const linkLoaderDomRect =linkLoaderHtml.getClientRects()[0];
-    const isIn =detectRange(event, linkLoaderDomRect);
-    !isIn && setOpenLink(false);
-  };
-    /**
-   * 유저가 mainMenu 나 sideMenu 밖의 영역을 클릭 할 경우 openMenu 의 값을 false로 변경해 Menu 창을 닫는 함수 
-   * @param event globalThis.MouseEvent
-   * @param colorMenuHtml 
-   */
-  const closeMenu=(event:globalThis.MouseEvent, mainMenuHtml:HTMLElement)=>{
-    const mainMenuDomRect =mainMenuHtml.getClientRects()[0];
-    const sideMenuHtml =document.getElementById("sideMenu");
-    const sideMenuDomRect =sideMenuHtml?.getClientRects()[0];
-    const isInMainMenu =detectRange(event, mainMenuDomRect);
-    const isInSideMenu =detectRange(event, sideMenuDomRect);
-    !isInMainMenu && !isInSideMenu &&setOpenMenu(false);
+  const closeSideMenu=(target:HTMLElement, htmlId:sideMenuIdType)=>{
+    const isIn = target.id === htmlId ? 
+                  true :
+                  target.closest(`#${htmlId}`) !== null; 
+                  console.log("close side menu", !isIn, htmlId);
+    if(!isIn){
+      switch (htmlId) {
+        case "blockStylerColor":
+          setOpenColor(false);
+          break;
+        case "block_commandBlock":
+          setCommand({
+            boolean:false,
+            command:null,
+            targetBlock:null
+          })
+          break;
+        case "linkLoader":
+          setOpenLink(false);
+          break;
+        case "menu_mainMenu":
+          const isInSideMenu = target.id ==="menu_sideMenu"? 
+                                true : 
+                                target.closest("#menu_sideMenu") !==null ;
+          !isInSideMenu && setOpenMenu(false);
+          break;
+        default:
+          break;
+      }
+    }
+
   };
     /**
    * 화면상에서 클릭한 곳이 blockStyler외의 곳일 경우, blockStyler 에 의한 변경사항의 여부에 따라 변경 사항이 있으면 블록의 contents 중 선택된 영역을 가리키는 selected 클래스를 제거하고, 변경이 없는 경우 원래의 블록으로 되돌린 후, selection 값은 null로 변경하여 BlockStyler component의 실행을 종료하는 함수   
@@ -430,17 +431,14 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
           if(colorMenuHtml==null && commandBlockHtml===null && mainMenu===null && linkLoaderHtml ==null ){ 
             removeSelected(frameHtml,block ,editBlock,page, setSelection);
           }else{
-            if(colorMenuHtml!==null){
-              closeColorMenu(event, colorMenuHtml);
-            };
-            if(commandBlockHtml!==null){
-              closeCommandBlock(event,commandBlockHtml);
-            };
-            if(mainMenu!==null){
-              closeMenu(event, mainMenu);
-            };
-            if(linkLoaderHtml!==null){
-              closeLinkLoader(event, linkLoaderHtml);
+            const eventTarget = event.target as HTMLElement|null;
+            if (eventTarget!==null) {
+
+              openColor && closeSideMenu(eventTarget, "blockStylerColor");
+              openLink && closeSideMenu(eventTarget, "linkLoader");
+              openMenu && closeSideMenu(eventTarget, "menu_mainMenu");
+              command.boolean && closeSideMenu(eventTarget, "block_commandBlock");
+            
             }
           };
           setSelection !==null && setSelection(null);
