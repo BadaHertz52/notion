@@ -21,6 +21,7 @@ const MobileBlockMenu =({
   const [block, setBlock]= useState<Block|null>(null);
   const [openMobileBlockStyler, setOpenMobileBlockStyler]= useState<boolean>(false);
   const inner = document.getElementById('inner');
+  // mobileBlockMenu 창이 열려있을 때, mobileBlockMenu 나 contentEditable 이외의 영역을 클릭 시, moblileBlockMenu 창을 닫는  동작 (+ Selection 이 있는 경우, 이를 해제 )
   inner?.addEventListener('click', (event)=>{
     const target =event.target as HTMLElement|null;
     const mobileBlockMenuElement =target?.closest("#mobileBlockMenu");
@@ -89,9 +90,6 @@ const MobileBlockMenu =({
    */
   function closeMM (){
     setOpenMM(false);
-    if(openMobileBlockStyler && block !==null){
-      removeSelected(frameHtml, block, editBlock,page,null);
-    }
   };
   const addNewBlock =()=>{
     if(page.blocksId!==null && block !==null){
