@@ -170,7 +170,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
   type menuType =typeof color| typeof menu ;
   const closeOtherBtns=(event:MouseEvent<HTMLDivElement>)=>{
     const target =event.target as HTMLElement|null; 
-    if(target !==null){
+    if(target !==null  && !openMobileBlockMenu){
       const clickTypeBtn = target.closest(".typeBtn");
       const clickLinkBtn =target.closest(".linkBtn");
       const clickMenuBtn =target.closest(".menuBtn");
@@ -362,6 +362,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
 
 
   inner?.addEventListener("click", (event)=>{
+    !openMobileBlockMenu &&
     closeBlockStyler(event);
   });
 
@@ -518,7 +519,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
         <div className='styles'>
           <button 
             className='boldBtn btn'
-            onClick={()=>!openMobileBlockMenu &&onClickFontStyleBtn(bold)}
+            onClick={()=>{!openMobileBlockMenu &&onClickFontStyleBtn(bold)}}
             onTouchStart={prepareForChange}
             onTouchEnd={()=>onClickFontStyleBtn(bold)}
           >
@@ -526,7 +527,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
           </button>
           <button 
           className='italicBtn btn'
-          onClick={()=> !openMobileBlockMenu && onClickFontStyleBtn(italic)}
+          onClick={()=>{!openMobileBlockMenu && onClickFontStyleBtn(italic)}}
           onTouchStart={prepareForChange}
           onTouchEnd={()=>onClickFontStyleBtn('italic')}
           >
@@ -534,7 +535,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
           </button>
           <button 
             className='underlineBtn btn'
-            onClick={()=> !openMobileBlockMenu && onClickFontStyleBtn(underline)}
+            onClick={()=> {!openMobileBlockMenu && onClickFontStyleBtn(underline)}}
             onTouchStart={prepareForChange}
             onTouchEnd={()=>onClickFontStyleBtn(underline)}
           >
@@ -542,7 +543,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
           </button>
           <button 
             className='lineThroughBtn btn'
-            onClick={()=> !openMobileBlockMenu && onClickFontStyleBtn(lineThrough)}
+            onClick={()=> {!openMobileBlockMenu && onClickFontStyleBtn(lineThrough)}}
             onTouchStart={prepareForChange}
             onTouchEnd={()=>onClickFontStyleBtn(lineThrough)}
           >
@@ -551,7 +552,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
         </div>
         <button 
           className='colorBtn btn'
-          onClick={onClickColorBtn}
+          onClick={()=> {!openMobileBlockMenu &&  onClickColorBtn()}}
           onTouchStart={prepareForChange}
           onTouchEnd={()=>{openMobileSideMenu(
             'ms_color')}}
@@ -561,7 +562,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
         </button>
         <button 
           className='menuBtn btn'
-          onClick={onClickMenuBtn}
+          onClick={ ()=>{!openMobileBlockMenu &&  onClickMenuBtn()}}
           onTouchStart={prepareForChange}
           onTouchEnd={()=>{openMobileSideMenu(
             'ms_moreMenu')}}
