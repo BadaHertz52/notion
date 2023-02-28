@@ -65,9 +65,7 @@ export type Template_Frame_SAME_Props ={
   fontStyle: fontStyleType,
   setMobileSideMenu:Dispatch<SetStateAction<mobileSideMenuType>>,
   mobileSideMenuOpen:boolean,
-  setMobileSideMenuOpen:Dispatch<SetStateAction<boolean>>,
-  selection:selectionType|null,
-  setSelection:Dispatch<SetStateAction<selectionType|null>>
+  setMobileSideMenuOpen:Dispatch<SetStateAction<boolean>>
 };
 export type FrameProps = Template_Frame_SAME_Props &{
   page:Page,
@@ -80,8 +78,7 @@ const basicPageCover ='https://raw.githubusercontent.com/BadaHertz52/notion/mast
  * @returns 
  */
 
-const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,commentBlock,openComment, setRoutePage ,setTargetPageId ,setOpenComment , setCommentBlock ,popup, setPopup,selection,setSelection,
-  showAllComments ,smallText , fullWidth  ,discardEdit,setDiscardEdit , openTemplates,  setOpenTemplates, fontStyle , setMobileSideMenu, setMobileSideMenuOpen}:FrameProps)=>{
+const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,commentBlock,openComment, setRoutePage ,setTargetPageId ,setOpenComment , setCommentBlock ,popup, setPopup,showAllComments ,smallText , fullWidth  ,discardEdit,setDiscardEdit , openTemplates,  setOpenTemplates, fontStyle , setMobileSideMenu, setMobileSideMenuOpen}:FrameProps)=>{
   const innerWidth =window.innerWidth; 
   const innerHeight =window.innerHeight;
   const inner =document.getElementById("inner");
@@ -107,7 +104,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   const [commandBlockPositon, setCBPositon]=useState<CSSProperties>();
   const [commandBlockStyle, setCommandBlockStyle]=useState<CSSProperties|undefined>(undefined);
   const [menuOpen, setOpenMenu]= useState<boolean>(false);
-
+  const [selection, setSelection]=useState<selectionType|null>(null);
   const [popupStyle, setPopupStyle]=useState<CSSProperties |undefined>(undefined); 
   const [moveTargetBlock, setMoveTargetBlock]=useState<Block|null>(null);
   const moveBlock =useRef<boolean>(false);

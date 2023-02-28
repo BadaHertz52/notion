@@ -78,15 +78,13 @@ type EditorContainerProps = NotionActionProps &{
   setOpenTemplates: Dispatch<SetStateAction<boolean>>,
   fontStyle:fontStyleType,
   setFontStyle:Dispatch<SetStateAction<fontStyleType>>,
-  selection:selectionType|null,
-  setSelection:Dispatch<SetStateAction<selectionType|null>>,
   mobileSideMenu:mobileSideMenuType,
   setMobileSideMenu:Dispatch<SetStateAction<mobileSideMenuType>>,
   mobileSideMenuOpen:boolean,
   setMobileSideMenuOpen:Dispatch<SetStateAction<boolean>>
 };
 
-const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,recentPagesId ,isInTrash, makePagePath,changeSide,addBlock,editBlock ,changeBlockToPage, changePageToBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId, setRoutePage ,openComment,setOpenComment,commentBlock,setCommentBlock,smallText,setSmallText,fullWidth,setFullWidth,showAllComments,  setShowAllComments ,discardEdit , setDiscardEdit,setOpenExport, openTemplates, setOpenTemplates, fontStyle, setFontStyle , popup,setPopup,  mobileSideMenu ,setMobileSideMenu,mobileSideMenuOpen, setMobileSideMenuOpen , selection, setSelection}:EditorContainerProps)=>{
+const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,recentPagesId ,isInTrash, makePagePath,changeSide,addBlock,editBlock ,changeBlockToPage, changePageToBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId, setRoutePage ,openComment,setOpenComment,commentBlock,setCommentBlock,smallText,setSmallText,fullWidth,setFullWidth,showAllComments,  setShowAllComments ,discardEdit , setDiscardEdit,setOpenExport, openTemplates, setOpenTemplates, fontStyle, setFontStyle , popup,setPopup,  mobileSideMenu ,setMobileSideMenu,mobileSideMenuOpen, setMobileSideMenuOpen }:EditorContainerProps)=>{
   const dispatch =useDispatch();
   const user =useSelector((state:RootState)=>state.user);
   const [editorStyle, setEditorStyle]=useState<CSSProperties|undefined>(undefined);
@@ -206,8 +204,6 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,rece
         setMobileSideMenu={setMobileSideMenu}
         setMobileSideMenuOpen={setMobileSideMenuOpen}
         mobileSideMenuOpen={mobileSideMenuOpen}
-        selection={selection}
-        setSelection={setSelection}
       />
       {mobileSideMenuOpen && 
         mobileSideMenu.block !==null &&
@@ -235,7 +231,6 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,rece
         mobileSideMenu ={mobileSideMenu}
         setMobileSideMenu={setMobileSideMenu}
         mobileSideMenuOpen ={mobileSideMenuOpen}setMobileSideMenuOpen ={setMobileSideMenuOpen}
-        setSelection={setSelection}
         />
       }
     </div>

@@ -126,7 +126,7 @@ const NotionRouter =()=>{
     popup:false,
     what:null
   });
-  const [selection, setSelection]=useState<selectionType|null>(null);
+  
   const [mobileSideMenu, setMobileSideMenu]=useState<mobileSideMenuType>({
     block:null,
     what:undefined
@@ -464,8 +464,6 @@ const NotionRouter =()=>{
                       setOpenTemplates={setOpenTemplates}
                       fontStyle={fontStyle}
                       setFontStyle={setFontStyle}
-                      selection ={selection}
-                      setSelection={setSelection}
                       mobileSideMenu={mobileSideMenu}
                       setMobileSideMenu={setMobileSideMenu}
                       mobileSideMenuOpen={mobileSideMenuOpen}
@@ -513,8 +511,6 @@ const NotionRouter =()=>{
             mobileSideMenuOpen={mobileSideMenuOpen}
             setMobileSideMenu={setMobileSideMenu}
             setMobileSideMenuOpen={setMobileSideMenuOpen}
-            selection={selection}
-            setSelection={setSelection}
           />
           }
           {openTemplates &&
@@ -560,8 +556,6 @@ const NotionRouter =()=>{
               mobileSideMenuOpen={mobileSideMenuOpen}
               setMobileSideMenu={setMobileSideMenu}
               setMobileSideMenuOpen={setMobileSideMenuOpen}
-              selection={selection}
-              setSelection={setSelection}
             />
           }
           {routePage !==null &&
