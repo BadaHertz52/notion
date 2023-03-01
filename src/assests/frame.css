@@ -549,6 +549,10 @@ a:link, a:active, a:visited {
   align-items: center;
 }
 
+.subBlocks {
+  flex-direction: column;
+}
+
 .commentsBubble .commentBtn {
   display: flex;
   padding: 3px;

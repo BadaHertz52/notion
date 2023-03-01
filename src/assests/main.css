@@ -3048,7 +3048,8 @@ a:link, a:active, a:visited {
 #mobileSideMenu .menu_color,
 #mobileSideMenu .menu,
 #mobileSideMenu .menu .mainMenu,
-#mobileSideMenu .menu .sideMenu {
+#mobileSideMenu .menu .sideMenu,
+#mobileSideMenu #linkLoader {
   width: initial;
   display: block;
   flex-direction: initial;
@@ -3070,7 +3071,8 @@ a:link, a:active, a:visited {
 #mobileSideMenu .menu_color::-webkit-scrollbar-thumb,
 #mobileSideMenu .menu::-webkit-scrollbar-thumb,
 #mobileSideMenu .menu .mainMenu::-webkit-scrollbar-thumb,
-#mobileSideMenu .menu .sideMenu::-webkit-scrollbar-thumb {
+#mobileSideMenu .menu .sideMenu::-webkit-scrollbar-thumb,
+#mobileSideMenu #linkLoader::-webkit-scrollbar-thumb {
   background: initial;
 }
 #mobileSideMenu #commandBlock::-webkit-scrollbar-track,
@@ -3078,7 +3080,8 @@ a:link, a:active, a:visited {
 #mobileSideMenu .menu_color::-webkit-scrollbar-track,
 #mobileSideMenu .menu::-webkit-scrollbar-track,
 #mobileSideMenu .menu .mainMenu::-webkit-scrollbar-track,
-#mobileSideMenu .menu .sideMenu::-webkit-scrollbar-track {
+#mobileSideMenu .menu .sideMenu::-webkit-scrollbar-track,
+#mobileSideMenu #linkLoader::-webkit-scrollbar-track {
   background: initial;
 }
 #mobileSideMenu .menu .menu_inner, #mobileSideMenu .menu .menu_edit {

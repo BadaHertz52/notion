@@ -90,7 +90,8 @@
   .menu_color,
   .menu,
   .menu .mainMenu,
-  .menu .sideMenu{
+  .menu .sideMenu,
+  #linkLoader{
     @include resetPopupMenu;
     position: relative;
     width: 100vw;
