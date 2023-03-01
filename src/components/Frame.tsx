@@ -756,7 +756,14 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
       }
     };
   }
-
+  useEffect(()=>{
+    if(popup.what ==="popupComment"){
+      const targetCommentInputHtml = document.getElementById("popupMenu")?.querySelector(".commentInput") as HTMLInputElement|null|undefined;
+      if(targetCommentInputHtml!==null && targetCommentInputHtml !==undefined){
+        targetCommentInputHtml.focus();
+      }
+    }
+  },[popup.what])
   return(
     <div 
       className={ `frame ${newPageFram ? 'newPageFrame': ''} ${isMobile()? 'mobile' : 'web'}`}

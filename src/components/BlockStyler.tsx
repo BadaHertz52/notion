@@ -240,6 +240,11 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
       popup:true,
       what:"popupComment"
     });
+    const pageHtml = frameHtml?.querySelector('.page');
+    const pageHtmlDomRect = pageHtml?.getClientRects()[0];
+    if(pageHtmlDomRect!==undefined){
+      pageHtml?.setAttribute("style", `transform:translateY(${pageHtmlDomRect.y}px)`);
+    };
     setCommentBlock(block);
     setSelection !==null && setSelection(null);
     openMobileBlockMenu && setOpenMM(false);

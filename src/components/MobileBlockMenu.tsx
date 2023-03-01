@@ -78,7 +78,7 @@ const MobileBlockMenu =({
   window.addEventListener('resize', ()=>{
     const innerHeight =window.innerHeight;
     if(innerHeight === initialInnerHeight && pageHtml !==null && pageHtml!==undefined){
-      pageHtml.setAttribute("style", 'transform:traslateY(0)');
+      pageHtml.setAttribute("style", 'transform:translateY(0)');
     }
   });
   const openMobileSideMenu =(what:msmWhatType)=>{
@@ -115,6 +115,11 @@ const MobileBlockMenu =({
       what:'popupComment'
     });
     setPopupStyle(mbmStyle);
+    const pageHtmlDomRect = pageHtml?.getClientRects()[0];
+    if(pageHtmlDomRect!==undefined){
+      pageHtml?.setAttribute("style", `transform:translateY(${pageHtmlDomRect.y}px)`);
+    }
+
     closeMM();
   };
 
