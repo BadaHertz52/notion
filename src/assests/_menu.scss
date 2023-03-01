@@ -14,11 +14,24 @@
   font-size: 14px;
   padding: 3px;
   z-index: 30;
+  display: flex;
   .commentInput{
     width: calc(100% - 20px);
     max-width: 300px;
     margin: 10PX;
     box-sizing: border-box
+  }
+}
+.frame.mobile{
+  #popupMenu{
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .commentInput{
+      height: 100%;
+      margin: 5px;
+    }
   }
 }
 .mainMenu {

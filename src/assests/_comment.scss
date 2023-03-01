@@ -39,10 +39,10 @@
   height: 20px;
 }
 .commentBlock .firstLetter, 
-.commentInput .firstLetter{
+.commentInput .firstLetter .inner{
     display: flex;
     width: 20px;
-    height: inherit;
+    height: 20px;
     box-sizing: border-box;
     align-items: center;
     justify-content: center;
@@ -60,6 +60,18 @@
       }
     }
   }
+.commentInput .firstLetter{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: inherit;
+  .inner{
+    margin: 0;
+  }
+  span{
+    display: inline-block;
+  }
+}
 .comment {
   padding: 5%;
   border-top: 1px solid $lightMud;

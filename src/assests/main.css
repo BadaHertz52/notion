@@ -583,10 +583,10 @@ a:link, a:active, a:visited {
 }
 
 .commentBlock .firstLetter,
-.commentInput .firstLetter {
+.commentInput .firstLetter .inner {
   display: flex;
   width: 20px;
-  height: inherit;
+  height: 20px;
   box-sizing: border-box;
   align-items: center;
   justify-content: center;
@@ -599,9 +599,22 @@ a:link, a:active, a:visited {
   margin-right: 5px;
 }
 .commentBlock .firstLetter div,
-.commentInput .firstLetter div {
+.commentInput .firstLetter .inner div {
   font-size: 14px;
   font-weight: initial;
+}
+
+.commentInput .firstLetter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: inherit;
+}
+.commentInput .firstLetter .inner {
+  margin: 0;
+}
+.commentInput .firstLetter span {
+  display: inline-block;
 }
 
 .comment {
@@ -2529,12 +2542,24 @@ a:link, a:active, a:visited {
   font-size: 14px;
   padding: 3px;
   z-index: 30;
+  display: flex;
 }
 #popupMenu .commentInput {
   width: calc(100% - 20px);
   max-width: 300px;
   margin: 10PX;
   box-sizing: border-box;
+}
+
+.frame.mobile #popupMenu {
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.frame.mobile #popupMenu .commentInput {
+  height: 100%;
+  margin: 5px;
 }
 
 .mainMenu {

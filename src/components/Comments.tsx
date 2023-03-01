@@ -489,8 +489,10 @@ export const CommentInput =({userName, pageId, page ,mainComment, subComment,edi
     >
       {addOrEdit==="add" &&
       <div className='firstLetter'>
-        <div>
-          {userNameFirstLetter}
+        <div className="inner">
+          <span>
+            {userNameFirstLetter}
+          </span>
         </div>
       </div> 
       }
@@ -503,6 +505,7 @@ export const CommentInput =({userName, pageId, page ,mainComment, subComment,edi
           name="comment"
           onInput={onInputText}
           value={text}
+          
         />
         { addOrEdit ==="edit" &&
         <button
