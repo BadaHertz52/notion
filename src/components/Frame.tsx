@@ -769,7 +769,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
       className={ `frame ${newPageFram ? 'newPageFrame': ''} ${isMobile()? 'mobile' : 'web'}`}
       ref={frameRef}
       style={{
-        overflowY : openMobileMenu ? "hidden" : "scroll"
+        overflowY : (openMobileMenu || (isMobile() &&  popup.popup)) ? "hidden" : "scroll"
       }}
     >
       <div 
