@@ -1,4 +1,4 @@
-import  React, { useState ,useEffect  } from 'react';
+import  React, { useState ,useEffect, useRef  } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { BiCommentDetail } from 'react-icons/bi';
 import { RiDeleteBin6Line } from 'react-icons/ri';
@@ -15,7 +15,7 @@ type MobileBlockMenuProps = Omit<StylerCommonProps , 'block'> & {
 
 const MobileBlockMenu =({
   pages, pagesId, firstlist, userName, page,recentPagesId, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage, editPage,popup,setPopup, setCommentBlock,setTargetPageId,setPopupStyle,command ,setCommand, frameHtml ,openMobileBlockMenu ,setMobileSideMenu, setMobileSideMenuOpen, setOpenMM  , initialInnerHeight }:MobileBlockMenuProps)=>{
-  const pageHtml = frameHtml?.querySelector('.page');
+  const pageHtml = frameHtml?.querySelector('.page') as HTMLElement|null;
   const item = sessionStorage.getItem('mobileMenuBlock');
   const [mbmStyle,setMBMstyle]=useState<CSSProperties|undefined>(undefined);
   const [block, setBlock]= useState<Block|null>(null);
@@ -37,6 +37,9 @@ const MobileBlockMenu =({
 
   const changeMBMstyle =(targetBlock:Block)=>{
     const innerHeight = window.innerHeight;
+    /**
+     *Select event로 인해 가상키보드가 나타날 때 줄어든 window.innerHeight 의 값이자
+     */
     const heightGap = initialInnerHeight - innerHeight; 
     const blockElement = document.getElementById(`${targetBlock.id}_contents`);
     const blockElementDomRect =blockElement?.getClientRects()[0];
@@ -52,13 +55,16 @@ const MobileBlockMenu =({
       const left = pageContentInnerDomRect.left - frameDomRect.left ;
       let newTop = top;
       /**
-       * 가상 키보드롤 인해 가려지는 부분의 y축 시작점
+       * 가상 키보드롤 인해 가려지는 부분의 y축 시작점 (기준: window)
        */
       const pointBlinding = frameDomRect.height - heightGap;
+
       if(pageHtml !==null && pageHtml !==undefined){
-        if(top >= pointBlinding){
-          const widthOfMovement = top - pointBlinding + 32;
-          pageHtml.setAttribute("style", `transform:translateY( -${widthOfMovement}px)`);
+        const pageHtmlDomRect =pageHtml.getClientRects()[0];
+        const gap =  blockElementDomRect.bottom + (16 + 32) - pointBlinding;
+        if( gap >=0){
+          const newWidthOfMovement = -pageHtmlDomRect.y + gap ;
+          pageHtml.setAttribute("style", `transform:translateY(-${newWidthOfMovement}px)`);
           newTop = blockElement.getClientRects()[0].bottom + 16;
         };
           setMBMstyle({
@@ -73,7 +79,6 @@ const MobileBlockMenu =({
     const innerHeight =window.innerHeight;
     if(innerHeight === initialInnerHeight && pageHtml !==null && pageHtml!==undefined){
       pageHtml.setAttribute("style", 'transform:traslateY(0)');
-      block !==null && changeMBMstyle(block);
     }
   });
   const openMobileSideMenu =(what:msmWhatType)=>{
@@ -154,7 +159,7 @@ document.onselectionchange = (event)=>{
       setOpenMobileBlockStyler(true)
     }
 };
- useEffect(()=>{
+useEffect(()=>{
   if(item !==null){
     const targetBlock = JSON.parse(item);
     setBlock(targetBlock);
