@@ -8,7 +8,6 @@ import { Command } from './Frame';
 import {msmWhatType, selectionType} from '../containers/NotionRouter';
 import Menu, { MenuAndBlockStylerCommonProps } from './Menu';
 import { Block, Page} from '../modules/notion';
-import { detectRange } from './BlockFn';
 import LinkLoader from './LinkLoader';
 import { mobileSideMenuType } from '../containers/NotionRouter';
 import { selectContent } from './BlockComponent';
@@ -376,11 +375,14 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
     (blockStylerHtml !== null || commentInputHtml!==null)&&
     closeBlockStyler(event);
   }
-
   inner?.addEventListener("click", (event)=>{
-    operateCloseBlockStyler(event);
+    if(document.getElementById("blockStyler") !== null){
+      operateCloseBlockStyler(event);
+    }
+
   });
   inner?.addEventListener("touchend", (event)=>{
+    document.getElementById("blockStyler") !== null &&
     operateCloseBlockStyler(event);
   });
 
@@ -446,12 +448,10 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
           }else{
             const eventTarget = event.target as HTMLElement|null;
             if (eventTarget!==null) {
-
               openColor && closeSideMenu(eventTarget, "blockStylerColor");
               openLink && closeSideMenu(eventTarget, "linkLoader");
               openMenu && closeSideMenu(eventTarget, "menu_mainMenu");
               command.boolean && closeSideMenu(eventTarget, "block_commandBlock");
-            
             }
           };
 
