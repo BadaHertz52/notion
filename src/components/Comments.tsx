@@ -1055,7 +1055,14 @@ const Comments =({pageId,block,page, userName ,editBlock ,editPage ,frameHtml ,o
 
   useEffect(()=>{
     if(block?.comments !==undefined && block?.comments !==null){
-      setAllComments(block.comments)
+      const item = sessionStorage.getItem("mainCommentId");
+      if(item == null){
+        setAllComments(block.comments)
+      }else{
+        setAllComments(block.comments.filter((mainComment)=> mainComment.id === item));
+        sessionStorage.removeItem("mainCommentId");
+      }
+      
     }else{
       setAllComments(pageComments)
     }
