@@ -478,6 +478,7 @@ type  BlockComponentProps ={
   setSelection:Dispatch<SetStateAction<selectionType|null>>,
   openMobileMenu:boolean, 
   setOpenMM :Dispatch<SetStateAction<boolean>>,
+  onClickCommentBtn: (block: Block) => void
 };
 
 export type itemType ={
@@ -486,7 +487,7 @@ export type itemType ={
 };
 
 
-const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,command, setCommand  ,setOpenComment ,setTargetPageId ,setOpenLoader, setLoaderTargetBlock ,closeMenu ,templateHtml, setSelection ,openMobileMenu ,setOpenMM }:BlockComponentProps)=>{  
+const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,command, setCommand  ,setOpenComment ,setTargetPageId ,setOpenLoader, setLoaderTargetBlock ,closeMenu ,templateHtml, setSelection ,openMobileMenu ,setOpenMM , onClickCommentBtn}:BlockComponentProps)=>{  
   const editTime =JSON.stringify(Date.now);
   const contentEditableRef= useRef<HTMLElement>(null);
   /**
@@ -842,7 +843,7 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
   /**
    * BlockComponent 중 link 가 있는 element를 클릭 했을 경우 , 해당 링크를 여는 함수 
    */
-  const onClickLinkInContents=(event:MouseEvent)=>{
+  const onClickContentEditable=(event:MouseEvent)=>{
     const target =event.target as HTMLElement;
     if(target.className==="link"){
       const href =target.getAttribute("href") ;
@@ -850,6 +851,10 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
       href!==null&& openType!==null&&
       window.open(href,openType);
     };
+    if(target.classList.contains("text_commentBtn")){
+      sessionStorage.setItem( "mainCommentId",target.classList.value.split(' ').filter((i)=> i.includes("mainId"))[0].replace('mainId_', ''));
+      onClickCommentBtn(block)    
+    }
   };
   /**
    * input 창을 통해 command의 값을 변경 시키는 함수 
@@ -938,7 +943,7 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
           onKeyDown={(event)=> onKeyDownContents(event)}
           onSelect={(event)=>  onSelectInPC(event)}
           onTouchEnd={(event)=>{onTouchEnd(event)}}
-          onClick={(event)=>onClickLinkInContents(event)}
+          onClick={(event)=>onClickContentEditable(event)}
         /> 
         :
           <input
@@ -954,7 +959,11 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
       </>
     )
   };
-
+  const onClickContent =(event:MouseEvent<HTMLElement>)=> {
+    if(event.currentTarget.classList.contains("commentBtn")){
+      onClickCommentBtn(block);
+    }
+  };
   return(
     <div
       className ={`${block.type}_blockComponent blockComponent`}
@@ -1004,6 +1013,7 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
           className={`contents 
           ${block.comments !==null && block.comments.map((m:MainCommentType)=> m.selectedText === null).includes(true)? "commentBtn" :""
           }`}
+          onClick ={onClickContent}
         >
           <BlockContentEditable/>
         </div>

@@ -314,7 +314,7 @@
   }
 }
 .contents.commentBtn,
-.contents .commentBtn{
+.contents .text_commentBtn{
   color:inherit;
   text-decoration: inherit;
   width: fit-content;
@@ -329,9 +329,10 @@
 }
 .contents.commentBtn {
   background-color: $comment;
+  padding: 2px
 }
 .contents {
-  .commentBtn {
+  .text_commentBtn {
     background-color: $comment_text;
   }
 }

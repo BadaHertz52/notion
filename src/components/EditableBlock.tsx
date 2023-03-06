@@ -107,18 +107,6 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
       setOpenComment(true);
     }
   };
-  const commentBtns = document.querySelectorAll('.commentBtn');
-  commentBtns.forEach(element => {
-    element.addEventListener("click", ()=>{
-      const contentsElement = element.classList.contains(".contents")? element : element.closest(".contents");
-      const index = contentsElement?.id.indexOf("_contents");
-      const blockId = contentsElement?.id.slice(0,index);
-      if(blockId !==undefined){
-        const targetBlock = findBlock(page,blockId).BLOCK;
-        onClickCommentBtn(targetBlock);
-      }
-    })
-  });
   const onClickTodoBtn =()=>{
     const editedTobo :Block ={
       ...block,
@@ -241,6 +229,7 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
                 setSelection={setSelection}
                 openMobileMenu={openMobileMenu}
                 setOpenMM={setOpenMM}
+                onClickCommentBtn={onClickCommentBtn}
               />
             </div>
             </div>
@@ -385,6 +374,7 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
                 setSelection={setSelection}
                 openMobileMenu={openMobileMenu}
                 setOpenMM={setOpenMM}
+                onClickCommentBtn={onClickCommentBtn}
                 />
               </div>
               </div>

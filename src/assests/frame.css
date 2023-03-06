@@ -522,26 +522,27 @@ a:link, a:active, a:visited {
 }
 
 .contents.commentBtn,
-.contents .commentBtn {
+.contents .text_commentBtn {
   color: inherit;
   text-decoration: inherit;
   width: -moz-fit-content;
   width: fit-content;
   font-size: inherit;
   font-weight: inherit;
-  border-bottom: 2px solid rgba(255, 234, 128, 0.8);
+  border-bottom: 2px solid rgba(255, 198, 11, 0.658);
 }
 .contents.commentBtn:hover,
-.contents .commentBtn:hover {
-  background-color: rgba(255, 234, 128, 0.8);
+.contents .text_commentBtn:hover {
+  background-color: rgba(255, 198, 11, 0.658);
 }
 
 .contents.commentBtn {
-  background-color: rgba(248, 244, 202, 0.904);
+  background-color: rgba(255, 196, 0, 0.347);
+  padding: 2px;
 }
 
-.contents .commentBtn {
-  background-color: rgba(245, 240, 190, 0.904);
+.contents .text_commentBtn {
+  background-color: rgba(255, 196, 0, 0.183);
 }
 
 .mainBlock, .subBlocks {
