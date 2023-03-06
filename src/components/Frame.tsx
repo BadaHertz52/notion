@@ -583,9 +583,9 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   // edit block using sessionstorage
   const updateBlock=()=>{
     const item = sessionStorage.getItem("itemsTobeEdited");
-    const cursorElement =document.getSelection()?.anchorNode?.parentElement;
-    const className =cursorElement?.className ;
     if(item!==null){
+      const cursorElement =document.getSelection()?.anchorNode?.parentElement;
+      const className =cursorElement?.className ;
       const  itemObjet= JSON.parse(item);
       const targetBlock =itemObjet.block;
       const pageId = itemObjet.pageId;
