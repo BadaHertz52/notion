@@ -255,7 +255,7 @@ export const CommentInput =({userName, pageId, page ,mainComment, subComment,edi
     if(commentBlock !==null){
       const newId = `main_${editTime}`;
       if(selectedHtml !== null){
-        selectedHtml.classList.replace('selected', 'commentBtn');
+        selectedHtml.classList.replace('selected', `text_commentBtn mainId_${newId}`);
       };
       const newBlockComment :MainCommentType ={
         id:newId,
