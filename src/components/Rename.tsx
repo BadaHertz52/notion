@@ -18,8 +18,10 @@ const Rename =({currentPageId,block ,page,editBlock ,editPage,renameStyle, setOp
   const inner =document.getElementById("inner");
   const [openIconPopup, setOpenIconPopup]=useState<boolean>(false);
   inner?.addEventListener('click', (event)=>{
+    if(document.getElementById("rename")){
       openIconPopup && closePopup("iconPopup", setOpenIconPopup, event);
       closePopup("rename", setOpenRename, event);
+    }
   });
   const onClickRenameIcon =()=>{
     setOpenIconPopup(true);

@@ -72,11 +72,10 @@ const Loader =({block, page, editBlock ,editPage ,frameHtml,setOpenLoader ,setLo
     setLoaderTargetBlock(null);
   }
   inner?.addEventListener("click", (event)=>{
-    const loaderDomRect= loaderHtml?.getClientRects()[0];
-    if(loaderDomRect !==undefined){
-        const isInnerLoader = detectRange(event,loaderDomRect);
-        !isInnerLoader && closeLoader();
+    if(loaderHtml !==null){
+      !detectRange(event,loaderHtml.getClientRects()[0]) && closeLoader();
     }
+
   })
   function changeLoaderStyle(){
     if(block !==null){

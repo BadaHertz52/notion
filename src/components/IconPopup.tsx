@@ -155,13 +155,16 @@ const IconPopup =({ currentPageId,block,page, editBlock ,editPage,style,  setOpe
   const inner =document.getElementById("inner");
   inner?.addEventListener("click", (event:MouseEvent)=>{
     const iconPopup =document.getElementById("iconPopup");
-    const iconPopupDomRect = iconPopup?.getClientRects()[0];
-    const isInIconPopup =detectRange(event, iconPopupDomRect);
-    const target =event.target as null|Element;
-    if(target?.id !== "imageIconInput"){
-      !isInIconPopup && 
-      setOpenIconPopup(false);
-    };
+    if(iconPopup !==null){
+      const iconPopupDomRect = iconPopup?.getClientRects()[0];
+      const isInIconPopup =detectRange(event, iconPopupDomRect);
+      const target =event.target as null|Element;
+      if( target?.id !== "imageIconInput"){
+        !isInIconPopup && 
+        setOpenIconPopup(false);
+      };
+    } 
+
 
   })
   return(
