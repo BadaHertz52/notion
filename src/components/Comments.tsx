@@ -550,16 +550,22 @@ const ToolMore =({pageId, block,page, editBlock ,editPage, allComments, setAllCo
   const onClickDeleteComment =()=>{
     page !==null&& setTemplateItem(templateHtml,page);
     setMoreOpen(false);
-
-    const deleteBlockComment =( )=>{
-      if(comment !==null && block !==null && allComments !==null){
-        const blockComments :MainCommentType[] =[...allComments];
-        const mainCommentIds = blockComments.map((comment:MainCommentType)=> comment.id);
-        const updateBlock =()=>{
+    //page.header.comments 가 아닐 경우 
+    if(block !==null){
+      //delte blockComment
+      if(comment !==null && block !==null && block.comments !==null){
+        const blockComments :MainCommentType[] =[...block.comments];
+        const mainCommentIds = blockComments.map((m:MainCommentType)=> m.id);
+        const updateBlock =(changeContent:boolean)=>{
           const templateHtml= document.getElementById("template");
           setTemplateItem(templateHtml,page);
-          const editedBlock ={
+          let blockContents = block.contents;
+          if(changeContent){
+            blockContents = document.getElementById(`${block.id}_contents`)?.firstElementChild?.innerHTML as string; 
+          };
+          const editedBlock :Block ={
             ...block,
+            contents:blockContents,
             editTime:editTime,
             comments : blockComments[0]=== undefined ? null :blockComments
           };
@@ -570,8 +576,15 @@ const ToolMore =({pageId, block,page, editBlock ,editPage, allComments, setAllCo
         if(mainCommentIds?.includes(comment.id)){
             //MainCommentType
             const index = mainCommentIds.indexOf(comment.id);
+            const targetMainComment =blockComments[index];
+            if(targetMainComment.selectedText !==null){
+              const textCommentBtnElement =document.getElementById(`${block.id}_contents`)?.getElementsByClassName(`mainId_${targetMainComment.id}`)[0];
+              if(textCommentBtnElement !==undefined){
+                textCommentBtnElement.outerHTML = textCommentBtnElement.innerHTML;
+              };
+            };
             blockComments.splice(index,1);
-            updateBlock();
+            updateBlock(targetMainComment.selectedText !==null);
         }else{
           //SubCommentType
           const mainComment :MainCommentType = blockComments.filter((b:MainCommentType)=>
@@ -584,13 +597,9 @@ const ToolMore =({pageId, block,page, editBlock ,editPage, allComments, setAllCo
             ...mainComment,
           };
           blockComments.splice(mainCommentIndex, 1, newMainComment);
-          updateBlock();
+          updateBlock(false);
       }
       };
-    };
-    //page.header.comments 가 아닐 경우 
-    if(block !==null){
-      deleteBlockComment();
     }else{
       //page.header.comments 인 경우
       if(comment !==null && page.header.comments!==null){
