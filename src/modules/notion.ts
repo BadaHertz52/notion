@@ -620,7 +620,7 @@ const initialState :Notion ={
       comments: null
     },{
       id:"todo",
-      contents:"todo", 
+      contents:"to<span class='text_commentBtn mainId_comment_todo1'>do</span>", 
       firstBlock:true,
       subBlocksId:null ,
       parentBlocksId: null,
@@ -630,8 +630,7 @@ const initialState :Notion ={
       editTime: (Date.parse("2022-5-18-16:01:00")).toString(),
       createTime: (Date.parse("2022-5-18-3:00")).toString(),
       style :{
-        ...basicBlockStyle,
-        bgColor: bg_yellow,
+        ...basicBlockStyle
       },
       comments:[{
         id:"comment_todo1",
@@ -640,7 +639,7 @@ const initialState :Notion ={
         content:"todo comments", 
         editTime:(Date.parse("2022-5-18-16:01:30")).toString(),
         createTime: (Date.parse("2022-5-21-14:00")).toString(),
-        selectedText:null,
+        selectedText:"do",
         subComments:null,
         subCommentsId:null,
       },]
