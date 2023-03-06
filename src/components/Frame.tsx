@@ -681,11 +681,8 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
       if(contentEditableElement !==null && contentEditableElement !==undefined){
         const blockContnetElement = contentEditableElement?.closest('.contents');
         if(blockContnetElement!==null){
-          const id =blockContnetElement.id;
-          const index= id.indexOf('_contents');
-          const blockId = id.slice(0, index);
-          const block= findBlock(page, blockId).BLOCK;
-          sessionStorage.setItem("mobileMenuBlock", JSON.stringify(block));
+          const blockId =blockContnetElement.id.replace("_contents","");
+          sessionStorage.setItem("mobileMenuBlock", JSON.stringify(findBlock(page, blockId).BLOCK));
           setOpenMM(true);
         } ;
       }
