@@ -201,7 +201,7 @@ export const CommentInput =({userName, pageId, page ,mainComment, subComment,edi
         comments: blockComments
       };
       if(selectedHtml !==null){
-        const blockContentHtml = document.getElementById(`${commentBlock.id}_contents`);
+        const blockContentHtml = document.getElementById(`${commentBlock.id}_contents`)?.firstElementChild;
         const newBlockConent = blockContentHtml?.innerHTML; 
         if(newBlockConent !==undefined){
           editedBlock = {
@@ -255,7 +255,7 @@ export const CommentInput =({userName, pageId, page ,mainComment, subComment,edi
     if(commentBlock !==null){
       const newId = `main_${editTime}`;
       if(selectedHtml !== null){
-        selectedHtml.classList.replace('selected', `text_commentBtn mainId_${newId}`);
+        selectedHtml.className = `text_commentBtn mainId_${newId}`;
       };
       const newBlockComment :MainCommentType ={
         id:newId,
