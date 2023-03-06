@@ -318,6 +318,7 @@
   color:inherit;
   text-decoration: inherit;
   width: fit-content;
+  z-index: 6;
   font : {
     size: inherit;
     weight: inherit
@@ -334,6 +335,8 @@
 .contents {
   .text_commentBtn {
     background-color: $comment_text;
+    display: inline-block;
+    position: relative;
   }
 }
 .mainBlock , .subBlocks{

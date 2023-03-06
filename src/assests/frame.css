@@ -527,6 +527,7 @@ a:link, a:active, a:visited {
   text-decoration: inherit;
   width: -moz-fit-content;
   width: fit-content;
+  z-index: 6;
   font-size: inherit;
   font-weight: inherit;
   border-bottom: 2px solid rgba(255, 198, 11, 0.658);
@@ -543,6 +544,8 @@ a:link, a:active, a:visited {
 
 .contents .text_commentBtn {
   background-color: rgba(255, 196, 0, 0.183);
+  display: inline-block;
+  position: relative;
 }
 
 .mainBlock, .subBlocks {
