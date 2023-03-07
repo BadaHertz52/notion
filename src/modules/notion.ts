@@ -620,7 +620,7 @@ const initialState :Notion ={
       comments: null
     },{
       id:"todo",
-      contents:"to<span class='text_commentBtn mainId_comment_todo1'>do</span>", 
+      contents:"todo", 
       firstBlock:true,
       subBlocksId:null ,
       parentBlocksId: null,
@@ -632,17 +632,7 @@ const initialState :Notion ={
       style :{
         ...basicBlockStyle
       },
-      comments:[{
-        id:"comment_todo1",
-        userName:userName,
-        type:"open",
-        content:"todo comments", 
-        editTime:(Date.parse("2022-5-18-16:01:30")).toString(),
-        createTime: (Date.parse("2022-5-21-14:00")).toString(),
-        selectedText:"do",
-        subComments:null,
-        subCommentsId:null,
-      },]
+      comments:null
     },{
       id:"todo done",
       contents:"todo done",
@@ -672,7 +662,7 @@ const initialState :Notion ={
       comments:null
     },{
       id:"h2",
-      contents:"header2",
+      contents:"<span class='text_commentBtn mainId_comment_h2_1'>h</span>ead<span class='text_commentBtn mainId_comment_h2_2'>er</span>2",
       firstBlock:true,
       subBlocksId:null ,
       parentBlocksId: null,
@@ -682,7 +672,27 @@ const initialState :Notion ={
       editTime: (Date.parse("2022-5-18-20:00")).toString(),
       createTime: (Date.parse("2022-5-18-15:00")).toString(),
       style :basicBlockStyle,
-      comments:null
+      comments:[{
+        id:"comment_h2_1",
+        userName:userName,
+        type:"open",
+        content:"comments 1", 
+        editTime:(Date.parse("2022-5-18-16:01:30")).toString(),
+        createTime: (Date.parse("2022-5-21-14:00")).toString(),
+        selectedText:"h",
+        subComments:null,
+        subCommentsId:null,
+      },{
+        id:"comment_h2_2",
+        userName:userName,
+        type:"open",
+        content:"comments 1", 
+        editTime:(Date.parse("2022-5-18-16:01:35")).toString(),
+        createTime: (Date.parse("2022-5-21-14:05")).toString(),
+        selectedText:"er",
+        subComments:null,
+        subCommentsId:null,
+      }]
     },{
       id:"h3",
       contents:"header3", 
