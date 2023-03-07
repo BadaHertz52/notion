@@ -330,13 +330,14 @@
 }
 .contents.commentBtn {
   background-color: $comment;
-  padding: 2px
+  padding: 4px 
 }
 .contents {
   .text_commentBtn {
     background-color: $comment_text;
     display: inline-block;
     position: relative;
+    padding: 4px
   }
 }
 .mainBlock , .subBlocks{

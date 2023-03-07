@@ -539,13 +539,14 @@ a:link, a:active, a:visited {
 
 .contents.commentBtn {
   background-color: rgba(255, 196, 0, 0.347);
-  padding: 2px;
+  padding: 4px;
 }
 
 .contents .text_commentBtn {
   background-color: rgba(255, 196, 0, 0.183);
   display: inline-block;
   position: relative;
+  padding: 4px;
 }
 
 .mainBlock, .subBlocks {
