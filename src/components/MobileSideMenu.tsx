@@ -40,14 +40,6 @@ const MobileSideMenu =({pages, pagesId, recentPagesId,firstlist, block, userName
       what:undefined
     });
     setMobileSideMenuOpen(false);
-    removeSelected(frameHtml, block, editBlock ,page, null)
-  };
-  const onClickCloseBtn =()=>{
-    setMobileSideMenuStyle({
-      transform:'translateY(110vh)'});
-    setTimeout(() => {
-      closeSideMenu()
-    }, 1500);
   };
   useEffect(()=>{
     if(!mobileSideMenuOpen){
@@ -68,7 +60,7 @@ const MobileSideMenu =({pages, pagesId, recentPagesId,firstlist, block, userName
           <div className="top">
             <div>{getTitle()}</div>
             <button
-              onClick={onClickCloseBtn}
+              onClick={closeSideMenu}
             >
               close
             </button>
