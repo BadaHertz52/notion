@@ -1,7 +1,7 @@
 import React, { ChangeEvent, Dispatch,KeyboardEvent,MouseEvent, SetStateAction, SyntheticEvent,  TouchEvent,  useEffect, useRef} from 'react';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import { MdOutlinePhotoSizeSelectActual } from 'react-icons/md';
-import {  Block,BlockType,blockTypes,findBlock,findPage,findParentBlock,findPreviousBlockInDoc,MainCommentType,makeNewBlock,Page, toggle } from '../modules/notion';
+import {  Block,BlockType,blockTypes,findPage,findParentBlock,findPreviousBlockInDoc,MainCommentType,makeNewBlock,Page, toggle } from '../modules/notion';
 import { Command} from './Frame';
 import ImageContent from './ImageContent';
 import {selectionType} from '../containers/NotionRouter';
@@ -496,33 +496,6 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
   const possibleBlocks :Block[]|null = page.blocks !== null? page.blocks.filter((block:Block)=> block.type !=="image media" && block.type !=="page") : null;
   const possibleBlocksId :string[]|null = possibleBlocks !==null? possibleBlocks.map((block:Block)=> block.id ) : null;
   /**
-   * 키보드, 마우스, select 이벤트의 타켓이 되는 block를 찾아서 반환하는 함수 
-   * @param event type: ContentEditableEvent|KeyboardEvent<HTMLDivElement>|MouseEvent| SyntheticEvent<HTMLDivElement>
-   * @returns block 
-   */
-  const findTargetBlock =(event:ContentEditableEvent|KeyboardEvent<HTMLDivElement>|MouseEvent| SyntheticEvent<HTMLDivElement>|
-  TouchEvent<HTMLDivElement>|
-  globalThis.TouchEvent):Block|null=>{
-    const select_or_touch = (event.type === "touchend" || event.type === "select");
-    let targetElement = null;
-    if(!select_or_touch){
-      const target =event.currentTarget as HTMLElement|null;
-      targetElement = target;
-    }else{
-      const target = event.target as HTMLElement|null;
-      targetElement = target?.closest('.contents');
-    };
-    if(targetElement !==null && targetElement!== undefined){
-      const targetId= targetElement.id;
-      const end =targetId.indexOf("_contents");
-      const blockId = targetId.slice(0, end);
-      const targetBlock = findBlock(page, blockId).BLOCK;
-      return targetBlock;
-    }else{
-      return null
-    }
-  };
-  /**
    * 마우스가 block위를 움직일 경우, 해당 block의 element 옆에 blockFn compnent를 보여주는 함수 
    * @param event mouseEvent
    */
@@ -560,11 +533,10 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
    * @param event ContentEditableEvent
    */
   const onChangeContents=(event:ContentEditableEvent)=>{
-    const targetBlock= findTargetBlock(event);
-    if(page.blocks!==null && page.blocksId!==null && targetBlock!==null){
+    if(page.blocks!==null && page.blocksId!==null ){
       setTemplateItem(templateHtml, page);
       const value =event.target.value;
-      const targetBlockIndex= page.blocksId.indexOf(targetBlock.id);
+      const targetBlockIndex= page.blocksId.indexOf(block.id);
       /**
        * value값에 따라 새로운 블록을 생성하거나 기존 block의 content를 수정하는 함수 
        */
@@ -576,16 +548,16 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
           const editedContents =value.slice(0, start);
           const newBlockContents= value.slice(start+5,end );
           const newBlock:Block ={
-            ...makeNewBlock(page, targetBlock, newBlockContents),
-            firstBlock: targetBlock.firstBlock,
-            subBlocksId: targetBlock.subBlocksId,
-            parentBlocksId:targetBlock.parentBlocksId
+            ...makeNewBlock(page, block, newBlockContents),
+            firstBlock: block.firstBlock,
+            subBlocksId: block.subBlocksId,
+            parentBlocksId:block.parentBlocksId
           } ;
-          if((targetBlock.contents!== editedContents) || (targetBlock.contents==="")|| (targetBlock.subBlocksId!==null)){
+          if((block.contents!== editedContents) || (block.contents==="")|| (block.subBlocksId!==null)){
             const editedBlock:Block ={
-              ...targetBlock,
-              contents:block.contents!== editedContents ?editedContents : targetBlock.contents,
-              subBlocksId: targetBlock.subBlocksId !==null ? null : targetBlock.subBlocksId,
+              ...block,
+              contents:block.contents!== editedContents ?editedContents : block.contents,
+              subBlocksId: block.subBlocksId !==null ? null : block.subBlocksId,
               editTime:editTime,
             };
             editBlock(page.id, editedBlock);
@@ -593,25 +565,25 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
           if(block.type ===toggle){
             const newSubToggleBlock :Block ={
               ...newBlock,
-              parentBlocksId:[targetBlock.id],
+              parentBlocksId:[block.id],
               firstBlock:false,
             };
-            addBlock(page.id, newSubToggleBlock, targetBlockIndex+1, targetBlock.id);
+            addBlock(page.id, newSubToggleBlock, targetBlockIndex+1, block.id);
     
           }else{
-            addBlock(page.id, newBlock,targetBlockIndex+1, targetBlock.id);
+            addBlock(page.id, newBlock,targetBlockIndex+1, block.id);
           };
         }else{
-          // edite targetBlock 
+          // edite block 
           const cursor = document.getSelection();
           const offset =cursor?.anchorOffset;
-          if(!(targetBlock.contents==="" && offset===0&& value ==="")){
+          if(!(block.contents==="" && offset===0&& value ==="")){
             const editedBlock :Block ={
-              ...targetBlock,
+              ...block,
               contents: value,
               editTime:editTime,
             };
-            if(targetBlock.contents !== value){
+            if(block.contents !== value){
               const item={
                 pageId: page.id,
                 block: editedBlock
@@ -629,7 +601,7 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
         setCommand({
           boolean:true, 
           command:"/",
-          targetBlock:targetBlock
+          targetBlock:block
         })
       }
     }
@@ -657,17 +629,15 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
  */
   const onKeyDownContents=(event:KeyboardEvent<HTMLDivElement>)=>{
     const code =event.code.toLowerCase();
-    const targetBlock= findTargetBlock(event);
-    if(targetBlock !==null){
       switch (code) {
         case "tab":
           event.preventDefault();
           setTemplateItem(templateHtml, page);
-          const previousBlockIdInDoc =findPreviousBlockInDoc(page,targetBlock).previousBlockInDoc.id;
+          const previousBlockIdInDoc =findPreviousBlockInDoc(page,block).previousBlockInDoc.id;
           if(previousBlockIdInDoc !==undefined){
-            changeToSub(page.id, targetBlock, previousBlockIdInDoc);
+            changeToSub(page.id, block, previousBlockIdInDoc);
           }else{
-            console.log(`Cant' find block in front of ${targetBlock.id}block on screen`)
+            console.log(`Cant' find block in front of ${block.id}block on screen`)
           }
   
           break;
@@ -677,17 +647,17 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
           const cursor = document.getSelection();
           const offset =cursor?.anchorOffset;
           if(offset===0 && text===""){
-            deleteBlock(page.id, targetBlock, false);
+            deleteBlock(page.id, block, false);
           }
           if(offset===0 && text!==""){
-            raiseBlock(page.id, targetBlock )
+            raiseBlock(page.id, block )
           }
   
           break;
         case "arrowup":
-            if(page.firstBlocksId!==null && page.firstBlocksId[0]!== targetBlock.id){
+            if(page.firstBlocksId!==null && page.firstBlocksId[0]!== block.id){
               let doing:boolean = true;
-              let referenceBlock:Block = targetBlock;
+              let referenceBlock:Block = block;
               while (doing) {
                 let previousBlockInDoc = findPreviousBlockInDoc(page, referenceBlock).previousBlockInDoc;
   
@@ -697,9 +667,9 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
   
                 if(possibleBlocksId?.includes(previousBlockInDoc.id)){
                   if(previousBlockInDoc.type.includes("List")&& previousBlockInDoc.subBlocksId!==null){
-                    moveFocus(previousBlockInDoc.subBlocksId[previousBlockInDoc.subBlocksId.length-1] ,targetBlock);
+                    moveFocus(previousBlockInDoc.subBlocksId[previousBlockInDoc.subBlocksId.length-1] ,block);
                   }else{
-                    moveFocus(previousBlockInDoc.id, targetBlock);
+                    moveFocus(previousBlockInDoc.id, block);
                   }
                   doing= false;
                 }else{
@@ -719,9 +689,9 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
               const index = possibleBlocksId.indexOf(nextBlockId);
               const nextBlock = possibleBlocks[index];
               if(nextBlock.type.includes("List")&& nextBlock.subBlocksId!==null){
-                moveFocus(nextBlock.subBlocksId[0] ,targetBlock);
+                moveFocus(nextBlock.subBlocksId[0] ,block);
               }else{
-              moveFocus(nextBlockId ,targetBlock);
+              moveFocus(nextBlockId ,block);
               };
             };
   
@@ -800,22 +770,21 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
             }else{
               const firstSubBlockId= subBlock.subBlocksId[0];
               if(possibleBlocksId?.includes(firstSubBlockId)){
-                moveFocus(firstSubBlockId, targetBlock);
+                moveFocus(firstSubBlockId, block);
               };
             }
   
           };
-          if(targetBlock.firstBlock ){
-            findNextBlockOfFirstBlock(targetBlock);
+          if(block.firstBlock ){
+            findNextBlockOfFirstBlock(block);
           }else{
-            findNextBlockOfSubBlock(targetBlock);
+            findNextBlockOfSubBlock(block);
             };
   
           break;
           default:
           break;
       };
-    }
   }; 
   
  /**
@@ -824,21 +793,18 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
   const onSelectInPC =(event:SyntheticEvent<HTMLDivElement>)=>{
     if(!isMobile()){
       const SELECTION = window.getSelection(); 
-      const targetBlock = findTargetBlock(event);
-      if(targetBlock !==null){
-        selectContent(SELECTION, targetBlock ,contentEditableRef.current ,editBlock, page, setSelection);
-      }
+      if(block !==null){
+        selectContent(SELECTION, block ,contentEditableRef.current ,editBlock, page, setSelection);
+      };
+
     }
   };
   const onTouchEnd =(event :TouchEvent<HTMLDivElement>)=>{
-    const targetBlock = findTargetBlock(event);
-    if(targetBlock!==null){
-      if(targetBlock.comments ==null && !openMobileMenu ){
-        sessionStorage.setItem("mobileMenuBlock", JSON.stringify(targetBlock));
+      if(block.comments ==null && !openMobileMenu ){
+        sessionStorage.setItem("mobileMenuBlock", JSON.stringify(block));
         setOpenMM(true);
         setSelection(null);
       };
-    }
   }
   /**
    * BlockComponent 중 link 가 있는 element를 클릭 했을 경우 , 해당 링크를 여는 함수 
