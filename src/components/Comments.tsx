@@ -9,7 +9,7 @@ import { detectRange } from './BlockFn';
 import { PopupType } from '../containers/EditorContainer';
 import { IoMdCloseCircle } from 'react-icons/io';
 import { setTemplateItem } from './BlockComponent';
-import { getContent, removeSelected } from './BlockStyler';
+import { removeSelected } from './BlockStyler';
 const open="open";
 const resolve="resolve";
 type CommentsProps={
