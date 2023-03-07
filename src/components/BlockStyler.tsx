@@ -431,9 +431,9 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
       const target =event.target as HTMLElement|null ;
       if(target !==null){
         const isInBlockStyler = target.closest("#blockStyler") !== null;
-        const isInMobileSideMenu = target.closest("#mobileSideMenu") !==null;
+        const isInMobileBlockMenu = target.closest("#mobileBlockMenu") !==null;
         const isInCommentInput =target.closest(".commentInput");
-        if(!isInBlockStyler && !isInMobileSideMenu  &&
+        if(!isInBlockStyler && !isInMobileBlockMenu  &&
           !isInCommentInput 
           ){
           const colorMenuHtml = document.getElementById("blockStylerColor");
