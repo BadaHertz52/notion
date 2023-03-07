@@ -17,7 +17,7 @@ type MobileSideMenuProps = MenuAndBlockStylerCommonProps & {
   setMobileSideMenuOpen:Dispatch<SetStateAction<boolean>>
 }
 const MobileSideMenu =({pages, pagesId, recentPagesId,firstlist, block, userName, page,  addBlock,changeBlockToPage,changePageToBlock ,editBlock, deleteBlock ,duplicatePage,movePageToPage,editPage ,setPopup ,popup  ,setCommentBlock , setTargetPageId ,frameHtml, mobileSideMenu  ,setMobileSideMenu,mobileSideMenuOpen, setMobileSideMenuOpen}:MobileSideMenuProps)=>{
-  const mobileSelection :selectionType ={
+  const mobileSelection :selectionType|null = document.querySelector(".selected") == null? null : {
     block:block,
     change:false
   };
