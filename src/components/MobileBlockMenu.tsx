@@ -6,7 +6,7 @@ import { TiArrowSortedDown } from 'react-icons/ti';
 import { CSSProperties } from 'styled-components';
 import {  msmWhatType, ms_color, ms_moreMenu, ms_turnInto } from '../containers/NotionRouter';
 import { Block, findBlock, makeNewBlock} from '../modules/notion';
-import BlockStyler, {StylerCommonProps } from './BlockStyler';
+import BlockStyler, {removeSelected, StylerCommonProps } from './BlockStyler';
 
 
 type MobileBlockMenuProps = Omit<StylerCommonProps , 'block'> & {
@@ -171,7 +171,13 @@ useEffect(()=>{
     changeMBMstyle(targetBlock);
     sessionStorage.removeItem('mobileMenuBlock')
   }
- },[item])
+},[item]);
+
+useEffect(()=>{
+  if(!openMobileSideMenu && document.querySelector(".selected") !==null && block !==null){
+    removeSelected(frameHtml, block, editBlock ,page, null)
+  }
+},[openMobileSideMenu])
   return(
     <>
       <div id="mobileBlockMenu" style={mbmStyle}>
