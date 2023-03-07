@@ -148,16 +148,13 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   const onMouseLeaveFromPH=()=>{
     decoOpen && setdecoOpen(false);
   };
-  const closePopup=(event:globalThis.MouseEvent)=>{
-    if(popup.popup){
-      const popupMenu =document.getElementById("popupMenu");
+  const closePopup=(event:globalThis.MouseEvent, popupMenu:HTMLElement|null)=>{
       const popupMenuDomRect= popupMenu?.getClientRects()[0];
       const isInPopupMenu =detectRange(event, popupMenuDomRect);
       !isInPopupMenu && setPopup({
         popup:false,
         what:null
       });
-    };
   };
 
   const closeMenu =(event:globalThis.MouseEvent| MouseEvent)=>{
@@ -691,9 +688,9 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   inner?.addEventListener('touchstart', updateBlock);
   inner?.addEventListener("click",(event:globalThis.MouseEvent)=>{
     updateBlock();
-    menuOpen &&closeMenu(event);
-    popup.popup && closePopup(event);
-    openComment && commentBlock!==null && closeComments(event);
+    document.getElementById("menu_main") &&closeMenu(event);
+    document.getElementById("popupMenu") && closePopup(event ,document.getElementById("popupMenu"));
+    document.getElementById("block_comments") && closeComments(event);
     if(command.boolean){
       const block_commandBlock =document.getElementById("block_commandBlock");
       const commandDomRect =block_commandBlock?.getClientRects()[0];
@@ -730,7 +727,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
 
   //window.onresize =changeCommentStyle;
   useEffect(()=>{
-    // stop srcoll when something open
+    // stop scroll when something open
     if(popup.popup ||command.command|| openLoader|| openComment|| moveTargetBlock||selection){
       !frameRef.current?.classList.contains("stop") &&
       frameRef.current?.classList.add("stop");
@@ -740,7 +737,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
     }
   },[popup.popup, command.command, openLoader, openComment, moveTargetBlock,selection]);
 
-  document.onselectionchange =(event:Event)=>{
+  document.onselectionchange =()=>{
     if(isMobile() && openComment){
       const SELECTION = document.getSelection();
       const notSelect = (SELECTION?.anchorNode === SELECTION?.focusNode && SELECTION?.anchorOffset === SELECTION?.focusOffset);
