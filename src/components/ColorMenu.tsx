@@ -39,9 +39,8 @@ const ColorInform=({color ,background, colorName ,page, block ,editBlock, templa
       const color_colors=[" color_default","color_grey"," color_orange", "color_green", " color_blue", "color_red" ];
       const className=  `${target}_${colorName.toLocaleLowerCase()}`;
       const targetBlock =selection.block;
-      const selecteds =document.querySelectorAll(".selected") as NodeListOf<HTMLElement>;
-      if(selecteds[0]!==undefined){
-        selecteds.forEach((selectedHtml:HTMLElement)=>{
+      const selectedHtml =document.querySelector(".selected");
+      if(selectedHtml !==null){
           //배경색이나 폰트 색상을 바꾸려하는데, 선택된 node의 자식 node 중에 이미 배경색이나 폰트색상이 지정되어 있는 경우, 지정된 스타일을 제거함 
           const selectedChildren= selectedHtml.childNodes  as NodeListOf<Node> | undefined;
           if(selectedChildren !==undefined){
@@ -85,7 +84,7 @@ const ColorInform=({color ,background, colorName ,page, block ,editBlock, templa
               change:true
             })
           }
-        })
+
       }
     };
   };
