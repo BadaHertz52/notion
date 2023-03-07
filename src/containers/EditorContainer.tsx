@@ -229,7 +229,8 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,rece
         frameHtml ={null}
         mobileSideMenu ={mobileSideMenu}
         setMobileSideMenu={setMobileSideMenu}
-        mobileSideMenuOpen ={mobileSideMenuOpen}setMobileSideMenuOpen ={setMobileSideMenuOpen}
+        mobileSideMenuOpen ={mobileSideMenuOpen}
+        setMobileSideMenuOpen ={setMobileSideMenuOpen}
         />
       }
     </div>
