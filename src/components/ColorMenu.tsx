@@ -1,8 +1,9 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { BgColorType, bg_blue, bg_default, bg_green, bg_grey, bg_yellow, bg_pink, Block, blue, ColorType, defaultColor, green, grey, orange, Page, red } from '../modules/notion';
-import { setTemplateItem } from './BlockComponent';
+import { isMobile, setTemplateItem } from './BlockComponent';
 import {selectionType} from '../containers/NotionRouter';
+import { removeSelected } from './BlockStyler';
 
 type StyleColorInformProps ={
   color:ColorType | undefined,
@@ -31,12 +32,12 @@ const StyleColorInform =styled.span`
 `; 
 
 const ColorInform=({color ,background, colorName ,page, block ,editBlock, templateHtml,  selection, setSelection , setOpenMenu}:ColorInformProps)=>{
-
   const changeContentStyle=(colorName:string)=>{
     if(selection !==null ){
       const target = color ===undefined? "bg" :"color";
       const bg_colors=["bg_default","bg_grey"," bg_orange", "bg_green", " bg_blue",  "bg_pink"];
       const color_colors=[" color_default","color_grey"," color_orange", "color_green", " color_blue", "color_red" ];
+      const arry =target==="bg"? bg_colors : color_colors;
       const className=  `${target}_${colorName.toLocaleLowerCase()}`;
       const targetBlock =selection.block;
       const selectedHtml =document.querySelector(".selected");
@@ -48,7 +49,6 @@ const ColorInform=({color ,background, colorName ,page, block ,editBlock, templa
               if(node.nodeName==="SPAN"){
                 const spantHtml =node as HTMLElement; 
                 if(spantHtml.classList.contains(target)){
-                  const arry =target==="bg"? bg_colors : color_colors;
                   const targetColor = arry.filter((c:string)=> spantHtml.classList.contains(c))[0];
                   spantHtml.classList.remove(target);
                   spantHtml.classList.remove(targetColor);
@@ -62,10 +62,8 @@ const ColorInform=({color ,background, colorName ,page, block ,editBlock, templa
           };
           // 배경색 or 폰트 색상 지정을 위한 className 변경 
           if(selectedHtml.classList.contains(target)){
-            const arry = target==="bg"? bg_colors: color_colors;
             const removeTargetClass = arry.filter((c:string)=> selectedHtml.classList.contains(c))[0];
-            selectedHtml.classList.remove(removeTargetClass);
-            selectedHtml.classList.add(className)
+            selectedHtml.classList.replace(removeTargetClass, className);
           }else{
             selectedHtml.classList.add(target);
             selectedHtml.classList.add(className);
