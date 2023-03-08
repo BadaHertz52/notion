@@ -376,7 +376,8 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
     closeBlockStyler(event);
   }
   inner?.addEventListener("click", (event)=>{
-    if(document.getElementById("blockStyler") !== null){
+    if(document.getElementById("blockStyler") !== null && document.getElementById("mobileSideMenu"
+    ) === null){
       operateCloseBlockStyler(event);
     }
 
