@@ -759,7 +759,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
     }
   },[popup.what])
   useEffect(()=>{
-    if(!openMobileMenu && !mobileSideMenuOpen){
+    if(!openMobileMenu && !mobileSideMenuOpen && !popup.popup ){
         const selectedHtml =document.querySelector(".selected");
         const contentsHtml = selectedHtml?.closest(".contents");
         if(contentsHtml!==null && contentsHtml!==undefined){
