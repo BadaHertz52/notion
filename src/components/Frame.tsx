@@ -768,7 +768,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           removeSelected(frameHtml, targetBlock, editBlock ,page, null)
         }
     }
-  },[openMobileMenu, mobileSideMenuOpen])
+  },[openMobileMenu, mobileSideMenuOpen, popup.popup])
   return(
     <div 
       className={ `frame ${newPageFram ? 'newPageFrame': ''} ${isMobile()? 'mobile' : 'web'}`}
