@@ -169,7 +169,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
   const colorMenuHtmlId = "blockStylerColor";
   const commandBlockHtmlId ="block_commandBlock";
   const linkLoaderHtmlId ="linkLoader";
-  const mainMenuHtmlId ="menu_mainMenu";
+  const mainMenuHtmlId ="menu_main";
 
   type sideMenuIdType = typeof colorMenuHtmlId| typeof commandBlockHtmlId | typeof linkLoaderHtmlId|typeof mainMenuHtmlId;
 
@@ -369,22 +369,19 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
       });
     }
   };
-  const operateCloseBlockStyler =(event:globalThis.MouseEvent|TouchEvent)=>{
-    const blockStylerHtml =document.getElementById("blockStyler");
-    const commentInputHtml =document.getElementById("popupMenu")?.querySelector(".commentInput");
-    (blockStylerHtml !== null || commentInputHtml!==null)&&
-    closeBlockStyler(event);
+  const executeCloseBlockStyler =(event:globalThis.MouseEvent|TouchEvent)=>{
+    if((document.getElementById("blockStyler") !== null  ||
+      document.getElementById("popupMenu")?.querySelector(".commentInput" ))&&
+      document.getElementById("mobileSideMenu") === null 
+    ){
+      closeBlockStyler(event);
+    }
   }
   inner?.addEventListener("click", (event)=>{
-    if(document.getElementById("blockStyler") !== null && document.getElementById("mobileSideMenu"
-    ) === null){
-      operateCloseBlockStyler(event);
-    }
-
+      executeCloseBlockStyler(event);
   });
   inner?.addEventListener("touchend", (event)=>{
-    document.getElementById("blockStyler") !== null &&
-    operateCloseBlockStyler(event);
+    executeCloseBlockStyler(event);
   });
 
   /**
@@ -412,7 +409,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
         case "linkLoader":
           setOpenLink(false);
           break;
-        case "menu_mainMenu":
+        case "menu_main":
           const isInSideMenu = target.id ==="menu_sideMenu"? 
                                 true : 
                                 target.closest("#menu_sideMenu") !==null ;
@@ -451,7 +448,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
             if (eventTarget!==null) {
               openColor && closeSideMenu(eventTarget, "blockStylerColor");
               openLink && closeSideMenu(eventTarget, "linkLoader");
-              openMenu && closeSideMenu(eventTarget, "menu_mainMenu");
+              openMenu && closeSideMenu(eventTarget, "menu_main");
               command.boolean && closeSideMenu(eventTarget, "block_commandBlock");
             }
           };
