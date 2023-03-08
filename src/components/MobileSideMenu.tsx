@@ -7,7 +7,7 @@ import {selectionType} from '../containers/NotionRouter';
 import LinkLoader from './LinkLoader';
 
 import Menu, { MenuAndBlockStylerCommonProps } from './Menu';
-import { removeSelected } from './BlockStyler';
+
 type MobileSideMenuProps = MenuAndBlockStylerCommonProps & {
   recentPagesId :string[]|null,
   pagesId:string[],
