@@ -370,8 +370,9 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
     }
   };
   const executeCloseBlockStyler =(event:globalThis.MouseEvent|TouchEvent)=>{
-    if((document.getElementById("blockStyler") !== null  ||
-      document.getElementById("popupMenu")?.querySelector(".commentInput" ))&&
+    const commentInputHtml =document.getElementById("popupMenu")?.querySelector(".commentInput" )
+    if(document.getElementById("blockStyler") !== null &&
+    (commentInputHtml == null || commentInputHtml === undefined)&&
       document.getElementById("mobileSideMenu") === null 
     ){
       closeBlockStyler(event);
@@ -430,7 +431,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
       if(target !==null){
         const isInBlockStyler = target.closest("#blockStyler") !== null;
         const isInMobileBlockMenu = target.closest("#mobileBlockMenu") !==null;
-        const isInCommentInput =target.closest(".commentInput");
+        const isInCommentInput =target.closest(".commentInput") !==null;
         if(!isInBlockStyler && 
           !isInMobileBlockMenu  &&
           !isInCommentInput 
