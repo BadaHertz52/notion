@@ -13,7 +13,7 @@ import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import PageMenu from './PageMenu';
 import { isMobile ,setTemplateItem } from './BlockComponent';
 import { fontStyleType, mobileSideMenuType } from '../containers/NotionRouter';
-import BlockStyler from './BlockStyler';
+import BlockStyler, { removeSelected } from './BlockStyler';
 import MoveTargetBlock from './MoveTargetBlock';
 
 //icon
@@ -78,7 +78,7 @@ const basicPageCover ='https://raw.githubusercontent.com/BadaHertz52/notion/mast
  * @returns 
  */
 
-const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,commentBlock,openComment, setRoutePage ,setTargetPageId ,setOpenComment , setCommentBlock ,popup, setPopup,showAllComments ,smallText , fullWidth  ,discardEdit,setDiscardEdit , openTemplates,  setOpenTemplates, fontStyle , setMobileSideMenu, setMobileSideMenuOpen}:FrameProps)=>{
+const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,commentBlock,openComment, setRoutePage ,setTargetPageId ,setOpenComment , setCommentBlock ,popup, setPopup,showAllComments ,smallText , fullWidth  ,discardEdit,setDiscardEdit , openTemplates,  setOpenTemplates, fontStyle , setMobileSideMenu, mobileSideMenuOpen, setMobileSideMenuOpen}:FrameProps)=>{
   const innerWidth =window.innerWidth; 
   const innerHeight =window.innerHeight;
   const inner =document.getElementById("inner");
@@ -758,6 +758,17 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
       }
     }
   },[popup.what])
+  useEffect(()=>{
+    if(!openMobileMenu && !mobileSideMenuOpen){
+        const selectedHtml =document.querySelector(".selected");
+        const contentsHtml = selectedHtml?.closest(".contents");
+        if(contentsHtml!==null && contentsHtml!==undefined){
+          const blockId = contentsHtml.id.replace("_contents" ,'');
+          const targetBlock =findBlock(page, blockId).BLOCK;
+          removeSelected(frameHtml, targetBlock, editBlock ,page, null)
+        }
+    }
+  },[openMobileMenu, mobileSideMenuOpen])
   return(
     <div 
       className={ `frame ${newPageFram ? 'newPageFrame': ''} ${isMobile()? 'mobile' : 'web'}`}

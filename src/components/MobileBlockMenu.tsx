@@ -172,12 +172,6 @@ useEffect(()=>{
     sessionStorage.removeItem('mobileMenuBlock')
   }
 },[item]);
-
-useEffect(()=>{
-  if(!openMobileSideMenu && document.querySelector(".selected") !==null && block !==null){
-    removeSelected(frameHtml, block, editBlock ,page, null)
-  }
-},[openMobileSideMenu])
   return(
     <>
       <div id="mobileBlockMenu" style={mbmStyle}>
