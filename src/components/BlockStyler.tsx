@@ -431,7 +431,8 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
         const isInBlockStyler = target.closest("#blockStyler") !== null;
         const isInMobileBlockMenu = target.closest("#mobileBlockMenu") !==null;
         const isInCommentInput =target.closest(".commentInput");
-        if(!isInBlockStyler && !isInMobileBlockMenu  &&
+        if(!isInBlockStyler && 
+          !isInMobileBlockMenu  &&
           !isInCommentInput 
           ){
           const colorMenuHtml = document.getElementById("blockStylerColor");
@@ -440,6 +441,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
           const linkLoaderHtml = document.getElementById("linkLoader");
 
           if(colorMenuHtml==null && commandBlockHtml===null && mainMenu===null && linkLoaderHtml ==null ){ 
+            // 조건 : web에서 sideMenu가 닫혀 있을 경우
             removeSelected(frameHtml,block ,editBlock,page, setSelection);
             setSelection !==null && setSelection(null);
             openMenu && setOpenMM(false);
