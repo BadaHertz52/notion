@@ -948,31 +948,6 @@ a:link, a:active, a:visited {
   position: relative;
 }
 
-#popupMenu {
-  padding: 2%;
-  width: 320px;
-  display: flex;
-  flex-direction: column;
-  background-color: white;
-  margin: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
-  pointer-events: auto;
-  transform: matrix(1, 0, 0, 1, 0, 0);
-  z-index: 10;
-  border-radius: 8px;
-  box-shadow: 0px 0px 23px -5px #ababab;
-}
-#popupMenu::-webkit-scrollbar-thumb {
-  background: #D3D1CB;
-}
-#popupMenu::-webkit-scrollbar-track {
-  background: #EDECE9;
-}
-#popupMenu .commentInput {
-  flex-direction: row;
-}
-
 .commentInput {
   display: flex;
   flex-direction: row;

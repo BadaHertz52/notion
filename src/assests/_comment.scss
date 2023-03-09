@@ -260,13 +260,6 @@
     position: relative;
   }
 }
-#popupMenu{
-  padding: 2%;
-  @include popupMenu;
-  .commentInput{
-    flex-direction: row;
-  }
-}
 .commentInput {
   display: flex;
   flex-direction: row;

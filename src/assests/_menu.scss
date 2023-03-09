@@ -17,9 +17,9 @@
   display: flex;
   .commentInput{
     width: calc(100% - 20px);
-    max-width: 300px;
     margin: 10PX;
-    box-sizing: border-box
+    box-sizing: border-box;
+    flex-direction: row;
   }
 }
 .frame.mobile{
