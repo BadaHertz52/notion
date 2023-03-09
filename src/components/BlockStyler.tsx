@@ -10,7 +10,7 @@ import Menu, { MenuAndBlockStylerCommonProps } from './Menu';
 import { Block, Page} from '../modules/notion';
 import LinkLoader from './LinkLoader';
 import { mobileSideMenuType } from '../containers/NotionRouter';
-import { selectContent } from './BlockComponent';
+import { isMobile, selectContent } from './BlockComponent';
     /**
      * block의 content에서 selected class를 삭제하는 함수 
      */
@@ -209,7 +209,8 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
   const changeCommentStyle =()=>{
     const mainBlockDomRect =getMainBlockDomRect(frameHtml, block);
     if(mainBlockDomRect!==undefined && 
-      frameHtml!==null && frameHtml !==undefined ){
+      frameHtml!==null && 
+      frameHtml !==undefined ){
       const pageContentDomRect= pageContent?.getClientRects()[0];
       const frameDomRect =frameHtml.getClientRects()[0];
       const top = mainBlockDomRect.bottom+ 8 ;
@@ -219,7 +220,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
       if(pageContentDomRect!==undefined ){
         const left =pageContentDomRect.left -frameDomRect.left; 
         const bottom = (innerHeight- mainBlockDomRect.top) + 8 ;
-        remainHeight >10 ?
+        (remainHeight >10 || isMobile()) ?
         setPopupStyle({
           top:`${top}px`,
           left: `${left}px`,
@@ -229,8 +230,15 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
           bottom:`${bottom}px`,
           left: `${left}px`,
         });
-      }
+      };
 
+      if(isMobile()){
+        const pageHtml =frameHtml?.querySelector(".page");
+        if(pageHtml !== null && frameHtml !==null){
+          pageHtml?.setAttribute("style", 
+          `translateY(${ ( pageHtml.clientTop - frameHtml.clientTop) - 50}px)`);
+        }
+    };
     };
   };
   const onClickCommentBtn=()=>{
@@ -239,11 +247,6 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
       popup:true,
       what:"popupComment"
     });
-    const pageHtml = frameHtml?.querySelector('.page');
-    const pageHtmlDomRect = pageHtml?.getClientRects()[0];
-    if(pageHtmlDomRect!==undefined){
-      pageHtml?.setAttribute("style", `transform:translateY(${pageHtmlDomRect.y}px)`);
-    };
     setCommentBlock(block);
     setSelection !==null && setSelection(null);
     openMobileBlockMenu && setOpenMM(false);
@@ -394,7 +397,6 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
     const isIn = target.id === htmlId ? 
                   true :
                   target.closest(`#${htmlId}`) !== null; 
-                  console.log("close side menu", !isIn, htmlId);
     if(!isIn){
       switch (htmlId) {
         case "blockStylerColor":

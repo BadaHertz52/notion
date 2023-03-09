@@ -115,10 +115,11 @@ const MobileBlockMenu =({
       what:'popupComment'
     });
     setPopupStyle(mbmStyle);
-    const pageHtmlDomRect = pageHtml?.getClientRects()[0];
-    if(pageHtmlDomRect!==undefined){
-      pageHtml?.setAttribute("style", `transform:translateY(${pageHtmlDomRect.y}px)`);
-    }
+    const pageHtml =frameHtml?.querySelector(".page");
+    if(pageHtml !== null && frameHtml !==null){
+      pageHtml?.setAttribute("style", 
+      `translateY(${ ( pageHtml.clientTop - frameHtml.clientTop) - 50}px)`);
+    };
 
     closeMM();
   };
