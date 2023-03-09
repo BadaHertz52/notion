@@ -1,4 +1,4 @@
-import  React, { useState ,useEffect, useRef  } from 'react';
+import  React, { useState ,useEffect  } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { BiCommentDetail } from 'react-icons/bi';
 import { RiDeleteBin6Line } from 'react-icons/ri';
@@ -6,7 +6,7 @@ import { TiArrowSortedDown } from 'react-icons/ti';
 import { CSSProperties } from 'styled-components';
 import {  msmWhatType, ms_color, ms_moreMenu, ms_turnInto } from '../containers/NotionRouter';
 import { Block, findBlock, makeNewBlock} from '../modules/notion';
-import BlockStyler, {removeSelected, StylerCommonProps } from './BlockStyler';
+import BlockStyler, { StylerCommonProps } from './BlockStyler';
 
 
 type MobileBlockMenuProps = Omit<StylerCommonProps , 'block'> & {
