@@ -18,6 +18,7 @@ import {RiDeleteBin6Line } from 'react-icons/ri';
 import { AiOutlineFormatPainter } from 'react-icons/ai';
 import { isMobile, setTemplateItem } from './BlockComponent';
 import {selectionType} from '../containers/NotionRouter';
+
 export type MenuAndBlockStylerCommonProps={
   pages:Page[],
   firstlist:listItem[],
@@ -129,7 +130,7 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
     };
   },[turnInToPage, turnInto, color]);
 
-  const popupStyle = blockFnElement?.getAttribute("style");
+  let popupStyle = blockFnElement?.getAttribute("style");
 
   const recoveryMenuState=()=>{
     turnInto &&setTurnInto(false);
@@ -172,11 +173,12 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
     setCommentBlock(block);
     setOpenMenu(false);
     setSelection!==null && setSelection(null);
-    sessionStorage.setItem("popupStyle", JSON.stringify(popupStyle));
     setPopup({
       popup:true,
       what:popupComment
-    })
+    });
+
+
   };
   const removeBlock =()=>{
     setSelection!==null && setSelection(null);
@@ -316,6 +318,7 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
                   className='underline menu_editBtn'
                   name="move to"
                   onClick={onClickMoveTo}
+                  style ={{display: isMobile()? "none": "block"}}
                 >
                   <div>
                     <IoArrowRedoOutline/>
@@ -327,6 +330,7 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
                   className='underline menu_editBtn'
                   name="comment"
                   onClick={onOpenCommentInput}
+                  style ={{display: isMobile()? "none": "flex"}}
                 >
                   <div>
                     <BiCommentDetail/>
@@ -404,6 +408,8 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
             setTargetPageId={setTargetPageId}
           />
         }
+        { 
+      }
       </div>
   </div>
   )
