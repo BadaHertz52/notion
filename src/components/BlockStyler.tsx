@@ -517,7 +517,9 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
           className='typeBtn btn'
           onClick={onClickTypeBtn}
         >
-          {getBlockType()}
+          <span>
+            {getBlockType()}
+          </span>
           <IoIosArrowDown className='arrowDown'/>
         </button>
         <button 
