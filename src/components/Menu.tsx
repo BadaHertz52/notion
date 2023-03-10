@@ -151,11 +151,9 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
     setTurnInto(false);
     setTurnIntoPage(false);
     recoveryMenuState();
-    setSelection!==null && setSelection(null);
   };
   const showPageMenu =()=>{
     setTurnIntoPage(true);
-    setSelection!==null && setSelection(null);
     setTurnInto(false);
     setColor(false);
     recoveryMenuState();
