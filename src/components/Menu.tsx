@@ -277,6 +277,7 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
                   className='menu_editBtn'
                   onMouseOver={showTurnInto}
                   name="turn into"
+                  style ={{display: document.querySelector('#blockStyler') !== null? "none": "flex"}}
                 >
                   <div>
                     <BsArrowClockwise/>
@@ -340,6 +341,7 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
                   name='color'
                   className='underline menu_editBtn'
                   onMouseOver={showColorMenu}
+                  style ={{display: document.querySelector('#blockStyler') !== null? "none": "flex"}}
                 >
                   <div>
                     <AiOutlineFormatPainter/>
