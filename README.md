@@ -69,16 +69,16 @@ npm install --save react-icon react-contenteditable styled-component
 <img src="./image/readMeFile/template.png" width="450px" height="auto">
 <br/>
 
-* Resposible web - Mobile 화면
+* Resposible web - Mobile 화면 (sideMenu)
   <br/>
+
   <img 
     height="400px"
     width="auto"
-    src="https://user-images.githubusercontent.com/69838872/209685633-d05154ff-0d19-4dfd-b9a6-415b36033e8e.gif"
-    alt="mobile web simulation"
-  />
+    src="./image/readMeFile/mobile_side.gif"
+    alt="mobile web simulation"/>
 
-## <div id="data">2) Data </div>
+## <div id="data"> 2) Data </div>
 ## A. State 
 ## a. Notion State
   * Notion State type 
@@ -189,6 +189,7 @@ npm install --save react-icon react-contenteditable styled-component
 
     type MainCommentType = SubCommentType &{
     type:"open"|"resolve",
+    selectedText: null| string,
     subComments:SubCommentType[]|null,
     subCommentsId : string[] |null,
     };
@@ -274,7 +275,7 @@ npm install --save react-icon react-contenteditable styled-component
   * BlockContentEditable : block 의 content에 대한 component로 content를 수정할 수 있음
 
 * BlockFn
-  * block에 마우스를 가져다 내면 block 왼편에 나타나는 component로 block을 생성하는 add 버튼과 Menu를 여는 버튼을 가짐
+  * 웹 브라우저 환경에서  block에 마우스를 가져다 내면 block 왼편에 나타나는 component로 block을 생성하는 add 버튼과 Menu를 여는 버튼을 가짐
 
 * BlockStyler
   * block 의 일부 내용을 선택 시 나타나고, 일부 내용에 대한 스타일 변경,링크 추가, block의 타입 변경등을 담당
@@ -284,6 +285,7 @@ npm install --save react-icon react-contenteditable styled-component
 
 * CommandBlock
   * block의 타입을 변경함 
+  * 웹 브라우저에서 "/"를 선두로 block type을 작성함으로써 block type을 변경할 수 있음 
 
 * Comments
   * block에 대한 comments들을 보여주고, comment를 생성,수정,삭제할 수 있음
@@ -316,7 +318,17 @@ npm install --save react-icon react-contenteditable styled-component
 * Menu
   * block에 대한 복제,삭제,이동,타입 변경,comment 추가,color 변경등을 할 수 있는 component
   
-
+* MobileBlockMenu
+  * 모바일 브라우저에서 특정 블록을 선택하면 해당 블럭에대한 여러 기능을 하는 메뉴 컴포넌트 
+    * 새로운 블록 추가
+    * 해당 블록 삭제
+    * 해당 블록에 대한 comment 추가
+    * 해당 블록의 type 변경
+    * 해당 블록에 대한 폰트 색깔, 배경 색깔 설정 
+    * Menu 창을 여는 기능
+* MobileSideBlockMenu 
+  *  MobileBlockMenu 의 sideMenu  
+  
 * MoveTargetBlock
   * block의 위치를 이동 시킬 때, 이동되는 block을 화면상에 보여주는 component
 
@@ -453,47 +465,80 @@ npm install --save react-icon react-contenteditable styled-component
 
 * image 타입 블럭 생성 및 image 사이즈 변경
 
-  <img 
+<img 
     alt="imgBlock"
     width="50%"
     src="https://user-images.githubusercontent.com/69838872/209687927-d5d5ea4b-2865-4ddb-ab30-b8020c0597dc.gif"
   />
- 
- * blockStyler 
- 
-   <img 
-    alt="blockStyler"
+
+* comment 
+  
+<img ait="comment" width="50%" src="./image/readMeFile/m_comment.gif" />
+
+ * blockStyler - web browser
+  
+<img 
+    alt="blockStyler_web"
     width="50%"
     src="https://user-images.githubusercontent.com/69838872/209688273-bc6bd45b-bf0b-48be-aa1d-1020963f193d.gif"
   />
 
+  * blockStyler - mobile browser
+
+<img alt="blockStyler_mobile" width="50%" src="./image/readMeFile/m_b%20.gif"/>
+  
 * 다른 페이지로 블럭 이동
 
-   <img 
+<img 
     alt="move block to other page"
     width="50%"
     src="https://user-images.githubusercontent.com/69838872/209688356-e2cedb8f-dd72-47dc-9661-1cb6b36b5376.gif"
-  />
+/>
 
 * 블록 위치 변경 
 
-   <img 
+<img 
     ait="changePosition"
     width="50%"
     src="https://user-images.githubusercontent.com/69838872/209688434-5db37fcc-7987-460b-80a7-43db53d410c3.gif"
-  />
+/>
 
  * 기타: 키보드를 통한 조작, 블럭 삭제, 블럭 내용 선택등등
  
-  <img 
+<img 
     width="50%"
     alt="etc function"
     src="https://user-images.githubusercontent.com/69838872/209688197-d6aacef5-a7af-438c-8543-e9e40d16a8bb.gif"
-  />
+/>
   
+  * menu - mobile browswer
+  
+<img 
+  width="50%" 
+  alt="menu in mobile" 
+  src="./image/readMeFile/mobile_m.gif"
+/>
+
+  * sideMenu of menu  - mobile browswer
+  
+<img 
+  width="50%" 
+  alt="sideMenu of menu in mobile" 
+  src="./image/readMeFile/m_mm.gif"
+/>
+
 --------------------------
 ## <div id="update">4. Update </div>
-* 2022.12 모바일 환경에 더 적합하도록 업데이트
-  * sideBar,allComment 변경, MoblieMenu 추가, 모바일에서도 ImageContent 사이즈 변경가능하도록 수정
+* 2022.12 업데이트
+  * sideBar,allComment 변경,<span style="text-decoration:line-through"> MoblieMenu 추가 </span>, 모바일에서도 ImageContent 사이즈 변경가능하도록 수정
+  <br/>
+* 2022.3 업데이트 및 수정 
+  
+  * 모바일 브라우저에서 사용될 block 에 대한 메뉴와 그 사이드 메뉴를 담당하는 MobileBlockMenu, MobileSideMenu 추가
+
+  * 모바일 브라우저에서도 block의 contents 중 특정 글자를 선택할 때 해당 글자에 대한 BlockStyler 의 기능을 사용 가능
+  
+  * block 전체 뿐만 아니라 일부 내용에 대해서도 commment 추가 할 수 있음 
+
 -------------------------------------
 * 🔎 [Notion 프로젝트 후기 보러가기](https://velog.io/@badahertz52/Notion-프로젝트-후기)
