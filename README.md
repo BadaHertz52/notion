@@ -16,7 +16,7 @@
 * <a href="data">2) Data</a>
 
 *  <a href="function">3) Function</a>
-*  
+
 #### <a href="#update">4. Update </a>
 -------------------------------------
 ## <div id="builtWith">1. Tech skill & Built with </div>
@@ -45,10 +45,7 @@
 ```
 ### 2) Start
 ```
-npx create-react-app react 
-npm install react react-dom react-redux redux
-npm install react-router-dom --save 
-npm install --save react-icon react-contenteditable styled-component
+npm i
 ```
 -------------------------------------
 ## <div id="description"> 3.Description </div>
