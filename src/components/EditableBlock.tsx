@@ -1,8 +1,8 @@
-import React, { CSSProperties, Dispatch, MouseEvent, MutableRefObject, SetStateAction, useEffect, useRef} from 'react';
+import React, { CSSProperties, Dispatch, MouseEvent, MutableRefObject, SetStateAction, TouchEvent, useEffect, useRef} from 'react';
 import { Block, MainCommentType, findBlock, Page,  } from '../modules/notion';
 import { Command } from './Frame';
 import {selectionType} from '../containers/NotionRouter';
-import BlockComponent, { setTemplateItem } from './BlockComponent';
+import BlockComponent, { isMobile, setTemplateItem } from './BlockComponent';
 import { GoPrimitiveDot } from 'react-icons/go';
 import { GrCheckbox, GrCheckboxSelected } from 'react-icons/gr';
 import {  MdPlayArrow } from 'react-icons/md';
@@ -90,13 +90,22 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
   height: block.style.height===undefined? "inherit" : block.style.height,
   })
   };
-  const onMouseOverToMoveBlock=(event:MouseEvent<HTMLDivElement>, targetBlock:Block)=>{
+  /**
+   * [moveBlock] 현재 block을 moveTargetBlock (위치를 변경시킬 block)의 변경된 위치의 기준이 되는 pointBlock으로  지정하는 함수
+   * @param event 
+   * @param targetBlock 
+   */
+  const markPointBlock=(event:MouseEvent<HTMLDivElement>|TouchEvent<HTMLDivElement>, targetBlock:Block)=>{
     if(moveBlock.current){
       pointBlockToMoveBlock.current = targetBlock;
       event.currentTarget.classList.add("on");
     }
   };
-  const onMouseLeaveToMoveBlock=(event:MouseEvent<HTMLDivElement>)=>{
+  /**
+   * [moveBlock] 현재 block을  moveTargetBlock (위치를 변경시킬 block)의 위치변경의 기준이 되는 pointBlock 지정을 취소시키는 함수 
+   * @param event 
+   */
+  const canclePointBlock=(event:MouseEvent<HTMLDivElement>|TouchEvent<HTMLDivElement>)=>{
     if(moveBlock.current && pointBlockToMoveBlock.current?.id=== block.id){
       event.currentTarget.classList.remove("on");
     }
@@ -187,8 +196,8 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
           <div 
             className='mainBlock'
             key={`listItem_${subBlocks.indexOf(block)}`}
-            onMouseOver={(event)=>onMouseOverToMoveBlock(event, block)}
-            onMouseLeave={(event)=>onMouseLeaveToMoveBlock(event)}
+            onMouseOver={(event)=>markPointBlock(event, block)}
+            onMouseLeave={(event)=>canclePointBlock(event)}
           >
             <div className='mainBlock_block'>
             <div 
@@ -298,8 +307,8 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
             <>
             <div 
               className="mainBlock"
-              onMouseOver={(event)=>onMouseOverToMoveBlock(event, block)}
-              onMouseLeave={onMouseLeaveToMoveBlock}
+              onMouseOver={(event)=>markPointBlock(event, block)}
+              onMouseLeave={canclePointBlock}
             >
               <div className='mainBlock_block'>
               {block.type ==="todo" &&

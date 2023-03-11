@@ -106,7 +106,13 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   const [menuOpen, setOpenMenu]= useState<boolean>(false);
   const [selection, setSelection]=useState<selectionType|null>(null);
   const [popupStyle, setPopupStyle]=useState<CSSProperties |undefined>(undefined); 
+  /**
+   * page 내의 위치를 변경하는 대상이 되는  block
+   */
   const [moveTargetBlock, setMoveTargetBlock]=useState<Block|null>(null);
+  /**
+   * page내의 블록의 위치 변경이 있는 지 여부를 나타냄
+   */
   const moveBlock =useRef<boolean>(false);
   /** block 이동 시, 이동 할 위치의 기준이 되는 block(block 은 pointBlockToMoveBlock.current의 앞에 위치하게됨) */
   const pointBlockToMoveBlock =useRef<Block|null>(null);
@@ -249,13 +255,17 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
     };
     editPage(page.id, editedPage)
   };
-  const onMouseMoveToMoveBlock=()=>{
+  /**
+   * [moveBlock] 
+   */
+  const makeMoveBlockTrue=()=>{
     if(moveTargetBlock!==null){
+      console.log("make mobe block true")
         moveBlock.current=true
     };
   };
   /**
-   * 마우스 드래그로 블록의 위치를 변경하고, 변경된 위치에 따라 page의 data도 변경하는 함수 
+   * [moveBlock]  블록의 위치를 변경하고, 변경된 위치에 따라 page의 data도 변경하는 함수 
    */
   const changeBlockPosition =()=>{
     if(pointBlockToMoveBlock.current!==null && moveTargetBlock!==null && page.blocksId!== null && page.blocks!==null && page.firstBlocksId!==null){
@@ -454,9 +464,11 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
         editPage(page.id, newPage);
     };
   };
-  
-  const onMouseUpToMoveBlock=()=>{
-    if(moveBlock){
+  /**
+   * [moveBlock] block의 위치를 변경 시키는 것이 끝났을 때 (mouseUp | touchEnd) , 사용자가 지정한 위치대로 state를 변경하고 블록의 위치 변동을 위해 설정한 모든 것을 원래대로 되돌리는 함수 
+   */
+  const stopMovingBlock=()=>{
+    if(moveBlock.current){
       changeBlockPosition();
       moveBlock.current=false;
       setMoveTargetBlock(null);
@@ -467,16 +479,18 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
       editableBlockOn?.classList.remove("on");
     }
   };
-
-  const showMoveTargetBlock=(event:MouseEvent<HTMLDivElement>)=>{
+/**
+ * [moveBlock] 마우스, 터치의 이동에 따라 moveTargetBlock을 이동시키는 함수 
+ * @param clientX mouseEvent.clientX | touchEvent.touches[0].clientX
+ * @param clientY mouseEvent.clientY | touchEvent.touches[0].clientY
+ */
+  const move_MoveTargetBlock=(clientX :number ,clientY:number )=>{
     if(moveTargetBlock!==null && moveBlock.current ){
       const editor =document.querySelector(".editor");
-      const x =event.clientX;
-      const y =event.clientY;
       const moveTargetBlockHtml =document.getElementById("moveTargetBlock");
       if(moveTargetBlockHtml!==null && editor !==null){
         moveTargetBlockHtml.setAttribute(
-          "style",`position:absolute; top:${y + editor.scrollTop + 5}px; left:${x+ 5}px`
+          "style",`position:absolute; top:${clientY + editor.scrollTop + 5}px; left:${clientX+ 5}px`
         )
       }
     };
@@ -797,7 +811,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
         className='frame_inner'
         id={`page_${page.id}`}
         style={frameInnerStyle}
-        onMouseMove={showMoveTargetBlock}
+        onMouseMove={(event)=>move_MoveTargetBlock(event.clientX, event.clientY)}
       >
         <div className="page">
           <div 
@@ -957,8 +971,8 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
             {!newPageFram?
             <div 
               className='pageContent_inner'
-              onMouseMove={onMouseMoveToMoveBlock}
-              onMouseUp={onMouseUpToMoveBlock}
+              onMouseMove={makeMoveBlockTrue}
+              onMouseUp={stopMovingBlock}
               >
               {firstBlocks!== null &&
                 firstBlocks
