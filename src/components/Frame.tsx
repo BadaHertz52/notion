@@ -123,7 +123,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   const frameInnerStyle:CSSProperties={
     fontFamily:fontStyle ,
     fontSize: `${fontSize}px`,
-    width: openTemplates? "100%": (fullWidth?  `${maxWidth}px`: ( innerWidth>900?  '900px' : "75%") ) ,
+    width: isMobile()? "90%" : (openTemplates? "100%": (fullWidth?  `${maxWidth}px`: ( innerWidth>900?  '900px' : "75%") )) ,
   };
   const pageCommentStyle:CSSProperties ={
     fontSize:`${fontSize}px`
