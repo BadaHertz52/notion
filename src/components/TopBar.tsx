@@ -17,6 +17,7 @@ import { BsThreeDots } from "react-icons/bs";
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { IoArrowRedoOutline } from 'react-icons/io5';
 import { GrDocumentUpload } from 'react-icons/gr';
+import { isMobile } from './BlockComponent';
 type TopBarProps ={
   firstlist:listItem[],
   favorites:string[]|null,
@@ -358,6 +359,7 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages,pagePath, addBlock,
                     </label>
                   </button>
                   <button
+                    style ={{display: isMobile()? "none": "flex"}}
                     onClick={changeWidth}
                   >
                     <div>Full width</div>
@@ -403,6 +405,7 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages,pagePath, addBlock,
                     </span>
                   </button>
                   <button
+                    style ={{display: isMobile()? "none": "flex"}}
                     onClick={()=>{setOpenExport(true); setOpenPageMoreFun(false)}}
                   >
                     <GrDocumentUpload/>
