@@ -769,7 +769,22 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           removeSelected(frameHtml, targetBlock, editBlock ,page, null)
         }
     }
-  },[openMobileMenu, mobileSideMenuOpen, popup.popup])
+  },[openMobileMenu, mobileSideMenuOpen, popup.popup]);
+  
+  useEffect(()=>{
+    if(openComment && (openMobileMenu || mobileSideMenuOpen)){
+      if(openMobileMenu){
+        setOpenMM(false);
+      };
+      if(mobileSideMenuOpen){
+        setMobileSideMenuOpen(false);
+        setMobileSideMenu({
+          block:null,
+          what:undefined
+        })
+      }
+    }
+  },[openComment])
   return(
     <div 
       className={ `frame ${newPageFram ? 'newPageFrame': ''} ${isMobile()? 'mobile' : 'web'}`}
