@@ -45,10 +45,7 @@
 ```
 ### 2) Start
 ```
-npx create-react-app react 
-npm install react react-dom react-redux redux
-npm install react-router-dom --save 
-npm install --save react-icon react-contenteditable styled-component
+npm i
 ```
 -------------------------------------
 ## <div id="description"> 3.Description </div>
