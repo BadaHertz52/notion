@@ -434,11 +434,11 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
         const isInBlockStyler = target.closest("#blockStyler") !== null;
         const isInMenuComponent = target.closest(".menu") !== null;
         const isInMobileBlockMenu = target.closest("#mobileBlockMenu") !==null;
-        const isInCommentInput =target.closest(".commentInput") !==null;
+        const isInContents =target.closest(".contents") !== null;
         if(!isInBlockStyler && 
           !isInMenuComponent &&
           !isInMobileBlockMenu  &&
-          !isInCommentInput 
+          ! isInContents
           ){
           const colorMenuHtml = document.getElementById("blockStylerColor");
           const commandBlockHtml = document.getElementById("block_commandBlock");
@@ -480,17 +480,20 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
     });
   };
   document.onselectionchange =()=>{
-    if(!openMobileBlockMenu){
-      const SELECTION  =document.getSelection();
-      const notSelect = (SELECTION?.anchorNode === SELECTION?.focusNode && SELECTION?.anchorOffset === SELECTION?.focusOffset);
-      if(notSelect){
-        setOpenMobileBlockStyler !==null && setOpenMobileBlockStyler(false);
+      if(isMobile()){
+        const SELECTION  =document.getSelection();
+        const notSelect = (SELECTION?.anchorNode === SELECTION?.focusNode && SELECTION?.anchorOffset === SELECTION?.focusOffset);
+        if(notSelect){
+          setOpenMobileBlockStyler !==null && 
+          setOpenMobileBlockStyler(false);
+          setOpenMM(false);
+        }
+        
       }
-    }
   };
 
   useEffect(()=>{
-    if(!openMobileBlockMenu){
+    if(!isMobile()){
       changeStylerStyle(frameHtml, block, setBlockStylerStyle);
       if(selection?.change){
         openColor && setOpenColor(false);
