@@ -529,7 +529,18 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
       };
   };
   /**
-   * ContentEditable에서 block 의 content을 수정하는 함수 
+   * 모바일 브라우저에서 특정 이벤트가 발생 했을 때 mobileBlockMenu 를 열어 주는 함수 
+   */
+  const openMobileBlockMenu =()=>{
+    if(block.comments ==null && !openMobileMenu ){
+      sessionStorage.setItem("mobileMenuBlock", JSON.stringify(block));
+      setOpenMM(true);
+      setSelection(null);
+    };
+}
+  /**
+   * ContentEditable에서 block 의 content을 수정하는 함수 ,
+   *  웹 브라우저에서 "/"로 시작하면 block 의 type을 변경할 수 있음 
    * @param event ContentEditableEvent
    */
   const onChangeContents=(event:ContentEditableEvent)=>{
@@ -597,12 +608,16 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
         changeBlockContent();
       }else{
         // 타입 변경 명령어로 commandBlock 을 엶
-        setOpenComment(false);
-        setCommand({
-          boolean:true, 
-          command:"/",
-          targetBlock:block
-        })
+        if(!isMobile()){
+          // web browswer 에서 
+          setOpenComment(false);
+          setCommand({
+            boolean:true, 
+            command:"/",
+            targetBlock:block
+          })
+        }
+
       }
     }
   };
@@ -799,13 +814,6 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
 
     }
   };
-  const onTouchEnd =(event :TouchEvent<HTMLDivElement>)=>{
-      if(block.comments ==null && !openMobileMenu ){
-        sessionStorage.setItem("mobileMenuBlock", JSON.stringify(block));
-        setOpenMM(true);
-        setSelection(null);
-      };
-  }
   /**
    * BlockComponent 중 link 가 있는 element를 클릭 했을 경우 , 해당 링크를 여는 함수 
    */
@@ -908,7 +916,7 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
           onChange={(event)=> onChangeContents(event )}
           onKeyDown={(event)=> onKeyDownContents(event)}
           onSelect={(event)=>  onSelectInPC(event)}
-          onTouchEnd={(event)=>{onTouchEnd(event)}}
+          onTouchEnd={openMobileBlockMenu}
           onClick={(event)=>onClickContentEditable(event)}
         /> 
         :

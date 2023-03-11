@@ -285,7 +285,7 @@ a:link, a:active, a:visited {
   outline: none;
 }
 
-.contentEditable:empty:hover::after, .contentEditable:empty:focus::after {
+.frame.web .contentEditable:empty:hover::after, .frame.web .contentEditable:empty:focus::after {
   content: attr(placeholder);
   color: #B9B8B6;
 }
