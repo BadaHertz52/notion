@@ -239,6 +239,8 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
                 openMobileMenu={openMobileMenu}
                 setOpenMM={setOpenMM}
                 onClickCommentBtn={onClickCommentBtn}
+                moveBlock ={moveBlock}
+                setMoveTargetBlock={setMoveTargetBlock}
               />
             </div>
             </div>
@@ -384,6 +386,8 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
                 openMobileMenu={openMobileMenu}
                 setOpenMM={setOpenMM}
                 onClickCommentBtn={onClickCommentBtn}
+                moveBlock={moveBlock}
+                setMoveTargetBlock={setMoveTargetBlock}
                 />
               </div>
               </div>

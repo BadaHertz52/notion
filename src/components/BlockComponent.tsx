@@ -478,7 +478,9 @@ type  BlockComponentProps ={
   setSelection:Dispatch<SetStateAction<selectionType|null>>,
   openMobileMenu:boolean, 
   setOpenMM :Dispatch<SetStateAction<boolean>>,
-  onClickCommentBtn: (block: Block) => void
+  onClickCommentBtn: (block: Block) => void,
+  setMoveTargetBlock :Dispatch<SetStateAction<Block|null>>,
+  moveBlock: React.MutableRefObject<boolean>
 };
 
 export type itemType ={
@@ -487,7 +489,11 @@ export type itemType ={
 };
 
 
-const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,command, setCommand  ,setOpenComment ,setTargetPageId ,setOpenLoader, setLoaderTargetBlock ,closeMenu ,templateHtml, setSelection ,openMobileMenu ,setOpenMM , onClickCommentBtn}:BlockComponentProps)=>{  
+const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,command, setCommand  ,setOpenComment ,setTargetPageId ,setOpenLoader, setLoaderTargetBlock ,closeMenu ,templateHtml, setSelection ,openMobileMenu ,setOpenMM , onClickCommentBtn ,setMoveTargetBlock , moveBlock}:BlockComponentProps)=>{  
+  /**
+   * 모바일 브라우저에서, element을 터치 할때 사용자가 element을 이동하기 위해 touch 한 것인지 판별하기 위한 조건 중 하나
+   */
+  const startMarkMoveBlock =useRef<boolean>(false);
   const editTime =JSON.stringify(Date.now);
   const contentEditableRef= useRef<HTMLElement>(null);
   /**
@@ -938,11 +944,42 @@ const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub
       onClickCommentBtn(block);
     }
   };
+  /**
+   * [moveBlock - mobile] readyToMoveBlock 을 통해 위치를 변경시킬 블럭으로 해당 요소에 touch move 이벤트가 감지 되었을때,
+   * moveTargetBlock을 설정하고 해당 요소의 클래스를 원래대로 복귀하는 함수 
+   * @param event TouchEvent
+   */
+  const markMoveTargetBlock =(event:TouchEvent<HTMLDivElement>)=>{
+      if(event.currentTarget.classList.contains("on")){
+        setMoveTargetBlock(block);
+        const target = event.target as HTMLDivElement;
+        target.classList.remove("on");
+      }
+  } ;
+  /**
+   *[moveBlock - mobile]  moveBlock.current 로 Frame 내에서 움직임이 감지 되었다면, startMarkMoveBlock.current 를 true로 변환하고,  블록 위치변경을 위한 블록 선택임을 구별하기 위해 setTimeOut 을 사용해서 일정 시간이 지난후에도 startMoveBlock.current가 참일 때 event의 타켓인 요소의 클래스에 on을 추가해 moveTargetBlock을 설정할 준비를 하는 함수 
+   * @param event ToucheEvent
+   */
+  const readyToMoveBlock =(event:TouchEvent<HTMLDivElement>)=>{
+    if(!moveBlock.current) {
+      startMarkMoveBlock.current = true;
+    };
+    setTimeout(() => {
+      if(startMarkMoveBlock.current){
+        const target =event.target  as HTMLElement
+        target.classList.add("on");
+      }
+    }, (2000));
+  }
   return(
     <div
       className ={`${block.type}_blockComponent blockComponent`}
       onClick={onClickBlockContents}
       onMouseOver={showBlockFn}
+      onTouchStart={(event)=>readyToMoveBlock(event)}
+      onTouchEnd={()=>{if(!moveBlock.current)startMarkMoveBlock.current = false}}
+      onTouchCancel={()=> startMarkMoveBlock.current = false}
+      onTouchMove={(event)=>markMoveTargetBlock(event)}
     >
       {block.type === "page" ?
         <button 

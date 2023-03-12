@@ -1,5 +1,5 @@
 import '../assests/frame.css';
-import React, { CSSProperties, Dispatch,  MouseEvent,  SetStateAction, useEffect, useRef, useState } from 'react';
+import React, { CSSProperties, Dispatch,  MouseEvent,  SetStateAction, TouchEvent, useEffect, useRef, useState } from 'react';
 import { Block, MainCommentType, blockSample,  findBlock, findParentBlock, listItem, Page,  makeNewBlock, findPage } from '../modules/notion';
 import {selectionType} from '../containers/NotionRouter';
 import EditableBlock from './EditableBlock';
@@ -263,7 +263,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
    */
   const makeMoveBlockTrue=()=>{
     if(moveTargetBlock!==null){
-      console.log("make mobe block true")
         moveBlock.current=true
     };
   };
@@ -498,6 +497,35 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
       }
     };
   };
+  /**
+   * [moveBlock - mobile] 모바일 브라우저에서, moveTargetBlock의 위치를 변경시키고 moveTargetBlock의 위치에 있는 element인지 여부에 따라 클래스를 변경하고, pointBlockToMoveBlock.current 의 value를 바꾸는 함수 
+   * @param event 
+   */
+  const move_MoveTargetBlockInMobile =(event: TouchEvent<HTMLDivElement>)=>{  
+    if(moveBlock.current){
+      const clientX = event.touches[0].clientX;
+      const clientY = event.touches[0].clientY;
+      document.querySelectorAll(".mainBlock").forEach((element)=>{
+        const domRect = element.getClientRects()[0];
+        const isPointBlock = domRect.top <= clientY && domRect.bottom >= clientY ;
+        if(isPointBlock){
+          element.classList.add("on");
+          const blockId =element.closest(".block")?.id.replace("block_","");
+          if(blockId !==undefined){
+            pointBlockToMoveBlock.current = findBlock(page, blockId).BLOCK;
+          }
+        }else{
+          element.classList.contains("on") && element.classList.remove("on");
+        }
+      }); 
+      move_MoveTargetBlock(clientX, clientY);
+    }
+
+  }
+  /**
+   * .pageContent의 밑부분을 클릭 할때, 해당 페이지에 새로운 블록을 추가하는 함수 
+   * @param event 
+   */
   const onClickPageContentBottom =(event:MouseEvent)=>{
     const pageContent =event.currentTarget
     const clientX = event.clientX;
@@ -815,6 +843,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
         id={`page_${page.id}`}
         style={frameInnerStyle}
         onMouseMove={(event)=>move_MoveTargetBlock(event.clientX, event.clientY)}
+        onTouchMove={(event)=>move_MoveTargetBlockInMobile(event)}
       >
         <div className="page">
           <div 
@@ -975,7 +1004,9 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
             <div 
               className='pageContent_inner'
               onMouseMove={makeMoveBlockTrue}
+              onTouchMove={makeMoveBlockTrue}
               onMouseUp={stopMovingBlock}
+              onTouchEnd={stopMovingBlock}
               >
               {firstBlocks!== null &&
                 firstBlocks
