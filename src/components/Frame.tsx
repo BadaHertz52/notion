@@ -844,7 +844,9 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
         id={`page_${page.id}`}
         style={frameInnerStyle}
         onMouseMove={(event)=>move_MoveTargetBlock(event.clientX, event.clientY)}
+        onMouseUp={stopMovingBlock}
         onTouchMove={(event)=>move_MoveTargetBlockInMobile(event)}
+        onTouchEnd={stopMovingBlock}
       >
         <div className="page">
           <div 
@@ -1006,8 +1008,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
               className='pageContent_inner'
               onMouseMove={makeMoveBlockTrue}
               onTouchMove={makeMoveBlockTrue}
-              onMouseUp={stopMovingBlock}
-              onTouchEnd={stopMovingBlock}
               >
               {firstBlocks!== null &&
                 firstBlocks
