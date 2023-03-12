@@ -119,21 +119,24 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
 
   const [openMobileMenu, setOpenMM]=useState<boolean>(false);
   const maxWidth = innerWidth -60;
-  const fontSize:number = openTemplates? 20: ( smallText? 14: 16);
+  const fontSize:number = isMobile()? 
+                          openTemplates? 1.5 : (smallText? 1 :1.2)
+                          :
+                          openTemplates? 1.25: ( smallText? 0.8: 1);
   const frameInnerStyle:CSSProperties={
     fontFamily:fontStyle ,
-    fontSize: `${fontSize}px`,
+    fontSize: `${fontSize}rem`,
     width: isMobile()? "90%" : (openTemplates? "100%": (fullWidth?  `${maxWidth}px`: ( innerWidth>900?  '900px' : "75%") )) ,
   };
   const pageCommentStyle:CSSProperties ={
-    fontSize:`${fontSize}px`
+    fontSize:`${fontSize}rem`
   }
   const headerStyle: CSSProperties ={
     marginTop: page.header.cover !==null? "10px": "30px" ,
     
   };
   const pageTitleStyle :CSSProperties ={
-    fontSize:`${fontSize * 3}px`
+    fontSize:`${fontSize * 2}rem`
   };
   const size = page.header.iconType=== null? (innerWidth>= 768? 72 : 48) :( innerWidth>= 768? 124: 72);
   const pageIconStyle :CSSProperties={

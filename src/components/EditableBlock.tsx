@@ -63,7 +63,7 @@ export const changeFontSizeBySmallText=(block:Block, fontSize:number):CSSPropert
       break;
   }
   const style :CSSProperties={
-    fontSize :`${baseSize * ratio}px`
+    fontSize :`${baseSize * ratio}rem`
   };
   return style 
 };
