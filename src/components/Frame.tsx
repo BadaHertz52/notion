@@ -815,7 +815,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
         }
     }
   },[openMobileMenu, mobileSideMenuOpen, popup.popup]);
-  
+
   useEffect(()=>{
     if(openComment && (openMobileMenu || mobileSideMenuOpen)){
       if(openMobileMenu){
@@ -835,7 +835,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
       className={ `frame ${newPageFram ? 'newPageFrame': ''} ${isMobile()? 'mobile' : 'web'}`}
       ref={frameRef}
       style={{
-        overflowY : (openMobileMenu || (isMobile() &&  popup.popup)) ? "hidden" : "scroll"
+        overflowY : (openMobileMenu || (isMobile() &&  (popup.popup || moveTargetBlock !==null))) ? "hidden" : "scroll"
       }}
     >
       <div 
