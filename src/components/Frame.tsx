@@ -505,6 +505,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
     if(moveBlock.current){
       const clientX = event.touches[0].clientX;
       const clientY = event.touches[0].clientY;
+      frameHtml?.scrollTo(0,clientY);
       document.querySelectorAll(".mainBlock").forEach((element)=>{
         const domRect = element.getClientRects()[0];
         const isPointBlock = domRect.top <= clientY && domRect.bottom >= clientY ;
