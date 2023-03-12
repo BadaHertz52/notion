@@ -2,7 +2,7 @@ import React, { CSSProperties, Dispatch, MouseEvent, MutableRefObject, SetStateA
 import { Block, MainCommentType, findBlock, Page,  } from '../modules/notion';
 import { Command } from './Frame';
 import {selectionType} from '../containers/NotionRouter';
-import BlockComponent, { isMobile, setTemplateItem } from './BlockComponent';
+import BlockComponent, { setTemplateItem } from './BlockComponent';
 import { GoPrimitiveDot } from 'react-icons/go';
 import { GrCheckbox, GrCheckboxSelected } from 'react-icons/gr';
 import {  MdPlayArrow } from 'react-icons/md';
@@ -105,7 +105,7 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
    * [moveBlock] 현재 block을  moveTargetBlock (위치를 변경시킬 block)의 위치변경의 기준이 되는 pointBlock 지정을 취소시키는 함수 
    * @param event 
    */
-  const canclePointBlock=(event:MouseEvent<HTMLDivElement>|TouchEvent<HTMLDivElement>)=>{
+  const canclePointBlock=(event:MouseEvent<HTMLDivElement>)=>{
     if(moveBlock.current && pointBlockToMoveBlock.current?.id=== block.id){
       event.currentTarget.classList.remove("on");
     }
@@ -310,7 +310,7 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
             <div 
               className="mainBlock"
               onMouseOver={(event)=>markPointBlock(event, block)}
-              onMouseLeave={canclePointBlock}
+              onMouseLeave={(event)=>canclePointBlock(event)}
             >
               <div className='mainBlock_block'>
               {block.type ==="todo" &&
