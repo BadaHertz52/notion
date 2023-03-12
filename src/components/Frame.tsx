@@ -521,8 +521,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
       }); 
       move_MoveTargetBlock(clientX, clientY);
     }
-
-  }
+};
   /**
    * .pageContent의 밑부분을 클릭 할때, 해당 페이지에 새로운 블록을 추가하는 함수 
    * @param event 
@@ -836,7 +835,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
       className={ `frame ${newPageFram ? 'newPageFrame': ''} ${isMobile()? 'mobile' : 'web'}`}
       ref={frameRef}
       style={{
-        overflowY : (openMobileMenu || (isMobile() &&  (popup.popup || moveTargetBlock !==null))) ? "hidden" : "scroll"
+        overflowY : (openMobileMenu || (isMobile() &&  (popup.popup ))) ? "hidden" : "scroll"
       }}
     >
       <div 
