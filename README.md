@@ -482,7 +482,7 @@ npm i
 
   * blockStyler - mobile browser
 
-<img alt="blockStyler_mobile" width="50%" src="./image/readMeFile/m_b%20.gif"/>
+<img alt="blockStyler_mobile" width="40%" src="./image/readMeFile/m_b%20.gif"/>
   
 * 다른 페이지로 블럭 이동
 
@@ -492,14 +492,20 @@ npm i
     src="https://user-images.githubusercontent.com/69838872/209688356-e2cedb8f-dd72-47dc-9661-1cb6b36b5376.gif"
 />
 
-* 블록 위치 변경 
+* 블록 위치 변경 - web browser
 
 <img 
     ait="changePosition"
     width="50%"
     src="https://user-images.githubusercontent.com/69838872/209688434-5db37fcc-7987-460b-80a7-43db53d410c3.gif"
 />
+* 블록 위치 변경 - mobile browser
 
+<img 
+    ait="changePosition"
+    width="40%"
+    src="./image/readMeFile/moveBlock_mobile.gif"
+/>
  * 기타: 키보드를 통한 조작, 블럭 삭제, 블럭 내용 선택등등
  
 <img 
@@ -511,7 +517,7 @@ npm i
   * menu - mobile browswer
   
 <img 
-  width="50%" 
+  width="40%" 
   alt="menu in mobile" 
   src="./image/readMeFile/mobile_m.gif"
 />
@@ -519,7 +525,7 @@ npm i
   * sideMenu of menu  - mobile browswer
   
 <img 
-  width="50%" 
+  width="40%" 
   alt="sideMenu of menu in mobile" 
   src="./image/readMeFile/m_mm.gif"
 />
@@ -535,7 +541,9 @@ npm i
 
   * 모바일 브라우저에서도 block의 contents 중 특정 글자를 선택할 때 해당 글자에 대한 BlockStyler 의 기능을 사용 가능
   
-  * block 전체 뿐만 아니라 일부 내용에 대해서도 commment 추가 할 수 있음 
+  * block 전체 뿐만 아니라 일부 내용에 대해서도 commment 추가 할 수 있음
+   
+  * 모바일 브라우저에서 블럭간 이동이 안되는 오류 수정   
 
 -------------------------------------
 * 🔎 [Notion 프로젝트 후기 보러가기](https://velog.io/@badahertz52/Notion-프로젝트-후기)
