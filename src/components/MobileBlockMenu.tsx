@@ -58,29 +58,19 @@ const MobileBlockMenu =({
        * 가상 키보드롤 인해 가려지는 부분의 y축 시작점 (기준: window)
        */
       const pointBlinding = frameDomRect.height - heightGap;
-
-      if(pageHtml !==null && pageHtml !==undefined){
-        const pageHtmlDomRect =pageHtml.getClientRects()[0];
-        const gap =  blockElementDomRect.bottom + (16 + 32) - pointBlinding;
-        if( gap >=0){
-          const newWidthOfMovement = -pageHtmlDomRect.y + gap ;
-          pageHtml.setAttribute("style", `transform:translateY(-${newWidthOfMovement}px)`);
-          newTop = blockElement.getClientRects()[0].bottom + 16;
-        };
-          setMBMstyle({
-            top:`${newTop}px`,
-            left:`${left}px`,
-            maxWidth: pageContentInnerDomRect.width > 260 ? "280px" : `${pageContentInnerDomRect.width  }px`
-          })
-      }
+      const gap =  blockElementDomRect.bottom + (16 + 32) - pointBlinding;
+      if( gap >=0){
+        frameHtml.scrollTo(0 ,blockElementDomRect.bottom + 10 )
+        newTop = blockElement.getClientRects()[0].bottom + 16;
+      };
+        setMBMstyle({
+          top:`${newTop}px`,
+          left:`${left}px`,
+          maxWidth: pageContentInnerDomRect.width > 260 ? "280px" : `${pageContentInnerDomRect.width  }px`
+        })
     };
   };
-  window.addEventListener('resize', ()=>{
-    const innerHeight =window.innerHeight;
-    if(innerHeight === initialInnerHeight && pageHtml !==null && pageHtml!==undefined){
-      pageHtml.setAttribute("style", 'transform:translateY(0)');
-    }
-  });
+
   const openMobileSideMenu =(what:msmWhatType)=>{
     setMobileSideMenu({
       block:block,
