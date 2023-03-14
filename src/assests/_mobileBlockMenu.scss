@@ -90,7 +90,7 @@
   .menu .mainMenu,
   .menu .sideMenu,
   #linkLoader{
-    @include resetModalStyle;
+    @include resetModal;
     position: relative;
     width: 100vw;
     height: inherit;
