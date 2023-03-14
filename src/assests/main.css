@@ -1977,7 +1977,7 @@ a:link, a:active, a:visited {
   color: inherit;
 }
 
-#iconPopup {
+#iconModal {
   width: 320px;
   display: flex;
   flex-direction: column;
@@ -1995,19 +1995,19 @@ a:link, a:active, a:visited {
   left: 0;
   width: 170x;
 }
-#iconPopup::-webkit-scrollbar-thumb {
+#iconModal::-webkit-scrollbar-thumb {
   background: #D3D1CB;
 }
-#iconPopup::-webkit-scrollbar-track {
+#iconModal::-webkit-scrollbar-track {
   background: #EDECE9;
 }
-#iconPopup button:hover {
+#iconModal button:hover {
   background-color: #EDECE9;
 }
-#iconPopup .header, #iconPopup .body {
+#iconModal .header, #iconModal .body {
   padding: 10px;
 }
-#iconPopup .header {
+#iconModal .header {
   width: 100%;
   height: -moz-fit-content;
   height: fit-content;
@@ -2017,21 +2017,21 @@ a:link, a:active, a:visited {
   font-size: 14px;
   border-bottom: 1px solid rgb(141, 141, 141);
 }
-#iconPopup .header > div {
+#iconModal .header > div {
   display: flex;
 }
-#iconPopup .header > div button:first-child {
+#iconModal .header > div button:first-child {
   margin-right: 5px;
 }
-#iconPopup .header button {
+#iconModal .header button {
   display: flex;
   align-items: center;
   padding: 2px;
 }
-#iconPopup .header .categoryBtn, #iconPopup .header > div:last-child {
+#iconModal .header .categoryBtn, #iconModal .header > div:last-child {
   padding-bottom: 6px;
 }
-#iconPopup .header .categoryBtn {
+#iconModal .header .categoryBtn {
   width: -moz-fit-content;
   width: fit-content;
   display: flex;
@@ -2039,13 +2039,13 @@ a:link, a:active, a:visited {
   justify-content: space-between;
   position: relative;
 }
-#iconPopup .header > div:last-child {
+#iconModal .header > div:last-child {
   color: rgb(141, 141, 141);
 }
-#iconPopup .header > div:last-child button {
+#iconModal .header > div:last-child button {
   color: inherit;
 }
-#iconPopup .header .bottomLine {
+#iconModal .header .bottomLine {
   position: absolute;
   top: calc(100% - 1.25px);
   left: 0;
@@ -2053,21 +2053,21 @@ a:link, a:active, a:visited {
   height: 2.5px;
   background-color: black;
 }
-#iconPopup .emojiBtn {
+#iconModal .emojiBtn {
   width: 25px;
   height: 25px;
   margin-right: 10px;
   margin-bottom: 10px;
 }
-#iconPopup .emojiBtn img {
+#iconModal .emojiBtn img {
   width: 100%;
   height: 100%;
 }
-#iconPopup .body {
+#iconModal .body {
   text-align: center;
   height: 135px;
 }
-#iconPopup .imageIconBody {
+#iconModal .imageIconBody {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -2075,11 +2075,11 @@ a:link, a:active, a:visited {
   width: 100%;
   height: 100%;
 }
-#iconPopup .imageIconBody div {
+#iconModal .imageIconBody div {
   color: rgb(141, 141, 141);
   font-size: 12px;
 }
-#iconPopup .imageIconInputLabel {
+#iconModal .imageIconInputLabel {
   width: 80%;
   padding: 5px;
   background-color: rgb(46, 170, 220);
@@ -2088,10 +2088,10 @@ a:link, a:active, a:visited {
   text-align: center;
   margin-bottom: 8px;
 }
-#iconPopup .imageIconInputLabel:hover {
+#iconModal .imageIconInputLabel:hover {
   background-color: rgb(40, 140, 180);
 }
-#iconPopup #imageIconInput {
+#iconModal #imageIconInput {
   position: absolute;
   top: -99999px;
 }
@@ -2490,7 +2490,7 @@ a:link, a:active, a:visited {
 
 .mainMenu,
 .sideMenu,
-#popupMenu {
+#modalMenu {
   width: 320px;
   display: flex;
   flex-direction: column;
@@ -2508,36 +2508,36 @@ a:link, a:active, a:visited {
 }
 .mainMenu::-webkit-scrollbar-thumb,
 .sideMenu::-webkit-scrollbar-thumb,
-#popupMenu::-webkit-scrollbar-thumb {
+#modalMenu::-webkit-scrollbar-thumb {
   background: #D3D1CB;
 }
 .mainMenu::-webkit-scrollbar-track,
 .sideMenu::-webkit-scrollbar-track,
-#popupMenu::-webkit-scrollbar-track {
+#modalMenu::-webkit-scrollbar-track {
   background: #EDECE9;
 }
 
-#popupMenu {
+#modalMenu {
   position: absolute;
   font-size: 14px;
   padding: 3px;
   z-index: 30;
   display: flex;
 }
-#popupMenu .commentInput {
+#modalMenu .commentInput {
   width: calc(100% - 20px);
   margin: 10PX;
   box-sizing: border-box;
   flex-direction: row;
 }
 
-.frame.mobile #popupMenu {
+.frame.mobile #modalMenu {
   height: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.frame.mobile #popupMenu .commentInput {
+.frame.mobile #modalMenu .commentInput {
   height: 100%;
   margin: 5px;
 }
@@ -4792,7 +4792,7 @@ a:link, a:active, a:visited {
 #rename > .inner .rename_title {
   width: calc(100% - 2rem);
 }
-#rename #iconPopup {
+#rename #iconModal {
   position: relative;
   top: 0;
   margin-top: 10px;

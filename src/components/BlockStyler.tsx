@@ -103,7 +103,7 @@ return newBlock
 export type StylerCommonProps = MenuAndBlockStylerCommonProps& {
   pagesId:string[],
   recentPagesId:string[]|null,
-  setPopupStyle:Dispatch<React.SetStateAction<React.CSSProperties | undefined>>,
+  setModalStyle:Dispatch<React.SetStateAction<React.CSSProperties | undefined>>,
   setCommand: React.Dispatch<React.SetStateAction<Command>>,
   command: Command,
   openMobileBlockMenu:boolean,
@@ -116,7 +116,7 @@ export type BlockStylerProps = StylerCommonProps& {
   setSelection:Dispatch<SetStateAction<selectionType|null>>|null,
   setOpenMobileBlockStyler:Dispatch<SetStateAction<boolean>>|null
 }
-const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, block, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage, editPage,popup,setPopup, setCommentBlock,setTargetPageId,selection,setSelection ,setPopupStyle,command ,setCommand, frameHtml ,openMobileBlockMenu ,setMobileSideMenu, setMobileSideMenuOpen, setOpenMM,setOpenMobileBlockStyler}:BlockStylerProps)=>{
+const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, block, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage, editPage,modal,setModal, setCommentBlock,setTargetPageId,selection,setSelection ,setModalStyle,command ,setCommand, frameHtml ,openMobileBlockMenu ,setMobileSideMenu, setMobileSideMenuOpen, setOpenMM,setOpenMobileBlockStyler}:BlockStylerProps)=>{
 
   const bold="bold";
   const initial="initial";
@@ -221,12 +221,12 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
         const left =pageContentDomRect.left -frameDomRect.left; 
         const bottom = (innerHeight- mainBlockDomRect.top) + 8 ;
         (remainHeight >10 || isMobile()) ?
-        setPopupStyle({
+        setModalStyle({
           top:`${top}px`,
           left: `${left}px`,
         })
         :
-        setPopupStyle({
+        setModalStyle({
           bottom:`${bottom}px`,
           left: `${left}px`,
         });
@@ -243,9 +243,9 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
   };
   const onClickCommentBtn=()=>{
     changeCommentStyle();
-    setPopup({
-      popup:true,
-      what:"popupComment"
+    setModal({
+      open:true,
+      what:"modalComment"
     });
     setCommentBlock(block);
     setSelection !==null && setSelection(null);
@@ -373,7 +373,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
     }
   };
   const executeCloseBlockStyler =(event:globalThis.MouseEvent|TouchEvent)=>{
-    const commentInputHtml =document.getElementById("popupMenu")?.querySelector(".commentInput" )
+    const commentInputHtml =document.getElementById("modalMenu")?.querySelector(".commentInput" )
     if(document.getElementById("blockStyler") !== null &&
     (commentInputHtml == null || commentInputHtml === undefined)&&
       document.getElementById("mobileSideMenu") === null 
@@ -643,8 +643,8 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
             editPage={editPage}
             duplicatePage={duplicatePage}
             movePageToPage={movePageToPage}
-            popup={popup}
-            setPopup={setPopup}
+            modal={modal}
+            setModal={setModal}
             setCommentBlock={setCommentBlock}
             setTargetPageId={setTargetPageId}
             setOpenRename= {null}

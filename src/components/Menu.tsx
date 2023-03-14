@@ -5,7 +5,7 @@ import { CSSProperties } from 'styled-components';
 import ColorMenu from './ColorMenu';
 import { HiOutlineDuplicate, HiOutlinePencilAlt } from 'react-icons/hi';
 import PageMenu from './PageMenu';
-import { popupComment, popupMoveToPage, PopupType } from '../containers/EditorContainer';
+import { modalComment, modalMoveToPage, ModalType } from '../containers/EditorContainer';
 import Time from './Time';
 
 //icon
@@ -33,8 +33,8 @@ export type MenuAndBlockStylerCommonProps={
   editPage: (pageId: string, newPage: Page) => void,
   duplicatePage: (targetPageId: string) => void,
   movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
-  setPopup :Dispatch<SetStateAction<PopupType>> ,
-  popup:PopupType,
+  setModal :Dispatch<SetStateAction<ModalType>> ,
+  modal:ModalType,
   setCommentBlock: Dispatch<SetStateAction<Block | null>>,
   setTargetPageId: Dispatch<SetStateAction<string>>,
   frameHtml: HTMLDivElement | null,
@@ -48,7 +48,7 @@ export type MenuProps
   style:CSSProperties|undefined
 };
 
-const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,changeBlockToPage,changePageToBlock ,editBlock, deleteBlock ,duplicatePage,movePageToPage,editPage ,setPopup ,popup ,setCommentBlock ,setTargetPageId ,setOpenRename ,frameHtml,setSelection, style }:MenuProps)=>{
+const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,changeBlockToPage,changePageToBlock ,editBlock, deleteBlock ,duplicatePage,movePageToPage,editPage ,setModal ,modal ,setCommentBlock ,setTargetPageId ,setOpenRename ,frameHtml,setSelection, style }:MenuProps)=>{
   const templateHtml= document.getElementById("template");
   const blockFnElement = templateHtml !==null? templateHtml.querySelector(".blockFn") as HTMLElement|null : document.querySelector(".blockFn") as HTMLElement|null ;
   const menuRef =useRef<HTMLDivElement>(null);
@@ -130,14 +130,14 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
     };
   },[turnInToPage, turnInto, color]);
 
-  let popupStyle = blockFnElement?.getAttribute("style");
+  let modalStyle = blockFnElement?.getAttribute("style");
 
   const recoveryMenuState=()=>{
     turnInto &&setTurnInto(false);
     turnInToPage && setTurnIntoPage(false);
     color && setColor(false);
-    popup.popup && setPopup({
-      popup:false,
+    modal.open && setModal({
+      open:false,
       what: null
     })
   };
@@ -161,19 +161,19 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
   const onClickMoveTo=()=>{
     setOpenMenu(false);
     setSelection!==null && setSelection(null);
-    sessionStorage.setItem("popupStyle", JSON.stringify(popupStyle));
-    setPopup({
-      popup:true,
-      what: popupMoveToPage
+    sessionStorage.setItem("modalStyle", JSON.stringify(modalStyle));
+    setModal({
+      open:true,
+      what: modalMoveToPage
     })
   };
   const onOpenCommentInput=()=>{
     setCommentBlock(block);
     setOpenMenu(false);
     setSelection!==null && setSelection(null);
-    setPopup({
-      popup:true,
-      what:popupComment
+    setModal({
+      open:true,
+      what:modalComment
     });
 
 

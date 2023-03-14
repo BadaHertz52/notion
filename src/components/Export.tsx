@@ -9,7 +9,7 @@ type ExportProps= FrameProps &{
   setOpenExport:Dispatch<SetStateAction<boolean>>
 }
 const Export =({page,pagesId,pages,firstlist, recentPagesId ,setOpenExport, userName,editBlock,addBlock,changeBlockToPage,changePageToBlock,changeToSub,raiseBlock,deleteBlock,addPage,editPage, duplicatePage ,movePageToPage ,commentBlock,openComment ,setTargetPageId, setRoutePage, 
-  setOpenComment,setCommentBlock , popup,setPopup, showAllComments,smallText,fullWidth,discardEdit,setDiscardEdit, openTemplates , setOpenTemplates, fontStyle ,mobileSideMenuOpen, setMobileSideMenuOpen, setMobileSideMenu}:ExportProps)=>{
+  setOpenComment,setCommentBlock , modal,setModal, showAllComments,smallText,fullWidth,discardEdit,setDiscardEdit, openTemplates , setOpenTemplates, fontStyle ,mobileSideMenuOpen, setMobileSideMenuOpen, setMobileSideMenu}:ExportProps)=>{
   const html ="HTML";
   const pdf="PDF";
   const markdown="Markdown";
@@ -132,8 +132,8 @@ const Export =({page,pagesId,pages,firstlist, recentPagesId ,setOpenExport, user
                 movePageToPage={movePageToPage}
                 commentBlock={commentBlock}
                 openComment={openComment}
-                popup={popup}
-                setPopup={setPopup}
+                modal={modal}
+                setModal={setModal}
                 setRoutePage={setRoutePage}
                 setTargetPageId={setTargetPageId}
                 setOpenComment={setOpenComment}

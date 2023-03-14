@@ -296,7 +296,7 @@ npm i
 * Frame
   * page를 화면에 보여줌
 
-* IconPopup
+* IconModal
   * 아이콘을 추가,수정 시 사용됨
 
 * ImageContent

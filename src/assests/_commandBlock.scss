@@ -8,7 +8,7 @@
   }
 }
 #commandBlock{
-  @include popupMenu;
+  @include modalMenu;
   @include webkitScroll;
   overflow-y: scroll;
   margin-top: 1rem;

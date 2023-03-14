@@ -101,7 +101,7 @@
   position: absolute;
   z-index: 20;
   padding-bottom: 0;
-  @include popupMenu;
+  @include modalMenu;
   overflow-y: scroll;
   .comments_comments {
     width: 100%;
@@ -299,7 +299,7 @@ form button{
   }
 }
 #tool_more{
-  @include popupMenu;
+  @include modalMenu;
   width: 200px;
   z-index: 25;
   button{

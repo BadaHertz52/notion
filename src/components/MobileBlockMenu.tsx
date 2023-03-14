@@ -14,7 +14,7 @@ type MobileBlockMenuProps = Omit<StylerCommonProps , 'block'> & {
 };
 
 const MobileBlockMenu =({
-  pages, pagesId, firstlist, userName, page,recentPagesId, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage, editPage,popup,setPopup, setCommentBlock,setTargetPageId,setPopupStyle,command ,setCommand, frameHtml ,openMobileBlockMenu ,setMobileSideMenu, setMobileSideMenuOpen, setOpenMM  , initialInnerHeight }:MobileBlockMenuProps)=>{
+  pages, pagesId, firstlist, userName, page,recentPagesId, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage, editPage,modal,setModal, setCommentBlock,setTargetPageId,setModalStyle,command ,setCommand, frameHtml ,openMobileBlockMenu ,setMobileSideMenu, setMobileSideMenuOpen, setOpenMM  , initialInnerHeight }:MobileBlockMenuProps)=>{
   const pageHtml = frameHtml?.querySelector('.page') as HTMLElement|null;
   const item = sessionStorage.getItem('mobileMenuBlock');
   const [mbmStyle,setMBMstyle]=useState<CSSProperties|undefined>(undefined);
@@ -110,11 +110,11 @@ const MobileBlockMenu =({
   };
   const onTouchCommentBtn =()=>{
     setCommentBlock(block);
-    setPopup({
-      popup:true,
-      what:'popupComment'
+    setModal({
+      open:true,
+      what:'modalComment'
     });
-    setPopupStyle(mbmStyle);
+    setModalStyle(mbmStyle);
     const pageHtml =frameHtml?.querySelector(".page");
     if(pageHtml !== null && frameHtml !==null){
       pageHtml?.setAttribute("style", 
@@ -263,9 +263,9 @@ useEffect(()=>{
           editPage={editPage}
           duplicatePage={duplicatePage}
           movePageToPage={movePageToPage}
-          popup={popup}
-          setPopup={setPopup}
-          setPopupStyle={setPopupStyle}
+          modal={modal}
+          setModal={setModal}
+          setModalStyle={setModalStyle}
           command={command}
           setCommand={setCommand}
           setCommentBlock={setCommentBlock}

@@ -24,7 +24,7 @@ import { IoArrowRedoOutline } from 'react-icons/io5';
 
 
 
-export const closePopup =(elementId:string ,setState:Dispatch<SetStateAction<boolean>> , event:globalThis.MouseEvent)=>{
+export const closeModal =(elementId:string ,setState:Dispatch<SetStateAction<boolean>> , event:globalThis.MouseEvent)=>{
   const eventTarget =event.target as Element|null;
   if(eventTarget?.id !=="imageIconInput"){
     const element = document.getElementById(elementId);
@@ -348,14 +348,14 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
     if(openSideMoreMenu){
       const target =event.target as HTMLElement|null; 
       if(target?.parentElement?.className !=="resizeBar"){
-        closePopup("moreFn",setOpenSideMoreMenu, event );
+        closeModal("moreFn",setOpenSideMoreMenu, event );
         setMoreFnStyle(undefined);
       }
     };
-    openPageMenu && closePopup("pageMenu", setOpenPageMenu, event);
-    openRename && closePopup("rename", setOpenRename ,event);
+    openPageMenu && closeModal("pageMenu", setOpenPageMenu, event);
+    openRename && closeModal("rename", setOpenRename ,event);
 
-    openTrash && closePopup("trash",setOpenTrash, event );
+    openTrash && closeModal("trash",setOpenTrash, event );
   } );
 
   const onClickToDelete=()=>{

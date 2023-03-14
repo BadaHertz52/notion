@@ -1,6 +1,6 @@
 @import './common';
 #mobileBlockMenu{
-  @include popupMenu;
+  @include modalMenu;
   position:absolute;
   left:5%;
   min-width:250px ;
@@ -90,7 +90,7 @@
   .menu .mainMenu,
   .menu .sideMenu,
   #linkLoader{
-    @include resetPopupMenu;
+    @include resetModalStyle;
     position: relative;
     width: 100vw;
     height: inherit;

@@ -5,11 +5,11 @@
 }
 .mainMenu,
 .sideMenu,
-#popupMenu{
-  @include popupMenu;
+#modalMenu{
+  @include modalMenu;
   width: fit-content
 }
-#popupMenu{
+#modalMenu{
   position: absolute;
   font-size: 14px;
   padding: 3px;
@@ -23,7 +23,7 @@
   }
 }
 .frame.mobile{
-  #popupMenu{
+  #modalMenu{
     height: 60px;
     display: flex;
     justify-content: center;
@@ -35,7 +35,7 @@
   }
 }
 .mainMenu {
-  @include popupMenu;
+  @include modalMenu;
   width:240px;
   max-height: inherit;
   overflow-y: scroll;
@@ -92,7 +92,7 @@
   }
 }
 .menu_color{
-  @include popupMenu;
+  @include modalMenu;
   width: 200px;
   color: initial;
   font-weight: initial;
@@ -139,7 +139,7 @@
   background-color: #ffff;
 }
 #pageMenu {
-  @include popupMenu;
+  @include modalMenu;
   background-color: initial;
   .inner{
     width: 100%;

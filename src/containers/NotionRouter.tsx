@@ -12,7 +12,7 @@ import { RootState } from '../modules';
 import { add_block, add_page, add_template, Block, cancle_edit_template, change_block_to_page, change_page_to_block, change_to_sub, clean_trash, delete_block, delete_page, delete_template, duplicate_page, edit_block, edit_page,  emojiPath,  findPage,  IconType,  listItem,  move_page_to_page, Page, pageSample, raise_block, restore_page } from '../modules/notion';
 import { change_side, SideAppear } from '../modules/side';
 import { add_favorites, add_recent_page, clean_recent_page, remove_favorites } from '../modules/user';
-import EditorContainer, { PopupType } from './EditorContainer';
+import EditorContainer, { ModalType } from './EditorContainer';
 import SideBarContainer from './SideBarContainer';
 export const ms_turnInto ='ms_turnInto';
 export const ms_color ='ms_color';
@@ -122,8 +122,8 @@ const NotionRouter =()=>{
   const [openTemplates, setOpenTemplates]=useState<boolean>(false);
   const [fontStyle, setFontStyle]=useState<fontStyleType>(defaultFontFamily);
   const [loading, setLoading]=useState<boolean>(true);
-  const [popup, setPopup]=useState<PopupType>({
-    popup:false,
+  const [modal, setModal]=useState<ModalType>({
+    open:false,
     what:null
   });
   
@@ -450,8 +450,8 @@ const NotionRouter =()=>{
                       discardEdit={discard_edit}
                       setDiscardEdit={setDiscardEdit}
                       setOpenExport={setOpenExport}
-                      popup={popup}
-                      setPopup={setPopup}
+                      modal={modal}
+                      setModal={setModal}
                       openComment={openComment}
                       setOpenComment={setOpenComment}
                       commentBlock={commentBlock}
@@ -494,8 +494,8 @@ const NotionRouter =()=>{
             movePageToPage={movePageToPage}
             commentBlock={commentBlock}
             openComment={openComment}
-            popup={popup}
-            setPopup={setPopup}
+            modal={modal}
+            setModal={setModal}
             setTargetPageId={setTargetPageId}
             setRoutePage={setRoutePage}
             setOpenComment={setOpenComment}
@@ -542,8 +542,8 @@ const NotionRouter =()=>{
               commentBlock={commentBlock}
               openComment={openComment}
               setOpenComment={setOpenComment}
-              popup={popup}
-              setPopup={setPopup}
+              modal={modal}
+              setModal={setModal}
               openTemplates={openTemplates}
               setOpenTemplates={setOpenTemplates}
               setCommentBlock ={setCommentBlock}

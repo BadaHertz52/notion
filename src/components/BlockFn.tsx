@@ -6,7 +6,7 @@ import Rename from './Rename';
 
 import { AiOutlinePlus } from 'react-icons/ai';
 import { CgMenuGridO } from 'react-icons/cg';
-import { PopupType } from '../containers/EditorContainer';
+import { ModalType } from '../containers/EditorContainer';
 import { setTemplateItem } from './BlockComponent';
 
 type BlockFnProp ={
@@ -29,11 +29,11 @@ type BlockFnProp ={
   setMoveTargetBlock :Dispatch<SetStateAction<Block| null>>,
   moveTargetBlock:Block|null,
   setCommentBlock: Dispatch<SetStateAction<Block|null>>,
-  popup:PopupType,
-  setPopup: Dispatch<SetStateAction<PopupType>>,
+  modal:ModalType,
+  setModal: Dispatch<SetStateAction<ModalType>>,
   menuOpen:boolean,
   setOpenMenu:Dispatch<SetStateAction<boolean>>,
-  setPopupStyle:Dispatch<SetStateAction<CSSProperties|undefined>>,
+  setModalStyle:Dispatch<SetStateAction<CSSProperties|undefined>>,
   setTargetPageId: Dispatch<SetStateAction<string>>,
 };
 
@@ -77,7 +77,7 @@ export const detectRange =(event:MouseEvent| React.MouseEvent , targetArea:DOMRe
   return (inner_x && inner_y);
 };
 
-const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage, editBlock,changeBlockToPage,changePageToBlock, deleteBlock ,addPage,editPage, movePageToPage,  setMoveTargetBlock,moveTargetBlock,frameHtml ,setCommentBlock, popup, setPopup ,menuOpen,setOpenMenu ,setPopupStyle ,setTargetPageId }:BlockFnProp)=>{
+const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage, editBlock,changeBlockToPage,changePageToBlock, deleteBlock ,addPage,editPage, movePageToPage,  setMoveTargetBlock,moveTargetBlock,frameHtml ,setCommentBlock, modal, setModal ,menuOpen,setOpenMenu ,setModalStyle ,setTargetPageId }:BlockFnProp)=>{
   const [openRename, setOpenRename] =useState<boolean>(false);
 
   const [blockFnTargetBlock, setBlockFnTargetBlock]=useState<Block|null>(null);
@@ -107,8 +107,8 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
     moveTargetBlock!==null&& setMoveTargetBlock(null);
     const sessionItem = sessionStorage.getItem("blockFnTargetBlock") ;
     menuOpen && setOpenMenu(false); 
-    popup.popup && setPopup({
-      popup:false,
+    modal.open && setModal({
+      open:false,
       what:null
     })
     if(sessionItem!==null && !menuOpen){
@@ -128,20 +128,20 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
   },[openRename, blockFnTargetBlock, pagesId, pages]);
 
   useEffect(()=>{
-    const popupStyleItem =sessionStorage.getItem("popupStyle");
-    if(popup.popup && popupStyleItem !==null){
-      const firstPoint= popupStyleItem.indexOf("px;");
-      const secondPosint =popupStyleItem.indexOf("left:");
-      const lastPosint =popupStyleItem.lastIndexOf("px");
-      const top =Number(popupStyleItem.slice(5, firstPoint))+24;
-      const left =Number(popupStyleItem.slice(secondPosint+5, lastPosint))+45 ;
-      setPopupStyle({
+    const modalStyleItem =sessionStorage.getItem("modalStyle");
+    if(modal.open && modalStyleItem !==null){
+      const firstPoint= modalStyleItem.indexOf("px;");
+      const secondPosint =modalStyleItem.indexOf("left:");
+      const lastPosint =modalStyleItem.lastIndexOf("px");
+      const top =Number(modalStyleItem.slice(5, firstPoint))+24;
+      const left =Number(modalStyleItem.slice(secondPosint+5, lastPosint))+45 ;
+      setModalStyle({
         top: `${top}px`,
         left:`${left}px`
       });
-      sessionStorage.removeItem("popupStyle")
+      sessionStorage.removeItem("modalStyle")
     }
-  },[popup.popup, setPopupStyle]);
+  },[modal.open, setModalStyle]);
 
   useEffect(()=>{
     const innerHeight =window.innerHeight;
@@ -199,8 +199,8 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
             editPage={editPage}
             duplicatePage={duplicatePage}
             movePageToPage={movePageToPage}
-            popup={popup}
-            setPopup={setPopup}
+            modal={modal}
+            setModal={setModal}
             setCommentBlock={setCommentBlock}
             setTargetPageId={setTargetPageId}
             setOpenRename= {setOpenRename}

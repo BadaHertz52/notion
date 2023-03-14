@@ -6,7 +6,7 @@ import { HiOutlinePencil } from 'react-icons/hi';
 import { IoArrowUpCircleSharp, IoCheckmarkCircle, IoTrashOutline } from 'react-icons/io5';
 import Time from './Time';
 import { detectRange } from './BlockFn';
-import { PopupType } from '../containers/EditorContainer';
+import { ModalType } from '../containers/EditorContainer';
 import { IoMdCloseCircle } from 'react-icons/io';
 import { setTemplateItem } from './BlockComponent';
 import { removeSelected } from './BlockStyler';
@@ -107,7 +107,7 @@ type CommentInputProps={
    */
   allComments:MainCommentType[]|null,
   setAllComments: Dispatch<SetStateAction<MainCommentType[] | null>>|null,
-  setPopup:Dispatch<SetStateAction<PopupType>>| null,
+  setModal:Dispatch<SetStateAction<ModalType>>| null,
   setEdit:Dispatch<SetStateAction<boolean>>|null,
   templateHtml: HTMLElement | null ,
   frameHtml :HTMLElement|null
@@ -127,7 +127,7 @@ type CommentBlockProps ={
   moreOpen:boolean,
   setMoreOpen:Dispatch<SetStateAction<boolean>>,
   setToolMoreStyle:Dispatch<SetStateAction<CSSProperties | undefined>>,
-  setPopup:Dispatch<SetStateAction<PopupType>>| null,
+  setModal:Dispatch<SetStateAction<ModalType>>| null,
   discardEdit:boolean,
   setDiscardEdit:Dispatch<SetStateAction<boolean>>,
   templateHtml: HTMLElement | null,
@@ -176,7 +176,7 @@ const closeToolMore=(event:MouseEvent| globalThis.MouseEvent ,setMoreOpen:Dispat
   };
 };
 
-export const CommentInput =({userName, pageId, page ,mainComment, subComment,editBlock,editPage, commentBlock ,allComments, setAllComments,setPopup, addOrEdit,setEdit ,templateHtml ,frameHtml}:CommentInputProps)=>{
+export const CommentInput =({userName, pageId, page ,mainComment, subComment,editBlock,editPage, commentBlock ,allComments, setAllComments,setModal, addOrEdit,setEdit ,templateHtml ,frameHtml}:CommentInputProps)=>{
   const editTime =JSON.stringify(Date.now());
   const userNameFirstLetter =userName.substring(0,1).toUpperCase();
   const [editTargetComment, setEditTargetComment]=useState<MainCommentType|SubCommentType|null>(null) ;
@@ -454,8 +454,8 @@ export const CommentInput =({userName, pageId, page ,mainComment, subComment,edi
   function closeInput (){
     setEdit !==null && setEdit(false);
     setText("");
-    setPopup !==null&& setPopup({
-      popup:false,
+    setModal !==null&& setModal({
+      open:false,
       what:null
     })
   };
@@ -816,7 +816,7 @@ const CommentTool =({mainComment , comment,block, page ,pageId ,editBlock ,editP
   )
 };
 
-const CommentBlock =({comment ,mainComment ,block ,page ,pageId, userName,editBlock ,editPage,setPopup ,frameHtml,allComments,setAllComments , moreOpen ,setMoreOpen ,setToolMoreStyle  ,discardEdit,setDiscardEdit, templateHtml , showAllComments}:CommentBlockProps)=>{
+const CommentBlock =({comment ,mainComment ,block ,page ,pageId, userName,editBlock ,editPage,setModal ,frameHtml,allComments,setAllComments , moreOpen ,setMoreOpen ,setToolMoreStyle  ,discardEdit,setDiscardEdit, templateHtml , showAllComments}:CommentBlockProps)=>{
   const firstLetter = comment.userName.substring(0,1).toUpperCase();
   const [edit, setEdit]=useState<boolean>(false);
   const editCommentItem= sessionStorage.getItem("editComment");
@@ -900,7 +900,7 @@ const CommentBlock =({comment ,mainComment ,block ,page ,pageId, userName,editBl
           commentBlock={block}
           allComments={allComments}
           setAllComments={setAllComments}
-          setPopup={setPopup}
+          setModal={setModal}
           addOrEdit="edit"
           setEdit={setEdit}
           templateHtml={templateHtml}
@@ -934,7 +934,7 @@ const Comment =({userName,comment, block,page, pageId, editBlock ,editPage ,fram
           moreOpen={moreOpen}
           setMoreOpen={setMoreOpen}
           setToolMoreStyle={setToolMoreStyle}
-          setPopup={null}
+          setModal={null}
           discardEdit={discardEdit}
           setDiscardEdit={setDiscardEdit}
           templateHtml={templateHtml}
@@ -960,7 +960,7 @@ const Comment =({userName,comment, block,page, pageId, editBlock ,editPage ,fram
           moreOpen={moreOpen}
           setMoreOpen={setMoreOpen}
           setToolMoreStyle={setToolMoreStyle}
-          setPopup={null}
+          setModal={null}
           discardEdit={discardEdit}
           setDiscardEdit={setDiscardEdit}
           templateHtml={templateHtml}
@@ -980,7 +980,7 @@ const Comment =({userName,comment, block,page, pageId, editBlock ,editPage ,fram
         commentBlock={block}
         allComments={allComments}
         setAllComments={setAllComments}
-        setPopup={null}
+        setModal={null}
         addOrEdit="add"
         setEdit={null}
         templateHtml={templateHtml}

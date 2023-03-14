@@ -1,7 +1,7 @@
 @import './common';
 
 #templates , .templatesAlert{
-  @include popup;
+  @include modal;
   .inner{
     top:0;
     left:0;

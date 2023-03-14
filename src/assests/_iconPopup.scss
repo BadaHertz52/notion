@@ -1,7 +1,7 @@
 @import './common';
 
-#iconPopup {
-  @include popupMenu;
+#iconModal {
+  @include modalMenu;
   position: absolute;
   top:100%;
   left: 0;

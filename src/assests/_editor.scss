@@ -180,7 +180,7 @@
     }
   }
   .pageMoreFun{
-    @include popupMenu;
+    @include modalMenu;
     position: absolute;
     top:100%;
     right: 0;
@@ -304,7 +304,7 @@
 }
 .discardEdit.on{
   display: block;
-  @include popup;
+  @include modal;
   z-index: 300;
   .inner{ 
     width: 336px;

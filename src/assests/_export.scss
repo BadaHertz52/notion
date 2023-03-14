@@ -1,6 +1,6 @@
 @import './common';
 #export {
-  @include popup;
+  @include modal;
   display: flex;
   z-index: 3;
   user-select: none;

@@ -93,16 +93,16 @@ export const randomIcon =():Emoji=>{
   return emojis[index]
 };
 
-type IconPopupProps ={
+type IconModalProps ={
   currentPageId:string |null,
   block:Block|null,
   page:Page,
   editBlock:(pageId: string, block: Block) => void,
   editPage: (pageId: string, newPage: Page) => void,
   style :CSSProperties |undefined,
-  setOpenIconPopup :Dispatch<SetStateAction<boolean>>,
+  setOpenIconModal :Dispatch<SetStateAction<boolean>>,
 };
-const IconPopup =({ currentPageId,block,page, editBlock ,editPage,style,  setOpenIconPopup} :IconPopupProps)=>{
+const IconModal =({ currentPageId,block,page, editBlock ,editPage,style,  setOpenIconModal} :IconModalProps)=>{
   const emoji ="emoji";
   const image="image";
   type Category = typeof emoji | typeof image;
@@ -130,7 +130,7 @@ const IconPopup =({ currentPageId,block,page, editBlock ,editPage,style,  setOpe
       };
       editBlock(currentPageId, editedBlock)
     }
-    setOpenIconPopup(false);
+    setOpenIconModal(false);
   };
   const removeIcon =()=>{
     changePageIcon(null , null);
@@ -154,14 +154,14 @@ const IconPopup =({ currentPageId,block,page, editBlock ,editPage,style,  setOpe
 
   const inner =document.getElementById("inner");
   inner?.addEventListener("click", (event:MouseEvent)=>{
-    const iconPopup =document.getElementById("iconPopup");
-    if(iconPopup !==null){
-      const iconPopupDomRect = iconPopup?.getClientRects()[0];
-      const isInIconPopup =detectRange(event, iconPopupDomRect);
+    const iconModal =document.getElementById("iconModal");
+    if(iconModal !==null){
+      const iconModalDomRect = iconModal?.getClientRects()[0];
+      const isInIconModal =detectRange(event, iconModalDomRect);
       const target =event.target as null|Element;
       if( target?.id !== "imageIconInput"){
-        !isInIconPopup && 
-        setOpenIconPopup(false);
+        !isInIconModal && 
+        setOpenIconModal(false);
       };
     } 
 
@@ -169,7 +169,7 @@ const IconPopup =({ currentPageId,block,page, editBlock ,editPage,style,  setOpe
   })
   return(
     <div 
-      id="iconPopup"
+      id="iconModal"
       style={style}
     >
       <div className='inner'>
@@ -256,4 +256,4 @@ const IconPopup =({ currentPageId,block,page, editBlock ,editPage,style,  setOpe
   )
 };
 
-export default React.memo(IconPopup)
+export default React.memo(IconModal)

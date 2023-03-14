@@ -1,7 +1,7 @@
 @import './common';
 #linkLoader{
   position: absolute;
-  @include popupMenu;
+  @include modalMenu;
   width: 300px;
   .inner{
     display: flex;

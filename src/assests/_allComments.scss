@@ -69,7 +69,7 @@
   .commentsTypeBtn.open{
     position: relative;
     .types{
-      @include popupMenu;
+      @include modalMenu;
       width:180px;
       z-index: 110;
       position: absolute;

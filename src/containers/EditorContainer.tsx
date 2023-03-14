@@ -9,12 +9,12 @@ import  {  Block, Page,  change_to_sub, raise_block, listItem } from '../modules
 import { SideAppear } from '../modules/side';
 import { fontStyleType, mobileSideMenuType, pathType } from './NotionRouter';
 
-export const popupMoveToPage= "popupMoveToPage" ;
-export const popupComment ="popupComment" ;
-export const popupCommand="popupCommand";
-export type PopupType ={
-  popup: boolean,
-  what: typeof popupMoveToPage | typeof popupComment | typeof popupCommand| null,
+export const modalMoveToPage= "modalMoveToPage" ;
+export const modalComment ="modalComment" ;
+export const modalCommand="modalCommand";
+export type ModalType ={
+  open: boolean,
+  what: typeof modalMoveToPage | typeof modalComment | typeof modalCommand| null,
 };
 export type NotionActionProps ={
   editBlock :(pageId: string, block: Block) => void,
@@ -57,8 +57,8 @@ type EditorContainerProps = NotionActionProps &{
 
   setTargetPageId:Dispatch<SetStateAction<string>>,
   setRoutePage: React.Dispatch<React.SetStateAction<Page | null>>,
-  popup:PopupType,
-  setPopup:Dispatch<SetStateAction<PopupType>>,
+  modal:ModalType,
+  setModal:Dispatch<SetStateAction<ModalType>>,
   openComment :boolean,
   setOpenComment: Dispatch<SetStateAction<boolean>>,
   commentBlock :Block|null,
@@ -83,7 +83,7 @@ type EditorContainerProps = NotionActionProps &{
   setMobileSideMenuOpen:Dispatch<SetStateAction<boolean>>
 };
 
-const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,recentPagesId ,isInTrash, makePagePath,changeSide,addBlock,editBlock ,changeBlockToPage, changePageToBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId, setRoutePage ,openComment,setOpenComment,commentBlock,setCommentBlock,smallText,setSmallText,fullWidth,setFullWidth,showAllComments,  setShowAllComments ,discardEdit , setDiscardEdit,setOpenExport, openTemplates, setOpenTemplates, fontStyle, setFontStyle , popup,setPopup,  mobileSideMenu ,setMobileSideMenu,mobileSideMenuOpen, setMobileSideMenuOpen }:EditorContainerProps)=>{
+const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,recentPagesId ,isInTrash, makePagePath,changeSide,addBlock,editBlock ,changeBlockToPage, changePageToBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId, setRoutePage ,openComment,setOpenComment,commentBlock,setCommentBlock,smallText,setSmallText,fullWidth,setFullWidth,showAllComments,  setShowAllComments ,discardEdit , setDiscardEdit,setOpenExport, openTemplates, setOpenTemplates, fontStyle, setFontStyle , modal,setModal,  mobileSideMenu ,setMobileSideMenu,mobileSideMenuOpen, setMobileSideMenuOpen }:EditorContainerProps)=>{
   const dispatch =useDispatch();
   const user =useSelector((state:RootState)=>state.user);
   const [editorStyle, setEditorStyle]=useState<CSSProperties|undefined>(undefined);
@@ -190,8 +190,8 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,rece
         setRoutePage={setRoutePage}
         setOpenComment={setOpenComment}
         setCommentBlock ={setCommentBlock}
-        popup={popup}
-        setPopup={setPopup}
+        modal={modal}
+        setModal={setModal}
         showAllComments={showAllComments}
         smallText={smallText}
         fullWidth={fullWidth}
@@ -222,8 +222,8 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,rece
         duplicatePage={duplicatePage}
         movePageToPage ={movePageToPage}
         editPage ={editPage}
-        setPopup ={setPopup}
-        popup ={popup}
+        setModal ={setModal}
+        modal ={modal}
         setCommentBlock ={setCommentBlock}
         setTargetPageId ={setTargetPageId}
         frameHtml ={null}

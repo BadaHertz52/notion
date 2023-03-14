@@ -1,4 +1,4 @@
-import { Emoji, emojis } from '../components/IconPopup';
+import { Emoji, emojis } from '../components/IconModal';
 export const emojiPath ="https://raw.githubusercontent.com/BadaHertz52/notion/master/image/emoji/";
 const catImg = 'https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assests/img/michael-sum-LEpfefQf4rU-unsplash.jpg' ;
 const imgBlockImg ='https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assests/img/roses-gfcb7dbdd4_640.jpg';

@@ -1,6 +1,6 @@
 @import './common';
 #loader{
-  @include popupMenu;
+  @include modalMenu;
   font-size: inherit;
   div{
     box-sizing: border-box;

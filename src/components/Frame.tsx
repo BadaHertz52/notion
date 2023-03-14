@@ -3,7 +3,7 @@ import React, { CSSProperties, Dispatch,  MouseEvent,  SetStateAction, TouchEven
 import { Block, MainCommentType, blockSample,  findBlock, findParentBlock, listItem, Page,  makeNewBlock, findPage } from '../modules/notion';
 import {selectionType} from '../containers/NotionRouter';
 import EditableBlock from './EditableBlock';
-import IconPopup, { randomIcon } from './IconPopup';
+import IconModal, { randomIcon } from './IconModal';
 import CommandBlock from './CommandBlock';
 import Comments, { CommentInput } from './Comments';
 import BlockFn, { detectRange } from './BlockFn';
@@ -23,7 +23,7 @@ import {GrDocumentText ,GrDocument} from 'react-icons/gr';
 import { MdInsertPhoto } from 'react-icons/md';
 import { HiTemplate } from 'react-icons/hi';
 import MobileBlockMenu from './MobileBlockMenu';
-import { PopupType } from '../containers/EditorContainer';
+import { ModalType } from '../containers/EditorContainer';
 
 export type Command ={
   boolean:boolean,
@@ -54,8 +54,8 @@ export type Template_Frame_SAME_Props ={
   setOpenComment: Dispatch<SetStateAction<boolean>>,
   openTemplates:boolean,
   setOpenTemplates: Dispatch<React.SetStateAction<boolean>>,
-  popup:PopupType,
-  setPopup:Dispatch<SetStateAction<PopupType>>,
+  modal:ModalType,
+  setModal:Dispatch<SetStateAction<ModalType>>,
   setCommentBlock: Dispatch<SetStateAction<Block | null>>,
   showAllComments:boolean,
   smallText: boolean, 
@@ -78,7 +78,7 @@ const basicPageCover ='https://raw.githubusercontent.com/BadaHertz52/notion/mast
  * @returns 
  */
 
-const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,commentBlock,openComment, setRoutePage ,setTargetPageId ,setOpenComment , setCommentBlock ,popup, setPopup,showAllComments ,smallText , fullWidth  ,discardEdit,setDiscardEdit , openTemplates,  setOpenTemplates, fontStyle , setMobileSideMenu, mobileSideMenuOpen, setMobileSideMenuOpen}:FrameProps)=>{
+const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,commentBlock,openComment, setRoutePage ,setTargetPageId ,setOpenComment , setCommentBlock ,modal, setModal,showAllComments ,smallText , fullWidth  ,discardEdit,setDiscardEdit , openTemplates,  setOpenTemplates, fontStyle , setMobileSideMenu, mobileSideMenuOpen, setMobileSideMenuOpen}:FrameProps)=>{
   const innerWidth =window.innerWidth; 
   const innerHeight =window.innerHeight;
   const inner =document.getElementById("inner");
@@ -96,7 +96,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
     command:null,
     targetBlock:null
   });
-  const [openIconPopup, setOpenIconPopup]=useState<boolean>(false);
+  const [openIconModal, setOpenIconModal]=useState<boolean>(false);
   const [openPageCommentInput, setOpenPageCommentInput]=useState<boolean>(false);
   const [openLoader, setOpenLoader]=useState<boolean>(false);
   const [loaderTargetBlock, setLoaderTargetBlock]=useState<Block|null>(null);
@@ -105,7 +105,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   const [commandBlockStyle, setCommandBlockStyle]=useState<CSSProperties|undefined>(undefined);
   const [menuOpen, setOpenMenu]= useState<boolean>(false);
   const [selection, setSelection]=useState<selectionType|null>(null);
-  const [popupStyle, setPopupStyle]=useState<CSSProperties |undefined>(undefined); 
+  const [modalStyle, setModalStyle]=useState<CSSProperties |undefined>(undefined); 
   /**
    * page 내의 위치를 변경하는 대상이 되는  block
    */
@@ -157,11 +157,11 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   const onMouseLeaveFromPH=()=>{
     decoOpen && setdecoOpen(false);
   };
-  const closePopup=(event:globalThis.MouseEvent, popupMenu:HTMLElement|null)=>{
-      const popupMenuDomRect= popupMenu?.getClientRects()[0];
-      const isInPopupMenu =detectRange(event, popupMenuDomRect);
-      !isInPopupMenu && setPopup({
-        popup:false,
+  const closeModal=(event:globalThis.MouseEvent, modalMenu:HTMLElement|null)=>{
+      const modalMenuDomRect= modalMenu?.getClientRects()[0];
+      const isInModalMenu =detectRange(event, modalMenuDomRect);
+      !isInModalMenu && setModal({
+        open:false,
         what:null
       });
   };
@@ -199,7 +199,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
 
 
   const onClickPageIcon =(event:React.MouseEvent)=>{
-    if(openIconPopup !==true){
+    if(openIconModal !==true){
       const frame =document.getElementsByClassName("frame")[0];
       const frameDomRect =frame.getClientRects()[0];
       const currentTarget =event.currentTarget ;
@@ -210,13 +210,13 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           top: domeRect.bottom + 24,
           left:domeRect.left - frameDomRect.left ,
         })
-        setOpenIconPopup(true);
+        setOpenIconModal(true);
       }else{
         console.log("Can't find currentTarget")
       }
 
     }else{
-      setOpenIconPopup(false);
+      setOpenIconModal(false);
     }
   };
   const onChangePageTitle =(event:ContentEditableEvent)=>{
@@ -734,7 +734,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   inner?.addEventListener("click",(event:globalThis.MouseEvent)=>{
     updateBlock();
     document.getElementById("menu_main") &&closeMenu(event);
-    document.getElementById("popupMenu") && closePopup(event ,document.getElementById("popupMenu"));
+    document.getElementById("modalMenu") && closeModal(event ,document.getElementById("modalMenu"));
     document.getElementById("block_comments") && closeComments(event);
     if(command.boolean){
       const block_commandBlock =document.getElementById("block_commandBlock");
@@ -773,14 +773,14 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   //window.onresize =changeCommentStyle;
   useEffect(()=>{
     // stop scroll when something open
-    if(popup.popup ||command.command|| openLoader|| openComment|| moveTargetBlock||selection){
+    if(modal.open ||command.command|| openLoader|| openComment|| moveTargetBlock||selection){
       !frameRef.current?.classList.contains("stop") &&
       frameRef.current?.classList.add("stop");
     }else{
       frameRef.current?.classList.contains("stop") &&
       frameRef.current?.classList.remove("stop");
     }
-  },[popup.popup, command.command, openLoader, openComment, moveTargetBlock,selection]);
+  },[modal.open, command.command, openLoader, openComment, moveTargetBlock,selection]);
 
   document.onselectionchange =()=>{
     if(isMobile() && openComment){
@@ -796,16 +796,16 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
     };
   }
   useEffect(()=>{
-    if(popup.what ==="popupComment"){
-      const targetCommentInputHtml = document.getElementById("popupMenu")?.querySelector(".commentInput") as HTMLInputElement|null|undefined;
+    if(modal.what ==="modalComment"){
+      const targetCommentInputHtml = document.getElementById("modalMenu")?.querySelector(".commentInput") as HTMLInputElement|null|undefined;
       if(targetCommentInputHtml!==null && 
         targetCommentInputHtml !==undefined){
         targetCommentInputHtml.focus();
         } ;
     }
-  },[popup.what])
+  },[modal.what])
   useEffect(()=>{
-    if(!openMobileMenu && !mobileSideMenuOpen && !popup.popup ){
+    if(!openMobileMenu && !mobileSideMenuOpen && !modal.open ){
         const selectedHtml =document.querySelector(".selected");
         const contentsHtml = selectedHtml?.closest(".contents");
         if(contentsHtml!==null && contentsHtml!==undefined){
@@ -814,7 +814,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           removeSelected(frameHtml, targetBlock, editBlock ,page, null)
         }
     }
-  },[openMobileMenu, mobileSideMenuOpen, popup.popup]);
+  },[openMobileMenu, mobileSideMenuOpen, modal.open]);
 
   useEffect(()=>{
     if(openComment && (openMobileMenu || mobileSideMenuOpen)){
@@ -835,7 +835,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
       className={ `frame ${newPageFram ? 'newPageFrame': ''} ${isMobile()? 'mobile' : 'web'}`}
       ref={frameRef}
       style={{
-        overflowY : (openMobileMenu || (isMobile() &&  (popup.popup ))) ? "hidden" : "scroll"
+        overflowY : (openMobileMenu || (isMobile() &&  (modal.open ))) ? "hidden" : "scroll"
       }}
     >
       <div 
@@ -970,7 +970,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
                     commentBlock={null}
                     allComments={page.header.comments}
                     setAllComments ={null}
-                    setPopup={null}
+                    setModal={null}
                     addOrEdit={"add"}
                     setEdit={setOpenPageCommentInput}
                     templateHtml={templateHtml}
@@ -987,15 +987,15 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
               </div>
             </div>
           </div>
-          {openIconPopup &&
-            <IconPopup 
+          {openIconModal &&
+            <IconModal 
               currentPageId={page.id}
               block={null}
               page={page}
               style={iconStyle}
               editBlock={editBlock}
               editPage={editPage}
-              setOpenIconPopup={setOpenIconPopup}
+              setOpenIconModal={setOpenIconModal}
             />
           }
           <div 
@@ -1128,21 +1128,21 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
             setCommentBlock={setCommentBlock}
             moveTargetBlock={moveTargetBlock}
             setMoveTargetBlock={setMoveTargetBlock}
-            popup={popup}
-            setPopup={setPopup}
+            modal={modal}
+            setModal={setModal}
             menuOpen={menuOpen}
             setOpenMenu={setOpenMenu}
-            setPopupStyle={setPopupStyle}
+            setModalStyle={setModalStyle}
             setTargetPageId={setTargetPageId}
           />
       }
 
-      {popup.popup && 
+      {modal.open && 
           <div 
-            id="popupMenu"
-            style ={popupStyle}
+            id="modalMenu"
+            style ={modalStyle}
           >
-            {popup.what==="popupMoveToPage" &&
+            {modal.what==="modalMoveToPage" &&
             <PageMenu
               what="block"
               currentPage={page}
@@ -1156,7 +1156,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
               setTargetPageId={setTargetPageId}
             /> 
             }
-            {popup.what ==="popupComment" && commentBlock !==null &&
+            {modal.what ==="modalComment" && commentBlock !==null &&
                 <CommentInput
                 pageId={page.id}
                 page={page}
@@ -1168,7 +1168,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
                 commentBlock={commentBlock}
                 allComments={commentBlock.comments}
                 setAllComments={null}
-                setPopup={setPopup}
+                setModal={setModal}
                 addOrEdit="add"
                 setEdit={null}
                 templateHtml={templateHtml}
@@ -1241,9 +1241,9 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           editPage={editPage}
           duplicatePage={duplicatePage}
           movePageToPage={movePageToPage}
-          popup={popup}
-          setPopup={setPopup}
-          setPopupStyle={setPopupStyle}
+          modal={modal}
+          setModal={setModal}
+          setModalStyle={setModalStyle}
           command={command}
           setCommand={setCommand}
           setCommentBlock={setCommentBlock}
@@ -1274,9 +1274,9 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
         editPage={editPage}
         duplicatePage={duplicatePage}
         movePageToPage={movePageToPage}
-        popup={popup}
-        setPopup={setPopup}
-        setPopupStyle={setPopupStyle}
+        modal={modal}
+        setModal={setModal}
+        setModalStyle={setModalStyle}
         command={command}
         setCommand={setCommand}
         setCommentBlock={setCommentBlock}

@@ -2,9 +2,9 @@ import React, { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import { CSSProperties } from "styled-components";
 import { Block, Page } from "../modules/notion";
 import { setTemplateItem } from "./BlockComponent";
-import IconPopup from "./IconPopup";
+import IconModal from "./IconModal";
 import PageIcon from "./PageIcon";
-import { closePopup } from "./SideBar";
+import { closeModal } from "./SideBar";
 type RenameProps = {
   currentPageId:string|null,
   block:Block|null,
@@ -16,15 +16,15 @@ type RenameProps = {
 }
 const Rename =({currentPageId,block ,page,editBlock ,editPage,renameStyle, setOpenRename}:RenameProps)=>{
   const inner =document.getElementById("inner");
-  const [openIconPopup, setOpenIconPopup]=useState<boolean>(false);
+  const [openIconModal, setOpenIconModal]=useState<boolean>(false);
   inner?.addEventListener('click', (event)=>{
     if(document.getElementById("rename")){
-      openIconPopup && closePopup("iconPopup", setOpenIconPopup, event);
-      closePopup("rename", setOpenRename, event);
+      openIconModal && closeModal("iconModal", setOpenIconModal, event);
+      closeModal("rename", setOpenRename, event);
     }
   });
   const onClickRenameIcon =()=>{
-    setOpenIconPopup(true);
+    setOpenIconModal(true);
   };
   const changeTitle =(event:ChangeEvent<HTMLInputElement> )=>{
     const value = event.target.value;
@@ -75,15 +75,15 @@ const Rename =({currentPageId,block ,page,editBlock ,editPage,renameStyle, setOp
             value ={page.header.title}
           />
       </div>
-      {openIconPopup && 
-          <IconPopup
+      {openIconModal && 
+          <IconModal
             page={page}
             currentPageId={currentPageId}
             block= {block}
             editBlock={editBlock}
             editPage={editPage}
             style={undefined}
-            setOpenIconPopup={setOpenIconPopup}
+            setOpenIconModal={setOpenIconModal}
           />
       }
     </div>
