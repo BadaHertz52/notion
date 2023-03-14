@@ -1,7 +1,7 @@
 @import './common';
 #blockStyler{
   position: absolute;
-  @include modalMenu;
+  @include modalStyle;
   border-radius: 5px ;
   width: fit-content;
   overflow-x: scroll;

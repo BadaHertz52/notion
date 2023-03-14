@@ -373,7 +373,7 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
     }
   };
   const executeCloseBlockStyler =(event:globalThis.MouseEvent|TouchEvent)=>{
-    const commentInputHtml =document.getElementById("modalMenu")?.querySelector(".commentInput" )
+    const commentInputHtml =document.getElementById("modal")?.querySelector(".commentInput" )
     if(document.getElementById("blockStyler") !== null &&
     (commentInputHtml == null || commentInputHtml === undefined)&&
       document.getElementById("mobileSideMenu") === null 

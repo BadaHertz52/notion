@@ -1,7 +1,7 @@
 @import './common';
 
 #trash{
-  @include modalMenu;
+  @include modalStyle;
   display: none;
   width: 400px;
   min-width: 180px;

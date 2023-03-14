@@ -97,7 +97,7 @@
       display: none;
     }
     .sort_options.on{
-      @include modalMenu;
+      @include modalStyle;
       z-index: 20;
       left :30px;
       top:1.2rem;

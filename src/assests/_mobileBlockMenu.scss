@@ -1,6 +1,6 @@
 @import './common';
 #mobileBlockMenu{
-  @include modalMenu;
+  @include modalStyle;
   position:absolute;
   left:5%;
   min-width:250px ;

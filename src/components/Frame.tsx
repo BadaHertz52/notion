@@ -157,9 +157,9 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   const onMouseLeaveFromPH=()=>{
     decoOpen && setdecoOpen(false);
   };
-  const closeModal=(event:globalThis.MouseEvent, modalMenu:HTMLElement|null)=>{
-      const modalMenuDomRect= modalMenu?.getClientRects()[0];
-      const isInModalMenu =detectRange(event, modalMenuDomRect);
+  const closeModal=(event:globalThis.MouseEvent, modalEle:HTMLElement|null)=>{
+      const modalDomRect= modalEle?.getClientRects()[0];
+      const isInModalMenu =detectRange(event, modalDomRect);
       !isInModalMenu && setModal({
         open:false,
         what:null
@@ -734,7 +734,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   inner?.addEventListener("click",(event:globalThis.MouseEvent)=>{
     updateBlock();
     document.getElementById("menu_main") &&closeMenu(event);
-    document.getElementById("modalMenu") && closeModal(event ,document.getElementById("modalMenu"));
+    document.getElementById("modal") && closeModal(event ,document.getElementById("modal"));
     document.getElementById("block_comments") && closeComments(event);
     if(command.boolean){
       const block_commandBlock =document.getElementById("block_commandBlock");
@@ -1139,7 +1139,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
 
       {modal.open && 
           <div 
-            id="modalMenu"
+            id="modal"
             style ={modalStyle}
           >
             {modal.what==="modalMoveToPage" &&

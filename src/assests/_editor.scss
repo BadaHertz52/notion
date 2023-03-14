@@ -180,7 +180,7 @@
     }
   }
   .pageMoreFun{
-    @include modalMenu;
+    @include modalStyle;
     position: absolute;
     top:100%;
     right: 0;
