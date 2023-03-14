@@ -734,7 +734,7 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
   inner?.addEventListener("click",(event:globalThis.MouseEvent)=>{
     updateBlock();
     document.getElementById("menu_main") &&closeMenu(event);
-    document.getElementById("modal") && closeModal(event ,document.getElementById("modal"));
+    document.getElementById("modal-menu") && closeModal(event ,document.getElementById("modal-menu"));
     document.getElementById("block_comments") && closeComments(event);
     if(command.boolean){
       const block_commandBlock =document.getElementById("block_commandBlock");
@@ -1139,7 +1139,8 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
 
       {modal.open && 
           <div 
-            id="modal"
+            id="modal-menu"
+            className ='modal'
             style ={modalStyle}
           >
             {modal.what==="modalMoveToPage" &&

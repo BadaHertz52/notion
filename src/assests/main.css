@@ -2490,7 +2490,7 @@ a:link, a:active, a:visited {
 
 .mainMenu,
 .sideMenu,
-#modalMenu {
+#modal-menu {
   width: 320px;
   display: flex;
   flex-direction: column;
@@ -2508,36 +2508,36 @@ a:link, a:active, a:visited {
 }
 .mainMenu::-webkit-scrollbar-thumb,
 .sideMenu::-webkit-scrollbar-thumb,
-#modalMenu::-webkit-scrollbar-thumb {
+#modal-menu::-webkit-scrollbar-thumb {
   background: #D3D1CB;
 }
 .mainMenu::-webkit-scrollbar-track,
 .sideMenu::-webkit-scrollbar-track,
-#modalMenu::-webkit-scrollbar-track {
+#modal-menu::-webkit-scrollbar-track {
   background: #EDECE9;
 }
 
-#modalMenu {
+#modal-menu {
   position: absolute;
   font-size: 14px;
   padding: 3px;
   z-index: 30;
   display: flex;
 }
-#modalMenu .commentInput {
+#modal-menu .commentInput {
   width: calc(100% - 20px);
   margin: 10PX;
   box-sizing: border-box;
   flex-direction: row;
 }
 
-.frame.mobile #modalMenu {
+.frame.mobile #modal-menu {
   height: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.frame.mobile #modalMenu .commentInput {
+.frame.mobile #modal-menu .commentInput {
   height: 100%;
   margin: 5px;
 }

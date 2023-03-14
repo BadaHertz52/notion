@@ -5,11 +5,11 @@
 }
 .mainMenu,
 .sideMenu,
-#modalStyle{
+#modal-menu{
   @include modalStyle;
   width: fit-content
 }
-#modalStyle{
+#modal-menu{
   position: absolute;
   font-size: 14px;
   padding: 3px;
@@ -23,7 +23,7 @@
   }
 }
 .frame.mobile{
-  #modalStyle{
+  #modal-menu{
     height: 60px;
     display: flex;
     justify-content: center;
