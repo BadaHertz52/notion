@@ -23,30 +23,18 @@ import {GrDocumentText ,GrDocument} from 'react-icons/gr';
 import { MdInsertPhoto } from 'react-icons/md';
 import { HiTemplate } from 'react-icons/hi';
 import MobileBlockMenu from './MobileBlockMenu';
-import { ModalType } from '../containers/EditorContainer';
-
+import {  ActionProps_Editor, ModalType,} from '../containers/EditorContainer';
 export type Command ={
   boolean:boolean,
   command:string | null,
   targetBlock: Block |null
 };
-export type Template_Frame_SAME_Props ={
+export type Template_Frame_SAME_Props = ActionProps_Editor & {
   userName:string,
   pages:Page[],
   pagesId:string[],
   firstlist:listItem[],
   recentPagesId:string[]|null,
-  editBlock :(pageId: string, block: Block) => void,
-  addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
-  changeBlockToPage: (currentPageId: string, block: Block) => void,
-  changePageToBlock:(currentPageId: string, block: Block) => void,
-  changeToSub: (pageId: string, block: Block, newParentBlockId: string) => void,
-  raiseBlock: (pageId: string, block: Block) => void,
-  deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
-  addPage :(newPage:Page ,)=>void,
-  editPage :(pageId:string,newPage:Page ,)=>void,
-  duplicatePage:(targetPageId: string) => void,
-  movePageToPage:(targetPageId: string, destinationPageId: string) => void,
   setTargetPageId:Dispatch<React.SetStateAction<string>>,
   setRoutePage: Dispatch<React.SetStateAction<Page | null>>,
   commentBlock: Block | null,

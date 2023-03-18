@@ -16,29 +16,31 @@ export type ModalType ={
   open: boolean,
   what: typeof modalMoveToPage | typeof modalComment | typeof modalCommand| null,
 };
-export type NotionActionProps ={
+export type ActionPropsCommon ={
   editBlock :(pageId: string, block: Block) => void,
-  changeBlockToPage: (currentPageId: string, block: Block) => void,
-
   addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
-
-  deleteBlock: (pageId: string, block: Block , isInMenu:boolean) => void,
-  
-  addPage : ( newPage:Page, )=>void
-  editPage : (pageId:string , newPage:Page, )=>void,
+  deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
+  addPage :(newPage:Page ,)=>void,
+  editPage :(pageId:string,newPage:Page ,)=>void,
+  duplicatePage:(targetPageId: string) => void,
+  movePageToPage:(targetPageId: string, destinationPageId: string) => void,
+  changeBlockToPage: (currentPageId: string, block: Block) => void
+};
+export type ActinoProps_Side = ActionPropsCommon &{
   deletePage : (pageId:string )=>void,
-  duplicatePage: (targetPageId: string) => void,
-  movePageToPage: (targetPageId: string, destinationPageId: string) => void,
   restorePage: (pageId: string) => void,
-
   cleanTrash: (pageId: string) => void,
-
   addFavorites: (itemId: string) => void,
   removeFavorites: (itemId: string) => void,
-
   changeSide: (appear: SideAppear) => void,
+
 };
-type EditorContainerProps = NotionActionProps &{
+export type ActionProps_Editor = ActionPropsCommon &{
+  changePageToBlock:(currentPageId: string, block: Block) => void,
+  changeToSub: (pageId: string, block: Block, newParentBlockId: string) => void,
+  raiseBlock: (pageId: string, block: Block) => void,
+}
+type EditorContainerProps = ActionProps_Editor &  ActinoProps_Side &{
   pages:Page[],
   pagesId:string[],
   userName:string,
@@ -46,15 +48,8 @@ type EditorContainerProps = NotionActionProps &{
   recentPagesId:string[]|null,
   sideAppear:SideAppear,
   page:Page,
-
-  changeToSub: (pageId: string, block: Block, newParentBlockId: string) => void,
-  raiseBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
-  isInTrash:boolean,
-
-  changePageToBlock:(currentPageId: string, block: Block) => void,
-
   makePagePath: (page: Page ,pagesId:string[], pages:Page[]) => pathType[] | null,
-
+  isInTrash:boolean,
   setTargetPageId:Dispatch<SetStateAction<string>>,
   setRoutePage: React.Dispatch<React.SetStateAction<Page | null>>,
   modal:ModalType,

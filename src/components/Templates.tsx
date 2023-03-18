@@ -1,22 +1,32 @@
 import React, { Dispatch, MouseEvent, SetStateAction, useRef, useState } from 'react';
 import { AiOutlineExpandAlt, AiOutlinePlus, AiOutlineShrink } from 'react-icons/ai';
 import { BsTrash } from 'react-icons/bs';
-import { findPage, Page, pageSample } from '../modules/notion';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { RootState } from '../modules';
+import { add_template, cancle_edit_template, delete_template, findPage, Page, pageSample } from '../modules/notion';
 import { UserState } from '../modules/user';
 import Frame, { Template_Frame_SAME_Props } from './Frame';
 import PageIcon from './PageIcon';
 
 type TemplatesProps = Template_Frame_SAME_Props &{
-  routePageId:string,
   user:UserState,
-  templatesId: string[]|null,
-  addTemplate: (template: Page) => void,
-  cancleEditTemplate: (templateId: string) => void,
-  deleteTemplate: (templateId: string) => void,
+  routePageId:string, // 현재 page
   setRoutePage:Dispatch<SetStateAction<Page|null>>,
   setOpenTemplates: Dispatch<SetStateAction<boolean>>
 };
-const Templates =({routePageId ,user ,templatesId,userName, pagesId, pages, firstlist ,recentPagesId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage , addTemplate,cancleEditTemplate, deleteTemplate, setRoutePage ,setTargetPageId,commentBlock,openComment , openTemplates ,setOpenTemplates ,setOpenComment , modal ,setModal,setCommentBlock ,showAllComments ,smallText , fullWidth  ,discardEdit,setDiscardEdit, fontStyle , mobileSideMenuOpen , setMobileSideMenuOpen ,setMobileSideMenu }:TemplatesProps)=>{
+const Templates =({routePageId ,user ,pagesId, pages, firstlist ,recentPagesId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage , setRoutePage ,setTargetPageId,commentBlock,openComment , openTemplates ,setOpenTemplates ,setOpenComment , modal ,setModal,setCommentBlock ,showAllComments ,smallText , fullWidth  ,discardEdit,setDiscardEdit, fontStyle , mobileSideMenuOpen , setMobileSideMenuOpen ,setMobileSideMenu }:TemplatesProps)=>{
+  const templatesId =useSelector((state:RootState)=> state.notion).templatesId;
+  const dispatch =useDispatch();
+  const addTemplate =(template:Page)=>{
+    dispatch(add_template(template))
+  };
+  const cancleEditTemplate =(templateId:string)=>{
+    dispatch(cancle_edit_template(templateId))
+  };
+  const deleteTemplate =(templateId:string)=>{
+    dispatch(delete_template(templateId));
+  };
   const templates = templatesId !==null ? templatesId.map((id:string)=> findPage(pagesId, pages, id))  :null;
   const [template, setTemplate]= useState<Page|null>(templates==null? null : templates[0]);
   const openTarget =useRef<Page|null>(null);
@@ -222,7 +232,7 @@ const Templates =({routePageId ,user ,templatesId,userName, pagesId, pages, firs
               </div>
             <Frame
               page={template}
-              userName={userName}
+              userName={user.userName}
               pagesId={pagesId}
               pages={pages}
               firstlist={firstlist}

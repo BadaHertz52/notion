@@ -3,9 +3,9 @@ import {  useSelector } from 'react-redux';
 import SideBar from '../components/SideBar';
 import { RootState } from '../modules';
 import { SideAppear } from '../modules/side';
-import { NotionActionProps } from './EditorContainer';
+import { ActinoProps_Side } from './EditorContainer';
 
-export type SideBarContainerProp = NotionActionProps &{
+export type SideBarContainerProp = ActinoProps_Side &{
   sideAppear:SideAppear,
   setTargetPageId: Dispatch<SetStateAction<string>>,
   openQF:boolean,

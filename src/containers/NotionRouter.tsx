@@ -98,7 +98,6 @@ const NotionRouter =()=>{
   const firstPagesId= notion.firstPagesId;
   const [firstlist ,setFirstList]=useState<listItem[]|null>(null);
   const [firstPage, setFirstPage]=useState<Page|null>(null);
-  const templatesId =notion.templatesId;
   const trashPagesId =notion.trash.pagesId;
   const trashPages =notion.trash.pages;
   const user =useSelector((state:RootState)=> state.user);
@@ -200,15 +199,6 @@ const NotionRouter =()=>{
     if(routePage?.id === pageId){
       setRoutePage(firstPage);
     }
-  };
-  const addTemplate =(template:Page)=>{
-    dispatch(add_template(template))
-  };
-  const cancleEditTemplate =(templateId:string)=>{
-    dispatch(cancle_edit_template(templateId))
-  };
-  const deleteTemplate =(templateId:string)=>{
-    dispatch(delete_template(templateId));
   };
   //page---
 
@@ -390,7 +380,6 @@ const NotionRouter =()=>{
             editBlock={editBlock}
             deleteBlock={deleteBlock}
             changeBlockToPage={changeBlockToPage}
-
             addPage={addPage}
             editPage={editPage}
             deletePage={deletePage}
@@ -517,7 +506,6 @@ const NotionRouter =()=>{
             <Templates
               routePageId={routePage.id}
               user={user}
-              templatesId={templatesId}
               userName={user.userName}
               pagesId={pagesId}
               pages={pages}
@@ -534,9 +522,6 @@ const NotionRouter =()=>{
               editPage={editPage}
               duplicatePage={duplicatePage}
               movePageToPage={movePageToPage}
-              addTemplate={addTemplate}
-              cancleEditTemplate ={cancleEditTemplate}
-              deleteTemplate ={deleteTemplate}
               setRoutePage={setRoutePage}
               setTargetPageId={setTargetPageId}
               commentBlock={commentBlock}
