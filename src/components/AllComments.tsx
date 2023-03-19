@@ -72,7 +72,7 @@ const AllComments=({page, userName,showAllComments, setShowAllComments,discardEd
     id="allComments"
     style={style}
   >
-    <div className='inner'>
+    <div className='allComments-inner'>
       <div className='allComments_header'>
         <span>Comments</span>
         <div className='commentsTypeBtn'>

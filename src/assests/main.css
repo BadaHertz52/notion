@@ -116,7 +116,7 @@ a:link, a:active, a:visited {
 #allComments .pageFun {
   height: 45px;
 }
-#allComments .inner {
+#allComments .allComments-inner {
   overflow-y: scroll;
   width: 100%;
   height: 100%;
