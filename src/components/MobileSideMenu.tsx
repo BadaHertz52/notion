@@ -1,4 +1,4 @@
-import React , {Dispatch, SetStateAction , useEffect, useState ,useRef} from 'react';
+import React , {Dispatch, SetStateAction , useEffect, useState} from 'react';
 import { CSSProperties } from 'styled-components';
 import { mobileSideMenuType } from '../containers/NotionRouter';
 import ColorMenu from './ColorMenu';
@@ -16,7 +16,8 @@ type MobileSideMenuProps = MenuAndBlockStylerCommonProps & {
   mobileSideMenuOpen:boolean,
   setMobileSideMenuOpen:Dispatch<SetStateAction<boolean>>
 }
-const MobileSideMenu =({pages, pagesId, recentPagesId,firstlist, block, userName, page,  addBlock,changeBlockToPage,changePageToBlock ,editBlock, deleteBlock ,duplicatePage,movePageToPage,editPage ,setModal ,modal  ,setCommentBlock , setTargetPageId ,frameHtml, mobileSideMenu  ,setMobileSideMenu,mobileSideMenuOpen, setMobileSideMenuOpen}:MobileSideMenuProps)=>{
+const MobileSideMenu =({pages, pagesId, recentPagesId,firstlist, block, userName, page,setModal ,modal  ,setCommentBlock , setTargetPageId ,frameHtml, mobileSideMenu  ,setMobileSideMenu,mobileSideMenuOpen, setMobileSideMenuOpen}:MobileSideMenuProps)=>{
+
   const mobileSelection :selectionType|null = document.querySelector(".selected") == null? null : {
     block:block,
     change:false
@@ -75,14 +76,6 @@ const MobileSideMenu =({pages, pagesId, recentPagesId,firstlist, block, userName
               page={page}
               userName={userName}
               setOpenMenu={setMobileSideMenuOpen}
-              addBlock={addBlock}
-              editBlock={editBlock}
-              changeBlockToPage={changeBlockToPage}
-              changePageToBlock={changePageToBlock}
-              deleteBlock={deleteBlock}
-              editPage={editPage}
-              duplicatePage={duplicatePage}
-              movePageToPage={movePageToPage}
               modal={modal}
               setModal={setModal}
               setCommentBlock={setCommentBlock}
@@ -97,7 +90,6 @@ const MobileSideMenu =({pages, pagesId, recentPagesId,firstlist, block, userName
                 <ColorMenu
                 page={page}
                 block={block}
-                editBlock={editBlock}
                 selection={mobileSelection}
                 setSelection={null}
                 setOpenMenu={setMobileSideMenuOpen}
@@ -108,10 +100,6 @@ const MobileSideMenu =({pages, pagesId, recentPagesId,firstlist, block, userName
                   style={undefined}
                   page={page}
                   block={block}
-                  editBlock={editBlock}
-                  changeBlockToPage={changeBlockToPage}
-                  changePageToBlock={changePageToBlock}
-                  editPage={editPage}
                   command={null}
                   setCommand={null}
                   setTurnInto={setMobileSideMenuOpen}
@@ -125,7 +113,6 @@ const MobileSideMenu =({pages, pagesId, recentPagesId,firstlist, block, userName
               pagesId={pagesId}
               page={page}
               block={block}
-              editBlock={editBlock}
               setOpenLink={setMobileSideMenuOpen}
               blockStylerStyle={undefined}
               setSelection={null}

@@ -1,13 +1,13 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import {useDispatch, useSelector } from 'react-redux';
+import React, { Dispatch, SetStateAction, useEffect, useState , useContext} from 'react';
+import {useSelector } from 'react-redux';
 import { CSSProperties } from 'styled-components';
 import Frame  from '../components/Frame';
 import MobileSideMenu from '../components/MobileSideMenu';
 import TopBar from '../components/TopBar';
 import { RootState } from '../modules';
-import  {  Block, Page,  change_to_sub, raise_block, listItem } from '../modules/notion';
+import  {  Block, Page, listItem} from '../modules/notion';
 import { SideAppear } from '../modules/side';
-import { fontStyleType, mobileSideMenuType, pathType } from './NotionRouter';
+import { ActionContext, fontStyleType, mobileSideMenuType, pathType } from './NotionRouter';
 
 export const modalMoveToPage= "modalMoveToPage" ;
 export const modalComment ="modalComment" ;
@@ -16,31 +16,8 @@ export type ModalType ={
   open: boolean,
   what: typeof modalMoveToPage | typeof modalComment | typeof modalCommand| null,
 };
-export type ActionPropsCommon ={
-  editBlock :(pageId: string, block: Block) => void,
-  addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
-  deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
-  addPage :(newPage:Page ,)=>void,
-  editPage :(pageId:string,newPage:Page ,)=>void,
-  duplicatePage:(targetPageId: string) => void,
-  movePageToPage:(targetPageId: string, destinationPageId: string) => void,
-  changeBlockToPage: (currentPageId: string, block: Block) => void
-};
-export type ActinoProps_Side = ActionPropsCommon &{
-  deletePage : (pageId:string )=>void,
-  restorePage: (pageId: string) => void,
-  cleanTrash: (pageId: string) => void,
-  addFavorites: (itemId: string) => void,
-  removeFavorites: (itemId: string) => void,
-  changeSide: (appear: SideAppear) => void,
 
-};
-export type ActionProps_Editor = ActionPropsCommon &{
-  changePageToBlock:(currentPageId: string, block: Block) => void,
-  changeToSub: (pageId: string, block: Block, newParentBlockId: string) => void,
-  raiseBlock: (pageId: string, block: Block) => void,
-}
-type EditorContainerProps = ActionProps_Editor &  ActinoProps_Side &{
+type EditorContainerProps ={
   pages:Page[],
   pagesId:string[],
   userName:string,
@@ -78,14 +55,11 @@ type EditorContainerProps = ActionProps_Editor &  ActinoProps_Side &{
   setMobileSideMenuOpen:Dispatch<SetStateAction<boolean>>
 };
 
-const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,recentPagesId ,isInTrash, makePagePath,changeSide,addBlock,editBlock ,changeBlockToPage, changePageToBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId, setRoutePage ,openComment,setOpenComment,commentBlock,setCommentBlock,smallText,setSmallText,fullWidth,setFullWidth,showAllComments,  setShowAllComments ,discardEdit , setDiscardEdit,setOpenExport, openTemplates, setOpenTemplates, fontStyle, setFontStyle , modal,setModal,  mobileSideMenu ,setMobileSideMenu,mobileSideMenuOpen, setMobileSideMenuOpen }:EditorContainerProps)=>{
-  const dispatch =useDispatch();
+const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,recentPagesId ,isInTrash, makePagePath, setTargetPageId, setRoutePage ,openComment,setOpenComment,commentBlock,setCommentBlock,smallText,setSmallText,fullWidth,setFullWidth,showAllComments,  setShowAllComments ,discardEdit , setDiscardEdit,setOpenExport, openTemplates, setOpenTemplates, fontStyle, setFontStyle , modal,setModal,  mobileSideMenu ,setMobileSideMenu,mobileSideMenuOpen, setMobileSideMenuOpen }:EditorContainerProps)=>{
+  const {restorePage,cleanTrash} =useContext(ActionContext).actions;
   const user =useSelector((state:RootState)=>state.user);
   const [editorStyle, setEditorStyle]=useState<CSSProperties|undefined>(undefined);
-  const changeToSub =(pageId: string, block: Block,  newParentBlockId: string)=> dispatch(change_to_sub(pageId, block, newParentBlockId));
-  const raiseBlock =(pageId: string, block: Block) =>dispatch((raise_block(pageId, block)));
   const [pagePath, setPagePath]=useState<pathType[]|null>(null);
-
 
   useEffect(()=>{
     if(sideAppear==="lock"){
@@ -139,18 +113,6 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,rece
       page={page}
       pages={pages}
       pagePath ={pagePath}
-      changeSide={changeSide}
-
-      addBlock={addBlock}
-      deleteBlock={deleteBlock}
-      changeBlockToPage={changeBlockToPage}
-      
-      deletePage={deletePage}
-      movePageToPage={movePageToPage}
-
-      removeFavorites={removeFavorites}
-      addFavorites={addFavorites}
-
       setTargetPageId={setTargetPageId}
       showAllComments={showAllComments}
       setShowAllComments={setShowAllComments}
@@ -168,17 +130,6 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,rece
         pages={pages}
         firstlist={firstlist}
         recentPagesId={recentPagesId}
-        addBlock={addBlock}
-        editBlock={editBlock}
-        changeBlockToPage={changeBlockToPage}
-        changePageToBlock={changePageToBlock}
-        changeToSub={changeToSub}
-        raiseBlock={raiseBlock}
-        deleteBlock={deleteBlock}
-        addPage={addPage}
-        editPage={editPage}
-        duplicatePage={duplicatePage}
-        movePageToPage={movePageToPage}
         commentBlock={commentBlock}
         openComment={openComment}
         setTargetPageId={setTargetPageId}
@@ -209,14 +160,6 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,rece
         userName={userName}
         page={page}
         block={mobileSideMenu.block}
-        addBlock={editBlock}
-        changeBlockToPage={changeBlockToPage}
-        changePageToBlock ={changePageToBlock}
-        editBlock={editBlock}
-        deleteBlock ={deleteBlock}
-        duplicatePage={duplicatePage}
-        movePageToPage ={movePageToPage}
-        editPage ={editPage}
         setModal ={setModal}
         modal ={modal}
         setCommentBlock ={setCommentBlock}

@@ -1,10 +1,10 @@
-import React, { ChangeEvent, Dispatch,KeyboardEvent,MouseEvent, SetStateAction, SyntheticEvent,  TouchEvent,  useEffect, useRef} from 'react';
+import React, { ChangeEvent, Dispatch,KeyboardEvent,MouseEvent, SetStateAction, SyntheticEvent,  TouchEvent,  useEffect, useRef ,useContext} from 'react';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import { MdOutlinePhotoSizeSelectActual } from 'react-icons/md';
 import {  Block,BlockType,blockTypes,findPage,findParentBlock,findPreviousBlockInDoc,MainCommentType,makeNewBlock,Page, toggle } from '../modules/notion';
 import { Command} from './Frame';
 import ImageContent from './ImageContent';
-import {selectionType} from '../containers/NotionRouter';
+import {ActionContext, selectionType} from '../containers/NotionRouter';
 /**
  * template 수정 시에 수정 이전 버전을 session storage에 저장하는 함수 (page의 내용을 변경하는 모든 함수에서 사용됨)
  * @param templateHtml #template 인 element로 template이 열린 경우에만 함수가 동작하도록 하기 위한 조건을 사용됨
@@ -462,11 +462,6 @@ type  BlockComponentProps ={
   pagesId:string[],
   block:Block,
   page:Page,
-  editBlock :(pageId: string, block: Block) => void,
-  addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
-  changeToSub: (pageId: string, block: Block, newParentBlockId: string) => void,
-  raiseBlock: (pageId: string, block: Block) => void,
-  deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
   command :Command,
   setCommand:Dispatch<SetStateAction<Command>>,
   setOpenComment :Dispatch<SetStateAction<boolean>>,
@@ -489,7 +484,8 @@ export type itemType ={
 };
 
 
-const BlockComponent=({pages,pagesId,block, page ,addBlock,editBlock,changeToSub,raiseBlock, deleteBlock ,command, setCommand  ,setOpenComment ,setTargetPageId ,setOpenLoader, setLoaderTargetBlock ,closeMenu ,templateHtml, setSelection ,openMobileMenu ,setOpenMM , onClickCommentBtn ,setMoveTargetBlock , moveBlock}:BlockComponentProps)=>{  
+const BlockComponent=({pages,pagesId,block, page ,command, setCommand  ,setOpenComment ,setTargetPageId ,setOpenLoader, setLoaderTargetBlock ,closeMenu ,templateHtml, setSelection ,openMobileMenu ,setOpenMM , onClickCommentBtn ,setMoveTargetBlock , moveBlock}:BlockComponentProps)=>{ 
+  const {editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock} = useContext(ActionContext).actions; 
   /**
    * 모바일 브라우저에서, element을 터치 할때 사용자가 element을 이동하기 위해 touch 한 것인지 판별하기 위한 조건 중 하나
    */

@@ -1,6 +1,7 @@
-import React, { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
+import React, { ChangeEvent, Dispatch, SetStateAction, useState ,useContext } from 'react';
 import { BsEmojiSmile } from 'react-icons/bs';
 import { CSSProperties } from 'styled-components';
+import { ActionContext } from '../containers/NotionRouter';
 import { Block, emojiPath, IconType, Page } from '../modules/notion';
 import { setTemplateItem } from './BlockComponent';
 import { detectRange } from './BlockFn';
@@ -97,12 +98,11 @@ type IconModalProps ={
   currentPageId:string |null,
   block:Block|null,
   page:Page,
-  editBlock:(pageId: string, block: Block) => void,
-  editPage: (pageId: string, newPage: Page) => void,
   style :CSSProperties |undefined,
   setOpenIconModal :Dispatch<SetStateAction<boolean>>,
 };
-const IconModal =({ currentPageId,block,page, editBlock ,editPage,style,  setOpenIconModal} :IconModalProps)=>{
+const IconModal =({ currentPageId,block,page,style,  setOpenIconModal} :IconModalProps)=>{
+  const {editBlock ,editPage} =useContext(ActionContext).actions;
   const emoji ="emoji";
   const image="image";
   type Category = typeof emoji | typeof image;

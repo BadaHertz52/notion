@@ -1,13 +1,12 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState  ,useContext} from 'react';
 import { IoTrashOutline } from 'react-icons/io5';
 import { RiArrowGoBackLine } from 'react-icons/ri';
 import { CSSProperties } from 'styled-components';
+import { ActionContext } from '../containers/NotionRouter';
 import { Page } from '../modules/notion';
 import Result, { makeResultType,resultType } from './Result';
 type ResultItemProps ={
   item:resultType,
-  cleanTrash: (itemId: string) => void,
-  restorePage: (pageId: string) => void,
   setTargetPageId: Dispatch<SetStateAction<string>>,
   setOpenTrash :Dispatch<React.SetStateAction<boolean>>
 };
@@ -16,12 +15,11 @@ type TrashProps={
   trashPagesId:string[]|null,
   trashPages: Page[] |null,
   pagesId:string[] |null,
-  cleanTrash: (itemId: string) => void,
-  restorePage: (pageId: string) => void,
   setTargetPageId: Dispatch<SetStateAction<string>>,
   setOpenTrash :Dispatch<React.SetStateAction<boolean>>
 };
-const ResultItem=({item , restorePage, cleanTrash ,setTargetPageId, setOpenTrash}:ResultItemProps)=>{
+const ResultItem=({item ,setTargetPageId, setOpenTrash}:ResultItemProps)=>{
+  const {cleanTrash ,restorePage} =useContext(ActionContext).actions;
   const goPage=(event: React.MouseEvent)=>{
     const target = event.target as HTMLElement;
     const tagName = target.tagName.toLowerCase();
@@ -57,7 +55,7 @@ const ResultItem=({item , restorePage, cleanTrash ,setTargetPageId, setOpenTrash
   )
 };
 
-const Trash=({style,trashPages, trashPagesId ,pagesId, restorePage, cleanTrash ,setTargetPageId ,setOpenTrash}:TrashProps)=>{
+const Trash=({style,trashPages, trashPagesId ,pagesId, setTargetPageId ,setOpenTrash}:TrashProps)=>{
   const [trashList ,setTrashList ]=useState<resultType[]|undefined>(undefined);
   //undefined 이면 trash가 없는것 
   const [result, setResult] =useState<resultType[]|null>(null);
@@ -150,8 +148,6 @@ const Trash=({style,trashPages, trashPagesId ,pagesId, restorePage, cleanTrash ,
               result.map((item:resultType)=>
               <ResultItem
                 item={item}
-                restorePage={restorePage}
-                cleanTrash={cleanTrash}
                 setTargetPageId={setTargetPageId}
                 setOpenTrash={setOpenTrash}
               />

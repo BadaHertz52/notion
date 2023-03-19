@@ -1,7 +1,7 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState ,useContext } from 'react';
 
-import { pathType } from '../containers/NotionRouter';
-import {   Block, listItem, Page } from '../modules/notion';
+import { ActionContext, pathType } from '../containers/NotionRouter';
+import { listItem, Page } from '../modules/notion';
 import {  SideAppear } from '../modules/side';
 import PageMenu from './PageMenu';
 import { CSSProperties } from 'styled-components';
@@ -25,18 +25,6 @@ type TopBarProps ={
   page:Page,
   pages:Page[],
   pagePath: pathType[] |null ,
-
-  addBlock:(pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
-  deleteBlock: (pageId: string, block: Block, isInMenu: boolean) => void,
-  changeBlockToPage: (currentPageId: string, block: Block) => void,
-
-  deletePage: (pageId: string) => void,
-  movePageToPage: (targetPageId: string, destinationPageId: string) => void,
-
-  changeSide: (appear: SideAppear) => void,
-  removeFavorites: (itemId: string) => void,
-
-  addFavorites: (itemId: string) => void
   setTargetPageId:Dispatch<SetStateAction<string>>,
   showAllComments:boolean,
   setShowAllComments:Dispatch<SetStateAction<boolean>>,
@@ -48,7 +36,8 @@ type TopBarProps ={
   setFontStyle:Dispatch<SetStateAction<fontStyleType>>
 };
 
-const TopBar =({ firstlist,favorites,sideAppear,page , pages,pagePath, addBlock, changeBlockToPage ,deleteBlock ,deletePage, movePageToPage, changeSide ,addFavorites,removeFavorites ,setTargetPageId  , showAllComments, setShowAllComments , smallText, setSmallText ,fullWidth, setFullWidth ,setOpenExport, setFontStyle}:TopBarProps)=>{
+const TopBar =({ firstlist,favorites,sideAppear,page , pages,pagePath,setTargetPageId  , showAllComments, setShowAllComments , smallText, setSmallText ,fullWidth, setFullWidth ,setOpenExport, setFontStyle}:TopBarProps)=>{
+  const {deletePage, changeSide ,addFavorites,removeFavorites} =useContext(ActionContext).actions;
   const inner =document.getElementById("inner");
   const [title, setTitle]= useState<string>("");
   const [openPageMoreFun, setOpenPageMoreFun] =useState<boolean>(false);
@@ -424,10 +413,6 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages,pagePath, addBlock,
           currentPage={page}
           firstlist={firstlist}
           pages={pages}
-          addBlock={addBlock}
-          changeBlockToPage={changeBlockToPage}
-          deleteBlock={deleteBlock}
-          movePageToPage={movePageToPage}
           setOpenMenu={setOpenPageMenu}
           setTargetPageId={setTargetPageId}
         />

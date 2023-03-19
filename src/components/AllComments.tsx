@@ -1,4 +1,4 @@
-import React, { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react";
+import React, { Dispatch, MouseEvent, SetStateAction, useEffect, useState} from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { CSSProperties } from "styled-components";
 import { Block, MainCommentType, Page } from "../modules/notion";
@@ -9,14 +9,13 @@ type AllCommentsProps={
   page:Page,
   userName:string,
   favorites:string[]|null,
-  editBlock: (pageId: string, block: Block) => void,
   showAllComments:boolean,
   setShowAllComments:Dispatch<SetStateAction<boolean>>,
   discardEdit:boolean,
   setDiscardEdit:Dispatch<SetStateAction<boolean>>,
   style:CSSProperties,
 }
-const AllComments=({page, userName, editBlock, showAllComments, setShowAllComments,discardEdit ,setDiscardEdit, style}:AllCommentsProps)=>{
+const AllComments=({page, userName,showAllComments, setShowAllComments,discardEdit ,setDiscardEdit, style}:AllCommentsProps)=>{
   const inner =document.getElementById("inner");
   inner?.addEventListener("click",(event)=>{
     if(showAllComments){
@@ -121,8 +120,6 @@ const AllComments=({page, userName, editBlock, showAllComments, setShowAllCommen
             page={page}
             userName={userName}
             block={block}
-            editBlock={editBlock}
-            editPage={null}
             frameHtml={null}
             openComment={false}
             select={select}

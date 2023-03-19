@@ -8,7 +8,7 @@ import ReactDOMServer from 'react-dom/server';
 type ExportProps= FrameProps &{
   setOpenExport:Dispatch<SetStateAction<boolean>>
 }
-const Export =({page,pagesId,pages,firstlist, recentPagesId ,setOpenExport, userName,editBlock,addBlock,changeBlockToPage,changePageToBlock,changeToSub,raiseBlock,deleteBlock,addPage,editPage, duplicatePage ,movePageToPage ,commentBlock,openComment ,setTargetPageId, setRoutePage, 
+const Export =({page,pagesId,pages,firstlist, recentPagesId ,setOpenExport, userName,commentBlock,openComment ,setTargetPageId, setRoutePage, 
   setOpenComment,setCommentBlock , modal,setModal, showAllComments,smallText,fullWidth,discardEdit,setDiscardEdit, openTemplates , setOpenTemplates, fontStyle ,mobileSideMenuOpen, setMobileSideMenuOpen, setMobileSideMenu}:ExportProps)=>{
   const html ="HTML";
   const pdf="PDF";
@@ -119,17 +119,6 @@ const Export =({page,pagesId,pages,firstlist, recentPagesId ,setOpenExport, user
                 pagesId={pagesId}
                 firstlist={firstlist}
                 recentPagesId={recentPagesId}
-                addBlock={addBlock}
-                editBlock={editBlock}
-                changeBlockToPage={changeBlockToPage}
-                changePageToBlock={changePageToBlock}
-                changeToSub={changeToSub}
-                raiseBlock={raiseBlock}
-                deleteBlock={deleteBlock}
-                addPage={addPage}
-                editPage={editPage}
-                duplicatePage={duplicatePage}
-                movePageToPage={movePageToPage}
                 commentBlock={commentBlock}
                 openComment={openComment}
                 modal={modal}

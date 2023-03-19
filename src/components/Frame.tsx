@@ -1,7 +1,7 @@
 import '../assests/frame.css';
-import React, { CSSProperties, Dispatch,  MouseEvent,  SetStateAction, TouchEvent, useEffect, useRef, useState } from 'react';
+import React, { CSSProperties, Dispatch,  MouseEvent,  SetStateAction, TouchEvent, useEffect, useRef, useState ,useContext } from 'react';
 import { Block, MainCommentType, blockSample,  findBlock, findParentBlock, listItem, Page,  makeNewBlock, findPage } from '../modules/notion';
-import {selectionType} from '../containers/NotionRouter';
+import {ActionContext, selectionType} from '../containers/NotionRouter';
 import EditableBlock from './EditableBlock';
 import IconModal, { randomIcon } from './IconModal';
 import CommandBlock from './CommandBlock';
@@ -23,13 +23,13 @@ import {GrDocumentText ,GrDocument} from 'react-icons/gr';
 import { MdInsertPhoto } from 'react-icons/md';
 import { HiTemplate } from 'react-icons/hi';
 import MobileBlockMenu from './MobileBlockMenu';
-import {  ActionProps_Editor, ModalType,} from '../containers/EditorContainer';
+import { ModalType,} from '../containers/EditorContainer';
 export type Command ={
   boolean:boolean,
   command:string | null,
   targetBlock: Block |null
 };
-export type Template_Frame_SAME_Props = ActionProps_Editor & {
+export type Template_Frame_SAME_Props = {
   userName:string,
   pages:Page[],
   pagesId:string[],
@@ -66,7 +66,8 @@ const basicPageCover ='https://raw.githubusercontent.com/BadaHertz52/notion/mast
  * @returns 
  */
 
-const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage,commentBlock,openComment, setRoutePage ,setTargetPageId ,setOpenComment , setCommentBlock ,modal, setModal,showAllComments ,smallText , fullWidth  ,discardEdit,setDiscardEdit , openTemplates,  setOpenTemplates, fontStyle , setMobileSideMenu, mobileSideMenuOpen, setMobileSideMenuOpen}:FrameProps)=>{
+const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,commentBlock,openComment, setRoutePage ,setTargetPageId ,setOpenComment , setCommentBlock ,modal, setModal,showAllComments ,smallText , fullWidth  ,discardEdit,setDiscardEdit , openTemplates,  setOpenTemplates, fontStyle , setMobileSideMenu, mobileSideMenuOpen, setMobileSideMenuOpen}:FrameProps)=>{
+  const {editPage ,editBlock, addBlock} =useContext(ActionContext).actions;
   const innerWidth =window.innerWidth; 
   const innerHeight =window.innerHeight;
   const inner =document.getElementById("inner");
@@ -935,8 +936,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
                   page={page}
                   pageId={page.id}
                   userName={userName}
-                  editBlock={editBlock}
-                  editPage={editPage}
                   frameHtml={frameHtml}
                   discardEdit={discardEdit}
                   setDiscardEdit={setDiscardEdit}
@@ -981,8 +980,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
               block={null}
               page={page}
               style={iconStyle}
-              editBlock={editBlock}
-              editPage={editPage}
               setOpenIconModal={setOpenIconModal}
             />
           }
@@ -1006,11 +1003,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
                       pagesId={pagesId}
                       page={page}
                       block={block}
-                      addBlock={addBlock}
-                      editBlock={editBlock}
-                      changeToSub={changeToSub}
-                      raiseBlock={raiseBlock}
-                      deleteBlock={deleteBlock}
                       fontSize={fontSize}
                       moveBlock={moveBlock}
                       setMoveTargetBlock={setMoveTargetBlock}
@@ -1073,10 +1065,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
             key={`${command.targetBlock.id}_command`}
             page={page}
             block={command.targetBlock}
-            editBlock={editBlock}
-            changeBlockToPage={changeBlockToPage}
-            changePageToBlock={changePageToBlock}
-            editPage={editPage}
             command={command}
             setCommand={setCommand}
             setTurnInto={null}
@@ -1102,15 +1090,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
             pagesId={pagesId}
             firstlist={firstlist}
             userName={userName}
-            addBlock={addBlock}
-            editBlock={editBlock}
-            changeBlockToPage={changeBlockToPage}
-            changePageToBlock={changePageToBlock}
-            deleteBlock={deleteBlock}
-            addPage={addPage}
-            editPage={editPage}
-            duplicatePage={duplicatePage}
-            movePageToPage={movePageToPage}
             frameHtml={frameHtml}
             commentBlock={commentBlock}
             setCommentBlock={setCommentBlock}
@@ -1137,10 +1116,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
               currentPage={page}
               pages={pages}
               firstlist={firstlist}
-              deleteBlock={deleteBlock}
-              addBlock={addBlock}
-              changeBlockToPage={changeBlockToPage}
-              movePageToPage={movePageToPage}
               setOpenMenu={setOpenMenu}
               setTargetPageId={setTargetPageId}
             /> 
@@ -1172,8 +1147,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           block={commentBlock}
           pageId={page.id}
           page={page}
-          editBlock={editBlock}
-          editPage={editPage}
           frameHtml={frameHtml}
           openComment={openComment}
           select={null}
@@ -1189,11 +1162,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           pagesId={pagesId}
           page={page}
           block={moveTargetBlock}
-          addBlock={addBlock}
-          editBlock={editBlock}
-          changeToSub={changeToSub}
-          raiseBlock={raiseBlock}
-          deleteBlock={deleteBlock}
           fontSize={fontSize}
           moveBlock={moveBlock}
           setMoveTargetBlock={setMoveTargetBlock}
@@ -1222,14 +1190,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
           page={page}
           recentPagesId={recentPagesId}
           block={selection.block}
-          addBlock={addBlock}
-          editBlock={editBlock}
-          changeBlockToPage={changeBlockToPage}
-          changePageToBlock={changePageToBlock}
-          deleteBlock={deleteBlock}
-          editPage={editPage}
-          duplicatePage={duplicatePage}
-          movePageToPage={movePageToPage}
           modal={modal}
           setModal={setModal}
           setModalStyle={setModalStyle}
@@ -1255,14 +1215,6 @@ const Frame =({ userName,page, pagesId, pages, firstlist ,recentPagesId,editBloc
         userName={userName}
         page={page}
         recentPagesId={recentPagesId}
-        addBlock={addBlock}
-        editBlock={editBlock}
-        changeBlockToPage={changeBlockToPage}
-        changePageToBlock={changePageToBlock}
-        deleteBlock={deleteBlock}
-        editPage={editPage}
-        duplicatePage={duplicatePage}
-        movePageToPage={movePageToPage}
         modal={modal}
         setModal={setModal}
         setModalStyle={setModalStyle}

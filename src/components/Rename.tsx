@@ -1,5 +1,6 @@
-import React, { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
+import React, { ChangeEvent, Dispatch, SetStateAction, useState , useContext} from "react";
 import { CSSProperties } from "styled-components";
+import { ActionContext } from "../containers/NotionRouter";
 import { Block, Page } from "../modules/notion";
 import { setTemplateItem } from "./BlockComponent";
 import IconModal from "./IconModal";
@@ -9,12 +10,11 @@ type RenameProps = {
   currentPageId:string|null,
   block:Block|null,
   page:Page,
-  editBlock:(pageId: string, block: Block) => void,
-  editPage: (pageId: string, newPage: Page) => void,
   renameStyle:CSSProperties|undefined,
   setOpenRename: Dispatch<SetStateAction<boolean>>,
 }
-const Rename =({currentPageId,block ,page,editBlock ,editPage,renameStyle, setOpenRename}:RenameProps)=>{
+const Rename =({currentPageId,block ,page,renameStyle, setOpenRename}:RenameProps)=>{
+  const {editPage ,editBlock} =useContext(ActionContext).actions ;
   const inner =document.getElementById("inner");
   const [openIconModal, setOpenIconModal]=useState<boolean>(false);
   inner?.addEventListener('click', (event)=>{
@@ -80,8 +80,6 @@ const Rename =({currentPageId,block ,page,editBlock ,editPage,renameStyle, setOp
             page={page}
             currentPageId={currentPageId}
             block= {block}
-            editBlock={editBlock}
-            editPage={editPage}
             style={undefined}
             setOpenIconModal={setOpenIconModal}
           />

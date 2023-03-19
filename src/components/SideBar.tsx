@@ -1,4 +1,4 @@
-import React, {  CSSProperties, Dispatch, SetStateAction, useEffect, useRef, useState, TouchEvent } from 'react';
+import React, {  CSSProperties, Dispatch, SetStateAction, useEffect, useRef, useState, TouchEvent , useContext } from 'react';
 import { Block, blockSample, findPage, listItem, Notion, Page, pageSample } from '../modules/notion';
 import { detectRange } from './BlockFn';
 import { UserState } from '../modules/user';
@@ -21,6 +21,7 @@ import { HiOutlineDuplicate, HiTemplate} from 'react-icons/hi';
 import { MdPlayArrow } from 'react-icons/md';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { IoArrowRedoOutline } from 'react-icons/io5';
+import { ActionContext } from '../containers/NotionRouter';
 
 
 
@@ -165,7 +166,8 @@ const ItemTemplate =({item,setTargetPageId ,onClickMoreBtn, addNewSubPage, chang
   )
 };
 
-const ListTemplate =({notion,targetList ,setTargetPageId , onClickMoreBtn, addNewSubPage ,changeSide}:ListTemplateProp)=>{
+const ListTemplate =({notion,targetList ,setTargetPageId , addNewSubPage , onClickMoreBtn}:ListTemplateProp)=>{
+  const {changeSide}= useContext(ActionContext).actions 
   const findSubPage =(id:string, pagesId:string[], pages:Page[]):listItem=>{
     const index =pagesId.indexOf(id);
     const subPage:Page =pages[index];
@@ -224,8 +226,9 @@ const ListTemplate =({notion,targetList ,setTargetPageId , onClickMoreBtn, addNe
   )
 };
 
-const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,changeBlockToPage,addPage ,duplicatePage,editPage,deletePage,movePageToPage, cleanTrash, restorePage, addFavorites, removeFavorites, changeSide,setTargetPageId ,openQF ,setOpenQF ,setOpenTemplates ,showAllComments
+const SideBar =({notion, user,sideAppear ,setTargetPageId  ,setOpenQF ,setOpenTemplates ,showAllComments
 }:SideBarProps)=>{
+  const {addBlock,addPage ,duplicatePage,deletePage,addFavorites, removeFavorites, changeSide} =useContext(ActionContext).actions; 
   const inner =document.getElementById("inner");
   const pages =notion.pages;
   const pagesId =notion.pagesId;
@@ -774,10 +777,6 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
         currentPage={findPage(pagesId, pages, targetItem.id)}
         pages={pages}
         firstlist={firstlist}
-        addBlock={addBlock}
-        deleteBlock={deleteBlock}
-        changeBlockToPage={changeBlockToPage}
-        movePageToPage={movePageToPage}
         setOpenMenu={setOpenSideMoreMenu}
         setTargetPageId={setTargetPageId}
       />
@@ -788,8 +787,6 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
         currentPageId={null}
         block={null}
         page={targetPage}
-        editBlock={editBlock}
-        editPage={editPage}
         renameStyle={renameStyle}
         setOpenRename={setOpenRename}
       />
@@ -799,8 +796,6 @@ const SideBar =({notion, user,sideAppear  ,addBlock,editBlock,deleteBlock ,chang
       trashPagesId={trashPagesId}
       trashPages={trashPages}
       pagesId={pagesId}
-      cleanTrash={cleanTrash}
-      restorePage={restorePage}
       setTargetPageId={setTargetPageId}
       setOpenTrash={setOpenTrash}
     />

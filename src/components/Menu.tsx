@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState, useRef} from 'react';
+import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState, useRef ,useContext} from 'react';
 import { Block,listItem, Page } from '../modules/notion';
 import CommandBlock from './CommandBlock';
 import { CSSProperties } from 'styled-components';
@@ -17,7 +17,7 @@ import {IoArrowRedoOutline} from 'react-icons/io5';
 import {RiDeleteBin6Line } from 'react-icons/ri';
 import { AiOutlineFormatPainter } from 'react-icons/ai';
 import { isMobile, setTemplateItem } from './BlockComponent';
-import {selectionType} from '../containers/NotionRouter';
+import {ActionContext, selectionType} from '../containers/NotionRouter';
 
 export type MenuAndBlockStylerCommonProps={
   pages:Page[],
@@ -25,14 +25,6 @@ export type MenuAndBlockStylerCommonProps={
   page:Page,
   block:Block,
   userName: string,
-  addBlock:(pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
-  editBlock : (pageId: string, block: Block) => void,
-  changeBlockToPage: (currentPageId: string, block: Block) => void,
-  changePageToBlock:(currentPageId: string, block: Block) => void,
-  deleteBlock :(pageId: string, block: Block ,isInMenu:boolean) => void,
-  editPage: (pageId: string, newPage: Page) => void,
-  duplicatePage: (targetPageId: string) => void,
-  movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
   setModal :Dispatch<SetStateAction<ModalType>> ,
   modal:ModalType,
   setCommentBlock: Dispatch<SetStateAction<Block | null>>,
@@ -48,7 +40,8 @@ export type MenuProps
   style:CSSProperties|undefined
 };
 
-const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,changeBlockToPage,changePageToBlock ,editBlock, deleteBlock ,duplicatePage,movePageToPage,editPage ,setModal ,modal ,setCommentBlock ,setTargetPageId ,setOpenRename ,frameHtml,setSelection, style }:MenuProps)=>{
+const Menu=({pages,firstlist, page, block, userName, setOpenMenu,setModal ,modal ,setCommentBlock ,setTargetPageId ,setOpenRename ,frameHtml,setSelection, style }:MenuProps)=>{
+  const {addBlock, deleteBlock ,duplicatePage} =useContext(ActionContext).actions;
   const templateHtml= document.getElementById("template");
   const blockFnElement = templateHtml !==null? templateHtml.querySelector(".blockFn") as HTMLElement|null : document.querySelector(".blockFn") as HTMLElement|null ;
   const menuRef =useRef<HTMLDivElement>(null);
@@ -374,10 +367,6 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
               style={undefined}
               page={page}
               block={block}
-              editBlock={editBlock}
-              changeBlockToPage={changeBlockToPage}
-              changePageToBlock={changePageToBlock}
-              editPage={editPage}
               command={null}
               setCommand={null}
               setTurnInto={setTurnInto}
@@ -388,7 +377,6 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
           <ColorMenu
             page={page}
             block={block}
-            editBlock={editBlock}
             selection={null}
             setSelection={null}
             setOpenMenu={null}
@@ -400,10 +388,6 @@ const Menu=({pages,firstlist, page, block, userName, setOpenMenu,addBlock,change
             currentPage={page}
             pages={pages}
             firstlist={firstlist}   
-            addBlock={addBlock}
-            changeBlockToPage={changeBlockToPage}
-            deleteBlock={deleteBlock}
-            movePageToPage={movePageToPage}
             setOpenMenu={setOpenMenu}
             setTargetPageId={setTargetPageId}
           />

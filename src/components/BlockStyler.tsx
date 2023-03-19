@@ -1,11 +1,11 @@
-import React, { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, MouseEvent, SetStateAction, useEffect, useState ,useContext } from 'react';
 import { BsChatLeftText, BsThreeDots } from 'react-icons/bs';
 import { IoIosArrowDown } from 'react-icons/io';
 import {ImArrowUpRight2} from 'react-icons/im';
 import { CSSProperties } from 'styled-components';
 import ColorMenu from './ColorMenu';
 import { Command } from './Frame';
-import {msmWhatType, selectionType} from '../containers/NotionRouter';
+import {ActionContext, msmWhatType, selectionType} from '../containers/NotionRouter';
 import Menu, { MenuAndBlockStylerCommonProps } from './Menu';
 import { Block, Page} from '../modules/notion';
 import LinkLoader from './LinkLoader';
@@ -116,8 +116,8 @@ export type BlockStylerProps = StylerCommonProps& {
   setSelection:Dispatch<SetStateAction<selectionType|null>>|null,
   setOpenMobileBlockStyler:Dispatch<SetStateAction<boolean>>|null
 }
-const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, block, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage, editPage,modal,setModal, setCommentBlock,setTargetPageId,selection,setSelection ,setModalStyle,command ,setCommand, frameHtml ,openMobileBlockMenu ,setMobileSideMenu, setMobileSideMenuOpen, setOpenMM,setOpenMobileBlockStyler}:BlockStylerProps)=>{
-
+const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, block, modal,setModal, setCommentBlock,setTargetPageId,selection,setSelection ,setModalStyle,command ,setCommand, frameHtml ,openMobileBlockMenu ,setMobileSideMenu, setMobileSideMenuOpen, setOpenMM,setOpenMobileBlockStyler}:BlockStylerProps)=>{
+  const { editBlock} =useContext(ActionContext).actions;
   const bold="bold";
   const initial="initial";
   const italic= "italic";
@@ -606,7 +606,6 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
           pagesId={pagesId}
           page={page}
           block={selection? selection.block : block}
-          editBlock={editBlock}
           setOpenLink={setOpenLink}
           blockStylerStyle={blockStylerStyle}
           setSelection={setSelection}
@@ -620,7 +619,6 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
             <ColorMenu
               page={page}
               block={selection ? selection.block: block}
-              editBlock={editBlock}
               selection={selection}
               setSelection ={setSelection}
               setOpenMenu={null}
@@ -635,14 +633,6 @@ const BlockStyler=({pages, pagesId, firstlist, userName, page,recentPagesId, blo
             block={selection ? selection.block :block}
             userName={userName}
             setOpenMenu={setOpenMenu}
-            addBlock={addBlock}
-            editBlock={editBlock}
-            changeBlockToPage={changeBlockToPage}
-            changePageToBlock={changePageToBlock}
-            deleteBlock={deleteBlock}
-            editPage={editPage}
-            duplicatePage={duplicatePage}
-            movePageToPage={movePageToPage}
             modal={modal}
             setModal={setModal}
             setCommentBlock={setCommentBlock}

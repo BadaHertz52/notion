@@ -1,4 +1,4 @@
-import React, {  Dispatch, FormEvent,SetStateAction,useEffect,useRef,useState, MouseEvent } from 'react';
+import React, {  Dispatch, FormEvent,SetStateAction,useEffect,useRef,useState, MouseEvent ,useContext } from 'react';
 import { CSSProperties } from 'styled-components';
 import { Block, MainCommentType, SubCommentType, Page} from '../modules/notion';
 import {  BsThreeDots } from 'react-icons/bs';
@@ -10,6 +10,7 @@ import { ModalType } from '../containers/EditorContainer';
 import { IoMdCloseCircle } from 'react-icons/io';
 import { setTemplateItem } from './BlockComponent';
 import { removeSelected } from './BlockStyler';
+import { ActionContext } from '../containers/NotionRouter';
 const open="open";
 const resolve="resolve";
 type CommentsProps={
@@ -20,8 +21,6 @@ type CommentsProps={
   page:Page,
   pageId: string,
   userName:string,
-  editBlock :(pageId: string, block: Block) => void | null,
-  editPage: ((pageId: string, newPage: Page) => void )| null,
   frameHtml:HTMLElement|null,
   openComment:boolean,
   /**
@@ -989,7 +988,8 @@ const Comment =({userName,comment, block,page, pageId, editBlock ,editPage ,fram
     </div>
   )
 };
-const Comments =({pageId,block,page, userName ,editBlock ,editPage ,frameHtml ,openComment, select ,discardEdit ,setDiscardEdit ,showAllComments}:CommentsProps)=>{
+const Comments =({pageId,block,page, userName  ,frameHtml ,openComment, select ,discardEdit ,setDiscardEdit ,showAllComments}:CommentsProps)=>{
+  const {editBlock ,editPage} =useContext(ActionContext).actions;
   const inner =document.getElementById("inner");
   const pageComments =page.header.comments;
   const [commentsStyle, setCommentsStyle]= useState<CSSProperties|undefined>(undefined);

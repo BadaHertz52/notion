@@ -1,5 +1,6 @@
-import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState ,useContext } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
+import { ActionContext } from '../containers/NotionRouter';
 import { Block,  listItem,  Page} from '../modules/notion';
 import { setTemplateItem } from './BlockComponent';
 import PageIcon from './PageIcon';
@@ -9,16 +10,12 @@ type PageMenuProps ={
   currentPage:Page,
   pages:Page[],
   firstlist:listItem[],
-  deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
-  changeBlockToPage: (currentPageId: string, block: Block) => void
-  addBlock:(pageId: string, block: Block, nextBlockIndex: number, previousBlockId: string | null) => void,
   setOpenMenu:Dispatch<SetStateAction<boolean>> |null,
-  movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
   setTargetPageId: Dispatch<SetStateAction<string>>,
 };
 
-const PageMenu =({ what, currentPage,pages, firstlist,deleteBlock,changeBlockToPage, addBlock, movePageToPage ,setOpenMenu ,setTargetPageId}:PageMenuProps)=>{
-
+const PageMenu =({ what, currentPage,pages, firstlist,setOpenMenu ,setTargetPageId}:PageMenuProps)=>{
+  const {deleteBlock,changeBlockToPage, addBlock ,movePageToPage} =useContext(ActionContext).actions;
   type PageButtonProps={
     item: listItem
   };

@@ -1,7 +1,7 @@
-import React, { CSSProperties, Dispatch, MouseEvent, MutableRefObject, SetStateAction, TouchEvent, useEffect, useRef} from 'react';
+import React, { CSSProperties, Dispatch, MouseEvent, MutableRefObject, SetStateAction, TouchEvent, useEffect, useRef ,useContext} from 'react';
 import { Block, MainCommentType, findBlock, Page,  } from '../modules/notion';
 import { Command } from './Frame';
-import {selectionType} from '../containers/NotionRouter';
+import {ActionContext, selectionType} from '../containers/NotionRouter';
 import BlockComponent, { setTemplateItem } from './BlockComponent';
 import { GoPrimitiveDot } from 'react-icons/go';
 import { GrCheckbox, GrCheckboxSelected } from 'react-icons/gr';
@@ -13,11 +13,6 @@ export type EditableBlockProps ={
   pagesId:string[],
   page:Page,
   block:Block,
-  editBlock :(pageId: string, block: Block) => void,
-  addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
-  changeToSub: (pageId: string, block: Block, newParentBlockId: string) => void,
-  raiseBlock: (pageId: string, block: Block) => void,
-  deleteBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
   fontSize:number,
   moveBlock:MutableRefObject<boolean>,
   setMoveTargetBlock :Dispatch<SetStateAction<Block | null>>,
@@ -68,9 +63,10 @@ export const changeFontSizeBySmallText=(block:Block, fontSize:number):CSSPropert
   return style 
 };
 
-const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeToSub ,raiseBlock, deleteBlock ,fontSize, moveBlock ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand , openComment, setTargetPageId ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock,closeMenu ,templateHtml ,setSelection ,setOpenMM ,openMobileMenu
+const EditableBlock =({ pages,pagesId,page, block ,fontSize, moveBlock ,setMoveTargetBlock, pointBlockToMoveBlock ,command, setCommand , openComment, setTargetPageId ,setOpenComment ,setCommentBlock ,setOpenLoader, setLoaderTargetBlock,closeMenu ,templateHtml ,setSelection ,setOpenMM ,openMobileMenu
 
 }:EditableBlockProps)=>{  
+  const {editBlock} = useContext(ActionContext).actions;
   const className = block.type !== "toggle" ?
   `${block.type} block ` :
   `${block.type} block ${block.subBlocksId!==null?'on' : ""}`;
@@ -222,11 +218,6 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
                 page={page}
                 pages={pages}
                 pagesId={pagesId}
-                addBlock={addBlock}
-                editBlock={editBlock}
-                changeToSub={changeToSub}
-                raiseBlock={raiseBlock}
-                deleteBlock={deleteBlock}
                 command={command}
                 setCommand={setCommand}
                 setOpenComment={setOpenComment}
@@ -260,11 +251,6 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
               pagesId={pagesId}
               page={page}
               block={sub}
-              addBlock={addBlock}
-              editBlock={editBlock}
-              changeToSub={changeToSub}
-              raiseBlock={raiseBlock}
-              deleteBlock={deleteBlock}
               fontSize={fontSize}
               moveBlock={moveBlock}
               setMoveTargetBlock={setMoveTargetBlock}
@@ -369,11 +355,6 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
                 pagesId={pagesId}
                 block={block} 
                 page={page}
-                addBlock={addBlock}
-                editBlock={editBlock}
-                changeToSub={changeToSub}
-                raiseBlock={raiseBlock}
-                deleteBlock={deleteBlock}
                 command={command}
                 setCommand={setCommand}
                 setTargetPageId={setTargetPageId}
@@ -410,11 +391,6 @@ const EditableBlock =({ pages,pagesId,page, block , editBlock, addBlock,changeTo
                     pagesId={pagesId}
                     page={page}
                     block={subBlock}
-                    addBlock={addBlock}
-                    editBlock={editBlock}
-                    changeToSub={changeToSub}
-                    raiseBlock={raiseBlock}
-                    deleteBlock={deleteBlock}
                     fontSize={fontSize}
                     moveBlock={moveBlock}
                     setMoveTargetBlock={setMoveTargetBlock}

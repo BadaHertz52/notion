@@ -1,10 +1,10 @@
-import  React, { useState ,useEffect  } from 'react';
+import  React, { useState ,useEffect  ,useContext } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { BiCommentDetail } from 'react-icons/bi';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { TiArrowSortedDown } from 'react-icons/ti';
 import { CSSProperties } from 'styled-components';
-import {  msmWhatType, ms_color, ms_moreMenu, ms_turnInto } from '../containers/NotionRouter';
+import {  ActionContext, msmWhatType, ms_color, ms_moreMenu, ms_turnInto } from '../containers/NotionRouter';
 import { Block, findBlock, makeNewBlock} from '../modules/notion';
 import BlockStyler, { removeSelected, StylerCommonProps } from './BlockStyler';
 
@@ -14,8 +14,8 @@ type MobileBlockMenuProps = Omit<StylerCommonProps , 'block'> & {
 };
 
 const MobileBlockMenu =({
-  pages, pagesId, firstlist, userName, page,recentPagesId, addBlock, editBlock, changeBlockToPage, changePageToBlock,deleteBlock,duplicatePage,movePageToPage, editPage,modal,setModal, setCommentBlock,setTargetPageId,setModalStyle,command ,setCommand, frameHtml ,openMobileBlockMenu ,setMobileSideMenu, setMobileSideMenuOpen, setOpenMM  , initialInnerHeight }:MobileBlockMenuProps)=>{
-  const pageHtml = frameHtml?.querySelector('.page') as HTMLElement|null;
+  pages, pagesId, firstlist, userName, page,recentPagesId,modal,setModal, setCommentBlock,setTargetPageId,setModalStyle,command ,setCommand, frameHtml ,openMobileBlockMenu ,setMobileSideMenu, setMobileSideMenuOpen, setOpenMM  , initialInnerHeight }:MobileBlockMenuProps)=>{
+  const {addBlock, editBlock, deleteBlock} =useContext(ActionContext).actions;
   const item = sessionStorage.getItem('mobileMenuBlock');
   const [mbmStyle,setMBMstyle]=useState<CSSProperties|undefined>(undefined);
   const [block, setBlock]= useState<Block|null>(null);
@@ -245,14 +245,6 @@ useEffect(()=>{
           page={page}
           recentPagesId={recentPagesId}
           block={block}
-          addBlock={addBlock}
-          editBlock={editBlock}
-          changeBlockToPage={changeBlockToPage}
-          changePageToBlock={changePageToBlock}
-          deleteBlock={deleteBlock}
-          editPage={editPage}
-          duplicatePage={duplicatePage}
-          movePageToPage={movePageToPage}
           modal={modal}
           setModal={setModal}
           setModalStyle={setModalStyle}

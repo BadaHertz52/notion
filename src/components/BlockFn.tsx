@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect,  useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect,  useState ,useContext } from 'react';
 import Menu from './Menu';
 import {Block, findPage, listItem, makeNewBlock, Page} from '../modules/notion';
 import { CSSProperties } from 'styled-components';
@@ -8,6 +8,7 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import { CgMenuGridO } from 'react-icons/cg';
 import { ModalType } from '../containers/EditorContainer';
 import { setTemplateItem } from './BlockComponent';
+import { ActionContext } from '../containers/NotionRouter';
 
 type BlockFnProp ={
   pages:Page[],
@@ -15,16 +16,7 @@ type BlockFnProp ={
   firstlist:listItem[],
   page:Page,
   userName:string,
-  addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void, 
-  editBlock: (pageId: string, block: Block) => void,
-  changeBlockToPage: (currentPageId: string, block: Block) => void,
-  changePageToBlock: (currentPageId: string, block: Block) => void
-  deleteBlock :(pageId: string, block: Block ,isInMenu:boolean) => void,
-  addPage : ( newPage:Page, )=>void,
-  editPage: (pageId: string, newPage: Page) => void,
-  duplicatePage: (targetPageId: string) => void,
   commentBlock: Block|null,
-  movePageToPage: (targetPageId:string, destinationPageId:string)=>void,
   frameHtml: HTMLDivElement | null,
   setMoveTargetBlock :Dispatch<SetStateAction<Block| null>>,
   moveTargetBlock:Block|null,
@@ -77,7 +69,9 @@ export const detectRange =(event:MouseEvent| React.MouseEvent , targetArea:DOMRe
   return (inner_x && inner_y);
 };
 
-const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage, editBlock,changeBlockToPage,changePageToBlock, deleteBlock ,addPage,editPage, movePageToPage,  setMoveTargetBlock,moveTargetBlock,frameHtml ,setCommentBlock, modal, setModal ,menuOpen,setOpenMenu ,setModalStyle ,setTargetPageId }:BlockFnProp)=>{
+const BlockFn =({pages,pagesId,firstlist, page,userName, setMoveTargetBlock,moveTargetBlock,frameHtml ,setCommentBlock, modal, setModal ,menuOpen,setOpenMenu ,setModalStyle ,setTargetPageId }:BlockFnProp)=>{
+  const {addBlock} =useContext(ActionContext).actions;
+
   const [openRename, setOpenRename] =useState<boolean>(false);
 
   const [blockFnTargetBlock, setBlockFnTargetBlock]=useState<Block|null>(null);
@@ -191,14 +185,6 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
             page={page}
             userName={userName}
             setOpenMenu={setOpenMenu}
-            addBlock={addBlock}
-            editBlock={editBlock}
-            changeBlockToPage={changeBlockToPage}
-            changePageToBlock={changePageToBlock}
-            deleteBlock={deleteBlock}
-            editPage={editPage}
-            duplicatePage={duplicatePage}
-            movePageToPage={movePageToPage}
             modal={modal}
             setModal={setModal}
             setCommentBlock={setCommentBlock}
@@ -214,8 +200,6 @@ const BlockFn =({pages,pagesId,firstlist, page,userName, addBlock,duplicatePage,
           currentPageId={page.id}
           block={blockFnTargetBlock}
           page={renameTargetPage}
-          editBlock={editBlock}
-          editPage={editPage}
           renameStyle={undefined}
           setOpenRename={setOpenRename}
         />

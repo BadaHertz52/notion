@@ -1,9 +1,9 @@
-import React, { Dispatch, SetStateAction, useEffect, useRef } from 'react';
+import React, { Dispatch, SetStateAction, useContext } from 'react';
 import styled from 'styled-components';
 import { BgColorType, bg_blue, bg_default, bg_green, bg_grey, bg_yellow, bg_pink, Block, blue, ColorType, defaultColor, green, grey, orange, Page, red } from '../modules/notion';
-import { isMobile, setTemplateItem } from './BlockComponent';
-import {selectionType} from '../containers/NotionRouter';
-import { removeSelected } from './BlockStyler';
+import {  setTemplateItem } from './BlockComponent';
+import {ActionContext, selectionType} from '../containers/NotionRouter';
+
 
 type StyleColorInformProps ={
   color:ColorType | undefined,
@@ -147,12 +147,12 @@ const ColorInform=({color ,background, colorName ,page, block ,editBlock, templa
 type ColorMenuProps = {
   page :Page,
   block:Block,
-  editBlock : (pageId: string, block: Block) => void,
   selection:selectionType|null,
   setSelection:Dispatch<SetStateAction<selectionType | null>>|null,
   setOpenMenu : Dispatch<SetStateAction<boolean>>|null
 };
-const ColorMenu=({page, block, editBlock, selection, setSelection , setOpenMenu}:ColorMenuProps)=>{
+const ColorMenu=({page, block,selection, setSelection , setOpenMenu}:ColorMenuProps)=>{
+  const {editBlock}=useContext(ActionContext).actions;
   const templateHtml=document.getElementById("template");
   return(
     <div className="menu_color"  >

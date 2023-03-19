@@ -1,11 +1,11 @@
-import React, {Dispatch, SetStateAction, useEffect} from 'react';
+import React, {Dispatch, SetStateAction, useEffect, useContext} from 'react';
 import { FcTodoList } from 'react-icons/fc';
 import { IoIosList } from 'react-icons/io';
 import { IoDocumentTextOutline, IoTextOutline } from 'react-icons/io5';
 import { RiPlayList2Fill } from 'react-icons/ri';
 import { VscListOrdered } from 'react-icons/vsc';
 import { Command } from './Frame';
-import {selectionType} from '../containers/NotionRouter';
+import {ActionContext, selectionType} from '../containers/NotionRouter';
 import {  Block, BlockType,  findBlock,  findParentBlock, makeNewBlock, numberList, Page } from "../modules/notion";
 import imgIcon from '../assests/img/vincent-van-gogh-ge1323790d_640.jpg'; 
 import { setTemplateItem } from './BlockComponent';
@@ -14,17 +14,14 @@ import { CSSProperties } from 'styled-components';
 type CommandBlockProp ={
   page:Page,
   block:Block,
-  editBlock :(pageId:string, block:Block)=>void,
-  changeBlockToPage: (currentPageId: string, block: Block) => void,
-  changePageToBlock:(currentPageId: string, block: Block) => void,
-  editPage: (pageId: string, newPage: Page) => void,
   command:Command | null,
   setCommand: Dispatch<SetStateAction<Command>> |null ,
   setTurnInto: React.Dispatch<React.SetStateAction<boolean>>|null,
   setSelection:Dispatch<SetStateAction<selectionType | null>>|null,
   style:CSSProperties|undefined
 };
-const CommandBlock =({ page ,block , editBlock,changeBlockToPage,changePageToBlock ,editPage ,setCommand ,command ,setSelection ,setTurnInto ,style}:CommandBlockProp)=>{
+const CommandBlock =({ page ,block ,setCommand ,command ,setSelection ,setTurnInto ,style}:CommandBlockProp)=>{
+  const {editBlock,changeBlockToPage,changePageToBlock ,editPage } =useContext(ActionContext).actions;
   const commandBlock_inner =document.getElementById("commandBlock_inner");
   const commandBlock_noResult =document.getElementById("commandBlock_noResult");
 

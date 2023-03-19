@@ -1,9 +1,9 @@
-import React , {useState, ChangeEvent, Dispatch ,SetStateAction, useEffect} from 'react';
+import React , {useState, ChangeEvent, Dispatch ,SetStateAction, useEffect ,useContext} from 'react';
 import { BsArrowUpRight, BsLink45Deg } from 'react-icons/bs';
 import { IoMdCopy } from 'react-icons/io';
 import { IoTrashOutline } from 'react-icons/io5';
 import { CSSProperties } from 'styled-components';
-import {  makePagePath, makeRoutePath, pathType } from '../containers/NotionRouter';
+import {  ActionContext, makePagePath, makeRoutePath, pathType } from '../containers/NotionRouter';
 import { Block, findPage, Page } from '../modules/notion';
 import {selectionType} from '../containers/NotionRouter';
 import PageIcon from './PageIcon';
@@ -14,12 +14,12 @@ type LinkLoaderProps={
   pagesId:string[],
   page:Page,
   block:Block,
-  editBlock: (pageId: string, block: Block) => void,
   setOpenLink: Dispatch<SetStateAction<boolean>>,
   blockStylerStyle:CSSProperties|undefined,
   setSelection: Dispatch<SetStateAction<selectionType | null>>|null,
 }
-const LinkLoader=({recentPagesId, pages,page,pagesId, block,editBlock, setOpenLink, blockStylerStyle,setSelection}:LinkLoaderProps)=>{
+const LinkLoader=({recentPagesId, pages,page,pagesId, block, setOpenLink, blockStylerStyle,setSelection}:LinkLoaderProps)=>{
+  const {editBlock} =useContext(ActionContext).actions;
   const selectedHtml =document.querySelector(".selected");
   const recentPages = recentPagesId!==null? 
                       (recentPagesId.length>3 ?  

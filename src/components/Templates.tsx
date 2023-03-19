@@ -1,8 +1,9 @@
-import React, { Dispatch, MouseEvent, SetStateAction, useRef, useState } from 'react';
+import React, { Dispatch, MouseEvent, SetStateAction, useRef, useState, useContext} from 'react';
 import { AiOutlineExpandAlt, AiOutlinePlus, AiOutlineShrink } from 'react-icons/ai';
 import { BsTrash } from 'react-icons/bs';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
+import { ActionContext } from '../containers/NotionRouter';
 import { RootState } from '../modules';
 import { add_template, cancle_edit_template, delete_template, findPage, Page, pageSample } from '../modules/notion';
 import { UserState } from '../modules/user';
@@ -15,7 +16,8 @@ type TemplatesProps = Template_Frame_SAME_Props &{
   setRoutePage:Dispatch<SetStateAction<Page|null>>,
   setOpenTemplates: Dispatch<SetStateAction<boolean>>
 };
-const Templates =({routePageId ,user ,pagesId, pages, firstlist ,recentPagesId,editBlock,changeBlockToPage,changePageToBlock, addBlock,changeToSub ,raiseBlock, deleteBlock, addPage, editPage ,duplicatePage,movePageToPage , setRoutePage ,setTargetPageId,commentBlock,openComment , openTemplates ,setOpenTemplates ,setOpenComment , modal ,setModal,setCommentBlock ,showAllComments ,smallText , fullWidth  ,discardEdit,setDiscardEdit, fontStyle , mobileSideMenuOpen , setMobileSideMenuOpen ,setMobileSideMenu }:TemplatesProps)=>{
+const Templates =({routePageId ,user ,pagesId, pages, firstlist ,recentPagesId, setRoutePage ,setTargetPageId,commentBlock,openComment , openTemplates ,setOpenTemplates ,setOpenComment , modal ,setModal,setCommentBlock ,showAllComments ,smallText , fullWidth  ,discardEdit,setDiscardEdit, fontStyle , mobileSideMenuOpen , setMobileSideMenuOpen ,setMobileSideMenu }:TemplatesProps)=>{
+  const { addPage, editPage} =useContext(ActionContext).actions;
   const templatesId =useSelector((state:RootState)=> state.notion).templatesId;
   const dispatch =useDispatch();
   const addTemplate =(template:Page)=>{
@@ -237,17 +239,6 @@ const Templates =({routePageId ,user ,pagesId, pages, firstlist ,recentPagesId,e
               pages={pages}
               firstlist={firstlist}
               recentPagesId={recentPagesId}
-              addBlock={addBlock}
-              editBlock={editBlock}
-              changeBlockToPage={changeBlockToPage}
-              changePageToBlock={changePageToBlock}
-              changeToSub={changeToSub}
-              raiseBlock={raiseBlock}
-              deleteBlock={deleteBlock}
-              addPage={addPage}
-              editPage={editPage}
-              duplicatePage={duplicatePage}
-              movePageToPage={movePageToPage}
               commentBlock={commentBlock}
               openComment={openComment}
               setTargetPageId={setTargetPageId}
