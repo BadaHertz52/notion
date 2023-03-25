@@ -96,11 +96,11 @@
   & > div {
     position: relative;
   }
-  .icon-page {
+  .page__icon-outBox {
     width: fit-content;
     height: fit-content;
   }
-  .icon-page.iconNull {
+  .page__icon.iconNull {
     display: none;
   }
   .deco div {
@@ -130,7 +130,7 @@
       font-size: 13px;
     }
   }
-  .icon-page {
+  .page__icon {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -145,7 +145,7 @@
       height: 100%;
       font-size: 60px;
     }
-    .pageIcon__img {
+    .page__icon__img {
       width: 100%;
       height: 100%;
     }

@@ -34,11 +34,11 @@
 }
 
 .commentBlock__header,
-.input-comment {
+.commentInput {
   height: 20px;
 }
 .commentBlock .firstLetter,
-.input-comment .firstLetter .inner {
+.commentInput .firstLetter .inner {
   display: flex;
   width: 20px;
   height: 20px;
@@ -59,7 +59,7 @@
     }
   }
 }
-.input-comment .firstLetter {
+.commentInput .firstLetter {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -116,7 +116,7 @@
       font-size: inherit;
     }
   }
-  .input-comment form input {
+  .commentInput form input {
     font-size: inherit;
   }
   .comments {
@@ -238,7 +238,7 @@
     padding-bottom: 2px;
     background: rgba(255, 212, 0, 0.8);
   }
-  .input-comment {
+  .commentInput {
     width: calc(100% - 34px);
     box-sizing: border-box;
     input[type="text"] {
@@ -257,7 +257,7 @@
     position: relative;
   }
 }
-.input-comment {
+.commentInput {
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -281,7 +281,7 @@
     margin: 0 2.5%;
     font-size: 14px;
   }
-  .input-comment {
+  .commentInput {
     &:focus {
       outline: none;
     }

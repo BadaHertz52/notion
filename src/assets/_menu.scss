@@ -2,9 +2,10 @@
 .menu {
   font-weight: initial;
   position: absolute;
+  z-index: 10;
 }
 .mainMenu,
-.menu___sideMenu,
+.menu__sideMenu,
 #modal__menu {
   @include modalStyle;
   width: fit-content;
@@ -15,8 +16,8 @@
   padding: 3px;
   z-index: 30;
   display: flex;
-  .input-comment {
-    width: calc(100% - 20px);
+  .commentInput {
+    width: 350px;
     margin: 10px;
     box-sizing: border-box;
     flex-direction: row;
@@ -28,7 +29,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    .input-comment {
+    .commentInput {
       height: 100%;
       margin: 5px;
     }
@@ -68,7 +69,7 @@
   }
 }
 
-.menu___sideMenu {
+.menu__sideMenu {
   display: block;
   position: absolute;
   z-index: 20;
@@ -79,7 +80,7 @@
   .no-result {
     display: none;
   }
-  .menu___color,
+  .menu__color,
   #commandBlock {
     background-color: initial;
   }
@@ -91,7 +92,7 @@
     }
   }
 }
-.menu___color {
+.menu__color {
   @include modalStyle;
   width: 200px;
   color: initial;
@@ -128,7 +129,7 @@
     margin-left: 5px;
   }
 }
-.menu___sideMenu #pageMenu {
+.menu__sideMenu #pageMenu {
   .inner {
     width: 100%;
     height: fit-content;
@@ -159,7 +160,7 @@
     margin-top: 10px;
     width: 90%;
     margin: 5%;
-    &__header {
+    .page-group__header {
       color: $itemText;
       font : {
         size: 12px;
@@ -171,7 +172,7 @@
   .btn-page {
     font-size: 14px;
     padding: 5px 0;
-    .inner {
+    &__inner {
       display: flex;
       height: 1rem;
       & > div {
@@ -219,10 +220,10 @@
 
 @media screen and (max-width: 767px) {
   .mainMenu,
-  .menu___sideMenu {
+  .menu__sideMenu {
     width: 200px;
   }
-  .menu___sideMenu > div {
+  .menu__sideMenu > div {
     width: 100%;
   }
 }

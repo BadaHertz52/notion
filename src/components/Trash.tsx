@@ -43,10 +43,10 @@ const ResultItem = ({
     <div className="page" onClick={goPage}>
       <Result item={item} />
       <div className="btn-group">
-        <button className="restoreBtn" onClick={() => restorePage(item.id)}>
+        <button className="btn-restore" onClick={() => restorePage(item.id)}>
           <RiArrowGoBackLine />
         </button>
-        <button className="cleanBtn" onClick={() => cleanTrash(item.id)}>
+        <button className="btn-clean" onClick={() => cleanTrash(item.id)}>
           <IoTrashOutline />
         </button>
       </div>

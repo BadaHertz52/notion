@@ -452,7 +452,7 @@ const BlockStyler = ({
   ) => {
     const commentInputHtml = document
       .getElementById("modal__menu")
-      ?.querySelector(".input-comment");
+      ?.querySelector(".commentInput");
     if (
       document.getElementById("blockStyler") !== null &&
       (commentInputHtml == null || commentInputHtml === undefined) &&

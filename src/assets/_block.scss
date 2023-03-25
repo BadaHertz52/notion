@@ -216,12 +216,12 @@
 }
 .page.block {
   padding: 5px;
-  .icon-page,
+  .page__icon-outBox,
   img {
     width: 18px;
     height: 18px;
   }
-  .icon-page span {
+  .page__icon-outBox span {
     width: inherit;
     height: inherit;
   }
@@ -345,7 +345,7 @@
   color: inherit;
   text-decoration: inherit;
   width: fit-content;
-  z-index: 6;
+  z-index: 2;
   font : {
     size: inherit;
     weight: inherit;

@@ -541,7 +541,7 @@ export const CommentInput = ({
   return (
     <div
       className={
-        addOrEdit === "edit" ? "input-comment editComment" : "input-comment"
+        addOrEdit === "edit" ? "commentInput editComment" : "commentInput"
       }
     >
       {addOrEdit === "add" && (
@@ -555,7 +555,6 @@ export const CommentInput = ({
         <input
           type="text"
           placeholder={placeHolder}
-          className="input-comment"
           name="comment"
           onInput={onInputText}
           value={text}

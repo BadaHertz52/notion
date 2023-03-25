@@ -28,11 +28,11 @@
     justify-content: space-between;
     align-items: center;
     padding: 8px 12px;
-    .icon-page {
+    .page__icon {
       margin-left: 5px;
       width: 18px;
       height: 18px;
-      .pageIcon__img {
+      .page__icon__img {
         width: 100%;
         height: 100%;
       }
@@ -157,14 +157,14 @@
         background-color: #edece9;
       }
     }
-    .icon-page {
+    .page__icon-outBox {
       width: 22px;
       height: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-    .pageIcon__img {
+    .page__icon__img {
       width: 14px;
       height: 14px;
     }

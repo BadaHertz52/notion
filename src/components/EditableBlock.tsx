@@ -366,7 +366,7 @@ const EditableBlock = ({
                     </button>
                   )}
                   {block.type === "page" && (
-                    <div className="icon-page left">
+                    <div className="page__icon-outBox left">
                       <PageIcon
                         icon={block.icon}
                         iconType={block.iconType}

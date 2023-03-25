@@ -134,7 +134,7 @@ const Export = ({
               }
               ${
                 content === noFileImage &&
-                "img, .page__header__cover, .icon-page, .media, .pageIcon__img{display:none}"
+                "img, .page__header__cover, .page__icon-outBox, .media, .page__icon__img{display:none}"
               }
             </style>
           </head>

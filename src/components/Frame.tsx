@@ -1011,7 +1011,7 @@ const Frame = ({
     if (modal.what === "modalComment") {
       const targetCommentInputHtml = document
         .getElementById("modalMenu")
-        ?.querySelector(".input-comment") as
+        ?.querySelector(".commentInput") as
         | HTMLInputElement
         | null
         | undefined;
@@ -1106,7 +1106,7 @@ const Frame = ({
             )}
             <div className="page__header_notCover">
               <div
-                className="icon-page"
+                className="page__icon-outBox"
                 style={pageTitleStyle}
                 onClick={onClickPageIcon}
               >

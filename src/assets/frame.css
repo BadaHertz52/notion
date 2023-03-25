@@ -453,12 +453,12 @@ a:visited {
 .page.block {
   padding: 5px;
 }
-.page.block .icon-page,
+.page.block .page__icon-outBox,
 .page.block img {
   width: 18px;
   height: 18px;
 }
-.page.block .icon-page span {
+.page.block .page__icon-outBox span {
   width: inherit;
   height: inherit;
 }
@@ -582,7 +582,7 @@ a:visited {
   text-decoration: inherit;
   width: -moz-fit-content;
   width: fit-content;
-  z-index: 6;
+  z-index: 2;
   font-size: inherit;
   font-weight: inherit;
   border-bottom: 2px solid rgba(255, 198, 11, 0.658);
@@ -769,12 +769,12 @@ a:visited {
 }
 
 .commentBlock__header,
-.input-comment {
+.commentInput {
   height: 20px;
 }
 
 .commentBlock .firstLetter,
-.input-comment .firstLetter .inner {
+.commentInput .firstLetter .inner {
   display: flex;
   width: 20px;
   height: 20px;
@@ -790,21 +790,21 @@ a:visited {
   margin-right: 5px;
 }
 .commentBlock .firstLetter div,
-.input-comment .firstLetter .inner div {
+.commentInput .firstLetter .inner div {
   font-size: 14px;
   font-weight: initial;
 }
 
-.input-comment .firstLetter {
+.commentInput .firstLetter {
   display: flex;
   justify-content: center;
   align-items: center;
   height: inherit;
 }
-.input-comment .firstLetter .inner {
+.commentInput .firstLetter .inner {
   margin: 0;
 }
-.input-comment .firstLetter span {
+.commentInput .firstLetter span {
   display: inline-block;
 }
 
@@ -871,7 +871,7 @@ a:visited {
 .page__comments .commentBlock .comment__contents {
   font-size: inherit;
 }
-.page__comments .input-comment form input {
+.page__comments .commentInput form input {
   font-size: inherit;
 }
 .page__comments .comments {
@@ -992,11 +992,11 @@ a:visited {
   padding-bottom: 2px;
   background: rgba(255, 212, 0, 0.8);
 }
-.commentBlock .input-comment {
+.commentBlock .commentInput {
   width: calc(100% - 34px);
   box-sizing: border-box;
 }
-.commentBlock .input-comment input[type=text] {
+.commentBlock .commentInput input[type=text] {
   margin: 0;
 }
 .commentBlock .tool button:hover {
@@ -1007,13 +1007,13 @@ a:visited {
   position: relative;
 }
 
-.input-comment {
+.commentInput {
   display: flex;
   flex-direction: row;
   width: 100%;
   padding: 0;
 }
-.input-comment form {
+.commentInput form {
   display: flex;
   flex-grow: 1;
   flex-shrink: 1;
@@ -1022,7 +1022,7 @@ a:visited {
   width: calc(100% - 24px);
   box-sizing: border-box;
 }
-.input-comment input[type=text] {
+.commentInput input[type=text] {
   width: 90%;
   height: 1.5rem;
   font-size: 15px;
@@ -1041,18 +1041,18 @@ a:visited {
   margin: 0 2.5%;
   font-size: 14px;
 }
-.input-comment input[type=text]::-moz-placeholder {
+.commentInput input[type=text]::-moz-placeholder {
   color: #b9b8b6;
 }
-.input-comment input[type=text]::placeholder {
+.commentInput input[type=text]::placeholder {
   color: #b9b8b6;
 }
-.input-comment input[type=text]:focus {
+.commentInput input[type=text]:focus {
   box-sizing: border-box;
   outline: 3.5px solid rgb(169, 226, 245);
   border: none;
 }
-.input-comment .input-comment:focus {
+.commentInput .commentInput:focus {
   outline: none;
 }
 
@@ -1291,12 +1291,12 @@ a:visited {
 #linkLoader .page__inner:hover {
   background-color: #edece9;
 }
-#linkLoader .icon-page {
+#linkLoader .page__icon-outBox {
   width: 1.5rem;
   height: 100%;
   margin-right: 10px;
 }
-#linkLoader .pageIcon__img {
+#linkLoader .page__icon__img {
   width: 100%;
   height: 100%;
 }
@@ -1470,13 +1470,13 @@ a:visited {
 .page__header > div {
   position: relative;
 }
-.page__header .icon-page {
+.page__header .page__icon-outBox {
   width: -moz-fit-content;
   width: fit-content;
   height: -moz-fit-content;
   height: fit-content;
 }
-.page__header .icon-page.iconNull {
+.page__header .page__icon.iconNull {
   display: none;
 }
 .page__header .deco div {
@@ -1507,7 +1507,7 @@ a:visited {
 .page__header .deco div span {
   font-size: 13px;
 }
-.page__header .icon-page {
+.page__header .page__icon {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1517,13 +1517,13 @@ a:visited {
   pointer-events: auto;
   cursor: default;
 }
-.page__header .icon-page .pageStringIcon {
+.page__header .page__icon .pageStringIcon {
   text-align: center;
   width: 100%;
   height: 100%;
   font-size: 60px;
 }
-.page__header .icon-page .pageIcon__img {
+.page__header .page__icon .page__icon__img {
   width: 100%;
   height: 100%;
 }

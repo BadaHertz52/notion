@@ -96,13 +96,13 @@ const PageMenu = ({
   const PageButton = ({ item }: PageButtonProps) => {
     return (
       <button className="btn-page" onClick={() => onClickToMove(item.id)}>
-        <div className="inner">
+        <div className="btn-page__inner">
           <PageIcon
             icon={item.icon}
             iconType={item.iconType}
             style={undefined}
           />
-          <div className="page__title">
+          <div className="btn-page__title">
             <span>{item.title}</span>
           </div>
         </div>
@@ -152,7 +152,7 @@ const PageMenu = ({
         ) : (
           <>
             <div className="page-group">
-              <header id="page-group__header">Sugested</header>
+              <header className="page-group__header">Sugested</header>
               {firstList.map((item: listItem) => (
                 <PageButton key={`list_${item.id}`} item={item} />
               ))}
