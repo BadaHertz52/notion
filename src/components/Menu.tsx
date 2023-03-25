@@ -203,6 +203,7 @@ const Menu = ({
     setCommentBlock(block);
     setOpenMenu(false);
     setSelection !== null && setSelection(null);
+    sessionStorage.setItem("modalStyle", JSON.stringify(modalStyle));
     setModal({
       open: true,
       what: modalComment,
