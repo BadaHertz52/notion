@@ -1,112 +1,139 @@
-import React, { Dispatch, SetStateAction, useEffect, useState ,useContext } from 'react';
+import React, {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+  useContext,
+} from "react";
 
-import { ActionContext, pathType } from '../containers/NotionRouter';
-import { listItem, Page } from '../modules/notion';
-import {  SideAppear } from '../modules/side';
-import PageMenu from './PageMenu';
-import { CSSProperties } from 'styled-components';
-import PageIcon from './PageIcon';
-import { detectRange } from './BlockFn';
-import { defaultFontFamily, fontStyleType, monoFontFamily, serifFontFamily } from '../containers/NotionRouter';
-import { IoIosArrowBack } from 'react-icons/io';
-import { AiOutlineMenu} from 'react-icons/ai';
-import { FiChevronsLeft } from 'react-icons/fi';
+import { ActionContext, pathType } from "../containers/NotionRouter";
+import { listItem, Page } from "../modules/notion";
+import { SideAppear } from "../modules/side";
+import PageMenu from "./PageMenu";
+import { CSSProperties } from "styled-components";
+import PageIcon from "./PageIcon";
+import { detectRange } from "./BlockFn";
+import {
+  defaultFontFamily,
+  fontStyleType,
+  monoFontFamily,
+  serifFontFamily,
+} from "../containers/NotionRouter";
+import { IoIosArrowBack } from "react-icons/io";
+import { AiOutlineMenu } from "react-icons/ai";
+import { FiChevronsLeft } from "react-icons/fi";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { BiMessageDetail } from "react-icons/bi";
 import { BsThreeDots } from "react-icons/bs";
-import { RiDeleteBin6Line } from 'react-icons/ri';
-import { IoArrowRedoOutline } from 'react-icons/io5';
-import { GrDocumentUpload } from 'react-icons/gr';
-import { isMobile } from './BlockComponent';
-type TopBarProps ={
-  firstlist:listItem[],
-  favorites:string[]|null,
-  sideAppear:SideAppear,
-  page:Page,
-  pages:Page[],
-  pagePath: pathType[] |null ,
-  setTargetPageId:Dispatch<SetStateAction<string>>,
-  showAllComments:boolean,
-  setShowAllComments:Dispatch<SetStateAction<boolean>>,
-  smallText:boolean,
-  setSmallText:Dispatch<SetStateAction<boolean>>,
-  fullWidth:boolean,
-  setFullWidth:Dispatch<SetStateAction<boolean>>,
-  setOpenExport :Dispatch<SetStateAction<boolean>>,
-  setFontStyle:Dispatch<SetStateAction<fontStyleType>>
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { IoArrowRedoOutline } from "react-icons/io5";
+import { GrDocumentUpload } from "react-icons/gr";
+import { isMobile } from "./BlockComponent";
+type TopBarProps = {
+  firstList: listItem[];
+  favorites: string[] | null;
+  sideAppear: SideAppear;
+  page: Page;
+  pages: Page[];
+  pagePath: pathType[] | null;
+  setTargetPageId: Dispatch<SetStateAction<string>>;
+  showAllComments: boolean;
+  setShowAllComments: Dispatch<SetStateAction<boolean>>;
+  smallText: boolean;
+  setSmallText: Dispatch<SetStateAction<boolean>>;
+  fullWidth: boolean;
+  setFullWidth: Dispatch<SetStateAction<boolean>>;
+  setOpenExport: Dispatch<SetStateAction<boolean>>;
+  setFontStyle: Dispatch<SetStateAction<fontStyleType>>;
 };
 
-const TopBar =({ firstlist,favorites,sideAppear,page , pages,pagePath,setTargetPageId  , showAllComments, setShowAllComments , smallText, setSmallText ,fullWidth, setFullWidth ,setOpenExport, setFontStyle}:TopBarProps)=>{
-  const {deletePage, changeSide ,addFavorites,removeFavorites} =useContext(ActionContext).actions;
-  const inner =document.getElementById("inner");
-  const [title, setTitle]= useState<string>("");
-  const [openPageMoreFun, setOpenPageMoreFun] =useState<boolean>(false);
-  const [openPageMenu, setOpenPageMenu]=useState<boolean>(false);
-  const pageInFavorites = favorites?.includes(page.id); 
+const TopBar = ({
+  firstList,
+  favorites,
+  sideAppear,
+  page,
+  pages,
+  pagePath,
+  setTargetPageId,
+  showAllComments,
+  setShowAllComments,
+  smallText,
+  setSmallText,
+  fullWidth,
+  setFullWidth,
+  setOpenExport,
+  setFontStyle,
+}: TopBarProps) => {
+  const { deletePage, changeSide, addFavorites, removeFavorites } =
+    useContext(ActionContext).actions;
+  const inner = document.getElementById("inner");
+  const [title, setTitle] = useState<string>("");
+  const [openPageMoreFun, setOpenPageMoreFun] = useState<boolean>(false);
+  const [openPageMenu, setOpenPageMenu] = useState<boolean>(false);
+  const pageInFavorites = favorites?.includes(page.id);
 
-  const onClickSideBarBtn =(event:React.MouseEvent)=>{
-    const target =event.target as HTMLElement;
-    const targetTag =target.tagName.toLowerCase();
-    const width =window.outerWidth;
-    if(showAllComments && width <1000 ){
+  const onClickSideBarBtn = (event: React.MouseEvent) => {
+    const target = event.target as HTMLElement;
+    const targetTag = target.tagName.toLowerCase();
+    const width = window.outerWidth;
+    if (showAllComments && width < 1000) {
       setShowAllComments(false);
-    };
+    }
     switch (targetTag) {
       case "button":
-        target.id ==="sideBarBtn" && changeSide("lock");
+        target.id === "topBar__btn-sideBar" && changeSide("lock");
         break;
       case "svg":
-        target.parentElement?.id==="sideBarBtn" && changeSide("lock");
+        target.parentElement?.id === "topBar__btn-sideBar" &&
+          changeSide("lock");
         break;
       case "path":
-        target.parentElement?.parentElement?.id=== "sideBarBtn" && changeSide("lock");
+        target.parentElement?.parentElement?.id === "topBar__btn-sideBar" &&
+          changeSide("lock");
         break;
       default:
         break;
     }
   };
-  const onMouseEnterSidBarBtn=()=>{
-    const innerWidth =window.innerWidth;
-    if(innerWidth >768){
-      (sideAppear ==="close" || sideAppear==="floatHide") ?
-      changeSide("float"):
-      changeSide("floatHide");
-    };
+  const onMouseEnterSidBarBtn = () => {
+    const innerWidth = window.innerWidth;
+    if (innerWidth > 768) {
+      sideAppear === "close" || sideAppear === "floatHide"
+        ? changeSide("float")
+        : changeSide("floatHide");
+    }
   };
 
-  const addOrRemoveFavorite=()=>{
-    pageInFavorites ?
-    removeFavorites(page.id):
-    addFavorites(page.id);
-  }
-  const onClickViewAllComments=()=>{
-    setOpenPageMoreFun(false);
-    setShowAllComments(!showAllComments)
-    changeAllCommentAndTopBarStyle()
+  const addOrRemoveFavorite = () => {
+    pageInFavorites ? removeFavorites(page.id) : addFavorites(page.id);
   };
-  const onClickMoreBtn =()=>{
+  const onClickViewAllComments = () => {
+    setOpenPageMoreFun(false);
+    setShowAllComments(!showAllComments);
+    changeAllCommentAndTopBarStyle();
+  };
+  const onClickMoreBtn = () => {
     setOpenPageMoreFun(!openPageMoreFun);
     setShowAllComments(false);
   };
-  const defaultStyle ="default";
-  const serif ="serif"; 
-  const mono ="mono";
-  type fontStyle =typeof defaultStyle | typeof serif |typeof mono; 
-  const returnFontFamily =(font:fontStyle)=>{
-    const style:CSSProperties ={
-      fontFamily: font
+  const defaultStyle = "default";
+  const serif = "serif";
+  const mono = "mono";
+  type fontStyle = typeof defaultStyle | typeof serif | typeof mono;
+  const returnFontFamily = (font: fontStyle) => {
+    const style: CSSProperties = {
+      fontFamily: font,
     };
-    return style
+    return style;
   };
-  const changeFontStyle=(event:React.MouseEvent ,font: fontStyle )=>{
-    const currentTarget =event.currentTarget;
+  const changeFontStyle = (event: React.MouseEvent, font: fontStyle) => {
+    const currentTarget = event.currentTarget;
     const targetFontSample = currentTarget.firstElementChild;
-    const fontSample =[...document.getElementsByClassName("fontSample")];
-    fontSample.forEach((element:Element)=>{
-      element.classList.contains("on") && 
-      element.classList.remove("on"); 
+    const fontSample = [...document.getElementsByClassName("font-sample")];
+    fontSample.forEach((element: Element) => {
+      element.classList.contains("on") && element.classList.remove("on");
     });
-    targetFontSample!==null && targetFontSample.classList.add("on");
+    targetFontSample !== null && targetFontSample.classList.add("on");
 
     switch (font) {
       case "default":
@@ -120,306 +147,255 @@ const TopBar =({ firstlist,favorites,sideAppear,page , pages,pagePath,setTargetP
         break;
       default:
         break;
-    };
-
+    }
   };
-  const changeFontSize=()=>{
+  const changeFontSize = () => {
     setSmallText(!smallText);
   };
 
-  const changeWidth=(event:React.MouseEvent)=>{
-    const width= window.innerWidth;
-    !(width<1024 && sideAppear ==="lock") && setFullWidth(!fullWidth);
+  const changeWidth = (event: React.MouseEvent) => {
+    const width = window.innerWidth;
+    !(width < 1024 && sideAppear === "lock") && setFullWidth(!fullWidth);
   };
-  const onClickMoveTo=()=>{
+  const onClickMoveTo = () => {
     setOpenPageMoreFun(false);
     setOpenPageMenu(!openPageMenu);
   };
-  
-  function changeAllCommentAndTopBarStyle(){
-    const innerWidth =window.innerWidth;
-    const topbar_left =document.querySelector(".topbar_left");
-    const pageFun =document.querySelector(".pageFun");
-    const pagePath =document.querySelectorAll(".pagePath");
-    const changePathWidth=(topbarLeftWidth:number)=>{
-      const width :number =((topbarLeftWidth -32) / pagePath.length);
-      pagePath.forEach((e:Element)=> e.setAttribute("style",`max-width:${width}px`));
+
+  function changeAllCommentAndTopBarStyle() {
+    const innerWidth = window.innerWidth;
+    const topBarLeftEl = document.querySelector(".topBar__left");
+    const topBarPageToolEl = document.querySelector(".topBar__page-tool");
+    const pagePath = document.querySelectorAll(".pagePath");
+    const changePathWidth = (topBarLeftWidth: number) => {
+      const width: number = (topBarLeftWidth - 32) / pagePath.length;
+      pagePath.forEach((e: Element) =>
+        e.setAttribute("style", `max-width:${width}px`)
+      );
     };
-    if(showAllComments){
-      if(innerWidth >= 385){
-        const newWidth =innerWidth -(12+385+5);
-        topbar_left?.setAttribute("style", `width: ${newWidth}px`);
-        pageFun?.setAttribute("style", "width:385px");
+    if (showAllComments) {
+      if (innerWidth >= 385) {
+        const newWidth = innerWidth - (12 + 385 + 5);
+        topBarLeftEl?.setAttribute("style", `width: ${newWidth}px`);
+        topBarPageToolEl?.setAttribute("style", "width:385px");
         changePathWidth(newWidth);
-      }else{
+      } else {
         changePathWidth(innerWidth * 0.5);
-        topbar_left?.setAttribute("style", "width:50%");
-        pageFun?.setAttribute("style", "width:50%");
+        topBarLeftEl?.setAttribute("style", "width:50%");
+        topBarPageToolEl?.setAttribute("style", "width:50%");
       }
-    }else{
-      topbar_left?.setAttribute("style", "width:50%");
-      changePathWidth( (innerWidth * 0.5) -26);
-    };
+    } else {
+      topBarLeftEl?.setAttribute("style", "width:50%");
+      changePathWidth(innerWidth * 0.5 - 26);
+    }
   }
-  window.onresize= changeAllCommentAndTopBarStyle;
+  window.onresize = changeAllCommentAndTopBarStyle;
 
-  useEffect(()=>{
-    if(sideAppear ==="float"){
-      setTitle("Lock sideBar ")
+  useEffect(() => {
+    if (sideAppear === "float") {
+      setTitle("Lock sideBar ");
     }
-    if(sideAppear ==="close"){
-      setTitle("Open sideBar ")
+    if (sideAppear === "close") {
+      setTitle("Open sideBar ");
     }
-  },[sideAppear]);
+  }, [sideAppear]);
 
-  inner?.addEventListener("click", function(event:MouseEvent){
-    if(openPageMenu){
+  inner?.addEventListener("click", function (event: MouseEvent) {
+    if (openPageMenu) {
       const pageMenu = document.getElementById("pageMenu");
-      const pageMenuDomRect =pageMenu?.getClientRects()[0]; 
-      const isInnnerMenu =detectRange(event, pageMenuDomRect);
-      !isInnnerMenu && setOpenPageMenu(false);
+      const pageMenuDomRect = pageMenu?.getClientRects()[0];
+      const isInnerMenu = detectRange(event, pageMenuDomRect);
+      !isInnerMenu && setOpenPageMenu(false);
     }
   });
-  return(
-    <div 
-      className="topbar"
-    >
-      <div className='topbar_left'>
-        {sideAppear !=="lock" &&
-          <button 
-            id="sideBarBtn"
-            title ={title}
-            aria-label ={title}
+  return (
+    <div className="topBar">
+      <div className="topBar__left">
+        {sideAppear !== "lock" && (
+          <button
+            id="topBar__btn-sideBar"
+            title={title}
+            aria-label={title}
             onMouseEnter={onMouseEnterSidBarBtn}
             onClick={onClickSideBarBtn}
           >
-            {sideAppear ==="float"
-            ? 
-            <FiChevronsLeft
-            />
-            :
-            (window.innerWidth>768?
-              <AiOutlineMenu/>
-              :
-              <IoIosArrowBack/>
-            )
-            }
+            {sideAppear === "float" ? (
+              <FiChevronsLeft />
+            ) : window.innerWidth > 768 ? (
+              <AiOutlineMenu />
+            ) : (
+              <IoIosArrowBack />
+            )}
           </button>
-
-        }
-        <div className="pagePathes">
-          {pagePath == null ? 
-            <button 
+        )}
+        <div className="page__path-group">
+          {pagePath == null ? (
+            <button
               className="pagePath"
-              onClick={()=>setTargetPageId(page.id)}
+              onClick={() => setTargetPageId(page.id)}
             >
               <PageIcon
                 icon={page.header.icon}
                 iconType={page.header.iconType}
                 style={undefined}
               />
-              <div>
-                {page.header.title }
-              </div>
+              <div>{page.header.title}</div>
             </button>
-          :
-            pagePath.map((path:pathType )=>
-            <button 
-              className="pagePath" 
-              key={pagePath.indexOf(path)}
-              onClick={()=>setTargetPageId(path.id)}
+          ) : (
+            pagePath.map((path: pathType) => (
+              <button
+                className="pagePath"
+                key={pagePath.indexOf(path)}
+                onClick={() => setTargetPageId(path.id)}
               >
-              {pagePath.indexOf(path)!==0 &&
-              <div className='pathSlash'>
-                /
-              </div> 
-              }
-              <div className='pageLink'>
-                <a 
-                  href='path'
-                  onClick={()=>setTargetPageId(path.id)}
-                >
-                  <div className='pathIcon'>
-                    <PageIcon
-                      icon={path.icon}
-                      iconType={path.iconType}
-                      style={undefined}
-                    />
-                  </div>
-                  <div className='pathTitle'
-                  >
-                    <div>{path.title}</div>
-                  </div>
-                </a>
-              </div>
-            </button>
-            )
-          }
+                {pagePath.indexOf(path) !== 0 && (
+                  <div className="pathSlash">/</div>
+                )}
+                <div className="page-link">
+                  <a href="path" onClick={() => setTargetPageId(path.id)}>
+                    <div className="icon-path">
+                      <PageIcon
+                        icon={path.icon}
+                        iconType={path.iconType}
+                        style={undefined}
+                      />
+                    </div>
+                    <div className="path-title">
+                      <div>{path.title}</div>
+                    </div>
+                  </a>
+                </div>
+              </button>
+            ))
+          )}
         </div>
       </div>
-      <div className="pageFun">
-        <button
-          title='Share or publish to the web'
-        >
-          Share
-        </button>
+      <div className="topBar__page-tool">
+        <button title="Share or publish to the web">Share</button>
         <button
           id="allCommentsBtn"
-          title='View all comments'
+          title="View all comments"
           onClick={onClickViewAllComments}
         >
-          <BiMessageDetail/>
+          <BiMessageDetail />
         </button>
         <button
           title="Pin this page in your sidebar"
-          className={pageInFavorites?"favoriteBtn on" : "favoriteBtn"}
+          className={pageInFavorites ? "btn-favorite on" : "btn-favorite"}
           onClick={addOrRemoveFavorite}
         >
-          {pageInFavorites ?
-          <AiFillStar/>
-          :
-          <AiOutlineStar/>
-          }
-
+          {pageInFavorites ? <AiFillStar /> : <AiOutlineStar />}
         </button>
-        <button
-          title=" Style, export, and more"
-          onClick={onClickMoreBtn}
-        >
-          <BsThreeDots/>
+        <button title=" Style, export, and more" onClick={onClickMoreBtn}>
+          <BsThreeDots />
         </button>
-        {openPageMoreFun &&
-          <div
-            className="pageMoreFun"
-          >
-            <div className='inner'>
-                <div className='fontStyle'>
-                  <div className='fontStyleHeader'>
-                    STYLE
-                  </div>
-                  <div className='fontStyleBtns'>
-                    <button
-                      onClick={(event)=>changeFontStyle( event,"default")}
+        {openPageMoreFun && (
+          <div className="page-tool__more">
+            <div className="inner">
+              <div className="fontStyle">
+                <div className="fontStyle__header">STYLE</div>
+                <div className="fontStyle__btn-group">
+                  <button
+                    onClick={(event) => changeFontStyle(event, "default")}
+                  >
+                    <div
+                      className="font-sample on"
+                      style={returnFontFamily("default")}
                     >
-                      <div 
-                        className='fontSample on'
-                        style={returnFontFamily("default")}>
-                        Ag
-                      </div>
-                      <div className='fontName'>
-                        Default
-                      </div>
-                    </button>
-                    <button
-                      onClick={(event)=>changeFontStyle( event,"serif")}
-                    >
-                      <div
-                        className='fontSample'
-                        style={returnFontFamily("serif")}
-                      >
-                        Ag
-                      </div>
-                      <div className='fontName'>
-                        Serif
-                      </div>
-                    </button>
-                    <button
-                      onClick={(event)=>changeFontStyle(event,"mono")}
-                    >
-                      <div
-                        className='fontSample'
-                        style={returnFontFamily("mono")}
-                      >
-                        Ag
-                      </div>
-                      <div className='fontName'>
-                        Mono
-                      </div>
-                    </button>
-                  </div>
-                </div>
-                <div className="size">
-                  <button
-                    onClick={changeFontSize}
-                  >
-                    <div>Small text</div>
-                    <label className='switchBtn'>
-                      <span className={smallText? "slider on": "slider"}></span>
-                    </label>
-                  </button>
-                  <button
-                    style ={{display: isMobile()? "none": "flex"}}
-                    onClick={changeWidth}
-                  >
-                    <div>Full width</div>
-                    <label className='switchBtn'>
-                      <span className={fullWidth? "slider on":"slider"}></span>
-                    </label>
-                  </button>
-                  <div></div>
-                </div>
-                <div className="function">
-                  <button
-                    className={pageInFavorites?"favoriteBtn on" : 
-                    "favoriteBtn"}
-                    onClick={addOrRemoveFavorite}
-                  >
-                    {pageInFavorites ?
-                      <AiFillStar/>
-                      :
-                      <AiOutlineStar/>
-                    }
-                    <span className='label'>
-                    {pageInFavorites ?
-                      "Remove from Favorites"
-                      :
-                      "Add to Favorites"
-                    }
-                    </span>
-                  </button>
-                  <button
-                    onClick={()=>deletePage(page.id)}
-                  >
-                    <RiDeleteBin6Line/>
-                    <span className='label'>
-                      Delete
-                    </span>
-                  </button>
-                  <button
-                    onClick={onClickMoveTo}
-                  >
-                    <IoArrowRedoOutline/>
-                    <span className='label'>
-                      Move to
-                    </span>
-                  </button>
-                  <button
-                    style ={{display: isMobile()? "none": "flex"}}
-                    onClick={()=>{setOpenExport(true); setOpenPageMoreFun(false)}}
-                  >
-                    <GrDocumentUpload/>
-                    <div>
-                      <span className='label'>Export</span>
-                      <span>PDF,HTML,Markdown</span>
+                      Ag
                     </div>
+                    <div className="font-name">Default</div>
+                  </button>
+                  <button onClick={(event) => changeFontStyle(event, "serif")}>
+                    <div
+                      className="font-sample"
+                      style={returnFontFamily("serif")}
+                    >
+                      Ag
+                    </div>
+                    <div className="font-name">Serif</div>
+                  </button>
+                  <button onClick={(event) => changeFontStyle(event, "mono")}>
+                    <div
+                      className="font-sample"
+                      style={returnFontFamily("mono")}
+                    >
+                      Ag
+                    </div>
+                    <div className="font-name">Mono</div>
                   </button>
                 </div>
+              </div>
+              <div className="size">
+                <button onClick={changeFontSize}>
+                  <div>Small text</div>
+                  <label className="btn-switch">
+                    <span className={smallText ? "slider on" : "slider"}></span>
+                  </label>
+                </button>
+                <button
+                  style={{ display: isMobile() ? "none" : "flex" }}
+                  onClick={changeWidth}
+                >
+                  <div>Full width</div>
+                  <label className="btn-switch">
+                    <span className={fullWidth ? "slider on" : "slider"}></span>
+                  </label>
+                </button>
+                <div></div>
+              </div>
+              <div className="function">
+                <button
+                  className={
+                    pageInFavorites ? "btn-favorite on" : "btn-favorite"
+                  }
+                  onClick={addOrRemoveFavorite}
+                >
+                  {pageInFavorites ? <AiFillStar /> : <AiOutlineStar />}
+                  <span className="label">
+                    {pageInFavorites
+                      ? "Remove from Favorites"
+                      : "Add to Favorites"}
+                  </span>
+                </button>
+                <button onClick={() => deletePage(page.id)}>
+                  <RiDeleteBin6Line />
+                  <span className="label">Delete</span>
+                </button>
+                <button onClick={onClickMoveTo}>
+                  <IoArrowRedoOutline />
+                  <span className="label">Move to</span>
+                </button>
+                <button
+                  style={{ display: isMobile() ? "none" : "flex" }}
+                  onClick={() => {
+                    setOpenExport(true);
+                    setOpenPageMoreFun(false);
+                  }}
+                >
+                  <GrDocumentUpload />
+                  <div>
+                    <span className="label">Export</span>
+                    <span>PDF,HTML,Markdown</span>
+                  </div>
+                </button>
+              </div>
             </div>
           </div>
-        }
-        {openPageMenu &&
-        <PageMenu
-          what="page"
-          currentPage={page}
-          firstlist={firstlist}
-          pages={pages}
-          setOpenMenu={setOpenPageMenu}
-          setTargetPageId={setTargetPageId}
-        />
-        }
+        )}
+        {openPageMenu && (
+          <PageMenu
+            what="page"
+            currentPage={page}
+            firstList={firstList}
+            pages={pages}
+            setOpenMenu={setOpenPageMenu}
+            setTargetPageId={setTargetPageId}
+          />
+        )}
       </div>
     </div>
-  )
+  );
 };
 
 export default React.memo(TopBar);

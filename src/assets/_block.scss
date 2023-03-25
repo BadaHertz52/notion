@@ -1,4 +1,4 @@
-@import './common';
+@import "./common";
 
 .editableBlock {
   box-sizing: border-box;
@@ -6,24 +6,24 @@
   width: 100%;
   height: min-content;
   margin: {
-    top:1rem;
-    bottom:1px;
+    top: 1rem;
+    bottom: 1px;
   }
   display: flex;
   flex-direction: column;
-  div{
+  div {
     width: 100%;
   }
-  .listItem_marker ,
-  .commentsBubble{
+  .listItem-marker,
+  .comments-bubble {
     width: fit-content;
   }
 }
 
-.mainBlock{
+.mainBlock {
   display: flex;
   justify-content: space-between;
-  .mainBlock_block{
+  .mainBlock__block {
     display: flex;
     align-items: center;
     width: 100%;
@@ -31,17 +31,17 @@
   }
   width: 100%;
 }
-.mainBlock.on{
-  border-top:  5px solid #8ae2ff;
+.mainBlock.on {
+  border-top: 5px solid #8ae2ff;
 }
-.subBlocks{
-  padding:0;
+.subBlock-group {
+  padding: 0;
   padding-left: 20px;
 }
 [contenteditable] {
   outline: 0px solid transparent;
 }
-.editableBlock , 
+.editableBlock,
 .blockFn button {
   font-size: inherit;
   line-height: inherit;
@@ -53,137 +53,155 @@
 .blockFn.on {
   display: flex;
   position: absolute;
-  padding-right:5px;
+  padding-right: 5px;
   z-index: 5;
-  .blockFnIcon{
-    svg{
+  .icon-blockFn {
+    svg {
       color: $itemSvg;
       fill: $itemSvg;
     }
-    
+
     font : {
       size: 1.2rem;
-      weight:bolder;
+      weight: bolder;
     }
   }
 }
 
 .blockFn button,
 .toggle.block .left {
-  &:hover{
+  &:hover {
     background-color: $itemHover;
   }
 }
 .contentEditable {
-  width:100%;
+  width: 100%;
   white-space: normal;
-  word-break:break-all;
+  word-break: break-all;
   overflow: hidden;
   user-select: text;
   font : {
-    size: inherit
+    size: inherit;
   }
-  &:focus-visible{
+  &:focus-visible {
     outline: none;
   }
 }
-.frame.web
-.contentEditable:empty{
-  &:hover, &:focus{
-    &::after{
+.frame.web .contentEditable:empty {
+  &:hover,
+  &:focus {
+    &::after {
       content: attr(placeholder);
       color: $mud;
     }
   }
 }
-.frame.web{
-  .selected ,.editableBlock .selected a:link , .editableBlock  a:link .selected{
-    background-color:#BDE6F1;
-    .bg_default, .bg_yellow, .bg_blue, .bg_green, .bg_grey,.bg_pink{
-      background-color:#BDE6F1;
+.frame.web {
+  .selected,
+  .editableBlock .selected a:link,
+  .editableBlock a:link .selected {
+    background-color: #bde6f1;
+    .bg_default,
+    .bg_yellow,
+    .bg_blue,
+    .bg_green,
+    .bg_grey,
+    .bg_pink {
+      background-color: #bde6f1;
     }
   }
 }
-.frame.mobile{
-  .selected ,.editableBlock .selected a:link , .editableBlock  a:link .selected{
-    background-color:#7dbcfc8a;
-    .bg_default, .bg_yellow, .bg_blue, .bg_green, .bg_grey,.bg_pink{
-      background-color:#7dbcfc8a;
+.frame.mobile {
+  .selected,
+  .editableBlock .selected a:link,
+  .editableBlock a:link .selected {
+    background-color: #7dbcfc8a;
+    .bg_default,
+    .bg_yellow,
+    .bg_blue,
+    .bg_green,
+    .bg_grey,
+    .bg_pink {
+      background-color: #7dbcfc8a;
     }
   }
 }
 
-.bg_default{
+.bg_default {
   background-color: none;
 }
-.bg_grey{
+.bg_grey {
   background-color: #e0e0e0;
 }
-.bg_yellow{
-  background-color:#fff9c4 ;
+.bg_yellow {
+  background-color: #fff9c4;
 }
-.bg_green{
+.bg_green {
   background-color: #ebffd7;
 }
-.bg_blue{
-  background-color:#e3f2fd ;
+.bg_blue {
+  background-color: #e3f2fd;
 }
-.bg_pink{
+.bg_pink {
   background-color: #fce4ec;
 }
-.color_default{
-  color:$black;
+.color_default {
+  color: $black;
 }
-.color_grey{
-  color:#bdbdbd
+.color_grey {
+  color: #bdbdbd;
 }
-.color_orange{
-  color:#ffa726
+.color_orange {
+  color: #ffa726;
 }
-.color_green{
-  color:#00701a
+.color_green {
+  color: #00701a;
 }
-.color_blue{
-  color:#1565c0
-} 
-.color_red{
-  color:#d32f2f
+.color_blue {
+  color: #1565c0;
 }
-.bold{
+.color_red {
+  color: #d32f2f;
+}
+.bold {
   font-weight: bold;
 }
-.italic{
+.italic {
   font-style: italic;
 }
-.underline{
+.underline {
   text-decoration: underline;
 }
-.lineThrough{
+.lineThrough {
   text-decoration: line-through;
 }
 
 .contentEditable {
-  a:link, a:visited, a:active{
-    color:grey;
+  a:link,
+  a:visited,
+  a:active {
+    color: grey;
     text-decoration: underline;
     z-index: 5;
     cursor: pointer;
   }
 }
-.h1 .mainBlock .contentEditable, 
+.h1 .mainBlock .contentEditable,
 .h2 .mainBlock .contentEditable,
-.h3 .mainBlock .contentEditable{
+.h3 .mainBlock .contentEditable {
   font-weight: 500;
 }
 
-.text.block{
-  margin-top:2px;
+.text.block {
+  margin-top: 2px;
 }
-.left , .blockContents , .blockFn {
+.left,
+.block-contents,
+.blockFn {
   height: 18px;
 }
-.todo.block, 
-.toggle.block ,
+.todo.block,
+.toggle.block,
 .page.block {
   .left {
     width: 18px;
@@ -197,47 +215,49 @@
   }
 }
 .page.block {
-  padding:5px;
-  .pageIcon,img{
+  padding: 5px;
+  .icon-page,
+  img {
     width: 18px;
     height: 18px;
   }
-  .pageIcon span{
-    width :inherit;
+  .icon-page span {
+    width: inherit;
     height: inherit;
   }
-  .blockContents{
+  .block-contents {
     display: flex;
     align-items: center;
   }
-  .contentEditable{
-    border-bottom: 1px solid  $mud;
+  .contentEditable {
+    border-bottom: 1px solid $mud;
   }
-  &:hover{
+  &:hover {
     background-color: $itemHover;
   }
 }
-.todo.done.block{
-  path{
-    stroke:grey
+.todo.done.block {
+  path {
+    stroke: grey;
   }
 }
-.toggle.block{
-  button{
+.toggle.block {
+  button {
     display: flex;
     align-items: center;
-    fill: $itemSvg ;
+    fill: $itemSvg;
   }
-  .subBlocks{
+  .subBlock-group {
     display: none;
   }
 }
-.toggle.on.block{
-  .subBlocks{
+.toggle.on.block {
+  .subBlock-group {
     display: block;
   }
 }
-.numberList , .bulletList{
+.numberList,
+.bulletList {
   display: flex;
   flex-direction: column;
 }
@@ -245,47 +265,46 @@
   display: flex;
   flex-direction: column;
   margin-bottom: 8px;
-  .subBlocks{
-    .editableBlock{
-     margin-top: 8px;
+  .subBlock-group {
+    .editableBlock {
+      margin-top: 8px;
     }
   }
-  .listItem_marker{
+  .listItem-marker {
     padding-right: 8px;
-    svg{
+    svg {
       font-size: 11px;
     }
   }
 }
 
 .blockToggleBtn {
-  svg{
+  svg {
     transform: rotate(0deg);
   }
 }
-.blockToggleBtn.on{
-  svg{
+.blockToggleBtn.on {
+  svg {
     transform: rotate(90deg);
   }
 }
-.media.block .mainBlock_block{
+.media.block .mainBlock__block {
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.blockComponent.on{
+.blockComponent.on {
   padding: 5px;
   font-size: 1.2rem;
-  -webkit-box-shadow: 0px 0px 10px 2px rgba(151, 151, 151, 0.486); 
-box-shadow: 0px 0px 10px 2px rgba(151, 151, 151, 0.486);
-border-radius: 5px;
+  -webkit-box-shadow: 0px 0px 10px 2px rgba(151, 151, 151, 0.486);
+  box-shadow: 0px 0px 10px 2px rgba(151, 151, 151, 0.486);
+  border-radius: 5px;
 }
-.media_blockComponent{
+.media_blockComponent {
   width: 100%;
   height: 100%;
-
 }
-.blockContents{
+.block-contents {
   width: 100%;
   height: fit-content;
   text-align: left;
@@ -293,15 +312,15 @@ border-radius: 5px;
   align-items: flex-end;
 }
 
-.addBlockFile{
+.btn-addBlockFile {
   width: 100%;
-  padding: 12px  ;
+  padding: 12px;
   background-color: $pistachioshell;
   color: $itemText;
-  cursor:pointer;
+  cursor: pointer;
   display: flex;
   align-items: center;
-  &:hover{
+  &:hover {
     background-color: $itemHover;
   }
   span {
@@ -310,65 +329,66 @@ border-radius: 5px;
     height: 1.2rem;
     font-size: inherit;
   }
-  svg{
+  svg {
     font-size: 1.2rem;
   }
 }
-.contents input{
-  border:none;
+.contents input {
+  border: none;
   width: 100%;
-  &:focus{
-    outline: none
+  &:focus {
+    outline: none;
   }
 }
-.contents.commentBtn,
-.contents .text_commentBtn{
-  color:inherit;
+.contents.btn-comment,
+.contents .text_commentBtn {
+  color: inherit;
   text-decoration: inherit;
   width: fit-content;
   z-index: 6;
   font : {
     size: inherit;
-    weight: inherit
+    weight: inherit;
   }
   border-bottom: 2px solid $commentHover;
-  &:hover{
+  &:hover {
     background-color: $commentHover;
   }
 }
-.contents.commentBtn {
+.contents.btn-comment {
   background-color: $comment;
-  padding: 4px 
+  padding: 4px;
 }
 .contents {
   .text_commentBtn {
     background-color: $comment_text;
     display: inline-block;
     position: relative;
-    padding: 4px
+    padding: 4px;
   }
 }
-.mainBlock , .subBlocks{
+.mainBlock,
+.subBlock-group {
   display: flex;
   align-items: center;
 }
-.subBlocks{
+.subBlock-group {
   flex-direction: column;
 }
-.commentsBubble .commentBtn{
+.comments-bubble .btn-comment {
   display: flex;
-  padding:3px;
-  &:hover{
-    background-color: $itemHover; 
+  padding: 3px;
+  &:hover {
+    background-color: $itemHover;
   }
-  svg,span{
+  svg,
+  span {
     color: $itemSvg;
     height: 1.1rem;
     line-height: 1.1rem;
     width: fit-content;
   }
-  span{
+  span {
     font-size: 12px;
   }
 }
-  

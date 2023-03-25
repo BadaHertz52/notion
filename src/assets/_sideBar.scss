@@ -1,63 +1,63 @@
-@import './common';
+@import "./common";
 
-.sideBar_close , 
-.sideBar_float,
-.sideBar_floatHide{
-  .frame{
+.sideBar-close,
+.sideBar-float,
+.sideBar-floatHide {
+  .frame {
     z-index: 1;
-    div, button {
+    div,
+    button {
       z-index: inherit;
     }
   }
-  .sideBar{
+  .sideBar {
     position: absolute;
     z-index: 10;
   }
-  .sideBarPageFn{
-    button{
-      color :$darkgrey
+  .sideBarPageFn {
+    button {
+      color: $darkgrey;
     }
   }
-  .sideBarBtn{
+  .topBar__btn-sideBar {
     display: none;
   }
-
 }
-.sideBar_close {
-  .sideBar{
-    transform: translate(-(100%), 0)
+.sideBar-close {
+  .sideBar {
+    transform: translate(-(100%), 0);
   }
 }
-.sideBar_float,
-.sideBar_floatHide{
-  .sideBar{
+.sideBar-float,
+.sideBar-floatHide {
+  .sideBar {
     @include modalStyle;
-    top:45px;
+    top: 45px;
     left: 0;
-    background-color:#ffff;
+    background-color: #ffff;
     width: 230px;
     height: fit-content;
   }
 }
-.sideBar_floatHide{
-  .sideBar{
+.sideBar-floatHide {
+  .sideBar {
     transform: translate(-250px, 0);
   }
 }
-.sideBar_lock{
-  .sideBar{
-    transform: translate(0,0);
-    flex-shrink: 0; 
+.sideBar-lock {
+  .sideBar {
+    transform: translate(0, 0);
+    flex-shrink: 0;
     flex-grow: 0;
   }
 }
-.sideBar{
+.sideBar {
   display: block;
   width: 250px;
   height: 100vh;
-  background-color:$pistachioshell;
+  background-color: $pistachioshell;
   transition: transform 2000ms cubic-bezier(0.4, 0, 0.2, 1);
-  &_inner{  
+  &__inner {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -65,190 +65,197 @@
     height: 100%;
     width: 100%;
   }
-  .pageImgIcon {
+  .pageIcon__img {
     width: 14px;
     height: 14px;
   }
-  .itemInner ,
+  .item__inner,
   .subPage.no {
-    span{
-      color:$itemText;
+    span {
+      color: $itemText;
       font-weight: 500;
     }
   }
-  .itemInner{
+  .item__inner {
     display: flex;
-    padding : 5px 14px;
+    padding: 5px 14px;
     font-size: 14px;
     text-align: center;
     min-height: 27px;
-    .record-icon, svg{
+    .record-icon,
+    svg {
       margin-right: 8px;
     }
-    svg{
+    svg {
       font : {
-        size:18px;
-        weight:bolder;
+        size: 18px;
+        weight: bolder;
       }
       color: $itemSvg;
       fill: $itemSvg;
     }
   }
-  .list .itemInner{
+  .list .item__inner {
     justify-content: space-between;
   }
-  .switcher, .fun1{
-    .itemInner{
+  .switcher,
+  .fun1 {
+    .item__inner {
       font-size: 13px;
     }
   }
-  .sideBarPageFn{
+  .sideBarPageFn {
     display: none;
   }
-  .sideBarPageFn.on{
+  .sideBarPageFn.on {
     display: flex;
     align-content: center;
     padding-top: 5px;
-    button{
+    button {
       width: fit-content;
       font-size: 12px;
       color: $itemSvg;
       fill: $itemSvg;
-      svg{
+      svg {
         width: fit-content;
         margin-right: 0;
       }
     }
   }
-  //--sideBarBtn
-  .sideBarBtn{
+  //--topBar__btn-sideBar
+  .topBar__btn-sideBar {
     color: $itemSvg;
-      fill: $itemSvg;
+    fill: $itemSvg;
     font-weight: bolder;
     font-size: 20px;
-    svg{
+    svg {
       margin-right: 0;
     }
   }
-  .openSideBarBtn{
+  .openSideBarBtn {
     position: absolute;
-    top:10px;
+    top: 10px;
     right: -10%;
   }
-  //--sideBarBtn
+  //--topBar__btn-sideBar
 
-  // -- switcher 
-  .switcher{
-    .itemInner{
+  // -- switcher
+  .switcher {
+    .item__inner {
       justify-content: space-between;
-      padding: 10px 14px ;
-      & > div{
+      padding: 10px 14px;
+      & > div {
         display: flex;
         align-items: center;
       }
     }
-    .trashBtn{
+    .trashBtn {
       display: none;
     }
   }
-  .record-icon{
-    background-color:$mud ;
+  .record-icon {
+    background-color: $mud;
     color: #ffff;
     border-radius: 3px;
     text-align: center;
     width: 18px;
     height: 18px;
     text-transform: uppercase;
-    div{
+    div {
       font-size: 12.5px;
     }
   }
-  .user{
+  .user {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
   }
-  .userEmail{
+  .userEmail {
     display: none;
   }
-  .userId{
+  .userId {
     display: flex;
     align-items: center;
     height: 18px;
-    div:first-child{
+    div:first-child {
       font-weight: 500;
     }
-    div:nth-child(2){
+    div:nth-child(2) {
       margin-top: -5px;
-      transform:rotate(90deg);
-      svg{
+      transform: rotate(90deg);
+      svg {
         margin-right: 0;
         color: $itemSvg;
         font-weight: bolder;
       }
     }
   }
-  // ---switcher 
-  //recentPages 
-  .recentPages{
+  // ---switcher
+  //recentPages
+  .recentPages {
     display: none;
   }
   // fun1--
-  .fun1{
+  .fun1 {
     border-top: none;
     padding-bottom: 20px;
-    .itemInner span{
+    .item__inner span {
       font-size: 12px;
       color: rgba(25, 23, 17, 0.753);
       font-weight: initial;
     }
-  } 
+  }
   // --fun1
-  .srcoller,.recentPages{
-    .header{
-      padding : 0 14px;
+  .sideBar___inner__scroll,
+  .recentPages {
+    .header {
+      padding: 0 14px;
       margin-bottom: 10px;
       font : {
         size: 11px;
-        weight:500;
+        weight: 500;
       }
       color: $itemSvg;
       fill: $itemSvg;
-
     }
   }
-  //scroller--
-  .srcoller{
+  //sideBar__inner__scroll--
+  .sideBar__inner__scroll {
     padding: 16px 0;
     height: 50%;
-    overflow:hidden auto;
-    //sroller//
+    overflow: hidden auto;
+    //scroll//
     @include webkitScroll;
-    ul{
+    .favorites,
+    .private {
+      margin-bottom: 20px;
+      .header {
+        color: $itemText;
+        margin-left: 16px;
+        margin-bottom: 14px;
+        font-size: 14px;
+      }
+    }
+    ul {
       list-style: none;
-      padding:0;
+      padding: 0;
       width: 100%;
     }
-    li{
+    li {
       padding: 0;
     }
-    .favorites , 
-    .private{
-      margin-bottom: 20px;
-    }
-
     .list .page {
       width: 100%;
     }
-    .subPage{
+    .subPage {
       display: none;
     }
-    .subPage.on{
+    .subPage.on {
       display: block;
-      margin : 5px 0;
+      margin: 5px 0;
       margin-left: 18px;
     }
-    .itemInner {
+    .item__inner {
       text-align: left;
       justify-content: space-between;
     }
@@ -257,7 +264,7 @@
       justify-content: flex-start;
     }
     .toggleBtn {
-      svg{
+      svg {
         margin-right: 0;
       }
     }
@@ -265,28 +272,28 @@
       font-size: inherit;
       display: flex;
       align-items: center;
-      span{
+      span {
         display: flex;
         align-items: center;
       }
-      svg{
+      svg {
         font-size: 13px;
         margin-right: 0;
       }
-      span:first-child{
+      span:first-child {
         margin-right: 5px;
       }
     }
     .subPage.no {
       margin-left: 36px;
-      span{
+      span {
         font-size: 13px;
       }
     }
-    .addPageBtn{
+    .btn-addPage {
       width: 18px;
       height: 18px;
-      svg{
+      svg {
         margin-right: 0;
         font-size: 16px;
       }
@@ -299,27 +306,32 @@
     }
   }
   .private {
-    .header{
-      display: flex;
-      justify-content: space-between;
-      svg{
-        color: $mud
+    .header {
+      position: relative;
+      button {
+        position: absolute;
+        top: 0;
+        right: 16px;
+      }
+      svg {
+        color: $mud;
       }
     }
   }
-  .fun2{
+  .fun2 {
     display: flex;
     flex-direction: column;
     font-weight: 500;
-    color:$darkgrey;
-    .itemInner{
+    color: $darkgrey;
+    .item__inner {
       justify-content: flex-start;
-      svg, span{
-        color:$darkgrey;
+      svg,
+      span {
+        color: $darkgrey;
       }
     }
   }
-  //--scrolloer
+  //--scroll
 
   // addNewPageBtn --
   .addNewPageBtn {
@@ -327,108 +339,110 @@
     height: 45px;
     min-height: 27px;
     border-top: 1px solid $lightMud;
-    &:hover{
+    &:hover {
       background-color: $itemHover;
     }
     button {
-      color:$darkgrey;
+      color: $darkgrey;
       font : {
-        size:14px;
+        size: 14px;
       }
       width: 100%;
       height: 100%;
       padding: 2px 14px;
       display: flex;
       align-items: center;
-      svg{
+      svg {
         color: $itemSvg;
-      fill: $itemSvg;
+        fill: $itemSvg;
         flex-grow: 0;
         flex-shrink: 0;
         margin-right: 8px;
         font : {
           size: 1rem;
-          weight: bolder
+          weight: bolder;
         }
       }
     }
   }
   //--addNewPage
 }
-#moreFn, 
-#sideBar_pageMenu{
+#moreFn,
+#sideBar__pageMenu {
   z-index: 20;
 }
-#moreFn{
+#moreFn {
   @include modalStyle;
   display: none;
   z-index: 20;
   width: 230px;
-  .resizeBar{
+  .resizeBar {
     display: none;
   }
-  button{
-    padding:  3%; 
+  button {
+    padding: 3%;
     @include editMenuBtns;
   }
   p {
     margin: 0;
     margin-left: 5px;
     padding: 3%;
-    color: $itemText
+    color: $itemText;
   }
-  .pageInform{
+  .page__inform {
     display: none;
   }
 }
 
-#sideBar_pageMenu{
+#sideBar__pageMenu {
   width: fit-content;
-  padding:0;
+  padding: 0;
 }
 
-
-@media screen and (max-width:425px) {
-  .sideBar{
+@media screen and (max-width: 425px) {
+  .sideBar {
     background-color: rgb(240, 240, 240);
     width: 100vw;
     .closeSideBarBtn {
       display: none;
     }
-    .itemInner{
+    .item__inner {
       padding: 0.5rem 1rem;
     }
-    .scroller{
+    .sideBar__inner__scroll {
       height: calc(80vh - 1.5rem);
     }
-    .switcher .itemInner,.srcoller .header , .recentPages .header{
+    .switcher .item__inner,
+    .sideBar__inner__scroll .header,
+    .recentPages .header {
       font-size: 1rem;
     }
     .switcher {
-      .itemInner{
-        padding-top:1rem;
+      .item__inner {
+        padding-top: 1rem;
       }
-      .trashBtn{
+      .trashBtn {
         display: block;
-        &:hover{
-          svg{
+        &:hover {
+          svg {
             fill: black;
           }
         }
       }
-    } 
-    .user , .record-icon{
+    }
+    .user,
+    .record-icon {
       height: 40px;
     }
     .record-icon {
       background-color: black;
-      color:#ffff;
+      color: #ffff;
     }
-    .itemInner svg{
+    .item__inner svg {
       font-size: 1rem;
-      color:$darkgrey;
+      color: $darkgrey;
     }
-    .userEmail{
+    .userEmail {
       margin-top: 4px;
       font-size: 14px;
     }
@@ -441,34 +455,36 @@
         font-size: 1.8rem;
       }
     }
-    .userEmail{
+    .userEmail {
       display: block;
     }
-    .itemInner{
+    .item__inner {
       font-size: 14px;
     }
-    .private .header svg{
-      color:$darkgrey
+    .private .header svg {
+      color: $darkgrey;
     }
-    .pageLink:hover{
-      background-color:rgba(222, 222, 222, 0.833) ;
+    .page-link:hover {
+      background-color: rgba(222, 222, 222, 0.833);
     }
-    .fun1, .fun2, .addNewPageBtn{
+    .fun1,
+    .fun2,
+    .addNewPageBtn {
       display: none;
     }
-    .recentPages{
+    .recentPages {
       display: block;
       margin: 10px 0;
-      .header{
+      .header {
         margin-bottom: 1rem;
       }
-      .list{
-        padding: 0 1rem ;
+      .list {
+        padding: 0 1rem;
         display: flex;
       }
-      .item{
+      .item {
         @include modalStyle;
-        box-shadow:rgba(15, 15, 15, 0.251) 0px 0px 4px inset  ;
+        box-shadow: rgba(15, 15, 15, 0.251) 0px 0px 4px inset;
         position: relative;
         height: 25vw;
         width: 25vw;
@@ -476,39 +492,39 @@
         flex-direction: column;
         box-sizing: border-box;
         margin-right: 14px;
-        .cover{
+        .cover {
           width: 100%;
           height: 50%;
         }
-        .cover.none{
-          background-color:rgb(224, 224, 224);
+        .cover.none {
+          background-color: rgb(224, 224, 224);
         }
-        .pageIcon {
+        .icon-page {
           width: 20%;
-          height: 20% ;
+          height: 20%;
           position: absolute;
-          top:40%;
-          left:10%;
+          top: 40%;
+          left: 10%;
         }
-        .pageImgIcon{
+        .pageIcon__img {
           width: 100%;
           height: 100%;
           border-radius: 50%;
         }
-        .title{
+        .title {
           background-color: #fff;
           text-align: center;
           text-overflow: ellipsis;
           overflow: hidden;
           white-space: nowrap;
-          padding: 5px ;
+          padding: 5px;
           padding-top: 15%;
           height: 50%;
           width: 100%;
           font: {
             size: 14px;
-            weight:bolder;
-          };
+            weight: bolder;
+          }
         }
       }
     }
@@ -516,63 +532,63 @@
 
   #moreFn {
     display: block;
-    position:absolute;
+    position: absolute;
     transform: translateY(100vh);
-    top:0;
+    top: 0;
     width: 100vw;
     height: 100vh;
     min-height: 10vh;
     transition: transform 500ms ease;
-    background-color:  rgb(240, 240, 240);
-    .resizeBar{
+    background-color: rgb(240, 240, 240);
+    .resizeBar {
       display: flex;
       justify-content: center;
       align-items: center;
       width: 100%;
       background-color: none;
-      div{
+      div {
         width: 3rem;
         height: 3px;
         border-radius: 20px;
-        background-color:  rgb(217, 215, 215);
+        background-color: rgb(217, 215, 215);
       }
     }
-    .edit_inform{
+    .edit__inform {
       display: none;
     }
-    .pageInform{
+    .page__inform {
       width: 100%;
       display: flex;
       flex-direction: row;
-      padding: 10px 1rem ;
-      .pageIcon {
+      padding: 10px 1rem;
+      .icon-page {
         height: 2.2rem;
         width: 2.2rem;
       }
-      .pageImgIcon{
+      .pageIcon__img {
         border-radius: 10px;
         width: 100%;
         display: flex;
         flex-direction: row;
       }
-      .pageTitle{
+      .page__title {
         margin-left: 1rem;
         font-size: 1.2rem;
         text-align: center;
       }
     }
-    button{
-      padding:0;
-      margin: 10px 1rem ;
+    button {
+      padding: 0;
+      margin: 10px 1rem;
     }
-    button > div{
-      width:calc(100% - 2rem);
+    button > div {
+      width: calc(100% - 2rem);
       padding: 5px;
       background-color: #fff;
       border-radius: 10px;
     }
-    .deleteBtn{
-      color:red
+    .btn-delete {
+      color: red;
     }
   }
 }

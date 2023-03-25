@@ -1,21 +1,22 @@
-@import './common';
+@import "./common";
 
-.editor.nonePage{
+.editor.nonePage {
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  top:20%;
-  p, button {
+  top: 20%;
+  p,
+  button {
     margin: 5px 0;
-    padding :5px ;
+    padding: 5px;
     font-size: 1rem;
   }
-  button{
+  button {
     color: $turkeyBlue;
-    border-bottom:1px solid $turkeyBlue;
+    border-bottom: 1px solid $turkeyBlue;
 
-    &:hover{
+    &:hover {
       background-color: $turkeyBlue;
       color: #ffff;
     }
@@ -27,45 +28,45 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  align-items:center;
+  align-items: center;
   @include webkitScroll;
   position: relative;
   //isInTrash
-  .isInTrash{
+  .isInTrash {
     z-index: 20;
     position: absolute;
     align-items: center;
     justify-items: center;
-    top:0;
+    top: 0;
     left: 0;
     display: flex;
     width: 100%;
     padding: 10px;
     box-sizing: border-box;
-    background-color:rgb(235, 87, 87); 
-    color:#ffff;
+    background-color: rgb(235, 87, 87);
+    color: #ffff;
     font-size: 14px;
-    .isInTrashBtns{
+    .isInTrash__btn-group {
       display: flex;
       justify-content: space-between;
     }
-    button{
-      color:#ffff;
-      border : 1px solid #ffff;
+    button {
+      color: #ffff;
+      border: 1px solid #ffff;
       border-radius: 3px;
-      padding:5px;
+      padding: 5px;
       margin-left: 8px;
       font-size: 13px;
     }
   }
-  // topbar ---
-  .topbar {
-    width:100%;
-    height: 45px ;
+  // topBar ---
+  .topBar {
+    width: 100%;
+    height: 45px;
     padding: {
       left: 12px;
       right: 16px;
-    };
+    }
     box-sizing: border-box;
     flex-grow: 0;
     flex-shrink: 0;
@@ -73,52 +74,52 @@
     justify-content: space-between;
     align-items: center;
     font-size: 14px;
-    color :rgb(55, 53, 47);
+    color: rgb(55, 53, 47);
     z-index: 5;
-    & >div{
+    & > div {
       width: 50%;
     }
-    .topbar_left  {
+    .topBar__left {
       display: flex;
       align-items: center;
     }
-    svg{
-      color:inherit;
+    svg {
+      color: inherit;
       font-size: 1rem;
     }
   }
-  .pagePathes ,
-  .pageFun {
+  .page__path-group,
+  .topBar__page-tool {
     display: flex;
     height: 100%;
-    color:inherit;
+    color: inherit;
   }
-  .pagePathes{
+  .page__path-group {
     flex-grow: 1;
     flex-shrink: 1;
   }
-  .pageFun,
-  #sideBarBtn{
+  .topBar__page-tool,
+  #topBar__btn-sideBar {
     flex-grow: 0;
     flex-shrink: 0;
   }
-  #sideBarBtn ,
-  .pagePathes {
+  #topBar__btn-sideBar,
+  .page__path-group {
     display: flex;
     align-items: center;
   }
-  #sideBarBtn {
+  #topBar__btn-sideBar {
     margin-right: 5px;
-    padding:10px;
+    padding: 10px;
   }
-  .pagePathes{
+  .page__path-group {
     display: flex;
     width: calc(100% - (1rem + 16px));
-    a{
+    a {
       text-align: center;
     }
-    span{
-      margin-right :5px
+    span {
+      margin-right: 5px;
     }
   }
   .pagePath {
@@ -126,35 +127,33 @@
     font-size: 14px;
     display: flex;
     margin-right: 3px;
-    .pageImgIcon{
-      width:14px;
+    .pageIcon__img {
+      width: 14px;
       height: 14px;
     }
-
   }
-  .pathSlash{
+  .pathSlash {
     margin-right: 3px;
   }
-  .pageLink{
-    width:100%;
+  .page-link {
+    width: 100%;
   }
-  .pageLink a{
+  .page-link a {
     display: flex;
-
   }
-  .pathIcon{
+  .icon-path {
     width: 14px;
     height: 14px;
     text-align: center;
   }
-  .pathTitle{
+  .path-title {
     width: fit-content;
     height: 14px;
     margin-left: 5px;
     display: flex;
     align-items: center;
     text-align: center;
-    div{
+    div {
       width: 100%;
       overflow: hidden;
       white-space: nowrap;
@@ -162,47 +161,47 @@
       word-break: keep-all;
     }
   }
-  .pageFun{
+  .topBar__page-tool {
     position: relative;
     display: flex;
-    justify-content:flex-end;
+    justify-content: flex-end;
     padding-right: 10px;
-    & >button {
+    & > button {
       margin-left: 10px;
     }
-    & >button:first-child{
+    & > button:first-child {
       margin-left: 0;
     }
     #pageMenu {
-      position:absolute;
-      top:100%;
-      right:0;
+      position: absolute;
+      top: 100%;
+      right: 0;
     }
   }
-  .pageMoreFun{
+  .page-tool__more {
     @include modalStyle;
     position: absolute;
-    top:100%;
+    top: 100%;
     right: 0;
     max-width: 200px;
-    
-    .inner >div{
+
+    .inner > div {
       padding: 10px;
-      padding-top:0;
+      padding-top: 0;
     }
-    .inner .fontStyle{
+    .inner .fontStyle {
       padding-top: 10px;
     }
-    .fontStyleHeader{
-      color:$itemText;
+    .fontStyle__header {
+      color: $itemText;
       font-size: 12px;
     }
-    .fontStyleBtns{
+    .fontStyle__btn-group {
       display: flex;
       flex-direction: row;
       justify-content: space-around;
       margin-top: 5px;
-      button{
+      button {
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
@@ -214,21 +213,21 @@
         padding: 10px 6px 6px;
         border-radius: 3px;
         line-height: 1;
-        
-        &:hover{
+
+        &:hover {
           background-color: $itemHover;
         }
       }
-      .fontSample{
-        font-size:24px;
+      .font-sample {
+        font-size: 24px;
         position: relative;
         top: -2px;
         height: 24px;
       }
-      .fontSample.on{
-        color:$turkeyBlue;
+      .font-sample.on {
+        color: $turkeyBlue;
       }
-      .fontName{
+      .font-name {
         font-size: 12px;
         line-height: 16px;
         color: $itemText;
@@ -236,83 +235,81 @@
         text-overflow: ellipsis;
         margin-top: 4px;
       }
-      
     }
-    .size{
+    .size {
       display: flex;
-      flex-direction:column;
-      
-      button{
+      flex-direction: column;
+
+      button {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
       }
-      button:first-child{
+      button:first-child {
         padding-bottom: 10px;
       }
     }
-    .function{
+    .function {
       display: flex;
       flex-direction: column;
       button {
         display: flex;
-        padding-top:10px;
-        svg{
+        padding-top: 10px;
+        svg {
           margin-right: 10px;
         }
-        .label{
+        .label {
           text-align: left;
           min-width: fit-content;
         }
-        div{
+        div {
           display: flex;
           flex-direction: column;
-          span:last-child{
+          span:last-child {
             font-size: 12px;
-            color:$itemText;
+            color: $itemText;
           }
         }
       }
     }
   }
-  #pageMenu{
-    #new_sub_page{
+  #pageMenu {
+    #new_sub_page {
       display: none;
     }
   }
 }
-  // --topbar
-.pageFun{
-  width: 180PX;
+// --topBar
+.topBar__page-tool {
+  width: 180px;
   display: flex;
   justify-content: space-around;
-  button{
-    color:inherit;
+  button {
+    color: inherit;
     font-size: 14px;
   }
 
-  .favoriteBtn.on{
-    svg{
+  .btn-favorite.on {
+    svg {
       fill: rgb(246, 192, 80);
     }
-    
   }
 }
 //--discardEdit
 .discardEdit {
-  display: none
+  display: none;
 }
-.discardEdit.on{
+.discardEdit.on {
   display: block;
   @include modal;
   z-index: 300;
-  .inner{ 
+  .inner {
     width: 336px;
     height: 204px;
     padding: 24px 32px;
     box-sizing: border-box;
   }
-  .question{
+  .question {
     min-height: 64px;
     text-align: center;
     display: flex;
@@ -320,11 +317,11 @@
     justify-content: center;
     width: 100%;
   }
-  .btns{
+  .btn-group {
     display: flex;
     flex-direction: column;
     width: 100%;
-    button{
+    button {
       height: 32px;
       width: 100%;
       border-radius: 3px;
@@ -334,25 +331,25 @@
       margin-top: 8px;
       white-space: nowrap;
     }
-    button:first-child{
-      color:rgb(235, 87, 87);
-      border:1px solid rgba(235, 87, 87, 0.5);
-      &:hover{
-        background-color:rgba(235, 87, 87, 0.1) ;
+    button:first-child {
+      color: rgb(235, 87, 87);
+      border: 1px solid rgba(235, 87, 87, 0.5);
+      &:hover {
+        background-color: rgba(235, 87, 87, 0.1);
       }
     }
-    button:nth-child(2){
-      border:1px solid rgba(55, 53, 47, 0.16);
-      &:hover{
-        background-color:$itemHover ;
+    button:nth-child(2) {
+      border: 1px solid rgba(55, 53, 47, 0.16);
+      &:hover {
+        background-color: $itemHover;
       }
     }
   }
 }
 
-@media screen and (max-width:768px) {
+@media screen and (max-width: 768px) {
   .editor {
-    .pathTitle {
+    .path-title {
       min-width: 0;
     }
   }

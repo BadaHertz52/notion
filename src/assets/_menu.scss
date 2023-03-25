@@ -1,34 +1,34 @@
-@import './common';
+@import "./common";
 .menu {
   font-weight: initial;
   position: absolute;
 }
 .mainMenu,
-.sideMenu,
-#modal-menu{
+.menu___sideMenu,
+#modal__menu {
   @include modalStyle;
-  width: fit-content
+  width: fit-content;
 }
-#modal-menu{
+#modal__menu {
   position: absolute;
   font-size: 14px;
   padding: 3px;
   z-index: 30;
   display: flex;
-  .commentInput{
+  .input-comment {
     width: calc(100% - 20px);
-    margin: 10PX;
+    margin: 10px;
     box-sizing: border-box;
     flex-direction: row;
   }
 }
-.frame.mobile{
-  #modal-menu{
+.frame.mobile {
+  #modal__menu {
     height: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
-    .commentInput{
+    .input-comment {
       height: 100%;
       margin: 5px;
     }
@@ -36,62 +36,62 @@
 }
 .mainMenu {
   @include modalStyle;
-  width:240px;
+  width: 240px;
   max-height: inherit;
   overflow-y: scroll;
-  .menu_inner {
+  .menu__inner {
     padding: 5% 0;
   }
-  .menu_search {
+  .menu__search {
     width: 100%;
-    input{
-      @include searchInput
+    input {
+      @include searchInput;
     }
   }
-  .menu_editBtns > button >div ,
-  .menu_edit_inform{
+  .menu__editBtnGroup > button > div,
+  .menu__edit__inform {
     width: 90%;
     margin: 3% 5%;
   }
 
-  .menu_editBtns .menu_editBtn {
-    @include editMenuBtns ;
-    &.off{
+  .menu__editBtnGroup .menu__editBtn {
+    @include editMenuBtns;
+    &.off {
       display: none;
     }
-    .underline{
-      border-top:  1px solid $mud;
+    .underline {
+      border-top: 1px solid $mud;
     }
-    .arrowDown  svg {
+    .arrow-down svg {
       transform: rotate(-90deg);
     }
   }
 }
 
-.sideMenu  {
+.menu___sideMenu {
   display: block;
-  position:absolute;
-  z-index:20;
-  overflow-y:"scroll";
-  &>div{
+  position: absolute;
+  z-index: 20;
+  overflow-y: "scroll";
+  & > div {
     width: 250px;
   }
-  .noResult{
+  .no-result {
     display: none;
   }
-  .menu_color,
-  #commandBlock{
+  .menu___color,
+  #commandBlock {
     background-color: initial;
   }
   #commandBlock {
     margin-top: 0;
     overflow: initial;
-    .command_btn {
-      display: block
+    .btn-command {
+      display: block;
     }
   }
 }
-.menu_color{
+.menu___color {
   @include modalStyle;
   width: 200px;
   color: initial;
@@ -99,8 +99,8 @@
   section > header {
     font : {
       size: 12px;
-      weight: 600
-    };
+      weight: 600;
+    }
     text-align: left;
     color: $mud;
   }
@@ -108,121 +108,121 @@
     padding: 3%;
   }
   section > header,
-  .colorIcon {
+  .icon-color {
     margin: 0 5px;
   }
-  .colorInform {
+  .btn-color-inform {
     display: flex;
     font-size: 14px;
     padding: 5px 0;
     width: 100%;
-    span{
+    span {
       height: 22px;
       line-height: 22px;
     }
   }
-  .colorIcon {
-    border :1px solid $lightMud ;
+  .icon-color {
+    border: 1px solid $lightMud;
   }
-  .colorName {
+  .color-name {
     margin-left: 5px;
   }
-
 }
-.sideMenu #pageMenu{
-  .inner{
+.menu___sideMenu #pageMenu {
+  .inner {
     width: 100%;
-    height: fit-content
+    height: fit-content;
   }
 }
-#sideBar_pageMenu #pageMenu {
+#sideBar__pageMenu #pageMenu {
   background-color: #ffff;
 }
 #pageMenu {
   @include modalStyle;
   background-color: initial;
-  .inner{
+  .inner {
     width: 100%;
     box-sizing: border-box;
     padding: 10px 0;
     display: flex;
-    flex-direction: column
+    flex-direction: column;
   }
-  .search{
-    input{
+  .search {
+    input {
       @include searchInput;
       font-size: 14px;
     }
   }
-  .pages{
+  .page-group {
     display: flex;
     flex-direction: column;
     margin-top: 10px;
     width: 90%;
     margin: 5%;
-    header{
-      color:$itemText;
+    &__header {
+      color: $itemText;
       font : {
         size: 12px;
         weight: 500;
-      };
+      }
       margin-bottom: 10px;
     }
   }
-  .page{
+  .btn-page {
     font-size: 14px;
     padding: 5px 0;
-    &_inner{
+    .inner {
       display: flex;
       height: 1rem;
-      & >div {
+      & > div {
         height: inherit;
       }
     }
   }
-  .pageIcon {
+  .page__icon {
     width: 1rem;
     margin-right: 12px;
-    img{
+    img {
       width: 100%;
       height: 100%;
     }
   }
-  .pageTitle{
+  .page__title {
     line-height: 1rem;
     text-align: center;
   }
-  #new_sub_page{
+  #new_sub_page {
     width: 100%;
     text-align: left;
     border-top: 1px solid $lightMud;
     padding-top: 10px;
     padding-left: 10px;
-    svg{
-      color:$itemText;
+    svg {
+      color: $itemText;
       font-weight: bolder;
       margin-right: 5px;
     }
-    span{
+    span {
       color: $itemText;
       font-size: 14px;
       font-weight: 400;
     }
   }
-
 }
 
-#moveTo_pageMenu{
-  #pageSugested, #new_sub_page {
+#moveTo_pageMenu {
+  #page-group__header,
+  #new_sub_page {
     display: none;
   }
 }
 
-@media screen and (max-width:767px){
-  .mainMenu , .sideMenu{
+@media screen and (max-width: 767px) {
+  .mainMenu,
+  .menu___sideMenu {
     width: 200px;
   }
-  .sideMenu >div{
+  .menu___sideMenu > div {
     width: 100%;
   }
 }

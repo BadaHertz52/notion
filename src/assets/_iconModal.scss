@@ -1,18 +1,19 @@
-@import './common';
+@import "./common";
 
 #iconModal {
   @include modalStyle;
   position: absolute;
-  top:100%;
+  top: 100%;
   left: 0;
   width: 170x;
-  button:hover{
+  button:hover {
     background-color: $itemHover;
   }
-  .header,.body{
+  .header,
+  .body {
     padding: 10px;
   }
-  .header{
+  .header {
     width: 100%;
     height: fit-content;
     padding-bottom: 0px;
@@ -20,84 +21,85 @@
     justify-content: space-between;
     font-size: 14px;
     border-bottom: 1px solid $itemText;
-    &> div{
+    & > div {
       display: flex;
-      button:first-child{
+      button:first-child {
         margin-right: 5px;
       }
     }
-    button{
+    button {
       display: flex;
       align-items: center;
       padding: 2px;
     }
-    .categoryBtn , &> div:last-child{
+    .btn-category,
+    & > div:last-child {
       padding-bottom: 6px;
     }
-    .categoryBtn{
+    .btn-category {
       width: fit-content;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       position: relative;
     }
-    &>div:last-child{
+    & > div:last-child {
       color: $itemText;
       button {
-        color:inherit; 
+        color: inherit;
       }
     }
-    .bottomLine{
+    .bottom-line {
       position: absolute;
-      top:calc(100% - 1.25px);
+      top: calc(100% - 1.25px);
       left: 0;
       width: 100%;
       height: 2.5px;
       background-color: black;
     }
   }
-    .emojiBtn {
-      width: 25px;
-      height: 25px;
-      margin : {
-        right:10px;
-        bottom:10px
-      }
-      img{
-        width: 100%;
-        height: 100%;
-      }
+  .btn-emoji {
+    width: 25px;
+    height: 25px;
+    margin : {
+      right: 10px;
+      bottom: 10px;
     }
-  .body{
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .body {
     text-align: center;
     height: 135px;
   }
-  .imageIconBody{
+  .iconModal__body__imgIcon {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100%;
     height: 100%;
-    div{
+    div {
       color: $itemText;
       font-size: 12px;
     }
   }
-  .imageIconInputLabel{
+  .label-inputImgIcon {
     width: 80%;
-    padding: 5px ;
+    padding: 5px;
     background-color: $turkeyBlue;
     color: #ffff;
-    font-weight:600;
+    font-weight: 600;
     text-align: center;
     margin-bottom: 8px;
-    &:hover{
-      background-color:rgb(40, 140, 180);
+    &:hover {
+      background-color: rgb(40, 140, 180);
     }
   }
-  #imageIconInput{
+  #inputImgIcon {
     position: absolute;
-    top:-99999px;
+    top: -99999px;
   }
 }

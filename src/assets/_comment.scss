@@ -1,74 +1,73 @@
-@import './common';
-.comments{
+@import "./common";
+.comments {
   display: flex;
   margin: 8px 0;
   padding-bottom: 1rem;
   border-bottom: 1px solid $lightMud;
   width: 100%;
-  &>div {
+  & > div {
     font-size: 14px;
   }
 }
 .comment,
-.main_comment,
-.comment_comment,
-.comments_comments,
+.comment__mainComment,
+.comment__subComments,
+.comments__comments-group,
 .commentBlock {
   width: inherit;
 }
-.blockId_comments{
-  .comments{
+.blockId_comments {
+  .comments {
     display: none;
   }
 }
 .blockId_comments.open {
   z-index: 5;
 
-  .comments{
-  display: flex;
-  flex-direction: column;
-
+  .comments {
+    display: flex;
+    flex-direction: column;
   }
-  .commentBtn.btnIcon{
-    display: none
+  .btn-comment.btnIcon {
+    display: none;
   }
 }
-  
-.comment_header ,
-.commentInput {
+
+.commentBlock__header,
+.input-comment {
   height: 20px;
 }
-.commentBlock .firstLetter, 
-.commentInput .firstLetter .inner{
-    display: flex;
-    width: 20px;
-    height: 20px;
-    box-sizing: border-box;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    border :1px solid black;
-    color: black;
-    text-align: center;
-    flex-grow: 0;
-    flex-shrink: 0;
-    margin-right: 5px;
-    div{
-      font : {
-        size:14px ;
-        weight: initial;
-      }
+.commentBlock .firstLetter,
+.input-comment .firstLetter .inner {
+  display: flex;
+  width: 20px;
+  height: 20px;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid black;
+  color: black;
+  text-align: center;
+  flex-grow: 0;
+  flex-shrink: 0;
+  margin-right: 5px;
+  div {
+    font : {
+      size: 14px;
+      weight: initial;
     }
   }
-.commentInput .firstLetter{
+}
+.input-comment .firstLetter {
   display: flex;
   justify-content: center;
   align-items: center;
   height: inherit;
-  .inner{
+  .inner {
     margin: 0;
   }
-  span{
+  span {
     display: inline-block;
   }
 }
@@ -78,53 +77,52 @@
   z-index: 10;
   box-sizing: border-box;
 }
-  .comment:first-child{
-    border-top: none;
-  }
-.pageHeader .comments{
+.comment:first-child {
+  border-top: none;
+}
+.page__header .comments {
   position: relative;
   width: 100%;
   box-sizing: border-box;
-  .comments_comments {
+  .comments__comments-group {
     width: inherit;
   }
   .commentBlock {
-    .comment_header{
+    .commentBlock__header {
       margin-bottom: 6px;
     }
   }
-  .comment{
-    padding:0;
+  .comment {
+    padding: 0;
   }
 }
-#block_comments {
+#block-comments {
   position: absolute;
   z-index: 20;
   padding-bottom: 0;
   @include modalStyle;
   overflow-y: scroll;
-  .comments_comments {
+  .comments__comments-group {
     width: 100%;
     margin: 0;
-    padding-bottom:0 ;
+    padding-bottom: 0;
   }
-} 
-.pageComment {
+}
+.page__comments {
   position: relative;
   .commentBlock {
-    .comment_header .information ,
-    .comment_content {
+    .commentBlock__header .information,
+    .comment__contents {
       font-size: inherit;
     }
   }
-  .commentInput form input
-  {
+  .input-comment form input {
     font-size: inherit;
   }
-  .comments{
+  .comments {
     position: relative;
   }
-  .comments .comment_block{
+  .comments .commentBlock__mainComment {
     display: none;
   }
 }
@@ -132,41 +130,41 @@
 #commentsInner {
   position: relative;
 }
-.commentType{
+.comments__btn-group-type {
   border-bottom: 1px solid $lightMud;
-  padding: 0 5%; 
+  padding: 0 5%;
   display: flex;
-  button{
+  button {
     height: 100%;
-    margin: 10px 5px; 
+    margin: 10px 5px;
   }
 }
-.commentBlock{
-    display: flex;
-    flex-direction: column;
-    margin-top: 8px;
-    width: 100%;
-    &>div {
-      font-size: 14px;
-    }
+.commentBlock {
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
+  width: 100%;
+  & > div {
+    font-size: 14px;
+  }
 
-  .comment_header {
+  .commentBlock__header {
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 14px;
     .information {
-      display:flex ;
+      display: flex;
       flex-direction: row;
       font-size: 14px;
       height: inherit;
     }
-    .firstLetter{
+    .firstLetter {
       flex-shrink: 0;
       flex-grow: 0;
     }
-    .userName{
+    .userName {
       margin: 0 5px;
       flex-shrink: 1;
       flex-grow: 1;
@@ -175,8 +173,8 @@
       line-height: 20px;
       text-overflow: ellipsis;
     }
-    .time{
-      margin:0;
+    .time {
+      margin: 0;
       color: $itemSvg;
       font-size: 13px;
       display: flex;
@@ -185,124 +183,123 @@
       flex-shrink: 2;
       text-overflow: ellipsis;
     }
-    .commentTool{
+    .comment__tool {
       display: flex;
       align-content: center;
       border: 1px solid $itemSvg;
       border-radius: 2px;
       height: 20px;
-      button{
+      button {
         width: fit-content;
         color: $itemSvg;
-      fill: $itemSvg;
-        height:100% ;
+        fill: $itemSvg;
+        height: 100%;
         box-sizing: border-box;
         display: flex;
         align-items: center;
         justify-items: center;
         text-align: center;
         font-size: 12px;
-        span{
+        span {
           padding: 3px;
         }
-        svg{
+        svg {
           font : {
             font-size: 1rem;
             weight: bolder;
           }
         }
       }
-      .resolveTool {
+      .comment__tool-resolve {
         border-right: 1px solid $itemSvg;
       }
     }
   }
-  .comment_block, 
-  .comment_content, 
-  .editComment{
+  .commentBlock__mainComment,
+  .comment__contents,
+  .editComment {
     margin-left: 34px;
     margin-bottom: 14px;
     font-size: 14px;
   }
-  .comment_block{
+  .commentBlock__mainComment {
     height: fit-content;
     display: flex;
-    color: $itemText
+    color: $itemText;
   }
-  .comment_block_line{
+  .commentBlock__mainComment_line {
     width: 3px;
     border-radius: 3px;
     margin : {
       left: 2px;
       right: 8px;
-    };
+    }
     flex-shrink: 0;
     padding-bottom: 2px;
     background: rgba(255, 212, 0, 0.8);
-  } 
-  .commentInput{
-    width: calc( 100% - 34px);
+  }
+  .input-comment {
+    width: calc(100% - 34px);
     box-sizing: border-box;
-    input[type="text"]{
+    input[type="text"] {
       margin: 0;
     }
   }
   .tool {
-    button{
-
-      &:hover{
+    button {
+      &:hover {
         background-color: $itemHover;
-        color:black
+        color: black;
       }
     }
   }
-  .moreTool{
+  .comment__tool-more {
     position: relative;
   }
 }
-.commentInput {
+.input-comment {
   display: flex;
   flex-direction: row;
   width: 100%;
   padding: 0;
-  form{
+  form {
     display: flex;
     flex-grow: 1;
     flex-shrink: 1;
     height: inherit;
     position: relative;
-    width: calc( 100% - 24px);
-    box-sizing: border-box
-    }
-    input[type="text"]{
-      @include searchInput;
-      background-color: initial;
-      border: none;
-      padding: 0;
-      height: 100%;
-      width: 90%;
-      margin: 0 2.5%;
-      font-size: 14px;
-    }
-    .commentText{
-      &:focus{
-        outline:  none;
-      }
-    }
+    width: calc(100% - 24px);
+    box-sizing: border-box;
   }
-
-form button{
-  svg{
-    font-size: 1.3rem;
-    color: $itemSvg;
-      fill: $itemSvg; 
+  input[type="text"] {
+    @include searchInput;
+    background-color: initial;
+    border: none;
+    padding: 0;
+    height: 100%;
+    width: 90%;
+    margin: 0 2.5%;
+    font-size: 14px;
+  }
+  .input-comment {
+    &:focus {
+      outline: none;
+    }
   }
 }
-#tool_more{
+
+form button {
+  svg {
+    font-size: 1.3rem;
+    color: $itemSvg;
+    fill: $itemSvg;
+  }
+}
+#tool_more {
   @include modalStyle;
   width: 200px;
   z-index: 25;
-  button{
+  button {
     width: 100%;
     padding: 10px;
     box-sizing: border-box;
@@ -311,21 +308,21 @@ form button{
     font-size: 14px;
     line-height: 16.8px;
     min-height: 28px;
-    &:hover{
+    &:hover {
       background-color: $itemHover;
     }
-    svg{
+    svg {
       width: 18px;
       height: inherit;
       font-weight: lighter;
     }
-    span{
+    span {
       margin: {
         left: 6px;
-      };
+      }
     }
   }
-  .aboutComments{
+  .aboutComments {
     color: $itemText;
     font-size: 13px;
     border-top: 1px solid $lightMud;

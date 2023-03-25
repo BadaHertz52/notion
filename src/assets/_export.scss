@@ -1,95 +1,96 @@
-@import './common';
+@import "./common";
 #export {
   @include modal;
   display: flex;
   z-index: 3;
   user-select: none;
-  .inner{
-    top:0;
+  .inner {
+    top: 0;
     left: 0;
     width: 320px;
-    padding:2rem 1.5rem;
+    padding: 2rem 1.5rem;
     box-sizing: border-box;
   }
-  .selects{
+  .select-group {
     width: 100%;
   }
-  .select{
+  .select {
     display: flex;
     justify-content: space-between;
     margin-bottom: 1rem;
     width: 100%;
-    position:relative;
-    font-size:14px;
+    position: relative;
+    font-size: 14px;
     line-height: 1.5;
-    select{
-      border:none;
+    select {
+      border: none;
     }
-    button{
-      color:rgb(55, 53, 47);
+    button {
+      color: rgb(55, 53, 47);
     }
   }
-  .select_label, .btns button{
-    color:$itemText;
+  .select__label,
+  .btn-group button {
+    color: $itemText;
   }
-  .select_form{
+  .select__form {
     position: relative;
     & > button {
       display: flex;
       align-items: center;
-      svg{
-        color :$itemText;
+      svg {
+        color: $itemText;
         font-size: 1rem;
       }
     }
   }
-  .options{
+  .select__btn-group {
     display: none;
   }
-  .options.on{
+  .select__btn-group.on {
     display: flex;
     flex-direction: column;
     align-items: center;
-    position:absolute;
-    top:calc(100% + 5px) ;
+    position: absolute;
+    top: calc(100% + 5px);
     right: 0;
     background-color: #ffff;
     border-radius: 3px;
-    box-shadow:rgb(15 15 15 / 5%) 0px 0px 0px 1px, rgb(15 15 15 / 10%) 0px 3px 6px, rgb(15 15 15 / 20%) 0px 9px 24px;
+    box-shadow: rgb(15 15 15 / 5%) 0px 0px 0px 1px,
+      rgb(15 15 15 / 10%) 0px 3px 6px, rgb(15 15 15 / 20%) 0px 9px 24px;
     z-index: 10;
-    padding:6px 5px;
+    padding: 6px 5px;
     width: fit-content;
     box-sizing: border-box;
-    button{
-      padding:8px 0;
+    button {
+      padding: 8px 0;
       padding-left: 8px;
       width: 100%;
       text-align: left;
       transition: background-color 20ms ease-in 0s;
-      border-radius:3px;
-      &:hover{
+      border-radius: 3px;
+      &:hover {
         background-color: $itemHover;
       }
     }
   }
-  .options.on:nth-child(1){
+  .select__btn-group.on:nth-child(1) {
     width: 120px;
   }
-  .options.on:nth-child(2){
+  .select__btn-group.on:nth-child(2) {
     width: 180px;
   }
-  .btns{
+  .btn-group {
     display: flex;
     justify-content: end;
-    button{
+    button {
       margin-left: 1rem;
-      padding:6px;
-      &:hover{
+      padding: 6px;
+      &:hover {
         background-color: $turkeyBlue;
-        color:#ffff;
+        color: #ffff;
         font-weight: 600;
       }
     }
-
   }
 }

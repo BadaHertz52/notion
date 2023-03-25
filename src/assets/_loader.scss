@@ -1,70 +1,70 @@
-@import './common';
-#loader{
+@import "./common";
+#loader {
   @include modalStyle;
   font-size: inherit;
-  div{
+  div {
     box-sizing: border-box;
     font-size: inherit;
   }
-  .inner{
+  .inner {
     height: fit-content;
     min-height: 100px;
     font-size: inherit;
     position: relative;
   }
-  .innerPadding {
-    padding:10px;
+  .loader__inner-padding {
+    padding: 10px;
     width: 100%;
   }
-  .imgLoader{
+  .loader-img {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     min-height: 100px;
-    .menu{
+    .menu {
       border-bottom: 1px solid $itemHover;
       width: 100%;
       position: relative;
-      .innerPadding{
+      .loader__inner-padding {
         display: flex;
         justify-content: space-between;
         padding: 5px 1rem;
       }
-      button{
+      button {
         padding: 5px 10px;
         font-size: 14px;
       }
-      .removeBtn{
-        color:rgb(136, 136, 136);
-        &:hover{
+      .btn-remove {
+        color: rgb(136, 136, 136);
+        &:hover {
           background-color: $itemHover;
         }
       }
     }
-    .loaderForm{
+    .loaderForm {
       width: 100%;
       height: 50px;
-      label{
+      label {
         display: block;
         width: 100%;
-        border:1px solid $itemHover;
+        border: 1px solid $itemHover;
         text-align: center;
-        padding:6px;
+        padding: 6px;
         box-sizing: border-box;
         font-size: 14px;
-        &:hover{
+        &:hover {
           background-color: $itemHover;
         }
       }
-      input{
-        position:absolute;
-        width:0;
+      input {
+        position: absolute;
+        width: 0;
         height: 0;
       }
     }
-    .explain{
+    .explain {
       font-size: 14px;
-      color:$mud;
+      color: $mud;
       text-align: center;
     }
   }

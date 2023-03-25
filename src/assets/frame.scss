@@ -1,0 +1,224 @@
+@import "./common";
+@import "./block";
+@import "./comment";
+@import "./linkLoader";
+#inner {
+  .blockComponent,
+  .contents,
+  .contentEditable {
+    color: inherit;
+  }
+}
+//frame ----
+.frame.stop {
+  overflow-y: hidden;
+}
+.frame {
+  width: 100%;
+  height: 100%;
+  flex-grow: 1;
+  flex-shrink: 1;
+  z-index: inherit;
+  display: flex !important;
+  justify-content: center;
+  overflow-y: scroll;
+}
+.frame__inner {
+  width: 100%;
+  height: 100%;
+  div,
+  input,
+  button {
+    font-family: inherit;
+  }
+}
+.page__header {
+  width: 100%;
+}
+.page__header_notCover,
+.page__contents {
+  max-width: 100%;
+  width: 100%;
+  padding-left: calc(96px + env(safe-area-inset-left));
+}
+.page__header .page__title,
+.editableBlock,
+.page__header .comments {
+  padding-right: calc(96px + env(safe-area-inset-left));
+}
+.subBlock-group .editableBlock {
+  padding-right: 0;
+}
+.page__comments {
+  margin-top: 1rem;
+}
+.page__header {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  margin-bottom: 30px;
+  .page__header__cover {
+    position: relative;
+    width: 100%;
+    height: 30vh;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+    .btn-change-cover {
+      display: none;
+    }
+  }
+  .page__header__cover.on {
+    .btn-change-cover {
+      font-size: 1rem;
+      display: block;
+      transition: display 1ms ease;
+      position: absolute;
+      bottom: 1rem;
+      left: 50%;
+      z-index: 30;
+      background-color: rgba(254, 254, 254, 0.712);
+      border-radius: 10px;
+      padding: 5px 10px;
+      &:hover {
+        transition: background-color 0.3s ease;
+        background-color: rgba(189, 189, 189, 0.744);
+      }
+    }
+  }
+  .page__header_notConver {
+    display: flex;
+    flex-direction: column;
+  }
+
+  & > div {
+    position: relative;
+  }
+  .icon-page {
+    width: fit-content;
+    height: fit-content;
+  }
+  .icon-page.iconNull {
+    display: none;
+  }
+  .deco div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-top: 8px;
+    margin-bottom: 10px;
+    width: 100%;
+    height: 24px;
+    button {
+      width: fit-content;
+      height: 100%;
+      margin-right: 5px;
+      color: $mud;
+      flex-grow: 0;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      svg {
+        padding-right: 5px;
+      }
+    }
+    span {
+      font-size: 13px;
+    }
+  }
+  .icon-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 100ms ease-in 0s;
+    opacity: 1;
+    position: relative;
+    pointer-events: auto;
+    cursor: default;
+    .pageStringIcon {
+      text-align: center;
+      width: 100%;
+      height: 100%;
+      font-size: 60px;
+    }
+    .pageIcon__img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .page__title {
+    font-size: inherit;
+    font-weight: bold;
+    width: 100%;
+    word-break: break-all;
+  }
+}
+.page__contents {
+  height: fit-content;
+  padding-bottom: 50px;
+}
+.frame.mobile {
+  .page__contents {
+    padding-bottom: 100px;
+  }
+}
+.page__contents__inner {
+  position: relative;
+  width: 100%;
+}
+.newPageFrame {
+  color: $mud;
+  span {
+    color: $mud;
+  }
+  .page__contents__inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    font-size: 1rem;
+    button {
+      font-size: 1rem;
+      display: block;
+      margin: 10px;
+      svg {
+        color: $itemSvg;
+        fill: $itemSvg;
+        margin-right: 10px;
+      }
+    }
+  }
+}
+// --frame
+.subFrame {
+  width: 100vw;
+}
+
+#moveTargetBlock {
+  opacity: 0.3;
+}
+
+@media screen and (max-width: 767px) {
+  .page__header {
+    margin-bottom: 5px;
+  }
+  .page__header .page__header__cover {
+    height: 100px;
+  }
+  .page__header_notCover,
+  .page__contents {
+    padding-left: 1rem;
+  }
+  .page__header .page__title,
+  .editableBlock,
+  .page__header .comments {
+    padding-right: 2rem;
+  }
+  .editableBlock {
+    margin-top: 5px;
+  }
+}

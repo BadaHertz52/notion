@@ -1,99 +1,100 @@
-@import './common';
-#blockStyler{
+@import "./common";
+#blockStyler {
   position: absolute;
   @include modalStyle;
-  border-radius: 5px ;
+  border-radius: 5px;
   width: fit-content;
   overflow-x: scroll;
-  .inner{
+  .inner {
     position: relative;
     width: 100%;
     height: 32px;
     display: flex;
     flex-direction: row;
   }
-  .btn{
+  .btn {
     height: 100%;
-    padding:0 8px;
+    padding: 0 8px;
     transition: backgroundColor 20ms ease-in 0s;
     display: flex;
     align-items: center;
     font-size: 14px;
-    &:hover{
+    &:hover {
       background-color: $itemHover;
     }
-    span ,svg{
+    span,
+    svg {
       height: 14px;
     }
-    span{
-      min-width: fit-content
+    span {
+      min-width: fit-content;
     }
   }
-  #commandBlock{
+  #commandBlock {
     display: flex;
     position: absolute;
-    top:100%;
+    top: 100%;
     left: 0;
     z-index: 50;
   }
-  .linkBtn{
-    svg:first-child{
+  .blockStyler__btn-link {
+    svg:first-child {
       margin-right: 4px;
     }
   }
-  .commentBtn{
-    svg:first-child{
+  .btn-comment {
+    svg:first-child {
       margin-right: 4px;
     }
   }
-  .styles{
+  .style {
     display: flex;
   }
-  .boldBtn{
+  .style__btn-bold {
     font-weight: bolder;
   }
-  .italicBtn{
+  .style__btn-italic {
     font-style: italic;
   }
-  .underlineBtn{
+  .style__btn-underline {
     text-decoration: underline;
   }
-  .lineThroughBtn{
+  .style__btn-lineThrough {
     text-decoration: line-through;
   }
-  .colorBtn{
-    .btn{
+  .blockStyler__btn-color {
+    .btn {
       font-weight: bolder;
     }
   }
 
-  .arrowDown{
-    color:$mud;
+  .arrow-down {
+    color: $mud;
     margin-left: 3px;
   }
 }
-#blockStylerColor{
+#block-styler__color {
   position: absolute;
-  z-index: 30
+  z-index: 30;
 }
 
 #mobileBlockMenu {
-  #blockStyler{
+  #blockStyler {
     position: relative;
     width: 100%;
     overflow: hidden;
-    svg{
+    svg {
       font-size: 14px;
       margin: 0;
     }
-    .typeBtn{
+    .blockStyler__btn-type {
       display: none;
     }
-    .commentBtn span{
+    .btn-comment span {
       display: none;
     }
-    .commentBtn , 
-    .menuBtn {
+    .btn-comment,
+    .blockStyler__btn-menu {
       padding: 0;
       text-align: center;
     }

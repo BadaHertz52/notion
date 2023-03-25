@@ -1,75 +1,75 @@
-$pistachioshell :rgb(242, 241, 238) ;
-$mud:#B9B8B6;
-$lightMud:#d6d6d6;
-$brightMud:rgba(242, 241, 238, 0.6);;
-$itemSvg:#a3a3a2;
+$pistachioshell: rgb(242, 241, 238);
+$mud: #b9b8b6;
+$lightMud: #d6d6d6;
+$brightMud: rgba(242, 241, 238, 0.6);
+$itemSvg: #a3a3a2;
 $itemText: rgb(141, 141, 141);
-$itemHover:#EDECE9;
+$itemHover: #edece9;
 $commentHover: rgba(255, 198, 11, 0.658);
-$comment:rgba(255, 196, 0, 0.347);
-$comment_text:rgba(255, 196, 0, 0.183);
-$darkgrey:rgb(112, 112, 112);
+$comment: rgba(255, 196, 0, 0.347);
+$comment_text: rgba(255, 196, 0, 0.183);
+$darkgrey: rgb(112, 112, 112);
 $turkeyBlue: rgb(46, 170, 220);
-$black :rgb(55,54,47);
+$black: rgb(55, 54, 47);
 @mixin initialBtn {
-  border:none;
-  background-color:transparent;
-  padding:0
-};
+  border: none;
+  background-color: transparent;
+  padding: 0;
+}
 @mixin searchInput {
-  width:90%;
+  width: 90%;
   height: 1.5rem;
   font-size: 15px;
   padding-left: 6px;
   color: $itemText;
-  &::placeholder{
+  &::placeholder {
     color: $mud;
   }
-  &:focus{
+  &:focus {
     box-sizing: border-box;
     outline: 3.5px solid rgb(169, 226, 245);
-    border:none;
+    border: none;
   }
-  margin:0 5%;
+  margin: 0 5%;
   border-radius: 5px;
   background-color: $brightMud;
-  border:  1px solid $mud;
-  box-shadow:rgba(15, 15, 15, 0.162)0px 0px 1px inset ;
-};
+  border: 1px solid $mud;
+  box-shadow: rgba(15, 15, 15, 0.162) 0px 0px 1px inset;
+}
 @mixin webkitScroll {
   &::-webkit-scrollbar {
     background: transparent;
     width: 10px;
     height: 10px;
   }
-  &::-webkit-scrollbar-thumb{
-    background-color:  #D3D1CB;;
+  &::-webkit-scrollbar-thumb {
+    background-color: #d3d1cb;
   }
-  &::-webkit-scrollbar-track{
+  &::-webkit-scrollbar-track {
     background-color: #edece9;
   }
-} ;
-.switchBtn{
+}
+.btn-switch {
   position: relative;
   width: 30px;
   height: 15px;
-  .slider{
-    position:absolute;
-    cursor:pointer;
+  .slider {
+    position: absolute;
+    cursor: pointer;
     width: 100%;
     height: 100%;
-    top:0;
-    left:0;
+    top: 0;
+    left: 0;
     right: 0;
     bottom: 0;
     border-radius: 34px;
     background-color: #ccc;
     -webkit-transition: 0.4s;
-    transition:0.4s;
+    transition: 0.4s;
   }
-  .slider::before{
-    position:absolute;
-    content:"";
+  .slider::before {
+    position: absolute;
+    content: "";
     height: 12px;
     width: 12px;
     bottom: 1.5px;
@@ -77,10 +77,10 @@ $black :rgb(55,54,47);
     border-radius: 50%;
     background-color: white;
     -webkit-transition: 0.4s;
-    transition:0.4s;
+    transition: 0.4s;
   }
-  .slider.on{
-    background-color:$turkeyBlue ;
+  .slider.on {
+    background-color: $turkeyBlue;
     box-shadow: 0 0 1px $turkeyBlue;
   }
   .slider.on:before {
@@ -91,7 +91,7 @@ $black :rgb(55,54,47);
 }
 @mixin modal {
   position: absolute;
-  top:0;
+  top: 0;
   left: 0;
   background-color: rgba(0, 0, 0, 0.53);
   width: 100vw;
@@ -100,13 +100,13 @@ $black :rgb(55,54,47);
   align-items: center;
   justify-content: center;
   z-index: 10;
-  .inner{
+  .inner {
     background-color: #ffff;
-    border-radius:3px;
+    border-radius: 3px;
     position: relative;
-    top:90px;
+    top: 90px;
     left: 12.5%;
-    width:75%;
+    width: 75%;
     max-height: 80vh;
     max-width: 600px;
     z-index: 15;
@@ -115,7 +115,7 @@ $black :rgb(55,54,47);
   }
 }
 @mixin modalStyle {
-  width:320px ;
+  width: 320px;
   display: flex;
   flex-direction: column;
   background-color: #ffff;
@@ -123,24 +123,24 @@ $black :rgb(55,54,47);
   overflow-x: hidden;
   overflow-y: auto;
   pointer-events: auto;
-  transform: matrix(1,0,0,1,0,0);
+  transform: matrix(1, 0, 0, 1, 0, 0);
   z-index: 10;
   border-radius: 8px;
-  -webkit-box-shadow: 0px 0px 23px -5px #ababab; 
+  -webkit-box-shadow: 0px 0px 23px -5px #ababab;
   box-shadow: 0px 0px 23px -5px #ababab;
-  
+
   &::-webkit-scrollbar-thumb {
-    background: #D3D1CB;
+    background: #d3d1cb;
   }
-  &::-webkit-scrollbar-track{
-    background: #EDECE9;
+  &::-webkit-scrollbar-track {
+    background: #edece9;
   }
 }
 @mixin resetModal {
-  width:initial ;
-  display:block;
+  width: initial;
+  display: block;
   flex-direction: initial;
-  background-color:initial;
+  background-color: initial;
   margin: 0;
   overflow-x: initial;
   overflow-y: initial;
@@ -148,28 +148,28 @@ $black :rgb(55,54,47);
   transform: initial;
   z-index: 0;
   border-radius: 0;
-  -webkit-box-shadow: none; 
+  -webkit-box-shadow: none;
   box-shadow: none;
-  
+
   &::-webkit-scrollbar-thumb {
     background: initial;
   }
-  &::-webkit-scrollbar-track{
-    background:initial;
+  &::-webkit-scrollbar-track {
+    background: initial;
   }
 }
-@mixin editMenuBtns{
+@mixin editMenuBtns {
   position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
-  & >div{
+  & > div {
     display: flex;
     justify-items: center;
     align-items: center;
   }
   font-size: 1rem;
-  span{
+  span {
     font-size: 14px;
     text-align: center;
   }
@@ -177,37 +177,37 @@ $black :rgb(55,54,47);
     font-size: 1rem;
     margin: {
       left: 5px;
-      right: 8px
+      right: 8px;
     }
   }
-  span:nth-child(3){
+  span:nth-child(3) {
     position: absolute;
     right: 1rem;
     color: $mud;
-    svg{
+    svg {
       font-size: 18px;
     }
   }
-};
-#inner .edit_inform{
-  color: $darkgrey
 }
-.edit_inform{
-  border-top:  1px solid $mud;
+#inner .edit__inform {
+  color: $darkgrey;
+}
+.edit__inform {
+  border-top: 1px solid $mud;
   font-size: 12px;
   text-align: left;
   margin-bottom: 0;
   p {
-    margin : 10px 0 0 10px
+    margin: 10px 0 0 10px;
   }
 }
 div {
   box-sizing: border-box;
   pointer-events: auto;
-  @include webkitScroll
+  @include webkitScroll;
 }
-.pageLink {
-  &:hover{
+.page-link {
+  &:hover {
     background-color: $itemHover;
   }
 }
@@ -220,16 +220,18 @@ button {
   font-size: inherit;
 }
 ul,
-ol{
+ol {
   margin: 0;
-  padding:0;
+  padding: 0;
   padding-left: 1rem;
   li {
     padding-left: 10px;
   }
 }
 
-a:link ,a:active ,a:visited {
+a:link,
+a:active,
+a:visited {
   text-decoration: none;
-  color: inherit
+  color: inherit;
 }

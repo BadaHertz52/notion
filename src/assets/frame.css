@@ -1,9 +1,9 @@
-.switchBtn {
+.btn-switch {
   position: relative;
   width: 30px;
   height: 15px;
 }
-.switchBtn .slider {
+.btn-switch .slider {
   position: absolute;
   cursor: pointer;
   width: 100%;
@@ -16,7 +16,7 @@
   background-color: #ccc;
   transition: 0.4s;
 }
-.switchBtn .slider::before {
+.btn-switch .slider::before {
   position: absolute;
   content: "";
   height: 12px;
@@ -27,25 +27,25 @@
   background-color: white;
   transition: 0.4s;
 }
-.switchBtn .slider.on {
+.btn-switch .slider.on {
   background-color: rgb(46, 170, 220);
   box-shadow: 0 0 1px rgb(46, 170, 220);
 }
-.switchBtn .slider.on:before {
+.btn-switch .slider.on:before {
   transform: translateX(10px);
 }
 
-#inner .edit_inform {
+#inner .edit__inform {
   color: rgb(112, 112, 112);
 }
 
-.edit_inform {
-  border-top: 1px solid #B9B8B6;
+.edit__inform {
+  border-top: 1px solid #b9b8b6;
   font-size: 12px;
   text-align: left;
   margin-bottom: 0;
 }
-.edit_inform p {
+.edit__inform p {
   margin: 10px 0 0 10px;
 }
 
@@ -59,14 +59,14 @@ div::-webkit-scrollbar {
   height: 10px;
 }
 div::-webkit-scrollbar-thumb {
-  background-color: #D3D1CB;
+  background-color: #d3d1cb;
 }
 div::-webkit-scrollbar-track {
   background-color: #edece9;
 }
 
-.pageLink:hover {
-  background-color: #EDECE9;
+.page-link:hover {
+  background-color: #edece9;
 }
 
 button {
@@ -92,17 +92,19 @@ ol li {
   padding-left: 10px;
 }
 
-a:link, a:active, a:visited {
+a:link,
+a:active,
+a:visited {
   text-decoration: none;
   color: inherit;
 }
 
-.switchBtn {
+.btn-switch {
   position: relative;
   width: 30px;
   height: 15px;
 }
-.switchBtn .slider {
+.btn-switch .slider {
   position: absolute;
   cursor: pointer;
   width: 100%;
@@ -115,7 +117,7 @@ a:link, a:active, a:visited {
   background-color: #ccc;
   transition: 0.4s;
 }
-.switchBtn .slider::before {
+.btn-switch .slider::before {
   position: absolute;
   content: "";
   height: 12px;
@@ -126,25 +128,25 @@ a:link, a:active, a:visited {
   background-color: white;
   transition: 0.4s;
 }
-.switchBtn .slider.on {
+.btn-switch .slider.on {
   background-color: rgb(46, 170, 220);
   box-shadow: 0 0 1px rgb(46, 170, 220);
 }
-.switchBtn .slider.on:before {
+.btn-switch .slider.on:before {
   transform: translateX(10px);
 }
 
-#inner .edit_inform {
+#inner .edit__inform {
   color: rgb(112, 112, 112);
 }
 
-.edit_inform {
-  border-top: 1px solid #B9B8B6;
+.edit__inform {
+  border-top: 1px solid #b9b8b6;
   font-size: 12px;
   text-align: left;
   margin-bottom: 0;
 }
-.edit_inform p {
+.edit__inform p {
   margin: 10px 0 0 10px;
 }
 
@@ -158,14 +160,14 @@ div::-webkit-scrollbar {
   height: 10px;
 }
 div::-webkit-scrollbar-thumb {
-  background-color: #D3D1CB;
+  background-color: #d3d1cb;
 }
 div::-webkit-scrollbar-track {
   background-color: #edece9;
 }
 
-.pageLink:hover {
-  background-color: #EDECE9;
+.page-link:hover {
+  background-color: #edece9;
 }
 
 button {
@@ -191,7 +193,9 @@ ol li {
   padding-left: 10px;
 }
 
-a:link, a:active, a:visited {
+a:link,
+a:active,
+a:visited {
   text-decoration: none;
   color: inherit;
 }
@@ -210,8 +214,8 @@ a:link, a:active, a:visited {
 .editableBlock div {
   width: 100%;
 }
-.editableBlock .listItem_marker,
-.editableBlock .commentsBubble {
+.editableBlock .listItem-marker,
+.editableBlock .comments-bubble {
   width: -moz-fit-content;
   width: fit-content;
 }
@@ -221,7 +225,7 @@ a:link, a:active, a:visited {
   justify-content: space-between;
   width: 100%;
 }
-.mainBlock .mainBlock_block {
+.mainBlock .mainBlock__block {
   display: flex;
   align-items: center;
   width: 100%;
@@ -232,7 +236,7 @@ a:link, a:active, a:visited {
   border-top: 5px solid #8ae2ff;
 }
 
-.subBlocks {
+.subBlock-group {
   padding: 0;
   padding-left: 20px;
 }
@@ -257,18 +261,18 @@ a:link, a:active, a:visited {
   padding-right: 5px;
   z-index: 5;
 }
-.blockFn.on .blockFnIcon {
+.blockFn.on .icon-blockFn {
   font-size: 1.2rem;
   font-weight: bolder;
 }
-.blockFn.on .blockFnIcon svg {
+.blockFn.on .icon-blockFn svg {
   color: #a3a3a2;
   fill: #a3a3a2;
 }
 
 .blockFn button:hover,
 .toggle.block .left:hover {
-  background-color: #EDECE9;
+  background-color: #edece9;
 }
 
 .contentEditable {
@@ -287,20 +291,58 @@ a:link, a:active, a:visited {
 
 .frame.web .contentEditable:empty:hover::after, .frame.web .contentEditable:empty:focus::after {
   content: attr(placeholder);
-  color: #B9B8B6;
+  color: #b9b8b6;
 }
 
-.frame.web .selected, .frame.web .editableBlock .selected a:link, .frame.web .editableBlock a:link .selected {
-  background-color: #BDE6F1;
+.frame.web .selected,
+.frame.web .editableBlock .selected a:link,
+.frame.web .editableBlock a:link .selected {
+  background-color: #bde6f1;
 }
-.frame.web .selected .bg_default, .frame.web .selected .bg_yellow, .frame.web .selected .bg_blue, .frame.web .selected .bg_green, .frame.web .selected .bg_grey, .frame.web .selected .bg_pink, .frame.web .editableBlock .selected a:link .bg_default, .frame.web .editableBlock .selected a:link .bg_yellow, .frame.web .editableBlock .selected a:link .bg_blue, .frame.web .editableBlock .selected a:link .bg_green, .frame.web .editableBlock .selected a:link .bg_grey, .frame.web .editableBlock .selected a:link .bg_pink, .frame.web .editableBlock a:link .selected .bg_default, .frame.web .editableBlock a:link .selected .bg_yellow, .frame.web .editableBlock a:link .selected .bg_blue, .frame.web .editableBlock a:link .selected .bg_green, .frame.web .editableBlock a:link .selected .bg_grey, .frame.web .editableBlock a:link .selected .bg_pink {
-  background-color: #BDE6F1;
+.frame.web .selected .bg_default,
+.frame.web .selected .bg_yellow,
+.frame.web .selected .bg_blue,
+.frame.web .selected .bg_green,
+.frame.web .selected .bg_grey,
+.frame.web .selected .bg_pink,
+.frame.web .editableBlock .selected a:link .bg_default,
+.frame.web .editableBlock .selected a:link .bg_yellow,
+.frame.web .editableBlock .selected a:link .bg_blue,
+.frame.web .editableBlock .selected a:link .bg_green,
+.frame.web .editableBlock .selected a:link .bg_grey,
+.frame.web .editableBlock .selected a:link .bg_pink,
+.frame.web .editableBlock a:link .selected .bg_default,
+.frame.web .editableBlock a:link .selected .bg_yellow,
+.frame.web .editableBlock a:link .selected .bg_blue,
+.frame.web .editableBlock a:link .selected .bg_green,
+.frame.web .editableBlock a:link .selected .bg_grey,
+.frame.web .editableBlock a:link .selected .bg_pink {
+  background-color: #bde6f1;
 }
 
-.frame.mobile .selected, .frame.mobile .editableBlock .selected a:link, .frame.mobile .editableBlock a:link .selected {
+.frame.mobile .selected,
+.frame.mobile .editableBlock .selected a:link,
+.frame.mobile .editableBlock a:link .selected {
   background-color: rgba(125, 188, 252, 0.5411764706);
 }
-.frame.mobile .selected .bg_default, .frame.mobile .selected .bg_yellow, .frame.mobile .selected .bg_blue, .frame.mobile .selected .bg_green, .frame.mobile .selected .bg_grey, .frame.mobile .selected .bg_pink, .frame.mobile .editableBlock .selected a:link .bg_default, .frame.mobile .editableBlock .selected a:link .bg_yellow, .frame.mobile .editableBlock .selected a:link .bg_blue, .frame.mobile .editableBlock .selected a:link .bg_green, .frame.mobile .editableBlock .selected a:link .bg_grey, .frame.mobile .editableBlock .selected a:link .bg_pink, .frame.mobile .editableBlock a:link .selected .bg_default, .frame.mobile .editableBlock a:link .selected .bg_yellow, .frame.mobile .editableBlock a:link .selected .bg_blue, .frame.mobile .editableBlock a:link .selected .bg_green, .frame.mobile .editableBlock a:link .selected .bg_grey, .frame.mobile .editableBlock a:link .selected .bg_pink {
+.frame.mobile .selected .bg_default,
+.frame.mobile .selected .bg_yellow,
+.frame.mobile .selected .bg_blue,
+.frame.mobile .selected .bg_green,
+.frame.mobile .selected .bg_grey,
+.frame.mobile .selected .bg_pink,
+.frame.mobile .editableBlock .selected a:link .bg_default,
+.frame.mobile .editableBlock .selected a:link .bg_yellow,
+.frame.mobile .editableBlock .selected a:link .bg_blue,
+.frame.mobile .editableBlock .selected a:link .bg_green,
+.frame.mobile .editableBlock .selected a:link .bg_grey,
+.frame.mobile .editableBlock .selected a:link .bg_pink,
+.frame.mobile .editableBlock a:link .selected .bg_default,
+.frame.mobile .editableBlock a:link .selected .bg_yellow,
+.frame.mobile .editableBlock a:link .selected .bg_blue,
+.frame.mobile .editableBlock a:link .selected .bg_green,
+.frame.mobile .editableBlock a:link .selected .bg_grey,
+.frame.mobile .editableBlock a:link .selected .bg_pink {
   background-color: rgba(125, 188, 252, 0.5411764706);
 }
 
@@ -368,7 +410,9 @@ a:link, a:active, a:visited {
   text-decoration: line-through;
 }
 
-.contentEditable a:link, .contentEditable a:visited, .contentEditable a:active {
+.contentEditable a:link,
+.contentEditable a:visited,
+.contentEditable a:active {
   color: grey;
   text-decoration: underline;
   z-index: 5;
@@ -385,7 +429,9 @@ a:link, a:active, a:visited {
   margin-top: 2px;
 }
 
-.left, .blockContents, .blockFn {
+.left,
+.block-contents,
+.blockFn {
   height: 18px;
 }
 
@@ -407,23 +453,24 @@ a:link, a:active, a:visited {
 .page.block {
   padding: 5px;
 }
-.page.block .pageIcon, .page.block img {
+.page.block .icon-page,
+.page.block img {
   width: 18px;
   height: 18px;
 }
-.page.block .pageIcon span {
+.page.block .icon-page span {
   width: inherit;
   height: inherit;
 }
-.page.block .blockContents {
+.page.block .block-contents {
   display: flex;
   align-items: center;
 }
 .page.block .contentEditable {
-  border-bottom: 1px solid #B9B8B6;
+  border-bottom: 1px solid #b9b8b6;
 }
 .page.block:hover {
-  background-color: #EDECE9;
+  background-color: #edece9;
 }
 
 .todo.done.block path {
@@ -435,15 +482,16 @@ a:link, a:active, a:visited {
   align-items: center;
   fill: #a3a3a2;
 }
-.toggle.block .subBlocks {
+.toggle.block .subBlock-group {
   display: none;
 }
 
-.toggle.on.block .subBlocks {
+.toggle.on.block .subBlock-group {
   display: block;
 }
 
-.numberList, .bulletList {
+.numberList,
+.bulletList {
   display: flex;
   flex-direction: column;
 }
@@ -453,13 +501,13 @@ a:link, a:active, a:visited {
   flex-direction: column;
   margin-bottom: 8px;
 }
-.listItem .subBlocks .editableBlock {
+.listItem .subBlock-group .editableBlock {
   margin-top: 8px;
 }
-.listItem .listItem_marker {
+.listItem .listItem-marker {
   padding-right: 8px;
 }
-.listItem .listItem_marker svg {
+.listItem .listItem-marker svg {
   font-size: 11px;
 }
 
@@ -471,7 +519,7 @@ a:link, a:active, a:visited {
   transform: rotate(90deg);
 }
 
-.media.block .mainBlock_block {
+.media.block .mainBlock__block {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -489,7 +537,7 @@ a:link, a:active, a:visited {
   height: 100%;
 }
 
-.blockContents {
+.block-contents {
   width: 100%;
   height: -moz-fit-content;
   height: fit-content;
@@ -498,7 +546,7 @@ a:link, a:active, a:visited {
   align-items: flex-end;
 }
 
-.addBlockFile {
+.btn-addBlockFile {
   width: 100%;
   padding: 12px;
   background-color: rgb(242, 241, 238);
@@ -507,16 +555,16 @@ a:link, a:active, a:visited {
   display: flex;
   align-items: center;
 }
-.addBlockFile:hover {
-  background-color: #EDECE9;
+.btn-addBlockFile:hover {
+  background-color: #edece9;
 }
-.addBlockFile span {
+.btn-addBlockFile span {
   margin-right: 6px;
   text-align: center;
   height: 1.2rem;
   font-size: inherit;
 }
-.addBlockFile svg {
+.btn-addBlockFile svg {
   font-size: 1.2rem;
 }
 
@@ -528,7 +576,7 @@ a:link, a:active, a:visited {
   outline: none;
 }
 
-.contents.commentBtn,
+.contents.btn-comment,
 .contents .text_commentBtn {
   color: inherit;
   text-decoration: inherit;
@@ -539,12 +587,12 @@ a:link, a:active, a:visited {
   font-weight: inherit;
   border-bottom: 2px solid rgba(255, 198, 11, 0.658);
 }
-.contents.commentBtn:hover,
+.contents.btn-comment:hover,
 .contents .text_commentBtn:hover {
   background-color: rgba(255, 198, 11, 0.658);
 }
 
-.contents.commentBtn {
+.contents.btn-comment {
   background-color: rgba(255, 196, 0, 0.347);
   padding: 4px;
 }
@@ -556,39 +604,41 @@ a:link, a:active, a:visited {
   padding: 4px;
 }
 
-.mainBlock, .subBlocks {
+.mainBlock,
+.subBlock-group {
   display: flex;
   align-items: center;
 }
 
-.subBlocks {
+.subBlock-group {
   flex-direction: column;
 }
 
-.commentsBubble .commentBtn {
+.comments-bubble .btn-comment {
   display: flex;
   padding: 3px;
 }
-.commentsBubble .commentBtn:hover {
-  background-color: #EDECE9;
+.comments-bubble .btn-comment:hover {
+  background-color: #edece9;
 }
-.commentsBubble .commentBtn svg, .commentsBubble .commentBtn span {
+.comments-bubble .btn-comment svg,
+.comments-bubble .btn-comment span {
   color: #a3a3a2;
   height: 1.1rem;
   line-height: 1.1rem;
   width: -moz-fit-content;
   width: fit-content;
 }
-.commentsBubble .commentBtn span {
+.comments-bubble .btn-comment span {
   font-size: 12px;
 }
 
-.switchBtn {
+.btn-switch {
   position: relative;
   width: 30px;
   height: 15px;
 }
-.switchBtn .slider {
+.btn-switch .slider {
   position: absolute;
   cursor: pointer;
   width: 100%;
@@ -601,7 +651,7 @@ a:link, a:active, a:visited {
   background-color: #ccc;
   transition: 0.4s;
 }
-.switchBtn .slider::before {
+.btn-switch .slider::before {
   position: absolute;
   content: "";
   height: 12px;
@@ -612,25 +662,25 @@ a:link, a:active, a:visited {
   background-color: white;
   transition: 0.4s;
 }
-.switchBtn .slider.on {
+.btn-switch .slider.on {
   background-color: rgb(46, 170, 220);
   box-shadow: 0 0 1px rgb(46, 170, 220);
 }
-.switchBtn .slider.on:before {
+.btn-switch .slider.on:before {
   transform: translateX(10px);
 }
 
-#inner .edit_inform {
+#inner .edit__inform {
   color: rgb(112, 112, 112);
 }
 
-.edit_inform {
-  border-top: 1px solid #B9B8B6;
+.edit__inform {
+  border-top: 1px solid #b9b8b6;
   font-size: 12px;
   text-align: left;
   margin-bottom: 0;
 }
-.edit_inform p {
+.edit__inform p {
   margin: 10px 0 0 10px;
 }
 
@@ -644,14 +694,14 @@ div::-webkit-scrollbar {
   height: 10px;
 }
 div::-webkit-scrollbar-thumb {
-  background-color: #D3D1CB;
+  background-color: #d3d1cb;
 }
 div::-webkit-scrollbar-track {
   background-color: #edece9;
 }
 
-.pageLink:hover {
-  background-color: #EDECE9;
+.page-link:hover {
+  background-color: #edece9;
 }
 
 button {
@@ -677,7 +727,9 @@ ol li {
   padding-left: 10px;
 }
 
-a:link, a:active, a:visited {
+a:link,
+a:active,
+a:visited {
   text-decoration: none;
   color: inherit;
 }
@@ -694,9 +746,9 @@ a:link, a:active, a:visited {
 }
 
 .comment,
-.main_comment,
-.comment_comment,
-.comments_comments,
+.comment__mainComment,
+.comment__subComments,
+.comments__comments-group,
 .commentBlock {
   width: inherit;
 }
@@ -712,17 +764,17 @@ a:link, a:active, a:visited {
   display: flex;
   flex-direction: column;
 }
-.blockId_comments.open .commentBtn.btnIcon {
+.blockId_comments.open .btn-comment.btnIcon {
   display: none;
 }
 
-.comment_header,
-.commentInput {
+.commentBlock__header,
+.input-comment {
   height: 20px;
 }
 
 .commentBlock .firstLetter,
-.commentInput .firstLetter .inner {
+.input-comment .firstLetter .inner {
   display: flex;
   width: 20px;
   height: 20px;
@@ -738,21 +790,21 @@ a:link, a:active, a:visited {
   margin-right: 5px;
 }
 .commentBlock .firstLetter div,
-.commentInput .firstLetter .inner div {
+.input-comment .firstLetter .inner div {
   font-size: 14px;
   font-weight: initial;
 }
 
-.commentInput .firstLetter {
+.input-comment .firstLetter {
   display: flex;
   justify-content: center;
   align-items: center;
   height: inherit;
 }
-.commentInput .firstLetter .inner {
+.input-comment .firstLetter .inner {
   margin: 0;
 }
-.commentInput .firstLetter span {
+.input-comment .firstLetter span {
   display: inline-block;
 }
 
@@ -767,22 +819,22 @@ a:link, a:active, a:visited {
   border-top: none;
 }
 
-.pageHeader .comments {
+.page__header .comments {
   position: relative;
   width: 100%;
   box-sizing: border-box;
 }
-.pageHeader .comments .comments_comments {
+.page__header .comments .comments__comments-group {
   width: inherit;
 }
-.pageHeader .comments .commentBlock .comment_header {
+.page__header .comments .commentBlock .commentBlock__header {
   margin-bottom: 6px;
 }
-.pageHeader .comments .comment {
+.page__header .comments .comment {
   padding: 0;
 }
 
-#block_comments {
+#block-comments {
   position: absolute;
   z-index: 20;
   padding-bottom: 0;
@@ -800,32 +852,32 @@ a:link, a:active, a:visited {
   box-shadow: 0px 0px 23px -5px #ababab;
   overflow-y: scroll;
 }
-#block_comments::-webkit-scrollbar-thumb {
-  background: #D3D1CB;
+#block-comments::-webkit-scrollbar-thumb {
+  background: #d3d1cb;
 }
-#block_comments::-webkit-scrollbar-track {
-  background: #EDECE9;
+#block-comments::-webkit-scrollbar-track {
+  background: #edece9;
 }
-#block_comments .comments_comments {
+#block-comments .comments__comments-group {
   width: 100%;
   margin: 0;
   padding-bottom: 0;
 }
 
-.pageComment {
+.page__comments {
   position: relative;
 }
-.pageComment .commentBlock .comment_header .information,
-.pageComment .commentBlock .comment_content {
+.page__comments .commentBlock .commentBlock__header .information,
+.page__comments .commentBlock .comment__contents {
   font-size: inherit;
 }
-.pageComment .commentInput form input {
+.page__comments .input-comment form input {
   font-size: inherit;
 }
-.pageComment .comments {
+.page__comments .comments {
   position: relative;
 }
-.pageComment .comments .comment_block {
+.page__comments .comments .commentBlock__mainComment {
   display: none;
 }
 
@@ -833,12 +885,12 @@ a:link, a:active, a:visited {
   position: relative;
 }
 
-.commentType {
+.comments__btn-group-type {
   border-bottom: 1px solid #d6d6d6;
   padding: 0 5%;
   display: flex;
 }
-.commentType button {
+.comments__btn-group-type button {
   height: 100%;
   margin: 10px 5px;
 }
@@ -852,24 +904,24 @@ a:link, a:active, a:visited {
 .commentBlock > div {
   font-size: 14px;
 }
-.commentBlock .comment_header {
+.commentBlock .commentBlock__header {
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 14px;
 }
-.commentBlock .comment_header .information {
+.commentBlock .commentBlock__header .information {
   display: flex;
   flex-direction: row;
   font-size: 14px;
   height: inherit;
 }
-.commentBlock .comment_header .firstLetter {
+.commentBlock .commentBlock__header .firstLetter {
   flex-shrink: 0;
   flex-grow: 0;
 }
-.commentBlock .comment_header .userName {
+.commentBlock .commentBlock__header .userName {
   margin: 0 5px;
   flex-shrink: 1;
   flex-grow: 1;
@@ -878,7 +930,7 @@ a:link, a:active, a:visited {
   line-height: 20px;
   text-overflow: ellipsis;
 }
-.commentBlock .comment_header .time {
+.commentBlock .commentBlock__header .time {
   margin: 0;
   color: #a3a3a2;
   font-size: 13px;
@@ -888,14 +940,14 @@ a:link, a:active, a:visited {
   flex-shrink: 2;
   text-overflow: ellipsis;
 }
-.commentBlock .comment_header .commentTool {
+.commentBlock .commentBlock__header .comment__tool {
   display: flex;
   align-content: center;
   border: 1px solid #a3a3a2;
   border-radius: 2px;
   height: 20px;
 }
-.commentBlock .comment_header .commentTool button {
+.commentBlock .commentBlock__header .comment__tool button {
   width: -moz-fit-content;
   width: fit-content;
   color: #a3a3a2;
@@ -908,30 +960,30 @@ a:link, a:active, a:visited {
   text-align: center;
   font-size: 12px;
 }
-.commentBlock .comment_header .commentTool button span {
+.commentBlock .commentBlock__header .comment__tool button span {
   padding: 3px;
 }
-.commentBlock .comment_header .commentTool button svg {
+.commentBlock .commentBlock__header .comment__tool button svg {
   font-font-size: 1rem;
   font-weight: bolder;
 }
-.commentBlock .comment_header .commentTool .resolveTool {
+.commentBlock .commentBlock__header .comment__tool .comment__tool-resolve {
   border-right: 1px solid #a3a3a2;
 }
-.commentBlock .comment_block,
-.commentBlock .comment_content,
+.commentBlock .commentBlock__mainComment,
+.commentBlock .comment__contents,
 .commentBlock .editComment {
   margin-left: 34px;
   margin-bottom: 14px;
   font-size: 14px;
 }
-.commentBlock .comment_block {
+.commentBlock .commentBlock__mainComment {
   height: -moz-fit-content;
   height: fit-content;
   display: flex;
   color: rgb(141, 141, 141);
 }
-.commentBlock .comment_block_line {
+.commentBlock .commentBlock__mainComment_line {
   width: 3px;
   border-radius: 3px;
   margin-left: 2px;
@@ -940,28 +992,28 @@ a:link, a:active, a:visited {
   padding-bottom: 2px;
   background: rgba(255, 212, 0, 0.8);
 }
-.commentBlock .commentInput {
+.commentBlock .input-comment {
   width: calc(100% - 34px);
   box-sizing: border-box;
 }
-.commentBlock .commentInput input[type=text] {
+.commentBlock .input-comment input[type=text] {
   margin: 0;
 }
 .commentBlock .tool button:hover {
-  background-color: #EDECE9;
+  background-color: #edece9;
   color: black;
 }
-.commentBlock .moreTool {
+.commentBlock .comment__tool-more {
   position: relative;
 }
 
-.commentInput {
+.input-comment {
   display: flex;
   flex-direction: row;
   width: 100%;
   padding: 0;
 }
-.commentInput form {
+.input-comment form {
   display: flex;
   flex-grow: 1;
   flex-shrink: 1;
@@ -970,7 +1022,7 @@ a:link, a:active, a:visited {
   width: calc(100% - 24px);
   box-sizing: border-box;
 }
-.commentInput input[type=text] {
+.input-comment input[type=text] {
   width: 90%;
   height: 1.5rem;
   font-size: 15px;
@@ -979,7 +1031,7 @@ a:link, a:active, a:visited {
   margin: 0 5%;
   border-radius: 5px;
   background-color: rgba(242, 241, 238, 0.6);
-  border: 1px solid #B9B8B6;
+  border: 1px solid #b9b8b6;
   box-shadow: rgba(15, 15, 15, 0.162) 0px 0px 1px inset;
   background-color: initial;
   border: none;
@@ -989,18 +1041,18 @@ a:link, a:active, a:visited {
   margin: 0 2.5%;
   font-size: 14px;
 }
-.commentInput input[type=text]::-moz-placeholder {
-  color: #B9B8B6;
+.input-comment input[type=text]::-moz-placeholder {
+  color: #b9b8b6;
 }
-.commentInput input[type=text]::placeholder {
-  color: #B9B8B6;
+.input-comment input[type=text]::placeholder {
+  color: #b9b8b6;
 }
-.commentInput input[type=text]:focus {
+.input-comment input[type=text]:focus {
   box-sizing: border-box;
   outline: 3.5px solid rgb(169, 226, 245);
   border: none;
 }
-.commentInput .commentText:focus {
+.input-comment .input-comment:focus {
   outline: none;
 }
 
@@ -1027,10 +1079,10 @@ form button svg {
   z-index: 25;
 }
 #tool_more::-webkit-scrollbar-thumb {
-  background: #D3D1CB;
+  background: #d3d1cb;
 }
 #tool_more::-webkit-scrollbar-track {
-  background: #EDECE9;
+  background: #edece9;
 }
 #tool_more button {
   width: 100%;
@@ -1043,7 +1095,7 @@ form button svg {
   min-height: 28px;
 }
 #tool_more button:hover {
-  background-color: #EDECE9;
+  background-color: #edece9;
 }
 #tool_more button svg {
   width: 18px;
@@ -1059,12 +1111,12 @@ form button svg {
   border-top: 1px solid #d6d6d6;
 }
 
-.switchBtn {
+.btn-switch {
   position: relative;
   width: 30px;
   height: 15px;
 }
-.switchBtn .slider {
+.btn-switch .slider {
   position: absolute;
   cursor: pointer;
   width: 100%;
@@ -1077,7 +1129,7 @@ form button svg {
   background-color: #ccc;
   transition: 0.4s;
 }
-.switchBtn .slider::before {
+.btn-switch .slider::before {
   position: absolute;
   content: "";
   height: 12px;
@@ -1088,25 +1140,25 @@ form button svg {
   background-color: white;
   transition: 0.4s;
 }
-.switchBtn .slider.on {
+.btn-switch .slider.on {
   background-color: rgb(46, 170, 220);
   box-shadow: 0 0 1px rgb(46, 170, 220);
 }
-.switchBtn .slider.on:before {
+.btn-switch .slider.on:before {
   transform: translateX(10px);
 }
 
-#inner .edit_inform {
+#inner .edit__inform {
   color: rgb(112, 112, 112);
 }
 
-.edit_inform {
-  border-top: 1px solid #B9B8B6;
+.edit__inform {
+  border-top: 1px solid #b9b8b6;
   font-size: 12px;
   text-align: left;
   margin-bottom: 0;
 }
-.edit_inform p {
+.edit__inform p {
   margin: 10px 0 0 10px;
 }
 
@@ -1120,14 +1172,14 @@ div::-webkit-scrollbar {
   height: 10px;
 }
 div::-webkit-scrollbar-thumb {
-  background-color: #D3D1CB;
+  background-color: #d3d1cb;
 }
 div::-webkit-scrollbar-track {
   background-color: #edece9;
 }
 
-.pageLink:hover {
-  background-color: #EDECE9;
+.page-link:hover {
+  background-color: #edece9;
 }
 
 button {
@@ -1153,7 +1205,9 @@ ol li {
   padding-left: 10px;
 }
 
-a:link, a:active, a:visited {
+a:link,
+a:active,
+a:visited {
   text-decoration: none;
   color: inherit;
 }
@@ -1175,26 +1229,29 @@ a:link, a:active, a:visited {
   width: 300px;
 }
 #linkLoader::-webkit-scrollbar-thumb {
-  background: #D3D1CB;
+  background: #d3d1cb;
 }
 #linkLoader::-webkit-scrollbar-track {
-  background: #EDECE9;
+  background: #edece9;
 }
 #linkLoader .inner {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-#linkLoader .search, #linkLoader .page_inner, #linkLoader .pages header {
+#linkLoader .search,
+#linkLoader .page__inner,
+#linkLoader .page-group header {
   padding: 7px 14px;
 }
-#linkLoader .search, #linkLoader .pages {
+#linkLoader .search,
+#linkLoader .page-group {
   width: 100%;
   margin-top: 10px;
 }
-#linkLoader .pages header {
+#linkLoader .page-group header {
   font-size: 12px;
-  color: #B9B8B6;
+  color: #b9b8b6;
 }
 #linkLoader input {
   width: 90%;
@@ -1205,7 +1262,7 @@ a:link, a:active, a:visited {
   margin: 0 5%;
   border-radius: 5px;
   background-color: rgba(242, 241, 238, 0.6);
-  border: 1px solid #B9B8B6;
+  border: 1px solid #b9b8b6;
   box-shadow: rgba(15, 15, 15, 0.162) 0px 0px 1px inset;
   width: 100%;
   margin-left: 0;
@@ -1213,62 +1270,62 @@ a:link, a:active, a:visited {
   box-sizing: border-box;
 }
 #linkLoader input::-moz-placeholder {
-  color: #B9B8B6;
+  color: #b9b8b6;
 }
 #linkLoader input::placeholder {
-  color: #B9B8B6;
+  color: #b9b8b6;
 }
 #linkLoader input:focus {
   box-sizing: border-box;
   outline: 3.5px solid rgb(169, 226, 245);
   border: none;
 }
-#linkLoader .pageList {
+#linkLoader .page-group__list {
   margin-top: 10px;
 }
-#linkLoader .page_inner {
+#linkLoader .page__inner {
   width: 100%;
   display: flex;
   align-items: center;
 }
-#linkLoader .page_inner:hover {
-  background-color: #EDECE9;
+#linkLoader .page__inner:hover {
+  background-color: #edece9;
 }
-#linkLoader .pageIcon {
+#linkLoader .icon-page {
   width: 1.5rem;
   height: 100%;
   margin-right: 10px;
 }
-#linkLoader .pageImgIcon {
+#linkLoader .pageIcon__img {
   width: 100%;
   height: 100%;
 }
-#linkLoader .pageInform {
+#linkLoader .page__inform {
   width: calc(100% - 1.5rem + 10px);
   display: flex;
   flex-direction: column;
   justify-content: left;
 }
-#linkLoader .pageTitle {
+#linkLoader .page__title {
   height: 100%;
   font-size: 1rem;
   text-overflow: ellipsis;
   text-align: left;
 }
-#linkLoader .pagePathes {
+#linkLoader .page__path-group {
   width: 100%;
   display: flex;
   flex-direction: row;
   margin-top: 6px;
   font-size: 14px;
   line-height: 1rem;
-  color: #B9B8B6;
+  color: #b9b8b6;
 }
-#linkLoader .pagePathes .path {
+#linkLoader .page__path-group .path {
   display: flex;
   flex-direction: row;
 }
-#linkLoader .pagePathes .title {
+#linkLoader .page__path-group .title {
   width: calc(100% - 4px);
   overflow: hidden;
   white-space: nowrap;
@@ -1278,12 +1335,12 @@ a:link, a:active, a:visited {
   flex-shrink: 1;
   text-align: initial;
 }
-#linkLoader .pagePathes .slash {
+#linkLoader .page__path-group .slash {
   margin: 0 4px;
 }
 
 #linkLoader_moreFn {
-  border-top: 1px solid #B9B8B6;
+  border-top: 1px solid #b9b8b6;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -1300,7 +1357,7 @@ a:link, a:active, a:visited {
   display: flex;
 }
 #linkLoader_moreFn button:hover {
-  background-color: #EDECE9;
+  background-color: #edece9;
 }
 
 #linkedFn {
@@ -1336,59 +1393,61 @@ a:link, a:active, a:visited {
   overflow-y: scroll;
 }
 
-.frame_inner {
+.frame__inner {
   width: 100%;
   height: 100%;
 }
-.frame_inner div, .frame_inner input, .frame_inner button {
+.frame__inner div,
+.frame__inner input,
+.frame__inner button {
   font-family: inherit;
 }
 
-.pageHeader {
+.page__header {
   width: 100%;
 }
 
-.pageHeader_notCover,
-.pageContent {
+.page__header_notCover,
+.page__contents {
   max-width: 100%;
   width: 100%;
   padding-left: calc(96px + env(safe-area-inset-left));
 }
 
-.pageHeader .pageTitle,
+.page__header .page__title,
 .editableBlock,
-.pageHeader .comments {
+.page__header .comments {
   padding-right: calc(96px + env(safe-area-inset-left));
 }
 
-.subBlocks .editableBlock {
+.subBlock-group .editableBlock {
   padding-right: 0;
 }
 
-.pageComment {
+.page__comments {
   margin-top: 1rem;
 }
 
-.pageHeader {
+.page__header {
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   margin-bottom: 30px;
 }
-.pageHeader .pageCover {
+.page__header .page__header__cover {
   position: relative;
   width: 100%;
   height: 30vh;
 }
-.pageHeader .pageCover img {
+.page__header .page__header__cover img {
   width: 100%;
   height: 100%;
 }
-.pageHeader .pageCover .changeCoverBtn {
+.page__header .page__header__cover .btn-change-cover {
   display: none;
 }
-.pageHeader .pageCover.on .changeCoverBtn {
+.page__header .page__header__cover.on .btn-change-cover {
   font-size: 1rem;
   display: block;
   transition: display 1ms ease;
@@ -1400,27 +1459,27 @@ a:link, a:active, a:visited {
   border-radius: 10px;
   padding: 5px 10px;
 }
-.pageHeader .pageCover.on .changeCoverBtn:hover {
+.page__header .page__header__cover.on .btn-change-cover:hover {
   transition: background-color 0.3s ease;
   background-color: rgba(189, 189, 189, 0.744);
 }
-.pageHeader .pageHeader_notConver {
+.page__header .page__header_notConver {
   display: flex;
   flex-direction: column;
 }
-.pageHeader > div {
+.page__header > div {
   position: relative;
 }
-.pageHeader .pageIcon {
+.page__header .icon-page {
   width: -moz-fit-content;
   width: fit-content;
   height: -moz-fit-content;
   height: fit-content;
 }
-.pageHeader .pageIcon.iconNull {
+.page__header .icon-page.iconNull {
   display: none;
 }
-.pageHeader .deco div {
+.page__header .deco div {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -1430,25 +1489,25 @@ a:link, a:active, a:visited {
   width: 100%;
   height: 24px;
 }
-.pageHeader .deco div button {
+.page__header .deco div button {
   width: -moz-fit-content;
   width: fit-content;
   height: 100%;
   margin-right: 5px;
-  color: #B9B8B6;
+  color: #b9b8b6;
   flex-grow: 0;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   font-size: 14px;
 }
-.pageHeader .deco div button svg {
+.page__header .deco div button svg {
   padding-right: 5px;
 }
-.pageHeader .deco div span {
+.page__header .deco div span {
   font-size: 13px;
 }
-.pageHeader .pageIcon {
+.page__header .icon-page {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1458,57 +1517,57 @@ a:link, a:active, a:visited {
   pointer-events: auto;
   cursor: default;
 }
-.pageHeader .pageIcon .pageStringIcon {
+.page__header .icon-page .pageStringIcon {
   text-align: center;
   width: 100%;
   height: 100%;
   font-size: 60px;
 }
-.pageHeader .pageIcon .pageImgIcon {
+.page__header .icon-page .pageIcon__img {
   width: 100%;
   height: 100%;
 }
-.pageHeader .pageTitle {
+.page__header .page__title {
   font-size: inherit;
   font-weight: bold;
   width: 100%;
   word-break: break-all;
 }
 
-.pageContent {
+.page__contents {
   height: -moz-fit-content;
   height: fit-content;
   padding-bottom: 50px;
 }
 
-.frame.mobile .pageContent {
+.frame.mobile .page__contents {
   padding-bottom: 100px;
 }
 
-.pageContent_inner {
+.page__contents__inner {
   position: relative;
   width: 100%;
 }
 
 .newPageFrame {
-  color: #B9B8B6;
+  color: #b9b8b6;
 }
 .newPageFrame span {
-  color: #B9B8B6;
+  color: #b9b8b6;
 }
-.newPageFrame .pageContent_inner {
+.newPageFrame .page__contents__inner {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: flex-start;
   font-size: 1rem;
 }
-.newPageFrame .pageContent_inner button {
+.newPageFrame .page__contents__inner button {
   font-size: 1rem;
   display: block;
   margin: 10px;
 }
-.newPageFrame .pageContent_inner button svg {
+.newPageFrame .page__contents__inner button svg {
   color: #a3a3a2;
   fill: #a3a3a2;
   margin-right: 10px;
@@ -1523,19 +1582,19 @@ a:link, a:active, a:visited {
 }
 
 @media screen and (max-width: 767px) {
-  .pageHeader {
+  .page__header {
     margin-bottom: 5px;
   }
-  .pageHeader .pageCover {
+  .page__header .page__header__cover {
     height: 100px;
   }
-  .pageHeader_notCover,
-  .pageContent {
+  .page__header_notCover,
+  .page__contents {
     padding-left: 1rem;
   }
-  .pageHeader .pageTitle,
+  .page__header .page__title,
   .editableBlock,
-  .pageHeader .comments {
+  .page__header .comments {
     padding-right: 2rem;
   }
   .editableBlock {

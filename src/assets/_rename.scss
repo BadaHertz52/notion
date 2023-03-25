@@ -1,7 +1,7 @@
 #rename {
   display: flex;
   flex-direction: column;
-  &> .inner{
+  & > .inner {
     @include modalStyle;
     display: flex;
     flex-direction: row;
@@ -9,30 +9,31 @@
     align-content: center;
     box-sizing: border-box;
     padding: 10px;
-    input, button{
+    input,
+    button {
       border: 1px solid $lightMud;
       border-radius: 1px;
       font-size: 15px;
       text-align: center;
-      padding:2px;
+      padding: 2px;
       height: 2rem;
       box-sizing: inherit;
     }
-    .rename_icon {
+    .rename__btn {
       width: 2rem;
-      .pageImgIcon{
+      .pageIcon__img {
         width: 1.2rem;
         height: 1.2rem;
       }
       border-right: none;
     }
-    .rename_title{
-      width: calc(100% - 2rem) ;
+    .rename__title {
+      width: calc(100% - 2rem);
     }
   }
   #iconModal {
     position: relative;
-    top:0;
+    top: 0;
     margin-top: 10px;
   }
 }

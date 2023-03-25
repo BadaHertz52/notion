@@ -1,13 +1,13 @@
-@import './common';
-#block_commandBlock {
+@import "./common";
+#block__commandBlock {
   position: absolute;
   z-index: 20;
-  #commandBlock{
+  #commandBlock {
     margin-top: 0;
-    z-index:inherit;
+    z-index: inherit;
   }
 }
-#commandBlock{
+#commandBlock {
   @include modalStyle;
   @include webkitScroll;
   overflow-y: scroll;
@@ -15,53 +15,52 @@
   &_inner {
     position: relative;
   }
-  .command div{
+  .command div {
     z-index: 30;
     button {
       z-index: 30;
     }
   }
-  .command > header{
-    padding:0 14px;
+  .command > header {
+    padding: 0 14px;
     margin: {
       top: 6px;
-      bottom:  8px;
+      bottom: 8px;
     }
     color: rgba(55, 53, 47, 0.65);
     font : {
       size: 11px;
-      weight: 500
+      weight: 500;
     }
     line-height: 120%;
     user-select: none;
     text-transform: uppercase;
   }
-  .command_btns{
+  .command__btn-group {
     padding: 5px;
   }
-  .command_btn {
+  .btn-command {
     display: none;
     width: 100%;
-    padding: 2% 0; 
+    padding: 2% 0;
     border-radius: 3px;
-    &:hover{
+    &:hover {
       background-color: rgba(55, 53, 47, 0.08);
       transition: backgroundColor 20ms ease-in 0s;
     }
   }
-  .command_btn.on {
+  .btn-command.on {
     display: block;
+  }
+  .btn-command.on.first {
+    background-color: rgba(55, 53, 47, 0.08);
+  }
 
-  }
-  .command_btn.on.first{
-    background-color:rgba(55, 53, 47, 0.08);
-  };
-  
-  .command_btn_inner{
+  .btn-command__inner {
     display: flex;
-    margin:0 1% ;
+    margin: 0 1%;
   }
-  .command_btn_left{
+  .btn-command__left {
     width: 38px;
     height: 38px;
     padding: 7px;
@@ -70,20 +69,20 @@
     flex-shrink: 0;
     border: 1px solid $lightMud;
     border-radius: 3px;
-    img{
-      width:100%;
-      height: 100%
+    img {
+      width: 100%;
+      height: 100%;
     }
   }
-  .media_blocks{
+  .type-media {
     border-top: 1px solid $itemSvg;
-    .command_btn_left {
-      padding:0
+    .btn-command__left {
+      padding: 0;
     }
-  } 
+  }
   .headerType {
     display: flex;
-    span:first-child{
+    span:first-child {
       font-size: 20px;
     }
     span:last-child {
@@ -92,24 +91,25 @@
       padding-top: 30%;
     }
   }
-  .command_btn_right{
+  .btn-command__right {
     flex-grow: 1;
     flex-shrink: 1;
     margin-left: 10px;
-    header , .command_explanation {
-      text-align: left
-    };
+    header,
+    .command__explanation {
+      text-align: left;
+    }
     header {
       font-size: 14px;
     }
-    .command_explanation{
-      padding-top:3px ;
+    .command__explanation {
+      padding-top: 3px;
       font-size: 12px;
-      color:rgba(55, 53, 47, 0.65);
+      color: rgba(55, 53, 47, 0.65);
     }
   }
 }
-#commandBlock_noResult{
+#commandBlock-noResult {
   display: none;
   color: rgba(55, 53, 47, 0.65);
   padding: 2% 10%;

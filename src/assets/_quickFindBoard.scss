@@ -1,53 +1,53 @@
-@import './common';
+@import "./common";
 
-#quickFindBord {
+#quickFindBoard {
   @include modal;
-  .inner{
+  .inner {
     height: fit-content;
     width: 300px;
-    top:0;
+    top: 0;
     left: 0;
-    &>div >div{
-      padding:10px;
+    & > div > div {
+      padding: 10px;
     }
   }
-  .qf_search{
-    padding : 1rem 10px;
+  .qf_search {
+    padding: 1rem 10px;
     display: flex;
     align-items: center;
     width: 100%;
     height: 3.3rem;
     font-size: 1.1rem;
     border-bottom: 1px solid $mud;
-    svg{
-      color:$mud;
+    svg {
+      color: $mud;
       margin-left: 5px;
     }
-    input{
-      padding:0;
+    input {
+      padding: 0;
       box-sizing: border-box;
-      border:none;
+      border: none;
       font-size: 1rem;
       font-weight: lighter;
       width: calc(100% - 2rem);
       margin-left: 10px;
       max-width: 100%;
     }
-    input::placeholder{
+    input::placeholder {
       color: $mud;
       text-overflow: ellipsis;
     }
-    input:focus{
+    input:focus {
       outline: none;
     }
   }
-  .qf_results{
-    min-height:min-content;
-    .header ,
-    .body{
+  .qf_results {
+    min-height: min-content;
+    .header,
+    .body {
       margin-bottom: 14px;
     }
-    .header{
+    .header {
       display: flex;
       justify-content: space-between;
       font-size: 12px;
@@ -57,102 +57,102 @@
       p {
         margin: 0;
       }
-      button{
+      button {
         color: $itemText;
       }
-      .addFilterBtn{
+      .addFilterBtn {
         display: flex;
         align-items: center;
-        color:$turkeyBlue;
+        color: $turkeyBlue;
         font-size: inherit;
-        &:hover{
+        &:hover {
           background-color: rgba(46, 171, 220, 0.164);
         }
       }
     }
-    .clearBtn{
-      padding:5px;
-      &:hover{
+    .btn-clear {
+      padding: 5px;
+      &:hover {
         background-color: $itemHover;
       }
     }
-    .sort{
+    .sort {
       width: 100%;
       display: flex;
       justify-content: space-between;
     }
-    .sort_selecter{
+    .sort__inner {
       display: flex;
       position: relative;
-      &> button{
+      & > button {
         margin-left: 5px;
         display: flex;
         align-items: center;
-        svg{
+        svg {
           margin-left: 5px;
         }
       }
     }
-    .sort_options{
+    .sort_options {
       display: none;
     }
-    .sort_options.on{
+    .sort_options.on {
       @include modalStyle;
       z-index: 20;
-      left :30px;
-      top:1.2rem;
+      left: 30px;
+      top: 1.2rem;
       display: flex;
       position: absolute;
       border-radius: 3px;
       flex-direction: column;
       width: 180px;
-      button{
+      button {
         display: flex;
         justify-content: space-between;
         padding: 5px 10px;
         color: $darkgrey;
-        .checkIcon{
+        .checkIcon {
           display: none;
         }
       }
-      button:first-child{
+      button:first-child {
         padding-top: 10px;
       }
-      button:last-child{
+      button:last-child {
         padding-bottom: 10px;
       }
-      button:hover{
+      button:hover {
         background-color: $itemHover;
       }
       .selected {
-        .checkIcon{
+        .checkIcon {
           display: block;
-          color:$turkeyBlue;
+          color: $turkeyBlue;
           font-size: 14px;
           font-weight: bolder;
         }
       }
     }
-    .body{
+    .body {
       position: relative;
       display: flex;
       flex-direction: column;
     }
-    .noResult, 
-    .noRecentPages{
+    .no-result,
+    .noRecentPages {
       color: $darkgrey;
       font-size: 14px;
       text-align: center;
     }
-    .noResult{
+    .no-result {
       p {
         margin: 0;
       }
-      p:nth-child(2){
-        color:$mud;
+      p:nth-child(2) {
+        color: $mud;
       }
-      button{
-        color:$turkeyBlue ;
+      button {
+        color: $turkeyBlue;
       }
     }
   }

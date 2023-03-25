@@ -1,18 +1,18 @@
-@import './common';
-#mobileBlockMenu{
+@import "./common";
+#mobileBlockMenu {
   @include modalStyle;
-  position:absolute;
-  left:5%;
-  min-width:250px ;
+  position: absolute;
+  left: 5%;
+  min-width: 250px;
   max-width: 80%;
   width: fit-content;
   overflow-y: hidden;
   overflow-x: auto;
-  .inner{
+  .inner {
     display: flex;
     justify-content: space-around;
   }
-  button{
+  button {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -20,32 +20,32 @@
     min-width: 24px;
     font-size: 1rem;
     border-right: 1px solid rgb(212, 212, 212);
-    .text{
+    .text {
       font-size: 14px;
       min-width: fit-content;
     }
-    .btn_inner{
+    .mobileBlock__btn__inner {
       width: 80%;
       height: calc(100% - 10px);
-      margin:5px 0;
+      margin: 5px 0;
       display: flex;
       align-items: center;
       justify-content: center;
     }
   }
-  button:last-child{
+  button:last-child {
     border-right: none;
     padding-right: 4px;
   }
-  .arrowDown{
-    color:grey;
+  .arrow-down {
+    color: grey;
     display: inline-flex;
     align-items: end;
-    svg{
-      height: fit-content
+    svg {
+      height: fit-content;
     }
   }
-};
+}
 
 #mobileSideMenu {
   position: absolute;
@@ -53,68 +53,70 @@
   z-index: 50;
   width: 100%;
   height: 100%;
-  background-color:  rgb(240, 240, 240);
-  animation:  duration timing-function delay iteration-count direction fill-mode;
-  .inner{
+  background-color: rgb(240, 240, 240);
+  animation: duration timing-function delay iteration-count direction fill-mode;
+  .inner {
     position: relative;
   }
-  .top{
+  .top {
     height: 2rem;
     background-color: #ffff;
     text-align: center;
     position: relative;
-    div{
+    div {
       line-height: 2rem;
       text-align: center;
       font-weight: bold;
       font-size: 1.2rem;
     }
-    div ,button{
+    div,
+    button {
       height: 100%;
     }
-    button{
-      position:absolute;
-      top:0;
-      right:1rem;
+    button {
+      position: absolute;
+      top: 0;
+      right: 1rem;
       font-size: 1rem;
     }
   }
-  .content {
+  .contents {
     width: inherit;
     height: calc(100vh - 1.5rem);
   }
   #commandBlock,
   #pageMenu,
-  .menu_color,
+  .menu___color,
   .menu,
   .menu .mainMenu,
-  .menu .sideMenu,
-  #linkLoader{
+  .menu .menu___sideMenu,
+  #linkLoader {
     @include resetModal;
     position: relative;
     width: 100vw;
     height: inherit;
   }
-  .menu{
-    .menu_inner, .menu_edit{
+  .menu {
+    .menu__inner,
+    .menu__edit {
       width: 100vw;
       height: inherit;
     }
-    .menu_search{
+    .menu__search {
       display: none;
     }
     .mainMenu {
-      .menu_inner{
-        padding:0
+      .menu__inner {
+        padding: 0;
       }
     }
-    .menu_edit{
+    .menu__edit {
       position: relative;
     }
-    .menu_editBtns{
+    .menu__editBtns {
       padding-top: 14px;
     }
-    .edit_inform{
+    .edit__inform {
       position: absolute;
       bottom: 3rem;
       left: 0;
@@ -122,11 +124,11 @@
       font-size: 14px;
     }
   }
-  .menu .sideMenu{
+  .menu .menu___sideMenu {
     position: absolute;
-    background-color:  rgb(240, 240, 240);
-    top:0;
-    left:0;
+    background-color: rgb(240, 240, 240);
+    top: 0;
+    left: 0;
     z-index: 60;
     width: inherit;
     height: inherit;
@@ -134,9 +136,9 @@
   }
 }
 
-@media screen and (min-width:375px) {
-  #mobileBlockMenu{
-    button{
+@media screen and (min-width: 375px) {
+  #mobileBlockMenu {
+    button {
       min-width: 32px;
     }
   }

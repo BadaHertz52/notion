@@ -1,90 +1,93 @@
-@import './common';
-#linkLoader{
+@import "./common";
+#linkLoader {
   position: absolute;
   @include modalStyle;
   width: 300px;
-  .inner{
+  .inner {
     display: flex;
     flex-direction: column;
     align-items: center;
   }
-  .search , .page_inner , .pages header{
+  .search,
+  .page__inner,
+  .page-group header {
     padding: 7px 14px;
   }
-  .search, .pages {
+  .search,
+  .page-group {
     width: 100%;
     margin-top: 10px;
   }
-  .pages {
-    header{
+  .page-group {
+    header {
       font-size: 12px;
-      color:$mud
+      color: $mud;
     }
   }
-  input{
+  input {
     @include searchInput;
     width: 100%;
     margin: {
-      left:0;
-      right:0
-    };
+      left: 0;
+      right: 0;
+    }
     box-sizing: border-box;
   }
-  .pageList{
+  .page-group__list {
     margin-top: 10px;
   }
-  .page_inner{
+  .page__inner {
     width: 100%;
     display: flex;
     align-items: center;
-    &:hover{
+    &:hover {
       background-color: $itemHover;
     }
   }
-  .pageIcon{
+  .icon-page {
     width: 1.5rem;
     height: 100%;
     margin-right: 10px;
   }
-  .pageImgIcon{
+  .pageIcon__img {
     width: 100%;
     height: 100%;
   }
-  .pageInform{
+  .page__inform {
     width: calc(100% - 1.5rem + 10px);
     display: flex;
     flex-direction: column;
     justify-content: left;
   }
-  .pageTitle{
+  .page__title {
     height: 100%;
     font-size: 1rem;
     text-overflow: ellipsis;
     text-align: left;
   }
-  .pagePathes{
+  .page__path-group {
     width: 100%;
     display: flex;
     flex-direction: row;
     margin-top: 6px;
     font-size: 14px;
     line-height: 1rem;
-    color:$mud;
-    .path{
+    color: $mud;
+    .path {
       display: flex;
       flex-direction: row;
     }
-    .title{
-      width: calc( 100% - 4px);
+    .title {
+      width: calc(100% - 4px);
       overflow: hidden;
       white-space: nowrap;
-      text-overflow:ellipsis ;
+      text-overflow: ellipsis;
       margin: 0;
       flex-grow: 1;
       flex-shrink: 1;
       text-align: initial;
     }
-    .slash{
+    .slash {
       margin: 0 4px;
     }
   }
@@ -94,29 +97,29 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  & > div{
+  & > div {
     width: 100%;
-    padding:4px;
+    padding: 4px;
   }
-  svg{
+  svg {
     margin-right: 10px;
   }
-  button{
-    padding:5px 10px;
+  button {
+    padding: 5px 10px;
     display: flex;
-    &:hover{
+    &:hover {
       background-color: $itemHover;
     }
   }
 }
-#linkedFn{
+#linkedFn {
   display: flex;
   flex-direction: column;
   span {
     font-size: 13.5px;
     line-height: 1.1rem;
   }
-  svg{
+  svg {
     font-size: 1.1rem;
   }
 }
