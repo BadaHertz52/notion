@@ -201,7 +201,6 @@ const NotionRouter = () => {
     open: false,
     what: null,
   });
-
   const [mobileSideMenu, setMobileSideMenu] = useState<mobileSideMenuType>({
     block: null,
     what: undefined,
@@ -433,7 +432,6 @@ const NotionRouter = () => {
       setLoading(false);
     }
   }, [firstPagesId, pages, pagesId]);
-
   useEffect(() => {
     if (firstPage !== null && routePage == null && hash === "") {
       setRoutePage(firstPage);

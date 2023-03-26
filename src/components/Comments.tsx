@@ -1140,7 +1140,7 @@ const Comments = ({
    */
   function changeCommentsStyle() {
     if (block !== null && openComment) {
-      const blockContentsEl = document.getElementById(`${block.id}__contents`);
+      const blockContentsEl = document.getElementById(`${block.id}-contents`);
       const editableBlock = document.getElementsByClassName("editableBlock")[0];
       const editableBlockDomRect = editableBlock.getClientRects()[0];
       const blockDocDomRect = blockContentsEl?.getClientRects()[0];

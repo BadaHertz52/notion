@@ -152,7 +152,6 @@ const BlockFn = ({
       const targetBlock = JSON.parse(sessionItem);
       setBlockFnTargetBlock(targetBlock);
       setOpenMenu(true);
-      sessionStorage.removeItem("blockFnTargetBlock");
     } else {
       console.log("BlockFn-openMenu error: there is no session item");
     }

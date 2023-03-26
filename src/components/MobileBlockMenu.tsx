@@ -15,6 +15,7 @@ import { Block, findBlock, makeNewBlock } from "../modules/notion";
 import BlockStyler, { removeSelected, StylerCommonProps } from "./BlockStyler";
 
 type MobileBlockMenuProps = Omit<StylerCommonProps, "block"> & {
+  mobileMenuTargetBlock: Block;
   initialInnerHeight: number;
 };
 
@@ -33,19 +34,18 @@ const MobileBlockMenu = ({
   command,
   setCommand,
   frameHtml,
-  openMobileBlockMenu,
+  mobileMenuTargetBlock,
   setMobileSideMenu,
   setMobileSideMenuOpen,
-  setOpenMM,
+  setMobileMenuTargetBlock,
   initialInnerHeight,
 }: MobileBlockMenuProps) => {
   const { addBlock, editBlock, deleteBlock } =
     useContext(ActionContext).actions;
-  const item = sessionStorage.getItem("mobileMenuBlock");
+  const [targetBlock, setTargetBlock] = useState<Block>(mobileMenuTargetBlock);
   const [mbmStyle, setMBMstyle] = useState<CSSProperties | undefined>(
     undefined
   );
-  const [block, setBlock] = useState<Block | null>(null);
   const [openMobileBlockStyler, setOpenMobileBlockStyler] =
     useState<boolean>(false);
   const inner = document.getElementById("inner");
@@ -69,13 +69,13 @@ const MobileBlockMenu = ({
     }
   });
 
-  const changeMBMstyle = (targetBlock: Block) => {
+  const changeMBMstyle = (block: Block) => {
     const innerHeight = window.innerHeight;
     /**
      *Select event로 인해 가상키보드가 나타날 때 줄어든 window.innerHeight 의 값이자
      */
     const heightGap = initialInnerHeight - innerHeight;
-    const blockElement = document.getElementById(`${targetBlock.id}__contents`);
+    const blockElement = document.getElementById(`${block.id}-contents`);
     const blockElementDomRect = blockElement?.getClientRects()[0];
     const pageContentInner = frameHtml?.querySelector(".page__contents__inner");
     const pageContentInnerDomRect = pageContentInner?.getClientRects()[0];
@@ -103,48 +103,61 @@ const MobileBlockMenu = ({
       setMBMstyle({
         top: `${newTop}px`,
         left: `${left}px`,
-        maxWidth:
-          pageContentInnerDomRect.width > 260
-            ? "280px"
-            : `${pageContentInnerDomRect.width}px`,
+        width: `${pageContentInnerDomRect.width}px`,
       });
     }
   };
 
   const openMobileSideMenu = (what: msmWhatType) => {
-    setMobileSideMenu({
-      block: block,
-      what: what,
-    });
     setMobileSideMenuOpen(true);
-    sessionStorage.setItem("msm_block", JSON.stringify(block));
+    const item = sessionStorage.getItem("mobileMenuTargetBlock");
+    if (targetBlock === undefined && item !== null) {
+      setMobileSideMenu({
+        block: JSON.parse(item),
+        what: what,
+      });
+      sessionStorage.setItem("msm_block", item);
+    } else {
+      sessionStorage.setItem("msm_block", JSON.stringify(targetBlock));
+      setMobileSideMenu({
+        block: targetBlock,
+        what: what,
+      });
+    }
     closeMM();
   };
   /**
    * MobileBlockMenu 창을 닫는 함수
    */
   function closeMM() {
-    setOpenMM(false);
+    setMobileMenuTargetBlock(null);
   }
   const addNewBlock = () => {
-    if (page.blocksId !== null && block !== null) {
-      const blockIndex = page.blocksId.indexOf(block.id);
-      const newBlock = makeNewBlock(page, block, "");
-      addBlock(page.id, newBlock, blockIndex + 1, block.id);
+    if (page.blocksId !== null && targetBlock !== null) {
+      const blockIndex = page.blocksId.indexOf(targetBlock.id);
+      const newBlock = makeNewBlock(page, targetBlock, "");
+      addBlock(page.id, newBlock, blockIndex + 1, targetBlock.id);
       closeMM();
     }
   };
   const removeBlock = () => {
-    block !== null && deleteBlock(page.id, block, true);
+    targetBlock !== null && deleteBlock(page.id, targetBlock, true);
     closeMM();
   };
   const onTouchCommentBtn = () => {
-    setCommentBlock(block);
+    const item = sessionStorage.getItem("mobileMenuTargetBlock");
+    if (targetBlock === undefined && item !== null) {
+      setCommentBlock(JSON.parse(item));
+    } else {
+      setCommentBlock(targetBlock);
+    }
     setModal({
       open: true,
       what: "modalComment",
     });
-    setModalStyle(mbmStyle);
+    setModalStyle({
+      ...mbmStyle,
+    });
     const pageHtml = frameHtml?.querySelector(".page");
     if (pageHtml !== null && frameHtml !== null) {
       pageHtml?.setAttribute(
@@ -181,9 +194,9 @@ const MobileBlockMenu = ({
         const id = blockContentElement.id;
         const index = id.indexOf("__contents");
         const blockId = id.slice(0, index);
-        const targetBlock = findBlock(page, blockId).BLOCK;
-        setBlock(targetBlock);
-        changeMBMstyle(targetBlock);
+        const newTargetBlock = findBlock(page, blockId).BLOCK;
+        setTargetBlock(newTargetBlock);
+        changeMBMstyle(newTargetBlock);
       }
     }
   };
@@ -203,23 +216,32 @@ const MobileBlockMenu = ({
     }
   };
   useEffect(() => {
-    if (item !== null) {
-      if (openMobileBlockStyler && block !== null) {
-        setOpenMobileBlockStyler(false);
-        removeSelected(frameHtml, block, editBlock, page, null);
+    if (mobileMenuTargetBlock !== undefined) {
+      sessionStorage.setItem(
+        "mobileMenuTargetBlock",
+        JSON.stringify(mobileMenuTargetBlock)
+      );
+      changeMBMstyle(mobileMenuTargetBlock);
+    } else {
+      const item = sessionStorage.getItem("mobileMenuTargetBlock");
+      if (item !== null) {
+        const block = JSON.parse(item);
+        setTargetBlock(block);
+        changeMBMstyle(block);
       }
-      const targetBlock = JSON.parse(item);
-      setBlock(targetBlock);
-      changeMBMstyle(targetBlock);
-      sessionStorage.removeItem("mobileMenuBlock");
     }
-  }, [item]);
+    if (openMobileBlockStyler) {
+      setOpenMobileBlockStyler(false);
+      removeSelected(frameHtml, mobileMenuTargetBlock, editBlock, page, null);
+    }
+  }, [mobileMenuTargetBlock]);
   return (
     <>
       <div id="mobileBlockMenu" style={mbmStyle}>
         {!openMobileBlockStyler ? (
           <div className="inner">
             <button
+              className="btn-add-block"
               onTouchEnd={addNewBlock}
               title="Click  to add a block below"
             >
@@ -227,14 +249,19 @@ const MobileBlockMenu = ({
                 <AiOutlinePlus />
               </div>
             </button>
-            {block?.type !== "page" && (
-              <button name="comment" onTouchEnd={onTouchCommentBtn}>
+            {targetBlock?.type !== "page" && (
+              <button
+                name="comment"
+                className="btn-comment"
+                onTouchEnd={onTouchCommentBtn}
+              >
                 <div className="mobileBlock__btn__inner">
                   <BiCommentDetail />
                 </div>
               </button>
             )}
             <button
+              className="btn-turn-into"
               onTouchEnd={() => openMobileSideMenu(ms_turnInto)}
               name="turn into"
             >
@@ -245,14 +272,18 @@ const MobileBlockMenu = ({
                 </div>
               </div>
             </button>
-            <button onTouchEnd={removeBlock} name="delete">
+            <button
+              className="btn-delete"
+              onTouchEnd={removeBlock}
+              name="delete"
+            >
               <div className="mobileBlock__btn__inner">
                 <RiDeleteBin6Line />
               </div>
             </button>
             <button
               name="color"
-              className="underline menu__editBtn"
+              className="underline menu__editBtn btn-color "
               onTouchEnd={() => openMobileSideMenu(ms_color)}
             >
               <div className="mobileBlock__btn__inner">
@@ -263,6 +294,7 @@ const MobileBlockMenu = ({
               </div>
             </button>
             <button
+              className="btn-open-menu"
               aria-details="open menu"
               onTouchEnd={() => openMobileSideMenu(ms_moreMenu)}
             >
@@ -272,7 +304,7 @@ const MobileBlockMenu = ({
             </button>
           </div>
         ) : (
-          block !== null && (
+          targetBlock !== null && (
             <BlockStyler
               pages={pages}
               pagesId={pagesId}
@@ -280,7 +312,7 @@ const MobileBlockMenu = ({
               userName={userName}
               page={page}
               recentPagesId={recentPagesId}
-              block={block}
+              block={targetBlock}
               modal={modal}
               setModal={setModal}
               setModalStyle={setModalStyle}
@@ -291,10 +323,10 @@ const MobileBlockMenu = ({
               selection={null}
               setSelection={null}
               frameHtml={frameHtml}
-              openMobileBlockMenu={openMobileBlockMenu}
+              mobileMenuTargetBlock={mobileMenuTargetBlock}
               setMobileSideMenu={setMobileSideMenu}
               setMobileSideMenuOpen={setMobileSideMenuOpen}
-              setOpenMM={setOpenMM}
+              setMobileMenuTargetBlock={setMobileMenuTargetBlock}
               setOpenMobileBlockStyler={setOpenMobileBlockStyler}
             />
           )

@@ -2,7 +2,6 @@
 
 #trash {
   @include modalStyle;
-  display: none;
   width: 400px;
   min-width: 180px;
   max-width: calc(100vw - 24px);
@@ -89,5 +88,33 @@
     left: 0;
     transform: translateY(200vh);
     transition: transform 1000ms ease;
+  }
+}
+@media screen and (max-width: 425px) {
+  #trash {
+    .range {
+      button {
+        font-size: 14px;
+      }
+    }
+  }
+}
+@media screen and (max-width: 768px) {
+  #trash {
+    .header {
+      margin-bottom: 24px;
+    }
+    .trash__list {
+      height: calc(90vh - 12px - 16px - 24px - 26px);
+      position: relative;
+    }
+    .noTrash {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-size: 32px;
+    }
   }
 }

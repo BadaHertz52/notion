@@ -90,7 +90,7 @@ export const basicBlockStyle: BlockStyle = {
   width: undefined,
   height: undefined,
 };
-const userName = "badahertz52";
+const userName = "user";
 const editTime = JSON.stringify(Date.now());
 
 const img = "img";
@@ -2519,25 +2519,11 @@ export default function notion(
       let trashPages = trash.pages == null ? null : [...trash.pages];
       let trashPagesId = trash.pagesId === null ? null : [...trash.pagesId];
 
-      pageArr = pages !== null ? [...pages] : null;
-      pageIdArr = pagesId !== null ? [...pagesId] : null;
-      firstPageIdArr = firstPagesId !== null ? [...firstPagesId] : null;
-
       const restoredPage: Page = {
         ...(targetPage as Page),
         editTime: editTime,
         parentsId: null,
       };
-
-      if (pageArr !== null && pageIdArr !== null && firstPageIdArr !== null) {
-        pageArr?.push(restoredPage);
-        pageIdArr.push(restoredPage.id);
-        firstPageIdArr.push(restoredPage.id);
-      } else {
-        pageArr = [restoredPage];
-        pageIdArr = [restoredPage.id];
-        firstPageIdArr = [restoredPage.id];
-      }
 
       if (trashPages !== null && trashPagesId !== null) {
         const trashTargetPage = findPage(
@@ -2556,21 +2542,26 @@ export default function notion(
         }
       }
       const newNotion: Notion = {
-        pages: pageArr,
-        pagesId: pageIdArr,
-        firstPagesId: firstPageIdArr,
-        templatesId: templatesId,
+        ...state,
+        pages: pages == null ? [restoredPage] : [...pages, restoredPage],
+        pagesId:
+          pagesId === null ? [restoredPage.id] : [...pagesId, restoredPage.id],
+        firstPagesId:
+          firstPagesId === null
+            ? [restoredPage.id]
+            : [...firstPagesId, restoredPage.id],
         trash:
           trashPages?.[0] !== undefined && trashPagesId?.[0] !== undefined
             ? {
-                pages: trashPages,
-                pagesId: trashPagesId,
+                pages: [...trashPages],
+                pagesId: [...trashPagesId],
               }
             : {
                 pages: null,
                 pagesId: null,
               },
       };
+      console.log("new notion", newNotion);
       return newNotion;
     case CLEAN_TRASH:
       trash.pages?.splice(pageIndex, 1);

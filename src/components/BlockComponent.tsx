@@ -257,7 +257,7 @@ export const getFromEndNode = (
   const focusText = endNode.textContent as string;
   const nodeParent = endNode.parentElement;
   /**
-   * focustNode의 parentNode가 span이냐에 따라 afterSelection 과 selectedEndIndex의 값을 변경하는 함수
+   * focusNode의 parentNode가 span이냐에 따라 afterSelection 과 selectedEndIndex의 값을 변경하는 함수
    * @param spanHtml   endNode가 span의 child일 경우 span.outerHTML, 아닐 경우 null
    */
   const changeValueByFocus = (spanHtml: null | string) => {
@@ -336,7 +336,7 @@ export const getFromEndNode = (
   };
 };
 /**
- * parentElement가 HtmlAnchorElement이며 focustNode와 별개인 startNode의 textContent를 변경함
+ * parentElement가 HtmlAnchorElement이며 focusNode와 별개인 startNode의 textContent를 변경함
  * @param startOffset : startNode에서 select이 시작된 지점
  * @param startNode select이 시작된 node
  * @param startNodeText :startNode.textContent
@@ -589,8 +589,8 @@ type BlockComponentProps = {
   closeMenu: (event: globalThis.MouseEvent | MouseEvent) => void;
   templateHtml: HTMLElement | null;
   setSelection: Dispatch<SetStateAction<selectionType | null>>;
-  openMobileMenu: boolean;
-  setOpenMM: Dispatch<SetStateAction<boolean>>;
+  mobileMenuTargetBlock: Block | null;
+  setMobileMenuTargetBlock: Dispatch<SetStateAction<Block | null>>;
   onClickCommentBtn: (block: Block) => void;
   setMoveTargetBlock: Dispatch<SetStateAction<Block | null>>;
   moveBlock: React.MutableRefObject<boolean>;
@@ -615,8 +615,8 @@ const BlockComponent = ({
   closeMenu,
   templateHtml,
   setSelection,
-  openMobileMenu,
-  setOpenMM,
+  mobileMenuTargetBlock,
+  setMobileMenuTargetBlock,
   onClickCommentBtn,
   setMoveTargetBlock,
   moveBlock,
@@ -644,7 +644,7 @@ const BlockComponent = ({
       ? possibleBlocks.map((block: Block) => block.id)
       : null;
   /**
-   * 마우스가 block위를 움직일 경우, 해당 block의 element 옆에 blockFn compnent를 보여주는 함수
+   * 마우스가 block위를 움직일 경우, 해당 block의 element 옆에 blockFn component를 보여주는 함수
    * @param event mouseEvent
    */
   const showBlockFn = (event: MouseEvent) => {
@@ -682,9 +682,8 @@ const BlockComponent = ({
    * 모바일 브라우저에서 특정 이벤트가 발생 했을 때 mobileBlockMenu 를 열어 주는 함수
    */
   const openMobileBlockMenu = () => {
-    if (block.comments == null && !openMobileMenu) {
-      sessionStorage.setItem("mobileMenuBlock", JSON.stringify(block));
-      setOpenMM(true);
+    if (block.comments == null) {
+      setMobileMenuTargetBlock(block);
       setSelection(null);
     }
   };

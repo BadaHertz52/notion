@@ -163,8 +163,8 @@ const Frame = ({
   const moveBlock = useRef<boolean>(false);
   /** block 이동 시, 이동 할 위치의 기준이 되는 block(block 은 pointBlockToMoveBlock.current의 앞에 위치하게됨) */
   const pointBlockToMoveBlock = useRef<Block | null>(null);
-
-  const [openMobileMenu, setOpenMM] = useState<boolean>(false);
+  const [mobileMenuTargetBlock, setMobileMenuTargetBlock] =
+    useState<Block | null>(null);
   const maxWidth = innerWidth - 60;
   const fontSize: number = isMobile()
     ? openTemplates
@@ -234,17 +234,18 @@ const Frame = ({
   const onMouseLeaveFromPH = () => {
     decoOpen && setDecoOpen(false);
   };
-  const closeModal = (
-    event: globalThis.MouseEvent,
-    modalEle: HTMLElement | null
-  ) => {
-    const modalDomRect = modalEle?.getClientRects()[0];
-    const isInModalMenu = detectRange(event, modalDomRect);
-    !isInModalMenu &&
-      setModal({
-        open: false,
-        what: null,
-      });
+  const closeModal = (event: globalThis.MouseEvent) => {
+    const target = event.target as HTMLElement | null;
+    if (target !== null) {
+      const isInModal = target.closest("#modal__menu");
+      const isInMobileBlockMenu = target.closest("#mobileBlockMenu");
+      if (!isInModal && !isInMobileBlockMenu) {
+        setModal({
+          open: false,
+          what: null,
+        });
+      }
+    }
   };
 
   const closeMenu = (event: globalThis.MouseEvent | MouseEvent) => {
@@ -264,9 +265,7 @@ const Frame = ({
   const closeComments = (event: globalThis.MouseEvent) => {
     if (openComment && commentBlock !== null) {
       const commentsDoc = document.getElementById("block-comments");
-      const commentBtn = document.getElementById(
-        `${commentBlock.id}__contents`
-      );
+      const commentBtn = document.getElementById(`${commentBlock.id}-contents`);
       if (commentsDoc !== null && commentBtn !== null) {
         const commentsDocDomRect = commentsDoc.getClientRects()[0];
         const commentBtnDomRect = commentBtn.getClientRects()[0];
@@ -732,7 +731,7 @@ const Frame = ({
   };
   //new Frame
   /**
-   * 새로 만든 페이지에 firstblock을 생성하면서 페이지에 내용을 작성할 수 있도록 하는 함수
+   * 새로 만든 페이지에 firstBlock을 생성하면서 페이지에 내용을 작성할 수 있도록 하는 함수
    * @returns page
    */
   const startNewPage = (): Page => {
@@ -910,11 +909,7 @@ const Frame = ({
       const blocKContentElement = contentEditableElement?.closest(".contents");
       if (blocKContentElement !== null) {
         const blockId = blocKContentElement.id.replace("__contents", "");
-        sessionStorage.setItem(
-          "mobileMenuBlock",
-          JSON.stringify(findBlock(page, blockId).BLOCK)
-        );
-        setOpenMM(true);
+        setMobileMenuTargetBlock(findBlock(page, blockId).BLOCK);
       }
     }
   };
@@ -922,10 +917,9 @@ const Frame = ({
   inner?.addEventListener("touchstart", updateBlock);
   inner?.addEventListener("click", (event: globalThis.MouseEvent) => {
     updateBlock();
-    document.getElementById("menu__main") && closeMenu(event);
-    document.getElementById("modal__menu") &&
-      closeModal(event, document.getElementById("modal__menu"));
-    document.getElementById("block-comments") && closeComments(event);
+    document.getElementById("menu__main") !== null && closeMenu(event);
+    document.getElementById("modal__menu") !== null && closeModal(event);
+    document.getElementById("block-comments") !== null && closeComments(event);
     if (command.boolean) {
       const blockCommandBlock = document.getElementById("block__commandBlock");
       const commandDomRect = blockCommandBlock?.getClientRects()[0];
@@ -1008,13 +1002,11 @@ const Frame = ({
     }
   };
   useEffect(() => {
+    console.log("modal", modal);
     if (modal.what === "modalComment") {
       const targetCommentInputHtml = document
         .getElementById("modalMenu")
-        ?.querySelector(".commentInput") as
-        | HTMLInputElement
-        | null
-        | undefined;
+        ?.querySelector(".commentInput") as HTMLInputElement | null | undefined;
       if (
         targetCommentInputHtml !== null &&
         targetCommentInputHtml !== undefined
@@ -1024,7 +1016,7 @@ const Frame = ({
     }
   }, [modal.what]);
   useEffect(() => {
-    if (!openMobileMenu && !mobileSideMenuOpen && !modal.open) {
+    if (mobileMenuTargetBlock === null && !mobileSideMenuOpen && !modal.open) {
       const selectedHtml = document.querySelector(".selected");
       const contentsHtml = selectedHtml?.closest(".contents");
       if (contentsHtml !== null && contentsHtml !== undefined) {
@@ -1033,12 +1025,12 @@ const Frame = ({
         removeSelected(frameHtml, targetBlock, editBlock, page, null);
       }
     }
-  }, [openMobileMenu, mobileSideMenuOpen, modal.open]);
+  }, [mobileMenuTargetBlock, mobileSideMenuOpen, modal.open]);
 
   useEffect(() => {
-    if (openComment && (openMobileMenu || mobileSideMenuOpen)) {
-      if (openMobileMenu) {
-        setOpenMM(false);
+    if (openComment && (mobileMenuTargetBlock !== null || mobileSideMenuOpen)) {
+      if (mobileMenuTargetBlock !== null) {
+        setMobileMenuTargetBlock(null);
       }
       if (mobileSideMenuOpen) {
         setMobileSideMenuOpen(false);
@@ -1057,7 +1049,9 @@ const Frame = ({
       ref={frameRef}
       style={{
         overflowY:
-          openMobileMenu || (isMobile() && modal.open) ? "hidden" : "scroll",
+          mobileMenuTargetBlock !== null || (isMobile() && modal.open)
+            ? "hidden"
+            : "scroll",
       }}
     >
       <div
@@ -1241,8 +1235,8 @@ const Frame = ({
                         closeMenu={closeMenu}
                         templateHtml={templateHtml}
                         setSelection={setSelection}
-                        setOpenMM={setOpenMM}
-                        openMobileMenu={openMobileMenu}
+                        setMobileMenuTargetBlock={setMobileMenuTargetBlock}
+                        mobileMenuTargetBlock={mobileMenuTargetBlock}
                       />
                     );
                   })}
@@ -1383,8 +1377,8 @@ const Frame = ({
           closeMenu={closeMenu}
           templateHtml={templateHtml}
           setSelection={setSelection}
-          setOpenMM={setOpenMM}
-          openMobileMenu={openMobileMenu}
+          setMobileMenuTargetBlock={setMobileMenuTargetBlock}
+          mobileMenuTargetBlock={mobileMenuTargetBlock}
         />
       )}
       {selection !== null && (
@@ -1406,14 +1400,14 @@ const Frame = ({
           selection={selection}
           setSelection={setSelection}
           frameHtml={frameHtml}
-          openMobileBlockMenu={openMobileMenu}
+          mobileMenuTargetBlock={mobileMenuTargetBlock}
           setMobileSideMenu={setMobileSideMenu}
           setMobileSideMenuOpen={setMobileSideMenuOpen}
-          setOpenMM={setOpenMM}
+          setMobileMenuTargetBlock={setMobileMenuTargetBlock}
           setOpenMobileBlockStyler={null}
         />
       )}
-      {openMobileMenu && (
+      {mobileMenuTargetBlock !== null && (
         <MobileBlockMenu
           pages={pages}
           pagesId={pagesId}
@@ -1429,10 +1423,10 @@ const Frame = ({
           setCommentBlock={setCommentBlock}
           setTargetPageId={setTargetPageId}
           frameHtml={frameHtml}
-          openMobileBlockMenu={openMobileMenu}
+          mobileMenuTargetBlock={mobileMenuTargetBlock}
           setMobileSideMenu={setMobileSideMenu}
           setMobileSideMenuOpen={setMobileSideMenuOpen}
-          setOpenMM={setOpenMM}
+          setMobileMenuTargetBlock={setMobileMenuTargetBlock}
           initialInnerHeight={innerHeight}
         />
       )}

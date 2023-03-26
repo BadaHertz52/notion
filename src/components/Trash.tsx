@@ -72,10 +72,10 @@ const Trash = ({
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (trashList !== undefined) {
       const value = event.target.value.toLowerCase();
-      const resultlist = trashList.filter((item: resultType) =>
+      const resultList = trashList.filter((item: resultType) =>
         item.title.toLowerCase().includes(value)
       );
-      resultlist?.[0] !== undefined ? setResult(resultlist) : setResult(null);
+      resultList?.[0] !== undefined ? setResult(resultList) : setResult(null);
     }
   };
 

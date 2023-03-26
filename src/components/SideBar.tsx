@@ -489,7 +489,8 @@ const SideBar = ({
   };
   const changeTrashStyle = () => {
     const innerWidth = window.innerWidth;
-    if (innerWidth > 768) {
+    console.log("inner width", innerWidth);
+    if (innerWidth >= 768) {
       if (trashBtn.current) {
         const domRect = trashBtn.current.getClientRects()[0];
         setTrashStyle({
@@ -504,6 +505,7 @@ const SideBar = ({
       }
     } else {
       setTrashStyle({
+        display: "block",
         transform: "translateY(0)",
       });
     }
@@ -556,7 +558,9 @@ const SideBar = ({
       const innerWidth = window.innerWidth;
       innerWidth > 768
         ? setTrashStyle({ display: "none" })
-        : setTrashStyle(undefined);
+        : setTrashStyle({
+            transform: "translateY(105vh)",
+          });
     }
   }, [openTrash]);
   useEffect(() => {

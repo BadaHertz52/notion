@@ -38,8 +38,8 @@ export type EditableBlockProps = {
   closeMenu: (event: globalThis.MouseEvent | MouseEvent) => void;
   templateHtml: HTMLElement | null;
   setSelection: Dispatch<SetStateAction<selectionType | null>>;
-  openMobileMenu: boolean;
-  setOpenMM: Dispatch<SetStateAction<boolean>>;
+  mobileMenuTargetBlock: Block | null;
+  setMobileMenuTargetBlock: Dispatch<SetStateAction<Block | null>>;
 };
 export type CommentOpenType = {
   open: boolean;
@@ -90,8 +90,8 @@ const EditableBlock = ({
   closeMenu,
   templateHtml,
   setSelection,
-  setOpenMM,
-  openMobileMenu,
+  setMobileMenuTargetBlock,
+  mobileMenuTargetBlock,
 }: EditableBlockProps) => {
   const { editBlock } = useContext(ActionContext).actions;
   const className =
@@ -264,8 +264,8 @@ const EditableBlock = ({
                       closeMenu={closeMenu}
                       templateHtml={templateHtml}
                       setSelection={setSelection}
-                      openMobileMenu={openMobileMenu}
-                      setOpenMM={setOpenMM}
+                      mobileMenuTargetBlock={mobileMenuTargetBlock}
+                      setMobileMenuTargetBlock={setMobileMenuTargetBlock}
                       onClickCommentBtn={onClickCommentBtn}
                       moveBlock={moveBlock}
                       setMoveTargetBlock={setMoveTargetBlock}
@@ -305,8 +305,8 @@ const EditableBlock = ({
                         closeMenu={closeMenu}
                         templateHtml={templateHtml}
                         setSelection={setSelection}
-                        setOpenMM={setOpenMM}
-                        openMobileMenu={openMobileMenu}
+                        setMobileMenuTargetBlock={setMobileMenuTargetBlock}
+                        mobileMenuTargetBlock={mobileMenuTargetBlock}
                       />
                     ))}
                 </div>
@@ -392,8 +392,8 @@ const EditableBlock = ({
                       closeMenu={closeMenu}
                       templateHtml={templateHtml}
                       setSelection={setSelection}
-                      openMobileMenu={openMobileMenu}
-                      setOpenMM={setOpenMM}
+                      mobileMenuTargetBlock={mobileMenuTargetBlock}
+                      setMobileMenuTargetBlock={setMobileMenuTargetBlock}
                       onClickCommentBtn={onClickCommentBtn}
                       moveBlock={moveBlock}
                       setMoveTargetBlock={setMoveTargetBlock}
@@ -431,8 +431,8 @@ const EditableBlock = ({
                       closeMenu={closeMenu}
                       templateHtml={templateHtml}
                       setSelection={setSelection}
-                      setOpenMM={setOpenMM}
-                      openMobileMenu={openMobileMenu}
+                      setMobileMenuTargetBlock={setMobileMenuTargetBlock}
+                      mobileMenuTargetBlock={mobileMenuTargetBlock}
                     />
                   ))}
                 </div>

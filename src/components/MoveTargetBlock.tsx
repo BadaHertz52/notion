@@ -24,8 +24,8 @@ const MoveTargetBlock = ({
   closeMenu,
   templateHtml,
   setSelection,
-  setOpenMM,
-  openMobileMenu,
+  setMobileMenuTargetBlock,
+  mobileMenuTargetBlock,
 }: EditableBlockProps) => {
   return (
     <div id="moveTargetBlock">
@@ -46,7 +46,7 @@ const MoveTargetBlock = ({
                       <div className="contentEditable">
                         {block.contents !== ""
                           ? block.contents
-                          : "type '/' for commmands"}
+                          : "type '/' for commands"}
                       </div>
                     </div>
                   </div>
@@ -77,8 +77,8 @@ const MoveTargetBlock = ({
           closeMenu={closeMenu}
           templateHtml={templateHtml}
           setSelection={setSelection}
-          setOpenMM={setOpenMM}
-          openMobileMenu={openMobileMenu}
+          setMobileMenuTargetBlock={setMobileMenuTargetBlock}
+          mobileMenuTargetBlock={mobileMenuTargetBlock}
         />
       )}
     </div>

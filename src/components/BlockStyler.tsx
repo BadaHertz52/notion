@@ -140,10 +140,10 @@ export type StylerCommonProps = MenuAndBlockStylerCommonProps & {
   >;
   setCommand: React.Dispatch<React.SetStateAction<Command>>;
   command: Command;
-  openMobileBlockMenu: boolean;
+  mobileMenuTargetBlock: Block | null;
   setMobileSideMenu: Dispatch<SetStateAction<mobileSideMenuType>>;
   setMobileSideMenuOpen: Dispatch<SetStateAction<boolean>>;
-  setOpenMM: Dispatch<SetStateAction<boolean>>;
+  setMobileMenuTargetBlock: Dispatch<SetStateAction<Block | null>>;
 };
 export type BlockStylerProps = StylerCommonProps & {
   selection: selectionType | null;
@@ -168,10 +168,10 @@ const BlockStyler = ({
   command,
   setCommand,
   frameHtml,
-  openMobileBlockMenu,
+  mobileMenuTargetBlock,
   setMobileSideMenu,
   setMobileSideMenuOpen,
-  setOpenMM,
+  setMobileMenuTargetBlock,
   setOpenMobileBlockStyler,
 }: BlockStylerProps) => {
   const { editBlock } = useContext(ActionContext).actions;
@@ -238,7 +238,7 @@ const BlockStyler = ({
 
   const closeOtherBtn = (event: MouseEvent<HTMLDivElement>) => {
     const target = event.target as HTMLElement | null;
-    if (target !== null && !openMobileBlockMenu) {
+    if (target !== null && mobileMenuTargetBlock === null) {
       const clickTypeBtn = target.closest(".blockStyler__btn-type");
       const clickLinkBtn = target.closest(".blockStyler__btn-link");
       const clickMenuBtn = target.closest(".blockStyler__btn-menu");
@@ -315,7 +315,7 @@ const BlockStyler = ({
     });
     setCommentBlock(block);
     setSelection !== null && setSelection(null);
-    openMobileBlockMenu && setOpenMM(false);
+    mobileMenuTargetBlock !== null && setMobileMenuTargetBlock(null);
   };
 
   const changeMenuStyle = (param: menuType) => {
@@ -372,7 +372,7 @@ const BlockStyler = ({
   };
 
   window.onresize = () => {
-    if (openMobileBlockMenu) {
+    if (mobileMenuTargetBlock !== null) {
       changeStylerStyle(frameHtml, block, setBlockStylerStyle);
       openMenu && changeMenuStyle(menu);
       openColor && changeMenuStyle(color);
@@ -534,7 +534,7 @@ const BlockStyler = ({
           // 조건 : web에서 sideMenu가 닫혀 있을 경우
           removeSelected(frameHtml, block, editBlock, page, setSelection);
           setSelection !== null && setSelection(null);
-          openMenu && setOpenMM(false);
+          openMenu && setMobileMenuTargetBlock(null);
         } else {
           const eventTarget = event.target as HTMLElement | null;
           if (eventTarget !== null) {
@@ -583,7 +583,7 @@ const BlockStyler = ({
         SELECTION?.anchorOffset === SELECTION?.focusOffset;
       if (notSelect) {
         setOpenMobileBlockStyler !== null && setOpenMobileBlockStyler(false);
-        setOpenMM(false);
+        setMobileMenuTargetBlock(null);
       }
     }
   };
@@ -622,7 +622,7 @@ const BlockStyler = ({
           <button
             className="blockStyler__btn-link btn"
             onClick={() => {
-              !openMobileBlockMenu && setOpenLink(!openLink);
+              if (mobileMenuTargetBlock == null) setOpenLink(!openLink);
             }}
             onTouchStart={prepareForChange}
             onTouchEnd={() => openMobileSideMenu("ms_link")}
@@ -644,7 +644,7 @@ const BlockStyler = ({
             <button
               className="style__btn-bold btn"
               onClick={() => {
-                !openMobileBlockMenu && onClickFontStyleBtn(bold);
+                if (mobileMenuTargetBlock === null) onClickFontStyleBtn(bold);
               }}
               onTouchStart={prepareForChange}
               onTouchEnd={() => onClickFontStyleBtn(bold)}
@@ -654,7 +654,7 @@ const BlockStyler = ({
             <button
               className="style__btn-italic btn"
               onClick={() => {
-                !openMobileBlockMenu && onClickFontStyleBtn(italic);
+                if (mobileMenuTargetBlock === null) onClickFontStyleBtn(italic);
               }}
               onTouchStart={prepareForChange}
               onTouchEnd={() => onClickFontStyleBtn("italic")}
@@ -664,7 +664,8 @@ const BlockStyler = ({
             <button
               className="style__btn-underline btn"
               onClick={() => {
-                !openMobileBlockMenu && onClickFontStyleBtn(underline);
+                if (mobileMenuTargetBlock === null)
+                  onClickFontStyleBtn(underline);
               }}
               onTouchStart={prepareForChange}
               onTouchEnd={() => onClickFontStyleBtn(underline)}
@@ -674,7 +675,8 @@ const BlockStyler = ({
             <button
               className="style__btn-lineThrough btn"
               onClick={() => {
-                !openMobileBlockMenu && onClickFontStyleBtn(lineThrough);
+                if (mobileMenuTargetBlock === null)
+                  onClickFontStyleBtn(lineThrough);
               }}
               onTouchStart={prepareForChange}
               onTouchEnd={() => onClickFontStyleBtn(lineThrough)}
@@ -685,7 +687,7 @@ const BlockStyler = ({
           <button
             className="blockStyler__btn-color btn"
             onClick={() => {
-              !openMobileBlockMenu && onClickColorBtn();
+              if (mobileMenuTargetBlock === null) onClickColorBtn();
             }}
             onTouchStart={prepareForChange}
             onTouchEnd={() => {
@@ -698,7 +700,7 @@ const BlockStyler = ({
           <button
             className="blockStyler__btn-menu btn"
             onClick={() => {
-              !openMobileBlockMenu && onClickMenuBtn();
+              if (mobileMenuTargetBlock === null) onClickMenuBtn();
             }}
             onTouchStart={prepareForChange}
             onTouchEnd={() => {

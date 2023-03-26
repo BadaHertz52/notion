@@ -37,6 +37,18 @@
     border-right: none;
     padding-right: 4px;
   }
+  .btn-add-block,
+  .btn-comment,
+  .btn-delete {
+    flex-grow: 1;
+  }
+  .btn-turn-into {
+    flex-grow: 3;
+  }
+  .btn-color,
+  .btn-open-menu {
+    flex-grow: 2;
+  }
   .arrow-down {
     color: grey;
     display: inline-flex;
@@ -86,10 +98,10 @@
   }
   #commandBlock,
   #pageMenu,
-  .menu___color,
+  .menu__color,
   .menu,
   .menu .mainMenu,
-  .menu .menu___sideMenu,
+  .menu .menu__sideMenu,
   #linkLoader {
     @include resetModal;
     position: relative;

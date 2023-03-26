@@ -1291,7 +1291,7 @@ a:visited {
 #linkLoader .page__inner:hover {
   background-color: #edece9;
 }
-#linkLoader .page__icon-outBox {
+#linkLoader .page__icon {
   width: 1.5rem;
   height: 100%;
   margin-right: 10px;

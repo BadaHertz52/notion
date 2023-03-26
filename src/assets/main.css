@@ -124,14 +124,14 @@ a:visited {
   height: 100%;
   background-color: white;
 }
-#allComments .allComments_header {
+#allComments .allComments__header {
   display: flex;
   justify-contents: space-between;
   padding: 0 5%;
   font-size: 13px;
   box-sizing: border-box;
 }
-#allComments .allComments_header span {
+#allComments .allComments__header span {
   font-weight: 600;
 }
 #allComments .comments {
@@ -2869,6 +2869,9 @@ a:visited {
   .menu__sideMenu > div {
     width: 100%;
   }
+  #modal__menu .commentInput {
+    width: 100%;
+  }
 }
 .btn-switch {
   position: relative;
@@ -3029,6 +3032,18 @@ a:visited {
   border-right: none;
   padding-right: 4px;
 }
+#mobileBlockMenu .btn-add-block,
+#mobileBlockMenu .btn-comment,
+#mobileBlockMenu .btn-delete {
+  flex-grow: 1;
+}
+#mobileBlockMenu .btn-turn-into {
+  flex-grow: 3;
+}
+#mobileBlockMenu .btn-color,
+#mobileBlockMenu .btn-open-menu {
+  flex-grow: 2;
+}
 #mobileBlockMenu .arrow-down {
   color: grey;
   display: inline-flex;
@@ -3079,10 +3094,10 @@ a:visited {
 }
 #mobileSideMenu #commandBlock,
 #mobileSideMenu #pageMenu,
-#mobileSideMenu .menu___color,
+#mobileSideMenu .menu__color,
 #mobileSideMenu .menu,
 #mobileSideMenu .menu .mainMenu,
-#mobileSideMenu .menu .menu___sideMenu,
+#mobileSideMenu .menu .menu__sideMenu,
 #mobileSideMenu #linkLoader {
   width: initial;
   display: block;
@@ -3102,19 +3117,19 @@ a:visited {
 }
 #mobileSideMenu #commandBlock::-webkit-scrollbar-thumb,
 #mobileSideMenu #pageMenu::-webkit-scrollbar-thumb,
-#mobileSideMenu .menu___color::-webkit-scrollbar-thumb,
+#mobileSideMenu .menu__color::-webkit-scrollbar-thumb,
 #mobileSideMenu .menu::-webkit-scrollbar-thumb,
 #mobileSideMenu .menu .mainMenu::-webkit-scrollbar-thumb,
-#mobileSideMenu .menu .menu___sideMenu::-webkit-scrollbar-thumb,
+#mobileSideMenu .menu .menu__sideMenu::-webkit-scrollbar-thumb,
 #mobileSideMenu #linkLoader::-webkit-scrollbar-thumb {
   background: initial;
 }
 #mobileSideMenu #commandBlock::-webkit-scrollbar-track,
 #mobileSideMenu #pageMenu::-webkit-scrollbar-track,
-#mobileSideMenu .menu___color::-webkit-scrollbar-track,
+#mobileSideMenu .menu__color::-webkit-scrollbar-track,
 #mobileSideMenu .menu::-webkit-scrollbar-track,
 #mobileSideMenu .menu .mainMenu::-webkit-scrollbar-track,
-#mobileSideMenu .menu .menu___sideMenu::-webkit-scrollbar-track,
+#mobileSideMenu .menu .menu__sideMenu::-webkit-scrollbar-track,
 #mobileSideMenu #linkLoader::-webkit-scrollbar-track {
   background: initial;
 }
@@ -3706,7 +3721,16 @@ a:visited {
   padding: 0;
 }
 
-@media screen and (max-width: 425px) {
+@media screen and (min-width: 425px) and (max-width: 768px) {
+  .sideBar {
+    display: flex;
+    justify-content: center;
+  }
+  .sideBar__inner {
+    width: 95%;
+  }
+}
+@media screen and (max-width: 768px) {
   .sideBar {
     background-color: rgb(240, 240, 240);
     width: 100vw;
@@ -3718,7 +3742,8 @@ a:visited {
     padding: 0.5rem 1rem;
   }
   .sideBar .sideBar__inner__scroll {
-    height: calc(80vh - 1.5rem);
+    height: calc(90vh - 40px - 26px - 2rem - 25vw);
+    box-sizing: border-box;
   }
   .sideBar .switcher .item__inner,
   .sideBar .sideBar__inner__scroll .header,
@@ -4400,7 +4425,6 @@ a:visited {
   z-index: 10;
   border-radius: 8px;
   box-shadow: 0px 0px 23px -5px #ababab;
-  display: none;
   width: 400px;
   min-width: 180px;
   max-width: calc(100vw - 24px);
@@ -4510,6 +4534,28 @@ a:visited {
     left: 0;
     transform: translateY(200vh);
     transition: transform 1000ms ease;
+  }
+}
+@media screen and (max-width: 425px) {
+  #trash .range button {
+    font-size: 14px;
+  }
+}
+@media screen and (max-width: 768px) {
+  #trash .header {
+    margin-bottom: 24px;
+  }
+  #trash .trash__list {
+    height: calc(90vh - 12px - 16px - 24px - 26px);
+    position: relative;
+  }
+  #trash .noTrash {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 32px;
   }
 }
 .btn-switch {

@@ -39,6 +39,7 @@ const PageMenu = ({
   const [block, setBlock] = useState<Block | null>(null);
   const sessionItem = sessionStorage.getItem("blockFnTargetBlock") as string;
   useEffect(() => {
+    console.log("sessionItem", sessionItem);
     if (sessionItem !== null && what === "block") {
       const block: Block = JSON.parse(sessionItem);
       setBlock(block);
@@ -152,7 +153,7 @@ const PageMenu = ({
         ) : (
           <>
             <div className="page-group">
-              <header className="page-group__header">Sugested</header>
+              <header className="page-group__header">Suggested</header>
               {firstList.map((item: listItem) => (
                 <PageButton key={`list_${item.id}`} item={item} />
               ))}

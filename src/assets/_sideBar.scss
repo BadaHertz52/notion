@@ -398,8 +398,16 @@
   width: fit-content;
   padding: 0;
 }
-
-@media screen and (max-width: 425px) {
+@media screen and (min-width: 425px) and (max-width: 768px) {
+  .sideBar {
+    display: flex;
+    justify-content: center;
+  }
+  .sideBar__inner {
+    width: 95%;
+  }
+}
+@media screen and (max-width: 768px) {
   .sideBar {
     background-color: rgb(240, 240, 240);
     width: 100vw;
@@ -410,7 +418,8 @@
       padding: 0.5rem 1rem;
     }
     .sideBar__inner__scroll {
-      height: calc(80vh - 1.5rem);
+      height: calc(90vh - 40px - 26px - 2rem - 25vw);
+      box-sizing: border-box;
     }
     .switcher .item__inner,
     .sideBar__inner__scroll .header,
@@ -529,7 +538,6 @@
       }
     }
   }
-
   #moreFn {
     display: block;
     position: absolute;
