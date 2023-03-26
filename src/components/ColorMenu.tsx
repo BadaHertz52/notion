@@ -61,9 +61,9 @@ const ColorInform = ({
   setSelection,
   setOpenMenu,
 }: ColorInformProps) => {
-  const changeContentStyle = (colorName: string) => {
+  const changeContentStyle = (color: string | undefined) => {
     if (selection !== null) {
-      const target = colorName === undefined ? "bg" : "color";
+      const target = color === undefined ? "bg" : "color";
       const bgColorArr = [
         "bg_default",
         "bg_grey",
@@ -120,7 +120,7 @@ const ColorInform = ({
           selectedHtml.classList.add(className);
         }
         const contentEditableHtml = document.getElementById(
-          `${block.id}__contents`
+          `${block.id}-contents`
         )?.firstElementChild;
         if (contentEditableHtml !== null && contentEditableHtml !== undefined) {
           const innerHtml = contentEditableHtml.innerHTML;
@@ -153,7 +153,7 @@ const ColorInform = ({
         };
         editBlock(page.id, newBlock);
       } else {
-        changeContentStyle(colorName);
+        changeContentStyle(color);
       }
     }
     if (color !== undefined && background === undefined) {
@@ -168,7 +168,7 @@ const ColorInform = ({
         };
         editBlock(page.id, newBlock);
       } else {
-        changeContentStyle(colorName);
+        changeContentStyle(color);
       }
     }
     setOpenMenu !== null && setOpenMenu(false);
