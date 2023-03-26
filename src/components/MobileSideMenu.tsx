@@ -57,10 +57,6 @@ const MobileSideMenu = ({
     }
   };
   const closeSideMenu = () => {
-    setMobileSideMenu({
-      block: null,
-      what: undefined,
-    });
     setMobileSideMenuOpen(false);
   };
   useEffect(() => {

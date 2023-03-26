@@ -35,7 +35,7 @@ export function removeSelected(
   > | null
 ) {
   // 변경된 내용이 있고, selected 만 제거하면 되는 경우
-  const blockContentHtml = frameHtml?.querySelector(`#${block.id}__contents`);
+  const blockContentHtml = frameHtml?.querySelector(`#${block.id}-contents`);
   const listOfSelected = blockContentHtml?.querySelectorAll(".selected");
   if (listOfSelected !== undefined && listOfSelected[0] !== undefined) {
     listOfSelected.forEach((selectedHtml: Element) => {

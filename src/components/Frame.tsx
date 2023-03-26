@@ -1020,7 +1020,7 @@ const Frame = ({
       const selectedHtml = document.querySelector(".selected");
       const contentsHtml = selectedHtml?.closest(".contents");
       if (contentsHtml !== null && contentsHtml !== undefined) {
-        const blockId = contentsHtml.id.replace("__contents", "");
+        const blockId = contentsHtml.id.replace("-contents", "");
         const targetBlock = findBlock(page, blockId).BLOCK;
         removeSelected(frameHtml, targetBlock, editBlock, page, null);
       }
