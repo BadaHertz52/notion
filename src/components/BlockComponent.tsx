@@ -56,13 +56,13 @@ export const isMobile = () => {
  * @param childNodes contentEditable.current의 childNodes
  * @returns node를 하위 요소로 하는 contentEditable.current의 childNode
  */
-export const findNodeInChilNodes = (node: Node, childNodes: Node[]) => {
+export const findNodeInChildNodes = (node: Node, childNodes: Node[]) => {
   const parentNode = node.parentNode as Node;
   let childNode: any | Node;
   if (parentNode.parentElement?.className === "contentEditable") {
     childNode = parentNode;
   } else {
-    childNode = findNodeInChilNodes(parentNode, childNodes);
+    childNode = findNodeInChildNodes(parentNode, childNodes);
   }
 
   // else if(parentNode.parentNode?.parentElement?.className==="contentEditable"){
@@ -89,7 +89,7 @@ export const getAccurateIndex = (
     const childrenArr = Array.from(children);
     let childNode = node;
     if (node.parentNode?.nodeName !== "DIV") {
-      const CHILD = findNodeInChilNodes(node, childrenArr);
+      const CHILD = findNodeInChildNodes(node, childrenArr);
       if (CHILD !== undefined) {
         childNode = CHILD;
       }
@@ -442,13 +442,13 @@ export const selectContent = (
       let anchorIndex = 0;
       let focusIndex = 0;
       if (anchorNode.parentNode?.nodeName !== "DIV") {
-        const childNode = findNodeInChilNodes(anchorNode, childNodes) as Node;
+        const childNode = findNodeInChildNodes(anchorNode, childNodes) as Node;
         anchorIndex = childNodes.indexOf(childNode);
       } else {
         anchorIndex = childNodes.indexOf(anchorNode);
       }
       if (focusNode.parentNode?.nodeName !== "DIV") {
-        const childNode = findNodeInChilNodes(focusNode, childNodes) as Node;
+        const childNode = findNodeInChildNodes(focusNode, childNodes) as Node;
         focusIndex = childNodes.indexOf(childNode);
       } else {
         focusIndex = childNodes.indexOf(focusNode);

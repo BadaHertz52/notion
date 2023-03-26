@@ -1400,7 +1400,6 @@ const Frame = ({
           selection={selection}
           setSelection={setSelection}
           frameHtml={frameHtml}
-          mobileMenuTargetBlock={mobileMenuTargetBlock}
           setMobileSideMenu={setMobileSideMenu}
           setMobileSideMenuOpen={setMobileSideMenuOpen}
           setMobileMenuTargetBlock={setMobileMenuTargetBlock}

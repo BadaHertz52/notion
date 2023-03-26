@@ -304,7 +304,7 @@ const MobileBlockMenu = ({
             </button>
           </div>
         ) : (
-          targetBlock !== null && (
+          sessionStorage.getItem("mobileMenuTargetBlock") !== null && (
             <BlockStyler
               pages={pages}
               pagesId={pagesId}
@@ -312,7 +312,13 @@ const MobileBlockMenu = ({
               userName={userName}
               page={page}
               recentPagesId={recentPagesId}
-              block={targetBlock}
+              block={
+                targetBlock !== undefined
+                  ? targetBlock
+                  : JSON.parse(
+                      sessionStorage.getItem("mobileMenuTargetBlock") as string
+                    )
+              }
               modal={modal}
               setModal={setModal}
               setModalStyle={setModalStyle}
@@ -323,7 +329,6 @@ const MobileBlockMenu = ({
               selection={null}
               setSelection={null}
               frameHtml={frameHtml}
-              mobileMenuTargetBlock={mobileMenuTargetBlock}
               setMobileSideMenu={setMobileSideMenu}
               setMobileSideMenuOpen={setMobileSideMenuOpen}
               setMobileMenuTargetBlock={setMobileMenuTargetBlock}
