@@ -50,7 +50,7 @@ const MobileBlockMenu = ({
     useState<boolean>(false);
   const inner = document.getElementById("inner");
   // mobileBlockMenu 창이 열려있을 때, mobileBlockMenu 나 contentEditable 이외의 영역을 클릭 시, mobileBlockMenu 창을 닫는  동작 (+ Selection 이 있는 경우, 이를 해제 )
-  inner?.addEventListener("click", (event) => {
+  const closeMobileBlockMenu = (event: MouseEvent) => {
     const target = event.target as HTMLElement | null;
     const mobileBlockMenuElement = target?.closest("#mobileBlockMenu");
     const contentEditableElement = target?.closest(".contentEditable");
@@ -67,7 +67,7 @@ const MobileBlockMenu = ({
     ) {
       closeMM();
     }
-  });
+  };
 
   const changeMBMstyle = (block: Block) => {
     const innerHeight = window.innerHeight;
@@ -215,6 +215,14 @@ const MobileBlockMenu = ({
       setOpenMobileBlockStyler(true);
     }
   };
+  useEffect(() => {
+    inner?.addEventListener("click", (event) => closeMobileBlockMenu(event));
+    return () => {
+      inner?.removeEventListener("click", (event) =>
+        closeMobileBlockMenu(event)
+      );
+    };
+  }, []);
   useEffect(() => {
     if (mobileMenuTargetBlock !== undefined) {
       sessionStorage.setItem(
