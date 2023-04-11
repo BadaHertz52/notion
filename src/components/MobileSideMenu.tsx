@@ -54,7 +54,6 @@ const MobileSideMenu = ({
     }
   };
   const closeSideMenu = () => {
-    console.log("close side mneu");
     setMobileSideMenu({
       what: undefined,
       block: null,

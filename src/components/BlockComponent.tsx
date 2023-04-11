@@ -108,7 +108,7 @@ export const getAccurateIndex = (
     });
     totalSentence = array.join("");
   } else {
-    console.log("Can't find contentEditable children");
+    console.error("Can't find contentEditable children");
   }
   const textIndex = totalSentence.length;
   return { textIndex: textIndex };
@@ -211,7 +211,7 @@ export const getFromStartNode = (
       changeValueByAnchor(null);
     }
   } else {
-    console.log(` Error :${startNode}'s textContent is null`);
+    console.error(` Error :${startNode}'s textContent is null`);
   }
   const preChangedContent =
     nodeParent?.nodeName === "SPAN" && startOffset > 0
@@ -780,7 +780,7 @@ const BlockComponent = ({
       const focusTargetHtml = contentsHtml.firstElementChild as HTMLElement;
       focusTargetHtml.focus();
     } else {
-      console.log(`Can't find .${targetBlock.id}__contents html`);
+      console.error(`Can't find .${targetBlock.id}__contents html`);
     }
   };
   /**
@@ -801,7 +801,7 @@ const BlockComponent = ({
         if (previousBlockIdInDoc) {
           changeToSub(page.id, block, previousBlockIdInDoc);
         } else {
-          console.log(
+          console.error(
             `Cant' find block in front of ${block.id}block on screen`
           );
         }

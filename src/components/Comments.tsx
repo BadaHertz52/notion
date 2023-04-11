@@ -842,7 +842,7 @@ const CommentTool = ({
           };
           setToolMoreStyle(style);
         } else {
-          console.log("Error:Can't find pageComment element");
+          console.error("Error:Can't find pageComment element");
         }
       } else {
         //blockComment

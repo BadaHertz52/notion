@@ -370,7 +370,7 @@ const NotionRouter = () => {
     if (titleHtml) {
       titleHtml.innerText = title;
     } else {
-      console.log("Can't find <title>");
+      console.error("Can't find <title>");
     }
   };
 
@@ -397,7 +397,7 @@ const NotionRouter = () => {
           break;
       }
     } else {
-      console.log("Can't find shortcut icon");
+      console.error("Can't find shortcut icon");
     }
   };
   useEffect(() => {

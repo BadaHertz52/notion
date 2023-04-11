@@ -65,7 +65,7 @@ const Loader = ({
       };
       reader.readAsDataURL(file);
     } else {
-      console.log("can't find image file");
+      console.error("can't find image file");
     }
   };
   const removePageCover = () => {

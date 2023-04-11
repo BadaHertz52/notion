@@ -292,7 +292,7 @@ const Frame = ({
         });
         setOpenIconModal(true);
       } else {
-        console.log("Can't find currentTarget");
+        console.error("Can't find currentTarget");
       }
     } else {
       setOpenIconModal(false);
@@ -987,7 +987,6 @@ const Frame = ({
     }
   };
   useEffect(() => {
-    console.log("modal", modal);
     if (modal.what === "modalComment") {
       const targetCommentInputHtml = document
         .getElementById("modalMenu")

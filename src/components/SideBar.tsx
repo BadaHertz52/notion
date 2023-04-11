@@ -482,7 +482,6 @@ const SideBar = ({
   };
   const changeTrashStyle = () => {
     const innerWidth = window.innerWidth;
-    console.log("inner width", innerWidth);
     if (innerWidth >= 768) {
       if (trashBtn.current) {
         const domRect = trashBtn.current.getClientRects()[0];

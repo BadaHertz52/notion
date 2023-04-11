@@ -129,7 +129,7 @@ const BlockFn = ({
       const newBlock = makeNewBlock(page, targetBlock, "");
       addBlock(page.id, newBlock, targetBlockIndex + 1, targetBlock.id);
     } else {
-      console.log("BlockFn-makeBlock error: there is no session item");
+      console.error("BlockFn-makeBlock error: there is no session item");
     }
   };
   const onMouseDownMenu = () => {
@@ -153,7 +153,7 @@ const BlockFn = ({
       setBlockFnTargetBlock(targetBlock);
       setOpenMenu(true);
     } else {
-      console.log("BlockFn-openMenu error: there is no session item");
+      console.error("BlockFn-openMenu error: there is no session item");
     }
   };
   useEffect(() => {

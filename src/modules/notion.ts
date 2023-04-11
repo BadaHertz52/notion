@@ -1189,7 +1189,7 @@ export function findBlock(
     index = page.blocksId.indexOf(blockId);
     block = page.blocks[index];
   } else {
-    console.log(
+    console.error(
       `page(id:${page.id}, title:${page.header.title}) doesn't have blocks`
     );
   }
@@ -1364,7 +1364,7 @@ export default function notion(
       //update parentBlock
       targetPage?.blocks?.splice(parentBlockIndex, 1, editedParentBlock);
     } else {
-      console.log("can't find parentBlocks of this block");
+      console.error("can't find parentBlocks of this block");
     }
   };
 
@@ -2521,7 +2521,6 @@ export default function notion(
                 pagesId: null,
               },
       };
-      console.log("new notion", newNotion);
       return newNotion;
     case CLEAN_TRASH:
       trash.pages?.splice(pageIndex, 1);
