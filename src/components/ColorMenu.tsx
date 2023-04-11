@@ -284,7 +284,7 @@ const ColorMenu = ({
         </div>
       </section>
       <section className="background-group">
-        <header>BACKGROUNDCOLOR</header>
+        <header>BACKGROUND COLOR</header>
         <div>
           <ColorInform
             colorName="Default"

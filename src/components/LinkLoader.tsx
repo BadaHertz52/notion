@@ -332,7 +332,7 @@ const LinkLoader = ({
   const [searchValue, setSearchValue] = useState<string | null>(null);
   const [candidates, setCandidates] = useState<Page[] | null>(null);
   const [webLink, setWebLink] = useState<boolean>(false);
-  const onChagneSearch = (event: ChangeEvent<HTMLInputElement>) => {
+  const onChangeSearch = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     if (value === "") {
       setSearchValue(null);
@@ -519,7 +519,7 @@ const LinkLoader = ({
   };
   const PageItem = ({ page }: PageItemProps) => {
     const pagePath = makeRoutePath(page, pagesId, pages).slice(1);
-    const pathes = makePagePath(page, pagesId, pages);
+    const paths = makePagePath(page, pagesId, pages);
     return (
       <button className="page__inner" onClick={() => addLink(pagePath)}>
         <PageIcon
@@ -531,9 +531,9 @@ const LinkLoader = ({
           <div className="page__title">{page.header.title}</div>
           {page.parentsId && (
             <div className="page__path-group">
-              {pathes?.map((path: pathType) => (
-                <div className="path" style={setWidth(pathes.length)}>
-                  {pathes.indexOf(path) !== 0 && <div className="slash">/</div>}
+              {paths?.map((path: pathType) => (
+                <div className="path" style={setWidth(paths.length)}>
+                  {paths.indexOf(path) !== 0 && <div className="slash">/</div>}
                   <div className="title">{path.title}</div>
                 </div>
               ))}
@@ -551,7 +551,7 @@ const LinkLoader = ({
             placeholder={
               linked ? "Edit link or search pages" : "Past link or search pages"
             }
-            onChange={onChagneSearch}
+            onChange={onChangeSearch}
           />
         </div>
         <div className="page-group">

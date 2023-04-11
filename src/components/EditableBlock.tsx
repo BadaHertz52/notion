@@ -201,7 +201,7 @@ const EditableBlock = ({
         } else {
           const previousSubBlock = listSubBlocks[subBlockIndex - 1];
           if (previousSubBlock.type === "numberList") {
-            const slicedSubBlocks = listSubBlocks.slice(0, subBlockIndex); // 0~ previousblock 까지
+            const slicedSubBlocks = listSubBlocks.slice(0, subBlockIndex); // 0~ previous block 까지
             const filteredSubBlocks = slicedSubBlocks.filter(
               (block: Block) => (block.type = "numberList")
             );
