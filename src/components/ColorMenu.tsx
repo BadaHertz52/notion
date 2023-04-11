@@ -120,7 +120,7 @@ const ColorInform = ({
           selectedHtml.classList.add(className);
         }
         const contentEditableHtml = document.getElementById(
-          `${block.id}-contents`
+          `${block.id}__contents`
         )?.firstElementChild;
         if (contentEditableHtml !== null && contentEditableHtml !== undefined) {
           const innerHtml = contentEditableHtml.innerHTML;

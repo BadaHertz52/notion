@@ -196,7 +196,7 @@
   margin-top: 2px;
 }
 .left,
-.block-contents,
+.block__contents,
 .blockFn {
   height: 18px;
 }
@@ -225,7 +225,7 @@
     width: inherit;
     height: inherit;
   }
-  .block-contents {
+  .block__contents {
     display: flex;
     align-items: center;
   }
@@ -304,7 +304,7 @@
   width: 100%;
   height: 100%;
 }
-.block-contents {
+.block__contents {
   width: 100%;
   height: fit-content;
   text-align: left;

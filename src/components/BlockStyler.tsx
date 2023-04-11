@@ -35,7 +35,7 @@ export function removeSelected(
   > | null
 ) {
   // 변경된 내용이 있고, selected 만 제거하면 되는 경우
-  const blockContentHtml = frameHtml?.querySelector(`#${block.id}-contents`);
+  const blockContentHtml = frameHtml?.querySelector(`#${block.id}__contents`);
   const listOfSelected = blockContentHtml?.querySelectorAll(".selected");
   if (listOfSelected !== undefined && listOfSelected[0] !== undefined) {
     listOfSelected.forEach((selectedHtml: Element) => {
@@ -107,7 +107,7 @@ export const changeStylerStyle = (
  */
 export const getContent = (block: Block): Block => {
   const contentEditableHtml = document.getElementById(
-    `${block.id}-contents`
+    `${block.id}__contents`
   )?.firstElementChild;
   let newBlock = block;
   if (contentEditableHtml !== null && contentEditableHtml !== undefined) {
@@ -547,7 +547,7 @@ const BlockStyler = ({
   //mobile
   const prepareForChange = () => {
     const mobileSelection = document.getSelection();
-    const contentEditableHtml = document.getElementById(`${block.id}-contents`)
+    const contentEditableHtml = document.getElementById(`${block.id}__contents`)
       ?.firstElementChild as HTMLElement | null | undefined;
 
     if (

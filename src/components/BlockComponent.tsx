@@ -554,7 +554,7 @@ export const selectContent = (
             updateEndParentNode(endOffset, endNode, endNodeText, endParentNode);
         }
         const newContents = document.getElementById(
-          `${targetBlock.id}-contents`
+          `${targetBlock.id}__contents`
         )?.firstElementChild?.innerHTML;
         if (newContents !== null && newContents !== undefined) {
           const editedBlock: Block = {
@@ -787,12 +787,12 @@ const BlockComponent = ({
    * @param targetBlock
    */
   const moveFocus = (nextBlockId: string, targetBlock: Block) => {
-    const contentsHtml = document.getElementById(`${nextBlockId}-contents`);
+    const contentsHtml = document.getElementById(`${nextBlockId}__contents`);
     if (contentsHtml !== null) {
       const focusTargetHtml = contentsHtml.firstElementChild as HTMLElement;
       focusTargetHtml.focus();
     } else {
-      console.log(`Can't find .${targetBlock.id}-contents html`);
+      console.log(`Can't find .${targetBlock.id}__contents html`);
     }
   };
   /**
@@ -1196,7 +1196,7 @@ const BlockComponent = ({
       onTouchMove={(event) => markMoveTargetBlock(event)}
     >
       {block.type === "page" ? (
-        <button className="contents page__title" id={`${block.id}-contents`}>
+        <button className="contents page__title" id={`${block.id}__contents`}>
           <BlockContentEditable />
         </button>
       ) : block.type.includes("media") ? (
@@ -1220,7 +1220,7 @@ const BlockComponent = ({
         )
       ) : (
         <div
-          id={`${block.id}-contents`}
+          id={`${block.id}__contents`}
           className={`contents 
           ${
             block.comments !== null &&

@@ -263,7 +263,9 @@ const Frame = ({
   const closeComments = (event: globalThis.MouseEvent) => {
     if (openComment && commentBlock !== null) {
       const commentsDoc = document.getElementById("block-comments");
-      const commentBtn = document.getElementById(`${commentBlock.id}-contents`);
+      const commentBtn = document.getElementById(
+        `${commentBlock.id}__contents`
+      );
       if (commentsDoc !== null && commentBtn !== null) {
         const commentsDocDomRect = commentsDoc.getClientRects()[0];
         const commentBtnDomRect = commentBtn.getClientRects()[0];
@@ -1018,7 +1020,7 @@ const Frame = ({
       const selectedHtml = document.querySelector(".selected");
       const contentsHtml = selectedHtml?.closest(".contents");
       if (contentsHtml !== null && contentsHtml !== undefined) {
-        const blockId = contentsHtml.id.replace("-contents", "");
+        const blockId = contentsHtml.id.replace("__contents", "");
         const targetBlock = findBlock(page, blockId).BLOCK;
         removeSelected(frameHtml, targetBlock, editBlock, page, null);
       }
@@ -1340,7 +1342,7 @@ const Frame = ({
           )}
         </div>
       )}
-      {commentBlock !== null && openComment && (
+      {commentBlock && openComment && (
         <Comments
           userName={userName}
           block={commentBlock}

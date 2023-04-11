@@ -915,7 +915,7 @@ const CommentBlock = ({
   const editCommentItem = sessionStorage.getItem("editComment");
   const targetMainComment = mainComment ? (comment as MainCommentType) : null;
   const blockContentEl = document.getElementById(
-    `${block?.id}-contents`
+    `${block?.id}__contents`
   )?.textContent;
   useEffect(() => {
     // discard edit
@@ -959,9 +959,9 @@ const CommentBlock = ({
       {mainComment && (
         <section className="commentBlock__mainComment">
           <div className="commentBlock__mainComment_line"></div>
-          {block !== null && (
+          {block && (
             <div className="commentBlock__mainComment_content">
-              {targetMainComment?.selectedText !== null
+              {targetMainComment?.selectedText
                 ? targetMainComment?.selectedText
                 : blockContentEl}
             </div>
@@ -1140,7 +1140,7 @@ const Comments = ({
    */
   function changeCommentsStyle() {
     if (block !== null && openComment) {
-      const blockContentsEl = document.getElementById(`${block.id}-contents`);
+      const blockContentsEl = document.getElementById(`${block.id}__contents`);
       const editableBlock = document.getElementsByClassName("editableBlock")[0];
       const editableBlockDomRect = editableBlock.getClientRects()[0];
       const blockDocDomRect = blockContentsEl?.getClientRects()[0];
@@ -1252,25 +1252,19 @@ const Comments = ({
         ref={commentsRef}
         style={commentsStyle}
       >
-        {resolveComments !== null &&
-          resolveComments.length > 0 &&
-          select == null &&
-          block !== null && (
-            <section className="comments__btn-group-type">
-              <button id="openTypeBtn" onClick={() => showComments("open")}>
-                <span>Open</span>
-                <span>{`(${openComments?.length})`}</span>
-              </button>
-              <button
-                id="resolveTypeBtn"
-                onClick={() => showComments("resolve")}
-              >
-                <span>Resolve</span>
-                <span>{`(${resolveComments?.length})`}</span>
-              </button>
-            </section>
-          )}
-        {targetComments !== null && (
+        {resolveComments && resolveComments.length > 0 && !select && (
+          <section className="comments__btn-group-type">
+            <button id="openTypeBtn" onClick={() => showComments("open")}>
+              <span>Open</span>
+              <span>{`(${openComments?.length})`}</span>
+            </button>
+            <button id="resolveTypeBtn" onClick={() => showComments("resolve")}>
+              <span>Resolve</span>
+              <span>{`(${resolveComments?.length})`}</span>
+            </button>
+          </section>
+        )}
+        {targetComments && (
           <section className="comments__comments-group">
             {targetComments.map((comment: MainCommentType) => (
               <Comment

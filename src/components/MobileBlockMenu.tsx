@@ -68,7 +68,7 @@ const MobileBlockMenu = ({
      *Select event로 인해 가상키보드가 나타날 때 줄어든 window.innerHeight 의 값이자
      */
     const heightGap = initialInnerHeight - innerHeight;
-    const blockElement = document.getElementById(`${block.id}-contents`);
+    const blockElement = document.getElementById(`${block.id}__contents`);
     const blockElementDomRect = blockElement?.getClientRects()[0];
     const pageContentInner = frameHtml?.querySelector(".page__contents__inner");
     const pageContentInnerDomRect = pageContentInner?.getClientRects()[0];

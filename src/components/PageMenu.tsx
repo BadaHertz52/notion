@@ -45,6 +45,7 @@ const PageMenu = ({
     }
   }, [sessionItem, what]);
   const templateHtml = document.getElementById("template");
+
   const moveBlockToPage = (destinationPageId: string, block: Block) => {
     setTemplateItem(templateHtml, currentPage);
     // 기존 페이지에서 블록 삭제
@@ -60,18 +61,17 @@ const PageMenu = ({
       (page: Page) => page.id === destinationPageId
     )[0];
     //set origin destinationPage
-    if (templateHtml !== null) {
+    if (templateHtml) {
       const item = JSON.stringify(destinationPage);
       sessionStorage.setItem("originMoveTargetPage", item);
     }
-    if (destinationPage.blocksId == null) {
+    if (!destinationPage.blocksId) {
       addBlock(destinationPageId, newBlock, 0, null);
     } else {
       const blocksIdLength = destinationPage.blocksId.length;
       addBlock(destinationPageId, newBlock, blocksIdLength, null);
     }
     // close Menu and recovery Menu state
-    console.log("///");
     closeMenu && closeMenu();
   };
   const onClickToMove = (id: string) => {

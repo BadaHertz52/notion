@@ -237,7 +237,7 @@ const EditableBlock = ({
                 <div className="mainBlock__block">
                   <div
                     id={`block-${block.id}`}
-                    className="block-contents"
+                    className="block__contents"
                     ref={blockContentsRef}
                     style={listStyle(block)}
                   >
@@ -375,7 +375,7 @@ const EditableBlock = ({
                     </div>
                   )}
                   <div
-                    className="block-contents"
+                    className="block__contents"
                     style={blockContentsStyle(block)}
                   >
                     <BlockComponent
