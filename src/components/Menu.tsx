@@ -198,6 +198,7 @@ const Menu = ({
   };
   const showPageMenuInMobile = () => {
     if (setMobileSideMenu) {
+      sessionStorage.setItem("blockFnTargetBlock", JSON.stringify(block));
       setMobileSideMenu({
         block: block,
         what: "ms_movePage",
