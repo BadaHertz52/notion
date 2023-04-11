@@ -226,8 +226,8 @@ const EditableBlock = ({
       <>
         {subBlocks &&
           subBlocks[0] &&
-          subBlocks.map((block: Block) => (
-            <div className="listItem">
+          subBlocks.map((block: Block, i) => (
+            <div className="listItem" key={`listItem_${i}`}>
               <div
                 className="mainBlock"
                 key={`listItem_${subBlocks.indexOf(block)}`}

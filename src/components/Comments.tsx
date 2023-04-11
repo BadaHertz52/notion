@@ -224,7 +224,7 @@ export const CommentInput = ({
   type situationType = typeof reply | typeof changing | typeof makingMain;
   const [placeHolder, setPlaceHolder] = useState<situationType>(makingMain);
   const [submitStyle, setSubmitStyle] = useState<CSSProperties>({
-    fill: "#a3a3a2;",
+    fill: "#a3a3a2",
     border: "none",
   });
   const [text, setText] = useState<string>("");

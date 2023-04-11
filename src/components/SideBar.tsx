@@ -606,8 +606,9 @@ const SideBar = ({
                 {recentPages === null ? (
                   <div>No pages visited recently </div>
                 ) : (
-                  recentPages.map((page: Page) => (
+                  recentPages.map((page: Page, i) => (
                     <button
+                      key={`recentPage_${i}`}
                       id={`item_${page.id}`}
                       className="item"
                       onClick={() => onClickRecentPageItem(page.id)}
