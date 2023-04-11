@@ -806,7 +806,7 @@ const SideBar = ({
               currentPage={findPage(pagesId, pages, targetItem.id)}
               pages={pages}
               firstList={firstList}
-              setOpenMenu={setOpenSideMoreMenu}
+              closeMenu={()=>setOpenSideMoreMenu(false)}
               setTargetPageId={setTargetPageId}
             />
           </div>

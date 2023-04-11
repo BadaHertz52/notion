@@ -71,9 +71,8 @@ export type Template_Frame_SAME_Props = {
   discardEdit: boolean;
   setDiscardEdit: Dispatch<SetStateAction<boolean>>;
   fontStyle: fontStyleType;
+  mobileSideMenu: mobileSideMenuType;
   setMobileSideMenu: Dispatch<SetStateAction<mobileSideMenuType>>;
-  mobileSideMenuOpen: boolean;
-  setMobileSideMenuOpen: Dispatch<SetStateAction<boolean>>;
 };
 export type FrameProps = Template_Frame_SAME_Props & {
   page: Page;
@@ -109,9 +108,8 @@ const Frame = ({
   openTemplates,
   setOpenTemplates,
   fontStyle,
+  mobileSideMenu,
   setMobileSideMenu,
-  mobileSideMenuOpen,
-  setMobileSideMenuOpen,
 }: FrameProps) => {
   const { editPage, editBlock, addBlock } = useContext(ActionContext).actions;
   const innerWidth = window.innerWidth;
@@ -1016,7 +1014,7 @@ const Frame = ({
     }
   }, [modal.what]);
   useEffect(() => {
-    if (mobileMenuTargetBlock === null && !mobileSideMenuOpen && !modal.open) {
+    if (mobileMenuTargetBlock === null && mobileSideMenu.what && !modal.open) {
       const selectedHtml = document.querySelector(".selected");
       const contentsHtml = selectedHtml?.closest(".contents");
       if (contentsHtml !== null && contentsHtml !== undefined) {
@@ -1025,15 +1023,17 @@ const Frame = ({
         removeSelected(frameHtml, targetBlock, editBlock, page, null);
       }
     }
-  }, [mobileMenuTargetBlock, mobileSideMenuOpen, modal.open]);
+  }, [mobileMenuTargetBlock, mobileSideMenu.what, modal.open]);
 
   useEffect(() => {
-    if (openComment && (mobileMenuTargetBlock !== null || mobileSideMenuOpen)) {
-      if (mobileMenuTargetBlock !== null) {
+    if (
+      openComment &&
+      (mobileMenuTargetBlock !== null || mobileSideMenu.what)
+    ) {
+      if (mobileMenuTargetBlock) {
         setMobileMenuTargetBlock(null);
       }
-      if (mobileSideMenuOpen) {
-        setMobileSideMenuOpen(false);
+      if (document.querySelector("#mobileSideMenu")) {
         setMobileSideMenu({
           block: null,
           what: undefined,
@@ -1271,7 +1271,6 @@ const Frame = ({
             block={command.targetBlock}
             command={command}
             setCommand={setCommand}
-            setTurnInto={null}
             setSelection={setSelection}
           />
         </div>
@@ -1316,7 +1315,7 @@ const Frame = ({
               currentPage={page}
               pages={pages}
               firstList={firstList}
-              setOpenMenu={setOpenMenu}
+              closeMenu={() => setModal({ open: false, what: null })}
               setTargetPageId={setTargetPageId}
             />
           )}
@@ -1401,7 +1400,6 @@ const Frame = ({
           setSelection={setSelection}
           frameHtml={frameHtml}
           setMobileSideMenu={setMobileSideMenu}
-          setMobileSideMenuOpen={setMobileSideMenuOpen}
           setMobileMenuTargetBlock={setMobileMenuTargetBlock}
           setOpenMobileBlockStyler={null}
         />
@@ -1424,7 +1422,6 @@ const Frame = ({
           frameHtml={frameHtml}
           mobileMenuTargetBlock={mobileMenuTargetBlock}
           setMobileSideMenu={setMobileSideMenu}
-          setMobileSideMenuOpen={setMobileSideMenuOpen}
           setMobileMenuTargetBlock={setMobileMenuTargetBlock}
           initialInnerHeight={innerHeight}
         />

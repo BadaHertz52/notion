@@ -24,7 +24,7 @@ type CommandBlockProp = {
   block: Block;
   command: Command | null;
   setCommand: Dispatch<SetStateAction<Command>> | null;
-  setTurnInto: React.Dispatch<React.SetStateAction<boolean>> | null;
+  closeCommand?: () => void;
   setSelection: Dispatch<SetStateAction<selectionType | null>> | null;
   style: CSSProperties | undefined;
 };
@@ -34,7 +34,7 @@ const CommandBlock = ({
   setCommand,
   command,
   setSelection,
-  setTurnInto,
+  closeCommand,
   style,
 }: CommandBlockProp) => {
   const { editBlock, changeBlockToPage, changePageToBlock, editPage } =
@@ -268,26 +268,21 @@ const CommandBlock = ({
           break;
       }
     }
-    closeCommendBlock();
+    closeCommandBlock();
   };
   const onClickImgTypeBtn = () => {
-    setCommand !== null &&
-      setCommand({
-        boolean: false,
-        targetBlock: null,
-        command: null,
-      });
-    setTurnInto !== null && setTurnInto(false);
     changeType("image media");
+    closeCommandBlock();
   };
-  function closeCommendBlock() {
+  function closeCommandBlock() {
     setCommand !== null &&
       setCommand({
         boolean: false,
         command: null,
         targetBlock: null,
       });
-    setTurnInto !== null && setTurnInto(false);
+
+    closeCommand && closeCommand();
   }
 
   useEffect(() => {

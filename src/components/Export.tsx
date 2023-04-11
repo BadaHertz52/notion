@@ -38,8 +38,7 @@ const Export = ({
   openTemplates,
   setOpenTemplates,
   fontStyle,
-  mobileSideMenuOpen,
-  setMobileSideMenuOpen,
+  mobileSideMenu,
   setMobileSideMenu,
 }: ExportProps) => {
   const html = "HTML";
@@ -181,9 +180,8 @@ const Export = ({
               openTemplates={openTemplates}
               setOpenTemplates={setOpenTemplates}
               fontStyle={fontStyle}
+              mobileSideMenu={mobileSideMenu}
               setMobileSideMenu={setMobileSideMenu}
-              setMobileSideMenuOpen={setMobileSideMenuOpen}
-              mobileSideMenuOpen={mobileSideMenuOpen}
             />
           );
           return { jsx: frameComponent, title: subPage.header.title };

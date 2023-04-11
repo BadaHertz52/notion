@@ -389,7 +389,7 @@ const TopBar = ({
             currentPage={page}
             firstList={firstList}
             pages={pages}
-            setOpenMenu={setOpenPageMenu}
+            closeMenu={() => setOpenPageMenu(false)}
             setTargetPageId={setTargetPageId}
           />
         )}

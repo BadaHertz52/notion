@@ -26,7 +26,7 @@ type LinkLoaderProps = {
   pagesId: string[];
   page: Page;
   block: Block;
-  setOpenLink: Dispatch<SetStateAction<boolean>>;
+  closeLink?: () => void;
   blockStylerStyle: CSSProperties | undefined;
   setSelection: Dispatch<SetStateAction<selectionType | null>> | null;
 };
@@ -36,7 +36,7 @@ const LinkLoader = ({
   page,
   pagesId,
   block,
-  setOpenLink,
+  closeLink,
   blockStylerStyle,
   setSelection,
 }: LinkLoaderProps) => {
@@ -452,7 +452,7 @@ const LinkLoader = ({
         makeNewAnchorElement(selectedHtml.innerHTML, link);
       }
     }
-    setOpenLink(false);
+    closeLink && closeLink();
     resetLinked();
   };
   const copyLink = () => {
@@ -461,8 +461,8 @@ const LinkLoader = ({
       if (href !== null) {
         navigator.clipboard.writeText(href);
       }
-      setOpenLink(false);
       resetLinked();
+      closeLink && closeLink();
     }
   };
 
@@ -472,8 +472,8 @@ const LinkLoader = ({
         e.outerHTML = e.innerHTML;
       });
       getBlockContents();
-      setOpenLink(false);
       resetLinked();
+      closeLink && closeLink();
     }
   };
 

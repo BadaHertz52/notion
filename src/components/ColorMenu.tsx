@@ -35,7 +35,7 @@ type ColorInformProps = {
   templateHtml: HTMLElement | null;
   selection: selectionType | null;
   setSelection: Dispatch<SetStateAction<selectionType | null>> | null;
-  setOpenMenu: Dispatch<SetStateAction<boolean>> | null;
+  closeMenu?: () => void;
 };
 const StyleColorInform = styled.span`
   color: ${(props: StyleColorInformProps) =>
@@ -59,7 +59,7 @@ const ColorInform = ({
   templateHtml,
   selection,
   setSelection,
-  setOpenMenu,
+  closeMenu,
 }: ColorInformProps) => {
   const changeContentStyle = (color: string | undefined) => {
     if (selection !== null) {
@@ -171,7 +171,7 @@ const ColorInform = ({
         changeContentStyle(color);
       }
     }
-    setOpenMenu !== null && setOpenMenu(false);
+    closeMenu && closeMenu();
   };
   return (
     <button className="btn-color-inform" onClick={changeColor}>
@@ -193,14 +193,14 @@ type ColorMenuProps = {
   block: Block;
   selection: selectionType | null;
   setSelection: Dispatch<SetStateAction<selectionType | null>> | null;
-  setOpenMenu: Dispatch<SetStateAction<boolean>> | null;
+  closeMenu?: () => void;
 };
 const ColorMenu = ({
   page,
   block,
   selection,
   setSelection,
-  setOpenMenu,
+  closeMenu,
 }: ColorMenuProps) => {
   const { editBlock } = useContext(ActionContext).actions;
   const templateHtml = document.getElementById("template");
@@ -219,7 +219,7 @@ const ColorMenu = ({
             templateHtml={templateHtml}
             selection={selection}
             setSelection={setSelection}
-            setOpenMenu={setOpenMenu}
+            closeMenu={closeMenu}
           />
           <ColorInform
             colorName="Grey"
@@ -231,7 +231,7 @@ const ColorMenu = ({
             templateHtml={templateHtml}
             selection={selection}
             setSelection={setSelection}
-            setOpenMenu={setOpenMenu}
+            closeMenu={closeMenu}
           />
           <ColorInform
             colorName="Orange"
@@ -243,7 +243,7 @@ const ColorMenu = ({
             templateHtml={templateHtml}
             selection={selection}
             setSelection={setSelection}
-            setOpenMenu={setOpenMenu}
+            closeMenu={closeMenu}
           />
           <ColorInform
             colorName="Green"
@@ -255,7 +255,7 @@ const ColorMenu = ({
             templateHtml={templateHtml}
             selection={selection}
             setSelection={setSelection}
-            setOpenMenu={setOpenMenu}
+            closeMenu={closeMenu}
           />
           <ColorInform
             colorName="Blue"
@@ -267,7 +267,7 @@ const ColorMenu = ({
             templateHtml={templateHtml}
             selection={selection}
             setSelection={setSelection}
-            setOpenMenu={setOpenMenu}
+            closeMenu={closeMenu}
           />
           <ColorInform
             colorName="Red"
@@ -279,7 +279,7 @@ const ColorMenu = ({
             templateHtml={templateHtml}
             selection={selection}
             setSelection={setSelection}
-            setOpenMenu={setOpenMenu}
+            closeMenu={closeMenu}
           />
         </div>
       </section>
@@ -296,7 +296,7 @@ const ColorMenu = ({
             templateHtml={templateHtml}
             selection={selection}
             setSelection={setSelection}
-            setOpenMenu={setOpenMenu}
+            closeMenu={closeMenu}
           />
           <ColorInform
             colorName="Grey"
@@ -308,7 +308,7 @@ const ColorMenu = ({
             templateHtml={templateHtml}
             selection={selection}
             setSelection={setSelection}
-            setOpenMenu={setOpenMenu}
+            closeMenu={closeMenu}
           />
           <ColorInform
             colorName="Yellow"
@@ -320,7 +320,7 @@ const ColorMenu = ({
             templateHtml={templateHtml}
             selection={selection}
             setSelection={setSelection}
-            setOpenMenu={setOpenMenu}
+            closeMenu={closeMenu}
           />
           <ColorInform
             colorName="Green"
@@ -332,7 +332,7 @@ const ColorMenu = ({
             templateHtml={templateHtml}
             selection={selection}
             setSelection={setSelection}
-            setOpenMenu={setOpenMenu}
+            closeMenu={closeMenu}
           />
           <ColorInform
             colorName="Blue"
@@ -344,7 +344,7 @@ const ColorMenu = ({
             templateHtml={templateHtml}
             selection={selection}
             setSelection={setSelection}
-            setOpenMenu={setOpenMenu}
+            closeMenu={closeMenu}
           />
           <ColorInform
             colorName="Pink"
@@ -356,7 +356,7 @@ const ColorMenu = ({
             templateHtml={templateHtml}
             selection={selection}
             setSelection={setSelection}
-            setOpenMenu={setOpenMenu}
+            closeMenu={closeMenu}
           />
         </div>
       </section>

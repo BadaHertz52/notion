@@ -29,7 +29,11 @@ import { IoArrowRedoOutline } from "react-icons/io5";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { AiOutlineFormatPainter } from "react-icons/ai";
 import { isMobile, setTemplateItem } from "./BlockComponent";
-import { ActionContext, selectionType } from "../containers/NotionRouter";
+import {
+  ActionContext,
+  mobileSideMenuType,
+  selectionType,
+} from "../containers/NotionRouter";
 
 export type MenuAndBlockStylerCommonProps = {
   pages: Page[];
@@ -45,10 +49,11 @@ export type MenuAndBlockStylerCommonProps = {
 };
 
 export type MenuProps = MenuAndBlockStylerCommonProps & {
-  setOpenMenu: Dispatch<SetStateAction<boolean>>;
+  setOpenMenu?: Dispatch<SetStateAction<boolean>>;
   setOpenRename: Dispatch<SetStateAction<boolean>> | null;
   setSelection: Dispatch<SetStateAction<selectionType | null>> | null;
   style: CSSProperties | undefined;
+  setMobileSideMenu?: Dispatch<SetStateAction<mobileSideMenuType>>;
 };
 
 const Menu = ({
@@ -66,6 +71,7 @@ const Menu = ({
   frameHtml,
   setSelection,
   style,
+  setMobileSideMenu,
 }: MenuProps) => {
   const { addBlock, deleteBlock, duplicatePage } =
     useContext(ActionContext).actions;
@@ -190,19 +196,32 @@ const Menu = ({
     setColor(false);
     recoveryMenuState();
   };
+  const showPageMenuInMobile = () => {
+    if (setMobileSideMenu) {
+      setMobileSideMenu({
+        block: block,
+        what: "ms_movePage",
+      });
+    }
+  };
+  const closeMenu = () => {
+    setOpenMenu
+      ? setOpenMenu(false)
+      : setMobileSideMenu &&
+        setMobileSideMenu({ block: null, what: undefined });
+  };
   const onClickMoveTo = () => {
-    setOpenMenu(false);
-    setSelection !== null && setSelection(null);
     sessionStorage.setItem("modalStyle", JSON.stringify(modalStyle));
     setModal({
       open: true,
       what: modalMoveToPage,
     });
+    closeMenu();
   };
   const onOpenCommentInput = () => {
     setCommentBlock(block);
-    setOpenMenu(false);
-    setSelection !== null && setSelection(null);
+    closeMenu();
+    setSelection && setSelection(null);
     sessionStorage.setItem("modalStyle", JSON.stringify(modalStyle));
     setModal({
       open: true,
@@ -213,7 +232,7 @@ const Menu = ({
     setSelection !== null && setSelection(null);
     setTemplateItem(templateHtml, page);
     deleteBlock(page.id, block, true);
-    setOpenMenu(false);
+    closeMenu();
   };
 
   const duplicateBlock = () => {
@@ -240,9 +259,10 @@ const Menu = ({
       if (block.type === "page") {
         duplicatePage(block.id);
       }
-      setOpenMenu(false);
+      closeMenu();
     }
   };
+
   const onSetEditBtnGroup = () => {
     setEditBtnGroup([...document.getElementsByClassName("menu__editBtn")]);
   };
@@ -260,7 +280,7 @@ const Menu = ({
   const onClickRename = () => {
     setSelection !== null && setSelection(null);
     setOpenRename !== null && setOpenRename(true);
-    setOpenMenu(false);
+    closeMenu();
   };
   useEffect(() => {
     if (!turnInto && !color && !turnInToPage && isMobile()) {
@@ -311,7 +331,8 @@ const Menu = ({
                 name="turn into"
                 style={{
                   display:
-                    document.querySelector("#blockStyler") !== null
+                    document.querySelector("#blockStyler") !== null ||
+                    isMobile()
                       ? "none"
                       : "flex",
                 }}
@@ -328,6 +349,7 @@ const Menu = ({
                 className="menu__editBtn"
                 name="turn into page in"
                 onMouseOver={showPageMenu}
+                onTouchEnd={showPageMenuInMobile}
               >
                 <div>
                   <MdOutlineRestorePage />
@@ -375,7 +397,8 @@ const Menu = ({
                 onMouseOver={showColorMenu}
                 style={{
                   display:
-                    document.querySelector("#blockStyler") !== null
+                    document.querySelector("#blockStyler") !== null ||
+                    isMobile()
                       ? "none"
                       : "flex",
                 }}
@@ -404,7 +427,7 @@ const Menu = ({
             block={block}
             command={null}
             setCommand={null}
-            setTurnInto={setTurnInto}
+            closeCommand={() => setTurnInto(false)}
             setSelection={setSelection}
           />
         )}
@@ -414,7 +437,6 @@ const Menu = ({
             block={block}
             selection={null}
             setSelection={null}
-            setOpenMenu={null}
           />
         )}
         {turnInToPage && (
@@ -423,7 +445,7 @@ const Menu = ({
             currentPage={page}
             pages={pages}
             firstList={firstList}
-            setOpenMenu={setOpenMenu}
+            closeMenu={setOpenMenu ? () => setOpenMenu(false) : undefined}
             setTargetPageId={setTargetPageId}
           />
         )}

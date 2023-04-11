@@ -7,14 +7,13 @@ import { selectionType } from "../containers/NotionRouter";
 import LinkLoader from "./LinkLoader";
 
 import Menu, { MenuAndBlockStylerCommonProps } from "./Menu";
+import PageMenu from "./PageMenu";
 
 type MobileSideMenuProps = MenuAndBlockStylerCommonProps & {
   recentPagesId: string[] | null;
   pagesId: string[];
   mobileSideMenu: mobileSideMenuType;
   setMobileSideMenu: Dispatch<SetStateAction<mobileSideMenuType>>;
-  mobileSideMenuOpen: boolean;
-  setMobileSideMenuOpen: Dispatch<SetStateAction<boolean>>;
 };
 const MobileSideMenu = ({
   pages,
@@ -31,8 +30,6 @@ const MobileSideMenu = ({
   frameHtml,
   mobileSideMenu,
   setMobileSideMenu,
-  mobileSideMenuOpen,
-  setMobileSideMenuOpen,
 }: MobileSideMenuProps) => {
   const mobileSelection: selectionType | null =
     document.querySelector(".selected") == null
@@ -57,21 +54,21 @@ const MobileSideMenu = ({
     }
   };
   const closeSideMenu = () => {
-    setMobileSideMenuOpen(false);
+    console.log("close side mneu");
+    setMobileSideMenu({
+      what: undefined,
+      block: null,
+    });
   };
   useEffect(() => {
-    if (!mobileSideMenuOpen) {
-      setMobileSideMenu({
-        block: null,
-        what: undefined,
-      });
+    if (!mobileSideMenu.what) {
       setMobileSideMenuStyle({
         transform: "translateY(110%)",
       });
     } else {
       setMobileSideMenuStyle({ transform: "translateY(0)" });
     }
-  }, [mobileSideMenuOpen]);
+  }, [mobileSideMenu]);
   return (
     <div id="mobileSideMenu" style={mobileSideMenuStyle}>
       <div className="inner">
@@ -87,7 +84,6 @@ const MobileSideMenu = ({
               firstList={firstList}
               page={page}
               userName={userName}
-              setOpenMenu={setMobileSideMenuOpen}
               modal={modal}
               setModal={setModal}
               setCommentBlock={setCommentBlock}
@@ -96,6 +92,7 @@ const MobileSideMenu = ({
               setSelection={null}
               frameHtml={frameHtml}
               style={undefined}
+              setMobileSideMenu={setMobileSideMenu}
             />
           )}
           {mobileSideMenu.what === "ms_color" && (
@@ -104,7 +101,7 @@ const MobileSideMenu = ({
               block={block}
               selection={mobileSelection}
               setSelection={null}
-              setOpenMenu={setMobileSideMenuOpen}
+              closeMenu={closeSideMenu}
             />
           )}
           {mobileSideMenu.what === "ms_turnInto" && (
@@ -114,7 +111,7 @@ const MobileSideMenu = ({
               block={block}
               command={null}
               setCommand={null}
-              setTurnInto={setMobileSideMenuOpen}
+              closeCommand={closeSideMenu}
               setSelection={null}
             />
           )}
@@ -125,9 +122,19 @@ const MobileSideMenu = ({
               pagesId={pagesId}
               page={page}
               block={block}
-              setOpenLink={setMobileSideMenuOpen}
+              closeLink={closeSideMenu}
               blockStylerStyle={undefined}
               setSelection={null}
+            />
+          )}
+          {mobileSideMenu.what === "ms_movePage" && (
+            <PageMenu
+              what="block"
+              currentPage={page}
+              pages={pages}
+              firstList={firstList}
+              closeMenu={closeSideMenu}
+              setTargetPageId={setTargetPageId}
             />
           )}
         </div>

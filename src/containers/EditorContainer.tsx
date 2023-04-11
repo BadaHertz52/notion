@@ -70,8 +70,6 @@ type EditorContainerProps = {
   setFontStyle: Dispatch<SetStateAction<fontStyleType>>;
   mobileSideMenu: mobileSideMenuType;
   setMobileSideMenu: Dispatch<SetStateAction<mobileSideMenuType>>;
-  mobileSideMenuOpen: boolean;
-  setMobileSideMenuOpen: Dispatch<SetStateAction<boolean>>;
 };
 
 const EditorContainer = ({
@@ -107,8 +105,6 @@ const EditorContainer = ({
   setModal,
   mobileSideMenu,
   setMobileSideMenu,
-  mobileSideMenuOpen,
-  setMobileSideMenuOpen,
 }: EditorContainerProps) => {
   const { restorePage, cleanTrash } = useContext(ActionContext).actions;
   const user = useSelector((state: RootState) => state.user);
@@ -136,7 +132,6 @@ const EditorContainer = ({
   useEffect(() => {
     setPagePath(makePagePath(page, pagesId, pages));
   }, [page, page.header.icon, page.header.title, makePagePath]);
-
   return (
     <div className="editor" style={editorStyle}>
       {isInTrash && (
@@ -190,11 +185,10 @@ const EditorContainer = ({
         openTemplates={openTemplates}
         setOpenTemplates={setOpenTemplates}
         fontStyle={fontStyle}
+        mobileSideMenu={mobileSideMenu}
         setMobileSideMenu={setMobileSideMenu}
-        setMobileSideMenuOpen={setMobileSideMenuOpen}
-        mobileSideMenuOpen={mobileSideMenuOpen}
       />
-      {mobileSideMenuOpen && mobileSideMenu.block !== null && (
+      {mobileSideMenu.block && (
         <MobileSideMenu
           pages={pages}
           pagesId={pagesId}
@@ -210,8 +204,6 @@ const EditorContainer = ({
           frameHtml={null}
           mobileSideMenu={mobileSideMenu}
           setMobileSideMenu={setMobileSideMenu}
-          mobileSideMenuOpen={mobileSideMenuOpen}
-          setMobileSideMenuOpen={setMobileSideMenuOpen}
         />
       )}
     </div>

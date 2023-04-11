@@ -4,13 +4,7 @@ import { BiCommentDetail } from "react-icons/bi";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { TiArrowSortedDown } from "react-icons/ti";
 import { CSSProperties } from "styled-components";
-import {
-  ActionContext,
-  msmWhatType,
-  ms_color,
-  ms_moreMenu,
-  ms_turnInto,
-} from "../containers/NotionRouter";
+import { ActionContext, msmWhatType } from "../containers/NotionRouter";
 import { Block, findBlock, makeNewBlock } from "../modules/notion";
 import BlockStyler, { removeSelected, StylerCommonProps } from "./BlockStyler";
 
@@ -36,7 +30,6 @@ const MobileBlockMenu = ({
   frameHtml,
   mobileMenuTargetBlock,
   setMobileSideMenu,
-  setMobileSideMenuOpen,
   setMobileMenuTargetBlock,
   initialInnerHeight,
 }: MobileBlockMenuProps) => {
@@ -109,7 +102,6 @@ const MobileBlockMenu = ({
   };
 
   const openMobileSideMenu = (what: msmWhatType) => {
-    setMobileSideMenuOpen(true);
     const item = sessionStorage.getItem("mobileMenuTargetBlock");
     if (targetBlock === undefined && item !== null) {
       setMobileSideMenu({
@@ -181,6 +173,7 @@ const MobileBlockMenu = ({
         break;
       case 1:
         //element node
+        contentEditableElement = anchorNode as HTMLElement;
         break;
       default:
         break;
@@ -270,7 +263,7 @@ const MobileBlockMenu = ({
             )}
             <button
               className="btn-turn-into"
-              onTouchEnd={() => openMobileSideMenu(ms_turnInto)}
+              onTouchEnd={() => openMobileSideMenu("ms_turnInto")}
               name="turn into"
             >
               <div className="mobileBlock__btn__inner">
@@ -292,7 +285,7 @@ const MobileBlockMenu = ({
             <button
               name="color"
               className="underline menu__editBtn btn-color "
-              onTouchEnd={() => openMobileSideMenu(ms_color)}
+              onTouchEnd={() => openMobileSideMenu("ms_color")}
             >
               <div className="mobileBlock__btn__inner">
                 <div className="text">Color</div>
@@ -304,7 +297,7 @@ const MobileBlockMenu = ({
             <button
               className="btn-open-menu"
               aria-details="open menu"
-              onTouchEnd={() => openMobileSideMenu(ms_moreMenu)}
+              onTouchEnd={() => openMobileSideMenu("ms_moreMenu")}
             >
               <div className="mobileBlock__btn__inner">
                 <div className="text">more</div>
@@ -338,7 +331,6 @@ const MobileBlockMenu = ({
               setSelection={null}
               frameHtml={frameHtml}
               setMobileSideMenu={setMobileSideMenu}
-              setMobileSideMenuOpen={setMobileSideMenuOpen}
               setMobileMenuTargetBlock={setMobileMenuTargetBlock}
               setOpenMobileBlockStyler={setOpenMobileBlockStyler}
             />

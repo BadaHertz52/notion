@@ -141,7 +141,6 @@ export type StylerCommonProps = MenuAndBlockStylerCommonProps & {
   setCommand: React.Dispatch<React.SetStateAction<Command>>;
   command: Command;
   setMobileSideMenu: Dispatch<SetStateAction<mobileSideMenuType>>;
-  setMobileSideMenuOpen: Dispatch<SetStateAction<boolean>>;
   setMobileMenuTargetBlock: Dispatch<SetStateAction<Block | null>>;
 };
 export type BlockStylerProps = StylerCommonProps & {
@@ -168,7 +167,6 @@ const BlockStyler = ({
   setCommand,
   frameHtml,
   setMobileSideMenu,
-  setMobileSideMenuOpen,
   setMobileMenuTargetBlock,
   setOpenMobileBlockStyler,
 }: BlockStylerProps) => {
@@ -568,7 +566,6 @@ const BlockStyler = ({
     }
   };
   const openMobileSideMenu = (what: msmWhatType) => {
-    setMobileSideMenuOpen(true);
     setMobileSideMenu({
       block: block,
       what: what,
@@ -715,7 +712,7 @@ const BlockStyler = ({
           pagesId={pagesId}
           page={page}
           block={selection ? selection.block : block}
-          setOpenLink={setOpenLink}
+          closeLink={() => setOpenLink(false)}
           blockStylerStyle={blockStylerStyle}
           setSelection={setSelection}
         />
@@ -727,7 +724,6 @@ const BlockStyler = ({
             block={selection ? selection.block : block}
             selection={selection}
             setSelection={setSelection}
-            setOpenMenu={null}
           />
         </div>
       )}

@@ -57,8 +57,7 @@ const Templates = ({
   discardEdit,
   setDiscardEdit,
   fontStyle,
-  mobileSideMenuOpen,
-  setMobileSideMenuOpen,
+  mobileSideMenu,
   setMobileSideMenu,
 }: TemplatesProps) => {
   const { addPage, editPage } = useContext(ActionContext).actions;
@@ -298,9 +297,8 @@ const Templates = ({
                   openTemplates={openTemplates}
                   setOpenTemplates={setOpenTemplates}
                   fontStyle={fontStyle}
+                  mobileSideMenu={mobileSideMenu}
                   setMobileSideMenu={setMobileSideMenu}
-                  setMobileSideMenuOpen={setMobileSideMenuOpen}
-                  mobileSideMenuOpen={mobileSideMenuOpen}
                 />
               </>
             ) : (

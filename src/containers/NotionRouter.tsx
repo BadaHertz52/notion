@@ -41,16 +41,15 @@ import {
 } from "../modules/user";
 import EditorContainer, { ModalType } from "./EditorContainer";
 import SideBarContainer from "./SideBarContainer";
-export const ms_turnInto = "ms_turnInto";
-export const ms_color = "ms_color";
-export const ms_moreMenu = "ms_moreMenu";
-export const ms_link = "ms_link";
-export type msmWhatType =
-  | typeof ms_turnInto
-  | typeof ms_color
-  | typeof ms_moreMenu
-  | typeof ms_link
-  | undefined;
+const MOBILE_SIDE_MENU = {
+  ms_turnInto: "ms_turnInto",
+  ms_movePage: "ms_movePage",
+  ms_color: "ms_color",
+  ms_moreMenu: "ms_moreMenu",
+  ms_link: "ms_link",
+} as const;
+
+export type msmWhatType = keyof typeof MOBILE_SIDE_MENU | undefined;
 export type mobileSideMenuType = {
   block: Block | null;
   what: msmWhatType;
@@ -205,7 +204,6 @@ const NotionRouter = () => {
     block: null,
     what: undefined,
   });
-  const [mobileSideMenuOpen, setMobileSideMenuOpen] = useState<boolean>(false);
   //---action.function
   //--block
   const editBlock = (pageId: string, block: Block) => {
@@ -547,8 +545,6 @@ const NotionRouter = () => {
                         setFontStyle={setFontStyle}
                         mobileSideMenu={mobileSideMenu}
                         setMobileSideMenu={setMobileSideMenu}
-                        mobileSideMenuOpen={mobileSideMenuOpen}
-                        setMobileSideMenuOpen={setMobileSideMenuOpen}
                       />
                     }
                   />
@@ -578,9 +574,8 @@ const NotionRouter = () => {
                     openTemplates={openTemplates}
                     setOpenTemplates={setOpenTemplates}
                     fontStyle={fontStyle}
-                    mobileSideMenuOpen={mobileSideMenuOpen}
+                    mobileSideMenu={mobileSideMenu}
                     setMobileSideMenu={setMobileSideMenu}
-                    setMobileSideMenuOpen={setMobileSideMenuOpen}
                   />
                 )}
                 {openTemplates && (
@@ -608,9 +603,8 @@ const NotionRouter = () => {
                     discardEdit={discard_edit}
                     setDiscardEdit={setDiscardEdit}
                     fontStyle={fontStyle}
-                    mobileSideMenuOpen={mobileSideMenuOpen}
+                    mobileSideMenu={mobileSideMenu}
                     setMobileSideMenu={setMobileSideMenu}
-                    setMobileSideMenuOpen={setMobileSideMenuOpen}
                   />
                 )}
                 {routePage !== null && (

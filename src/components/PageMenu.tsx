@@ -17,7 +17,7 @@ type PageMenuProps = {
   currentPage: Page;
   pages: Page[];
   firstList: listItem[];
-  setOpenMenu: Dispatch<SetStateAction<boolean>> | null;
+  closeMenu?: () => void;
   setTargetPageId: Dispatch<SetStateAction<string>>;
 };
 
@@ -26,7 +26,7 @@ const PageMenu = ({
   currentPage,
   pages,
   firstList,
-  setOpenMenu,
+  closeMenu,
   setTargetPageId,
 }: PageMenuProps) => {
   const { deleteBlock, changeBlockToPage, addBlock, movePageToPage } =
@@ -39,7 +39,6 @@ const PageMenu = ({
   const [block, setBlock] = useState<Block | null>(null);
   const sessionItem = sessionStorage.getItem("blockFnTargetBlock") as string;
   useEffect(() => {
-    console.log("sessionItem", sessionItem);
     if (sessionItem !== null && what === "block") {
       const block: Block = JSON.parse(sessionItem);
       setBlock(block);
@@ -72,12 +71,13 @@ const PageMenu = ({
       addBlock(destinationPageId, newBlock, blocksIdLength, null);
     }
     // close Menu and recovery Menu state
-    setOpenMenu !== null && setOpenMenu(false);
+    console.log("///");
+    closeMenu && closeMenu();
   };
   const onClickToMove = (id: string) => {
     switch (what) {
       case "block":
-        if (block !== null) {
+        if (block) {
           if (block.type === "page") {
             movePageToPage(block.id, id);
           } else {
