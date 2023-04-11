@@ -35,7 +35,7 @@ const AllComments = ({
     if (showAllComments) {
       const allCommentsHtml = document.querySelector("#allComments");
       const allCommentsHtmlDomRect = allCommentsHtml?.getClientRects()[0];
-      if (allCommentsHtmlDomRect !== undefined) {
+      if (allCommentsHtmlDomRect) {
         const isInAllComments = detectRange(event, allCommentsHtmlDomRect);
         if (!isInAllComments) {
           setShowAllComments(false);
@@ -44,18 +44,11 @@ const AllComments = ({
     }
   });
   const pageId = page.id;
-  const commentsBlocks: Block[] | null =
-    page.blocks !== null
-      ? page.blocks.filter(
-          (block: Block) => block.comments !== null && block.comments
-        )
-      : null;
+  const commentsBlocks: Block[] | null = page.blocks
+    ? page.blocks.filter((block: Block) => block.comments && block.comments)
+    : null;
   const targetCommentsBlocks: Block[] | null =
-    commentsBlocks == null
-      ? null
-      : commentsBlocks[0] !== undefined
-      ? commentsBlocks
-      : null;
+    commentsBlocks === null ? null : commentsBlocks[0] ? commentsBlocks : null;
   const allComments = targetCommentsBlocks?.map(
     (block: Block) => block.comments
   );
@@ -70,20 +63,20 @@ const AllComments = ({
   };
   const closeSelect = (event: MouseEvent) => {
     const target = event.currentTarget.parentElement?.previousElementSibling;
-    if (target !== undefined && target !== null) {
+    if (target) {
       target.parentElement?.classList.remove("open");
     }
   };
   useEffect(() => {
-    if (allComments !== undefined) {
+    if (allComments) {
       let resultComments: MainCommentType[] = [];
       allComments.forEach((comments: MainCommentType[] | null) => {
-        if (comments !== null) {
-          const seletedComments = comments.filter(
+        if (comments) {
+          const selectedComments = comments.filter(
             (c: MainCommentType) => c.type === select
           );
-          seletedComments[0] !== undefined &&
-            seletedComments.forEach((c) => resultComments.push(c));
+          selectedComments[0] &&
+            selectedComments.forEach((c) => resultComments.push(c));
         }
       });
       if (resultComments[0] === undefined) {
@@ -99,7 +92,7 @@ const AllComments = ({
       <div className="allComments__inner">
         <div className="allComments__header">
           <span>Comments</span>
-          <div className="allCommtes__btn-group">
+          <div className="allComments__btn-group">
             <button className="btn-select" onClick={openSelect}>
               {select === open ? "Open" : "Resolve"}
               <MdKeyboardArrowDown />
@@ -124,7 +117,7 @@ const AllComments = ({
             </div>
           </div>
         </div>
-        {targetCommentsBlocks == null || !result ? (
+        {targetCommentsBlocks === null || !result ? (
           <div className="no-result">
             <div>
               <p>No {select === open ? "Open" : "Resolved"} comments yet</p>

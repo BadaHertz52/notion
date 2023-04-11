@@ -39,7 +39,7 @@ const PageMenu = ({
   const [block, setBlock] = useState<Block | null>(null);
   const sessionItem = sessionStorage.getItem("blockFnTargetBlock") as string;
   useEffect(() => {
-    if (sessionItem !== null && what === "block") {
+    if (sessionItem && what === "block") {
       const block: Block = JSON.parse(sessionItem);
       setBlock(block);
     }
@@ -129,7 +129,7 @@ const PageMenu = ({
     setResult(RESULT);
   };
   const makeNewSubPage = () => {
-    if (block !== null) {
+    if (block) {
       setTemplateItem(templateHtml, currentPage);
       changeBlockToPage(currentPage.id, block);
     }
@@ -141,7 +141,7 @@ const PageMenu = ({
           <input type="search" onChange={findResult} />
         </div>
         {search ? (
-          result !== null ? (
+          result ? (
             <div className="page-group">
               {result.map((item: listItem) => (
                 <PageButton key={`list_${item.id}`} item={item} />

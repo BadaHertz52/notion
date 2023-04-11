@@ -25,7 +25,7 @@ export function makePath(
   parentsId.forEach((id: string) => {
     const title = parentsId.includes(id)
       ? findPage(pagesId, pages, id).header.title
-      : trashParentPages !== null && trashParentPagesId !== null
+      : trashParentPages && trashParentPagesId
       ? findPage(trashParentPagesId, trashParentPages, id).header.title
       : "";
     if (parentsId.indexOf(id) === 0) {
@@ -50,16 +50,15 @@ export function makeResultType(
     iconType: page.header.iconType,
     createTime: page.createTime,
     editTime: page.editTime,
-    path:
-      page.parentsId !== null
-        ? makePath(
-            page.parentsId,
-            pagesId,
-            pages,
-            trashParentPagesId,
-            trashParentPages
-          )
-        : null,
+    path: page.parentsId
+      ? makePath(
+          page.parentsId,
+          pagesId,
+          pages,
+          trashParentPagesId,
+          trashParentPages
+        )
+      : null,
   };
 }
 const Result = ({ item }: ResultProps) => {
@@ -68,7 +67,7 @@ const Result = ({ item }: ResultProps) => {
       <PageIcon icon={item.icon} iconType={item.iconType} style={undefined} />
       <div>
         <div className="page__title">{item.title}</div>
-        {item.path !== null && (
+        {item.path && (
           <div className="path">
             <span>—</span>
             {item.path}

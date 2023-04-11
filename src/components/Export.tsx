@@ -73,7 +73,7 @@ const Export = ({
   const onClickSwitchBtn = (event: MouseEvent) => {
     const currentTarget = event.currentTarget;
     const span = currentTarget.querySelector("span");
-    if (span !== null) {
+    if (span) {
       span.classList.toggle("on");
     }
   };
@@ -99,7 +99,7 @@ const Export = ({
     printWindow?.document.write(targetHtml);
     printWindow?.document.close();
     printWindow?.print();
-    if (printWindow !== null) {
+    if (printWindow) {
       printWindow.onload = function () {
         printWindow.close();
       };
@@ -109,7 +109,7 @@ const Export = ({
     const includeSubPagesSliderEl = document.getElementById(
       "includeSubPagesSlider"
     );
-    if (includeSubPagesSliderEl !== null) {
+    if (includeSubPagesSliderEl) {
       const frame = document.getElementsByClassName("frame")[0] as HTMLElement;
       const styleTag = [...document.querySelectorAll("style")];
       const styleCode = styleTag[1].outerHTML;
@@ -218,7 +218,7 @@ const Export = ({
             "text/html",
             format
           );
-          if (includeSubPage && page.subPagesId !== null) {
+          if (includeSubPage && page.subPagesId) {
             convertSubPageFrameIntoHtml(page.subPagesId).forEach(
               ({ html, title }: ConvertSubPageFrameIntoHtmlReturn) =>
                 exportDocument(title, html, "text/html", format)
@@ -227,7 +227,7 @@ const Export = ({
           break;
         case pdf:
           printPdf(currentPageFrameHtml);
-          if (includeSubPage && page.subPagesId !== null) {
+          if (includeSubPage && page.subPagesId) {
             convertSubPageFrameIntoHtml(page.subPagesId).forEach(
               ({ html, title }: ConvertSubPageFrameIntoHtmlReturn) =>
                 printPdf(html)
@@ -242,7 +242,7 @@ const Export = ({
             "text/markdown",
             format
           );
-          if (includeSubPage && page.subPagesId !== null) {
+          if (includeSubPage && page.subPagesId) {
             convertSubPageFrameIntoHtml(page.subPagesId).forEach(
               ({ html, title }: ConvertSubPageFrameIntoHtmlReturn) => {
                 const subPageMarkdownText = NodeHtmlMarkdown.translate(html);
@@ -263,7 +263,7 @@ const Export = ({
   };
   useEffect(() => {
     const aTags = document.querySelectorAll("a");
-    if (aTags[0] !== undefined) {
+    if (aTags[0]) {
       aTags.forEach((a: Element) => a.remove());
     }
   }, []);

@@ -32,7 +32,7 @@ const MobileSideMenu = ({
   setMobileSideMenu,
 }: MobileSideMenuProps) => {
   const mobileSelection: selectionType | null =
-    document.querySelector(".selected") == null
+    document.querySelector(".selected") === null
       ? null
       : {
           block: block,

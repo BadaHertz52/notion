@@ -76,10 +76,9 @@ const Menu = ({
   const { addBlock, deleteBlock, duplicatePage } =
     useContext(ActionContext).actions;
   const templateHtml = document.getElementById("template");
-  const blockFnElement =
-    templateHtml !== null
-      ? (templateHtml.querySelector(".blockFn") as HTMLElement | null)
-      : (document.querySelector(".blockFn") as HTMLElement | null);
+  const blockFnElement = templateHtml
+    ? (templateHtml.querySelector(".blockFn") as HTMLElement | null)
+    : (document.querySelector(".blockFn") as HTMLElement | null);
   const menuRef = useRef<HTMLDivElement>(null);
   const [editBtnGroup, setEditBtnGroup] = useState<Element[] | null>(null);
   const [turnInto, setTurnInto] = useState<boolean>(false);
@@ -103,7 +102,7 @@ const Menu = ({
     const innerWidth = window.innerWidth;
     const frameDomRect = frameHtml?.getClientRects()[0];
     let style: CSSProperties = {};
-    if (blockFnElement !== null && frameDomRect !== undefined) {
+    if (blockFnElement && frameDomRect) {
       const blockFnDomRect = blockFnElement.getClientRects()[0];
       const blockFnTop = blockFnDomRect.top as number;
       const overHeight = blockFnTop + menuHeight >= frameDomRect.height + 100;
@@ -125,10 +124,10 @@ const Menu = ({
     return style;
   }
   function changeSideMenuStyle() {
-    if (!isMobile() && menuRef.current !== null) {
+    if (!isMobile() && menuRef.current) {
       const mainMenu = menuRef.current.firstElementChild;
       const innerWidth = window.innerWidth;
-      if (mainMenu !== null && frameHtml !== null) {
+      if (mainMenu && frameHtml) {
         const menuTop = menuRef.current.getClientRects()[0].top;
         const frameBottom = frameHtml.getClientRects()[0].bottom;
         const maxHeight = frameBottom - menuTop - 32;
@@ -230,15 +229,15 @@ const Menu = ({
     });
   };
   const removeBlock = () => {
-    setSelection !== null && setSelection(null);
+    setSelection && setSelection(null);
     setTemplateItem(templateHtml, page);
     deleteBlock(page.id, block, true);
     closeMenu();
   };
 
   const duplicateBlock = () => {
-    setSelection !== null && setSelection(null);
-    if (page.blocks !== null && page.blocksId !== null) {
+    setSelection && setSelection(null);
+    if (page.blocks && page.blocksId) {
       setTemplateItem(templateHtml, page);
       const blockIndex = page.blocksId.indexOf(block.id);
       const previousBlockId = page.blocksId[blockIndex - 1];
@@ -279,8 +278,8 @@ const Menu = ({
     });
   };
   const onClickRename = () => {
-    setSelection !== null && setSelection(null);
-    setOpenRename !== null && setOpenRename(true);
+    setSelection && setSelection(null);
+    setOpenRename && setOpenRename(true);
     closeMenu();
   };
   useEffect(() => {
@@ -332,8 +331,7 @@ const Menu = ({
                 name="turn into"
                 style={{
                   display:
-                    document.querySelector("#blockStyler") !== null ||
-                    isMobile()
+                    document.querySelector("#blockStyler") || isMobile()
                       ? "none"
                       : "flex",
                 }}
@@ -398,8 +396,7 @@ const Menu = ({
                 onMouseOver={showColorMenu}
                 style={{
                   display:
-                    document.querySelector("#blockStyler") !== null ||
-                    isMobile()
+                    document.querySelector("#blockStyler") || isMobile()
                       ? "none"
                       : "flex",
                 }}

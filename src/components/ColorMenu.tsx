@@ -39,9 +39,9 @@ type ColorInformProps = {
 };
 const StyleColorInform = styled.span`
   color: ${(props: StyleColorInformProps) =>
-    props.color !== undefined ? props.color : "initial"};
+    props.color ? props.color : "initial"};
   background: ${(props: StyleColorInformProps) =>
-    props.background !== undefined ? props.background : "initial"};
+    props.background ? props.background : "initial"};
   font-weight: 500;
   font-size: 16px;
   width: 22px;
@@ -62,7 +62,7 @@ const ColorInform = ({
   closeMenu,
 }: ColorInformProps) => {
   const changeContentStyle = (color: string | undefined) => {
-    if (selection !== null) {
+    if (selection) {
       const target = color === undefined ? "bg" : "color";
       const bgColorArr = [
         "bg_default",
@@ -84,12 +84,12 @@ const ColorInform = ({
       const className = `${target}_${colorName.toLocaleLowerCase()}`;
       const targetBlock = selection.block;
       const selectedHtml = document.querySelector(".selected");
-      if (selectedHtml !== null) {
+      if (selectedHtml) {
         //배경색이나 폰트 색상을 바꾸려하는데, 선택된 node의 자식 node 중에 이미 배경색이나 폰트색상이 지정되어 있는 경우, 지정된 스타일을 제거함
         const selectedChildren = selectedHtml.childNodes as
           | NodeListOf<Node>
           | undefined;
-        if (selectedChildren !== undefined) {
+        if (selectedChildren) {
           selectedChildren.forEach((node: Node) => {
             if (node.nodeName === "SPAN") {
               const spanHtml = node as HTMLElement;
@@ -122,7 +122,7 @@ const ColorInform = ({
         const contentEditableHtml = document.getElementById(
           `${block.id}__contents`
         )?.firstElementChild;
-        if (contentEditableHtml !== null && contentEditableHtml !== undefined) {
+        if (contentEditableHtml) {
           const innerHtml = contentEditableHtml.innerHTML;
           const editedBlock: Block = {
             ...targetBlock,
@@ -130,7 +130,7 @@ const ColorInform = ({
             editTime: JSON.stringify(Date.now()),
           };
           editBlock(page.id, editedBlock);
-          setSelection !== null &&
+          setSelection &&
             setSelection({
               block: editedBlock,
               change: true,
@@ -140,7 +140,7 @@ const ColorInform = ({
     }
   };
   const changeColor = () => {
-    if (color === undefined && background !== undefined) {
+    if (color === undefined && background) {
       setTemplateItem(templateHtml, page);
       ///change background color
       if (selection === null) {
@@ -156,7 +156,7 @@ const ColorInform = ({
         changeContentStyle(color);
       }
     }
-    if (color !== undefined && background === undefined) {
+    if (color && background === undefined) {
       ///change color
       if (selection === null) {
         const newBlock: Block = {
@@ -183,7 +183,7 @@ const ColorInform = ({
         A
       </StyleColorInform>
       <span className="color-name">
-        {color !== undefined ? colorName : `${colorName} background`}
+        {color ? colorName : `${colorName} background`}
       </span>
     </button>
   );

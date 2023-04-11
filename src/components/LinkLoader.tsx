@@ -42,23 +42,21 @@ const LinkLoader = ({
 }: LinkLoaderProps) => {
   const { editBlock } = useContext(ActionContext).actions;
   const selectedHtml = document.querySelector(".selected");
-  const recentPages =
-    recentPagesId !== null
-      ? recentPagesId.length > 3
-        ? (recentPagesId
-            ?.slice(0.4)
-            .map((id: string) => findPage(pagesId, pages, id)) as Page[])
-        : (recentPagesId.map((id: string) =>
-            findPage(pagesId, pages, id)
-          ) as Page[])
-      : null;
+  const recentPages = recentPagesId
+    ? recentPagesId.length > 3
+      ? (recentPagesId
+          ?.slice(0.4)
+          .map((id: string) => findPage(pagesId, pages, id)) as Page[])
+      : (recentPagesId.map((id: string) =>
+          findPage(pagesId, pages, id)
+        ) as Page[])
+    : null;
   const notTemplatePages = pages.filter((p: Page) => p.type === "page");
-  const pageList =
-    recentPages !== null
-      ? recentPages
-      : notTemplatePages.length > 3
-      ? notTemplatePages.slice(0.4)
-      : notTemplatePages;
+  const pageList = recentPages
+    ? recentPages
+    : notTemplatePages.length > 3
+    ? notTemplatePages.slice(0.4)
+    : notTemplatePages;
 
   const topDomain = [
     ".com",
@@ -353,9 +351,7 @@ const LinkLoader = ({
         const candidateArr = notTemplatePages.filter((page: Page) =>
           page.header.title.includes(value)
         );
-        candidateArr[0] !== undefined
-          ? setCandidates(candidateArr)
-          : setCandidates(null);
+        candidateArr[0] ? setCandidates(candidateArr) : setCandidates(null);
       }
     }
   };
@@ -366,10 +362,7 @@ const LinkLoader = ({
     const targetBlockContentHtml = document
       .getElementById(`${block.id}__contents`)
       ?.querySelector(".contentEditable");
-    if (
-      targetBlockContentHtml !== null &&
-      targetBlockContentHtml !== undefined
-    ) {
+    if (targetBlockContentHtml && targetBlockContentHtml) {
       const innerHtml = targetBlockContentHtml.innerHTML;
       const newBlock: Block = {
         ...block,
@@ -377,7 +370,7 @@ const LinkLoader = ({
         editTime: JSON.stringify(Date.now()),
       };
       editBlock(page.id, newBlock);
-      setSelection !== null &&
+      setSelection &&
         setSelection({
           block: newBlock,
           change: true,
@@ -385,7 +378,7 @@ const LinkLoader = ({
     }
   };
   const resetLinked = () => {
-    if (linked && linkElements !== null) {
+    if (linked && linkElements) {
       setLinked(false);
       setLinkElements(null);
     }
@@ -426,8 +419,8 @@ const LinkLoader = ({
   };
 
   const addLink = (link: string) => {
-    if (selectedHtml !== null) {
-      if (linked && linkElements !== null) {
+    if (selectedHtml) {
+      if (linked && linkElements) {
         if (linkElements[0] === selectedHtml) {
           //href 만 변경
           changeHref(selectedHtml as HTMLAnchorElement, link);
@@ -444,7 +437,7 @@ const LinkLoader = ({
               e.outerHTML = e.innerHTML;
             });
             const newSelectedHtml = document.querySelector(".selected");
-            newSelectedHtml !== null &&
+            newSelectedHtml &&
               makeNewAnchorElement(newSelectedHtml.innerHTML, link);
           }
         }
@@ -456,9 +449,9 @@ const LinkLoader = ({
     resetLinked();
   };
   const copyLink = () => {
-    if (linkElements !== null) {
+    if (linkElements) {
       const href = linkElements[0].getAttribute("href");
-      if (href !== null) {
+      if (href) {
         navigator.clipboard.writeText(href);
       }
       resetLinked();
@@ -467,7 +460,7 @@ const LinkLoader = ({
   };
 
   const removeLink = () => {
-    if (linkElements !== null) {
+    if (linkElements) {
       linkElements.forEach((e: HTMLAnchorElement) => {
         e.outerHTML = e.innerHTML;
       });
@@ -485,7 +478,7 @@ const LinkLoader = ({
     return style;
   };
   useEffect(() => {
-    if (blockStyler !== null && blockStylerStyle !== undefined) {
+    if (blockStyler && blockStylerStyle) {
       const blockStylerTop = blockStylerStyle.top as string;
       const blockStylerTopValue = Number(
         blockStylerTop.slice(0, blockStylerTop.indexOf("px"))
@@ -499,7 +492,7 @@ const LinkLoader = ({
     }
   }, [blockStylerStyle, blockStyler]);
   useEffect(() => {
-    if (selectedHtml !== null) {
+    if (selectedHtml) {
       const selectedHtmlParent = selectedHtml.parentElement;
       const parentLink =
         selectedHtmlParent?.tagName === "A" &&
@@ -536,7 +529,7 @@ const LinkLoader = ({
         />
         <div className="page__inform">
           <div className="page__title">{page.header.title}</div>
-          {page.parentsId !== null && (
+          {page.parentsId && (
             <div className="page__path-group">
               {pathes?.map((path: pathType) => (
                 <div className="path" style={setWidth(pathes.length)}>
@@ -564,15 +557,15 @@ const LinkLoader = ({
         <div className="page-group">
           <header>LINK TO BLOCK</header>
           <div className="page-group__list">
-            {searchValue == null && candidates == null
+            {searchValue === null && candidates === null
               ? pageList.map((p: Page) => <PageItem page={p} />)
               : candidates?.map((p: Page) => <PageItem page={p} />)}
           </div>
         </div>
       </div>
-      {(webLink || linked || searchValue !== null) && (
+      {(webLink || linked || searchValue) && (
         <div id="linkLoader_moreFn">
-          {webLink && searchValue !== null && (
+          {webLink && searchValue && (
             <div id="btn-link-webPage">
               <button onClick={() => addLink(searchValue)}>
                 <BsLink45Deg />
@@ -592,7 +585,7 @@ const LinkLoader = ({
               </button>
             </div>
           )}
-          {searchValue !== null && (
+          {searchValue && (
             <div id="linkResult">
               <button onClick={() => addLink(searchValue)}>
                 <BsArrowUpRight />

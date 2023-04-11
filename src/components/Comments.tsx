@@ -54,7 +54,7 @@ type CommentsProps = {
    */
   setDiscardEdit: Dispatch<SetStateAction<boolean>>;
   /**
-   *showAllComments === true이면 AllCommmets안의 comments, showAllComments이면 frame안에 있는 page, block에 대한 comments로, ToolMore의 위치를 지정하는데 사용함
+   *showAllComments === true이면 AllComments안의 comments, showAllComments이면 frame안에 있는 page, block에 대한 comments로, ToolMore의 위치를 지정하는데 사용함
    */
   showAllComments: boolean;
 };
@@ -233,17 +233,17 @@ export const CommentInput = ({
   const selectedHtmlText = selectedHtml?.innerHTML;
 
   const updateBlock = (blockComments: MainCommentType[]) => {
-    if (commentBlock !== null) {
+    if (commentBlock) {
       let editedBlock: Block = {
         ...commentBlock,
         comments: blockComments,
       };
-      if (selectedHtml !== null) {
+      if (selectedHtml) {
         const blockContentHtml = document.getElementById(
           `${commentBlock.id}__contents`
         )?.firstElementChild;
         const blockContents = blockContentHtml?.innerHTML;
-        if (blockContents !== undefined) {
+        if (blockContents) {
           editedBlock = {
             ...editedBlock,
             contents: blockContents,
@@ -251,8 +251,8 @@ export const CommentInput = ({
         }
       }
       editBlock(pageId, editedBlock);
-      setAllComments !== null && setAllComments(blockComments);
-      if (selectedHtml !== null) {
+      setAllComments && setAllComments(blockComments);
+      if (selectedHtml) {
         removeSelected(frameHtml, editedBlock, editBlock, page, null);
       }
     }
@@ -285,7 +285,7 @@ export const CommentInput = ({
     const target = event?.currentTarget;
     const value = target.value;
     setText(value);
-    if (value == null || value === "") {
+    if (value === null || value === "") {
       setSubmitStyle({
         fill: "grey",
         border: "none",
@@ -297,9 +297,9 @@ export const CommentInput = ({
     }
   };
   const addMainComment = () => {
-    if (commentBlock !== null) {
+    if (commentBlock) {
       const newId = `main_${editTime}`;
-      if (selectedHtml !== null) {
+      if (selectedHtml) {
         selectedHtml.className = `text_commentBtn mainId_${newId}`;
       }
       const newBlockComment: MainCommentType = {
@@ -322,7 +322,7 @@ export const CommentInput = ({
   };
 
   const addSubComment = () => {
-    if (commentBlock !== null && allComments !== null && mainComment !== null) {
+    if (commentBlock && allComments && mainComment) {
       const comments = [...allComments];
       const mainCommentIndex = findMainCommentIndex(comments, mainComment);
       const newSubComment: SubCommentType = {
@@ -335,11 +335,11 @@ export const CommentInput = ({
       const editedMainComment: MainCommentType = {
         ...mainComment,
         subComments:
-          mainComment.subComments == null
+          mainComment.subComments === null
             ? [newSubComment]
             : mainComment.subComments.concat(newSubComment),
         subCommentsId:
-          mainComment.subCommentsId == null
+          mainComment.subCommentsId === null
             ? [newSubComment.id]
             : mainComment.subCommentsId.concat(newSubComment.id),
         editTime: editTime,
@@ -349,7 +349,7 @@ export const CommentInput = ({
     }
   };
   const updatePageComment = (pageComments: MainCommentType[] | null) => {
-    if (page !== null) {
+    if (page) {
       const editedPage: Page = {
         ...page,
         header: {
@@ -358,8 +358,8 @@ export const CommentInput = ({
         },
         editTime: editTime,
       };
-      setAllComments !== null && setAllComments(pageComments);
-      if (editPage !== null) {
+      setAllComments && setAllComments(pageComments);
+      if (editPage) {
         editPage(pageId, editedPage);
       }
     }
@@ -377,13 +377,13 @@ export const CommentInput = ({
       subCommentsId: null,
     };
     const newPageComments: MainCommentType[] | null =
-      page.header.comments == null
+      page.header.comments === null
         ? [newComment]
         : page.header.comments.concat(newComment);
     updatePageComment(newPageComments);
   };
   const addPageSubComment = () => {
-    if (allComments !== null && mainComment !== null) {
+    if (allComments && mainComment) {
       const comments = [...allComments];
       const mainCommentIndex = findMainCommentIndex(comments, mainComment);
       const newSubComment: SubCommentType = {
@@ -396,7 +396,7 @@ export const CommentInput = ({
       const editedMainComment: MainCommentType = {
         ...mainComment,
         subComments:
-          mainComment.subComments == null
+          mainComment.subComments === null
             ? [newSubComment]
             : mainComment.subComments?.concat(newSubComment),
         subCommentsId:
@@ -411,23 +411,23 @@ export const CommentInput = ({
   const recoveryInputAfterSubmit = () => {
     setText("");
     closeInput();
-    page !== null && setTemplateItem(templateHtml, page);
+    page && setTemplateItem(templateHtml, page);
     setEditTargetComment(null);
     sessionStorage.removeItem("editComment");
   };
 
   const makeNewComment = (event: MouseEvent) => {
     event.preventDefault();
-    if (commentBlock !== null) {
-      mainComment == null ? addMainComment() : addSubComment();
+    if (commentBlock) {
+      mainComment === null ? addMainComment() : addSubComment();
     } else {
-      mainComment == null ? addPageMainComment() : addPageSubComment();
+      mainComment === null ? addPageMainComment() : addPageSubComment();
     }
     recoveryInputAfterSubmit();
   };
 
   const editMainComment = () => {
-    if (commentBlock !== null && allComments !== null && mainComment !== null) {
+    if (commentBlock && allComments && mainComment) {
       const comments = [...allComments];
       const mainCommentIds = comments.map((m: MainCommentType) => m.id);
       const mainCommentIndex = mainCommentIds.indexOf(mainComment.id);
@@ -442,7 +442,7 @@ export const CommentInput = ({
   };
 
   const editSubComment = () => {
-    if (commentBlock !== null && allComments !== null && subComment !== null) {
+    if (commentBlock && allComments && subComment) {
       const comments = [...allComments];
       const { mainComment, mainCommentIndex } = findMainComment();
       const subIndex = mainComment.subCommentsId?.indexOf(
@@ -460,7 +460,7 @@ export const CommentInput = ({
   };
 
   const editPageComment = () => {
-    if (allComments !== null && mainComment !== null) {
+    if (allComments && mainComment) {
       const comments = [...allComments];
       const mainCommentsId = allComments.map((m: MainCommentType) => m.id);
       const mainCommentIndex = mainCommentsId.indexOf(mainComment.id);
@@ -475,11 +475,11 @@ export const CommentInput = ({
   };
 
   const editPageSubComment = () => {
-    if (allComments !== null && subComment !== null) {
+    if (allComments && subComment) {
       const comments = [...allComments];
       const { mainComment, mainCommentIndex } = findMainComment();
       const subIndex = mainComment.subCommentsId?.indexOf(subComment.id);
-      if (subIndex !== undefined) {
+      if (subIndex) {
         const editedSubComment: SubCommentType = {
           ...subComment,
           content: text,
@@ -493,10 +493,10 @@ export const CommentInput = ({
   };
   const editComment = (event: MouseEvent) => {
     event.preventDefault();
-    if (commentBlock !== null) {
-      mainComment !== null ? editMainComment() : editSubComment();
+    if (commentBlock) {
+      mainComment ? editMainComment() : editSubComment();
     } else {
-      mainComment !== null ? editPageComment() : editPageSubComment();
+      mainComment ? editPageComment() : editPageSubComment();
     }
     recoveryInputAfterSubmit();
   };
@@ -506,9 +506,9 @@ export const CommentInput = ({
     discardEdit?.classList.add("on");
   };
   function closeInput() {
-    setEdit !== null && setEdit(false);
+    setEdit && setEdit(false);
     setText("");
-    setModal !== null &&
+    setModal &&
       setModal({
         open: false,
         what: null,
@@ -517,7 +517,7 @@ export const CommentInput = ({
   useEffect(() => {
     switch (addOrEdit) {
       case "add":
-        if (mainComment !== null) {
+        if (mainComment) {
           //add new subComment to mainComment
           setPlaceHolder(reply);
         } else {
@@ -526,7 +526,7 @@ export const CommentInput = ({
         }
         break;
       case "edit":
-        if (subComment !== null) {
+        if (subComment) {
           setEditTargetComment(subComment);
           setPlaceHolder(subComment.content);
         } else {
@@ -575,7 +575,7 @@ export const CommentInput = ({
           }
           className="comment__btn-submit"
           name="comment__btn-submit"
-          disabled={text == null || text === ""}
+          disabled={text === null || text === ""}
         >
           {addOrEdit === "edit" ? (
             <IoCheckmarkCircle style={submitStyle} />
@@ -607,12 +607,12 @@ const ToolMore = ({
   const editTime = JSON.stringify(Date.now());
 
   const onClickDeleteComment = () => {
-    page !== null && setTemplateItem(templateHtml, page);
+    page && setTemplateItem(templateHtml, page);
     setMoreOpen(false);
     //page.header.comments 가 아닐 경우
-    if (block !== null) {
-      //delte blockComment
-      if (comment !== null && block !== null && block.comments !== null) {
+    if (block) {
+      //delete blockComment
+      if (comment && block && block.comments) {
         const blockComments: MainCommentType[] = [...block.comments];
         const mainCommentIds = blockComments.map((m: MainCommentType) => m.id);
         const updateBlock = (changeContent: boolean) => {
@@ -630,18 +630,18 @@ const ToolMore = ({
             comments: blockComments[0] === undefined ? null : blockComments,
           };
           editBlock(page.id, editedBlock);
-          setAllComments !== null && setAllComments(editedBlock.comments);
+          setAllComments && setAllComments(editedBlock.comments);
         };
 
         if (mainCommentIds?.includes(comment.id)) {
           //MainCommentType
           const index = mainCommentIds.indexOf(comment.id);
           const targetMainComment = blockComments[index];
-          if (targetMainComment.selectedText !== null) {
+          if (targetMainComment.selectedText) {
             const textCommentBtnElement = document
               .getElementById(`${block.id}__contents`)
               ?.getElementsByClassName(`mainId_${targetMainComment.id}`)[0];
-            if (textCommentBtnElement !== undefined) {
+            if (textCommentBtnElement) {
               textCommentBtnElement.outerHTML = textCommentBtnElement.innerHTML;
             }
           }
@@ -665,7 +665,7 @@ const ToolMore = ({
       }
     } else {
       //page.header.comments 인 경우
-      if (comment !== null && page.header.comments !== null) {
+      if (comment && page.header.comments) {
         const pageComments = [...page.header.comments];
         const pageCommentsId = pageComments.map((c: MainCommentType) => c.id);
         const isBlockComment = pageCommentsId.includes(comment.id);
@@ -680,8 +680,8 @@ const ToolMore = ({
             },
             editTime: editTime,
           };
-          editPage !== null && editPage(pageId, editedPage);
-          setAllComments !== null && setAllComments(editedPage.header.comments);
+          editPage && editPage(pageId, editedPage);
+          setAllComments && setAllComments(editedPage.header.comments);
         } else {
           const pageComment = pageComments.filter((pc: MainCommentType) =>
             pc.subCommentsId?.includes(comment.id)
@@ -709,8 +709,8 @@ const ToolMore = ({
               comments: pageComments,
             },
           };
-          setAllComments !== null && setAllComments(pageComments);
-          editPage !== null && editPage(pageId, editedPage);
+          setAllComments && setAllComments(pageComments);
+          editPage && editPage(pageId, editedPage);
         }
       }
     }
@@ -719,11 +719,11 @@ const ToolMore = ({
 
   const onClickEditComment = () => {
     setMoreOpen(false);
-    comment !== null && sessionStorage.setItem("editComment", comment.id);
+    comment && sessionStorage.setItem("editComment", comment.id);
     sessionStorage.removeItem("toolMoreItem");
   };
   useEffect(() => {
-    if (toolMoreItem !== null) {
+    if (toolMoreItem) {
       const item = JSON.parse(toolMoreItem);
       setComment(item);
     }
@@ -761,7 +761,7 @@ const CommentTool = ({
   const commentToolRef = useRef<HTMLDivElement>(null);
   const ResolveBtn = ({ comment }: ResolveBtnProps) => {
     const changeToResolve = () => {
-      if (page !== null) {
+      if (page) {
         setTemplateItem(templateHtml, page);
       }
       const editTime = JSON.stringify(Date.now());
@@ -770,8 +770,8 @@ const CommentTool = ({
         type: "resolve",
         editTime: editTime,
       };
-      if (block !== null) {
-        const comments = block.comments !== null ? [...block.comments] : [];
+      if (block) {
+        const comments = block.comments ? [...block.comments] : [];
         const commentIdes: string[] = comments?.map(
           (comment: MainCommentType) => comment.id
         ) as string[];
@@ -783,10 +783,10 @@ const CommentTool = ({
           editTime: editTime,
         };
         editBlock(pageId, editedBlock);
-        setAllComments !== null && setAllComments(editedBlock.comments);
+        setAllComments && setAllComments(editedBlock.comments);
       } else {
         const pageComment = page.header.comments?.[0];
-        if (pageComment !== undefined) {
+        if (pageComment) {
           const editedPageComment: MainCommentType = {
             ...pageComment,
             type: "resolve",
@@ -800,8 +800,8 @@ const CommentTool = ({
             },
             editTime: editTime,
           };
-          setAllComments !== null && setAllComments(editedPage.header.comments);
-          editPage !== null && editPage(pageId, editedPage);
+          setAllComments && setAllComments(editedPage.header.comments);
+          editPage && editPage(pageId, editedPage);
         }
       }
     };
@@ -819,21 +819,17 @@ const CommentTool = ({
     const commentToolDomRect = commentToolRef.current?.getClientRects()[0];
     const blockCommentsHtml = document.getElementById("block-comments");
     //frame 에서의 comments
-    if (
-      !showAllComments &&
-      commentToolDomRect !== undefined &&
-      frameHtml !== null
-    ) {
+    if (!showAllComments && commentToolDomRect && frameHtml) {
       if (blockCommentsHtml === null) {
         //pageComment
         const templateHtml = document.getElementById("template");
         const pageComment =
-          templateHtml == null
+          templateHtml === null
             ? (document.querySelector(".page__comments") as HTMLElement | null)
             : (templateHtml.querySelector(
                 ".page__comments"
               ) as HTMLElement | null);
-        if (pageComment !== null) {
+        if (pageComment) {
           const pageCommentsDomRect = pageComment?.getClientRects()[0];
           const style: CSSProperties = {
             position: "absolute",
@@ -859,7 +855,7 @@ const CommentTool = ({
       }
     }
     //AllComments에서의 comments
-    if (showAllComments && commentToolDomRect !== undefined) {
+    if (showAllComments && commentToolDomRect) {
       const top = targetDomRect.bottom + 5;
       const right = window.innerWidth - commentToolDomRect.right;
       const style: CSSProperties = {
@@ -919,7 +915,7 @@ const CommentBlock = ({
   )?.textContent;
   useEffect(() => {
     // discard edit
-    if (editCommentItem !== null) {
+    if (editCommentItem) {
       if (discardEdit) {
         setEdit(false);
         sessionStorage.removeItem("editComment");
@@ -1038,7 +1034,7 @@ const Comment = ({
           showAllComments={showAllComments}
         />
       </div>
-      {comment.subComments !== null && (
+      {comment.subComments && (
         <div className="comment__subComments">
           {comment.subComments.map((comment: SubCommentType) => (
             <CommentBlock
@@ -1139,12 +1135,12 @@ const Comments = ({
    * frame 에서 block-comments를 열었을때 (openComment === true) block의 위치에 따라 commentsStyle을 설정하는 함수
    */
   function changeCommentsStyle() {
-    if (block !== null && openComment) {
+    if (block && openComment) {
       const blockContentsEl = document.getElementById(`${block.id}__contents`);
       const editableBlock = document.getElementsByClassName("editableBlock")[0];
       const editableBlockDomRect = editableBlock.getClientRects()[0];
       const blockDocDomRect = blockContentsEl?.getClientRects()[0];
-      if (blockDocDomRect !== undefined && frameHtml !== null) {
+      if (blockDocDomRect && frameHtml) {
         const frameDomRect = frameHtml.getClientRects()[0];
         const pageTitleHtml = frameHtml.querySelector(
           ".page__title"
@@ -1195,9 +1191,9 @@ const Comments = ({
   }, [openComment]);
 
   useEffect(() => {
-    if (block?.comments !== undefined && block?.comments !== null) {
+    if (block?.comments) {
       const item = sessionStorage.getItem("mainCommentId");
-      if (item == null) {
+      if (item === null) {
         setAllComments(block.comments);
       } else {
         setAllComments(
@@ -1211,20 +1207,20 @@ const Comments = ({
   }, [block, page, pageComments]);
 
   useEffect(() => {
-    if (allComments !== null) {
+    if (allComments) {
       updateOpenAndResolveComments(allComments);
     } else {
       setTargetComment(null);
     }
   }, [allComments]);
   useEffect(() => {
-    if (select !== null) {
+    if (select) {
       select === open
         ? setTargetComment(openComments)
         : setTargetComment(resolveComments);
     } else {
       setTargetComment(openComments);
-      if (commentsRef.current !== null) {
+      if (commentsRef.current) {
         openComments === null || openComments[0] === undefined
           ? commentsRef.current.parentElement?.setAttribute(
               "style",

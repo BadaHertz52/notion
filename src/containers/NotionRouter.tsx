@@ -87,7 +87,7 @@ export const makePagePath = (
   pagesId: string[],
   pages: Page[]
 ): pathType[] | null => {
-  if (page.parentsId !== null) {
+  if (page.parentsId) {
     const parentPages: Page[] = page.parentsId.map((id: string) =>
       findPage(pagesId, pages, id)
     );
@@ -115,11 +115,11 @@ export const makeRoutePath = (
   pages: Page[]
 ): string => {
   let path = "";
-  if (page.parentsId == null) {
+  if (page.parentsId === null) {
     path = `/${page.id}`;
   } else {
     const pagePath = makePagePath(page, pagesId, pages);
-    if (pagePath !== null) {
+    if (pagePath) {
       let PATH = "";
       for (let i = 0; i <= pagePath.length; i++) {
         if (i < pagePath.length) {
@@ -252,7 +252,7 @@ const NotionRouter = () => {
   function deletePage(pageId: string) {
     const lastSlash = hash.lastIndexOf("/");
     const currentPageId = hash.slice(lastSlash + 1);
-    if (pageId === currentPageId && firstPagesId !== null) {
+    if (pageId === currentPageId && firstPagesId) {
       const openOtherFirstPage = () => {
         firstPagesId[0] === pageId
           ? firstPagesId.length > 1
@@ -260,7 +260,7 @@ const NotionRouter = () => {
             : setTargetPageId("none")
           : setTargetPageId(firstPagesId[0]);
       };
-      if (user.favorites !== null) {
+      if (user.favorites) {
         if (user.favorites.includes(pageId)) {
           user.favorites[0] === pageId
             ? user.favorites.length > 1
@@ -275,7 +275,7 @@ const NotionRouter = () => {
       }
     }
     dispatch(delete_page(pageId));
-    if (user.favorites !== null) {
+    if (user.favorites) {
       user.favorites?.includes(pageId) && dispatch(remove_favorites(pageId));
     }
   }
@@ -337,24 +337,20 @@ const NotionRouter = () => {
     changeSide: changeSide,
   };
   const findRoutePage = (pageId: string) => {
-    if (pages !== null && pagesId !== null) {
+    if (pages && pagesId) {
       if (pagesId.includes(pageId)) {
         const page = findPage(pagesId, pages, pageId);
         setRoutePage(page);
         setTargetPageId(page.id);
         addRecentPage(pageId);
-      } else if (
-        trashPagesId !== null &&
-        trashPages !== null &&
-        trashPagesId.includes(pageId)
-      ) {
+      } else if (trashPagesId && trashPages && trashPagesId.includes(pageId)) {
         const page = findPage(trashPagesId, trashPages, pageId);
         setRoutePage(page);
         setTargetPageId(page.id);
         addRecentPage(pageId);
       } else {
         setRoutePage(firstPage);
-        firstPage !== null &&
+        firstPage &&
           !user.recentPagesId?.includes(firstPage.id) &&
           addRecentPage(firstPage.id);
       }
@@ -371,7 +367,7 @@ const NotionRouter = () => {
   };
   const changeTitle = (title: string) => {
     const titleHtml = document.querySelector("title");
-    if (titleHtml !== null) {
+    if (titleHtml) {
       titleHtml.innerText = title;
     } else {
       console.log("Can't find <title>");
@@ -384,13 +380,13 @@ const NotionRouter = () => {
     ) as HTMLLinkElement | null;
     const changeHref = (href: string) =>
       shortcutIcon?.setAttribute("href", href);
-    if (shortcutIcon !== null) {
+    if (shortcutIcon) {
       switch (iconType) {
         case null:
           changeHref("./favicon.ico");
           break;
         case "img":
-          if (icon !== null) {
+          if (icon) {
             changeHref(icon);
           }
           break;
@@ -405,7 +401,7 @@ const NotionRouter = () => {
     }
   };
   useEffect(() => {
-    if (firstPagesId !== null && pages !== null && pagesId !== null) {
+    if (firstPagesId && pages && pagesId) {
       const FIRST_LIST = firstPagesId.map((id: string) => {
         const PAGE: Page = findPage(pagesId, pages, id);
         return {
@@ -420,10 +416,9 @@ const NotionRouter = () => {
         };
       });
       setFirstList(FIRST_LIST);
-      const newFirstPage =
-        user.favorites !== null
-          ? findPage(pagesId, pages, user.favorites[0])
-          : pages[0];
+      const newFirstPage = user.favorites
+        ? findPage(pagesId, pages, user.favorites[0])
+        : pages[0];
       setFirstPage(newFirstPage);
     } else {
       setRoutePage(null);
@@ -431,14 +426,14 @@ const NotionRouter = () => {
     }
   }, [firstPagesId, pages, pagesId]);
   useEffect(() => {
-    if (firstPage !== null && routePage == null && hash === "") {
+    if (firstPage && routePage === null && hash === "") {
       setRoutePage(firstPage);
       setTargetPageId(firstPage.id);
     }
   }, [firstPage]);
 
   useEffect(() => {
-    if (routePage !== null && pagesId !== null && pages !== null) {
+    if (routePage && pagesId && pages) {
       const path = makeRoutePath(routePage, pagesId, pages);
       navigate(path);
       changeTitle(routePage.header.title);
@@ -477,7 +472,7 @@ const NotionRouter = () => {
       const allCommentsHtml = document.getElementById("allComments");
       const width = allCommentsHtml?.clientWidth;
       if (innerWidth > 768) {
-        width !== undefined &&
+        width &&
           setAllCommentsStyle({
             transform: `translateX(${width + 50}px)`,
           });
@@ -503,10 +498,7 @@ const NotionRouter = () => {
               setOpenTemplates={setOpenTemplates}
               showAllComments={showAllComments}
             />
-            {routePage !== null &&
-            pagesId !== null &&
-            pages !== null &&
-            firstList !== null ? (
+            {routePage && pagesId && pages && firstList ? (
               <>
                 <Routes>
                   <Route
@@ -607,7 +599,7 @@ const NotionRouter = () => {
                     setMobileSideMenu={setMobileSideMenu}
                   />
                 )}
-                {routePage !== null && (
+                {routePage && (
                   <AllComments
                     page={routePage}
                     userName={user.userName}

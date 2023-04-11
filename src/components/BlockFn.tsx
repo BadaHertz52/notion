@@ -123,7 +123,7 @@ const BlockFn = ({
     const templateHtml = document.getElementById("template");
     setTemplateItem(templateHtml, page);
     const sessionItem = sessionStorage.getItem("blockFnTargetBlock");
-    if (sessionItem !== null && page.blocksId !== null) {
+    if (sessionItem && page.blocksId) {
       const targetBlock = JSON.parse(sessionItem);
       const targetBlockIndex = page.blocksId.indexOf(targetBlock.id);
       const newBlock = makeNewBlock(page, targetBlock, "");
@@ -134,13 +134,13 @@ const BlockFn = ({
   };
   const onMouseDownMenu = () => {
     const sessionItem = sessionStorage.getItem("blockFnTargetBlock");
-    if (sessionItem !== null) {
+    if (sessionItem) {
       const targetBlock = JSON.parse(sessionItem);
-      moveTargetBlock == null && setMoveTargetBlock(targetBlock);
+      moveTargetBlock === null && setMoveTargetBlock(targetBlock);
     }
   };
   const onClickMenu = () => {
-    moveTargetBlock !== null && setMoveTargetBlock(null);
+    moveTargetBlock && setMoveTargetBlock(null);
     const sessionItem = sessionStorage.getItem("blockFnTargetBlock");
     menuOpen && setOpenMenu(false);
     modal.open &&
@@ -148,7 +148,7 @@ const BlockFn = ({
         open: false,
         what: null,
       });
-    if (sessionItem !== null && !menuOpen) {
+    if (sessionItem && !menuOpen) {
       const targetBlock = JSON.parse(sessionItem);
       setBlockFnTargetBlock(targetBlock);
       setOpenMenu(true);
@@ -157,7 +157,7 @@ const BlockFn = ({
     }
   };
   useEffect(() => {
-    if (openRename && blockFnTargetBlock !== null) {
+    if (openRename && blockFnTargetBlock) {
       const page = findPage(pagesId, pages, blockFnTargetBlock.id) as Page;
       setRenameTargetPage(page);
     }
@@ -165,7 +165,7 @@ const BlockFn = ({
 
   useEffect(() => {
     const modalStyleItem = sessionStorage.getItem("modalStyle");
-    if (modal.open && modalStyleItem !== null) {
+    if (modal.open && modalStyleItem) {
       const firstPoint = modalStyleItem.indexOf("px;");
       const secondPoint = modalStyleItem.indexOf("left:");
       const lastPoint = modalStyleItem.lastIndexOf("px");
@@ -184,7 +184,7 @@ const BlockFn = ({
     const innerHeight = window.innerHeight;
     const inner = document.getElementById("inner");
     if (menuOpen) {
-      if (inner !== null) {
+      if (inner) {
         if (inner.offsetHeight > innerHeight) {
           inner.setAttribute("style", "overflow-y:scroll");
         } else {
@@ -192,7 +192,7 @@ const BlockFn = ({
         }
       }
     } else {
-      if (inner !== null) {
+      if (inner) {
         inner.setAttribute("style", "overflow-y:initial");
       }
     }
@@ -213,7 +213,7 @@ const BlockFn = ({
           >
             <CgMenuGridO />
           </button>
-          {menuOpen && blockFnTargetBlock !== null && (
+          {menuOpen && blockFnTargetBlock && (
             <Menu
               pages={pages}
               block={blockFnTargetBlock}
@@ -231,7 +231,7 @@ const BlockFn = ({
               style={undefined}
             />
           )}
-          {openRename && renameTargetPage !== null && (
+          {openRename && renameTargetPage && (
             <Rename
               currentPageId={page.id}
               block={blockFnTargetBlock}

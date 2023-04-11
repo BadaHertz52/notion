@@ -74,12 +74,11 @@ const Templates = ({
   const deleteTemplate = (templateId: string) => {
     dispatch(delete_template(templateId));
   };
-  const templates =
-    templatesId !== null
-      ? templatesId.map((id: string) => findPage(pagesId, pages, id))
-      : null;
+  const templates = templatesId
+    ? templatesId.map((id: string) => findPage(pagesId, pages, id))
+    : null;
   const [template, setTemplate] = useState<Page | null>(
-    templates == null ? null : templates[0]
+    templates === null ? null : templates[0]
   );
   const openTarget = useRef<Page | null>(null);
   const [openEditAlert, setOpenEditAlert] = useState<boolean>(false);
@@ -88,7 +87,7 @@ const Templates = ({
 
   const onClickTemplate = (event: MouseEvent<HTMLDivElement>) => {
     const templateInner = event.currentTarget.firstElementChild;
-    if (templateInner !== null) {
+    if (templateInner) {
       const templateInnerDomRect = templateInner.getClientRects()[0];
       const clientX = event.clientX;
       const clientY = event.clientY;
@@ -100,7 +99,7 @@ const Templates = ({
         clientY <= templateInnerDomRect.bottom;
       const isInInner = isInX && isInY;
       if (!isInInner) {
-        if (template !== null) {
+        if (template) {
           // 수정이전의 버전인 originTemplate이 있으면, 수정된 버전으로 바꿀 것인지 아닌지를 묻는 창이 뜨고, originTemplate이 없다면 templates 창을 닫음
           const item = sessionStorage.getItem("originTemplate");
           item === null ? setOpenTemplates(false) : setOpenEditAlert(true);
@@ -113,12 +112,12 @@ const Templates = ({
 
   const onClickUseBtn = () => {
     const targetPageId = sessionStorage.getItem("targetPageId");
-    if (template !== null) {
+    if (template) {
       const newPage: Page = {
         ...template,
         id: JSON.stringify(Date.now()),
       };
-      if (targetPageId == null) {
+      if (targetPageId === null) {
         addPage(newPage);
       } else {
         const editedPage: Page = {
@@ -134,10 +133,10 @@ const Templates = ({
     }
   };
   const showOtherTemplate = (otherTemplate: Page) => {
-    if (template !== null) {
+    if (template) {
       const item = sessionStorage.getItem("originTemplate");
       openTarget.current = otherTemplate;
-      if (item == null) {
+      if (item === null) {
         setTemplate(otherTemplate);
       } else {
         setOpenEditAlert(true);
@@ -159,13 +158,13 @@ const Templates = ({
    * editAlert에서 수정 사항을 취소하거나 저장한 후에, openTarget.current의 값에 따라 templates창을 닫거나, 다른 template을 연다.
    */
   const afterEditAlert = () => {
-    template !== null && sessionStorage.removeItem("originTemplate");
+    template && sessionStorage.removeItem("originTemplate");
     openTarget.current === null ? closeTemplate() : closeAlertOpenOther();
   };
   const onClickDiscardBtn = () => {
-    if (template !== null) {
+    if (template) {
       const item = sessionStorage.getItem("originTemplate");
-      if (item !== null) {
+      if (item) {
         cancelEditTemplate(template.id);
         afterEditAlert();
       }
@@ -175,7 +174,7 @@ const Templates = ({
   const onClickMakeTemplateBtn = () => {
     const date = JSON.stringify(Date.now());
     const id =
-      templatesId == null
+      templatesId === null
         ? `template1_${date}`
         : `template${templatesId.length + 1}_${date}`;
     const newTemplate: Page = {
@@ -196,7 +195,7 @@ const Templates = ({
   };
 
   const onClickDeleteTemplateBtn = () => {
-    if (template !== null && templatesId !== null && templates !== null) {
+    if (template && templatesId && templates) {
       const index = templatesId?.indexOf(template.id);
       if (templatesId.length > 1) {
         if (index === 0) {
@@ -209,14 +208,14 @@ const Templates = ({
         setOpenTemplates(false);
         if (routePageId === template.id) {
           const recentPagesId = user.recentPagesId;
-          if (recentPagesId !== null) {
+          if (recentPagesId) {
             const lastPageId = recentPagesId[recentPagesId.length - 2];
             const recentPageIndex = pagesId.indexOf(lastPageId);
             const recentPage = pages[recentPageIndex];
             setRoutePage(recentPage);
           } else {
             const favorites = user.favorites;
-            if (favorites !== null) {
+            if (favorites) {
               const favoritePageIndex = pagesId.indexOf(favorites[0]);
               const favoritePage = pages[favoritePageIndex];
               setRoutePage(favoritePage);
@@ -236,7 +235,7 @@ const Templates = ({
       <div id="templates" onClick={(event) => onClickTemplate(event)}>
         <div className="inner">
           <div id="template" className={expand ? "expand" : ""}>
-            {template !== null ? (
+            {template ? (
               <>
                 <div className="template__topBar">
                   <div className="template__inform">
@@ -313,7 +312,7 @@ const Templates = ({
             </button>
 
             <div className="template__side__list">
-              {templates !== null ? (
+              {templates ? (
                 templates.map((template: Page) => (
                   <button
                     className="item"

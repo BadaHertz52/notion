@@ -120,10 +120,9 @@ const Frame = ({
   const [templateHtml, setTemplateHtml] = useState<HTMLElement | null>(null);
   const editTime = JSON.stringify(Date.now());
   const firstBlocksId = page.firstBlocksId;
-  const firstBlocks =
-    firstBlocksId !== null
-      ? firstBlocksId.map((id: string) => findBlock(page, id).BLOCK)
-      : null;
+  const firstBlocks = firstBlocksId
+    ? firstBlocksId.map((id: string) => findBlock(page, id).BLOCK)
+    : null;
   const newPageFrame: boolean = page.firstBlocksId === null;
   const [openLoaderForCover, setOpenLoaderForCover] = useState<boolean>(false);
   const [decoOpen, setDecoOpen] = useState<boolean>(false);
@@ -192,7 +191,7 @@ const Frame = ({
     fontSize: `${fontSize}rem`,
   };
   const headerStyle: CSSProperties = {
-    marginTop: page.header.cover !== null ? "10px" : "30px",
+    marginTop: page.header.cover ? "10px" : "30px",
   };
   const pageTitleStyle: CSSProperties = {
     fontSize: `${fontSize * 2}rem`,
@@ -209,7 +208,7 @@ const Frame = ({
     width: size,
     height: size,
     marginTop:
-      page.header.cover == null
+      page.header.cover === null
         ? 0
         : page.header.iconType === null
         ? innerWidth >= 768
@@ -223,7 +222,7 @@ const Frame = ({
     if (
       (page.header.icon === null ||
         page.header.cover === null ||
-        page.header.comments == null) &&
+        page.header.comments === null) &&
       !decoOpen
     ) {
       setDecoOpen(true);
@@ -234,7 +233,7 @@ const Frame = ({
   };
   const closeModal = (event: globalThis.MouseEvent) => {
     const target = event.target as HTMLElement | null;
-    if (target !== null) {
+    if (target) {
       const isInModal = target.closest("#modal__menu");
       const isInMobileBlockMenu = target.closest("#mobileBlockMenu");
       if (!isInModal && !isInMobileBlockMenu) {
@@ -254,19 +253,19 @@ const Frame = ({
     const isInrMain = detectRange(event, mainMenuArea);
     const isInSide = detectRange(event, sideMenuArea);
 
-    if (sideMenuArea !== undefined) {
+    if (sideMenuArea) {
       isInrMain || isInSide ? setOpenMenu(true) : setOpenMenu(false);
     } else {
       isInrMain ? setOpenMenu(true) : setOpenMenu(false);
     }
   };
   const closeComments = (event: globalThis.MouseEvent) => {
-    if (openComment && commentBlock !== null) {
+    if (openComment && commentBlock) {
       const commentsDoc = document.getElementById("block-comments");
       const commentBtn = document.getElementById(
         `${commentBlock.id}__contents`
       );
-      if (commentsDoc !== null && commentBtn !== null) {
+      if (commentsDoc && commentBtn) {
         const commentsDocDomRect = commentsDoc.getClientRects()[0];
         const commentBtnDomRect = commentBtn.getClientRects()[0];
         const isInComments = detectRange(event, commentsDocDomRect);
@@ -284,7 +283,7 @@ const Frame = ({
       const frame = document.getElementsByClassName("frame")[0];
       const frameDomRect = frame.getClientRects()[0];
       const currentTarget = event.currentTarget;
-      if (currentTarget.firstElementChild !== null) {
+      if (currentTarget.firstElementChild) {
         const domeRect = currentTarget.firstElementChild.getClientRects()[0];
         setIconStyle({
           position: "absolute",
@@ -342,7 +341,7 @@ const Frame = ({
    * [moveBlock]
    */
   const makeMoveBlockTrue = () => {
-    if (moveTargetBlock !== null) {
+    if (moveTargetBlock) {
       moveBlock.current = true;
     }
   };
@@ -351,11 +350,11 @@ const Frame = ({
    */
   const changeBlockPosition = () => {
     if (
-      pointBlockToMoveBlock.current !== null &&
-      moveTargetBlock !== null &&
-      page.blocksId !== null &&
-      page.blocks !== null &&
-      page.firstBlocksId !== null
+      pointBlockToMoveBlock.current &&
+      moveTargetBlock &&
+      page.blocksId &&
+      page.blocks &&
+      page.firstBlocksId
     ) {
       const FIRST_BLOCKS_ID = [...page.firstBlocksId];
       setTemplateItem(templateHtml, page);
@@ -385,12 +384,11 @@ const Frame = ({
         ? {
             ...moveTargetBlock,
             firstBlock: false,
-            parentBlocksId:
-              newParentBlockOfList.parentBlocksId !== null
-                ? newParentBlockOfList.parentBlocksId.concat(
-                    newParentBlockOfList.id
-                  )
-                : [newParentBlockOfList.id],
+            parentBlocksId: newParentBlockOfList.parentBlocksId
+              ? newParentBlockOfList.parentBlocksId.concat(
+                  newParentBlockOfList.id
+                )
+              : [newParentBlockOfList.id],
             editTime: editTime,
           }
         : {
@@ -411,25 +409,24 @@ const Frame = ({
         parentBlockId: string,
         newParentBlockId: string | null
       ) => {
-        if (targetBlock.subBlocksId !== null) {
+        if (targetBlock.subBlocksId) {
           targetBlock.subBlocksId.forEach((id: string) => {
             const subBlocksIndex = blocksId.indexOf(id);
             const subBlock = blocks[subBlocksIndex];
             const parentBlocksId = [...(subBlock.parentBlocksId as string[])];
             const parentBlockIndex = parentBlocksId.indexOf(parentBlockId);
-            if (targetBlockIsList && newParentBlockId !== null) {
+            if (targetBlockIsList && newParentBlockId) {
               parentBlocksId.splice(parentBlockIndex, 1, newParentBlockId);
             } else {
               parentBlocksId.splice(parentBlockIndex, 1);
             }
             const editedSubBlock: Block = {
               ...subBlock,
-              parentBlocksId:
-                parentBlockId[0] !== undefined ? parentBlocksId : null,
+              parentBlocksId: parentBlockId[0] ? parentBlocksId : null,
               editTime: editTime,
             };
             editBlock(page.id, editedSubBlock);
-            subBlock.subBlocksId !== null &&
+            subBlock.subBlocksId &&
               deleteParentBlocksIdFromSubBlock(
                 subBlock,
                 parentBlockId,
@@ -450,7 +447,7 @@ const Frame = ({
         } else {
           //edit targetBlock's  origin parentBlock
           const { parentBlock } = findParentBlock(page, moveTargetBlock);
-          if (parentBlock.subBlocksId !== null) {
+          if (parentBlock.subBlocksId) {
             const editedParentBlock: Block = {
               ...parentBlock,
               subBlocksId: parentBlock.subBlocksId.filter(
@@ -461,7 +458,7 @@ const Frame = ({
             editBlock(page.id, editedParentBlock);
           }
           // edit targetBlock.subBlocksId
-          if (targetBlock.subBlocksId !== null) {
+          if (targetBlock.subBlocksId) {
             deleteParentBlocksIdFromSubBlock(
               targetBlock,
               parentBlock.id,
@@ -514,7 +511,7 @@ const Frame = ({
           ).parentBlock;
           if (moveTargetBlockParent.id !== parentBlockOfPointBlock.id) {
             const subBlocksId = moveTargetBlockParent.subBlocksId;
-            if (subBlocksId !== null) {
+            if (subBlocksId) {
               const subBlockIndex = subBlocksId.indexOf(targetBlock.id);
               subBlocksId.splice(subBlockIndex, 1);
               const newTargetBlockParent: Block = {
@@ -532,7 +529,7 @@ const Frame = ({
         //STEP2. edit parentBlock of pointBlock : 위치 변경에 따라 targetBlock or newParentBlockOfTargetBlock을 parentBlockOfPoint 의 subBlocksId 에 추가 , targetBlockIsList 일 경우 , newParentBlockOfTargetBlock을 페이지에 생성
 
         // step2-1 : targetBlockIsList 일때, newParentBlockOfTargetBlock을 페이지에 추가
-        if (targetBlockIsList && parentBlockOfPointBlock.subBlocksId !== null) {
+        if (targetBlockIsList && parentBlockOfPointBlock.subBlocksId) {
           const pointBlockIndex = blocksId.indexOf(pointBlock.id);
           const pointBlockIndexAsSub =
             parentBlockOfPointBlock.subBlocksId.indexOf(pointBlock.id);
@@ -550,10 +547,7 @@ const Frame = ({
           }
         }
         //step2-2 : targetBlock을 subBlocksId에 추가
-        if (
-          !targetBlockIsList &&
-          parentBlockOfPointBlock.subBlocksId !== null
-        ) {
+        if (!targetBlockIsList && parentBlockOfPointBlock.subBlocksId) {
           const parentBlockSubBlocksId = [
             ...parentBlockOfPointBlock.subBlocksId,
           ];
@@ -575,31 +569,26 @@ const Frame = ({
         }
         //STEP3.targetBlock의 subBlocks의 parentBlocksId 수정
         const addParentBlockToSubBlock = (targetBlock: Block) => {
-          if (targetBlock.subBlocksId !== null) {
+          if (targetBlock.subBlocksId) {
             targetBlock.subBlocksId.forEach((id: string) => {
               const subBlockIndex = blocksId.indexOf(id);
               const subBlock = blocks[subBlockIndex];
-              if (targetBlock.parentBlocksId !== null) {
+              if (targetBlock.parentBlocksId) {
                 const newSubBlock: Block = {
                   ...subBlock,
-                  parentBlocksId:
-                    subBlock.parentBlocksId !== null
-                      ? targetBlock.parentBlocksId.concat(targetBlock.id)
-                      : null,
+                  parentBlocksId: subBlock.parentBlocksId
+                    ? targetBlock.parentBlocksId.concat(targetBlock.id)
+                    : null,
                 };
                 editBlock(page.id, newSubBlock);
               }
-              subBlock.subBlocksId !== null &&
-                addParentBlockToSubBlock(subBlock);
+              subBlock.subBlocksId && addParentBlockToSubBlock(subBlock);
             });
           }
         };
 
-        if (
-          targetBlock.subBlocksId !== null &&
-          targetBlock.parentBlocksId !== null
-        ) {
-          if (moveTargetBlock.parentBlocksId !== null) {
+        if (targetBlock.subBlocksId && targetBlock.parentBlocksId) {
+          if (moveTargetBlock.parentBlocksId) {
             moveTargetBlock.parentBlocksId[
               moveTargetBlock.parentBlocksId.length - 1
             ] !==
@@ -643,10 +632,10 @@ const Frame = ({
    * @param clientY mouseEvent.clientY | touchEvent.touches[0].clientY
    */
   const move_MoveTargetBlock = (clientX: number, clientY: number) => {
-    if (moveTargetBlock !== null && moveBlock.current) {
+    if (moveTargetBlock && moveBlock.current) {
       const editor = document.querySelector(".editor");
       const moveTargetBlockHtml = document.getElementById("moveTargetBlock");
-      if (moveTargetBlockHtml !== null && editor !== null) {
+      if (moveTargetBlockHtml && editor) {
         moveTargetBlockHtml.setAttribute(
           "style",
           `position:absolute; top:${clientY + editor.scrollTop + 5}px; left:${
@@ -672,7 +661,7 @@ const Frame = ({
         if (isPointBlock) {
           element.classList.add("on");
           const blockId = element.closest(".block")?.id.replace("block-", "");
-          if (blockId !== undefined) {
+          if (blockId) {
             pointBlockToMoveBlock.current = findBlock(page, blockId).BLOCK;
           }
         } else {
@@ -691,7 +680,7 @@ const Frame = ({
     const clientX = event.clientX;
     const clientY = event.clientY;
 
-    if (pageContentEl !== null) {
+    if (pageContentEl) {
       const pageContentDomRect = pageContentEl.getClientRects()[0];
       const pageContentPadding = getComputedStyle(
         pageContentEl,
@@ -720,8 +709,7 @@ const Frame = ({
         };
 
         if (page.firstBlocksId) {
-          page.blocks !== null &&
-            addBlock(page.id, newBlock, page.blocks.length, null);
+          page.blocks && addBlock(page.id, newBlock, page.blocks.length, null);
         } else {
           addBlock(page.id, newBlock, 0, null);
         }
@@ -791,7 +779,7 @@ const Frame = ({
   // edit block using sessionStorage
   const updateBlock = () => {
     const item = sessionStorage.getItem("itemsTobeEdited");
-    if (item !== null) {
+    if (item) {
       const cursorElement = document.getSelection()?.anchorNode?.parentElement;
       const className = cursorElement?.className;
       const itemObjet = JSON.parse(item);
@@ -799,8 +787,8 @@ const Frame = ({
       const pageId = itemObjet.pageId;
       const condition =
         className === "contentEditable" &&
-        cursorElement !== undefined &&
-        cursorElement !== null &&
+        cursorElement &&
+        cursorElement &&
         cursorElement.parentElement?.id === `${targetBlock.id}__contents`;
       if (!condition) {
         editBlock(pageId, targetBlock);
@@ -812,13 +800,13 @@ const Frame = ({
    * commandBlockPosition (type:CSSProperties)의 값을 변경하는 함수
    */
   const changeCBSposition = () => {
-    if (command.boolean && command.targetBlock !== null) {
+    if (command.boolean && command.targetBlock) {
       const frameDomRect = frameHtml?.getClientRects()[0];
       const blockStyler = document.getElementById("blockStyler");
-      if (blockStyler !== null) {
+      if (blockStyler) {
         //blockStyler
         const blockStylerDomRect = blockStyler.getClientRects()[0];
-        if (frameDomRect !== undefined) {
+        if (frameDomRect) {
           const top = blockStylerDomRect.top + blockStylerDomRect.height;
           const left = `${blockStylerDomRect.left - frameDomRect.left}px`;
           const remainHeight = frameDomRect.height - top;
@@ -850,7 +838,7 @@ const Frame = ({
         //typing 으로 type 변경 시
         const commandInput = document.getElementById("commandInput");
         const commandInputDomRect = commandInput?.getClientRects()[0];
-        if (frameDomRect !== undefined && commandInputDomRect !== undefined) {
+        if (frameDomRect && commandInputDomRect) {
           const top = commandInputDomRect.top + commandInputDomRect.height + 14;
           const left = `${commandInputDomRect.left - frameDomRect.left}px`;
           const remainingHeight = frameDomRect.height - top;
@@ -902,12 +890,9 @@ const Frame = ({
       default:
         break;
     }
-    if (
-      contentEditableElement !== null &&
-      contentEditableElement !== undefined
-    ) {
+    if (contentEditableElement && contentEditableElement) {
       const blocKContentElement = contentEditableElement?.closest(".contents");
-      if (blocKContentElement !== null) {
+      if (blocKContentElement) {
         const blockId = blocKContentElement.id.replace("__contents", "");
         setMobileMenuTargetBlock(findBlock(page, blockId).BLOCK);
       }
@@ -917,14 +902,14 @@ const Frame = ({
   inner?.addEventListener("touchstart", updateBlock);
   inner?.addEventListener("click", (event: globalThis.MouseEvent) => {
     updateBlock();
-    document.getElementById("menu__main") !== null && closeMenu(event);
-    document.getElementById("modal__menu") !== null && closeModal(event);
-    document.getElementById("block-comments") !== null && closeComments(event);
+    document.getElementById("menu__main") && closeMenu(event);
+    document.getElementById("modal__menu") && closeModal(event);
+    document.getElementById("block-comments") && closeComments(event);
     if (command.boolean) {
       const blockCommandBlock = document.getElementById("block__commandBlock");
       const commandDomRect = blockCommandBlock?.getClientRects()[0];
       const commandInputHtml = document.getElementById("commandInput");
-      if (commandDomRect !== undefined && commandInputHtml !== null) {
+      if (commandDomRect && commandInputHtml) {
         const isInnerCommand = detectRange(event, commandDomRect);
         !isInnerCommand &&
           event.target !== commandInputHtml &&
@@ -943,7 +928,7 @@ const Frame = ({
   }, [openTemplates]);
 
   useEffect(() => {
-    if (!newPageFrame && firstBlocksId !== null) {
+    if (!newPageFrame && firstBlocksId) {
       const newFirstBlockHtml = document.getElementById(
         `${firstBlocksId[0]}__contentsId`
       );
@@ -951,7 +936,7 @@ const Frame = ({
         | HTMLElement
         | null
         | undefined;
-      if (contenteditableHtml !== null && contenteditableHtml !== undefined) {
+      if (contenteditableHtml) {
         contenteditableHtml.focus();
       }
     }
@@ -992,7 +977,7 @@ const Frame = ({
       const notSelect =
         SELECTION?.anchorNode === SELECTION?.focusNode &&
         SELECTION?.anchorOffset === SELECTION?.focusOffset;
-      if (!notSelect && SELECTION !== null) {
+      if (!notSelect && SELECTION) {
         if (openComment) {
           setOpenComment(false);
           setCommentBlock(null);
@@ -1007,10 +992,7 @@ const Frame = ({
       const targetCommentInputHtml = document
         .getElementById("modalMenu")
         ?.querySelector(".commentInput") as HTMLInputElement | null | undefined;
-      if (
-        targetCommentInputHtml !== null &&
-        targetCommentInputHtml !== undefined
-      ) {
+      if (targetCommentInputHtml && targetCommentInputHtml) {
         targetCommentInputHtml.focus();
       }
     }
@@ -1019,7 +1001,7 @@ const Frame = ({
     if (mobileMenuTargetBlock === null && mobileSideMenu.what && !modal.open) {
       const selectedHtml = document.querySelector(".selected");
       const contentsHtml = selectedHtml?.closest(".contents");
-      if (contentsHtml !== null && contentsHtml !== undefined) {
+      if (contentsHtml && contentsHtml) {
         const blockId = contentsHtml.id.replace("__contents", "");
         const targetBlock = findBlock(page, blockId).BLOCK;
         removeSelected(frameHtml, targetBlock, editBlock, page, null);
@@ -1028,10 +1010,7 @@ const Frame = ({
   }, [mobileMenuTargetBlock, mobileSideMenu.what, modal.open]);
 
   useEffect(() => {
-    if (
-      openComment &&
-      (mobileMenuTargetBlock !== null || mobileSideMenu.what)
-    ) {
+    if (openComment && (mobileMenuTargetBlock || mobileSideMenu.what)) {
       if (mobileMenuTargetBlock) {
         setMobileMenuTargetBlock(null);
       }
@@ -1051,7 +1030,7 @@ const Frame = ({
       ref={frameRef}
       style={{
         overflowY:
-          mobileMenuTargetBlock !== null || (isMobile() && modal.open)
+          mobileMenuTargetBlock || (isMobile() && modal.open)
             ? "hidden"
             : "scroll",
       }}
@@ -1074,7 +1053,7 @@ const Frame = ({
             onMouseMove={onMouseMoveOnPH}
             onMouseLeave={onMouseLeaveFromPH}
           >
-            {page.header.cover !== null && (
+            {page.header.cover && (
               <div
                 className="page__header__cover"
                 onMouseEnter={(event) => onMouseEnterPC(event)}
@@ -1115,7 +1094,7 @@ const Frame = ({
               <div className="deco">
                 {decoOpen && (
                   <div>
-                    {page.header.icon == null && (
+                    {page.header.icon === null && (
                       <button
                         className="deco__btn-icon"
                         onClick={addRandomIcon}
@@ -1124,7 +1103,7 @@ const Frame = ({
                         <span>Add Icon</span>
                       </button>
                     )}
-                    {page.header.cover == null && (
+                    {page.header.cover === null && (
                       <button
                         className="deco__btn-cover"
                         onClick={onClickAddCover}
@@ -1133,7 +1112,7 @@ const Frame = ({
                         <span>Add Cover</span>
                       </button>
                     )}
-                    {page.header.comments == null && (
+                    {page.header.comments === null && (
                       <button
                         className="deco__btn-comment"
                         onClick={() => setOpenPageCommentInput(true)}
@@ -1152,7 +1131,7 @@ const Frame = ({
                 />
               </div>
               <div className="page__comments" style={pageCommentStyle}>
-                {page.header.comments !== null ? (
+                {page.header.comments ? (
                   page.header.comments.map((comment: MainCommentType) => (
                     <Comments
                       key={`pageComment_${comment.id}`}
@@ -1213,7 +1192,7 @@ const Frame = ({
                 onMouseMove={makeMoveBlockTrue}
                 onTouchMove={makeMoveBlockTrue}
               >
-                {firstBlocks !== null &&
+                {firstBlocks &&
                   firstBlocks.map((block: Block) => {
                     return (
                       <EditableBlock
@@ -1264,7 +1243,7 @@ const Frame = ({
           </div>
         </div>
       </div>
-      {command.boolean && command.targetBlock !== null && (
+      {command.boolean && command.targetBlock && (
         <div id="block__commandBlock" style={commandBlockPosition}>
           <CommandBlock
             style={commandBlockStyle}
@@ -1277,7 +1256,7 @@ const Frame = ({
           />
         </div>
       )}
-      {openLoader && loaderTargetBlock !== null && (
+      {openLoader && loaderTargetBlock && (
         <Loader
           block={loaderTargetBlock}
           page={page}
@@ -1321,7 +1300,7 @@ const Frame = ({
               setTargetPageId={setTargetPageId}
             />
           )}
-          {modal.what === "modalComment" && commentBlock !== null && (
+          {modal.what === "modalComment" && commentBlock && (
             <CommentInput
               pageId={page.id}
               page={page}
@@ -1356,7 +1335,7 @@ const Frame = ({
           showAllComments={showAllComments}
         />
       )}
-      {moveTargetBlock !== null && (
+      {moveTargetBlock && (
         <MoveTargetBlock
           key={moveTargetBlock.id}
           pages={pages}
@@ -1382,7 +1361,7 @@ const Frame = ({
           mobileMenuTargetBlock={mobileMenuTargetBlock}
         />
       )}
-      {selection !== null && (
+      {selection && (
         <BlockStyler
           pages={pages}
           pagesId={pagesId}
@@ -1406,7 +1385,7 @@ const Frame = ({
           setOpenMobileBlockStyler={null}
         />
       )}
-      {mobileMenuTargetBlock !== null && (
+      {mobileMenuTargetBlock && (
         <MobileBlockMenu
           pages={pages}
           pagesId={pagesId}

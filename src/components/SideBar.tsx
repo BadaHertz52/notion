@@ -96,7 +96,7 @@ const ItemTemplate = ({
   const onToggleSubPage = (event: React.MouseEvent) => {
     const target = event.target as HTMLElement;
     const toggleSubPage = (subPageElement: null | undefined | Element) => {
-      if (subPageElement !== null && subPageElement !== undefined) {
+      if (subPageElement) {
         subPageElement.classList.toggle("on");
         subPageElement.classList.contains("on")
           ? setToggleStyle({
@@ -132,12 +132,12 @@ const ItemTemplate = ({
     }
   };
   const showPageFn = () => {
-    if (sideBarPageFn.current !== null) {
+    if (sideBarPageFn.current) {
       sideBarPageFn.current.classList.toggle("on");
     }
   };
   const removeOn = () => {
-    if (sideBarPageFn.current !== null) {
+    if (sideBarPageFn.current) {
       sideBarPageFn.current.classList.contains("on") &&
         sideBarPageFn.current.classList.remove("on");
     }
@@ -176,7 +176,7 @@ const ItemTemplate = ({
           className="moreBtn"
           title="delete, duplicate, and more"
           onClick={() => {
-            sideBarPageFn.current !== null &&
+            sideBarPageFn.current &&
               onClickMoreBtn(item, sideBarPageFn.current);
           }}
         >
@@ -245,9 +245,9 @@ const ListTemplate = ({
               changeSide={changeSide}
             />
           </div>
-          {notion.pages !== null &&
-            notion.pagesId !== null &&
-            (item.subPagesId !== null ? (
+          {notion.pages &&
+            notion.pagesId &&
+            (item.subPagesId ? (
               <div className="subPage">
                 <ListTemplate
                   notion={notion}
@@ -295,7 +295,7 @@ const SideBar = ({
   const pages = notion.pages;
   const pagesId = notion.pagesId;
   const recentPages =
-    pages !== null && pagesId !== null && user.recentPagesId !== null
+    pages && pagesId && user.recentPagesId
       ? user.recentPagesId.map(
           (pageId: string) => findPage(pagesId, pages, pageId) as Page
         )
@@ -304,24 +304,23 @@ const SideBar = ({
   const trashPagesId = notion.trash.pagesId;
   const firstPagesId = notion.firstPagesId;
   const firstPages =
-    pagesId !== null && pages !== null && firstPagesId !== null
+    pagesId && pages && firstPagesId
       ? firstPagesId.map((id: string) => findPage(pagesId, pages, id))
       : null;
-  const firstList: listItem[] | null =
-    firstPages !== null
-      ? firstPages.map((page: Page) => {
-          return {
-            id: page.id,
-            title: page.header.title,
-            iconType: page.header.iconType,
-            icon: page.header.icon,
-            subPagesId: page.subPagesId,
-            parentsId: page.parentsId,
-            editTime: page.editTime,
-            createTime: page.createTime,
-          };
-        })
-      : null;
+  const firstList: listItem[] | null = firstPages
+    ? firstPages.map((page: Page) => {
+        return {
+          id: page.id,
+          title: page.header.title,
+          iconType: page.header.iconType,
+          icon: page.header.icon,
+          subPagesId: page.subPagesId,
+          parentsId: page.parentsId,
+          editTime: page.editTime,
+          createTime: page.createTime,
+        };
+      })
+    : null;
   const trashBtn = useRef<HTMLButtonElement>(null);
   const [target, setTarget] = useState<HTMLElement | null>(null);
   const [targetItem, setTargetItem] = useState<listItem | null>(null);
@@ -346,46 +345,44 @@ const SideBar = ({
     pagesId: string[],
     pages: Page[]
   ): listItem[] | null => {
-    const list: listItem[] | null =
-      favorites !== null
-        ? favorites.map((id: string) => {
-            const page = findPage(pagesId, pages, id);
-            const listItem = {
-              id: page.id,
-              title: page.header.title,
-              iconType: page.header.iconType,
-              icon: page.header.icon,
-              subPagesId: page.subPagesId,
-              parentsId: page.parentsId,
-              editTime: page.editTime,
-              createTime: page.createTime,
-            };
-            return listItem;
-          })
-        : null;
-    return list;
-  };
-  const list: listItem[] | null =
-    firstPages !== null
-      ? firstPages
-          .filter((page: Page) => page.parentsId == null)
-          .map((page: Page) => ({
+    const list: listItem[] | null = favorites
+      ? favorites.map((id: string) => {
+          const page = findPage(pagesId, pages, id);
+          const listItem = {
             id: page.id,
+            title: page.header.title,
             iconType: page.header.iconType,
             icon: page.header.icon,
-            title: page.header.title,
             subPagesId: page.subPagesId,
             parentsId: page.parentsId,
             editTime: page.editTime,
             createTime: page.createTime,
-          }))
+          };
+          return listItem;
+        })
       : null;
+    return list;
+  };
+  const list: listItem[] | null = firstPages
+    ? firstPages
+        .filter((page: Page) => page.parentsId === null)
+        .map((page: Page) => ({
+          id: page.id,
+          iconType: page.header.iconType,
+          icon: page.header.icon,
+          title: page.header.title,
+          subPagesId: page.subPagesId,
+          parentsId: page.parentsId,
+          editTime: page.editTime,
+          createTime: page.createTime,
+        }))
+    : null;
   const addNewPage = () => {
     addPage(pageSample);
   };
 
   const addNewSubPage = (item: listItem) => {
-    if (pagesId !== null && pages !== null) {
+    if (pagesId && pages) {
       const targetPage = findPage(pagesId, pages, item.id);
       const newPageBlock: Block = {
         ...blockSample,
@@ -393,14 +390,14 @@ const SideBar = ({
         type: "page",
         parentBlocksId: null,
       };
-      if (targetPage.blocksId == null) {
+      if (targetPage.blocksId === null) {
         addBlock(targetPage.id, newPageBlock, 0, null);
       } else {
         addBlock(
           targetPage.id,
           newPageBlock,
           targetPage.blocksId.length,
-          targetPage.firstBlocksId == null
+          targetPage.firstBlocksId === null
             ? null
             : targetPage.firstBlocksId[targetPage.firstBlocksId.length - 1]
         );
@@ -444,7 +441,7 @@ const SideBar = ({
 
   const onClickToDelete = () => {
     setOpenSideMoreMenu(false);
-    if (targetItem !== null) {
+    if (targetItem) {
       deletePage(targetItem.id);
     }
   };
@@ -461,24 +458,20 @@ const SideBar = ({
   };
   const onClickToAddFavorite = () => {
     setOpenSideMoreMenu(false);
-    targetItem !== null && addFavorites(targetItem.id);
+    targetItem && addFavorites(targetItem.id);
   };
   const onClickToRemoveFavorite = () => {
     setOpenSideMoreMenu(false);
-    targetItem !== null && removeFavorites(targetItem.id);
+    targetItem && removeFavorites(targetItem.id);
   };
   const onClickToDuplicate = () => {
     setOpenSideMoreMenu(false);
-    targetItem !== null && duplicatePage(targetItem.id);
+    targetItem && duplicatePage(targetItem.id);
   };
   const onClickToRename = () => {
     setOpenSideMoreMenu(false);
     setOpenRename(true);
-    if (
-      targetItem !== null &&
-      target !== null &&
-      target?.parentElement !== null
-    ) {
+    if (targetItem && target && target?.parentElement) {
       const domRect = target.parentElement.getClientRects()[0];
       setRenameStyle({
         position: "absolute",
@@ -547,7 +540,7 @@ const SideBar = ({
     }
   };
   useEffect(() => {
-    if (targetItem !== null && pagesId !== null && pages !== null) {
+    if (targetItem && pagesId && pages) {
       const page = findPage(pagesId, pages, targetItem.id);
       setTargetPage(page);
     }
@@ -611,7 +604,7 @@ const SideBar = ({
                 <span>RECENTLY VISITED PAGE </span>
               </div>
               <div className="list">
-                {recentPages == null ? (
+                {recentPages === null ? (
                   <div>No pages visited recently </div>
                 ) : (
                   recentPages.map((page: Page) => (
@@ -620,7 +613,7 @@ const SideBar = ({
                       className="item"
                       onClick={() => onClickRecentPageItem(page.id)}
                     >
-                      {page.header.cover !== null ? (
+                      {page.header.cover ? (
                         <img
                           className="cover"
                           src={page.header.cover}
@@ -665,24 +658,22 @@ const SideBar = ({
                 <div className="header">
                   <span>FAVORITES </span>
                 </div>
-                {user.favorites !== null &&
-                  pagesId !== null &&
-                  pages !== null && (
-                    <div className="list">
-                      <ListTemplate
-                        notion={notion}
-                        targetList={makeFavoriteList(
-                          user.favorites,
-                          pagesId,
-                          pages
-                        )}
-                        setTargetPageId={setTargetPageId}
-                        onClickMoreBtn={onClickMoreBtn}
-                        addNewSubPage={addNewSubPage}
-                        changeSide={changeSide}
-                      />
-                    </div>
-                  )}
+                {user.favorites && pagesId && pages && (
+                  <div className="list">
+                    <ListTemplate
+                      notion={notion}
+                      targetList={makeFavoriteList(
+                        user.favorites,
+                        pagesId,
+                        pages
+                      )}
+                      setTargetPageId={setTargetPageId}
+                      onClickMoreBtn={onClickMoreBtn}
+                      addNewSubPage={addNewSubPage}
+                      changeSide={changeSide}
+                    />
+                  </div>
+                )}
               </div>
               <div className="private">
                 <div className="header">
@@ -695,9 +686,9 @@ const SideBar = ({
                     <AiOutlinePlus />
                   </button>
                 </div>
-                {notion.pages !== null && (
+                {notion.pages && (
                   <div className="list">
-                    {notion.pages[0] !== undefined && (
+                    {notion.pages[0] && (
                       <ListTemplate
                         notion={notion}
                         targetList={list}
@@ -739,7 +730,7 @@ const SideBar = ({
         <button className="resizeBar" onTouchStart={onTouchStartResizeBar}>
           <div></div>
         </button>
-        {targetItem !== null && (
+        {targetItem && (
           <div className="page__inform">
             <PageIcon
               icon={targetItem.icon}
@@ -755,7 +746,7 @@ const SideBar = ({
             <span>Delete</span>
           </div>
         </button>
-        {targetItem !== null && user.favorites?.includes(targetItem.id) ? (
+        {targetItem && user.favorites?.includes(targetItem.id) ? (
           <button className="moreFn__btn" onClick={onClickToRemoveFavorite}>
             <div>
               <AiOutlineStar />
@@ -791,27 +782,23 @@ const SideBar = ({
         </button>
         <div className="edit__inform">
           <p>Last edited by {user.userName}</p>
-          {targetItem !== null && <Time editTime={targetItem.editTime} />}
+          {targetItem && <Time editTime={targetItem.editTime} />}
         </div>
       </div>
 
-      {openPageMenu &&
-        targetItem !== null &&
-        firstList !== null &&
-        pages !== null &&
-        pagesId !== null && (
-          <div id="sideBar__pageMenu" style={pageMenuStyle}>
-            <PageMenu
-              what="page"
-              currentPage={findPage(pagesId, pages, targetItem.id)}
-              pages={pages}
-              firstList={firstList}
-              closeMenu={()=>setOpenSideMoreMenu(false)}
-              setTargetPageId={setTargetPageId}
-            />
-          </div>
-        )}
-      {openRename && targetPage !== null && (
+      {openPageMenu && targetItem && firstList && pages && pagesId && (
+        <div id="sideBar__pageMenu" style={pageMenuStyle}>
+          <PageMenu
+            what="page"
+            currentPage={findPage(pagesId, pages, targetItem.id)}
+            pages={pages}
+            firstList={firstList}
+            closeMenu={() => setOpenSideMoreMenu(false)}
+            setTargetPageId={setTargetPageId}
+          />
+        </div>
+      )}
+      {openRename && targetPage && (
         <Rename
           currentPageId={null}
           block={null}

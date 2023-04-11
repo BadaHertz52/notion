@@ -37,7 +37,7 @@ export function removeSelected(
   // 변경된 내용이 있고, selected 만 제거하면 되는 경우
   const blockContentHtml = frameHtml?.querySelector(`#${block.id}__contents`);
   const listOfSelected = blockContentHtml?.querySelectorAll(".selected");
-  if (listOfSelected !== undefined && listOfSelected[0] !== undefined) {
+  if (listOfSelected && listOfSelected[0]) {
     listOfSelected.forEach((selectedHtml: Element) => {
       if (selectedHtml.classList.length > 1) {
         selectedHtml?.classList.remove("selected");
@@ -47,7 +47,7 @@ export function removeSelected(
     });
   } else {
     const spanElements = blockContentHtml?.querySelectorAll("span");
-    if (spanElements !== undefined) {
+    if (spanElements) {
       spanElements.forEach((element: HTMLSpanElement) => {
         if (element.className === "") {
           element.outerHTML = element.innerHTML;
@@ -57,7 +57,7 @@ export function removeSelected(
   }
   const editedBlock = getContent(block);
   editBlock(page.id, editedBlock);
-  setSelection !== null && setSelection(null);
+  setSelection && setSelection(null);
 }
 /**
  * BlockStyler의 타켓인 block에 대한 내용을 담고 있는 element중 mainBlock element의 domRect을 반환하는 함수
@@ -82,11 +82,7 @@ export const changeStylerStyle = (
   const mainBlockDomRect = getMainBlockDomRect(frameHtml, block);
   const pageContentInner = frameHtml?.querySelector(".page__contents__inner");
   const pageContentDomRect = pageContentInner?.getClientRects()[0];
-  if (
-    frameHtml !== null &&
-    mainBlockDomRect !== undefined &&
-    pageContentDomRect !== undefined
-  ) {
+  if (frameHtml && mainBlockDomRect && pageContentDomRect) {
     const frameDomRect = frameHtml.getClientRects()[0];
     const top = mainBlockDomRect.top - frameDomRect.top;
     const left = mainBlockDomRect.left - frameDomRect.left;
@@ -110,12 +106,12 @@ export const getContent = (block: Block): Block => {
     `${block.id}__contents`
   )?.firstElementChild;
   let newBlock = block;
-  if (contentEditableHtml !== null && contentEditableHtml !== undefined) {
+  if (contentEditableHtml) {
     const children = contentEditableHtml.childNodes;
     let contentsArr: string[] = [];
     children.forEach((c: Node) => {
       if (c.nodeType === 3) {
-        c.nodeValue !== null && contentsArr.push(c.nodeValue);
+        c.nodeValue && contentsArr.push(c.nodeValue);
       }
       //span
       if (c.nodeType === 1) {
@@ -234,7 +230,7 @@ const BlockStyler = ({
 
   const closeOtherBtn = (event: MouseEvent<HTMLDivElement>) => {
     const target = event.target as HTMLElement | null;
-    if (target !== null && !isMobile()) {
+    if (target && !isMobile()) {
       const clickTypeBtn = target.closest(".blockStyler__btn-type");
       const clickLinkBtn = target.closest(".blockStyler__btn-link");
       const clickMenuBtn = target.closest(".blockStyler__btn-menu");
@@ -267,18 +263,14 @@ const BlockStyler = ({
   };
   const changeCommentStyle = () => {
     const mainBlockDomRect = getMainBlockDomRect(frameHtml, block);
-    if (
-      mainBlockDomRect !== undefined &&
-      frameHtml !== null &&
-      frameHtml !== undefined
-    ) {
+    if (mainBlockDomRect && frameHtml) {
       const pageContentDomRect = pageContentEl?.getClientRects()[0];
       const frameDomRect = frameHtml.getClientRects()[0];
       const top = mainBlockDomRect.bottom + 8;
       const innerHeight = window.innerHeight;
       const remainHeight = innerHeight - (top + 50);
 
-      if (pageContentDomRect !== undefined) {
+      if (pageContentDomRect) {
         const left = pageContentDomRect.left - frameDomRect.left;
         const bottom = innerHeight - mainBlockDomRect.top + 8;
         remainHeight > 10 || isMobile()
@@ -294,7 +286,7 @@ const BlockStyler = ({
 
       if (isMobile()) {
         const pageHtml = frameHtml?.querySelector(".page");
-        if (pageHtml !== null && frameHtml !== null) {
+        if (pageHtml && frameHtml) {
           pageHtml?.setAttribute(
             "style",
             `translateY(${pageHtml.clientTop - frameHtml.clientTop - 50}px)`
@@ -310,12 +302,12 @@ const BlockStyler = ({
       what: "modalComment",
     });
     setCommentBlock(block);
-    setSelection !== null && setSelection(null);
+    setSelection && setSelection(null);
     isMobile() && setMobileMenuTargetBlock(null);
   };
 
   const changeMenuStyle = (param: menuType) => {
-    if (blockStyler !== null && frameHtml !== null && frameHtml !== undefined) {
+    if (blockStyler && frameHtml) {
       const blockStylerDomRect = blockStyler.getClientRects()[0];
       const frameHtmlDomRect = frameHtml.getClientRects()[0];
       const top = blockStylerDomRect.bottom + 5;
@@ -385,7 +377,7 @@ const BlockStyler = ({
     selectedHtml: HTMLElement
   ) => {
     const decoSpan = selectedHtml.querySelectorAll(`.${deco}`);
-    if (decoSpan[0] !== undefined) {
+    if (decoSpan[0]) {
       decoSpan.forEach((e: Element) => {
         if (e.classList.length === 1) {
           e.outerHTML = e.innerHTML;
@@ -405,10 +397,10 @@ const BlockStyler = ({
     const listOfSelected = document.querySelectorAll(
       ".selected"
     ) as NodeListOf<HTMLElement>;
-    if (listOfSelected[0] !== undefined) {
+    if (listOfSelected[0]) {
       listOfSelected.forEach((selectedHtml: HTMLElement) => {
         const selectedSpan = selectedHtml.querySelectorAll(`.${btnName}`);
-        if (selectedSpan[0] !== undefined) {
+        if (selectedSpan[0]) {
           //btnName과 같은 스타일이 지정된 span 이 있으므로 selectedHtml의 class를 변경하기 전에 같은 스타일이 있는 span을 정리해줌
           selectedSpan.forEach((span: Element) => {
             if (span.classList.length === 1) {
@@ -436,7 +428,7 @@ const BlockStyler = ({
 
       const editedBlock = getContent(block);
       editBlock(page.id, editedBlock);
-      setSelection !== null &&
+      setSelection &&
         setSelection({
           block: editedBlock,
           change: true,
@@ -450,8 +442,8 @@ const BlockStyler = ({
       .getElementById("modal__menu")
       ?.querySelector(".commentInput");
     if (
-      document.getElementById("blockStyler") !== null &&
-      (commentInputHtml == null || commentInputHtml === undefined) &&
+      document.getElementById("blockStyler") &&
+      (commentInputHtml === null || commentInputHtml === undefined) &&
       document.getElementById("mobileSideMenu") === null
     ) {
       closeBlockStyler(event);
@@ -470,8 +462,7 @@ const BlockStyler = ({
    * @param htmlId
    */
   const closeSideMenu = (target: HTMLElement, htmlId: sideMenuIdType) => {
-    const isIn =
-      target.id === htmlId ? true : target.closest(`#${htmlId}`) !== null;
+    const isIn = target.id === htmlId ? true : target.closest(`#${htmlId}`);
     if (!isIn) {
       switch (htmlId) {
         case "block-styler__color":
@@ -489,9 +480,7 @@ const BlockStyler = ({
           break;
         case "menu__main":
           const isInSideMenu =
-            target.id === "sideMenu"
-              ? true
-              : target.closest("#sideMenu") !== null;
+            target.id === "sideMenu" ? true : target.closest("#sideMenu");
           !isInSideMenu && setOpenMenu(false);
           break;
         default:
@@ -505,11 +494,11 @@ const BlockStyler = ({
    */
   function closeBlockStyler(event: globalThis.MouseEvent | TouchEvent) {
     const target = event.target as HTMLElement | null;
-    if (target !== null) {
-      const isInBlockStyler = target.closest("#blockStyler") !== null;
-      const isInMenuComponent = target.closest(".menu") !== null;
-      const isInMobileBlockMenu = target.closest("#mobileBlockMenu") !== null;
-      const isInContents = target.closest(".contents") !== null;
+    if (target) {
+      const isInBlockStyler = target.closest("#blockStyler");
+      const isInMenuComponent = target.closest(".menu");
+      const isInMobileBlockMenu = target.closest("#mobileBlockMenu");
+      const isInContents = target.closest(".contents");
       if (
         !isInBlockStyler &&
         !isInMenuComponent &&
@@ -522,18 +511,18 @@ const BlockStyler = ({
         const linkLoaderHtml = document.getElementById("linkLoader");
 
         if (
-          colorMenuHtml == null &&
+          colorMenuHtml === null &&
           commandBlockHtml === null &&
           mainMenu === null &&
-          linkLoaderHtml == null
+          linkLoaderHtml === null
         ) {
           // 조건 : web에서 sideMenu가 닫혀 있을 경우
           removeSelected(frameHtml, block, editBlock, page, setSelection);
-          setSelection !== null && setSelection(null);
+          setSelection && setSelection(null);
           openMenu && setMobileMenuTargetBlock(null);
         } else {
           const eventTarget = event.target as HTMLElement | null;
-          if (eventTarget !== null) {
+          if (eventTarget) {
             openColor && closeSideMenu(eventTarget, "block-styler__color");
             openLink && closeSideMenu(eventTarget, "linkLoader");
             openMenu && closeSideMenu(eventTarget, "menu__main");
@@ -550,11 +539,7 @@ const BlockStyler = ({
     const contentEditableHtml = document.getElementById(`${block.id}__contents`)
       ?.firstElementChild as HTMLElement | null | undefined;
 
-    if (
-      mobileSelection !== null &&
-      contentEditableHtml !== null &&
-      contentEditableHtml !== undefined
-    ) {
+    if (mobileSelection && contentEditableHtml) {
       selectContent(
         mobileSelection,
         block,
@@ -578,7 +563,7 @@ const BlockStyler = ({
         SELECTION?.anchorNode === SELECTION?.focusNode &&
         SELECTION?.anchorOffset === SELECTION?.focusOffset;
       if (notSelect) {
-        setOpenMobileBlockStyler !== null && setOpenMobileBlockStyler(false);
+        setOpenMobileBlockStyler && setOpenMobileBlockStyler(false);
         setMobileMenuTargetBlock(null);
       }
     }

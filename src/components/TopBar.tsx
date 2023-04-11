@@ -133,7 +133,7 @@ const TopBar = ({
     fontSample.forEach((element: Element) => {
       element.classList.contains("on") && element.classList.remove("on");
     });
-    targetFontSample !== null && targetFontSample.classList.add("on");
+    targetFontSample && targetFontSample.classList.add("on");
 
     switch (font) {
       case "default":
@@ -229,7 +229,7 @@ const TopBar = ({
           </button>
         )}
         <div className="page__path-group">
-          {pagePath == null ? (
+          {pagePath === null ? (
             <button
               className="pagePath"
               onClick={() => setTargetPageId(page.id)}

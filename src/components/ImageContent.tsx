@@ -27,7 +27,7 @@ const ImageContent = ({ page, block, editBlock }: ImageContentProps) => {
     previousClientY.current = clientY;
     if (changeX !== 0 || changeY !== 0) {
       const imgDomRect = targetImgContent?.getClientRects()[0];
-      if (imgDomRect !== undefined) {
+      if (imgDomRect) {
         const imgWidth = imgDomRect.width;
         const imgHeight = imgDomRect.height;
         const width =
@@ -74,7 +74,7 @@ const ImageContent = ({ page, block, editBlock }: ImageContentProps) => {
       drag.current = false;
       const width = targetImgContent?.offsetWidth;
       const height = targetImgContent?.offsetHeight;
-      if (width !== undefined && height !== undefined) {
+      if (width && height) {
         const editedBlock: Block = {
           ...block,
           style: {

@@ -46,9 +46,9 @@ const CommandBlock = ({
 
   const showResult = () => {
     const btnArr = [...document.getElementsByClassName("btn-command")];
-    if (command !== null) {
+    if (command) {
       const typeCommand = command.command?.slice(1);
-      typeCommand !== undefined &&
+      typeCommand &&
         btnArr.forEach((btn: Element) => {
           const name = btn.getAttribute("name");
           if (name?.includes(typeCommand)) {
@@ -75,11 +75,7 @@ const CommandBlock = ({
    * @param editedBlock
    */
   const changeToListType = (editedBlock: Block, parentBlockType: BlockType) => {
-    if (
-      page.firstBlocksId !== null &&
-      page.blocks !== null &&
-      page.blocksId !== null
-    ) {
+    if (page.firstBlocksId && page.blocks && page.blocksId) {
       const firstBlocksId = [...page.firstBlocksId];
       const blocks = [...page.blocks];
       const blocksId = [...page.blocksId];
@@ -94,21 +90,20 @@ const CommandBlock = ({
       const listBlock: Block = {
         ...editedBlock,
         firstBlock: false,
-        parentBlocksId:
-          newParentBlock.parentBlocksId !== null
-            ? newParentBlock.parentBlocksId.concat(newParentBlock.id)
-            : [newParentBlock.id],
+        parentBlocksId: newParentBlock.parentBlocksId
+          ? newParentBlock.parentBlocksId.concat(newParentBlock.id)
+          : [newParentBlock.id],
       };
       //listBlock data 수정
       blocks.splice(indexOfBlocks, 1, listBlock);
 
-      setSelection !== null &&
+      setSelection &&
         setSelection({
           change: true,
           block: listBlock,
         });
       // newParent 를 blocks에 추가
-      if (editedBlock.parentBlocksId !== null) {
+      if (editedBlock.parentBlocksId) {
         //editedBlock is not firstBlock
         const { parentBlock, parentBlockIndex } = findParentBlock(
           page,
@@ -127,7 +122,7 @@ const CommandBlock = ({
           const updatedListBlock: Block = {
             ...listBlock,
             parentBlocksId:
-              updatedNewParentBlock.parentBlocksId == null
+              updatedNewParentBlock.parentBlocksId === null
                 ? [updatedNewParentBlock.id]
                 : updatedNewParentBlock.parentBlocksId.concat(
                     updatedNewParentBlock.id
@@ -191,21 +186,19 @@ const CommandBlock = ({
 
           const editedNewParentBlock: Block = {
             ...newParentBlock,
-            parentBlocksId:
-              editedParentBlock.parentBlocksId !== null
-                ? editedParentBlock.parentBlocksId.concat(editedParentBlock.id)
-                : [editedParentBlock.id],
+            parentBlocksId: editedParentBlock.parentBlocksId
+              ? editedParentBlock.parentBlocksId.concat(editedParentBlock.id)
+              : [editedParentBlock.id],
           };
           blocks.splice(indexOfBlocks, 0, editedNewParentBlock);
           blocksId.splice(indexOfBlocks, 0, editedNewParentBlock.id);
           const editedListBlock: Block = {
             ...listBlock,
-            parentBlocksId:
-              editedNewParentBlock.parentBlocksId !== null
-                ? editedNewParentBlock.parentBlocksId.concat(
-                    editedNewParentBlock.id
-                  )
-                : [editedNewParentBlock.id],
+            parentBlocksId: editedNewParentBlock.parentBlocksId
+              ? editedNewParentBlock.parentBlocksId.concat(
+                  editedNewParentBlock.id
+                )
+              : [editedNewParentBlock.id],
           };
           blocks.splice(indexOfBlocks, 1, editedListBlock);
         }
@@ -244,7 +237,7 @@ const CommandBlock = ({
         case "page":
           changeBlockToPage(page.id, block);
           const changedBlock = findBlock(page, block.id).BLOCK;
-          setSelection !== null &&
+          setSelection &&
             setSelection({
               change: true,
               block: changedBlock,
@@ -260,7 +253,7 @@ const CommandBlock = ({
           block.type === "page"
             ? changePageToBlock(page.id, editedBlock)
             : editBlock(page.id, editedBlock);
-          setSelection !== null &&
+          setSelection &&
             setSelection({
               change: true,
               block: editedBlock,
@@ -275,7 +268,7 @@ const CommandBlock = ({
     closeCommandBlock();
   };
   function closeCommandBlock() {
-    setCommand !== null &&
+    setCommand &&
       setCommand({
         boolean: false,
         command: null,
@@ -411,7 +404,7 @@ const CommandBlock = ({
                 <div className="btn-command__right">
                   <header>Bullet list</header>
                   <div className="command__explanation">
-                    Create a simple buttled list.
+                    Create a simple bullet list.
                   </div>
                 </div>
               </div>

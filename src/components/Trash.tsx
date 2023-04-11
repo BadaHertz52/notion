@@ -70,17 +70,17 @@ const Trash = ({
   //null 이면 검색의 결과값이 없는것
   const [sort, setSort] = useState<"all" | "current">("all");
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (trashList !== undefined) {
+    if (trashList) {
       const value = event.target.value.toLowerCase();
       const resultList = trashList.filter((item: resultType) =>
         item.title.toLowerCase().includes(value)
       );
-      resultList?.[0] !== undefined ? setResult(resultList) : setResult(null);
+      resultList?.[0] ? setResult(resultList) : setResult(null);
     }
   };
 
   useEffect(() => {
-    if (pagesId !== null) {
+    if (pagesId) {
       let filteringTargetList: resultType[] | undefined = undefined;
       const makeFilteringTargetList = (
         pages: Page[] | null
@@ -101,18 +101,17 @@ const Trash = ({
           const filteredTrashPages = trashPages?.filter((page: Page) =>
             page.parentsId?.includes(currentPageId)
           );
-          filteringTargetList =
-            filteredTrashPages !== undefined
-              ? filteredTrashPages[0] !== undefined
-                ? makeFilteringTargetList(filteredTrashPages)
-                : undefined
-              : undefined;
+          filteringTargetList = filteredTrashPages
+            ? filteredTrashPages[0]
+              ? makeFilteringTargetList(filteredTrashPages)
+              : undefined
+            : undefined;
           break;
         default:
           break;
       }
       setTrashList(filteringTargetList);
-      filteringTargetList !== undefined && setResult(filteringTargetList);
+      filteringTargetList && setResult(filteringTargetList);
     } else {
       setTrashList(undefined);
     }
@@ -138,8 +137,8 @@ const Trash = ({
           />
         </div>
         <div className="trash__list">
-          {trashList !== undefined ? (
-            result !== null ? (
+          {trashList ? (
+            result ? (
               result.map((item: resultType) => (
                 <ResultItem
                   item={item}

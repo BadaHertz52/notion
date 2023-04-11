@@ -10,12 +10,11 @@ type PageItemProps = {
 const PageIcon = ({ icon, iconType, style }: PageItemProps) => {
   const pageIconClassName =
     icon === null ? "page__icon iconNull" : "page__icon";
-  const imgSrc =
-    icon !== null
-      ? iconType === "img"
-        ? icon
-        : `${emojiPath}${icon}.png`
-      : pageDefultImg;
+  const imgSrc = icon
+    ? iconType === "img"
+      ? icon
+      : `${emojiPath}${icon}.png`
+    : pageDefultImg;
   return (
     <div className={pageIconClassName} style={style}>
       <span>

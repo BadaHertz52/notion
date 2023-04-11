@@ -97,13 +97,13 @@ const EditableBlock = ({
   const className =
     block.type !== "toggle"
       ? `${block.type} block `
-      : `${block.type} block ${block.subBlocksId !== null ? "on" : ""}`;
+      : `${block.type} block ${block.subBlocksId ? "on" : ""}`;
   const subBlocks = block.subBlocksId?.map(
     (id: string) => findBlock(page, id).BLOCK
   );
 
   const blockComments =
-    block.comments == null
+    block.comments === null
       ? false
       : block.comments.filter(
           (comment: MainCommentType) => comment.type === "open"
@@ -166,11 +166,11 @@ const EditableBlock = ({
 
   useEffect(() => {
     const newBlockItem = sessionStorage.getItem("newBlock");
-    if (newBlockItem !== null) {
+    if (newBlockItem) {
       const newBlockContentsDoc = document.getElementById(
         `${newBlockItem}__contents`
       );
-      if (newBlockContentsDoc !== null) {
+      if (newBlockContentsDoc) {
         const newBlockContentEditableDoc =
           newBlockContentsDoc.firstElementChild as HTMLElement;
         newBlockContentEditableDoc.focus();
@@ -189,7 +189,7 @@ const EditableBlock = ({
       let listMarker: string = "";
       const listSubBlocksId = block.subBlocksId;
 
-      if (listSubBlocksId !== null) {
+      if (listSubBlocksId) {
         const listSubBlocks = listSubBlocksId.map(
           (id: string) => findBlock(page, id).BLOCK
         );
@@ -224,8 +224,8 @@ const EditableBlock = ({
     };
     return (
       <>
-        {subBlocks !== undefined &&
-          subBlocks[0] !== undefined &&
+        {subBlocks &&
+          subBlocks[0] &&
           subBlocks.map((block: Block) => (
             <div className="listItem">
               <div
@@ -264,7 +264,6 @@ const EditableBlock = ({
                       closeMenu={closeMenu}
                       templateHtml={templateHtml}
                       setSelection={setSelection}
-                      mobileMenuTargetBlock={mobileMenuTargetBlock}
                       setMobileMenuTargetBlock={setMobileMenuTargetBlock}
                       onClickCommentBtn={onClickCommentBtn}
                       moveBlock={moveBlock}
@@ -279,7 +278,7 @@ const EditableBlock = ({
                   />
                 )}
               </div>
-              {block.subBlocksId !== null && (
+              {block.subBlocksId && (
                 <div className="subBlock-group">
                   {block.subBlocksId
                     .map((id: string) => findBlock(page, id).BLOCK)
@@ -357,7 +356,7 @@ const EditableBlock = ({
                       name={block.id}
                       onClick={onClickToggle}
                       className={
-                        block.subBlocksId !== null
+                        block.subBlocksId
                           ? "blockToggleBtn on left block__btn"
                           : "blockToggleBtn left block__btn"
                       }
@@ -392,7 +391,6 @@ const EditableBlock = ({
                       closeMenu={closeMenu}
                       templateHtml={templateHtml}
                       setSelection={setSelection}
-                      mobileMenuTargetBlock={mobileMenuTargetBlock}
                       setMobileMenuTargetBlock={setMobileMenuTargetBlock}
                       onClickCommentBtn={onClickCommentBtn}
                       moveBlock={moveBlock}
@@ -407,7 +405,7 @@ const EditableBlock = ({
                   />
                 )}
               </div>
-              {subBlocks !== undefined && subBlocks[0] !== undefined && (
+              {subBlocks && subBlocks[0] && (
                 <div className="subBlock-group">
                   {subBlocks.map((subBlock: Block) => (
                     <EditableBlock

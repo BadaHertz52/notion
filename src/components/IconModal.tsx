@@ -173,7 +173,7 @@ const IconModal = ({
       editTime: editTime,
     };
     editPage(page.id, editedPage);
-    if (block !== null && currentPageId !== null) {
+    if (block && currentPageId) {
       const editedBlock: Block = {
         ...block,
         iconType: iconType,
@@ -194,7 +194,7 @@ const IconModal = ({
 
   const onChangeImgIcon = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file !== undefined) {
+    if (file) {
       const reader = new FileReader();
       reader.onload = function () {
         const result = reader.result as string;
@@ -207,7 +207,7 @@ const IconModal = ({
   const inner = document.getElementById("inner");
   inner?.addEventListener("click", (event: MouseEvent) => {
     const iconModal = document.getElementById("iconModal");
-    if (iconModal !== null) {
+    if (iconModal) {
       const iconModalDomRect = iconModal?.getClientRects()[0];
       const isInIconModal = detectRange(event, iconModalDomRect);
       const target = event.target as null | Element;

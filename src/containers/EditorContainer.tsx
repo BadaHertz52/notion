@@ -117,7 +117,7 @@ const EditorContainer = ({
     if (sideAppear === "lock") {
       const sideBarHtml = document.querySelector(".sideBar");
       const sideBarWidth = sideBarHtml?.clientWidth;
-      if (sideBarWidth !== undefined) {
+      if (sideBarWidth) {
         setEditorStyle({
           width: `calc(100vw - ${sideBarWidth}px)`,
         });

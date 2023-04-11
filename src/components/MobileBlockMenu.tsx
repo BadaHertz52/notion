@@ -75,11 +75,11 @@ const MobileBlockMenu = ({
     const frameDomRect = frameHtml?.getClientRects()[0];
 
     if (
-      frameHtml !== null &&
-      frameDomRect !== undefined &&
-      pageContentInnerDomRect !== undefined &&
-      blockElement !== null &&
-      blockElementDomRect !== undefined
+      frameHtml &&
+      frameDomRect &&
+      pageContentInnerDomRect &&
+      blockElement &&
+      blockElementDomRect
     ) {
       const top = blockElementDomRect.bottom + 16;
       const left = pageContentInnerDomRect.left - frameDomRect.left;
@@ -103,7 +103,7 @@ const MobileBlockMenu = ({
 
   const openMobileSideMenu = (what: msmWhatType) => {
     const item = sessionStorage.getItem("mobileMenuTargetBlock");
-    if (targetBlock === undefined && item !== null) {
+    if (targetBlock === undefined && item) {
       setMobileSideMenu({
         block: JSON.parse(item),
         what: what,
@@ -125,7 +125,7 @@ const MobileBlockMenu = ({
     setMobileMenuTargetBlock(null);
   }
   const addNewBlock = () => {
-    if (page.blocksId !== null && targetBlock !== null) {
+    if (page.blocksId && targetBlock) {
       const blockIndex = page.blocksId.indexOf(targetBlock.id);
       const newBlock = makeNewBlock(page, targetBlock, "");
       addBlock(page.id, newBlock, blockIndex + 1, targetBlock.id);
@@ -133,12 +133,12 @@ const MobileBlockMenu = ({
     }
   };
   const removeBlock = () => {
-    targetBlock !== null && deleteBlock(page.id, targetBlock, true);
+    targetBlock && deleteBlock(page.id, targetBlock, true);
     closeMM();
   };
   const onTouchCommentBtn = () => {
     const item = sessionStorage.getItem("mobileMenuTargetBlock");
-    if (targetBlock === undefined && item !== null) {
+    if (targetBlock === undefined && item) {
       setCommentBlock(JSON.parse(item));
     } else {
       setCommentBlock(targetBlock);
@@ -151,7 +151,7 @@ const MobileBlockMenu = ({
       ...mbmStyle,
     });
     const pageHtml = frameHtml?.querySelector(".page");
-    if (pageHtml !== null && frameHtml !== null) {
+    if (pageHtml && frameHtml) {
       pageHtml?.setAttribute(
         "style",
         `translateY(${pageHtml.clientTop - frameHtml.clientTop - 50}px)`
@@ -178,12 +178,9 @@ const MobileBlockMenu = ({
       default:
         break;
     }
-    if (
-      contentEditableElement !== null &&
-      contentEditableElement !== undefined
-    ) {
+    if (contentEditableElement) {
       const blockContentElement = contentEditableElement?.closest(".contents");
-      if (blockContentElement !== null) {
+      if (blockContentElement) {
         const id = blockContentElement.id;
         const index = id.indexOf("__contents");
         const blockId = id.slice(0, index);
@@ -201,10 +198,10 @@ const MobileBlockMenu = ({
     if (SELECTION === null) {
       closeMM();
     }
-    if (notSelect && SELECTION !== null) {
+    if (notSelect && SELECTION) {
       detectSelectionInMobile(SELECTION);
     }
-    if (SELECTION !== null && !notSelect && !openMobileBlockStyler) {
+    if (SELECTION && !notSelect && !openMobileBlockStyler) {
       setOpenMobileBlockStyler(true);
     }
   };
@@ -217,7 +214,7 @@ const MobileBlockMenu = ({
     };
   }, []);
   useEffect(() => {
-    if (mobileMenuTargetBlock !== undefined) {
+    if (mobileMenuTargetBlock) {
       sessionStorage.setItem(
         "mobileMenuTargetBlock",
         JSON.stringify(mobileMenuTargetBlock)
@@ -225,7 +222,7 @@ const MobileBlockMenu = ({
       changeMBMstyle(mobileMenuTargetBlock);
     } else {
       const item = sessionStorage.getItem("mobileMenuTargetBlock");
-      if (item !== null) {
+      if (item) {
         const block = JSON.parse(item);
         setTargetBlock(block);
         changeMBMstyle(block);
@@ -305,7 +302,7 @@ const MobileBlockMenu = ({
             </button>
           </div>
         ) : (
-          sessionStorage.getItem("mobileMenuTargetBlock") !== null && (
+          sessionStorage.getItem("mobileMenuTargetBlock") && (
             <BlockStyler
               pages={pages}
               pagesId={pagesId}
@@ -314,7 +311,7 @@ const MobileBlockMenu = ({
               page={page}
               recentPagesId={recentPagesId}
               block={
-                targetBlock !== undefined
+                targetBlock
                   ? targetBlock
                   : JSON.parse(
                       sessionStorage.getItem("mobileMenuTargetBlock") as string

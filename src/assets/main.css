@@ -74,8 +74,8 @@ button {
   background-color: transparent;
   padding: 0;
   -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
   font-size: inherit;
@@ -153,21 +153,21 @@ a:visited {
   flex-shrink: 1;
   flex-grow: 1;
 }
-#allComments .allCommtes__btn-group {
+#allComments .allComments__btn-group {
   pointer-events: auto;
 }
-#allComments .allCommtes__btn-group .btn-select {
+#allComments .allComments__btn-group .btn-select {
   color: rgb(141, 141, 141);
   font-size: inherit;
   font-weight: inherit;
 }
-#allComments .allCommtes__btn-group .type-btn-group {
+#allComments .allComments__btn-group .type-btn-group {
   display: none;
 }
-#allComments .allCommtes__btn-group.open {
+#allComments .allComments__btn-group.open {
   position: relative;
 }
-#allComments .allCommtes__btn-group.open .type-btn-group {
+#allComments .allComments__btn-group.open .type-btn-group {
   width: 320px;
   display: flex;
   flex-direction: column;
@@ -188,19 +188,23 @@ a:visited {
   display: flex;
   flex-direction: column;
 }
-#allComments .allCommtes__btn-group.open .type-btn-group::-webkit-scrollbar-thumb {
+#allComments
+  .allComments__btn-group.open
+  .type-btn-group::-webkit-scrollbar-thumb {
   background: #d3d1cb;
 }
-#allComments .allCommtes__btn-group.open .type-btn-group::-webkit-scrollbar-track {
+#allComments
+  .allComments__btn-group.open
+  .type-btn-group::-webkit-scrollbar-track {
   background: #edece9;
 }
-#allComments .allCommtes__btn-group.open .type-btn-group button {
+#allComments .allComments__btn-group.open .type-btn-group button {
   padding: 10px 15px;
 }
-#allComments .allCommtes__btn-group.open .type-btn-group button:hover {
+#allComments .allComments__btn-group.open .type-btn-group button:hover {
   background-color: #edece9;
 }
-#allComments .allCommtes__btn-group.open .type-btn-group button:last-child {
+#allComments .allComments__btn-group.open .type-btn-group button:last-child {
   padding-top: 10px;
 }
 #allComments .comment:hover {
@@ -316,8 +320,8 @@ button {
   background-color: transparent;
   padding: 0;
   -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
   font-size: inherit;
@@ -530,8 +534,8 @@ button {
   background-color: transparent;
   padding: 0;
   -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
   font-size: inherit;
@@ -817,7 +821,7 @@ a:visited {
   width: calc(100% - 34px);
   box-sizing: border-box;
 }
-.commentBlock .commentInput input[type=text] {
+.commentBlock .commentInput input[type="text"] {
   margin: 0;
 }
 .commentBlock .tool button:hover {
@@ -843,7 +847,7 @@ a:visited {
   width: calc(100% - 24px);
   box-sizing: border-box;
 }
-.commentInput input[type=text] {
+.commentInput input[type="text"] {
   width: 90%;
   height: 1.5rem;
   font-size: 15px;
@@ -862,13 +866,13 @@ a:visited {
   margin: 0 2.5%;
   font-size: 14px;
 }
-.commentInput input[type=text]::-moz-placeholder {
+.commentInput input[type="text"]::-moz-placeholder {
   color: #b9b8b6;
 }
-.commentInput input[type=text]::placeholder {
+.commentInput input[type="text"]::placeholder {
   color: #b9b8b6;
 }
-.commentInput input[type=text]:focus {
+.commentInput input[type="text"]:focus {
   box-sizing: border-box;
   outline: 3.5px solid rgb(169, 226, 245);
   border: none;
@@ -1008,8 +1012,8 @@ button {
   background-color: transparent;
   padding: 0;
   -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
   font-size: inherit;
@@ -1093,8 +1097,8 @@ a:visited {
   font-weight: 500;
   line-height: 120%;
   -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  user-select: none;
   text-transform: uppercase;
 }
 #commandBlock .command__btn-group {
@@ -1253,8 +1257,8 @@ button {
   background-color: transparent;
   padding: 0;
   -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
   font-size: inherit;
@@ -1512,8 +1516,8 @@ a:visited {
   justify-content: flex-end;
   align-items: center;
   -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  user-select: none;
   transition: color 300ms ease 0s, border 300ms ease 0s;
   cursor: pointer;
   min-width: 34px;
@@ -1749,8 +1753,8 @@ button {
   background-color: transparent;
   padding: 0;
   -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
   font-size: inherit;
@@ -1788,8 +1792,8 @@ a:visited {
   display: flex;
   z-index: 3;
   -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  user-select: none;
 }
 #export .inner {
   background-color: white;
@@ -1856,7 +1860,8 @@ a:visited {
   right: 0;
   background-color: white;
   border-radius: 3px;
-  box-shadow: rgba(15, 15, 15, 0.05) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 3px 6px, rgba(15, 15, 15, 0.2) 0px 9px 24px;
+  box-shadow: rgba(15, 15, 15, 0.05) 0px 0px 0px 1px,
+    rgba(15, 15, 15, 0.1) 0px 3px 6px, rgba(15, 15, 15, 0.2) 0px 9px 24px;
   z-index: 10;
   padding: 6px 5px;
   width: -moz-fit-content;
@@ -1970,8 +1975,8 @@ button {
   background-color: transparent;
   padding: 0;
   -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
   font-size: inherit;
@@ -2047,7 +2052,8 @@ a:visited {
   align-items: center;
   padding: 2px;
 }
-#iconModal .header .btn-category, #iconModal .header > div:last-child {
+#iconModal .header .btn-category,
+#iconModal .header > div:last-child {
   padding-bottom: 6px;
 }
 #iconModal .header .btn-category {
@@ -2240,8 +2246,8 @@ button {
   background-color: transparent;
   padding: 0;
   -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
   font-size: inherit;
@@ -2482,8 +2488,8 @@ button {
   background-color: transparent;
   padding: 0;
   -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
   font-size: inherit;
@@ -2949,8 +2955,8 @@ button {
   background-color: transparent;
   padding: 0;
   -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
   font-size: inherit;
@@ -3249,8 +3255,8 @@ button {
   background-color: transparent;
   padding: 0;
   -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
   font-size: inherit;
@@ -4010,8 +4016,8 @@ button {
   background-color: transparent;
   padding: 0;
   -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
   font-size: inherit;
@@ -4165,8 +4171,8 @@ a:visited {
 }
 #template__side .template__side__btn-use {
   -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  user-select: none;
   transition: background-color 20ms ease-in 0s;
   cursor: pointer;
   display: inline-flex;
@@ -4175,7 +4181,8 @@ a:visited {
   flex-shrink: 0;
   height: 32px;
   border-radius: 3px;
-  box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px inset, rgba(15, 15, 15, 0.1) 0px 1px 2px;
+  box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px inset,
+    rgba(15, 15, 15, 0.1) 0px 1px 2px;
   background-color: rgb(46, 170, 220);
   color: white;
   fill: white;
@@ -4387,8 +4394,8 @@ button {
   background-color: transparent;
   padding: 0;
   -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
   font-size: inherit;
@@ -4634,8 +4641,8 @@ button {
   background-color: transparent;
   padding: 0;
   -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
   font-size: inherit;
@@ -4979,7 +4986,9 @@ body,
 #inner {
   display: flex;
   color: rgb(55, 54, 47);
-  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji",
+    "Segoe UI Symbol";
 }
 
 .editor {
@@ -4990,4 +4999,4 @@ body,
   #inner {
     overflow-y: hidden;
   }
-}/*# sourceMappingURL=main.css.map */
+} /*# sourceMappingURL=main.css.map */

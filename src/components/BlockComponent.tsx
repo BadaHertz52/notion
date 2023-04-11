@@ -36,9 +36,9 @@ export const setTemplateItem = (
   templateHtml: HTMLElement | null,
   page: Page
 ) => {
-  if (templateHtml !== null) {
+  if (templateHtml) {
     const templateItem = sessionStorage.getItem("originTemplate");
-    if (templateItem == null) {
+    if (templateItem === null) {
       const originTemplate = JSON.stringify(page);
       sessionStorage.setItem("originTemplate", originTemplate);
     }
@@ -85,12 +85,12 @@ export const getAccurateIndex = (
   const children = contentEditableHtml?.childNodes as
     | NodeListOf<Node>
     | undefined;
-  if (children !== undefined) {
+  if (children) {
     const childrenArr = Array.from(children);
     let childNode = node;
     if (node.parentNode?.nodeName !== "DIV") {
       const CHILD = findNodeInChildNodes(node, childrenArr);
-      if (CHILD !== undefined) {
+      if (CHILD) {
         childNode = CHILD;
       }
     }
@@ -146,14 +146,14 @@ export const getFromStartNode = (
   let selectedStartIndex: number = 0;
   const nodeParent = startNode.parentElement;
 
-  if (startNode.textContent !== null) {
+  if (startNode.textContent) {
     /**
      * startNode가 span의 child 인지의 여부에 따라 preSelection 과 selectedStartIndex의 값을 변경하는 함수
      * @param spanHtml  startNode가 span의 child일 경우 span.outerHTML, 아닐 경우 null
      */
     const changeValueByAnchor = (spanHtml: null | string) => {
       const text =
-        spanHtml == null ? (startNode.textContent as string) : spanHtml;
+        spanHtml === null ? (startNode.textContent as string) : spanHtml;
       //step 1. preAnchor, anchorStartIndex
       if (contents.indexOf(text) === contents.lastIndexOf(text)) {
         // 동일한 내용의 반복이 없는 경우
@@ -161,11 +161,10 @@ export const getFromStartNode = (
         preAnchor = contents.slice(0, anchorStartIndex);
       } else {
         //동일한 내용이 반복되는 경우로 보다 정확한 특정이 필요함
-        const parentNode = spanHtml == null ? null : startNode.parentNode;
-        anchorStartIndex =
-          parentNode !== null
-            ? getAccurateIndex(parentNode, block, contentEditableHtml).textIndex
-            : getAccurateIndex(startNode, block, contentEditableHtml).textIndex;
+        const parentNode = spanHtml === null ? null : startNode.parentNode;
+        anchorStartIndex = parentNode
+          ? getAccurateIndex(parentNode, block, contentEditableHtml).textIndex
+          : getAccurateIndex(startNode, block, contentEditableHtml).textIndex;
 
         preAnchor = contents.slice(0, anchorStartIndex);
       }
@@ -174,7 +173,7 @@ export const getFromStartNode = (
        * startNode에서 선택된  부분의 앞 부분
        */
       let preOfSelectionInAnchor = "";
-      if (spanHtml !== null) {
+      if (spanHtml) {
         /**
          * span.
          */
@@ -243,7 +242,7 @@ export const getFromEndNode = (
    */
   let afterFocusNode: string = "";
   /**
-   * block.contents에서 endNode의 index ( selected cotent의 끝의 index)
+   * block.contents에서 endNode의 index ( selected content의 끝의 index)
    */
   let focusStartIndex: number = 0;
   /**
@@ -276,11 +275,10 @@ export const getFromEndNode = (
       }
     } else {
       //중복0
-      const parentNode = spanHtml == null ? null : endNode.parentNode;
-      const textIndex =
-        parentNode !== null
-          ? getAccurateIndex(parentNode, block, contentEditableHtml).textIndex
-          : getAccurateIndex(endNode, block, contentEditableHtml).textIndex;
+      const parentNode = spanHtml === null ? null : endNode.parentNode;
+      const textIndex = parentNode
+        ? getAccurateIndex(parentNode, block, contentEditableHtml).textIndex
+        : getAccurateIndex(endNode, block, contentEditableHtml).textIndex;
       focusStartIndex = textIndex;
       const focusEndIndex = textIndex + text.length - 1;
       afterFocusNode = contents.slice(focusEndIndex + 1);
@@ -294,7 +292,7 @@ export const getFromEndNode = (
       afterOfSelectedInFocus = "";
       selectedEndIndex = focusStartIndex + text.length - 1;
     } else {
-      if (spanHtml !== null) {
+      if (spanHtml) {
         /**
          * focusText에서 선택된 부분의 뒷 부분
          */
@@ -425,17 +423,13 @@ export const selectContent = (
   const notSelect =
     SELECTION?.anchorNode === SELECTION?.focusNode &&
     SELECTION?.anchorOffset === SELECTION?.focusOffset;
-  if (SELECTION !== null && !notSelect) {
+  if (SELECTION && !notSelect) {
     const anchorNode = SELECTION.anchorNode;
     const anchorOffset = SELECTION.anchorOffset;
     const focusNode = SELECTION.focusNode;
     const focusOffset = SELECTION.focusOffset;
     const contents = targetBlock.contents;
-    if (
-      anchorNode !== null &&
-      focusNode !== null &&
-      contentEditableHtml !== null
-    ) {
+    if (anchorNode && focusNode && contentEditableHtml) {
       const contentEditableChild =
         contentEditableHtml.childNodes as NodeListOf<Node>;
       const childNodes = Array.from(contentEditableChild);
@@ -504,7 +498,7 @@ export const selectContent = (
         );
         const newContents = `${preChangedContent}<span class="selected">${newSelected}</span>${afterChangedContent}`;
         contentEditableHtml.innerHTML = newContents;
-        editBlock !== null &&
+        editBlock &&
           editBlock(page.id, {
             ...targetBlock,
             contents: newContents,
@@ -543,30 +537,30 @@ export const selectContent = (
               contentEditableHtml
             );
           }
-          startParentNode !== null &&
+          startParentNode &&
             updateStartParentNode(
               startOffset,
               startNode,
               startNodeText,
               startParentNode
             );
-          endParentNode !== null &&
+          endParentNode &&
             updateEndParentNode(endOffset, endNode, endNodeText, endParentNode);
         }
         const newContents = document.getElementById(
           `${targetBlock.id}__contents`
         )?.firstElementChild?.innerHTML;
-        if (newContents !== null && newContents !== undefined) {
+        if (newContents) {
           const editedBlock: Block = {
             ...targetBlock,
             contents: newContents,
             editTime: JSON.stringify(Date.now()),
           };
-          editBlock !== null && editBlock(page.id, editedBlock);
+          editBlock && editBlock(page.id, editedBlock);
         }
       }
       if (!isMobile()) {
-        setSelection !== null &&
+        setSelection &&
           setSelection({
             block: targetBlock,
             change: false,
@@ -589,7 +583,6 @@ type BlockComponentProps = {
   closeMenu: (event: globalThis.MouseEvent | MouseEvent) => void;
   templateHtml: HTMLElement | null;
   setSelection: Dispatch<SetStateAction<selectionType | null>>;
-  mobileMenuTargetBlock: Block | null;
   setMobileMenuTargetBlock: Dispatch<SetStateAction<Block | null>>;
   onClickCommentBtn: (block: Block) => void;
   setMoveTargetBlock: Dispatch<SetStateAction<Block | null>>;
@@ -615,7 +608,6 @@ const BlockComponent = ({
   closeMenu,
   templateHtml,
   setSelection,
-  mobileMenuTargetBlock,
   setMobileMenuTargetBlock,
   onClickCommentBtn,
   setMoveTargetBlock,
@@ -632,17 +624,14 @@ const BlockComponent = ({
   /**
    * 키보드 방향키(위/아래)로 이동 가능한 블럭
    */
-  const possibleBlocks: Block[] | null =
-    page.blocks !== null
-      ? page.blocks.filter(
-          (block: Block) =>
-            block.type !== "image media" && block.type !== "page"
-        )
-      : null;
-  const possibleBlocksId: string[] | null =
-    possibleBlocks !== null
-      ? possibleBlocks.map((block: Block) => block.id)
-      : null;
+  const possibleBlocks: Block[] | null = page.blocks
+    ? page.blocks.filter(
+        (block: Block) => block.type !== "image media" && block.type !== "page"
+      )
+    : null;
+  const possibleBlocksId: string[] | null = possibleBlocks
+    ? possibleBlocks.map((block: Block) => block.id)
+    : null;
   /**
    * 마우스가 block위를 움직일 경우, 해당 block의 element 옆에 blockFn component를 보여주는 함수
    * @param event mouseEvent
@@ -651,19 +640,19 @@ const BlockComponent = ({
     closeMenu(event);
     const currentTarget = event.currentTarget;
     const mainBlock = currentTarget.parentElement?.parentElement?.parentElement;
-    if (mainBlock !== null && mainBlock !== undefined) {
+    if (mainBlock && mainBlock) {
       const mainBlockDomRect = mainBlock?.getClientRects()[0];
       const editor = document.getElementsByClassName("editor")[0];
       const blockFn =
-        templateHtml == null
+        templateHtml === null
           ? editor.querySelector(".blockFn")
           : templateHtml.querySelector(".blockFn");
       blockFn?.classList.toggle("on");
       blockFn?.classList.contains("on")
         ? sessionStorage.setItem("blockFnTargetBlock", JSON.stringify(block))
         : sessionStorage.removeItem("blockFnTargetBlock");
-      if (mainBlockDomRect !== undefined) {
-        if (templateHtml == null) {
+      if (mainBlockDomRect) {
+        if (templateHtml === null) {
           const editorDomRect = editor.getClientRects()[0];
           const top = mainBlockDomRect.top + editor.scrollTop;
           const left = mainBlockDomRect.x - editorDomRect.x - 45;
@@ -682,7 +671,7 @@ const BlockComponent = ({
    * 모바일 브라우저에서 특정 이벤트가 발생 했을 때 mobileBlockMenu 를 열어 주는 함수
    */
   const openMobileBlockMenu = () => {
-    if (block.comments == null) {
+    if (block.comments === null) {
       setMobileMenuTargetBlock(block);
       setSelection(null);
     }
@@ -693,7 +682,7 @@ const BlockComponent = ({
    * @param event ContentEditableEvent
    */
   const onChangeContents = (event: ContentEditableEvent) => {
-    if (page.blocks !== null && page.blocksId !== null) {
+    if (page.blocks && page.blocksId) {
       setTemplateItem(templateHtml, page);
       const value = event.target.value;
       const targetBlockIndex = page.blocksId.indexOf(block.id);
@@ -716,7 +705,7 @@ const BlockComponent = ({
           if (
             block.contents !== editedContents ||
             block.contents === "" ||
-            block.subBlocksId !== null
+            block.subBlocksId
           ) {
             const editedBlock: Block = {
               ...block,
@@ -724,8 +713,7 @@ const BlockComponent = ({
                 block.contents !== editedContents
                   ? editedContents
                   : block.contents,
-              subBlocksId:
-                block.subBlocksId !== null ? null : block.subBlocksId,
+              subBlocksId: block.subBlocksId ? null : block.subBlocksId,
               editTime: editTime,
             };
             editBlock(page.id, editedBlock);
@@ -788,7 +776,7 @@ const BlockComponent = ({
    */
   const moveFocus = (nextBlockId: string, targetBlock: Block) => {
     const contentsHtml = document.getElementById(`${nextBlockId}__contents`);
-    if (contentsHtml !== null) {
+    if (contentsHtml) {
       const focusTargetHtml = contentsHtml.firstElementChild as HTMLElement;
       focusTargetHtml.focus();
     } else {
@@ -810,7 +798,7 @@ const BlockComponent = ({
         setTemplateItem(templateHtml, page);
         const previousBlockIdInDoc = findPreviousBlockInDoc(page, block)
           .previousBlockInDoc.id;
-        if (previousBlockIdInDoc !== undefined) {
+        if (previousBlockIdInDoc) {
           changeToSub(page.id, block, previousBlockIdInDoc);
         } else {
           console.log(
@@ -833,7 +821,7 @@ const BlockComponent = ({
 
         break;
       case "arrowup":
-        if (page.firstBlocksId !== null && page.firstBlocksId[0] !== block.id) {
+        if (page.firstBlocksId && page.firstBlocksId[0] !== block.id) {
           let doing: boolean = true;
           let referenceBlock: Block = block;
           while (doing) {
@@ -855,7 +843,7 @@ const BlockComponent = ({
             if (possibleBlocksId?.includes(previousBlockInDoc.id)) {
               if (
                 previousBlockInDoc.type.includes("List") &&
-                previousBlockInDoc.subBlocksId !== null
+                previousBlockInDoc.subBlocksId
               ) {
                 moveFocus(
                   previousBlockInDoc.subBlocksId[
@@ -880,13 +868,10 @@ const BlockComponent = ({
          * @param nextBlockId : 다음에 이동할 블록의 id
          */
         const setNextHtmlId = (nextBlockId: string) => {
-          if (possibleBlocks !== null && possibleBlocksId !== null) {
+          if (possibleBlocks && possibleBlocksId) {
             const index = possibleBlocksId.indexOf(nextBlockId);
             const nextBlock = possibleBlocks[index];
-            if (
-              nextBlock.type.includes("List") &&
-              nextBlock.subBlocksId !== null
-            ) {
+            if (nextBlock.type.includes("List") && nextBlock.subBlocksId) {
               moveFocus(nextBlock.subBlocksId[0], block);
             } else {
               moveFocus(nextBlockId, block);
@@ -898,8 +883,8 @@ const BlockComponent = ({
          * @param firstBlock : 기준이 되는 블록
          */
         const findNextBlockOfFirstBlock = (firstBlock: Block) => {
-          if (possibleBlocks !== null && possibleBlocksId !== null) {
-            if (page.firstBlocksId !== null) {
+          if (possibleBlocks && possibleBlocksId) {
+            if (page.firstBlocksId) {
               if (firstBlock.subBlocksId === null) {
                 const blockIndexAsFirstBlock = page.firstBlocksId.indexOf(
                   firstBlock.id
@@ -935,10 +920,10 @@ const BlockComponent = ({
          * @param subBlock :  다음 블록을 찾을 기준이 되는 블록
          */
         const findNextBlockOfSubBlock = (subBlock: Block) => {
-          if (subBlock.subBlocksId == null) {
+          if (subBlock.subBlocksId === null) {
             const findNextBlockByParent = (block: Block) => {
               const parentBlock = findParentBlock(page, block).parentBlock;
-              if (parentBlock.subBlocksId !== null) {
+              if (parentBlock.subBlocksId) {
                 const blockIndexAsSubBlock = parentBlock.subBlocksId.indexOf(
                   block.id
                 );
@@ -946,7 +931,7 @@ const BlockComponent = ({
                   blockIndexAsSubBlock ===
                   parentBlock.subBlocksId.length - 1
                 ) {
-                  if (parentBlock.firstBlock && page.firstBlocksId !== null) {
+                  if (parentBlock.firstBlock && page.firstBlocksId) {
                     const parentBlockIndexAsFirst = page.firstBlocksId.indexOf(
                       parentBlock.id
                     );
@@ -1010,7 +995,7 @@ const BlockComponent = ({
   const onSelectInPC = (event: SyntheticEvent<HTMLDivElement>) => {
     if (!isMobile()) {
       const SELECTION = window.getSelection();
-      if (block !== null) {
+      if (block) {
         selectContent(
           SELECTION,
           block,
@@ -1030,7 +1015,7 @@ const BlockComponent = ({
     if (target.className === "link") {
       const href = target.getAttribute("href");
       const openType = target.getAttribute("target");
-      href !== null && openType !== null && window.open(href, openType);
+      href && openType && window.open(href, openType);
     }
     if (target.classList.contains("text_commentBtn")) {
       sessionStorage.setItem(
@@ -1050,8 +1035,8 @@ const BlockComponent = ({
   function commandChange(event: ChangeEvent<HTMLInputElement>) {
     setTemplateItem(templateHtml, page);
     const value = event.target.value;
-    const trueOrFale = value.startsWith("/");
-    if (trueOrFale) {
+    const trueOrFalse = value.startsWith("/");
+    if (trueOrFalse) {
       setCommand({
         boolean: true,
         command: value.toLowerCase(),
@@ -1072,7 +1057,7 @@ const BlockComponent = ({
   function commandKeyUp(event: KeyboardEvent<HTMLInputElement>) {
     const code = event.code;
     const firstOn = document.querySelector(".btn-command.on.first");
-    if (code === "Enter" && command.targetBlock !== null) {
+    if (code === "Enter" && command.targetBlock) {
       const name = firstOn?.getAttribute("name") as string;
       const blockType: BlockType = blockTypes.filter((type) =>
         name.includes(type)
@@ -1098,7 +1083,7 @@ const BlockComponent = ({
     block.type === "page" && setTargetPageId(block.id);
   };
   /**
-   * image type의 block에 넣은 이미지 파일을 선택하기 위한 버튼을 클릭한 경우 작동하는 함수로, Loader componenet를 엶
+   * image type의 block에 넣은 이미지 파일을 선택하기 위한 버튼을 클릭한 경우 작동하는 함수로, Loader component를 엶
    */
   const onClickAddFileBtn = () => {
     setOpenLoader(true);
@@ -1115,7 +1100,7 @@ const BlockComponent = ({
     useEffect(() => {
       if (command.boolean) {
         const commentInputHtml = document.getElementById("commandInput");
-        if (commentInputHtml !== null) {
+        if (commentInputHtml) {
           commentInputHtml.focus();
         }
       }
@@ -1124,11 +1109,10 @@ const BlockComponent = ({
     return (
       <>
         {!command.command ||
-        (command.targetBlock !== null &&
-          command.targetBlock.id !== block.id) ? (
+        (command.targetBlock && command.targetBlock.id !== block.id) ? (
           <ContentEditable
             className="contentEditable"
-            placeholder="Type '/' for commmands"
+            placeholder="Type '/' for commands"
             html={blockContents}
             innerRef={contentEditableRef}
             onChange={(event) => onChangeContents(event)}
@@ -1223,7 +1207,7 @@ const BlockComponent = ({
           id={`${block.id}__contents`}
           className={`contents 
           ${
-            block.comments !== null &&
+            block.comments &&
             block.comments
               .map((m: MainCommentType) => m.selectedText === null)
               .includes(true)

@@ -66,7 +66,7 @@ const QuickFindBoard = ({
     }
   };
   const openSortOptions = () => {
-    if (sortOptions.current !== null) {
+    if (sortOptions.current) {
       sortOptions.current.classList.toggle("on");
       const qf_results = document.getElementsByClassName("qf_results")[0];
       sortOptions.current.classList.contains("on")
@@ -79,7 +79,7 @@ const QuickFindBoard = ({
     const selected = document
       .getElementById("quickFindBoard")
       ?.getElementsByClassName("selected")[0];
-    if (selected !== null) {
+    if (selected) {
       selected?.classList.remove("selected");
     }
     const target = event.target as HTMLElement;
@@ -114,8 +114,8 @@ const QuickFindBoard = ({
     }
 
     setSelectedOption(option);
-    if (result !== null && result !== "noResult") {
-      if (bestMatchesResult !== null && bestMatchesResult !== "noResult") {
+    if (result && result !== "noResult") {
+      if (bestMatchesResult && bestMatchesResult !== "noResult") {
         const compareResult = (
           a: resultType,
           b: resultType,
@@ -208,7 +208,7 @@ const QuickFindBoard = ({
   const closeQuickFindBoard = (event: React.MouseEvent) => {
     const inner = document.getElementById("quickFindBoard_inner");
     const innerDomRect = inner?.getClientRects()[0];
-    if (innerDomRect !== undefined) {
+    if (innerDomRect) {
       const isInBoard = detectRange(event, innerDomRect);
       if (!isInBoard) {
         const optionBtnIsClicked = checkOptionBtnClicked(event);
@@ -231,7 +231,7 @@ const QuickFindBoard = ({
           </div>
           <div className="qf_results">
             <div className="header">
-              {result !== null ? (
+              {result ? (
                 result !== "noResult" && (
                   <div className="sort">
                     <div className="sort__inner">
@@ -292,7 +292,7 @@ const QuickFindBoard = ({
               )}
             </div>
             <div className="body">
-              {result !== null ? (
+              {result ? (
                 result !== "noResult" ? (
                   result.map((item: resultType) => (
                     <button onClick={() => setTargetPageId(item.id)}>
@@ -306,7 +306,7 @@ const QuickFindBoard = ({
                     <button>Search deleted pages</button>
                   </div>
                 )
-              ) : recentPagesList !== undefined ? (
+              ) : recentPagesList ? (
                 recentPagesList.map((item: resultType) => (
                   <button onClick={() => setTargetPageId(item.id)}>
                     <Result item={item} />

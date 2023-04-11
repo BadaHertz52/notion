@@ -53,7 +53,7 @@ const Rename = ({
         editTime: editTime,
       };
       editPage(renamedPage.id, renamedPage);
-      if (block !== null && currentPageId !== null) {
+      if (block && currentPageId) {
         const editedBlock: Block = {
           ...block,
           contents: value,

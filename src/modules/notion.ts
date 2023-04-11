@@ -153,17 +153,17 @@ export function makeNewBlock(
   newBlockContents: string
 ): Block {
   const editTime = JSON.stringify(Date.now());
-  const blockNumber = page.blocks == null ? 0 : page.blocks.length;
+  const blockNumber = page.blocks === null ? 0 : page.blocks.length;
   const newBlock: Block = {
     id: `${page.id}_${blockNumber}_${editTime}`,
     editTime: editTime,
     createTime: editTime,
-    type: targetBlock !== null ? targetBlock.type : "text",
+    type: targetBlock ? targetBlock.type : "text",
     contents: newBlockContents === "<br>" ? "" : newBlockContents,
 
-    firstBlock: targetBlock !== null ? targetBlock.firstBlock : true,
-    subBlocksId: targetBlock !== null ? targetBlock.subBlocksId : null,
-    parentBlocksId: targetBlock !== null ? targetBlock.parentBlocksId : null,
+    firstBlock: targetBlock ? targetBlock.firstBlock : true,
+    subBlocksId: targetBlock ? targetBlock.subBlocksId : null,
+    parentBlocksId: targetBlock ? targetBlock.parentBlocksId : null,
     iconType: null,
     icon: null,
     style: basicBlockStyle,
@@ -1157,12 +1157,12 @@ export const getBlockText = (block: Block) => {
     `${block.id}__contents`
   )?.firstElementChild;
   let text = "";
-  if (contentEditableHtml !== null && contentEditableHtml !== undefined) {
+  if (contentEditableHtml) {
     const children = [...contentEditableHtml.childNodes];
     let contentsArr: string[] = [];
     children.forEach((c: Node) => {
       if (c.nodeType === 3) {
-        c.nodeValue !== null && contentsArr.push(c.nodeValue);
+        c.nodeValue && contentsArr.push(c.nodeValue);
       }
       if (c.nodeType === 1) {
         const element = c as HTMLElement;
@@ -1185,7 +1185,7 @@ export function findBlock(
 ): { index: number; BLOCK: Block } {
   let index = 0;
   let block = blockSample;
-  if (page.blocks !== null && page.blocksId !== null) {
+  if (page.blocks && page.blocksId) {
     index = page.blocksId.indexOf(blockId);
     block = page.blocks[index];
   } else {
@@ -1241,11 +1241,11 @@ export const findPreviousBlockInDoc = (
   let previousBlockInDoc = blockSample;
   let previousBlockIndex = 0;
   const findLastSubBLOCK = (targetBlock: Block) => {
-    if (targetBlock.subBlocksId !== null) {
+    if (targetBlock.subBlocksId) {
       const lastSubBlockId =
         targetBlock.subBlocksId[targetBlock.subBlocksId.length - 1];
       const { BLOCK, index } = findBlock(page, lastSubBlockId);
-      if (BLOCK.subBlocksId == null) {
+      if (BLOCK.subBlocksId === null) {
         previousBlockInDoc = BLOCK;
         previousBlockIndex = index;
       } else {
@@ -1253,7 +1253,7 @@ export const findPreviousBlockInDoc = (
       }
     }
   };
-  if (page.firstBlocksId !== null) {
+  if (page.firstBlocksId) {
     if (block.firstBlock) {
       const blockIndexAsFirstBlock = page.firstBlocksId.indexOf(block.id);
       const previousFirstBlockId =
@@ -1270,7 +1270,7 @@ export const findPreviousBlockInDoc = (
     }
     if (!block.firstBlock) {
       const { parentBlock, parentBlockIndex } = findParentBlock(page, block);
-      if (parentBlock.subBlocksId !== null) {
+      if (parentBlock.subBlocksId) {
         const blockIndexAsSubBlock = parentBlock.subBlocksId.indexOf(block.id);
         if (blockIndexAsSubBlock === 0) {
           previousBlockInDoc = parentBlock;
@@ -1280,7 +1280,7 @@ export const findPreviousBlockInDoc = (
             parentBlock.subBlocksId[blockIndexAsSubBlock - 1];
           const { BLOCK, index } = findBlock(page, previousSubBlockId);
           const previousSubBlock = BLOCK;
-          if (previousSubBlock.subBlocksId == null) {
+          if (previousSubBlock.subBlocksId === null) {
             previousBlockInDoc = previousSubBlock;
             previousBlockIndex = index;
           } else {
@@ -1299,11 +1299,11 @@ export default function notion(
   state: Notion = initialState,
   action: NotionAction
 ): Notion {
-  const pagesId = state.pagesId !== null ? [...state.pagesId] : null;
-  const firstPagesId =
-    state.firstPagesId !== null ? [...state.firstPagesId] : null;
-  const templatesId = state.templatesId == null ? null : [...state.templatesId];
-  const pages = state.pages !== null ? [...state.pages] : null;
+  const pagesId = state.pagesId ? [...state.pagesId] : null;
+  const firstPagesId = state.firstPagesId ? [...state.firstPagesId] : null;
+  const templatesId =
+    state.templatesId === null ? null : [...state.templatesId];
+  const pages = state.pages ? [...state.pages] : null;
   let trash = {
     pagesId: state.trash.pagesId ? [...state.trash.pagesId] : null,
     pages: state.trash.pages ? [...state.trash.pages] : null,
@@ -1314,10 +1314,10 @@ export default function notion(
       : (trash.pagesId?.indexOf(action.pageId) as number);
   const targetPage: Page | TrashPage | null =
     action.type !== RESTORE_PAGE
-      ? pages !== null
+      ? pages
         ? (pages[pageIndex] as Page)
         : null
-      : trash.pages !== null
+      : trash.pages
       ? (trash.pages[pageIndex] as TrashPage)
       : null;
 
@@ -1339,7 +1339,7 @@ export default function notion(
     subBlock: Block,
     previousBlockId: string | null
   ) => {
-    if (subBlock.parentBlocksId !== null && targetPage !== null) {
+    if (subBlock.parentBlocksId && targetPage) {
       //find parentBlock
       const { parentBlockIndex, parentBlock } = findParentBlock(
         targetPage,
@@ -1347,7 +1347,7 @@ export default function notion(
       );
 
       const subBlocksId = parentBlock.subBlocksId;
-      if (subBlocksId !== null) {
+      if (subBlocksId) {
         const previousBlockIndex =
           previousBlockId === null
             ? -1
@@ -1359,7 +1359,7 @@ export default function notion(
       //edit parentBlock
       const editedParentBlock: Block = {
         ...parentBlock,
-        subBlocksId: subBlocksId !== null ? subBlocksId : [subBlock.id],
+        subBlocksId: subBlocksId ? subBlocksId : [subBlock.id],
       };
       //update parentBlock
       targetPage?.blocks?.splice(parentBlockIndex, 1, editedParentBlock);
@@ -1374,9 +1374,9 @@ export default function notion(
    * @param block 삭제될 block
    */
   const editFirstBlocksId = (page: Page, block: Block) => {
-    if (block.firstBlock && page.firstBlocksId !== null) {
+    if (block.firstBlock && page.firstBlocksId) {
       const firstIndex: number = page.firstBlocksId.indexOf(block.id) as number;
-      if (block.subBlocksId !== null) {
+      if (block.subBlocksId) {
         if (firstIndex === 0) {
           page.firstBlocksId = [
             ...block.subBlocksId,
@@ -1392,7 +1392,7 @@ export default function notion(
           }
         }
       }
-      if (block.subBlocksId == null) {
+      if (block.subBlocksId === null) {
         page.firstBlocksId.splice(firstIndex, 1);
       }
     }
@@ -1404,7 +1404,7 @@ export default function notion(
    * @param blockDelete  raise되는 이유가 블럭의 삭제때문인지 여부
    */
   const raiseSubBlock = (page: Page, block: Block, blockDelete: boolean) => {
-    if (block.subBlocksId !== null) {
+    if (block.subBlocksId) {
       // 가정 설명 : 삭제 시 , 삭제되는 block 이 firstBlock 이면 subBlock 은 firstBlock 이 되고 아니면 화면상 이전 블록의 subBlock이 됨
 
       const subBlocks: Block[] = block.subBlocksId.map((id: string) => {
@@ -1412,7 +1412,7 @@ export default function notion(
         return BLOCK;
       });
       subBlocks.forEach((subBlock: Block) => {
-        if (subBlock.parentBlocksId !== null) {
+        if (subBlock.parentBlocksId) {
           const raisedSubBlock: Block = {
             ...subBlock,
             parentBlocksId: blockDelete
@@ -1423,8 +1423,7 @@ export default function notion(
           };
           const index = page.blocksId?.indexOf(subBlock.id) as number;
           editBlockData(index, raisedSubBlock);
-          subBlock.subBlocksId !== null &&
-            raiseSubBlock(page, subBlock, blockDelete);
+          subBlock.subBlocksId && raiseSubBlock(page, subBlock, blockDelete);
         }
       });
       //block 삭제와 page firstBlockId 수정은 따로 (sub=sub에서도 실행하기 때문에 sub만 수정 )
@@ -1440,7 +1439,7 @@ export default function notion(
     block: Block
   ) => {
     const subBlocksId = block.subBlocksId;
-    if (subBlocksId !== null && block.parentBlocksId !== null) {
+    if (subBlocksId && block.parentBlocksId) {
       const { parentBlock, parentBlockIndex } = findParentBlock(page, block);
       let parentSubsId = parentBlock.subBlocksId as string[];
       const index = parentSubsId.indexOf(block.id);
@@ -1471,7 +1470,7 @@ export default function notion(
    */
   const deleteBlockData = (page: Page, block: Block) => {
     const index = page.blocksId?.indexOf(block.id) as number;
-    if (block.firstBlock && page.firstBlocksId !== null) {
+    if (block.firstBlock && page.firstBlocksId) {
       const firstIndex = page.firstBlocksId.indexOf(block.id);
       block.firstBlock &&
         firstIndex >= 0 &&
@@ -1481,10 +1480,10 @@ export default function notion(
     page.blocksId?.splice(index, 1);
   };
   function addPage(newPage: Page) {
-    if (pagesId !== null && pages !== null && firstPagesId !== null) {
+    if (pagesId && pages && firstPagesId) {
       pagesId.push(newPage.id);
       pages.push(newPage);
-      if (newPage.parentsId == null) {
+      if (newPage.parentsId === null) {
         //firstPage 일경우
         firstPagesId.push(newPage.id);
       } else {
@@ -1496,46 +1495,37 @@ export default function notion(
         const parentPageIndex = pagesId.indexOf(parentPage.id);
         const editedParentPage: Page = {
           ...parentPage,
-          subPagesId:
-            parentPage.subPagesId !== null
-              ? parentPage.subPagesId.concat(newPage.id)
-              : [newPage.id],
+          subPagesId: parentPage.subPagesId
+            ? parentPage.subPagesId.concat(newPage.id)
+            : [newPage.id],
         };
 
         pages.splice(parentPageIndex, 1, editedParentPage);
       }
     }
   }
-  if (
-    targetPage !== null &&
-    pagesId !== null &&
-    pages !== null &&
-    firstPagesId !== null
-  ) {
-    const blockIndex: number =
-      action.block !== null
-        ? (pages[pageIndex]?.blocksId?.indexOf(action.block.id) as number)
-        : (0 as number);
+  if (targetPage && pagesId && pages && firstPagesId) {
+    const blockIndex: number = action.block
+      ? (pages[pageIndex]?.blocksId?.indexOf(action.block.id) as number)
+      : (0 as number);
     switch (action.type) {
       case ADD_BLOCK:
         if (action.newBlockIndex === 0) {
           // 새로운 블럭이 page 의 첫번째 블럭인 경우
-          targetPage.blocks =
-            targetPage.blocks !== null
-              ? [action.block, ...targetPage.blocks]
-              : [action.block];
-          targetPage.blocksId =
-            targetPage.blocksId !== null
-              ? [action.block.id, ...targetPage.blocksId]
-              : [action.block.id];
+          targetPage.blocks = targetPage.blocks
+            ? [action.block, ...targetPage.blocks]
+            : [action.block];
+          targetPage.blocksId = targetPage.blocksId
+            ? [action.block.id, ...targetPage.blocksId]
+            : [action.block.id];
         } else {
           targetPage.blocks?.splice(action.newBlockIndex, 0, action.block);
           targetPage.blocksId?.splice(action.newBlockIndex, 0, action.block.id);
         }
 
         if (action.block.firstBlock) {
-          if (targetPage.firstBlocksId !== null) {
-            if (action.previousBlockId !== null) {
+          if (targetPage.firstBlocksId) {
+            if (action.previousBlockId) {
               const firstIndex = targetPage.firstBlocksId.indexOf(
                 action.previousBlockId
               );
@@ -1561,15 +1551,12 @@ export default function notion(
           }
         } else {
           //subBlock 으로 만들어 졌을 때
-          if (action.block.parentBlocksId !== null) {
+          if (action.block.parentBlocksId) {
             updateParentBlock(action.block, action.previousBlockId);
           }
         }
 
-        if (
-          action.block.subBlocksId !== null &&
-          action.previousBlockId !== null
-        ) {
+        if (action.block.subBlocksId && action.previousBlockId) {
           // subBlock을 가지는 블록을 기준으로 그 다음 블록으로 만들어진 경우
           const previousBlock = findBlock(
             targetPage,
@@ -1582,7 +1569,7 @@ export default function notion(
             const parentIndex = BLOCK.parentBlocksId?.indexOf(
               action.previousBlockId as string
             );
-            parentIndex !== undefined &&
+            parentIndex &&
               BLOCK.parentBlocksId?.splice(parentIndex, 1, action.block.id);
           });
         }
@@ -1596,7 +1583,7 @@ export default function notion(
             parentsId: [targetPage.id],
           };
           addPage(newPage);
-          if (action.block.parentBlocksId !== null) {
+          if (action.block.parentBlocksId) {
             const parentPage = findPage(
               pagesId,
               pages,
@@ -1612,12 +1599,11 @@ export default function notion(
                 parentPage.blocksId === null
                   ? [action.block.id]
                   : parentPage.blocksId?.concat(action.block.id),
-              firstBlocksId:
-                parentPage.firstBlocksId !== null
-                  ? parentPage.firstBlocksId?.concat(action.block.id)
-                  : [action.block.id],
+              firstBlocksId: parentPage.firstBlocksId
+                ? parentPage.firstBlocksId?.concat(action.block.id)
+                : [action.block.id],
               subPagesId:
-                parentPage.subPagesId == null
+                parentPage.subPagesId === null
                   ? [...blockSample.id]
                   : parentPage.subPagesId.concat([blockSample.id]),
               editTime: editTime,
@@ -1658,22 +1644,21 @@ export default function notion(
         const allSubBlocks = targetPage.blocks?.filter((block: Block) =>
           block.parentBlocksId?.includes(action.block.id)
         );
-        if (allSubBlocks !== undefined && allSubBlocks[0] !== undefined) {
+        if (allSubBlocks && allSubBlocks[0]) {
           newBlocks = allSubBlocks.map((block: Block) => {
-            const newParentBlocksId =
-              block.parentBlocksId !== null
-                ? block.parentBlocksId.slice(1)
-                : null;
+            const newParentBlocksId = block.parentBlocksId
+              ? block.parentBlocksId.slice(1)
+              : null;
             const newBlock: Block = {
               ...block,
-              parentBlocksId:
-                newParentBlocksId !== null
-                  ? newParentBlocksId[0] === undefined
-                    ? null
-                    : newParentBlocksId
-                  : null,
+              parentBlocksId: newParentBlocksId
+                ? newParentBlocksId[0] === undefined
+                  ? null
+                  : newParentBlocksId
+                : null,
               firstBlock:
-                newParentBlocksId == null || newParentBlocksId[0] === undefined,
+                newParentBlocksId === null ||
+                newParentBlocksId[0] === undefined,
             };
             return newBlock;
           });
@@ -1684,24 +1669,19 @@ export default function notion(
           newSubPagesId = newBlocks
             .filter((block: Block) => block.type === "page")
             .map((block: Block) => block.id);
-          if (newBlocks[0] !== undefined) {
-            targetPage.blocks =
-              targetPage.blocks !== null
-                ? targetPage.blocks.filter(
-                    (block: Block) => !newBlocksId.includes(block.id)
-                  )
-                : null;
-            targetPage.blocksId =
-              targetPage.blocksId !== null
-                ? targetPage.blocksId.filter(
-                    (id: string) => !newBlocksId.includes(id)
-                  )
-                : null;
+          if (newBlocks[0]) {
+            targetPage.blocks = targetPage.blocks
+              ? targetPage.blocks.filter(
+                  (block: Block) => !newBlocksId.includes(block.id)
+                )
+              : null;
+            targetPage.blocksId = targetPage.blocksId
+              ? targetPage.blocksId.filter(
+                  (id: string) => !newBlocksId.includes(id)
+                )
+              : null;
           }
-          if (
-            newSubPagesId[0] !== undefined &&
-            targetPage.subPagesId !== null
-          ) {
+          if (newSubPagesId[0] && targetPage.subPagesId) {
             targetPage.subPagesId = targetPage.subPagesId.filter(
               (id: string) => !newSubPagesId?.includes(id)
             );
@@ -1725,7 +1705,7 @@ export default function notion(
           blocksId: newBlocksId,
           blocks: newBlocks,
           subPagesId:
-            newSubPagesId == null
+            newSubPagesId === null
               ? null
               : newSubPagesId[0] === undefined
               ? null
@@ -1760,24 +1740,22 @@ export default function notion(
         };
         editBlockData(blockIndex, changedBlock);
         if (
-          changedTargetPage.blocks !== null &&
-          changedTargetPage.blocksId !== null &&
-          targetPage.blocks !== null &&
-          targetPage.blocksId !== null
+          changedTargetPage.blocks &&
+          changedTargetPage.blocksId &&
+          targetPage.blocks &&
+          targetPage.blocksId
         ) {
           // targetPage에 changedTargetPage의 block들을 추가
-          const newParentBlocksId =
-            action.block.parentBlocksId !== null
-              ? action.block.parentBlocksId.concat(action.block.id)
-              : [action.block.id];
+          const newParentBlocksId = action.block.parentBlocksId
+            ? action.block.parentBlocksId.concat(action.block.id)
+            : [action.block.id];
           const newSubBlocks: Block[] = changedTargetPage.blocks.map(
             (block: Block) => ({
               ...block,
               firstBlock: false,
-              parentBlocksId:
-                block.parentBlocksId !== null
-                  ? newParentBlocksId.concat(action.block.id)
-                  : newParentBlocksId,
+              parentBlocksId: block.parentBlocksId
+                ? newParentBlocksId.concat(action.block.id)
+                : newParentBlocksId,
             })
           );
           const newTargetPageBlocks = targetPage.blocks.concat(newSubBlocks);
@@ -1804,10 +1782,9 @@ export default function notion(
         const { BLOCK, index } = findBlock(targetPage, action.newParentBlockId);
         const parentBlock: Block = {
           ...BLOCK,
-          subBlocksId:
-            BLOCK.subBlocksId !== null
-              ? BLOCK.subBlocksId.concat(action.block.id)
-              : [action.block.id],
+          subBlocksId: BLOCK.subBlocksId
+            ? BLOCK.subBlocksId.concat(action.block.id)
+            : [action.block.id],
           editTime: editTime,
         };
         const parentBlockIndex = index;
@@ -1817,10 +1794,9 @@ export default function notion(
         const editedBlock: Block = {
           ...action.block,
           firstBlock: false,
-          parentBlocksId:
-            parentBlock.parentBlocksId !== null
-              ? parentBlock.parentBlocksId.concat(parentBlock.id)
-              : [parentBlock.id],
+          parentBlocksId: parentBlock.parentBlocksId
+            ? parentBlock.parentBlocksId.concat(parentBlock.id)
+            : [parentBlock.id],
           editTime: editTime,
         };
         editBlockData(blockIndex, editedBlock);
@@ -1833,18 +1809,15 @@ export default function notion(
           targetPage.firstBlocksId?.splice(index, 1);
         }
         // 4. action.block의 subBlock 에서 다른 subBlock 으로 변경되었을 경우
-        if (action.block.parentBlocksId !== null) {
+        if (action.block.parentBlocksId) {
           const previousParentBlockId =
             action.block.parentBlocksId[action.block.parentBlocksId.length - 1];
           const { BLOCK, index } = findBlock(targetPage, previousParentBlockId);
           const editedPreviousParentBlock: Block = {
             ...BLOCK,
-            subBlocksId:
-              BLOCK.subBlocksId !== null
-                ? BLOCK.subBlocksId.filter(
-                    (id: string) => id !== action.block.id
-                  )
-                : null,
+            subBlocksId: BLOCK.subBlocksId
+              ? BLOCK.subBlocksId.filter((id: string) => id !== action.block.id)
+              : null,
             editTime: editTime,
           };
           editBlockData(index, editedPreviousParentBlock);
@@ -1866,10 +1839,10 @@ export default function notion(
           result2.pull: action block 의 subBlock 앞으로 땡기기 
           */
         if (
-          targetPage.firstBlocksId !== null &&
+          targetPage.firstBlocksId &&
           targetPage.firstBlocksId[0] !== action.block.id &&
-          targetPage.blocks !== null &&
-          targetPage.blocksId !== null
+          targetPage.blocks &&
+          targetPage.blocksId
         ) {
           const targetBlock = action.block;
           const { previousBlockInDoc, previousBlockInDocIndex } =
@@ -1889,11 +1862,7 @@ export default function notion(
               editTime: editTime,
             };
 
-            if (
-              parentBlockIndex !== null &&
-              parentBlock !== null &&
-              parentBlock.subBlocksId !== null
-            ) {
+            if (parentBlockIndex && parentBlock && parentBlock.subBlocksId) {
               const newSubBlocksId = parentBlock.subBlocksId.filter(
                 (id: string) => id !== targetBlock.id
               );
@@ -1956,7 +1925,7 @@ export default function notion(
             };
             editBlockData(parentBlockIndex, editedParentBlock);
             //edit firstBlock
-            if (parentBlock.firstBlock && targetPage.firstBlocksId !== null) {
+            if (parentBlock.firstBlock && targetPage.firstBlocksId) {
               const firstIndex = targetPage.firstBlocksId.indexOf(
                 parentBlock.id
               );
@@ -1967,7 +1936,7 @@ export default function notion(
               );
             }
 
-            if (parentBlock.parentBlocksId !== null) {
+            if (parentBlock.parentBlocksId) {
               const grandParentBlockId =
                 parentBlock.parentBlocksId[
                   parentBlock.parentBlocksId.length - 1
@@ -1978,7 +1947,7 @@ export default function notion(
               );
               const grandParentBlock = BLOCK;
               const grandParentBlockIndex = index;
-              if (grandParentBlock.subBlocksId !== null) {
+              if (grandParentBlock.subBlocksId) {
                 const grandSubsId = [...grandParentBlock.subBlocksId];
                 const subIndex = grandSubsId.indexOf(parentBlock.id);
                 grandSubsId.splice(subIndex + 1, 0, targetBlock.id);
@@ -2000,7 +1969,7 @@ export default function notion(
               targetPage,
               targetBlock
             );
-            if (parentBlock.subBlocksId !== null) {
+            if (parentBlock.subBlocksId) {
               /**
                * parentBlock.subBlocksId를 복사한 것
                */
@@ -2034,9 +2003,9 @@ export default function notion(
 
       case DELETE_BLOCK:
         if (
-          action.block.parentBlocksId !== null &&
-          targetPage.blocks !== null &&
-          targetPage.blocksId !== null
+          action.block.parentBlocksId &&
+          targetPage.blocks &&
+          targetPage.blocksId
         ) {
           const parentBlocksId = action.block?.parentBlocksId as string[];
           const parentBlockId: string =
@@ -2046,7 +2015,7 @@ export default function notion(
           const newSubBlocksId = parentBlock.subBlocksId?.filter(
             (id: string) => id !== action.block.id
           ) as string[];
-          if (newSubBlocksId[0] !== undefined) {
+          if (newSubBlocksId[0]) {
             editBlockData(parentBlockIndex, {
               ...parentBlock,
               subBlocksId: newSubBlocksId,
@@ -2109,7 +2078,7 @@ export default function notion(
           },
           editTime: editTime,
         };
-        if (targetPage.parentsId == null) {
+        if (targetPage.parentsId === null) {
           const index = firstPagesId.indexOf(targetPage.id);
           firstPagesId.splice(index + 1, 0, duplicatedNewPage.id);
         } else {
@@ -2140,12 +2109,12 @@ export default function notion(
 
       case EDIT_PAGE:
         function editPage(newPage: Page) {
-          if (pagesId !== null && pages !== null) {
+          if (pagesId && pages) {
             const parentsId = newPage.parentsId;
-            if (parentsId !== null) {
+            if (parentsId) {
               const parentPageId = parentsId[parentsId.length - 1];
               const parentPage = findPage(pagesId, pages, parentPageId);
-              if (parentPage.blocks !== null && parentPage.blocksId !== null) {
+              if (parentPage.blocks && parentPage.blocksId) {
                 const blockIndex = parentPage.blocksId.indexOf(newPage.id);
                 const pageBlock = parentPage.blocks[blockIndex];
                 const editedPageBlock: Block = {
@@ -2202,7 +2171,7 @@ export default function notion(
         const changeParentsId = (pageId: string) => {
           const subPage = findPage(pagesId, pages, pageId) as Page;
           const subPageIndex = pagesId.indexOf(pageId);
-          if (subPage.parentsId !== null) {
+          if (subPage.parentsId) {
             const targetPageIndex = subPage.parentsId.indexOf(action.pageId);
             const remainPagesId = subPage.parentsId.slice(targetPageIndex);
             const newParentPagesId = [destinationPageId, ...remainPagesId];
@@ -2212,14 +2181,14 @@ export default function notion(
               editTime: editTime,
             };
             pages.splice(subPageIndex, 1, editedSubPage);
-            if (subPage.subPagesId !== null) {
+            if (subPage.subPagesId) {
               subPage.subPagesId.forEach((subPageId: string) =>
                 changeParentsId(subPageId)
               );
             }
           }
         };
-        if (editedMoveTargetPage.subPagesId !== null) {
+        if (editedMoveTargetPage.subPagesId) {
           editedMoveTargetPage.subPagesId.forEach((subPageId: string) =>
             changeParentsId(subPageId)
           );
@@ -2227,7 +2196,7 @@ export default function notion(
         let pageBlockStyle: BlockStyle = basicBlockStyle;
 
         // 페이지 이동전, targetPage가 들어 있는 page에서 targetPage에 대한 데이터 삭제 :block 삭제, subPages 삭제
-        if (moveTargetPage.parentsId !== null) {
+        if (moveTargetPage.parentsId) {
           /**
            * 이동 전에 targetPage가 들어있는 page
            */
@@ -2237,10 +2206,10 @@ export default function notion(
             moveTargetPage.parentsId[moveTargetPage.parentsId.length - 1]
           );
           if (
-            parentPage.blocks !== null &&
-            parentPage.blocksId !== null &&
-            parentPage.firstBlocksId !== null &&
-            parentPage.subPagesId !== null
+            parentPage.blocks &&
+            parentPage.blocksId &&
+            parentPage.firstBlocksId &&
+            parentPage.subPagesId
           ) {
             const blockIndex = parentPage.blocksId.indexOf(action.pageId);
             const pageBlock = parentPage.blocks[blockIndex];
@@ -2253,7 +2222,7 @@ export default function notion(
               //firstBlocksId.splice(indexAsFirst,1);
             }
             //pageBlock의 parentBlock을 수정
-            if (pageBlock.parentBlocksId !== null) {
+            if (pageBlock.parentBlocksId) {
               const { parentBlock, parentBlockIndex } = findParentBlock(
                 parentPage,
                 pageBlock
@@ -2304,22 +2273,18 @@ export default function notion(
         const editedDestinationPage: Page = {
           ...destinationPage,
           editTime: editTime,
-          firstBlocksId:
-            destinationPage.firstBlocksId !== null
-              ? destinationPage.firstBlocksId.concat(newPageBlock.id)
-              : [newPageBlock.id],
-          blocks:
-            destinationPage.blocks !== null
-              ? destinationPage.blocks.concat(newPageBlock)
-              : [newPageBlock],
-          blocksId:
-            destinationPage.blocksId !== null
-              ? destinationPage.blocksId.concat(newPageBlock.id)
-              : [newPageBlock.id],
-          subPagesId:
-            destinationPage.subPagesId !== null
-              ? destinationPage.subPagesId.concat(editedMoveTargetPage.id)
-              : [editedMoveTargetPage.id],
+          firstBlocksId: destinationPage.firstBlocksId
+            ? destinationPage.firstBlocksId.concat(newPageBlock.id)
+            : [newPageBlock.id],
+          blocks: destinationPage.blocks
+            ? destinationPage.blocks.concat(newPageBlock)
+            : [newPageBlock],
+          blocksId: destinationPage.blocksId
+            ? destinationPage.blocksId.concat(newPageBlock.id)
+            : [newPageBlock.id],
+          subPagesId: destinationPage.subPagesId
+            ? destinationPage.subPagesId.concat(editedMoveTargetPage.id)
+            : [editedMoveTargetPage.id],
         };
         pages.splice(destinationPageIndex, 1, editedDestinationPage);
         return {
@@ -2338,23 +2303,19 @@ export default function notion(
           deletedTargetPageIndex: number,
           blockDelete: boolean
         ) {
-          if (deletedTargetPage.parentsId !== null) {
+          if (deletedTargetPage.parentsId) {
             const parentPageIndex = pagesId.indexOf(
               deletedTargetPage.parentsId[
                 deletedTargetPage.parentsId.length - 1
               ]
             );
             const parentPage = pages[parentPageIndex];
-            if (parentPage.subPagesId !== null) {
+            if (parentPage.subPagesId) {
               const subPageIndex = parentPage.subPagesId.indexOf(
                 deletedTargetPage.id
               );
               parentPage.subPagesId.splice(subPageIndex, 1);
-              if (
-                blockDelete &&
-                parentPage.blocksId !== null &&
-                parentPage.blocks !== null
-              ) {
+              if (blockDelete && parentPage.blocksId && parentPage.blocks) {
                 const blockIndex = parentPage.blocksId.indexOf(
                   deletedTargetPage.id
                 );
@@ -2364,7 +2325,7 @@ export default function notion(
                 const firstBlocKIndex = parentPage.firstBlocksId?.indexOf(
                   pageBlock.id
                 );
-                if (firstBlocKIndex !== undefined) {
+                if (firstBlocKIndex) {
                   if (firstBlocKIndex > -1) {
                     parentPage.firstBlocksId?.splice(firstBlocKIndex, 1);
                   } else {
@@ -2375,7 +2336,7 @@ export default function notion(
                     const newParentBlock: Block = {
                       ...parentBlock,
                       subBlocksId:
-                        parentBlock.subBlocksId == null
+                        parentBlock.subBlocksId === null
                           ? null
                           : parentBlock.subBlocksId.filter(
                               (id: string) => id !== pageBlock.id
@@ -2401,7 +2362,7 @@ export default function notion(
         }
 
         function deletePage(pageId: string, blockDelete: boolean) {
-          if (pagesId !== null && pages !== null && firstPagesId !== null) {
+          if (pagesId && pages && firstPagesId) {
             const deletedTargetPageIndex = pagesId.indexOf(pageId);
             const deletedTargetPage = pages[deletedTargetPageIndex];
 
@@ -2417,7 +2378,7 @@ export default function notion(
               ...deletedTargetPage,
               subPages: null,
             };
-            if (deletedTargetPage.subPagesId !== null) {
+            if (deletedTargetPage.subPagesId) {
               const subPages: Page[] = deletedTargetPage.subPagesId.map(
                 (id: string) => findPage(pagesId, pages, id)
               );
@@ -2433,11 +2394,11 @@ export default function notion(
             }
             trash = {
               pagesId:
-                trash.pagesId == null
+                trash.pagesId === null
                   ? [deletedTargetPage.id]
                   : trash.pagesId.concat(deletedTargetPage.id),
               pages:
-                trash.pages == null
+                trash.pages === null
                   ? [trashTargetPage]
                   : trash.pages.concat(trashTargetPage),
             };
@@ -2454,7 +2415,7 @@ export default function notion(
       case CANCEL_EDIT_TEMPLATE:
         const restorePage = (item: string) => {
           const sessionItem = sessionStorage.getItem(item);
-          if (sessionItem !== null) {
+          if (sessionItem) {
             const originTemplate: Page = JSON.parse(sessionItem);
             const templateIndexInPages = pagesId.indexOf(originTemplate.id);
             pages.splice(templateIndexInPages, 1, originTemplate);
@@ -2474,7 +2435,7 @@ export default function notion(
         const templateIndexInPages = pagesId.indexOf(`${action.pageId}`);
         pages.splice(templateIndexInPages, 1);
         pagesId.splice(templateIndexInPages, 1);
-        if (templatesId !== null) {
+        if (templatesId) {
           const templateIndexInTemplates = templatesId.indexOf(
             `${action.pageId}`
           );
@@ -2483,12 +2444,11 @@ export default function notion(
         return {
           pages: pages,
           firstPagesId: firstPagesId,
-          templatesId:
-            templatesId !== null
-              ? templatesId[0] === undefined
-                ? null
-                : templatesId
-              : templatesId,
+          templatesId: templatesId
+            ? templatesId[0] === undefined
+              ? null
+              : templatesId
+            : templatesId,
           pagesId: pagesId,
           trash: trash,
         };
@@ -2496,11 +2456,11 @@ export default function notion(
   }
   switch (action.type) {
     case ADD_PAGE:
-      let pageArr = pages !== null ? [...pages] : null;
-      let pageIdArr = pagesId !== null ? [...pagesId] : null;
-      let firstPageIdArr = firstPagesId !== null ? [...firstPagesId] : null;
+      let pageArr = pages ? [...pages] : null;
+      let pageIdArr = pagesId ? [...pagesId] : null;
+      let firstPageIdArr = firstPagesId ? [...firstPagesId] : null;
 
-      if (pagesId !== null && pages !== null && firstPagesId !== null) {
+      if (pagesId && pages && firstPagesId) {
         addPage(action.newPage);
       } else {
         pageArr = [action.newPage];
@@ -2508,15 +2468,15 @@ export default function notion(
         firstPageIdArr = [action.newPage.id];
       }
       return {
-        pages: pages !== null ? pages : pageArr,
-        firstPagesId: firstPagesId !== null ? firstPagesId : firstPageIdArr,
+        pages: pages ? pages : pageArr,
+        firstPagesId: firstPagesId ? firstPagesId : firstPageIdArr,
         templatesId: templatesId,
-        pagesId: pagesId !== null ? pagesId : pageIdArr,
+        pagesId: pagesId ? pagesId : pageIdArr,
         trash: trash,
       };
 
     case RESTORE_PAGE:
-      let trashPages = trash.pages == null ? null : [...trash.pages];
+      let trashPages = trash.pages === null ? null : [...trash.pages];
       let trashPagesId = trash.pagesId === null ? null : [...trash.pagesId];
 
       const restoredPage: Page = {
@@ -2525,7 +2485,7 @@ export default function notion(
         parentsId: null,
       };
 
-      if (trashPages !== null && trashPagesId !== null) {
+      if (trashPages && trashPagesId) {
         const trashTargetPage = findPage(
           trashPagesId,
           trashPages,
@@ -2534,7 +2494,7 @@ export default function notion(
         const trashTargetPageIndex = trashPagesId.indexOf(trashTargetPage.id);
         trashPages.splice(trashTargetPageIndex, 1);
         trashPagesId.splice(trashTargetPageIndex, 1);
-        if (trashTargetPage.subPages !== null) {
+        if (trashTargetPage.subPages) {
           trashTargetPage.subPages.forEach((sub: Page) => {
             pageArr?.push(sub);
             pageIdArr?.push(sub.id);
@@ -2543,7 +2503,7 @@ export default function notion(
       }
       const newNotion: Notion = {
         ...state,
-        pages: pages == null ? [restoredPage] : [...pages, restoredPage],
+        pages: pages === null ? [restoredPage] : [...pages, restoredPage],
         pagesId:
           pagesId === null ? [restoredPage.id] : [...pagesId, restoredPage.id],
         firstPagesId:
@@ -2551,7 +2511,7 @@ export default function notion(
             ? [restoredPage.id]
             : [...firstPagesId, restoredPage.id],
         trash:
-          trashPages?.[0] !== undefined && trashPagesId?.[0] !== undefined
+          trashPages?.[0] && trashPagesId?.[0]
             ? {
                 pages: [...trashPages],
                 pagesId: [...trashPagesId],
@@ -2567,8 +2527,8 @@ export default function notion(
       trash.pages?.splice(pageIndex, 1);
       trash.pagesId?.splice(pageIndex, 1);
       const cleanedTrash = {
-        pages: trash.pages?.[0] !== undefined ? trash.pages : null,
-        pagesId: trash.pagesId?.[0] !== undefined ? trash.pagesId : null,
+        pages: trash.pages?.[0] ? trash.pages : null,
+        pagesId: trash.pagesId?.[0] ? trash.pagesId : null,
       };
       return {
         ...state,
@@ -2579,14 +2539,12 @@ export default function notion(
       const newTemplate = action.template;
 
       return {
-        pages: pages !== null ? pages.concat(newTemplate) : [newTemplate],
+        pages: pages ? pages.concat(newTemplate) : [newTemplate],
         firstPagesId: firstPagesId,
-        templatesId:
-          templatesId !== null
-            ? templatesId.concat(newTemplate.id)
-            : [newTemplate.id],
-        pagesId:
-          pagesId !== null ? pagesId.concat(newTemplate.id) : [newTemplate.id],
+        templatesId: templatesId
+          ? templatesId.concat(newTemplate.id)
+          : [newTemplate.id],
+        pagesId: pagesId ? pagesId.concat(newTemplate.id) : [newTemplate.id],
         trash: trash,
       };
 

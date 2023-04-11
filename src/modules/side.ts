@@ -29,7 +29,7 @@ export default function side(
   switch (action.type) {
     case CHANGE_SIDE:
       const sideBar = document.getElementById("inner");
-      if (sideBar !== null) {
+      if (sideBar) {
         const classList = sideBar.classList;
         const newClassName = `sideBar-${action.appear}`;
         sideBar.classList.replace(classList[0], newClassName);

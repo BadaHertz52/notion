@@ -34,11 +34,11 @@ const Loader = ({
   );
   const onChangeImgFile = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file !== undefined) {
+    if (file) {
       const reader = new FileReader();
       reader.onload = function () {
         const result = reader.result as string;
-        if (block !== null) {
+        if (block) {
           const editedBlock: Block = {
             ...block,
             type: "image media",
@@ -47,7 +47,7 @@ const Loader = ({
           };
           const templateHtml = document.getElementById("template");
           setTemplateItem(templateHtml, page);
-          editBlock !== null && editBlock(page.id, editedBlock);
+          editBlock && editBlock(page.id, editedBlock);
           closeLoader();
         } else {
           //change page cover
@@ -59,7 +59,7 @@ const Loader = ({
             },
             editTime: JSON.stringify(Date.now()),
           };
-          editPage !== null && editPage(page.id, editedPage);
+          editPage && editPage(page.id, editedPage);
           closeLoader();
         }
       };
@@ -77,30 +77,26 @@ const Loader = ({
       },
       editTime: JSON.stringify(Date.now()),
     };
-    editPage !== null && editPage(page.id, editedPage);
+    editPage && editPage(page.id, editedPage);
     setOpenLoader(false);
   };
   function closeLoader() {
     setOpenLoader(false);
-    setLoaderTargetBlock !== null && setLoaderTargetBlock(null);
+    setLoaderTargetBlock && setLoaderTargetBlock(null);
   }
   inner?.addEventListener("click", (event) => {
-    if (loaderHtml !== null) {
+    if (loaderHtml) {
       !detectRange(event, loaderHtml.getClientRects()[0]) && closeLoader();
     }
   });
   function changeLoaderStyle() {
-    if (block !== null) {
+    if (block) {
       const blockHtml = document.getElementById(`block-${block.id}`);
       const blockDomRect = blockHtml?.getClientRects()[0];
       const editorHtml = document.querySelector(".editor");
       const editorDomRect = editorHtml?.getClientRects()[0];
 
-      if (
-        blockDomRect !== undefined &&
-        frameHtml !== null &&
-        editorDomRect !== undefined
-      ) {
+      if (blockDomRect && frameHtml && editorDomRect) {
         const frameDomRect = frameHtml.getClientRects()[0];
         const frameInner = frameHtml.getElementsByClassName(
           "frame__inner"
@@ -137,7 +133,7 @@ const Loader = ({
       }
     } else {
       const pageCover = frameHtml?.querySelector(".page__header__cover");
-      if (pageCover !== undefined && pageCover !== null) {
+      if (pageCover) {
         const style: CSSProperties = {
           position: "absolute",
           top: pageCover.clientHeight,
