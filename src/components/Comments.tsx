@@ -915,7 +915,7 @@ const CommentBlock = ({
   const editCommentItem = sessionStorage.getItem("editComment");
   const targetMainComment = mainComment ? (comment as MainCommentType) : null;
   const blockContentEl = document.getElementById(
-    `${block?.id}__contents`
+    `${block?.id}-contents`
   )?.textContent;
   useEffect(() => {
     // discard edit
