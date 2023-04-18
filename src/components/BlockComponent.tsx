@@ -760,7 +760,7 @@ const BlockComponent = ({
           // web browser 에서
           setOpenComment(false);
           setCommand({
-            boolean: true,
+            open: true,
             command: "/",
             targetBlock: block,
           });
@@ -1037,13 +1037,13 @@ const BlockComponent = ({
     const trueOrFalse = value.startsWith("/");
     if (trueOrFalse) {
       setCommand({
-        boolean: true,
+        open: true,
         command: value.toLowerCase(),
         targetBlock: command.targetBlock,
       });
     } else {
       setCommand({
-        boolean: false,
+        open: false,
         command: null,
         targetBlock: null,
       });
@@ -1068,7 +1068,7 @@ const BlockComponent = ({
       };
       editBlock(page.id, newBlock);
       setCommand({
-        boolean: false,
+        open: false,
         command: null,
         targetBlock: null,
       });
@@ -1097,7 +1097,7 @@ const BlockComponent = ({
     const blockContents =
       block.type === "page" ? getPageTitle() : block.contents;
     useEffect(() => {
-      if (command.boolean) {
+      if (command.open) {
         const commentInputHtml = document.getElementById("commandInput");
         if (commentInputHtml) {
           commentInputHtml.focus();

@@ -45,7 +45,7 @@ import { HiTemplate } from "react-icons/hi";
 import MobileBlockMenu from "./MobileBlockMenu";
 import { ModalType } from "../containers/EditorContainer";
 export type Command = {
-  boolean: boolean;
+  open: boolean;
   command: string | null;
   targetBlock: Block | null;
 };
@@ -127,7 +127,7 @@ const Frame = ({
   const [openLoaderForCover, setOpenLoaderForCover] = useState<boolean>(false);
   const [decoOpen, setDecoOpen] = useState<boolean>(false);
   const [command, setCommand] = useState<Command>({
-    boolean: false,
+    open: false,
     command: null,
     targetBlock: null,
   });
@@ -800,7 +800,7 @@ const Frame = ({
    * commandBlockPosition (type:CSSProperties)의 값을 변경하는 함수
    */
   const changeCBSposition = () => {
-    if (command.boolean && command.targetBlock) {
+    if (command.open && command.targetBlock) {
       const frameDomRect = frameHtml?.getClientRects()[0];
       const blockStyler = document.getElementById("blockStyler");
       if (blockStyler) {
@@ -905,7 +905,7 @@ const Frame = ({
     document.getElementById("menu__main") && closeMenu(event);
     document.getElementById("modal__menu") && closeModal(event);
     document.getElementById("block-comments") && closeComments(event);
-    if (command.boolean) {
+    if (command.open) {
       const blockCommandBlock = document.getElementById("block__commandBlock");
       const commandDomRect = blockCommandBlock?.getClientRects()[0];
       const commandInputHtml = document.getElementById("commandInput");
@@ -914,7 +914,7 @@ const Frame = ({
         !isInnerCommand &&
           event.target !== commandInputHtml &&
           setCommand({
-            boolean: false,
+            open: false,
             command: null,
             targetBlock: null,
           });
@@ -943,7 +943,7 @@ const Frame = ({
   }, [newPageFrame, firstBlocksId]);
   useEffect(() => {
     changeCBSposition();
-  }, [command.boolean, command.targetBlock, openTemplates]);
+  }, [command.open, command.targetBlock, openTemplates]);
 
   //window.onresize =changeCommentStyle;
   useEffect(() => {
@@ -1242,7 +1242,7 @@ const Frame = ({
           </div>
         </div>
       </div>
-      {command.boolean && command.targetBlock && (
+      {command.open && command.targetBlock && (
         <div id="block__commandBlock" style={commandBlockPosition}>
           <CommandBlock
             style={commandBlockStyle}

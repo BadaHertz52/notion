@@ -237,7 +237,7 @@ const BlockStyler = ({
       const clickColorBtn = target.closest(".blockStyler__btn-color");
       !clickTypeBtn &&
         setCommand({
-          boolean: false,
+          open: false,
           command: null,
           targetBlock: null,
         });
@@ -249,14 +249,14 @@ const BlockStyler = ({
   };
 
   const onClickTypeBtn = () => {
-    command.boolean
+    command.open
       ? setCommand({
-          boolean: false,
+          open: false,
           command: null,
           targetBlock: null,
         })
       : setCommand({
-          boolean: true,
+          open: true,
           command: null,
           targetBlock: block,
         });
@@ -470,7 +470,7 @@ const BlockStyler = ({
           break;
         case "block__commandBlock":
           setCommand({
-            boolean: false,
+            open: false,
             command: null,
             targetBlock: null,
           });
@@ -526,8 +526,7 @@ const BlockStyler = ({
             openColor && closeSideMenu(eventTarget, "block-styler__color");
             openLink && closeSideMenu(eventTarget, "linkLoader");
             openMenu && closeSideMenu(eventTarget, "menu__main");
-            command.boolean &&
-              closeSideMenu(eventTarget, "block__commandBlock");
+            command.open && closeSideMenu(eventTarget, "block__commandBlock");
           }
         }
       }
@@ -576,11 +575,11 @@ const BlockStyler = ({
         openColor && setOpenColor(false);
         openLink && setOpenLink(false);
         openMenu && setOpenMenu(false);
-        command.boolean &&
+        command.open &&
           setCommand({
             command: null,
             targetBlock: null,
-            boolean: false,
+            open: false,
           });
       }
     }

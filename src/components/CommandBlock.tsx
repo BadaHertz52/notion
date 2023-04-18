@@ -253,7 +253,7 @@ const CommandBlock = ({
   function closeCommandBlock() {
     setCommand &&
       setCommand({
-        boolean: false,
+        open: false,
         command: null,
         targetBlock: null,
       });
