@@ -95,12 +95,6 @@ const CommandBlock = ({
       };
       //listBlock data 수정
       blocks.splice(indexOfBlocks, 1, listBlock);
-
-      setSelection &&
-        setSelection({
-          change: true,
-          block: listBlock,
-        });
       // newParent 를 blocks에 추가
       if (editedBlock.parentBlocksId) {
         //editedBlock is not firstBlock
@@ -235,12 +229,6 @@ const CommandBlock = ({
       switch (blockType) {
         case "page":
           changeBlockToPage(page.id, block);
-          const changedBlock = findBlock(page, block.id).BLOCK;
-          setSelection &&
-            setSelection({
-              change: true,
-              block: changedBlock,
-            });
           break;
         case "numberListArr":
           changeToListType(editedBlock, "numberListArr");
@@ -252,15 +240,11 @@ const CommandBlock = ({
           block.type === "page"
             ? changePageToBlock(page.id, editedBlock)
             : editBlock(page.id, editedBlock);
-          setSelection &&
-            setSelection({
-              change: true,
-              block: editedBlock,
-            });
           break;
       }
     }
     closeCommandBlock();
+    setSelection && setSelection(null);
   };
   const onClickImgTypeBtn = () => {
     changeType("image");
