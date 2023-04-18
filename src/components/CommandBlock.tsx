@@ -12,7 +12,6 @@ import {
   findBlock,
   findParentBlock,
   makeNewBlock,
-  numberList,
   Page,
 } from "../modules/notion";
 import imgIcon from "../assets/img/vincent-van-gogh-ge1323790d_640.jpg";
@@ -229,9 +228,9 @@ const CommandBlock = ({
           blockType === "bulletListArr"
             ? "bulletList"
             : blockType === "numberListArr"
-            ? numberList
+            ? "numberList"
             : blockType,
-        contents: blockType === "image media" ? "" : block.contents,
+        contents: blockType === "image" ? "" : block.contents,
       };
       switch (blockType) {
         case "page":
@@ -264,7 +263,7 @@ const CommandBlock = ({
     closeCommandBlock();
   };
   const onClickImgTypeBtn = () => {
-    changeType("image media");
+    changeType("image");
     closeCommandBlock();
   };
   function closeCommandBlock() {

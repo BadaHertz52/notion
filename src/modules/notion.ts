@@ -6,50 +6,48 @@ const catImg =
 const imgBlockImg =
   "https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assets/img/roses-gfcb7dbdd4_640.jpg";
 //TYPE
-export const text = "text" as const;
-export const toggle = "toggle" as const;
-export const todo = "todo" as const;
-export const todo_done = "todo done" as const;
-export const h1 = "h1" as const;
-export const h2 = "h2" as const;
-export const h3 = "h3" as const;
-export const page = "page" as const;
-export const image = "image media" as const;
-export const bookmark = "bookmark media" as const;
-export const numberList = "numberList" as const;
-export const numberListArr = "numberListArr" as const;
-export const bulletList = "bulletList" as const;
-export const bulletListArr = "bulletListArr" as const;
-export const blockTypes = [
-  text,
-  toggle,
-  todo,
-  todo_done,
-  image,
-  bookmark,
-  h1,
-  h2,
-  page,
-  numberList,
-  bulletList,
-];
+// export const text = "text" as const;
+// export const toggle = "toggle" as const;
+// export const todo = "todo" as const;
+// export const todo_done = "todo_done" as const;
+// export const h1 = "h1" as const;
+// export const h2 = "h2" as const;
+// export const h3 = "h3" as const;
+// export const page = "page" as const;
+// export const image = "image media" as const;
+// export const numberList = "numberList" as const;
+// export const numberListArr = "numberListArr" as const;
+// export const bulletList = "bulletList" as const;
+// export const bulletListArr = "bulletListArr" as const;
 
 export type BlockType =
-  | typeof text
-  | typeof toggle
-  | typeof todo
-  | typeof todo_done
-  | typeof image
-  | typeof bookmark
-  | typeof h1
-  | typeof h2
-  | typeof h3
-  | typeof page
-  | typeof numberList
-  | typeof bulletList
-  | typeof numberListArr
-  | typeof bulletListArr;
+  | "text"
+  | "toggle"
+  | "todo"
+  | "todo_done"
+  | "image"
+  | "h1"
+  | "h2"
+  | "h3"
+  | "page"
+  | "numberList"
+  | "bulletList"
+  | "numberListArr"
+  | "bulletListArr";
 
+export const blockTypes: BlockType[] = [
+  "text",
+  "toggle",
+  "todo",
+  "todo_done",
+  "image",
+  "h1",
+  "h2",
+  "h3",
+  "page",
+  "numberList",
+  "bulletList",
+];
 export const defaultColor: string = "initial" as const;
 export const grey: string = "#bdbdbd" as const;
 export const orange: string = "#ffa726" as const;
@@ -132,7 +130,7 @@ export const blockSample: Block = {
   firstBlock: true,
   subBlocksId: null,
   parentBlocksId: null,
-  type: text,
+  type: "text",
   iconType: null,
   icon: null,
   editTime: editTime,
@@ -184,8 +182,8 @@ export type listItem = {
   editTime: string;
   createTime: string;
 };
-const template = "template";
-type pageType = typeof page | typeof template;
+
+type pageType = "page" | "template";
 export type Page = {
   id: string;
   type: pageType;
@@ -212,7 +210,7 @@ type TrashPage = Page & {
 };
 export const pageSample: Page = {
   id: editTime,
-  type: page,
+  type: "page",
   header: {
     title: "untitle",
     iconType: null,
@@ -492,7 +490,7 @@ const returnTemplateSubBlock = (day: string, index: number) => {
     firstBlock: false,
     subBlocksId: null,
     parentBlocksId: [`templateBlock_${day}`],
-    type: todo,
+    type: "todo",
     iconType: null,
     icon: null,
     editTime: editTime,
@@ -511,7 +509,7 @@ const returnTemplateBlock = (day: string, index: number) => {
     firstBlock: true,
     subBlocksId: [`templateSub_${day}`],
     parentBlocksId: null,
-    type: h3,
+    type: "h3",
     iconType: null,
     icon: null,
     editTime: editTime,
@@ -545,7 +543,7 @@ const templateSubBlocksId = day.map((d: string) => `templateSub_${d}`);
 //reducer
 const template1: Page = {
   id: "template1",
-  type: template,
+  type: "template",
   header: {
     title: "To Do List ",
     iconType: "emoji",
@@ -563,7 +561,7 @@ const template1: Page = {
 };
 const template2: Page = {
   id: "template2",
-  type: template,
+  type: "template",
   header: {
     title: "To Do List2 ",
     iconType: "emoji",
@@ -579,7 +577,7 @@ const template2: Page = {
       firstBlock: true,
       subBlocksId: null,
       parentBlocksId: null,
-      type: todo,
+      type: "todo",
       iconType: null,
       icon: null,
       editTime: editTime,
@@ -611,7 +609,7 @@ const initialState: Notion = {
   pages: [
     {
       id: "12345",
-      type: page,
+      type: "page",
       header: {
         title: "welcome notion 🐱",
         iconType: "img",
@@ -636,7 +634,7 @@ const initialState: Notion = {
         "img",
         "toggle",
         "todo",
-        "todo done",
+        "todo_done",
         "h1",
         "h2",
         "h3",
@@ -652,7 +650,7 @@ const initialState: Notion = {
           firstBlock: true,
           subBlocksId: ["sub1_1", "sub1_2"],
           parentBlocksId: null,
-          type: text,
+          type: "text",
           iconType: null,
           icon: null,
           editTime: Date.parse("2022-5-18-15:00").toString(),
@@ -682,7 +680,7 @@ const initialState: Notion = {
           firstBlock: true,
           subBlocksId: null,
           parentBlocksId: null,
-          type: image,
+          type: "image",
           iconType: null,
           icon: null,
           editTime: Date.parse("2022-5-18-16:00").toString(),
@@ -700,7 +698,7 @@ const initialState: Notion = {
           firstBlock: true,
           subBlocksId: ["toggleSub"],
           parentBlocksId: null,
-          type: toggle,
+          type: "toggle",
           iconType: null,
           icon: null,
           editTime: Date.parse("2022-5-18-16:00").toString(),
@@ -714,7 +712,7 @@ const initialState: Notion = {
           firstBlock: false,
           subBlocksId: null,
           parentBlocksId: ["toggle"],
-          type: text,
+          type: "text",
           iconType: null,
           icon: null,
           editTime: Date.parse("2022-5-18-16:10").toString(),
@@ -728,7 +726,7 @@ const initialState: Notion = {
           firstBlock: true,
           subBlocksId: null,
           parentBlocksId: null,
-          type: todo,
+          type: "todo",
           iconType: null,
           icon: null,
           editTime: Date.parse("2022-5-18-16:01:00").toString(),
@@ -739,12 +737,12 @@ const initialState: Notion = {
           comments: null,
         },
         {
-          id: "todo done",
-          contents: "todo done",
+          id: "todo_done",
+          contents: "todo_done",
           firstBlock: true,
           subBlocksId: null,
           parentBlocksId: null,
-          type: todo_done,
+          type: "todo_done",
           iconType: null,
           icon: null,
           editTime: Date.parse("2022-5-19-11:30").toString(),
@@ -759,7 +757,7 @@ const initialState: Notion = {
           firstBlock: true,
           subBlocksId: null,
           parentBlocksId: null,
-          type: h1,
+          type: "h1",
           iconType: null,
           icon: null,
           editTime: Date.parse("2022-5-19-12:00").toString(),
@@ -774,7 +772,7 @@ const initialState: Notion = {
           firstBlock: true,
           subBlocksId: null,
           parentBlocksId: null,
-          type: h2,
+          type: "h2",
           iconType: null,
           icon: null,
           editTime: Date.parse("2022-5-18-20:00").toString(),
@@ -811,7 +809,7 @@ const initialState: Notion = {
           firstBlock: true,
           subBlocksId: null,
           parentBlocksId: null,
-          type: h3,
+          type: "h3",
           iconType: null,
           icon: null,
           editTime: Date.parse("2022-5-19-19:20").toString(),
@@ -825,7 +823,7 @@ const initialState: Notion = {
           firstBlock: true,
           subBlocksId: null,
           parentBlocksId: null,
-          type: page,
+          type: "page",
           iconType: null,
           icon: null,
           editTime: Date.parse("2022-5-20-21:00").toString(),
@@ -839,7 +837,7 @@ const initialState: Notion = {
           firstBlock: true,
           subBlocksId: null,
           parentBlocksId: null,
-          type: page,
+          type: "page",
           iconType: "emoji",
           icon: emojis[8],
           editTime: Date.parse("2022-5-20-9:00").toString(),
@@ -853,7 +851,7 @@ const initialState: Notion = {
           firstBlock: false,
           subBlocksId: ["sub2_1"],
           parentBlocksId: ["text"],
-          type: text,
+          type: "text",
           iconType: null,
           icon: null,
           editTime: Date.parse("2022-6-1-1:00").toString(),
@@ -869,7 +867,7 @@ const initialState: Notion = {
           firstBlock: false,
           subBlocksId: null,
           parentBlocksId: ["text"],
-          type: text,
+          type: "text",
           iconType: null,
           icon: null,
           editTime: Date.parse("2022-5-12-09:00").toString(),
@@ -897,7 +895,7 @@ const initialState: Notion = {
           firstBlock: false,
           subBlocksId: null,
           parentBlocksId: ["text", "sub1_1"],
-          type: text,
+          type: "text",
           iconType: null,
           icon: null,
           editTime: Date.parse("2022-5-27-7:00").toString(),
@@ -908,12 +906,12 @@ const initialState: Notion = {
           comments: null,
         },
         {
-          id: "numberList",
+          id: "numberListArr",
           contents: "",
           firstBlock: true,
           subBlocksId: ["num1", "num2", "num3"],
           parentBlocksId: null,
-          type: numberListArr,
+          type: "numberListArr",
           iconType: null,
           icon: null,
           editTime: Date.parse("2022-6-1-18:45").toString(),
@@ -928,8 +926,8 @@ const initialState: Notion = {
           contents: "n1",
           firstBlock: false,
           subBlocksId: null,
-          parentBlocksId: [numberList],
-          type: numberList,
+          parentBlocksId: ["numberList"],
+          type: "numberList",
           iconType: null,
           icon: null,
           editTime: Date.parse("2022-6-1-19:03").toString(),
@@ -945,8 +943,8 @@ const initialState: Notion = {
           contents: "n2",
           firstBlock: false,
           subBlocksId: null,
-          parentBlocksId: [numberList],
-          type: numberList,
+          parentBlocksId: ["numberList"],
+          type: "numberList",
           iconType: null,
           icon: null,
           editTime: Date.parse("2022-6-1-19:03:50").toString(),
@@ -973,8 +971,8 @@ const initialState: Notion = {
           contents: "n3",
           firstBlock: false,
           subBlocksId: null,
-          parentBlocksId: [numberList],
-          type: numberList,
+          parentBlocksId: ["numberList"],
+          type: "numberList",
           iconType: null,
           icon: null,
           editTime: Date.parse("2022-6-1-19:12:13").toString(),
@@ -985,12 +983,12 @@ const initialState: Notion = {
           comments: null,
         },
         {
-          id: "bulletList",
+          id: "bulletListArr",
           contents: "",
           firstBlock: true,
           subBlocksId: ["b1", "b2"],
           parentBlocksId: null,
-          type: bulletListArr,
+          type: "bulletListArr",
           iconType: null,
           icon: null,
           editTime: Date.parse("2022-6-1-19:13:45").toString(),
@@ -1005,8 +1003,8 @@ const initialState: Notion = {
           contents: "b1",
           firstBlock: false,
           subBlocksId: null,
-          parentBlocksId: [bulletList],
-          type: bulletList,
+          parentBlocksId: ["bulletList"],
+          type: "bulletList",
           iconType: null,
           icon: null,
           editTime: Date.parse("2022-6-1-19:23").toString(),
@@ -1021,8 +1019,8 @@ const initialState: Notion = {
           contents: "b2",
           firstBlock: false,
           subBlocksId: null,
-          parentBlocksId: [bulletList],
-          type: bulletList,
+          parentBlocksId: ["bulletList"],
+          type: "bulletList",
           iconType: null,
           icon: null,
           editTime: Date.parse("2022-6-1-20:12").toString(),
@@ -1039,7 +1037,7 @@ const initialState: Notion = {
         "toggle",
         "toggleSub",
         "todo",
-        "todo done",
+        "todo_done",
         "h1",
         "h2",
         "h3",
@@ -1075,7 +1073,7 @@ const initialState: Notion = {
           firstBlock: true,
           subBlocksId: null,
           parentBlocksId: null,
-          type: image,
+          type: "image",
           iconType: null,
           icon: null,
           editTime: Date.parse("2022-5-18-16:00").toString(),
@@ -1105,7 +1103,7 @@ const initialState: Notion = {
     },
     {
       id: "1234",
-      type: page,
+      type: "page",
       header: {
         title: "notion2",
         iconType: "emoji",
@@ -1123,7 +1121,7 @@ const initialState: Notion = {
     },
     {
       id: "123",
-      type: page,
+      type: "page",
       header: {
         title: "notion3",
         iconType: "emoji",
@@ -1693,7 +1691,7 @@ export default function notion(
           : changedTypeBlock.contents;
         const newPage: Page = {
           id: changedTypeBlock.id,
-          type: page,
+          type: "page",
           header: {
             title: title,
             iconType: changedTypeBlock.iconType,

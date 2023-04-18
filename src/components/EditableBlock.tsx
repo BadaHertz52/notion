@@ -112,7 +112,7 @@ const EditableBlock = ({
       : true;
   const blockContentsStyle = (block: Block): CSSProperties => {
     return {
-      color: block.type !== "todo done" ? block.style.color : "grey",
+      color: block.type !== "todo_done" ? block.style.color : "grey",
       backgroundColor: block.style.bgColor,
       width: block.style.width === undefined ? "inherit" : block.style.width,
       height: block.style.height === undefined ? "inherit" : block.style.height,
@@ -150,7 +150,7 @@ const EditableBlock = ({
   const onClickTodoBtn = () => {
     const editedBlock: Block = {
       ...block,
-      type: block.type === "todo" ? "todo done" : "todo",
+      type: block.type === "todo" ? "todo_done" : "todo",
       editTime: JSON.stringify(Date.now()),
     };
     setTemplateItem(templateHtml, page);
@@ -342,7 +342,7 @@ const EditableBlock = ({
                       <GrCheckbox className="block__btn__svg" />
                     </button>
                   )}
-                  {block.type === "todo done" && (
+                  {block.type === "todo_done" && (
                     <button
                       className="checkbox done left block__btn"
                       name={block.id}

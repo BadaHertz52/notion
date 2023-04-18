@@ -22,7 +22,6 @@ import {
   MainCommentType,
   makeNewBlock,
   Page,
-  toggle,
 } from "../modules/notion";
 import { Command } from "./Frame";
 import ImageContent from "./ImageContent";
@@ -626,7 +625,7 @@ const BlockComponent = ({
    */
   const possibleBlocks: Block[] | null = page.blocks
     ? page.blocks.filter(
-        (block: Block) => block.type !== "image media" && block.type !== "page"
+        (block: Block) => block.type !== "image" && block.type !== "page"
       )
     : null;
   const possibleBlocksId: string[] | null = possibleBlocks
@@ -718,7 +717,7 @@ const BlockComponent = ({
             };
             editBlock(page.id, editedBlock);
           }
-          if (block.type === toggle) {
+          if (block.type === "toggle") {
             const newSubToggleBlock: Block = {
               ...newBlock,
               parentBlocksId: [block.id],
@@ -1183,13 +1182,11 @@ const BlockComponent = ({
         <button className="contents page__title" id={`${block.id}__contents`}>
           <BlockContentEditable />
         </button>
-      ) : block.type.includes("media") ? (
+      ) : block.type === "image" ? (
         block.contents === "" ? (
           <button className="btn-addBlockFile" onClick={onClickAddFileBtn}>
             <span className="icon-addBlockFile">
-              {block.type === "image media" && (
-                <MdOutlinePhotoSizeSelectActual />
-              )}
+              <MdOutlinePhotoSizeSelectActual />
             </span>
             <span>
               Add a {block.type.slice(0, block.type.indexOf("media"))}
@@ -1197,9 +1194,7 @@ const BlockComponent = ({
           </button>
         ) : (
           <>
-            {block.type === "image media" && (
-              <ImageContent page={page} block={block} editBlock={editBlock} />
-            )}
+            <ImageContent page={page} block={block} editBlock={editBlock} />
           </>
         )
       ) : (

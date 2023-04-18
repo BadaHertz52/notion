@@ -194,7 +194,7 @@ const BlockStyler = ({
         return "Text";
       case "todo":
         return "To-do list";
-      case "todo done":
+      case "todo_done":
         return "To-do list";
       case "toggle":
         return "Toggle list";

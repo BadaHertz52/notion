@@ -41,7 +41,7 @@ const Loader = ({
         if (block) {
           const editedBlock: Block = {
             ...block,
-            type: "image media",
+            type: "image",
             contents: result,
             editTime: JSON.stringify(Date.now()),
           };
