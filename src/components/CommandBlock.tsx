@@ -9,7 +9,6 @@ import { ActionContext, selectionType } from "../containers/NotionRouter";
 import {
   Block,
   BlockType,
-  findBlock,
   findParentBlock,
   makeNewBlock,
   Page,
