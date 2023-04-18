@@ -1,177 +1,236 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import {useDispatch, useSelector } from 'react-redux';
-import { CSSProperties } from 'styled-components';
-import Frame  from '../components/Frame';
-import MobileSideMenu from '../components/MobileSideMenu';
-import TopBar from '../components/TopBar';
-import { RootState } from '../modules';
-import  {  Block, Page,  change_to_sub, raise_block, listItem } from '../modules/notion';
-import { SideAppear } from '../modules/side';
-import { fontStyleType, mobileSideMenuType, pathType } from './NotionRouter';
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { CSSProperties } from "styled-components";
+import Frame from "../components/Frame";
+import MobileSideMenu from "../components/MobileSideMenu";
+import TopBar from "../components/TopBar";
+import { RootState } from "../modules";
+import {
+  Block,
+  Page,
+  change_to_sub,
+  raise_block,
+  listItem,
+} from "../modules/notion";
+import { SideAppear } from "../modules/side";
+import { fontStyleType, mobileSideMenuType, pathType } from "./NotionRouter";
 
-export const popupMoveToPage= "popupMoveToPage" ;
-export const popupComment ="popupComment" ;
-export const popupCommand="popupCommand";
-export type PopupType ={
-  popup: boolean,
-  what: typeof popupMoveToPage | typeof popupComment | typeof popupCommand| null,
+export const popupMoveToPage = "popupMoveToPage";
+export const popupComment = "popupComment";
+export const popupCommand = "popupCommand";
+export type PopupType = {
+  popup: boolean;
+  what:
+    | typeof popupMoveToPage
+    | typeof popupComment
+    | typeof popupCommand
+    | null;
 };
-export type NotionActionProps ={
-  editBlock :(pageId: string, block: Block) => void,
-  changeBlockToPage: (currentPageId: string, block: Block) => void,
+export type NotionActionProps = {
+  editBlock: (pageId: string, block: Block) => void;
+  changeBlockToPage: (currentPageId: string, block: Block) => void;
 
-  addBlock: (pageId: string, block: Block, newBlockIndex: number, previousBlockId: string | null) => void,
+  addBlock: (
+    pageId: string,
+    block: Block,
+    newBlockIndex: number,
+    previousBlockId: string | null
+  ) => void;
 
-  deleteBlock: (pageId: string, block: Block , isInMenu:boolean) => void,
-  
-  addPage : ( newPage:Page, )=>void
-  editPage : (pageId:string , newPage:Page, )=>void,
-  deletePage : (pageId:string )=>void,
-  duplicatePage: (targetPageId: string) => void,
-  movePageToPage: (targetPageId: string, destinationPageId: string) => void,
-  restorePage: (pageId: string) => void,
+  deleteBlock: (pageId: string, block: Block, isInMenu: boolean) => void;
 
-  cleanTrash: (pageId: string) => void,
+  addPage: (newPage: Page) => void;
+  editPage: (pageId: string, newPage: Page) => void;
+  deletePage: (pageId: string) => void;
+  duplicatePage: (targetPageId: string) => void;
+  movePageToPage: (targetPageId: string, destinationPageId: string) => void;
+  restorePage: (pageId: string) => void;
 
-  addFavorites: (itemId: string) => void,
-  removeFavorites: (itemId: string) => void,
+  cleanTrash: (pageId: string) => void;
 
-  changeSide: (appear: SideAppear) => void,
+  addFavorites: (itemId: string) => void;
+  removeFavorites: (itemId: string) => void;
+
+  changeSide: (appear: SideAppear) => void;
 };
-type EditorContainerProps = NotionActionProps &{
-  pages:Page[],
-  pagesId:string[],
-  userName:string,
-  firstlist:listItem[],
-  recentPagesId:string[]|null,
-  sideAppear:SideAppear,
-  page:Page,
+type EditorContainerProps = NotionActionProps & {
+  pages: Page[];
+  pagesId: string[];
+  userName: string;
+  firstList: listItem[];
+  recentPagesId: string[] | null;
+  sideAppear: SideAppear;
+  page: Page;
 
-  changeToSub: (pageId: string, block: Block, newParentBlockId: string) => void,
-  raiseBlock: (pageId: string, block: Block ,isInMenu:boolean) => void,
-  isInTrash:boolean,
+  changeToSub: (pageId: string, block: Block, newParentBlockId: string) => void;
+  raiseBlock: (pageId: string, block: Block, isInMenu: boolean) => void;
+  isInTrash: boolean;
 
-  changePageToBlock:(currentPageId: string, block: Block) => void,
+  changePageToBlock: (currentPageId: string, block: Block) => void;
 
-  makePagePath: (page: Page ,pagesId:string[], pages:Page[]) => pathType[] | null,
+  makePagePath: (
+    page: Page,
+    pagesId: string[],
+    pages: Page[]
+  ) => pathType[] | null;
 
-  setTargetPageId:Dispatch<SetStateAction<string>>,
-  setRoutePage: React.Dispatch<React.SetStateAction<Page | null>>,
-  popup:PopupType,
-  setPopup:Dispatch<SetStateAction<PopupType>>,
-  openComment :boolean,
-  setOpenComment: Dispatch<SetStateAction<boolean>>,
-  commentBlock :Block|null,
-  setCommentBlock:Dispatch<SetStateAction<Block|null>>,
-  smallText:boolean,
-  setSmallText:Dispatch<SetStateAction<boolean>>,
-  
-  fullWidth:boolean,
-  setFullWidth:Dispatch<SetStateAction<boolean>>,
-  showAllComments:boolean,
-  setShowAllComments:Dispatch<SetStateAction<boolean>>,
-  discardEdit:boolean,
-  setDiscardEdit:Dispatch<SetStateAction<boolean>>,
-  setOpenExport :Dispatch<SetStateAction<boolean>>,
-  openTemplates: boolean,
-  setOpenTemplates: Dispatch<SetStateAction<boolean>>,
-  fontStyle:fontStyleType,
-  setFontStyle:Dispatch<SetStateAction<fontStyleType>>,
-  mobileSideMenu:mobileSideMenuType,
-  setMobileSideMenu:Dispatch<SetStateAction<mobileSideMenuType>>,
-  mobileSideMenuOpen:boolean,
-  setMobileSideMenuOpen:Dispatch<SetStateAction<boolean>>
+  setTargetPageId: Dispatch<SetStateAction<string>>;
+  setRoutePage: React.Dispatch<React.SetStateAction<Page | null>>;
+  popup: PopupType;
+  setPopup: Dispatch<SetStateAction<PopupType>>;
+  openComment: boolean;
+  setOpenComment: Dispatch<SetStateAction<boolean>>;
+  commentBlock: Block | null;
+  setCommentBlock: Dispatch<SetStateAction<Block | null>>;
+  smallText: boolean;
+  setSmallText: Dispatch<SetStateAction<boolean>>;
+
+  fullWidth: boolean;
+  setFullWidth: Dispatch<SetStateAction<boolean>>;
+  showAllComments: boolean;
+  setShowAllComments: Dispatch<SetStateAction<boolean>>;
+  discardEdit: boolean;
+  setDiscardEdit: Dispatch<SetStateAction<boolean>>;
+  setOpenExport: Dispatch<SetStateAction<boolean>>;
+  openTemplates: boolean;
+  setOpenTemplates: Dispatch<SetStateAction<boolean>>;
+  fontStyle: fontStyleType;
+  setFontStyle: Dispatch<SetStateAction<fontStyleType>>;
+  mobileSideMenu: mobileSideMenuType;
+  setMobileSideMenu: Dispatch<SetStateAction<mobileSideMenuType>>;
+  mobileSideMenuOpen: boolean;
+  setMobileSideMenuOpen: Dispatch<SetStateAction<boolean>>;
 };
 
-const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,recentPagesId ,isInTrash, makePagePath,changeSide,addBlock,editBlock ,changeBlockToPage, changePageToBlock,deleteBlock,addPage,editPage,restorePage,duplicatePage, movePageToPage,deletePage, removeFavorites, addFavorites, cleanTrash, setTargetPageId, setRoutePage ,openComment,setOpenComment,commentBlock,setCommentBlock,smallText,setSmallText,fullWidth,setFullWidth,showAllComments,  setShowAllComments ,discardEdit , setDiscardEdit,setOpenExport, openTemplates, setOpenTemplates, fontStyle, setFontStyle , popup,setPopup,  mobileSideMenu ,setMobileSideMenu,mobileSideMenuOpen, setMobileSideMenuOpen }:EditorContainerProps)=>{
-  const dispatch =useDispatch();
-  const user =useSelector((state:RootState)=>state.user);
-  const [editorStyle, setEditorStyle]=useState<CSSProperties|undefined>(undefined);
-  const changeToSub =(pageId: string, block: Block,  newParentBlockId: string)=> dispatch(change_to_sub(pageId, block, newParentBlockId));
-  const raiseBlock =(pageId: string, block: Block) =>dispatch((raise_block(pageId, block)));
-  const [pagePath, setPagePath]=useState<pathType[]|null>(null);
+const EditorContainer = ({
+  sideAppear,
+  userName,
+  firstList,
+  page,
+  pages,
+  pagesId,
+  recentPagesId,
+  isInTrash,
+  makePagePath,
+  changeSide,
+  addBlock,
+  editBlock,
+  changeBlockToPage,
+  changePageToBlock,
+  deleteBlock,
+  addPage,
+  editPage,
+  restorePage,
+  duplicatePage,
+  movePageToPage,
+  deletePage,
+  removeFavorites,
+  addFavorites,
+  cleanTrash,
+  setTargetPageId,
+  setRoutePage,
+  openComment,
+  setOpenComment,
+  commentBlock,
+  setCommentBlock,
+  smallText,
+  setSmallText,
+  fullWidth,
+  setFullWidth,
+  showAllComments,
+  setShowAllComments,
+  discardEdit,
+  setDiscardEdit,
+  setOpenExport,
+  openTemplates,
+  setOpenTemplates,
+  fontStyle,
+  setFontStyle,
+  popup,
+  setPopup,
+  mobileSideMenu,
+  setMobileSideMenu,
+  mobileSideMenuOpen,
+  setMobileSideMenuOpen,
+}: EditorContainerProps) => {
+  const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.user);
+  const [editorStyle, setEditorStyle] = useState<CSSProperties | undefined>(
+    undefined
+  );
+  const changeToSub = (
+    pageId: string,
+    block: Block,
+    newParentBlockId: string
+  ) => dispatch(change_to_sub(pageId, block, newParentBlockId));
+  const raiseBlock = (pageId: string, block: Block) =>
+    dispatch(raise_block(pageId, block));
+  const [pagePath, setPagePath] = useState<pathType[] | null>(null);
 
-
-  useEffect(()=>{
-    if(sideAppear==="lock"){
+  useEffect(() => {
+    if (sideAppear === "lock") {
       const sideBarHtml = document.querySelector(".sideBar");
-      const sideBarWidth =sideBarHtml?.clientWidth;
-      if(sideBarWidth!==undefined){
+      const sideBarWidth = sideBarHtml?.clientWidth;
+      if (sideBarWidth !== undefined) {
         setEditorStyle({
-          width:`calc(100vw - ${sideBarWidth}px)`
-        })
+          width: `calc(100vw - ${sideBarWidth}px)`,
+        });
       }
-    }else{
+    } else {
       setEditorStyle({
-        width:"100vw"
-      })
+        width: "100vw",
+      });
     }
-  },[sideAppear])
+  }, [sideAppear]);
 
-  useEffect(()=>{
-    setPagePath(makePagePath(page, pagesId, pages))
-  },[page, page.header.icon, page.header.title, makePagePath]);
+  useEffect(() => {
+    setPagePath(makePagePath(page, pagesId, pages));
+  }, [page, page.header.icon, page.header.title, makePagePath]);
 
-
-  return(
-    <div 
-      className='editor'
-      style={editorStyle}
-    >
-      {isInTrash &&
-      <div className='isInTrash'>
-        <div>
-          This is page is in Trash.
+  return (
+    <div className="editor" style={editorStyle}>
+      {isInTrash && (
+        <div className="isInTrash">
+          <div>This is page is in Trash.</div>
+          <div className="isInTrashBtns">
+            <button onClick={() => restorePage(page.id)}>Restore page</button>
+            <button onClick={() => cleanTrash(page.id)}>
+              Delete permanently
+            </button>
+          </div>
         </div>
-        <div className="isInTrashBtns">
-          <button
-            onClick={()=>restorePage(page.id)}
-          >
-            Restore page
-          </button>
-          <button
-            onClick={()=>cleanTrash(page.id)}
-          >
-            Delete permanently
-          </button>
-        </div>
-      </div>
-      }
+      )}
       <TopBar
-      firstlist={firstlist}
-      favorites={user.favorites}
-      sideAppear={sideAppear}
-      page={page}
-      pages={pages}
-      pagePath ={pagePath}
-      changeSide={changeSide}
-
-      addBlock={addBlock}
-      deleteBlock={deleteBlock}
-      changeBlockToPage={changeBlockToPage}
-      
-      deletePage={deletePage}
-      movePageToPage={movePageToPage}
-
-      removeFavorites={removeFavorites}
-      addFavorites={addFavorites}
-
-      setTargetPageId={setTargetPageId}
-      showAllComments={showAllComments}
-      setShowAllComments={setShowAllComments}
-      smallText={smallText}
-      setSmallText={setSmallText}
-      fullWidth={fullWidth}
-      setFullWidth={setFullWidth}
-      setOpenExport={setOpenExport}
-      setFontStyle={setFontStyle}
-      /> 
+        firstList={firstList}
+        favorites={user.favorites}
+        sideAppear={sideAppear}
+        page={page}
+        pages={pages}
+        pagePath={pagePath}
+        changeSide={changeSide}
+        addBlock={addBlock}
+        deleteBlock={deleteBlock}
+        changeBlockToPage={changeBlockToPage}
+        deletePage={deletePage}
+        movePageToPage={movePageToPage}
+        removeFavorites={removeFavorites}
+        addFavorites={addFavorites}
+        setTargetPageId={setTargetPageId}
+        showAllComments={showAllComments}
+        setShowAllComments={setShowAllComments}
+        smallText={smallText}
+        setSmallText={setSmallText}
+        fullWidth={fullWidth}
+        setFullWidth={setFullWidth}
+        setOpenExport={setOpenExport}
+        setFontStyle={setFontStyle}
+      />
       <Frame
         page={page}
         userName={userName}
         pagesId={pagesId}
         pages={pages}
-        firstlist={firstlist}
+        firstList={firstList}
         recentPagesId={recentPagesId}
         addBlock={addBlock}
         editBlock={editBlock}
@@ -189,7 +248,7 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,rece
         setTargetPageId={setTargetPageId}
         setRoutePage={setRoutePage}
         setOpenComment={setOpenComment}
-        setCommentBlock ={setCommentBlock}
+        setCommentBlock={setCommentBlock}
         popup={popup}
         setPopup={setPopup}
         showAllComments={showAllComments}
@@ -204,37 +263,36 @@ const EditorContainer =({sideAppear,userName, firstlist,page,pages, pagesId,rece
         setMobileSideMenuOpen={setMobileSideMenuOpen}
         mobileSideMenuOpen={mobileSideMenuOpen}
       />
-      {mobileSideMenuOpen && 
-        mobileSideMenu.block !==null &&
+      {mobileSideMenuOpen && mobileSideMenu.block !== null && (
         <MobileSideMenu
-        pages={pages}
-        pagesId={pagesId}
-        recentPagesId={recentPagesId}
-        firstlist={firstlist}
-        userName={userName}
-        page={page}
-        block={mobileSideMenu.block}
-        addBlock={editBlock}
-        changeBlockToPage={changeBlockToPage}
-        changePageToBlock ={changePageToBlock}
-        editBlock={editBlock}
-        deleteBlock ={deleteBlock}
-        duplicatePage={duplicatePage}
-        movePageToPage ={movePageToPage}
-        editPage ={editPage}
-        setPopup ={setPopup}
-        popup ={popup}
-        setCommentBlock ={setCommentBlock}
-        setTargetPageId ={setTargetPageId}
-        frameHtml ={null}
-        mobileSideMenu ={mobileSideMenu}
-        setMobileSideMenu={setMobileSideMenu}
-        mobileSideMenuOpen ={mobileSideMenuOpen}
-        setMobileSideMenuOpen ={setMobileSideMenuOpen}
+          pages={pages}
+          pagesId={pagesId}
+          recentPagesId={recentPagesId}
+          firstList={firstList}
+          userName={userName}
+          page={page}
+          block={mobileSideMenu.block}
+          addBlock={editBlock}
+          changeBlockToPage={changeBlockToPage}
+          changePageToBlock={changePageToBlock}
+          editBlock={editBlock}
+          deleteBlock={deleteBlock}
+          duplicatePage={duplicatePage}
+          movePageToPage={movePageToPage}
+          editPage={editPage}
+          setPopup={setPopup}
+          popup={popup}
+          setCommentBlock={setCommentBlock}
+          setTargetPageId={setTargetPageId}
+          frameHtml={null}
+          mobileSideMenu={mobileSideMenu}
+          setMobileSideMenu={setMobileSideMenu}
+          mobileSideMenuOpen={mobileSideMenuOpen}
+          setMobileSideMenuOpen={setMobileSideMenuOpen}
         />
-      }
+      )}
     </div>
-  )
+  );
 };
 
-export default React.memo(EditorContainer)
+export default React.memo(EditorContainer);
