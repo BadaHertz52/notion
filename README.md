@@ -609,7 +609,7 @@ type UserAction =
 - 2022.12 업데이트
   - sideBar,allComment 변경,<span style="text-decoration:line-through"> MoblieMenu 추가 </span>, 모바일에서도 ImageContent 사이즈 변경가능하도록 수정
     <br/>
-- 2022.3 업데이트 및 수정
+- 2023.3 업데이트 및 수정
 
   - 모바일 브라우저에서 사용될 block 에 대한 메뉴와 그 사이드 메뉴를 담당하는 MobileBlockMenu, MobileSideMenu 추가
 
