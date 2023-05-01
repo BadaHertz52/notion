@@ -1,6 +1,6 @@
 # Notion
 
-해당 프로젝트는 [Notion](https://www.notion.so/)을 react를 사용하여 클론 코딩한 프로젝트입니다.
+해당 프로젝트는 [Notion](https://www.notion.so/)을 react를 사용하여 직접 레이아웃과 기능들을 분석하 클론 코딩한 프로젝트입니다.
 
 ## [노션 프로젝트 바로가기](https://badahertz52.github.io/notion)
 
