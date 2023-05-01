@@ -26,9 +26,11 @@
 
 ### 1) Tech skill
 
-- React
-- Type script
-- SCSS
+- HTML
+- Type script , Java Script
+- SCSS , styled-components
+-React
+-Redux
 
 ### 2) Built with
 
