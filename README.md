@@ -29,8 +29,8 @@
 - HTML
 - Type script , Java Script
 - SCSS , styled-components
--React
--Redux
+- React
+- Redux
 
 ### 2) Built with
 
