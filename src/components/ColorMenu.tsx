@@ -174,7 +174,11 @@ const ColorInform = ({
     closeMenu && closeMenu();
   };
   return (
-    <button className="btn-color-inform" onClick={changeColor}>
+    <button
+      className="btn-color-inform"
+      title={`button to change ${color ? "color" : "background color"}`}
+      onClick={changeColor}
+    >
       <StyleColorInform
         className={"icon-color"}
         color={color}

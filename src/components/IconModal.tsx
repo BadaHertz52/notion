@@ -222,20 +222,35 @@ const IconModal = ({
         <div className="header">
           <div className="category">
             <div className="btn-category">
-              <button onClick={() => setCategory(emoji)}>Emoji</button>
+              <button
+                title="button to open emojis"
+                onClick={() => setCategory(emoji)}
+              >
+                Emoji
+              </button>
               {category === emoji && <span className="bottom-line"></span>}
             </div>
             <div className="btn-category">
-              <button onClick={() => setCategory(image)}>Upload image</button>
+              <button
+                title="button to open form to upload image"
+                onClick={() => setCategory(image)}
+              >
+                Upload image
+              </button>
               {category === image && <span className="bottom-line"></span>}
             </div>
           </div>
           <div>
-            <button onClick={onClickRandom}>
+            <button
+              title="button to select random emoji as icon"
+              onClick={onClickRandom}
+            >
               <BsEmojiSmile />
               Random
             </button>
-            <button onClick={removeIcon}>Remove</button>
+            <button title="button to remove icon" onClick={removeIcon}>
+              Remove
+            </button>
           </div>
         </div>
 
@@ -243,6 +258,7 @@ const IconModal = ({
           {category === emoji ? (
             emojis.map((emoji: Emoji) => (
               <button
+                title={`button to select ${emoji} emoji`}
                 className="btn-emoji"
                 onClick={() => changePageIcon(emoji, "emoji")}
               >

@@ -102,6 +102,7 @@ const ImageContent = ({ page, block, editBlock }: ImageContentProps) => {
       style={imageStyle}
     >
       <button
+        title="left button to resize image"
         className="btn-size length left"
         onMouseDown={(event) => onMouseDownSizeBtn(event)}
         onTouchStart={(event) => onTouchStartSizeBtn(event)}
@@ -109,6 +110,7 @@ const ImageContent = ({ page, block, editBlock }: ImageContentProps) => {
         <span></span>
       </button>
       <button
+        title="right button to resize image"
         className="btn-size length right"
         onMouseDown={(event) => onMouseDownSizeBtn(event)}
         onTouchStart={(event) => onTouchStartSizeBtn(event)}
@@ -116,6 +118,7 @@ const ImageContent = ({ page, block, editBlock }: ImageContentProps) => {
         <span></span>
       </button>
       <button
+        title="bottom button to resize image"
         className="btn-size transverse bottom "
         onMouseDown={(event) => onMouseDownSizeBtn(event)}
         onTouchStart={(event) => onTouchStartSizeBtn(event)}

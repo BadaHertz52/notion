@@ -96,7 +96,11 @@ const PageMenu = ({
 
   const PageButton = ({ item }: PageButtonProps) => {
     return (
-      <button className="btn-page" onClick={() => onClickToMove(item.id)}>
+      <button
+        title="button to move page"
+        className="btn-page"
+        onClick={() => onClickToMove(item.id)}
+      >
         <div className="btn-page__inner">
           <PageIcon
             icon={item.icon}
@@ -163,7 +167,11 @@ const PageMenu = ({
                 <PageButton key={`list_${item.id}`} item={item} />
               ))}
             </div>
-            <button id="new_sub_page" onClick={makeNewSubPage}>
+            <button
+              id="new_sub_page"
+              title="button to add new subpage"
+              onClick={makeNewSubPage}
+            >
               <AiOutlinePlus />
               <span>New sub-page</span>
             </button>

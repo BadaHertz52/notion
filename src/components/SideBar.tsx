@@ -156,6 +156,7 @@ const ItemTemplate = ({
     >
       <div className="pageItem">
         <button
+          title="button to toggle page"
           className="toggleBtn"
           onClick={onToggleSubPage}
           style={toggleStyle}
@@ -174,7 +175,7 @@ const ItemTemplate = ({
       <div className="sideBarPageFn" ref={sideBarPageFn}>
         <button
           className="moreBtn"
-          title="delete, duplicate, and more"
+          title="button to open menu to delete, duplicate or for more"
           onClick={() => {
             sideBarPageFn.current &&
               onClickMoreBtn(item, sideBarPageFn.current);
@@ -184,7 +185,7 @@ const ItemTemplate = ({
         </button>
         <button
           className="btn-addPage"
-          title="Quickly add a page inside"
+          title="button to quickly add a page inside"
           onClick={() => {
             addNewSubPage(item);
           }}
@@ -584,12 +585,14 @@ const SideBar = ({
                   </div>
                 </div>
                 <button
+                  title="button to close side menu"
                   className="closeSideBarBtn topBar__btn-sideBar"
                   onClick={() => changeSide("close")}
                 >
                   <FiChevronsLeft />
                 </button>
                 <button
+                  title="button to open form that has deleted page"
                   className="trashBtn"
                   onClick={onClickTrashBtn}
                   ref={trashBtn}
@@ -608,6 +611,7 @@ const SideBar = ({
                 ) : (
                   recentPages.map((page: Page, i) => (
                     <button
+                      title={`button to move page that is ${page.title}`}
                       key={`recentPage_${i}`}
                       id={`item_${page.id}`}
                       className="item"
@@ -634,7 +638,10 @@ const SideBar = ({
               </div>
             </div>
             <div className="fun1">
-              <button onClick={() => setOpenQF(true)}>
+              <button
+                title="button to open quick find board"
+                onClick={() => setOpenQF(true)}
+              >
                 <div className="item__inner">
                   <BiSearchAlt2 />
                   <span>Quick Find</span>
@@ -703,13 +710,20 @@ const SideBar = ({
               </div>
             </div>
             <div className="fun2">
-              <button onClick={() => setOpenTemplates(true)}>
+              <button
+                title="button to open templates"
+                onClick={() => setOpenTemplates(true)}
+              >
                 <div className="item__inner">
                   <HiTemplate />
                   <span>Templates</span>
                 </div>
               </button>
-              <button onClick={onClickTrashBtn} ref={trashBtn}>
+              <button
+                title="button to open form that has deleted pages"
+                onClick={onClickTrashBtn}
+                ref={trashBtn}
+              >
                 <div className="item__inner">
                   <BsFillTrash2Fill />
                   <span>Trash</span>
@@ -719,7 +733,7 @@ const SideBar = ({
           </div>
           {/* <a href="https://icons8.com/icon/11732/페이지-개요">페이지 개요 icon by Icons8</a> */}
           <div className="addNewPageBtn">
-            <button onClick={addNewPage}>
+            <button title="button to make new page" onClick={addNewPage}>
               <AiOutlinePlus />
               <span>New page</span>
             </button>
@@ -727,7 +741,11 @@ const SideBar = ({
         </div>
       </div>
       <div id="moreFn" style={moreFnStyle} onTouchMove={onTouchMoveSideBar}>
-        <button className="resizeBar" onTouchStart={onTouchStartResizeBar}>
+        <button
+          title="button to resize moreFn "
+          className="resizeBar"
+          onTouchStart={onTouchStartResizeBar}
+        >
           <div></div>
         </button>
         {targetItem && (
@@ -740,41 +758,65 @@ const SideBar = ({
             <div className="page__title">{targetItem.title}</div>
           </div>
         )}
-        <button className="moreFn__btn btn-delete" onClick={onClickToDelete}>
+        <button
+          title="button to delete"
+          className="moreFn__btn btn-delete"
+          onClick={onClickToDelete}
+        >
           <div>
             <RiDeleteBin6Line />
             <span>Delete</span>
           </div>
         </button>
         {targetItem && user.favorites?.includes(targetItem.id) ? (
-          <button className="moreFn__btn" onClick={onClickToRemoveFavorite}>
+          <button
+            title="button to remove to favorite"
+            className="moreFn__btn"
+            onClick={onClickToRemoveFavorite}
+          >
             <div>
               <AiOutlineStar />
               <span>Remove to Favorites</span>
             </div>
           </button>
         ) : (
-          <button className="moreFn__btn" onClick={onClickToAddFavorite}>
+          <button
+            title="button to add to favorite"
+            className="moreFn__btn"
+            onClick={onClickToAddFavorite}
+          >
             <div>
               <AiOutlineStar />
               <span>Add to Favorites</span>
             </div>
           </button>
         )}
-        <button className="moreFn__btn" onClick={onClickToDuplicate}>
+        <button
+          title="button to duplicate"
+          className="moreFn__btn"
+          onClick={onClickToDuplicate}
+        >
           <div>
             <HiOutlineDuplicate />
             <span>Duplicate</span>
             <span></span>
           </div>
         </button>
-        <button className="moreFn__btn" onClick={onClickToRename}>
+        <button
+          title="button to rename"
+          className="moreFn__btn"
+          onClick={onClickToRename}
+        >
           <div>
             <BsPencilSquare />
             <span>Rename</span>
           </div>
         </button>
-        <button className="moreFn__btn" onClick={onClickMoveToBtn}>
+        <button
+          title="butotn to move  it to other page"
+          className="moreFn__btn"
+          onClick={onClickMoveToBtn}
+        >
           <div>
             <IoArrowRedoOutline />
             <span>Move to</span>

@@ -270,6 +270,7 @@ const CommandBlock = ({
           <header className="command__header">BASIC BLOCKS</header>
           <div className="command__btn-group type">
             <button
+              title="btn for type that is text"
               onClick={() => changeType("text")}
               className="btn-command on"
               name="text"
@@ -287,6 +288,7 @@ const CommandBlock = ({
               </div>
             </button>
             <button
+              title="btn for type that is page"
               onClick={() => changeType("page")}
               className="btn-command on "
               name="page"
@@ -304,6 +306,7 @@ const CommandBlock = ({
               </div>
             </button>
             <button
+              title="btn for type that is todo"
               onClick={() => changeType("todo")}
               className="btn-command on"
               name="todo list"
@@ -321,6 +324,7 @@ const CommandBlock = ({
               </div>
             </button>
             <button
+              title="btn for type that is h1"
               className="btn-command on"
               onClick={() => changeType("h1")}
               name="h1 heading 1"
@@ -339,6 +343,7 @@ const CommandBlock = ({
               </div>
             </button>
             <button
+              title="btn for type that is h2"
               className="btn-command on"
               onClick={() => changeType("h2")}
               name="h2 heading 2"
@@ -357,6 +362,7 @@ const CommandBlock = ({
               </div>
             </button>
             <button
+              title="btn for type that is h3"
               className="btn-command on"
               onClick={() => changeType("h3")}
               name="h3 heading 3"
@@ -375,6 +381,7 @@ const CommandBlock = ({
               </div>
             </button>
             <button
+              title="btn for type that is bulletList"
               className="btn-command on"
               onClick={() => changeType("bulletListArr")}
               name="bullet list"
@@ -392,6 +399,7 @@ const CommandBlock = ({
               </div>
             </button>
             <button
+              title="btn for type that is numberList"
               className="btn-command on"
               onClick={() => changeType("numberListArr")}
               name="number list"
@@ -409,6 +417,7 @@ const CommandBlock = ({
               </div>
             </button>
             <button
+              title="btn for type that is toggle"
               className="btn-command on"
               onClick={() => changeType("toggle")}
               name="toggle list"
@@ -431,6 +440,7 @@ const CommandBlock = ({
           <header className="command__header">MEDIA</header>
           <div className="command__btn-group type">
             <button
+              title="btn for type that is image"
               className="btn-command on"
               onClick={onClickImgTypeBtn}
               name="image"

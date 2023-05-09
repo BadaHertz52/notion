@@ -521,7 +521,11 @@ const LinkLoader = ({
     const pagePath = makeRoutePath(page, pagesId, pages).slice(1);
     const paths = makePagePath(page, pagesId, pages);
     return (
-      <button className="page__inner" onClick={() => addLink(pagePath)}>
+      <button
+        title="button to open page"
+        className="page__inner"
+        onClick={() => addLink(pagePath)}
+      >
         <PageIcon
           icon={page.header.icon}
           iconType={page.header.iconType}
@@ -569,7 +573,10 @@ const LinkLoader = ({
         <div id="linkLoader_moreFn">
           {webLink && searchValue && (
             <div id="btn-link-webPage">
-              <button onClick={() => addLink(searchValue)}>
+              <button
+                title="button to  link to  web page "
+                onClick={() => addLink(searchValue)}
+              >
                 <BsLink45Deg />
                 Link to web page
               </button>
@@ -577,11 +584,19 @@ const LinkLoader = ({
           )}
           {linked && (
             <div id="linkedFn">
-              <button id="btn-copy-link" onClick={copyLink}>
+              <button
+                title="button to copy link"
+                id="btn-copy-link"
+                onClick={copyLink}
+              >
                 <IoMdCopy />
                 <span>Copy link</span>
               </button>
-              <button id="btn-remove-link" onClick={removeLink}>
+              <button
+                title="button to remove link"
+                id="btn-remove-link"
+                onClick={removeLink}
+              >
                 <IoTrashOutline />
                 <span>Remove link</span>
               </button>
@@ -589,7 +604,10 @@ const LinkLoader = ({
           )}
           {searchValue && (
             <div id="linkResult">
-              <button onClick={() => addLink(searchValue)}>
+              <button
+                title="button to add link "
+                onClick={() => addLink(searchValue)}
+              >
                 <BsArrowUpRight />
                 <span>New "{searchValue}" page in....</span>
               </button>

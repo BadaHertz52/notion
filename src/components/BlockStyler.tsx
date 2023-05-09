@@ -593,6 +593,7 @@ const BlockStyler = ({
       >
         <div className="inner">
           <button
+            title="button to change type"
             className="blockStyler__btn-type btn"
             onClick={onClickTypeBtn}
           >
@@ -600,6 +601,7 @@ const BlockStyler = ({
             <IoIosArrowDown className="arrow-down" />
           </button>
           <button
+            title="button to add link "
             className="blockStyler__btn-link btn"
             onClick={() => {
               if (!isMobile()) setOpenLink(!openLink);
@@ -612,6 +614,7 @@ const BlockStyler = ({
             <IoIosArrowDown className="arrow-down" />
           </button>
           <button
+            title="button to comment"
             className="btn-comment btn"
             onClick={onClickCommentBtn}
             onTouchStart={prepareForChange}
@@ -622,6 +625,7 @@ const BlockStyler = ({
           </button>
           <div className="style">
             <button
+              title="button to change bold  style"
               className="style__btn-bold btn"
               onClick={() => {
                 if (!isMobile()) onClickFontStyleBtn(bold);
@@ -632,6 +636,7 @@ const BlockStyler = ({
               B
             </button>
             <button
+              title="button to change italic style "
               className="style__btn-italic btn"
               onClick={() => {
                 if (!isMobile()) onClickFontStyleBtn(italic);
@@ -642,6 +647,7 @@ const BlockStyler = ({
               i
             </button>
             <button
+              title="button to change underline style "
               className="style__btn-underline btn"
               onClick={() => {
                 if (!isMobile()) onClickFontStyleBtn(underline);
@@ -652,6 +658,7 @@ const BlockStyler = ({
               U
             </button>
             <button
+              title="button to change lineThrough"
               className="style__btn-lineThrough btn"
               onClick={() => {
                 if (!isMobile()) onClickFontStyleBtn(lineThrough);
@@ -663,6 +670,7 @@ const BlockStyler = ({
             </button>
           </div>
           <button
+            title="button to change color of content "
             className="blockStyler__btn-color btn"
             onClick={() => {
               if (!isMobile()) onClickColorBtn();
@@ -676,6 +684,7 @@ const BlockStyler = ({
             <IoIosArrowDown className="arrow-down" />
           </button>
           <button
+            title="button to open menu "
             className="blockStyler__btn-menu btn"
             onClick={() => {
               if (!isMobile()) onClickMenuBtn();

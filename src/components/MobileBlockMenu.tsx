@@ -241,7 +241,7 @@ const MobileBlockMenu = ({
             <button
               className="btn-add-block"
               onTouchEnd={addNewBlock}
-              title="Click  to add a block below"
+              title="button  to add a block below"
             >
               <div className="mobileBlock__btn__inner">
                 <AiOutlinePlus />
@@ -251,6 +251,7 @@ const MobileBlockMenu = ({
               <button
                 name="comment"
                 className="btn-comment"
+                title="button to comment"
                 onTouchEnd={onTouchCommentBtn}
               >
                 <div className="mobileBlock__btn__inner">
@@ -259,6 +260,7 @@ const MobileBlockMenu = ({
               </button>
             )}
             <button
+              title="button to turn into"
               className="btn-turn-into"
               onTouchEnd={() => openMobileSideMenu("ms_turnInto")}
               name="turn into"
@@ -271,6 +273,7 @@ const MobileBlockMenu = ({
               </div>
             </button>
             <button
+              title="button to delete"
               className="btn-delete"
               onTouchEnd={removeBlock}
               name="delete"
@@ -280,6 +283,7 @@ const MobileBlockMenu = ({
               </div>
             </button>
             <button
+              title="button to change color"
               name="color"
               className="underline menu__editBtn btn-color "
               onTouchEnd={() => openMobileSideMenu("ms_color")}

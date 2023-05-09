@@ -238,6 +238,7 @@ const QuickFindBoard = ({
                     <div className="sort__inner">
                       <div>Sort :</div>
                       <button
+                        title="button to open box to select option"
                         onClick={openSortOptions}
                         ref={openSortOptionsBtn}
                       >
@@ -246,6 +247,7 @@ const QuickFindBoard = ({
                       </button>
                       <div className="sort__options" ref={sortOptions}>
                         <button
+                          title={`button to select ${bestMatches}`}
                           onClick={onClickOption}
                           className="selected optionBtn"
                         >
@@ -254,26 +256,42 @@ const QuickFindBoard = ({
                             <AiOutlineCheck />
                           </div>
                         </button>
-                        <button onClick={onClickOption} className="optionBtn">
+                        <button
+                          title={`button to select ${lastEditedNewest}`}
+                          onClick={onClickOption}
+                          className="optionBtn"
+                        >
                           <div className="optionName">{lastEditedNewest}</div>
                           <div className="checkIcon">
                             <AiOutlineCheck />
                           </div>
                         </button>
-                        <button onClick={onClickOption} className="optionBtn">
+                        <button
+                          title={`button to select ${lastEditedOldest}`}
+                          onClick={onClickOption}
+                          className="optionBtn"
+                        >
                           <div className="optionName">{lastEditedOldest}</div>
 
                           <div className="checkIcon">
                             <AiOutlineCheck />
                           </div>
                         </button>
-                        <button onClick={onClickOption} className="optionBtn">
+                        <button
+                          title={`button to select ${createdNewest}`}
+                          onClick={onClickOption}
+                          className="optionBtn"
+                        >
                           <div className="optionName">{createdNewest}</div>
                           <div className="checkIcon">
                             <AiOutlineCheck />
                           </div>
                         </button>
-                        <button onClick={onClickOption} className="optionBtn">
+                        <button
+                          title={`button to select ${createdOldest}`}
+                          onClick={onClickOption}
+                          className="optionBtn"
+                        >
                           <div className="optionName">{createdOldest}</div>
                           <div className="checkIcon">
                             <AiOutlineCheck />
@@ -286,7 +304,11 @@ const QuickFindBoard = ({
               ) : (
                 <>
                   <p>RECENT PAGES</p>
-                  <button className="btn-clear" onClick={cleanRecentPage}>
+                  <button
+                    title="button to clear option"
+                    className="btn-clear"
+                    onClick={cleanRecentPage}
+                  >
                     Clear
                   </button>
                 </>
@@ -296,7 +318,10 @@ const QuickFindBoard = ({
               {result ? (
                 result !== "noResult" ? (
                   result.map((item: resultType) => (
-                    <button onClick={() => setTargetPageId(item.id)}>
+                    <button
+                      title="button to select result"
+                      onClick={() => setTargetPageId(item.id)}
+                    >
                       <Result item={item} />
                     </button>
                   ))
@@ -304,12 +329,15 @@ const QuickFindBoard = ({
                   <div className="no-result">
                     <p>No result</p>
                     <p>Some results may be in your deleted pages</p>
-                    <button>Search deleted pages</button>
+                    <p>Search deleted pages</p>
                   </div>
                 )
               ) : recentPagesList ? (
                 recentPagesList.map((item: resultType) => (
-                  <button onClick={() => setTargetPageId(item.id)}>
+                  <button
+                    title="button to select page"
+                    onClick={() => setTargetPageId(item.id)}
+                  >
                     <Result item={item} />
                   </button>
                 ))

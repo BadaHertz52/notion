@@ -43,10 +43,18 @@ const ResultItem = ({
     <div className="page" onClick={goPage}>
       <Result item={item} />
       <div className="btn-group">
-        <button className="btn-restore" onClick={() => restorePage(item.id)}>
+        <button
+          title="button to restore page"
+          className="btn-restore"
+          onClick={() => restorePage(item.id)}
+        >
           <RiArrowGoBackLine />
         </button>
-        <button className="btn-clean" onClick={() => cleanTrash(item.id)}>
+        <button
+          title="button to  permanently delete page"
+          className="btn-clean"
+          onClick={() => cleanTrash(item.id)}
+        >
           <IoTrashOutline />
         </button>
       </div>
@@ -122,10 +130,24 @@ const Trash = ({
       <div className="inner">
         <div className="header">
           <div className="range">
-            <button onClick={() => setSort("all")}>All Pages</button>
-            <button onClick={() => setSort("current")}>In current page</button>
+            <button
+              title="button to show all pages"
+              onClick={() => setSort("all")}
+            >
+              All Pages
+            </button>
+            <button
+              title="button to show  pages in current page"
+              onClick={() => setSort("current")}
+            >
+              In current page
+            </button>
           </div>
-          <button className="closeTrashBtn" onClick={() => setOpenTrash(false)}>
+          <button
+            title="close button"
+            className="closeTrashBtn"
+            onClick={() => setOpenTrash(false)}
+          >
             close
           </button>
         </div>

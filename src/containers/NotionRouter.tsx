@@ -627,7 +627,10 @@ const NotionRouter = () => {
               <div className="editor nonePage">
                 <p>Page doesn't existence</p>
                 <p>Try make new Page</p>
-                <button onClick={() => addPage(pageSample)}>
+                <button
+                  title="button to make new page"
+                  onClick={() => addPage(pageSample)}
+                >
                   Make new page
                 </button>
               </div>
@@ -641,8 +644,12 @@ const NotionRouter = () => {
               <div>Do you want to discard this edit?</div>
             </div>
             <div className="btn-group">
-              <button onClick={onClickDiscardEdit}>Discard</button>
-              <button onClick={onClickCloseEdit}>Close</button>
+              <button title="button to discard" onClick={onClickDiscardEdit}>
+                Discard
+              </button>
+              <button title="close button" onClick={onClickCloseEdit}>
+                Close
+              </button>
             </div>
           </div>
         </div>

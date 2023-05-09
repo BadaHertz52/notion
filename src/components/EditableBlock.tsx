@@ -335,6 +335,7 @@ const EditableBlock = ({
                 <div className="mainBlock__block">
                   {block.type === "todo" && (
                     <button
+                      title="button to check"
                       className="checkbox left block__btn"
                       name={block.id}
                       onClick={onClickTodoBtn}
@@ -344,6 +345,7 @@ const EditableBlock = ({
                   )}
                   {block.type === "todo_done" && (
                     <button
+                      title="button to uncheck"
                       className="checkbox done left block__btn"
                       name={block.id}
                       onClick={onClickTodoBtn}
@@ -353,6 +355,7 @@ const EditableBlock = ({
                   )}
                   {block.type === "toggle" && (
                     <button
+                      title="button to toggle"
                       name={block.id}
                       onClick={onClickToggle}
                       className={

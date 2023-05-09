@@ -157,9 +157,15 @@ const Loader = ({
         <div className="loader-img">
           <div className="menu">
             <div className=" loader__inner-padding">
-              <button name="btn-upload">Upload</button>
+              <button title="button to upload file" name="btn-upload">
+                Upload
+              </button>
               {block === null && (
-                <button className="btn-remove" onClick={removePageCover}>
+                <button
+                  title="button to remove file"
+                  className="btn-remove"
+                  onClick={removePageCover}
+                >
                   Remove
                 </button>
               )}

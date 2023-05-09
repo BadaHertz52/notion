@@ -1060,6 +1060,7 @@ const Frame = ({
               >
                 <img src={page.header.cover} alt="page cover " />
                 <button
+                  title="button to change page cover"
                   className="btn-change-cover"
                   onClick={onClickChangeCoverBtn}
                 >
@@ -1095,6 +1096,7 @@ const Frame = ({
                   <div>
                     {page.header.icon === null && (
                       <button
+                        title="button to  open menu to add page icon"
                         className="deco__btn-icon"
                         onClick={addRandomIcon}
                       >
@@ -1104,6 +1106,7 @@ const Frame = ({
                     )}
                     {page.header.cover === null && (
                       <button
+                        title="button to  open menu to add page cover"
                         className="deco__btn-cover"
                         onClick={onClickAddCover}
                       >
@@ -1113,6 +1116,7 @@ const Frame = ({
                     )}
                     {page.header.comments === null && (
                       <button
+                        title="button to  open menu to add comment about page"
                         className="deco__btn-comment"
                         onClick={() => setOpenPageCommentInput(true)}
                       >
@@ -1223,16 +1227,25 @@ const Frame = ({
               </div>
             ) : (
               <div className="page__contents__inner">
-                <button onClick={onClickEmptyWithIconBtn}>
+                <button
+                  title="button to start empty page with icon"
+                  onClick={onClickEmptyWithIconBtn}
+                >
                   <GrDocumentText />
                   <span>Empty with icon</span>
                 </button>
-                <button onClick={onClickEmpty}>
+                <button
+                  title="button to start empty page "
+                  onClick={onClickEmpty}
+                >
                   <GrDocument />
                   <span>Empty</span>
                 </button>
                 {page.type !== "template" && (
-                  <button onClick={onClickTemplateBtn}>
+                  <button
+                    title="button to start  page with template"
+                    onClick={onClickTemplateBtn}
+                  >
                     <HiTemplate />
                     <span>Templates</span>
                   </button>

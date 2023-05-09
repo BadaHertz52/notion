@@ -1180,12 +1180,20 @@ const BlockComponent = ({
       onTouchMove={(event) => markMoveTargetBlock(event)}
     >
       {block.type === "page" ? (
-        <button className="contents page__title" id={`${block.id}__contents`}>
+        <button
+          className="contents page__title"
+          title="open contents of which type page"
+          id={`${block.id}__contents`}
+        >
           <BlockContentEditable />
         </button>
       ) : block.type === "image" ? (
         block.contents === "" ? (
-          <button className="btn-addBlockFile" onClick={onClickAddFileBtn}>
+          <button
+            className="btn-addBlockFile"
+            title="btn to add image"
+            onClick={onClickAddFileBtn}
+          >
             <span className="icon-addBlockFile">
               <MdOutlinePhotoSizeSelectActual />
             </span>

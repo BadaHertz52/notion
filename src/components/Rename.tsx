@@ -66,7 +66,11 @@ const Rename = ({
   return (
     <div id="rename" style={renameStyle}>
       <div className="inner">
-        <button className="rename__btn" onClick={onClickRenameIcon}>
+        <button
+          title="button to move page"
+          className="rename__btn"
+          onClick={onClickRenameIcon}
+        >
           <PageIcon
             icon={page.header.icon}
             iconType={page.header.iconType}

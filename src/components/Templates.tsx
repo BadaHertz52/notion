@@ -250,6 +250,11 @@ const Templates = ({
                   </div>
                   <div className="template__tool">
                     <button
+                      title={`button to ${
+                        expand
+                          ? "revert  the template to original size"
+                          : "expand the template size"
+                      } `}
                       className="btn-expand"
                       aria-label={
                         expand
@@ -264,6 +269,7 @@ const Templates = ({
                       </div>
                     </button>
                     <button
+                      title="button to delete template"
                       className="template__btn-delete"
                       aria-label="delete template"
                       onClick={() => setOpenDeleteAlert(true)}
@@ -307,7 +313,11 @@ const Templates = ({
             )}
           </div>
           <div id="template__side" className={expand ? "off" : ""}>
-            <button className="template__side__btn-use" onClick={onClickUseBtn}>
+            <button
+              title="button to use this template"
+              className="template__side__btn-use"
+              onClick={onClickUseBtn}
+            >
               Use this template
             </button>
 
@@ -315,6 +325,7 @@ const Templates = ({
               {templates ? (
                 templates.map((template: Page) => (
                   <button
+                    title="button to move page"
                     className="item"
                     onClick={() => showOtherTemplate(template)}
                   >
@@ -335,6 +346,7 @@ const Templates = ({
               )}
             </div>
             <button
+              title="button to make new template"
               className="template__side__btn-make"
               onClick={onClickMakeTemplateBtn}
             >
@@ -351,10 +363,18 @@ const Templates = ({
               The template has been modified. <br />
               Do you want to save the edits?
             </div>
-            <button className="btn-save" onClick={afterEditAlert}>
+            <button
+              title="button to save changed"
+              className="btn-save"
+              onClick={afterEditAlert}
+            >
               Save
             </button>
-            <button className="btn-discard" onClick={onClickDiscardBtn}>
+            <button
+              title="button to discard edited"
+              className="btn-discard"
+              onClick={onClickDiscardBtn}
+            >
               Discard edit
             </button>
           </div>
@@ -365,16 +385,18 @@ const Templates = ({
           <div className="inner">
             <div>Do you want to delete this template?</div>
             <button
+              title="button to delete"
               className="alert__btn-delete"
               onClick={onClickDeleteTemplateBtn}
             >
               Delete
             </button>
             <button
+              title="button to cancel"
               className="alert__btn-cancel"
               onClick={() => setOpenDeleteAlert(false)}
             >
-              Cancle
+              Cancel
             </button>
           </div>
         </div>

@@ -93,12 +93,18 @@ const AllComments = ({
         <div className="allComments__header">
           <span>Comments</span>
           <div className="allComments__btn-group">
-            <button className="btn-select" onClick={openSelect}>
+            <button
+              className="btn-select"
+              onClick={openSelect}
+              type="button"
+              title="select open  not resolved comments or resolved comments"
+            >
               {select === open ? "Open" : "Resolve"}
               <MdKeyboardArrowDown />
             </button>
             <div className="type-btn-group">
               <button
+                title="open  not resolved comments"
                 onClick={(event) => {
                   setSelect(open);
                   closeSelect(event);
@@ -107,6 +113,7 @@ const AllComments = ({
                 Open Comments
               </button>
               <button
+                title="open resolved comments"
                 onClick={(event) => {
                   setSelect(resolve);
                   closeSelect(event);

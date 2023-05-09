@@ -231,6 +231,7 @@ const TopBar = ({
         <div className="page__path-group">
           {pagePath === null ? (
             <button
+              title="button to move page"
               className="pagePath"
               onClick={() => setTargetPageId(page.id)}
             >
@@ -244,6 +245,7 @@ const TopBar = ({
           ) : (
             pagePath.map((path: pathType) => (
               <button
+                title="button to move page"
                 className="pagePath"
                 key={pagePath.indexOf(path)}
                 onClick={() => setTargetPageId(path.id)}
@@ -296,6 +298,7 @@ const TopBar = ({
                 <div className="fontStyle__header">STYLE</div>
                 <div className="fontStyle__btn-group">
                   <button
+                    title="button to change font to default"
                     onClick={(event) => changeFontStyle(event, "default")}
                   >
                     <div
@@ -306,7 +309,10 @@ const TopBar = ({
                     </div>
                     <div className="font-name">Default</div>
                   </button>
-                  <button onClick={(event) => changeFontStyle(event, "serif")}>
+                  <button
+                    title="button to change font to serif"
+                    onClick={(event) => changeFontStyle(event, "serif")}
+                  >
                     <div
                       className="font-sample"
                       style={returnFontFamily("serif")}
@@ -315,7 +321,10 @@ const TopBar = ({
                     </div>
                     <div className="font-name">Serif</div>
                   </button>
-                  <button onClick={(event) => changeFontStyle(event, "mono")}>
+                  <button
+                    title="button to change font to mono"
+                    onClick={(event) => changeFontStyle(event, "mono")}
+                  >
                     <div
                       className="font-sample"
                       style={returnFontFamily("mono")}
@@ -327,13 +336,21 @@ const TopBar = ({
                 </div>
               </div>
               <div className="size">
-                <button onClick={changeFontSize}>
+                <button
+                  title={` button  ${
+                    smallText ? "to change large text " : "to change small text"
+                  }`}
+                  onClick={changeFontSize}
+                >
                   <div>Small text</div>
                   <label className="btn-switch">
                     <span className={smallText ? "slider on" : "slider"}></span>
                   </label>
                 </button>
                 <button
+                  title={`button ${
+                    fullWidth ? "to change small width" : "to change full width"
+                  }`}
                   style={{ display: isMobile() ? "none" : "flex" }}
                   onClick={changeWidth}
                 >
@@ -346,6 +363,11 @@ const TopBar = ({
               </div>
               <div className="function">
                 <button
+                  title={`button ${
+                    pageInFavorites
+                      ? "to remove from Favorites"
+                      : "to add to Favorites"
+                  }`}
                   className={
                     pageInFavorites ? "btn-favorite on" : "btn-favorite"
                   }
@@ -358,15 +380,22 @@ const TopBar = ({
                       : "Add to Favorites"}
                   </span>
                 </button>
-                <button onClick={() => deletePage(page.id)}>
+                <button
+                  title="delete button"
+                  onClick={() => deletePage(page.id)}
+                >
                   <RiDeleteBin6Line />
                   <span className="label">Delete</span>
                 </button>
-                <button onClick={onClickMoveTo}>
+                <button
+                  title="button to move page to other page"
+                  onClick={onClickMoveTo}
+                >
                   <IoArrowRedoOutline />
                   <span className="label">Move to</span>
                 </button>
                 <button
+                  title="button to export page"
                   style={{ display: isMobile() ? "none" : "flex" }}
                   onClick={() => {
                     setOpenExport(true);

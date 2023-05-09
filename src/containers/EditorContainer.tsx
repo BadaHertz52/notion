@@ -138,8 +138,16 @@ const EditorContainer = ({
         <div className="isInTrash">
           <div>This is page is in Trash.</div>
           <div className="isInTrash__btn-group">
-            <button onClick={() => restorePage(page.id)}>Restore page</button>
-            <button onClick={() => cleanTrash(page.id)}>
+            <button
+              title="button to restore page"
+              onClick={() => restorePage(page.id)}
+            >
+              Restore page
+            </button>
+            <button
+              title="button to delete page  permanently "
+              onClick={() => cleanTrash(page.id)}
+            >
               Delete permanently
             </button>
           </div>

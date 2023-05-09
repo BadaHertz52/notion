@@ -307,6 +307,7 @@ const Menu = ({
           <div className="menu__edit">
             <div className="menu__editBtnGroup">
               <button
+                title="button to remove"
                 className="menu__editBtn"
                 onClick={removeBlock}
                 name="delete"
@@ -317,6 +318,7 @@ const Menu = ({
                 </div>
               </button>
               <button
+                title="button to duplicate"
                 className="menu__editBtn"
                 onClick={duplicateBlock}
                 name="duplicate"
@@ -327,6 +329,7 @@ const Menu = ({
                 </div>
               </button>
               <button
+                title="button to turn into type"
                 className="menu__editBtn"
                 onMouseOver={showTurnInto}
                 name="turn into"
@@ -346,6 +349,7 @@ const Menu = ({
                 </div>
               </button>
               <button
+                title="button to turn in to page "
                 className="menu__editBtn"
                 name="turn into page in"
                 onMouseOver={showPageMenu}
@@ -360,7 +364,11 @@ const Menu = ({
                 </div>
               </button>
               {block.type === "page" && (
-                <button className="menu__editBtn" onClick={onClickRename}>
+                <button
+                  title="button to rename"
+                  className="menu__editBtn"
+                  onClick={onClickRename}
+                >
                   <div>
                     <HiOutlinePencilAlt />
                     <span>Rename</span>
@@ -368,6 +376,7 @@ const Menu = ({
                 </button>
               )}
               <button
+                title="button to move to"
                 className="underline menu__editBtn"
                 name="move to"
                 onClick={onClickMoveTo}
@@ -380,6 +389,7 @@ const Menu = ({
               </button>
               {block.type !== "page" && (
                 <button
+                  title="button to comment"
                   className="underline menu__editBtn"
                   name="comment"
                   onClick={onOpenCommentInput}
@@ -392,6 +402,7 @@ const Menu = ({
                 </button>
               )}
               <button
+                title="button to change color"
                 name="color"
                 className="underline menu__editBtn"
                 onMouseOver={showColorMenu}

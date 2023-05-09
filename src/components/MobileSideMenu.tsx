@@ -73,7 +73,9 @@ const MobileSideMenu = ({
       <div className="inner">
         <div className="top">
           <div>{getTitle()}</div>
-          <button onClick={closeSideMenu}>close</button>
+          <button title="button to close" onClick={closeSideMenu}>
+            close
+          </button>
         </div>
         <div className="contents">
           {mobileSideMenu.what === "ms_moreMenu" && (

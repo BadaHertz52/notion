@@ -12,6 +12,7 @@ const BlockComment = ({ block, onClickCommentBtn }: BlockCommentProps) => {
     <div id={`${block.id}-comments`} className="comments-bubble">
       <button
         className="btn-comment btnIcon"
+        title="open comment about contents"
         name={block.id}
         onClick={() => onClickCommentBtn(block)}
       >
