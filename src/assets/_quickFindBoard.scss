@@ -7,11 +7,11 @@
     width: 300px;
     top: 0;
     left: 0;
-    & > div > div {
+    & > div {
       padding: 10px;
     }
   }
-  .qf_search {
+  .qf__search {
     padding: 1rem 10px;
     display: flex;
     align-items: center;
@@ -41,7 +41,7 @@
       outline: none;
     }
   }
-  .qf_results {
+  .qf__results {
     min-height: min-content;
     .header,
     .body {
@@ -54,6 +54,7 @@
       color: $itemText;
       height: fit-content;
       padding-left: 5px;
+      margin-top: 14px;
       p {
         margin: 0;
       }
@@ -83,6 +84,7 @@
     }
     .sort__inner {
       display: flex;
+      flex-direction: row;
       position: relative;
       & > button {
         margin-left: 5px;
@@ -93,10 +95,10 @@
         }
       }
     }
-    .sort_options {
+    .sort__options {
       display: none;
     }
-    .sort_options.on {
+    .sort__options.on {
       @include modalStyle;
       z-index: 20;
       left: 30px;

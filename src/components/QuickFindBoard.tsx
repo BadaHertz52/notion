@@ -68,7 +68,7 @@ const QuickFindBoard = ({
   const openSortOptions = () => {
     if (sortOptions.current) {
       sortOptions.current.classList.toggle("on");
-      const qf_results = document.getElementsByClassName("qf_results")[0];
+      const qf_results = document.getElementsByClassName("qf__results")[0];
       sortOptions.current.classList.contains("on")
         ? qf_results.setAttribute("style", "min-height:170px")
         : qf_results.setAttribute("style", "min-height:min-content");
@@ -206,7 +206,7 @@ const QuickFindBoard = ({
     return optionBtnIsClicked;
   };
   const closeQuickFindBoard = (event: React.MouseEvent) => {
-    const inner = document.getElementById("quickFindBoard_inner");
+    const inner = document.getElementById("quickFindBoard__inner");
     const innerDomRect = inner?.getClientRects()[0];
     if (innerDomRect) {
       const isInBoard = detectRange(event, innerDomRect);
@@ -218,18 +218,18 @@ const QuickFindBoard = ({
   };
   return (
     <div id="quickFindBoard" onClick={closeQuickFindBoard}>
-      <div className="inner" id="quickFindBoard_inner">
+      <div className="inner" id="quickFindBoard__inner">
         <div>
-          <div className="qf_search">
+          <div className="qf__search">
             <BsSearch />
             <input
-              id="quickFinBoardInput"
+              id="qf__search__input"
               type="text"
               onChange={onChangeQuickFindInput}
               placeholder={`Search ${userName}'s Notion`}
             />
           </div>
-          <div className="qf_results">
+          <div className="qf__results">
             <div className="header">
               {result ? (
                 result !== "noResult" && (
@@ -243,7 +243,7 @@ const QuickFindBoard = ({
                         <div>{selectedOption}</div>
                         <BsChevronDown />
                       </button>
-                      <div className="sort_options" ref={sortOptions}>
+                      <div className="sort__options" ref={sortOptions}>
                         <button
                           onClick={onClickOption}
                           className="selected optionBtn"

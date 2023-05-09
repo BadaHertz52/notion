@@ -74,8 +74,8 @@ button {
   background-color: transparent;
   padding: 0;
   -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
+     -moz-user-select: none;
+          user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
   font-size: inherit;
@@ -188,14 +188,10 @@ a:visited {
   display: flex;
   flex-direction: column;
 }
-#allComments
-  .allComments__btn-group.open
-  .type-btn-group::-webkit-scrollbar-thumb {
+#allComments .allComments__btn-group.open .type-btn-group::-webkit-scrollbar-thumb {
   background: #d3d1cb;
 }
-#allComments
-  .allComments__btn-group.open
-  .type-btn-group::-webkit-scrollbar-track {
+#allComments .allComments__btn-group.open .type-btn-group::-webkit-scrollbar-track {
   background: #edece9;
 }
 #allComments .allComments__btn-group.open .type-btn-group button {
@@ -320,8 +316,8 @@ button {
   background-color: transparent;
   padding: 0;
   -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
+     -moz-user-select: none;
+          user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
   font-size: inherit;
@@ -534,8 +530,8 @@ button {
   background-color: transparent;
   padding: 0;
   -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
+     -moz-user-select: none;
+          user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
   font-size: inherit;
@@ -821,7 +817,7 @@ a:visited {
   width: calc(100% - 34px);
   box-sizing: border-box;
 }
-.commentBlock .commentInput input[type="text"] {
+.commentBlock .commentInput input[type=text] {
   margin: 0;
 }
 .commentBlock .tool button:hover {
@@ -847,7 +843,7 @@ a:visited {
   width: calc(100% - 24px);
   box-sizing: border-box;
 }
-.commentInput input[type="text"] {
+.commentInput input[type=text] {
   width: 90%;
   height: 1.5rem;
   font-size: 15px;
@@ -866,13 +862,13 @@ a:visited {
   margin: 0 2.5%;
   font-size: 14px;
 }
-.commentInput input[type="text"]::-moz-placeholder {
+.commentInput input[type=text]::-moz-placeholder {
   color: #b9b8b6;
 }
-.commentInput input[type="text"]::placeholder {
+.commentInput input[type=text]::placeholder {
   color: #b9b8b6;
 }
-.commentInput input[type="text"]:focus {
+.commentInput input[type=text]:focus {
   box-sizing: border-box;
   outline: 3.5px solid rgb(169, 226, 245);
   border: none;
@@ -1012,8 +1008,8 @@ button {
   background-color: transparent;
   padding: 0;
   -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
+     -moz-user-select: none;
+          user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
   font-size: inherit;
@@ -1059,6 +1055,7 @@ a:visited {
   z-index: 10;
   border-radius: 8px;
   box-shadow: 0px 0px 23px -5px #ababab;
+  position: relative;
   overflow-y: scroll;
   margin-top: 1rem;
 }
@@ -1097,8 +1094,8 @@ a:visited {
   font-weight: 500;
   line-height: 120%;
   -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
+     -moz-user-select: none;
+          user-select: none;
   text-transform: uppercase;
 }
 #commandBlock .command__btn-group {
@@ -1257,8 +1254,8 @@ button {
   background-color: transparent;
   padding: 0;
   -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
+     -moz-user-select: none;
+          user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
   font-size: inherit;
@@ -1516,8 +1513,8 @@ a:visited {
   justify-content: flex-end;
   align-items: center;
   -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
+     -moz-user-select: none;
+          user-select: none;
   transition: color 300ms ease 0s, border 300ms ease 0s;
   cursor: pointer;
   min-width: 34px;
@@ -1753,8 +1750,8 @@ button {
   background-color: transparent;
   padding: 0;
   -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
+     -moz-user-select: none;
+          user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
   font-size: inherit;
@@ -1792,8 +1789,8 @@ a:visited {
   display: flex;
   z-index: 3;
   -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 #export .inner {
   background-color: white;
@@ -1860,8 +1857,7 @@ a:visited {
   right: 0;
   background-color: white;
   border-radius: 3px;
-  box-shadow: rgba(15, 15, 15, 0.05) 0px 0px 0px 1px,
-    rgba(15, 15, 15, 0.1) 0px 3px 6px, rgba(15, 15, 15, 0.2) 0px 9px 24px;
+  box-shadow: rgba(15, 15, 15, 0.05) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 3px 6px, rgba(15, 15, 15, 0.2) 0px 9px 24px;
   z-index: 10;
   padding: 6px 5px;
   width: -moz-fit-content;
@@ -1975,8 +1971,8 @@ button {
   background-color: transparent;
   padding: 0;
   -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
+     -moz-user-select: none;
+          user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
   font-size: inherit;
@@ -2052,8 +2048,7 @@ a:visited {
   align-items: center;
   padding: 2px;
 }
-#iconModal .header .btn-category,
-#iconModal .header > div:last-child {
+#iconModal .header .btn-category, #iconModal .header > div:last-child {
   padding-bottom: 6px;
 }
 #iconModal .header .btn-category {
@@ -2246,8 +2241,8 @@ button {
   background-color: transparent;
   padding: 0;
   -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
+     -moz-user-select: none;
+          user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
   font-size: inherit;
@@ -2488,8 +2483,8 @@ button {
   background-color: transparent;
   padding: 0;
   -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
+     -moz-user-select: none;
+          user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
   font-size: inherit;
@@ -2955,8 +2950,8 @@ button {
   background-color: transparent;
   padding: 0;
   -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
+     -moz-user-select: none;
+          user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
   font-size: inherit;
@@ -3255,8 +3250,8 @@ button {
   background-color: transparent;
   padding: 0;
   -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
+     -moz-user-select: none;
+          user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
   font-size: inherit;
@@ -4016,8 +4011,8 @@ button {
   background-color: transparent;
   padding: 0;
   -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
+     -moz-user-select: none;
+          user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
   font-size: inherit;
@@ -4171,8 +4166,8 @@ a:visited {
 }
 #template__side .template__side__btn-use {
   -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
+     -moz-user-select: none;
+          user-select: none;
   transition: background-color 20ms ease-in 0s;
   cursor: pointer;
   display: inline-flex;
@@ -4181,8 +4176,7 @@ a:visited {
   flex-shrink: 0;
   height: 32px;
   border-radius: 3px;
-  box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px inset,
-    rgba(15, 15, 15, 0.1) 0px 1px 2px;
+  box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px inset, rgba(15, 15, 15, 0.1) 0px 1px 2px;
   background-color: rgb(46, 170, 220);
   color: white;
   fill: white;
@@ -4394,8 +4388,8 @@ button {
   background-color: transparent;
   padding: 0;
   -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
+     -moz-user-select: none;
+          user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
   font-size: inherit;
@@ -4641,8 +4635,8 @@ button {
   background-color: transparent;
   padding: 0;
   -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
+     -moz-user-select: none;
+          user-select: none;
   cursor: pointer;
   transition: background-color 20ms ease-in 0s;
   font-size: inherit;
@@ -4698,10 +4692,10 @@ a:visited {
   top: 0;
   left: 0;
 }
-#quickFindBoard .inner > div > div {
+#quickFindBoard .inner > div {
   padding: 10px;
 }
-#quickFindBoard .qf_search {
+#quickFindBoard .qf__search {
   padding: 1rem 10px;
   display: flex;
   align-items: center;
@@ -4710,11 +4704,11 @@ a:visited {
   font-size: 1.1rem;
   border-bottom: 1px solid #b9b8b6;
 }
-#quickFindBoard .qf_search svg {
+#quickFindBoard .qf__search svg {
   color: #b9b8b6;
   margin-left: 5px;
 }
-#quickFindBoard .qf_search input {
+#quickFindBoard .qf__search input {
   padding: 0;
   box-sizing: border-box;
   border: none;
@@ -4724,26 +4718,26 @@ a:visited {
   margin-left: 10px;
   max-width: 100%;
 }
-#quickFindBoard .qf_search input::-moz-placeholder {
+#quickFindBoard .qf__search input::-moz-placeholder {
   color: #b9b8b6;
   text-overflow: ellipsis;
 }
-#quickFindBoard .qf_search input::placeholder {
+#quickFindBoard .qf__search input::placeholder {
   color: #b9b8b6;
   text-overflow: ellipsis;
 }
-#quickFindBoard .qf_search input:focus {
+#quickFindBoard .qf__search input:focus {
   outline: none;
 }
-#quickFindBoard .qf_results {
+#quickFindBoard .qf__results {
   min-height: -moz-min-content;
   min-height: min-content;
 }
-#quickFindBoard .qf_results .header,
-#quickFindBoard .qf_results .body {
+#quickFindBoard .qf__results .header,
+#quickFindBoard .qf__results .body {
   margin-bottom: 14px;
 }
-#quickFindBoard .qf_results .header {
+#quickFindBoard .qf__results .header {
   display: flex;
   justify-content: space-between;
   font-size: 12px;
@@ -4751,49 +4745,51 @@ a:visited {
   height: -moz-fit-content;
   height: fit-content;
   padding-left: 5px;
+  margin-top: 14px;
 }
-#quickFindBoard .qf_results .header p {
+#quickFindBoard .qf__results .header p {
   margin: 0;
 }
-#quickFindBoard .qf_results .header button {
+#quickFindBoard .qf__results .header button {
   color: rgb(141, 141, 141);
 }
-#quickFindBoard .qf_results .header .addFilterBtn {
+#quickFindBoard .qf__results .header .addFilterBtn {
   display: flex;
   align-items: center;
   color: rgb(46, 170, 220);
   font-size: inherit;
 }
-#quickFindBoard .qf_results .header .addFilterBtn:hover {
+#quickFindBoard .qf__results .header .addFilterBtn:hover {
   background-color: rgba(46, 171, 220, 0.164);
 }
-#quickFindBoard .qf_results .btn-clear {
+#quickFindBoard .qf__results .btn-clear {
   padding: 5px;
 }
-#quickFindBoard .qf_results .btn-clear:hover {
+#quickFindBoard .qf__results .btn-clear:hover {
   background-color: #edece9;
 }
-#quickFindBoard .qf_results .sort {
+#quickFindBoard .qf__results .sort {
   width: 100%;
   display: flex;
   justify-content: space-between;
 }
-#quickFindBoard .qf_results .sort__inner {
+#quickFindBoard .qf__results .sort__inner {
   display: flex;
+  flex-direction: row;
   position: relative;
 }
-#quickFindBoard .qf_results .sort__inner > button {
+#quickFindBoard .qf__results .sort__inner > button {
   margin-left: 5px;
   display: flex;
   align-items: center;
 }
-#quickFindBoard .qf_results .sort__inner > button svg {
+#quickFindBoard .qf__results .sort__inner > button svg {
   margin-left: 5px;
 }
-#quickFindBoard .qf_results .sort_options {
+#quickFindBoard .qf__results .sort__options {
   display: none;
 }
-#quickFindBoard .qf_results .sort_options.on {
+#quickFindBoard .qf__results .sort__options.on {
   width: 320px;
   display: flex;
   flex-direction: column;
@@ -4815,54 +4811,54 @@ a:visited {
   flex-direction: column;
   width: 180px;
 }
-#quickFindBoard .qf_results .sort_options.on::-webkit-scrollbar-thumb {
+#quickFindBoard .qf__results .sort__options.on::-webkit-scrollbar-thumb {
   background: #d3d1cb;
 }
-#quickFindBoard .qf_results .sort_options.on::-webkit-scrollbar-track {
+#quickFindBoard .qf__results .sort__options.on::-webkit-scrollbar-track {
   background: #edece9;
 }
-#quickFindBoard .qf_results .sort_options.on button {
+#quickFindBoard .qf__results .sort__options.on button {
   display: flex;
   justify-content: space-between;
   padding: 5px 10px;
   color: rgb(112, 112, 112);
 }
-#quickFindBoard .qf_results .sort_options.on button .checkIcon {
+#quickFindBoard .qf__results .sort__options.on button .checkIcon {
   display: none;
 }
-#quickFindBoard .qf_results .sort_options.on button:first-child {
+#quickFindBoard .qf__results .sort__options.on button:first-child {
   padding-top: 10px;
 }
-#quickFindBoard .qf_results .sort_options.on button:last-child {
+#quickFindBoard .qf__results .sort__options.on button:last-child {
   padding-bottom: 10px;
 }
-#quickFindBoard .qf_results .sort_options.on button:hover {
+#quickFindBoard .qf__results .sort__options.on button:hover {
   background-color: #edece9;
 }
-#quickFindBoard .qf_results .sort_options.on .selected .checkIcon {
+#quickFindBoard .qf__results .sort__options.on .selected .checkIcon {
   display: block;
   color: rgb(46, 170, 220);
   font-size: 14px;
   font-weight: bolder;
 }
-#quickFindBoard .qf_results .body {
+#quickFindBoard .qf__results .body {
   position: relative;
   display: flex;
   flex-direction: column;
 }
-#quickFindBoard .qf_results .no-result,
-#quickFindBoard .qf_results .noRecentPages {
+#quickFindBoard .qf__results .no-result,
+#quickFindBoard .qf__results .noRecentPages {
   color: rgb(112, 112, 112);
   font-size: 14px;
   text-align: center;
 }
-#quickFindBoard .qf_results .no-result p {
+#quickFindBoard .qf__results .no-result p {
   margin: 0;
 }
-#quickFindBoard .qf_results .no-result p:nth-child(2) {
+#quickFindBoard .qf__results .no-result p:nth-child(2) {
   color: #b9b8b6;
 }
-#quickFindBoard .qf_results .no-result button {
+#quickFindBoard .qf__results .no-result button {
   color: rgb(46, 170, 220);
 }
 
@@ -4936,12 +4932,12 @@ a:visited {
   line-height: 1rem;
   text-align: center;
 }
-.result .page__icon-outBox {
+.result .page__icon {
   margin-right: 10px;
   width: 1.1rem;
   height: 1.1rem;
 }
-.result .page__icon-outBox img {
+.result .page__icon img {
   width: 100%;
   height: 100%;
 }
@@ -4986,9 +4982,7 @@ body,
 #inner {
   display: flex;
   color: rgb(55, 54, 47);
-  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji",
-    "Segoe UI Symbol";
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
 .editor {
@@ -4999,4 +4993,4 @@ body,
   #inner {
     overflow-y: hidden;
   }
-} /*# sourceMappingURL=main.css.map */
+}/*# sourceMappingURL=main.css.map */
