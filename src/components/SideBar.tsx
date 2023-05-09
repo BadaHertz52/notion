@@ -611,7 +611,7 @@ const SideBar = ({
                 ) : (
                   recentPages.map((page: Page, i) => (
                     <button
-                      title={`button to move page that is ${page.title}`}
+                      title={`button to move page that is ${page.header.title}`}
                       key={`recentPage_${i}`}
                       id={`item_${page.id}`}
                       className="item"
