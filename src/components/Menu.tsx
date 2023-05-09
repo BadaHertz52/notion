@@ -297,6 +297,7 @@ const Menu = ({
             <input
               type="search"
               id="menu__search_input"
+              title="search input in menu"
               name="search"
               placeholder="Search actions"
               onClick={onSetEditBtnGroup}

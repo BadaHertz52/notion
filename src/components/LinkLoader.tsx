@@ -548,6 +548,8 @@ const LinkLoader = ({
       <div className="inner">
         <div className="search">
           <input
+            id="input-loader"
+            title="input loader file"
             placeholder={
               linked ? "Edit link or search pages" : "Past link or search pages"
             }

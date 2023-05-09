@@ -75,6 +75,7 @@ const Rename = ({
         </button>
         <input
           className="rename__title"
+          title="input to rename "
           onChange={changeTitle}
           type="text"
           value={page.header.title}

@@ -554,6 +554,7 @@ export const CommentInput = ({
       <form>
         <input
           type="text"
+          title="comment input"
           placeholder={placeHolder}
           name="comment"
           onInput={onInputText}

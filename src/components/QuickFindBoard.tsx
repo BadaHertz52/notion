@@ -225,6 +225,7 @@ const QuickFindBoard = ({
             <input
               id="qf__search__input"
               type="text"
+              title="search input in quick find board to search page"
               onChange={onChangeQuickFindInput}
               placeholder={`Search ${userName}'s Notion`}
             />

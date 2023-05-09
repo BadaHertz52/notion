@@ -131,6 +131,7 @@ const Trash = ({
         </div>
         <div className="search">
           <input
+            title="input to search page removed"
             type="text"
             onChange={onChange}
             placeholder="Filter by page title..."

@@ -1123,6 +1123,7 @@ const BlockComponent = ({
         ) : (
           <input
             type="text"
+            title="content input"
             tabIndex={-1}
             value={command.command}
             id="commandInput"
