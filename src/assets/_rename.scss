@@ -9,6 +9,12 @@
     align-content: center;
     box-sizing: border-box;
     padding: 10px;
+    label,
+    button,
+    input {
+      height: 2rem;
+      box-sizing: border-box;
+    }
     input,
     button {
       border: 1px solid $lightMud;
@@ -19,6 +25,7 @@
       height: 2rem;
       box-sizing: inherit;
     }
+
     .rename__btn {
       width: 2rem;
       .page__icon__img {
@@ -27,8 +34,11 @@
       }
       border-right: none;
     }
-    .rename__title {
+    label {
       width: calc(100% - 2rem);
+    }
+    input {
+      width: 100%;
     }
   }
   #iconModal {

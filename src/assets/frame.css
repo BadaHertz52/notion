@@ -1,3 +1,7 @@
+label {
+  width: 100%;
+}
+
 .btn-switch {
   position: relative;
   width: 30px;
@@ -97,6 +101,10 @@ a:active,
 a:visited {
   text-decoration: none;
   color: inherit;
+}
+
+label {
+  width: 100%;
 }
 
 .btn-switch {
@@ -436,6 +444,7 @@ a:visited {
 }
 
 .todo.block .left,
+.todo_done.block .left,
 .toggle.block .left,
 .page.block .left {
   width: 18px;
@@ -443,6 +452,7 @@ a:visited {
   font-size: 15px;
 }
 .todo.block svg,
+.todo_done.block svg,
 .toggle.block svg,
 .page.block svg {
   width: inherit;
@@ -473,7 +483,7 @@ a:visited {
   background-color: #edece9;
 }
 
-.todo.done.block path {
+.todon_done.block path {
   stroke: grey;
 }
 
@@ -631,6 +641,10 @@ a:visited {
 }
 .comments-bubble .btn-comment span {
   font-size: 12px;
+}
+
+label {
+  width: 100%;
 }
 
 .btn-switch {
@@ -793,6 +807,10 @@ a:visited {
 .commentInput .firstLetter .inner div {
   font-size: 14px;
   font-weight: initial;
+}
+
+.commentInput label {
+  width: 100%;
 }
 
 .commentInput .firstLetter {
@@ -1112,6 +1130,10 @@ form button svg {
   color: rgb(141, 141, 141);
   font-size: 13px;
   border-top: 1px solid #d6d6d6;
+}
+
+label {
+  width: 100%;
 }
 
 .btn-switch {

@@ -1,3 +1,7 @@
+label {
+  width: 100%;
+}
+
 .btn-switch {
   position: relative;
   width: 30px;
@@ -249,6 +253,10 @@ a:visited {
     border-left: none;
   }
 }
+label {
+  width: 100%;
+}
+
 .btn-switch {
   position: relative;
   width: 30px;
@@ -463,6 +471,10 @@ a:visited {
   text-align: center;
 }
 
+label {
+  width: 100%;
+}
+
 .btn-switch {
   position: relative;
   width: 30px;
@@ -623,6 +635,10 @@ a:visited {
 .commentInput .firstLetter .inner div {
   font-size: 14px;
   font-weight: initial;
+}
+
+.commentInput label {
+  width: 100%;
 }
 
 .commentInput .firstLetter {
@@ -944,6 +960,10 @@ form button svg {
   border-top: 1px solid #d6d6d6;
 }
 
+label {
+  width: 100%;
+}
+
 .btn-switch {
   position: relative;
   width: 30px;
@@ -1188,6 +1208,10 @@ a:visited {
   padding: 2% 10%;
   height: -moz-fit-content;
   height: fit-content;
+}
+
+label {
+  width: 100%;
 }
 
 .btn-switch {
@@ -1686,6 +1710,10 @@ a:visited {
     min-width: 0;
   }
 }
+label {
+  width: 100%;
+}
+
 .btn-switch {
   position: relative;
   width: 30px;
@@ -1905,6 +1933,10 @@ a:visited {
   background-color: rgb(46, 170, 220);
   color: white;
   font-weight: 600;
+}
+
+label {
+  width: 100%;
 }
 
 .btn-switch {
@@ -2177,6 +2209,10 @@ a:visited {
   height: 100%;
 }
 
+label {
+  width: 100%;
+}
+
 .btn-switch {
   position: relative;
   width: 30px;
@@ -2417,6 +2453,10 @@ a:visited {
   bottom: 10%;
   border-radius: 50%;
   background-color: white;
+}
+
+label {
+  width: 100%;
 }
 
 .btn-switch {
@@ -2886,6 +2926,10 @@ a:visited {
     width: 100%;
   }
 }
+label {
+  width: 100%;
+}
+
 .btn-switch {
   position: relative;
   width: 30px;
@@ -3186,6 +3230,10 @@ a:visited {
     min-width: 32px;
   }
 }
+label {
+  width: 100%;
+}
+
 .btn-switch {
   position: relative;
   width: 30px;
@@ -3952,6 +4000,10 @@ a:visited {
     color: red;
   }
 }
+label {
+  width: 100%;
+}
+
 .btn-switch {
   position: relative;
   width: 30px;
@@ -4329,6 +4381,10 @@ a:visited {
   background-color: rgba(235, 87, 87, 0.1);
 }
 
+label {
+  width: 100%;
+}
+
 .btn-switch {
   position: relative;
   width: 30px;
@@ -4576,6 +4632,10 @@ a:visited {
     font-size: 32px;
   }
 }
+label {
+  width: 100%;
+}
+
 .btn-switch {
   position: relative;
   width: 30px;
@@ -4909,6 +4969,12 @@ a:visited {
 #rename > .inner::-webkit-scrollbar-track {
   background: #edece9;
 }
+#rename > .inner label,
+#rename > .inner button,
+#rename > .inner input {
+  height: 2rem;
+  box-sizing: border-box;
+}
 #rename > .inner input,
 #rename > .inner button {
   border: 1px solid #d6d6d6;
@@ -4927,8 +4993,11 @@ a:visited {
   width: 1.2rem;
   height: 1.2rem;
 }
-#rename > .inner .rename__title {
+#rename > .inner label {
   width: calc(100% - 2rem);
+}
+#rename > .inner input {
+  width: 100%;
 }
 #rename #iconModal {
   position: relative;

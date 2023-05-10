@@ -201,6 +201,7 @@
   height: 18px;
 }
 .todo.block,
+.todo_done.block,
 .toggle.block,
 .page.block {
   .left {
@@ -236,7 +237,7 @@
     background-color: $itemHover;
   }
 }
-.todo.done.block {
+.todon_done.block {
   path {
     stroke: grey;
   }
