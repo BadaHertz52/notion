@@ -12,6 +12,7 @@ import { setTemplateItem } from "./BlockComponent";
 import IconModal from "./IconModal";
 import PageIcon from "./PageIcon";
 import { closeModal } from "./SideBar";
+import ScreenOnly from "./ScreenOnly";
 type RenameProps = {
   currentPageId: string | null;
   block: Block | null;
@@ -77,13 +78,16 @@ const Rename = ({
             style={undefined}
           />
         </button>
-        <input
-          className="rename__title"
-          title="input to rename "
-          onChange={changeTitle}
-          type="text"
-          value={page.header.title}
-        />
+        <label>
+          <ScreenOnly text="input to rename " />
+          <input
+            className="rename__title"
+            title="input to rename "
+            onChange={changeTitle}
+            type="text"
+            value={page.header.title}
+          />
+        </label>
       </div>
       {openIconModal && (
         <IconModal

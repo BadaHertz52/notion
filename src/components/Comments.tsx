@@ -553,14 +553,17 @@ export const CommentInput = ({
         </div>
       )}
       <form>
-        <input
-          type="text"
-          title="comment input"
-          placeholder={placeHolder}
-          name="comment"
-          onInput={onInputText}
-          value={text}
-        />
+        <label>
+          <ScreenOnly text="comment input" />
+          <input
+            type="text"
+            title="comment input"
+            placeholder={placeHolder}
+            name="comment"
+            onInput={onInputText}
+            value={text}
+          />
+        </label>
         {addOrEdit === "edit" && (
           <button
             className="btn-cancel-edit"

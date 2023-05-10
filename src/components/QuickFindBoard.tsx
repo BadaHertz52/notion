@@ -6,6 +6,7 @@ import { AiOutlineCheck } from "react-icons/ai";
 import { BsChevronDown, BsSearch } from "react-icons/bs";
 import { detectRange } from "./BlockFn";
 import Result, { makeResultType, resultType } from "./Result";
+import ScreenOnly from "./ScreenOnly";
 
 type QuickFindBoardProps = {
   userName: string;
@@ -222,13 +223,16 @@ const QuickFindBoard = ({
         <div>
           <div className="qf__search">
             <BsSearch />
-            <input
-              id="qf__search__input"
-              type="text"
-              title="search input in quick find board to search page"
-              onChange={onChangeQuickFindInput}
-              placeholder={`Search ${userName}'s Notion`}
-            />
+            <label>
+              <ScreenOnly text="search input in quick find board to search page" />
+              <input
+                id="qf__search__input"
+                type="text"
+                title="search input in quick find board to search page"
+                onChange={onChangeQuickFindInput}
+                placeholder={`Search ${userName}'s Notion`}
+              />
+            </label>
           </div>
           <div className="qf__results">
             <div className="header">

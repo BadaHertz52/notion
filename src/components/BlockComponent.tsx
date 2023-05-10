@@ -1122,16 +1122,21 @@ const BlockComponent = ({
             onClick={(event) => onClickContentEditable(event)}
           />
         ) : (
-          <input
-            type="text"
-            title="content input"
-            tabIndex={-1}
-            value={command.command}
-            id="commandInput"
-            className="contentEditable"
-            onChange={commandChange}
-            onKeyUp={commandKeyUp}
-          />
+          <>
+            <label htmlFor="commandInput">
+              <ScreenOnly text="content input" />
+            </label>
+            <input
+              type="text"
+              title="content input"
+              tabIndex={-1}
+              value={command.command}
+              id="commandInput"
+              className="contentEditable"
+              onChange={commandChange}
+              onKeyUp={commandKeyUp}
+            />
+          </>
         )}
       </>
     );

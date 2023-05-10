@@ -34,6 +34,7 @@ import {
   mobileSideMenuType,
   selectionType,
 } from "../containers/NotionRouter";
+import ScreenOnly from "./ScreenOnly";
 
 export type MenuAndBlockStylerCommonProps = {
   pages: Page[];
@@ -294,15 +295,18 @@ const Menu = ({
       <div id="menu__main" className="mainMenu">
         <div className="menu__inner">
           <div className="menu__search">
-            <input
-              type="search"
-              id="menu__search_input"
-              title="search input in menu"
-              name="search"
-              placeholder="Search actions"
-              onClick={onSetEditBtnGroup}
-              onChange={onSearch}
-            />
+            <label>
+              <ScreenOnly text="search input in menu" />
+              <input
+                type="search"
+                id="menu__search_input"
+                title="search input in menu"
+                name="search"
+                placeholder="Search actions"
+                onClick={onSetEditBtnGroup}
+                onChange={onSearch}
+              />
+            </label>
           </div>
           <div className="menu__edit">
             <div className="menu__editBtnGroup">

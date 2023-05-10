@@ -155,12 +155,15 @@ const Trash = ({
           </button>
         </div>
         <div className="search">
-          <input
-            title="input to search page removed"
-            type="text"
-            onChange={onChange}
-            placeholder="Filter by page title..."
-          />
+          <label>
+            <ScreenOnly text="input to search page removed" />
+            <input
+              title="input to search page removed"
+              type="text"
+              onChange={onChange}
+              placeholder="Filter by page title..."
+            />
+          </label>
         </div>
         <div className="trash__list">
           {trashList ? (

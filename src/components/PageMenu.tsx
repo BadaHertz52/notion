@@ -11,6 +11,7 @@ import { ActionContext } from "../containers/NotionRouter";
 import { Block, listItem, Page } from "../modules/notion";
 import { setTemplateItem } from "./BlockComponent";
 import PageIcon from "./PageIcon";
+import ScreenOnly from "./ScreenOnly";
 
 type PageMenuProps = {
   what: "page" | "block";
@@ -142,12 +143,15 @@ const PageMenu = ({
     <div id="pageMenu">
       <div className="inner">
         <div className="search">
-          <input
-            id="pageMenu__search__input"
-            title="input in pageMenu to search page"
-            type="search"
-            onChange={findResult}
-          />
+          <label>
+            <ScreenOnly text="input in pageMenu to search page" />
+            <input
+              id="pageMenu__search__input"
+              title="input in pageMenu to search page"
+              type="search"
+              onChange={findResult}
+            />
+          </label>
         </div>
         {search ? (
           result ? (

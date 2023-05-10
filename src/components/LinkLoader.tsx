@@ -553,14 +553,19 @@ const LinkLoader = ({
     <div id="linkLoader" style={linkLoaderStyle}>
       <div className="inner">
         <div className="search">
-          <input
-            id="input-loader"
-            title="input loader file"
-            placeholder={
-              linked ? "Edit link or search pages" : "Past link or search pages"
-            }
-            onChange={onChangeSearch}
-          />
+          <label>
+            <ScreenOnly text="input loader file" />
+            <input
+              id="input-loader"
+              title="input loader file"
+              placeholder={
+                linked
+                  ? "Edit link or search pages"
+                  : "Past link or search pages"
+              }
+              onChange={onChangeSearch}
+            />
+          </label>
         </div>
         <div className="page-group">
           <header>LINK TO BLOCK</header>
