@@ -18,6 +18,7 @@ import { GrCheckbox, GrCheckboxSelected } from "react-icons/gr";
 import { MdPlayArrow } from "react-icons/md";
 import PageIcon from "./PageIcon";
 import BlockComment from "./BlockComment";
+import ScreenOnly from "./ScreenOnly";
 export type EditableBlockProps = {
   pages: Page[];
   pagesId: string[];
@@ -340,6 +341,7 @@ const EditableBlock = ({
                       name={block.id}
                       onClick={onClickTodoBtn}
                     >
+                      <ScreenOnly text="button to check" />
                       <GrCheckbox className="block__btn__svg" />
                     </button>
                   )}
@@ -350,6 +352,7 @@ const EditableBlock = ({
                       name={block.id}
                       onClick={onClickTodoBtn}
                     >
+                      <ScreenOnly text="button to uncheck" />
                       <GrCheckboxSelected className="block__btn__svg " />
                     </button>
                   )}
@@ -364,6 +367,7 @@ const EditableBlock = ({
                           : "blockToggleBtn left block__btn"
                       }
                     >
+                      <ScreenOnly text="button to toggle" />
                       <MdPlayArrow className="block__btn__svg" />
                     </button>
                   )}

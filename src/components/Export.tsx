@@ -10,6 +10,7 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import { findPage, Page } from "../modules/notion";
 import Frame, { FrameProps } from "./Frame";
 import ReactDOMServer from "react-dom/server";
+import ScreenOnly from "./ScreenOnly";
 
 type ExportProps = FrameProps & {
   setOpenExport: Dispatch<SetStateAction<boolean>>;
@@ -274,30 +275,18 @@ const Export = ({
           <div className="select">
             <div className="select__label">Export format</div>
             <div className="select__form">
-              <button
-                title="button to open format option box "
-                onClick={(event) => openOptions(event)}
-              >
+              <button onClick={(event) => openOptions(event)}>
                 {format}
                 <MdKeyboardArrowDown />
               </button>
               <div className="select__btn-group">
-                <button
-                  title="button to select exported file format as html"
-                  onClick={(event) => changeFormat(event, html)}
-                >
+                <button onClick={(event) => changeFormat(event, html)}>
                   {html}
                 </button>
-                <button
-                  title="button to select exported file format as pdf"
-                  onClick={(event) => changeFormat(event, pdf)}
-                >
+                <button onClick={(event) => changeFormat(event, pdf)}>
                   {pdf}
                 </button>
-                <button
-                  title="button to select exported file format as markdown"
-                  onClick={(event) => changeFormat(event, markdown)}
-                >
+                <button onClick={(event) => changeFormat(event, markdown)}>
                   {markdown}
                 </button>
               </div>
@@ -306,24 +295,15 @@ const Export = ({
           <div className="select">
             <div className="select__label">Include content</div>
             <div className="select__form">
-              <button
-                title="button to open option about content of file"
-                onClick={(event) => openOptions(event)}
-              >
+              <button onClick={(event) => openOptions(event)}>
                 {content}
                 <MdKeyboardArrowDown />
               </button>
               <div className="select__btn-group">
-                <button
-                  title="button to select everything  option"
-                  onClick={(event) => changeContent(event, everything)}
-                >
+                <button onClick={(event) => changeContent(event, everything)}>
                   {everything}
                 </button>
-                <button
-                  title="button to select no image  option"
-                  onClick={(event) => changeContent(event, noFileImage)}
-                >
+                <button onClick={(event) => changeContent(event, noFileImage)}>
                   {noFileImage}
                 </button>
               </div>
@@ -336,6 +316,7 @@ const Export = ({
               onClick={onClickSwitchBtn}
               className="btn-switch"
             >
+              <ScreenOnly text="switch button to select whether or not to include subpages" />
               <span id="includeSubPagesSlider" className="slider"></span>
             </button>
           </div>

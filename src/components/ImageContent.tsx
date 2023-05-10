@@ -2,6 +2,7 @@ import React, { MouseEvent, TouchEvent, useRef, useState } from "react";
 import { CSSProperties } from "styled-components";
 import { Block, Page } from "../modules/notion";
 import { setTemplateItem } from "./BlockComponent";
+import ScreenOnly from "./ScreenOnly";
 
 type ImageContentProps = {
   page: Page;
@@ -107,6 +108,7 @@ const ImageContent = ({ page, block, editBlock }: ImageContentProps) => {
         onMouseDown={(event) => onMouseDownSizeBtn(event)}
         onTouchStart={(event) => onTouchStartSizeBtn(event)}
       >
+        <ScreenOnly text="left button to resize image" />
         <span></span>
       </button>
       <button
@@ -115,6 +117,7 @@ const ImageContent = ({ page, block, editBlock }: ImageContentProps) => {
         onMouseDown={(event) => onMouseDownSizeBtn(event)}
         onTouchStart={(event) => onTouchStartSizeBtn(event)}
       >
+        <ScreenOnly text="right button to resize image" />
         <span></span>
       </button>
       <button
@@ -123,6 +126,7 @@ const ImageContent = ({ page, block, editBlock }: ImageContentProps) => {
         onMouseDown={(event) => onMouseDownSizeBtn(event)}
         onTouchStart={(event) => onTouchStartSizeBtn(event)}
       >
+        <ScreenOnly text="bottom button to resize image" />
         <span></span>
       </button>
       <img src={block.contents} alt="block_photo" />

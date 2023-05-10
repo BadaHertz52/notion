@@ -10,6 +10,7 @@ import { CSSProperties } from "styled-components";
 import { Block, MainCommentType, Page } from "../modules/notion";
 import { detectRange } from "./BlockFn";
 import Comments from "./Comments";
+import ScreenOnly from "./ScreenOnly";
 
 type AllCommentsProps = {
   page: Page;
@@ -99,6 +100,7 @@ const AllComments = ({
               type="button"
               title="select open  not resolved comments or resolved comments"
             >
+              <ScreenOnly text="select open  not resolved comments or resolved comments" />
               {select === open ? "Open" : "Resolve"}
               <MdKeyboardArrowDown />
             </button>

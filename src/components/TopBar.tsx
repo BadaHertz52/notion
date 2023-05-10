@@ -29,6 +29,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { IoArrowRedoOutline } from "react-icons/io5";
 import { GrDocumentUpload } from "react-icons/gr";
 import { isMobile } from "./BlockComponent";
+import ScreenOnly from "./ScreenOnly";
 type TopBarProps = {
   firstList: listItem[];
   favorites: string[] | null;
@@ -219,6 +220,7 @@ const TopBar = ({
             onMouseEnter={onMouseEnterSidBarBtn}
             onClick={onClickSideBarBtn}
           >
+            <ScreenOnly text={title} />
             {sideAppear === "float" ? (
               <FiChevronsLeft />
             ) : window.innerWidth > 768 ? (
@@ -279,6 +281,7 @@ const TopBar = ({
           title="View all comments"
           onClick={onClickViewAllComments}
         >
+          <ScreenOnly text="View all comments" />
           <BiMessageDetail />
         </button>
         <button
@@ -286,9 +289,11 @@ const TopBar = ({
           className={pageInFavorites ? "btn-favorite on" : "btn-favorite"}
           onClick={addOrRemoveFavorite}
         >
+          <ScreenOnly text="Pin this page in your sidebar" />
           {pageInFavorites ? <AiFillStar /> : <AiOutlineStar />}
         </button>
         <button title=" Style, export, and more" onClick={onClickMoreBtn}>
+          <ScreenOnly text="Style, export, and more" />
           <BsThreeDots />
         </button>
         {openPageMoreFun && (

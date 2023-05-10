@@ -1,6 +1,7 @@
 import React from "react";
 import { IoChatboxOutline } from "react-icons/io5";
 import { Block } from "../modules/notion";
+import ScreenOnly from "./ScreenOnly";
 
 type BlockCommentProps = {
   block: Block;
@@ -16,6 +17,7 @@ const BlockComment = ({ block, onClickCommentBtn }: BlockCommentProps) => {
         name={block.id}
         onClick={() => onClickCommentBtn(block)}
       >
+        <ScreenOnly text="open comment about contents" />
         <IoChatboxOutline />
         <span className="comment-length">{block.comments?.length}</span>
       </button>

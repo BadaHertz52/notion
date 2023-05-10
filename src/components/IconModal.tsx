@@ -11,6 +11,7 @@ import { ActionContext } from "../containers/NotionRouter";
 import { Block, emojiPath, IconType, Page } from "../modules/notion";
 import { setTemplateItem } from "./BlockComponent";
 import { detectRange } from "./BlockFn";
+import ScreenOnly from "./ScreenOnly";
 const smileEmoji = "smile";
 const heartEyesEmoji = "heart_eyes";
 const angryEmoji = "angry";
@@ -262,6 +263,7 @@ const IconModal = ({
                 className="btn-emoji"
                 onClick={() => changePageIcon(emoji, "emoji")}
               >
+                <ScreenOnly text={`button to select ${emoji} emoji`} />
                 <img alt={emoji} src={`${emojiPath}${emoji}.png`} />
               </button>
             ))

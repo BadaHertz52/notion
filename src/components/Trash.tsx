@@ -11,6 +11,7 @@ import { CSSProperties } from "styled-components";
 import { ActionContext } from "../containers/NotionRouter";
 import { Page } from "../modules/notion";
 import Result, { makeResultType, resultType } from "./Result";
+import ScreenOnly from "./ScreenOnly";
 type ResultItemProps = {
   item: resultType;
   setTargetPageId: Dispatch<SetStateAction<string>>;
@@ -48,6 +49,7 @@ const ResultItem = ({
           className="btn-restore"
           onClick={() => restorePage(item.id)}
         >
+          <ScreenOnly text="button to restore page" />
           <RiArrowGoBackLine />
         </button>
         <button
@@ -55,6 +57,7 @@ const ResultItem = ({
           className="btn-clean"
           onClick={() => cleanTrash(item.id)}
         >
+          <ScreenOnly text="button to permanently delete page" />
           <IoTrashOutline />
         </button>
       </div>

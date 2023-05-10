@@ -21,6 +21,7 @@ import { CgMenuGridO } from "react-icons/cg";
 import { ModalType } from "../containers/EditorContainer";
 import { setTemplateItem } from "./BlockComponent";
 import { ActionContext } from "../containers/NotionRouter";
+import ScreenOnly from "./ScreenOnly";
 
 type BlockFnProp = {
   pages: Page[];
@@ -202,6 +203,7 @@ const BlockFn = ({
       <div className="blockFn">
         <div className="icon-blockFn">
           <button onClick={makeBlock} title="Click  to add a block below">
+            <ScreenOnly text="button  to add a block below" />
             <AiOutlinePlus />
           </button>
         </div>

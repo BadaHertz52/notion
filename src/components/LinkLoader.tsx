@@ -19,6 +19,7 @@ import {
 import { Block, findPage, Page } from "../modules/notion";
 import { selectionType } from "../containers/NotionRouter";
 import PageIcon from "./PageIcon";
+import ScreenOnly from "./ScreenOnly";
 
 type LinkLoaderProps = {
   recentPagesId: string[] | null;
@@ -526,6 +527,7 @@ const LinkLoader = ({
         className="page__inner"
         onClick={() => addLink(pagePath)}
       >
+        <ScreenOnly text="button to open page" />
         <PageIcon
           icon={page.header.icon}
           iconType={page.header.iconType}

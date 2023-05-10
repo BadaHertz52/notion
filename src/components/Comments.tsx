@@ -29,6 +29,7 @@ import { IoMdCloseCircle } from "react-icons/io";
 import { setTemplateItem } from "./BlockComponent";
 import { removeSelected } from "./BlockStyler";
 import { ActionContext } from "../containers/NotionRouter";
+import ScreenOnly from "./ScreenOnly";
 const open = "open";
 const resolve = "resolve";
 type CommentsProps = {
@@ -565,6 +566,7 @@ export const CommentInput = ({
             className="btn-cancel-edit"
             onClick={(event) => openDiscardEdit(event)}
           >
+            <ScreenOnly text="button to cancel edit" />
             <IoMdCloseCircle />
           </button>
         )}
@@ -579,9 +581,15 @@ export const CommentInput = ({
           disabled={text === null || text === ""}
         >
           {addOrEdit === "edit" ? (
-            <IoCheckmarkCircle style={submitStyle} />
+            <>
+              <ScreenOnly text="button to edit comment" />
+              <IoCheckmarkCircle style={submitStyle} />
+            </>
           ) : (
-            <IoArrowUpCircleSharp style={submitStyle} />
+            <>
+              <ScreenOnly text="button to add comment" />
+              <IoArrowUpCircleSharp style={submitStyle} />
+            </>
           )}
         </button>
       </form>
@@ -878,6 +886,7 @@ const CommentTool = ({
           !moreOpen ? (event) => openToolMore(event) : () => setMoreOpen(false)
         }
       >
+        <ScreenOnly text="more comment tool" />
         <span>
           <BsThreeDots />
         </span>

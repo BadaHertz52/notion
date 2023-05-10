@@ -47,6 +47,7 @@ import { MdPlayArrow } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { IoArrowRedoOutline } from "react-icons/io5";
 import { ActionContext } from "../containers/NotionRouter";
+import ScreenOnly from "./ScreenOnly";
 
 export const closeModal = (
   elementId: string,
@@ -161,6 +162,7 @@ const ItemTemplate = ({
           onClick={onToggleSubPage}
           style={toggleStyle}
         >
+          <ScreenOnly text="button to toggle page" />
           <MdPlayArrow />
         </button>
         <button className="pageName" onClick={onClickPageName}>
@@ -181,6 +183,7 @@ const ItemTemplate = ({
               onClickMoreBtn(item, sideBarPageFn.current);
           }}
         >
+          <ScreenOnly text="button to open menu to delete, duplicate or for more" />
           <BsThreeDots />
         </button>
         <button
@@ -190,6 +193,7 @@ const ItemTemplate = ({
             addNewSubPage(item);
           }}
         >
+          <ScreenOnly text="button to quickly add a page inside" />
           <AiOutlinePlus />
         </button>
       </div>
@@ -589,6 +593,7 @@ const SideBar = ({
                   className="closeSideBarBtn topBar__btn-sideBar"
                   onClick={() => changeSide("close")}
                 >
+                  <ScreenOnly text="button to close side menu" />
                   <FiChevronsLeft />
                 </button>
                 <button
@@ -597,6 +602,7 @@ const SideBar = ({
                   onClick={onClickTrashBtn}
                   ref={trashBtn}
                 >
+                  <ScreenOnly text="button to open form that has deleted page" />
                   <BsTrash />
                 </button>
               </div>
@@ -690,6 +696,7 @@ const SideBar = ({
                     title="Quickly add a page inside"
                     onClick={addNewPage}
                   >
+                    <ScreenOnly text="Quickly add a page inside" />
                     <AiOutlinePlus />
                   </button>
                 </div>
@@ -746,6 +753,7 @@ const SideBar = ({
           className="resizeBar"
           onTouchStart={onTouchStartResizeBar}
         >
+          <ScreenOnly text="button to resize moreFn" />
           <div></div>
         </button>
         {targetItem && (

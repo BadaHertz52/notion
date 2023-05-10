@@ -22,6 +22,7 @@ import { Block, Page } from "../modules/notion";
 import LinkLoader from "./LinkLoader";
 import { mobileSideMenuType } from "../containers/NotionRouter";
 import { isMobile, selectContent } from "./BlockComponent";
+import ScreenOnly from "./ScreenOnly";
 /**
  * block의 content에서 selected class를 삭제하는 함수
  */
@@ -597,6 +598,7 @@ const BlockStyler = ({
             className="blockStyler__btn-type btn"
             onClick={onClickTypeBtn}
           >
+            <ScreenOnly text="button to change type and value is current type" />
             <span>{getBlockType()}</span>
             <IoIosArrowDown className="arrow-down" />
           </button>
@@ -694,6 +696,7 @@ const BlockStyler = ({
               openMobileSideMenu("ms_moreMenu");
             }}
           >
+            <ScreenOnly text="button to open menu" />
             <BsThreeDots />
           </button>
         </div>

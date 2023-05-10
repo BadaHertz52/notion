@@ -7,6 +7,7 @@ import { CSSProperties } from "styled-components";
 import { ActionContext, msmWhatType } from "../containers/NotionRouter";
 import { Block, findBlock, makeNewBlock } from "../modules/notion";
 import BlockStyler, { removeSelected, StylerCommonProps } from "./BlockStyler";
+import ScreenOnly from "./ScreenOnly";
 
 type MobileBlockMenuProps = Omit<StylerCommonProps, "block"> & {
   mobileMenuTargetBlock: Block;
@@ -243,6 +244,7 @@ const MobileBlockMenu = ({
               onTouchEnd={addNewBlock}
               title="button  to add a block below"
             >
+              <ScreenOnly text="button  to add a block below" />
               <div className="mobileBlock__btn__inner">
                 <AiOutlinePlus />
               </div>
@@ -254,6 +256,7 @@ const MobileBlockMenu = ({
                 title="button to comment"
                 onTouchEnd={onTouchCommentBtn}
               >
+                <ScreenOnly text="button  to comment" />
                 <div className="mobileBlock__btn__inner">
                   <BiCommentDetail />
                 </div>
@@ -278,6 +281,7 @@ const MobileBlockMenu = ({
               onTouchEnd={removeBlock}
               name="delete"
             >
+              <ScreenOnly text="button  to delete" />
               <div className="mobileBlock__btn__inner">
                 <RiDeleteBin6Line />
               </div>
