@@ -97,6 +97,7 @@
   }
 }
 #block-comments {
+  @include hiddenScrollBar;
   position: absolute;
   z-index: 20;
   padding-bottom: 0;
@@ -169,7 +170,6 @@
       flex-shrink: 1;
       flex-grow: 1;
       font-weight: bold;
-      text-align: center;
       line-height: 20px;
       text-overflow: ellipsis;
     }

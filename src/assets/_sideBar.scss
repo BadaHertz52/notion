@@ -154,6 +154,9 @@
     }
   }
   .record-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: $mud;
     color: #ffff;
     border-radius: 3px;
@@ -162,6 +165,8 @@
     height: 18px;
     text-transform: uppercase;
     div {
+      height: 12.5px;
+      width: 12.5px;
       font-size: 12.5px;
     }
   }
@@ -381,7 +386,7 @@
   }
   button {
     padding: 3%;
-    @include editMenuBtns;
+    @include editMenuBtnGroup;
   }
   p {
     margin: 0;

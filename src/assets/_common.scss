@@ -1,5 +1,5 @@
 $pistachioshell: rgb(242, 241, 238);
-$mud: #b9b8b6;
+$mud: #929292;
 $lightMud: #d6d6d6;
 $brightMud: rgba(242, 241, 238, 0.6);
 $itemSvg: #a3a3a2;
@@ -49,46 +49,13 @@ $black: rgb(55, 54, 47);
     background-color: #edece9;
   }
 }
-.btn-switch {
-  position: relative;
-  width: 30px;
-  height: 15px;
-  .slider {
-    position: absolute;
-    cursor: pointer;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: 34px;
-    background-color: #ccc;
-    -webkit-transition: 0.4s;
-    transition: 0.4s;
-  }
-  .slider::before {
-    position: absolute;
-    content: "";
-    height: 12px;
-    width: 12px;
-    bottom: 1.5px;
-    left: 4px;
-    border-radius: 50%;
-    background-color: white;
-    -webkit-transition: 0.4s;
-    transition: 0.4s;
-  }
-  .slider.on {
-    background-color: $turkeyBlue;
-    box-shadow: 0 0 1px $turkeyBlue;
-  }
-  .slider.on:before {
-    -webkit-transform: translateX(10px);
-    -ms-transform: translateX(10px);
-    transform: translateX(10px);
+@mixin hiddenScrollBar {
+  &::-webkit-scrollbar {
+    width: 0px;
+    background-color: transparent;
   }
 }
+
 @mixin modal {
   position: absolute;
   top: 0;
@@ -158,7 +125,7 @@ $black: rgb(55, 54, 47);
     background: initial;
   }
 }
-@mixin editMenuBtns {
+@mixin editMenuBtnGroup {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -187,6 +154,46 @@ $black: rgb(55, 54, 47);
     svg {
       font-size: 18px;
     }
+  }
+}
+.btn-switch {
+  position: relative;
+  width: 30px;
+  height: 15px;
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 34px;
+    background-color: #ccc;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+  }
+  .slider::before {
+    position: absolute;
+    content: "";
+    height: 12px;
+    width: 12px;
+    bottom: 1.5px;
+    left: 4px;
+    border-radius: 50%;
+    background-color: white;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+  }
+  .slider.on {
+    background-color: $turkeyBlue;
+    box-shadow: 0 0 1px $turkeyBlue;
+  }
+  .slider.on:before {
+    -webkit-transform: translateX(10px);
+    -ms-transform: translateX(10px);
+    transform: translateX(10px);
   }
 }
 #inner .edit__inform {

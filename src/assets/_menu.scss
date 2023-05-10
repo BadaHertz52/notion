@@ -56,7 +56,7 @@
   }
 
   .menu__editBtnGroup .menu__editBtn {
-    @include editMenuBtns;
+    @include editMenuBtnGroup;
     &.off {
       display: none;
     }

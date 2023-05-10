@@ -19,6 +19,7 @@
     height: 45px;
   }
   .allComments__inner {
+    @include hiddenScrollBar;
     overflow-y: scroll;
     width: 100%;
     height: 100%;
@@ -35,6 +36,7 @@
     }
   }
   .comments {
+    @include hiddenScrollBar;
     width: 100%;
     position: relative;
     pointer-events: auto;
@@ -58,6 +60,7 @@
   .allComments__btn-group {
     pointer-events: auto;
     .btn-select {
+      margin-left: 10px;
       color: $itemText;
       font-size: inherit;
       font-weight: inherit;
