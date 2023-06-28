@@ -5,20 +5,6 @@ const catImg =
   "https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assets/img/michael-sum-LEpfefQf4rU-unsplash.jpg";
 const imgBlockImg =
   "https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assets/img/roses-gfcb7dbdd4_640.jpg";
-//TYPE
-// export const text = "text" as const;
-// export const toggle = "toggle" as const;
-// export const todo = "todo" as const;
-// export const todo_done = "todo_done" as const;
-// export const h1 = "h1" as const;
-// export const h2 = "h2" as const;
-// export const h3 = "h3" as const;
-// export const page = "page" as const;
-// export const image = "image media" as const;
-// export const numberList = "numberList" as const;
-// export const numberListArr = "numberListArr" as const;
-// export const bulletList = "bulletList" as const;
-// export const bulletListArr = "bulletListArr" as const;
 
 export type BlockType =
   | "text"
@@ -592,16 +578,6 @@ const template2: Page = {
   editTime: Date.parse("2022-8-23-15:00").toString(),
   createTime: Date.parse("2022-8-23-12:00").toString(),
 };
-// const initialState :Notion ={
-//   pagesId:null ,
-//   firstPagesId:null,
-//   templatesId:null,
-//   pages:null,
-//   trash:{
-//     pages:null,
-//     pagesId:null
-//   }
-// }
 const initialState: Notion = {
   pagesId: ["12345", "page1", "page2", "1234", "123", "template1", "template2"],
   firstPagesId: ["12345", "1234", "123"],
