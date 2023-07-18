@@ -64,10 +64,6 @@ export const findNodeInChildNodes = (node: Node, childNodes: Node[]) => {
   } else {
     childNode = findNodeInChildNodes(parentNode, childNodes);
   }
-
-  // else if(parentNode.parentNode?.parentElement?.className==="contentEditable"){
-  //   childNode =parentNode.parentNode;
-  // }
   return childNode;
 };
 /**

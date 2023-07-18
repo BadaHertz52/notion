@@ -45,22 +45,16 @@
 
 ## <div id="start"> 2. Getting start </div>
 
-### 1) Prerequiste
+### 1) Install
 
-- node.js
-  <br/>
-  [node.js 설치하러 가기](https://nodejs.org/ko/download/)
-
-- npm
-
-```
- npm install npm@latest -g
+```bash
+ npm i
 ```
 
 ### 2) Start
 
 ```
-npm i
+npm run start
 ```
 
 ---
@@ -84,7 +78,7 @@ npm i
 <img src="./image/readMeFile/template.png" width="450px" height="auto">
 <br/>
 
-- Resposible web - Mobile 화면 (sideMenu)
+- Responsible web - Mobile 화면 (sideMenu)
   <br/>
 
   <img 
@@ -108,7 +102,7 @@ npm i
     pages: Page[] | null;
     //부모 page가 없는, 최상위에 있는 page들의 id
     firstPagesId: string[] | null;
-    //모든 tempplate의 id
+    //모든 template의 id
     templatesId: string[] | null;
     // 삭제된 page의 id와 page들
     trash: {
@@ -305,7 +299,7 @@ type UserAction =
 
   - 페이지 내의 모든 comment를 보여주는 component
 
-- BlockComponent ,BlockConentEditable
+- BlockComponent ,BlockContentEditable
 
   - BlockComponent : EditableBlock component 의 자식 component이자 BlockContentEditable의 부모 component로 block의 type별 다른 html element를 보여준다
   - BlockContentEditable : block 의 content에 대한 component로 content를 수정할 수 있음
@@ -387,7 +381,7 @@ type UserAction =
 
   - block이나 page를 다른 page로 이동시킬 경우 page를 검색할때 검색 결과를 보여주고, block이나 page를 다른 page로 이동시켜줌
 
-- QuikFindBoard
+- QuickFindBoard
 
   - Sidebar에서 page를 검색하고 page 클릭 시 해당 page를 열 수 있는 기능을 담당함
 
@@ -428,7 +422,7 @@ type UserAction =
   />
 
 - 사이드바 모양 변경(왼쪽에 고정, 감추기, 띄우기)
-- Quik Find: 페이지 찾기
+- Quick Find: 페이지 찾기
 - 페이지옆에 생성되는 메뉴버튼: 페이지 생성,삭제,페이지 타이틀이나 아이콘 변경, 다른 페이지로 이동, 즐겨찾기에 추가 또는 삭제
 - 휴지통 : 삭제된 페이지 영구 삭제 또는 복구
 
@@ -459,7 +453,7 @@ type UserAction =
 
 ### <div id="topBar_function"> a. Topbar </div>
 
-#### 📼 Topbar simualtion
+#### 📼 Topbar simulation
 
 <img 
     width="50%"
@@ -556,19 +550,22 @@ type UserAction =
   
 * 다른 페이지로 블럭 이동
 
-<img 
     alt="move block to other page"
     width="50%"
-    src="https://user-images.githubusercontent.com/69838872/209688356-e2cedb8f-dd72-47dc-9661-1cb6b36b5376.gif"
-/>
 
-- 블록 위치 변경 - web browser
+# <img
 
-<img 
-    ait="changePosition"
-    width="50%"
-    src="https://user-images.githubusercontent.com/69838872/209688434-5db37fcc-7987-460b-80a7-43db53d410c3.gif"
-/>
+- 블록 위치 변경
+
+  <img
+
+  > > > > > > > develop
+
+      ait="changePosition"
+      width="50%"
+      src="https://user-images.githubusercontent.com/69838872/209688434-5db37fcc-7987-460b-80a7-43db53d410c3.gif"
+
+  />
 
 - 블록 위치 변경 - mobile browser
 
@@ -586,7 +583,7 @@ type UserAction =
     src="https://user-images.githubusercontent.com/69838872/209688197-d6aacef5-a7af-438c-8543-e9e40d16a8bb.gif"
 />
 
-- menu - mobile browswer
+- menu - mobile browser
 
 <img 
   width="40%" 
@@ -594,7 +591,7 @@ type UserAction =
   src="./image/readMeFile/mobile_m.gif"
 />
 
-- sideMenu of menu - mobile browswer
+- sideMenu of menu - mobile browser
 
 <img 
   width="40%" 
@@ -607,7 +604,7 @@ type UserAction =
 ## <div id="update">4. Update </div>
 
 - 2022.12 업데이트
-  - sideBar,allComment 변경,<span style="text-decoration:line-through"> MoblieMenu 추가 </span>, 모바일에서도 ImageContent 사이즈 변경가능하도록 수정
+  - sideBar,allComment 변경,<span style="text-decoration:line-through"> Mobile Menu 추가 </span>, 모바일에서도 ImageContent 사이즈 변경가능하도록 수정
     <br/>
 - 2023.3 업데이트 및 수정
 
@@ -615,7 +612,7 @@ type UserAction =
 
   - 모바일 브라우저에서도 block의 contents 중 특정 글자를 선택할 때 해당 글자에 대한 BlockStyler 의 기능을 사용 가능
 
-  - block 전체 뿐만 아니라 일부 내용에 대해서도 commment 추가 할 수 있음
+  - block 전체 뿐만 아니라 일부 내용에 대해서도 comment 추가 할 수 있음
 
   - 모바일 브라우저에서 블럭간 이동이 안되는 오류 수정
 
