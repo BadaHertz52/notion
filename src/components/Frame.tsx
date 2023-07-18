@@ -1,4 +1,4 @@
-import "../assets/frame.css";
+import "../assets/frame.scss";
 import React, {
   CSSProperties,
   Dispatch,
