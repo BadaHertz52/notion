@@ -27,7 +27,7 @@ import { Command } from "./Frame";
 import ImageContent from "./ImageContent";
 import { ActionContext, selectionType } from "../containers/NotionRouter";
 import ScreenOnly from "./ScreenOnly";
-import { isMobile, setTemplateItem } from "../fn";
+import { isMobile, selectContent, setTemplateItem } from "../fn";
 
 type BlockComponentProps = {
   pages: Page[];
