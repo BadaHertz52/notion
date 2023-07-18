@@ -5,6 +5,7 @@ import React, {
   useState,
   MouseEvent,
   useEffect,
+  useCallback,
 } from "react";
 import {
   Block,
@@ -98,31 +99,42 @@ const CommentInput = ({
 
   const selectedHtmlText = selectedHtml?.innerHTML;
 
-  const updateBlock = (blockComments: MainCommentType[]) => {
-    if (commentBlock) {
-      let editedBlock: Block = {
-        ...commentBlock,
-        comments: blockComments,
-      };
-      if (selectedHtml) {
-        const blockContentHtml = document.getElementById(
-          `${commentBlock.id}__contents`
-        )?.firstElementChild;
-        const blockContents = blockContentHtml?.innerHTML;
-        if (blockContents) {
-          editedBlock = {
-            ...editedBlock,
-            contents: blockContents,
-          };
+  const updateBlock = useCallback(
+    (blockComments: MainCommentType[]) => {
+      if (commentBlock) {
+        let editedBlock: Block = {
+          ...commentBlock,
+          comments: blockComments,
+        };
+        if (selectedHtml) {
+          const blockContentHtml = document.getElementById(
+            `${commentBlock.id}__contents`
+          )?.firstElementChild;
+          const blockContents = blockContentHtml?.innerHTML;
+          if (blockContents) {
+            editedBlock = {
+              ...editedBlock,
+              contents: blockContents,
+            };
+          }
+        }
+        editBlock(pageId, editedBlock);
+        setAllComments && setAllComments(blockComments);
+        if (selectedHtml) {
+          removeSelected(frameHtml, editedBlock, editBlock, page, null);
         }
       }
-      editBlock(pageId, editedBlock);
-      setAllComments && setAllComments(blockComments);
-      if (selectedHtml) {
-        removeSelected(frameHtml, editedBlock, editBlock, page, null);
-      }
-    }
-  };
+    },
+    [
+      commentBlock,
+      editBlock,
+      frameHtml,
+      page,
+      pageId,
+      selectedHtml,
+      setAllComments,
+    ]
+  );
   const findMainCommentIndex = (
     comments: MainCommentType[],
     mainComment: MainCommentType
@@ -131,7 +143,7 @@ const CommentInput = ({
     const mainCommentIndex = commentsId.indexOf(mainComment.id);
     return mainCommentIndex;
   };
-  const findMainComment = (): {
+  const findMainComment = useCallback((): {
     mainComment: MainCommentType;
     mainCommentIndex: number;
   } => {
@@ -145,9 +157,9 @@ const CommentInput = ({
       mainComment: mainComment,
       mainCommentIndex: mainCommentIndex,
     };
-  };
+  }, [allComments, subComment]);
 
-  const onInputText = (event: FormEvent<HTMLInputElement>) => {
+  const onInputText = useCallback((event: FormEvent<HTMLInputElement>) => {
     const target = event?.currentTarget;
     const value = target.value;
     setText(value);
@@ -161,8 +173,8 @@ const CommentInput = ({
         fill: " rgb(46, 170, 220)",
       });
     }
-  };
-  const addMainComment = () => {
+  }, []);
+  const addMainComment = useCallback(() => {
     if (commentBlock) {
       const newId = `main_${editTime}`;
       if (selectedHtml) {
@@ -185,9 +197,18 @@ const CommentInput = ({
           : allComments.concat(newBlockComment);
       updateBlock(newBlockComments);
     }
-  };
+  }, [
+    allComments,
+    commentBlock,
+    editTime,
+    selectedHtml,
+    selectedHtmlText,
+    text,
+    updateBlock,
+    userName,
+  ]);
 
-  const addSubComment = () => {
+  const addSubComment = useCallback(() => {
     if (commentBlock && allComments && mainComment) {
       const comments = [...allComments];
       const mainCommentIndex = findMainCommentIndex(comments, mainComment);
@@ -213,24 +234,36 @@ const CommentInput = ({
       comments.splice(mainCommentIndex, 1, editedMainComment);
       updateBlock(comments);
     }
-  };
-  const updatePageComment = (pageComments: MainCommentType[] | null) => {
-    if (page) {
-      const editedPage: Page = {
-        ...page,
-        header: {
-          ...page.header,
-          comments: pageComments,
-        },
-        editTime: editTime,
-      };
-      setAllComments && setAllComments(pageComments);
-      if (editPage) {
-        editPage(pageId, editedPage);
+  }, [
+    allComments,
+    commentBlock,
+    editTime,
+    mainComment,
+    text,
+    updateBlock,
+    userName,
+  ]);
+  const updatePageComment = useCallback(
+    (pageComments: MainCommentType[] | null) => {
+      if (page) {
+        const editedPage: Page = {
+          ...page,
+          header: {
+            ...page.header,
+            comments: pageComments,
+          },
+          editTime: editTime,
+        };
+        setAllComments && setAllComments(pageComments);
+        if (editPage) {
+          editPage(pageId, editedPage);
+        }
       }
-    }
-  };
-  const addPageMainComment = () => {
+    },
+    [editPage, editTime, page, pageId, setAllComments]
+  );
+
+  const addPageMainComment = useCallback(() => {
     const newComment: MainCommentType = {
       id: `pageComment_${editTime}`,
       userName: userName,
@@ -247,8 +280,9 @@ const CommentInput = ({
         ? [newComment]
         : page.header.comments.concat(newComment);
     updatePageComment(newPageComments);
-  };
-  const addPageSubComment = () => {
+  }, [editTime, page.header.comments, text, updatePageComment, userName]);
+
+  const addPageSubComment = useCallback(() => {
     if (allComments && mainComment) {
       const comments = [...allComments];
       const mainCommentIndex = findMainCommentIndex(comments, mainComment);
@@ -273,26 +307,48 @@ const CommentInput = ({
       comments.splice(mainCommentIndex, 1, editedMainComment);
       updatePageComment(comments);
     }
-  };
-  const recoveryInputAfterSubmit = () => {
+  }, [allComments, editTime, mainComment, text, updatePageComment, userName]);
+
+  const closeInput = useCallback(() => {
+    setEdit && setEdit(false);
+    setText("");
+    setModal &&
+      setModal({
+        open: false,
+        what: null,
+      });
+  }, [setEdit, setModal]);
+
+  const recoveryInputAfterSubmit = useCallback(() => {
     setText("");
     closeInput();
     page && setTemplateItem(templateHtml, page);
     setEditTargetComment(null);
     sessionStorage.removeItem("editComment");
-  };
+  }, [closeInput, page, templateHtml]);
 
-  const makeNewComment = (event: MouseEvent) => {
-    event.preventDefault();
-    if (commentBlock) {
-      mainComment === null ? addMainComment() : addSubComment();
-    } else {
-      mainComment === null ? addPageMainComment() : addPageSubComment();
-    }
-    recoveryInputAfterSubmit();
-  };
+  const makeNewComment = useCallback(
+    (event: MouseEvent) => {
+      event.preventDefault();
+      if (commentBlock) {
+        mainComment === null ? addMainComment() : addSubComment();
+      } else {
+        mainComment === null ? addPageMainComment() : addPageSubComment();
+      }
+      recoveryInputAfterSubmit();
+    },
+    [
+      addMainComment,
+      addPageMainComment,
+      addPageSubComment,
+      addSubComment,
+      commentBlock,
+      mainComment,
+      recoveryInputAfterSubmit,
+    ]
+  );
 
-  const editMainComment = () => {
+  const editMainComment = useCallback(() => {
     if (commentBlock && allComments && mainComment) {
       const comments = [...allComments];
       const mainCommentIds = comments.map((m: MainCommentType) => m.id);
@@ -305,9 +361,9 @@ const CommentInput = ({
       comments.splice(mainCommentIndex, 1, editedBlockComment);
       updateBlock(comments);
     }
-  };
+  }, [allComments, commentBlock, editTime, mainComment, text, updateBlock]);
 
-  const editSubComment = () => {
+  const editSubComment = useCallback(() => {
     if (commentBlock && allComments && subComment) {
       const comments = [...allComments];
       const { mainComment, mainCommentIndex } = findMainComment();
@@ -323,9 +379,17 @@ const CommentInput = ({
       comments.splice(mainCommentIndex, 1, mainComment);
       updateBlock(comments);
     }
-  };
+  }, [
+    allComments,
+    commentBlock,
+    editTime,
+    findMainComment,
+    subComment,
+    text,
+    updateBlock,
+  ]);
 
-  const editPageComment = () => {
+  const editPageComment = useCallback(() => {
     if (allComments && mainComment) {
       const comments = [...allComments];
       const mainCommentsId = allComments.map((m: MainCommentType) => m.id);
@@ -338,9 +402,9 @@ const CommentInput = ({
       comments.splice(mainCommentIndex, 1, editedMainComment);
       updatePageComment(comments);
     }
-  };
+  }, [allComments, editTime, mainComment, text, updatePageComment]);
 
-  const editPageSubComment = () => {
+  const editPageSubComment = useCallback(() => {
     if (allComments && subComment) {
       const comments = [...allComments];
       const { mainComment, mainCommentIndex } = findMainComment();
@@ -356,30 +420,40 @@ const CommentInput = ({
         updatePageComment(comments);
       }
     }
-  };
-  const editComment = (event: MouseEvent) => {
-    event.preventDefault();
-    if (commentBlock) {
-      mainComment ? editMainComment() : editSubComment();
-    } else {
-      mainComment ? editPageComment() : editPageSubComment();
-    }
-    recoveryInputAfterSubmit();
-  };
-  const openDiscardEdit = (event: MouseEvent) => {
+  }, [
+    allComments,
+    editTime,
+    findMainComment,
+    subComment,
+    text,
+    updatePageComment,
+  ]);
+  const editComment = useCallback(
+    (event: MouseEvent) => {
+      event.preventDefault();
+      if (commentBlock) {
+        mainComment ? editMainComment() : editSubComment();
+      } else {
+        mainComment ? editPageComment() : editPageSubComment();
+      }
+      recoveryInputAfterSubmit();
+    },
+    [
+      commentBlock,
+      editMainComment,
+      editPageComment,
+      editPageSubComment,
+      editSubComment,
+      mainComment,
+      recoveryInputAfterSubmit,
+    ]
+  );
+  const openDiscardEdit = useCallback((event: MouseEvent) => {
     event.preventDefault();
     const discardEdit = document.getElementById("discardEdit");
     discardEdit?.classList.add("on");
-  };
-  function closeInput() {
-    setEdit && setEdit(false);
-    setText("");
-    setModal &&
-      setModal({
-        open: false,
-        what: null,
-      });
-  }
+  }, []);
+
   useEffect(() => {
     switch (addOrEdit) {
       case "add":
@@ -430,20 +504,13 @@ const CommentInput = ({
           />
         </label>
         {addOrEdit === "edit" && (
-          <button
-            className="btn-cancel-edit"
-            onClick={(event) => openDiscardEdit(event)}
-          >
+          <button className="btn-cancel-edit" onClick={openDiscardEdit}>
             <ScreenOnly text="button to cancel edit" />
             <IoMdCloseCircle />
           </button>
         )}
         <button
-          onClick={
-            addOrEdit === "add"
-              ? (event) => makeNewComment(event)
-              : (event) => editComment(event)
-          }
+          onClick={addOrEdit === "add" ? makeNewComment : editComment}
           className="comment__btn-submit"
           name="comment__btn-submit"
           disabled={text === null || text === ""}

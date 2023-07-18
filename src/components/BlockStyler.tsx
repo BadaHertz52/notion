@@ -5,6 +5,7 @@ import React, {
   useEffect,
   useState,
   useContext,
+  useCallback,
 } from "react";
 import { BsChatLeftText, BsThreeDots } from "react-icons/bs";
 import { IoIosArrowDown } from "react-icons/io";
@@ -128,61 +129,69 @@ const BlockStyler = ({
    * BlockStyler의 타켓인 block에 대한 내용을 담고 있는 element중 mainBlock element의 domRect을 반환하는 함수
    * @returns DOMRect | undefined
    */
-  const getMainBlockDomRect = (
-    frameHtml: HTMLDivElement | null,
-    block: Block
-  ): DOMRect | undefined => {
-    const blockHtml = frameHtml?.querySelector(`#block-${block.id}`);
-    const mainBlockHtml = block.type.includes("List")
-      ? blockHtml?.parentElement?.parentElement
-      : blockHtml?.querySelector(".mainBlock");
-    const mainBlockDomRect = mainBlockHtml?.getClientRects()[0];
-    return mainBlockDomRect;
-  };
-  const changeStylerStyle = (
-    frameHtml: HTMLDivElement | null,
-    block: Block,
-    setStyle: Dispatch<SetStateAction<CSSProperties | undefined>>
-  ) => {
-    const mainBlockDomRect = getMainBlockDomRect(frameHtml, block);
-    const pageContentInner = frameHtml?.querySelector(".page__contents__inner");
-    const pageContentDomRect = pageContentInner?.getClientRects()[0];
-    if (frameHtml && mainBlockDomRect && pageContentDomRect) {
-      const frameDomRect = frameHtml.getClientRects()[0];
-      const top = mainBlockDomRect.top - frameDomRect.top;
-      const left = mainBlockDomRect.left - frameDomRect.left;
-      setStyle({
-        top: `${top}px`,
-        left: `${left}px`,
-        width:
-          window.innerWidth < 768
-            ? `${pageContentDomRect.width}px`
-            : "fit-content",
-      });
-    }
-  };
-
-  const closeOtherBtn = (event: MouseEvent<HTMLDivElement>) => {
-    const target = event.target as HTMLElement | null;
-    if (target && !isMobile()) {
-      const clickTypeBtn = target.closest(".blockStyler__btn-type");
-      const clickLinkBtn = target.closest(".blockStyler__btn-link");
-      const clickMenuBtn = target.closest(".blockStyler__btn-menu");
-      const clickColorBtn = target.closest(".blockStyler__btn-color");
-      !clickTypeBtn &&
-        setCommand({
-          open: false,
-          command: null,
-          targetBlock: null,
+  const getMainBlockDomRect = useCallback(
+    (frameHtml: HTMLDivElement | null, block: Block): DOMRect | undefined => {
+      const blockHtml = frameHtml?.querySelector(`#block-${block.id}`);
+      const mainBlockHtml = block.type.includes("List")
+        ? blockHtml?.parentElement?.parentElement
+        : blockHtml?.querySelector(".mainBlock");
+      const mainBlockDomRect = mainBlockHtml?.getClientRects()[0];
+      return mainBlockDomRect;
+    },
+    []
+  );
+  const changeStylerStyle = useCallback(
+    (
+      frameHtml: HTMLDivElement | null,
+      block: Block,
+      setStyle: Dispatch<SetStateAction<CSSProperties | undefined>>
+    ) => {
+      const mainBlockDomRect = getMainBlockDomRect(frameHtml, block);
+      const pageContentInner = frameHtml?.querySelector(
+        ".page__contents__inner"
+      );
+      const pageContentDomRect = pageContentInner?.getClientRects()[0];
+      if (frameHtml && mainBlockDomRect && pageContentDomRect) {
+        const frameDomRect = frameHtml.getClientRects()[0];
+        const top = mainBlockDomRect.top - frameDomRect.top;
+        const left = mainBlockDomRect.left - frameDomRect.left;
+        setStyle({
+          top: `${top}px`,
+          left: `${left}px`,
+          width:
+            window.innerWidth < 768
+              ? `${pageContentDomRect.width}px`
+              : "fit-content",
         });
+      }
+    },
+    [getMainBlockDomRect]
+  );
 
-      !clickLinkBtn && setOpenLink(false);
-      !clickMenuBtn && setOpenMenu(false);
-      !clickColorBtn && setOpenColor(false);
-    }
-  };
+  const closeOtherBtn = useCallback(
+    (event: MouseEvent<HTMLDivElement>) => {
+      const target = event.target as HTMLElement | null;
+      if (target && !isMobile()) {
+        const clickTypeBtn = target.closest(".blockStyler__btn-type");
+        const clickLinkBtn = target.closest(".blockStyler__btn-link");
+        const clickMenuBtn = target.closest(".blockStyler__btn-menu");
+        const clickColorBtn = target.closest(".blockStyler__btn-color");
+        !clickTypeBtn &&
+          setCommand({
+            open: false,
+            command: null,
+            targetBlock: null,
+          });
 
-  const onClickTypeBtn = () => {
+        !clickLinkBtn && setOpenLink(false);
+        !clickMenuBtn && setOpenMenu(false);
+        !clickColorBtn && setOpenColor(false);
+      }
+    },
+    [setCommand]
+  );
+
+  const onClickTypeBtn = useCallback(() => {
     command.open
       ? setCommand({
           open: false,
@@ -194,8 +203,9 @@ const BlockStyler = ({
           command: null,
           targetBlock: block,
         });
-  };
-  const changeCommentStyle = () => {
+  }, [block, command.open, setCommand]);
+
+  const changeCommentStyle = useCallback(() => {
     const mainBlockDomRect = getMainBlockDomRect(frameHtml, block);
     if (mainBlockDomRect && frameHtml) {
       const pageContentDomRect = pageContentEl?.getClientRects()[0];
@@ -228,8 +238,8 @@ const BlockStyler = ({
         }
       }
     }
-  };
-  const onClickCommentBtn = () => {
+  }, [block, frameHtml, getMainBlockDomRect, pageContentEl, setModalStyle]);
+  const onClickCommentBtn = useCallback(() => {
     changeCommentStyle();
     setModal({
       open: true,
@@ -238,7 +248,14 @@ const BlockStyler = ({
     setCommentBlock(block);
     setSelection && setSelection(null);
     isMobile() && setMobileMenuTargetBlock(null);
-  };
+  }, [
+    block,
+    changeCommentStyle,
+    setCommentBlock,
+    setMobileMenuTargetBlock,
+    setModal,
+    setSelection,
+  ]);
 
   const changeMenuStyle = (param: menuType) => {
     if (blockStyler && frameHtml) {
@@ -276,6 +293,7 @@ const BlockStyler = ({
       }
     }
   };
+
   const onClickColorBtn = () => {
     if (openColor) {
       setOpenColor(false);
@@ -284,14 +302,14 @@ const BlockStyler = ({
       setOpenColor(true);
     }
   };
-  const onClickMenuBtn = () => {
+  const onClickMenuBtn = useCallback(() => {
     if (openMenu) {
       setOpenMenu(false);
     } else {
       changeMenuStyle(menu);
       setOpenMenu(true);
     }
-  };
+  }, [changeMenuStyle, openMenu]);
 
   window.onresize = () => {
     if (isMobile()) {
@@ -306,69 +324,70 @@ const BlockStyler = ({
    * @param deco  삭제하고자 하는 , 기존에 지정된 textDeco 스타일
    * * @param selectedHtml : 선택된 node
    */
-  const removeOtherTextDeco = (
-    deco: textDecoType,
-    selectedHtml: HTMLElement
-  ) => {
-    const decoSpan = selectedHtml.querySelectorAll(`.${deco}`);
-    if (decoSpan[0]) {
-      decoSpan.forEach((e: Element) => {
-        if (e.classList.length === 1) {
-          e.outerHTML = e.innerHTML;
-        } else {
-          e.classList.remove(deco);
-        }
-      });
-    }
-  };
+  const removeOtherTextDeco = useCallback(
+    (deco: textDecoType, selectedHtml: HTMLElement) => {
+      const decoSpan = selectedHtml.querySelectorAll(`.${deco}`);
+      if (decoSpan[0]) {
+        decoSpan.forEach((e: Element) => {
+          if (e.classList.length === 1) {
+            e.outerHTML = e.innerHTML;
+          } else {
+            e.classList.remove(deco);
+          }
+        });
+      }
+    },
+    []
+  );
   /**
    * 클릭한 버튼에 따라, 선택된 내용의 fontWeight, fontstyle , textDeco를 변경하는 함수
    * @param btnName 클릭한 버튼의 이름
    */
-  const onClickFontStyleBtn = (
-    btnName: fontWeightType | fontStyleType | textDecoType
-  ) => {
-    const listOfSelected = document.querySelectorAll(
-      ".selected"
-    ) as NodeListOf<HTMLElement>;
-    if (listOfSelected[0]) {
-      listOfSelected.forEach((selectedHtml: HTMLElement) => {
-        const selectedSpan = selectedHtml.querySelectorAll(`.${btnName}`);
-        if (selectedSpan[0]) {
-          //btnName과 같은 스타일이 지정된 span 이 있으므로 selectedHtml의 class를 변경하기 전에 같은 스타일이 있는 span을 정리해줌
-          selectedSpan.forEach((span: Element) => {
-            if (span.classList.length === 1) {
-              // span의 class 가 btnName인 경우
-              span.outerHTML = span.innerHTML;
-            } else {
-              span.classList.remove(btnName);
-            }
-          });
-        }
+  const onClickFontStyleBtn = useCallback(
+    (btnName: fontWeightType | fontStyleType | textDecoType) => {
+      const listOfSelected = document.querySelectorAll(
+        ".selected"
+      ) as NodeListOf<HTMLElement>;
+      if (listOfSelected[0]) {
+        listOfSelected.forEach((selectedHtml: HTMLElement) => {
+          const selectedSpan = selectedHtml.querySelectorAll(`.${btnName}`);
+          if (selectedSpan[0]) {
+            //btnName과 같은 스타일이 지정된 span 이 있으므로 selectedHtml의 class를 변경하기 전에 같은 스타일이 있는 span을 정리해줌
+            selectedSpan.forEach((span: Element) => {
+              if (span.classList.length === 1) {
+                // span의 class 가 btnName인 경우
+                span.outerHTML = span.innerHTML;
+              } else {
+                span.classList.remove(btnName);
+              }
+            });
+          }
 
-        if (btnName === "lineThrough") {
-          removeOtherTextDeco("underline", selectedHtml);
-        }
-        if (btnName === "underline") {
-          removeOtherTextDeco("lineThrough", selectedHtml);
-        }
-        //class 변경 : 버튼을 눌러서 새로 스타일을 지정하거나, 지정했던 스타일을 없애는 기능
-        if (selectedHtml.className.includes(btnName)) {
-          selectedHtml.classList.remove(btnName);
-        } else {
-          selectedHtml.classList.add(btnName);
-        }
-      });
-
-      const editedBlock = getContent(block);
-      editBlock(page.id, editedBlock);
-      setSelection &&
-        setSelection({
-          block: editedBlock,
-          change: true,
+          if (btnName === "lineThrough") {
+            removeOtherTextDeco("underline", selectedHtml);
+          }
+          if (btnName === "underline") {
+            removeOtherTextDeco("lineThrough", selectedHtml);
+          }
+          //class 변경 : 버튼을 눌러서 새로 스타일을 지정하거나, 지정했던 스타일을 없애는 기능
+          if (selectedHtml.className.includes(btnName)) {
+            selectedHtml.classList.remove(btnName);
+          } else {
+            selectedHtml.classList.add(btnName);
+          }
         });
-    }
-  };
+
+        const editedBlock = getContent(block);
+        editBlock(page.id, editedBlock);
+        setSelection &&
+          setSelection({
+            block: editedBlock,
+            change: true,
+          });
+      }
+    },
+    [block, editBlock, page.id, removeOtherTextDeco, setSelection]
+  );
   const executeCloseBlockStyler = (
     event: globalThis.MouseEvent | TouchEvent
   ) => {
@@ -471,7 +490,7 @@ const BlockStyler = ({
     }
   }
   //mobile
-  const prepareForChange = () => {
+  const prepareForChange = useCallback(() => {
     const mobileSelection = document.getSelection();
     const contentEditableHtml = document.getElementById(`${block.id}__contents`)
       ?.firstElementChild as HTMLElement | null | undefined;
@@ -486,13 +505,16 @@ const BlockStyler = ({
         null
       );
     }
-  };
-  const openMobileSideMenu = (what: msmWhatType) => {
-    setMobileSideMenu({
-      block: block,
-      what: what,
-    });
-  };
+  }, [block, editBlock, page]);
+  const openMobileSideMenu = useCallback(
+    (what: msmWhatType) => {
+      setMobileSideMenu({
+        block: block,
+        what: what,
+      });
+    },
+    [setMobileSideMenu, block]
+  );
   document.onselectionchange = () => {
     if (isMobile()) {
       const SELECTION = document.getSelection();
@@ -521,14 +543,20 @@ const BlockStyler = ({
           });
       }
     }
-  }, [selection]);
+  }, [
+    selection,
+    block,
+    changeStylerStyle,
+    command.open,
+    frameHtml,
+    openColor,
+    openLink,
+    openMenu,
+    setCommand,
+  ]);
   return (
     <>
-      <div
-        id="blockStyler"
-        style={blockStylerStyle}
-        onClick={(event) => closeOtherBtn(event)}
-      >
+      <div id="blockStyler" style={blockStylerStyle} onClick={closeOtherBtn}>
         <div className="inner">
           <button
             title="button to change type"

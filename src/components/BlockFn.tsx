@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useState,
   useContext,
+  useCallback,
 } from "react";
 import Menu from "./Menu";
 import {
@@ -120,7 +121,7 @@ const BlockFn = ({
   );
   const [renameTargetPage, setRenameTargetPage] = useState<Page | null>(null);
 
-  const makeBlock = () => {
+  const makeBlock = useCallback(() => {
     const templateHtml = document.getElementById("template");
     setTemplateItem(templateHtml, page);
     const sessionItem = sessionStorage.getItem("blockFnTargetBlock");
@@ -132,15 +133,15 @@ const BlockFn = ({
     } else {
       console.error("BlockFn-makeBlock error: there is no session item");
     }
-  };
-  const onMouseDownMenu = () => {
+  }, [addBlock, page]);
+  const onMouseDownMenu = useCallback(() => {
     const sessionItem = sessionStorage.getItem("blockFnTargetBlock");
     if (sessionItem) {
       const targetBlock = JSON.parse(sessionItem);
       moveTargetBlock === null && setMoveTargetBlock(targetBlock);
     }
-  };
-  const onClickMenu = () => {
+  }, [setMoveTargetBlock, moveTargetBlock]);
+  const onClickMenu = useCallback(() => {
     moveTargetBlock && setMoveTargetBlock(null);
     const sessionItem = sessionStorage.getItem("blockFnTargetBlock");
     menuOpen && setOpenMenu(false);
@@ -156,7 +157,14 @@ const BlockFn = ({
     } else {
       console.error("BlockFn-openMenu error: there is no session item");
     }
-  };
+  }, [
+    menuOpen,
+    modal.open,
+    moveTargetBlock,
+    setModal,
+    setMoveTargetBlock,
+    setOpenMenu,
+  ]);
   useEffect(() => {
     if (openRename && blockFnTargetBlock) {
       const page = findPage(pagesId, pages, blockFnTargetBlock.id) as Page;

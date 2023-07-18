@@ -534,7 +534,7 @@ const BlockContentEditable = ({
         commentInputHtml.focus();
       }
     }
-  }, []);
+  }, [command.open]);
 
   return (
     <>

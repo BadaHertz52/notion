@@ -1,34 +1,20 @@
 import React, {
-  ChangeEvent,
   Dispatch,
-  KeyboardEvent,
   MouseEvent,
   SetStateAction,
-  SyntheticEvent,
   TouchEvent,
-  useEffect,
   useRef,
   useContext,
   useCallback,
 } from "react";
-import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
+
 import { MdOutlinePhotoSizeSelectActual } from "react-icons/md";
-import {
-  Block,
-  BlockType,
-  blockTypes,
-  findPage,
-  findParentBlock,
-  findPreviousBlockInDoc,
-  MainCommentType,
-  makeNewBlock,
-  Page,
-} from "../modules/notion";
+import { Block, MainCommentType, Page } from "../modules/notion";
 import { Command } from "./Frame";
 import ImageContent from "./ImageContent";
 import { ActionContext, selectionType } from "../containers/NotionRouter";
 import ScreenOnly from "./ScreenOnly";
-import { isMobile, selectContent, setTemplateItem } from "../fn";
+
 import BlockContentEditable from "./BlockContentEditable";
 
 type BlockComponentProps = {
@@ -134,38 +120,47 @@ const BlockComponent = ({
     setLoaderTargetBlock(block);
   }, [setOpenLoader, setLoaderTargetBlock, block]);
 
-  const onClickContent = (event: MouseEvent<HTMLElement>) => {
-    if (event.currentTarget.classList.contains("btn-comment")) {
-      onClickCommentBtn(block);
-    }
-  };
+  const onClickContent = useCallback(
+    (event: MouseEvent<HTMLElement>) => {
+      if (event.currentTarget.classList.contains("btn-comment")) {
+        onClickCommentBtn(block);
+      }
+    },
+    [block, onClickCommentBtn]
+  );
   /**
    * [moveBlock - mobile] readyToMoveBlock 을 통해 위치를 변경시킬 블럭으로 해당 요소에 touch move 이벤트가 감지 되었을때,
    * moveTargetBlock을 설정하고 해당 요소의 클래스를 원래대로 복귀하는 함수
    * @param event TouchEvent
    */
-  const markMoveTargetBlock = (event: TouchEvent<HTMLDivElement>) => {
-    if (event.currentTarget.classList.contains("on")) {
-      setMoveTargetBlock(block);
-      const target = event.target as HTMLDivElement;
-      target.classList.remove("on");
-    }
-  };
+  const markMoveTargetBlock = useCallback(
+    (event: TouchEvent<HTMLDivElement>) => {
+      if (event.currentTarget.classList.contains("on")) {
+        setMoveTargetBlock(block);
+        const target = event.target as HTMLDivElement;
+        target.classList.remove("on");
+      }
+    },
+    [block, setMoveTargetBlock]
+  );
   /**
    *[moveBlock - mobile]  moveBlock.current 로 Frame 내에서 움직임이 감지 되었다면, startMarkMoveBlock.current 를 true로 변환하고,  블록 위치변경을 위한 블록 선택임을 구별하기 위해 setTimeOut 을 사용해서 일정 시간이 지난후에도 startMoveBlock.current가 참일 때 event의 타켓인 요소의 클래스에 on을 추가해 moveTargetBlock을 설정할 준비를 하는 함수
    * @param event ToucheEvent
    */
-  const readyToMoveBlock = (event: TouchEvent<HTMLDivElement>) => {
-    if (!moveBlock.current) {
-      startMarkMoveBlock.current = true;
-    }
-    setTimeout(() => {
-      if (startMarkMoveBlock.current) {
-        const target = event.target as HTMLElement;
-        target.classList.add("on");
+  const readyToMoveBlock = useCallback(
+    (event: TouchEvent<HTMLDivElement>) => {
+      if (!moveBlock.current) {
+        startMarkMoveBlock.current = true;
       }
-    }, 2000);
-  };
+      setTimeout(() => {
+        if (startMarkMoveBlock.current) {
+          const target = event.target as HTMLElement;
+          target.classList.add("on");
+        }
+      }, 2000);
+    },
+    [moveBlock]
+  );
   return (
     <div
       className={`${block.type}-blockComponent blockComponent`}

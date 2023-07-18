@@ -72,7 +72,7 @@ const CommentBlock = ({
         comment.id === editCommentItem && setEdit(true);
       }
     }
-  }, [editCommentItem, comment.id, discardEdit]);
+  }, [editCommentItem, comment.id, discardEdit, setDiscardEdit]);
   return (
     <div className="commentBlock">
       <section className="commentBlock__header">
