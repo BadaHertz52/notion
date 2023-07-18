@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { CSSProperties } from "styled-components";
 import { Block, Page } from "../modules/notion";
-import { setTemplateItem } from "./BlockComponent";
+import { setTemplateItem } from "../fn";
 import { detectRange } from "./BlockFn";
 type LoaderProps = {
   block: Block | null;

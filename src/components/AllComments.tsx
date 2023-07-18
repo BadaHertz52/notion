@@ -86,7 +86,7 @@ const AllComments = ({
         setResult(true);
       }
     }
-  }, [select]);
+  }, [select, allComments]);
 
   return (
     <div id="allComments" style={style}>

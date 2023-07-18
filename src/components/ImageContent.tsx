@@ -1,7 +1,7 @@
 import React, { MouseEvent, TouchEvent, useRef, useState } from "react";
 import { CSSProperties } from "styled-components";
 import { Block, Page } from "../modules/notion";
-import { setTemplateItem } from "./BlockComponent";
+import { setTemplateItem } from "../fn";
 import ScreenOnly from "./ScreenOnly";
 
 type ImageContentProps = {

@@ -12,7 +12,8 @@ import React, {
 import { Block, MainCommentType, findBlock, Page } from "../modules/notion";
 import { Command } from "./Frame";
 import { ActionContext, selectionType } from "../containers/NotionRouter";
-import BlockComponent, { setTemplateItem } from "./BlockComponent";
+import BlockComponent from "./BlockComponent";
+import { setTemplateItem } from "../fn";
 import { GoPrimitiveDot } from "react-icons/go";
 import { GrCheckbox, GrCheckboxSelected } from "react-icons/gr";
 import { MdPlayArrow } from "react-icons/md";

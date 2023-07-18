@@ -7,7 +7,7 @@ import {
   findBlock,
 } from "../modules/notion";
 import { CSSProperties } from "styled-components";
-import { setTemplateItem } from "./BlockComponent";
+import { setTemplateItem } from "../fn";
 import { HiOutlinePencil } from "react-icons/hi";
 import { IoTrashOutline } from "react-icons/io5";
 

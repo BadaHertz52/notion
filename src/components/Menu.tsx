@@ -28,7 +28,7 @@ import { TiArrowSortedDown } from "react-icons/ti";
 import { IoArrowRedoOutline } from "react-icons/io5";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { AiOutlineFormatPainter } from "react-icons/ai";
-import { isMobile, setTemplateItem } from "./BlockComponent";
+import { isMobile, setTemplateItem } from "../fn";
 import {
   ActionContext,
   mobileSideMenuType,

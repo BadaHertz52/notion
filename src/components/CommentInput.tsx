@@ -15,7 +15,7 @@ import {
 import { ModalType } from "../containers/EditorContainer";
 import { CSSProperties } from "styled-components";
 import { removeSelected } from "./BlockStyler";
-import { setTemplateItem } from "./BlockComponent";
+import { setTemplateItem } from "../fn";
 import ScreenOnly from "./ScreenOnly";
 import { IoMdCloseCircle } from "react-icons/io";
 import { IoArrowUpCircleSharp, IoCheckmarkCircle } from "react-icons/io5";

@@ -28,7 +28,7 @@ import { BsThreeDots } from "react-icons/bs";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { IoArrowRedoOutline } from "react-icons/io5";
 import { GrDocumentUpload } from "react-icons/gr";
-import { isMobile } from "./BlockComponent";
+import { isMobile } from "../fn";
 import ScreenOnly from "./ScreenOnly";
 type TopBarProps = {
   firstList: listItem[];

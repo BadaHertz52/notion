@@ -9,7 +9,7 @@ import { BsEmojiSmile } from "react-icons/bs";
 import { CSSProperties } from "styled-components";
 import { ActionContext } from "../containers/NotionRouter";
 import { Block, emojiPath, IconType, Page } from "../modules/notion";
-import { setTemplateItem } from "./BlockComponent";
+import { setTemplateItem } from "../fn";
 import { detectRange } from "./BlockFn";
 import ScreenOnly from "./ScreenOnly";
 const smileEmoji = "smile";

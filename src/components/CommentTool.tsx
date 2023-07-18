@@ -6,7 +6,7 @@ import {
   SubCommentType,
 } from "../modules/notion";
 import { CSSProperties } from "styled-components";
-import { setTemplateItem } from "./BlockComponent";
+import { setTemplateItem } from "../fn";
 import ScreenOnly from "./ScreenOnly";
 import { BsThreeDots } from "react-icons/bs";
 type CommentToolProps = {

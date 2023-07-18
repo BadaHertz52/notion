@@ -9,7 +9,7 @@ import React, {
 import { AiOutlinePlus } from "react-icons/ai";
 import { ActionContext } from "../containers/NotionRouter";
 import { Block, listItem, Page } from "../modules/notion";
-import { setTemplateItem } from "./BlockComponent";
+import { setTemplateItem } from "../fn";
 import PageIcon from "./PageIcon";
 import ScreenOnly from "./ScreenOnly";
 

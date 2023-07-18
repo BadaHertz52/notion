@@ -8,7 +8,7 @@ import React, {
 import { CSSProperties } from "styled-components";
 import { ActionContext } from "../containers/NotionRouter";
 import { Block, Page } from "../modules/notion";
-import { setTemplateItem } from "./BlockComponent";
+import { setTemplateItem } from "../fn";
 import IconModal from "./IconModal";
 import PageIcon from "./PageIcon";
 import { closeModal } from "./SideBar";

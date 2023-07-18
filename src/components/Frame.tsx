@@ -32,7 +32,7 @@ import Loader from "./Loader";
 import PageIcon from "./PageIcon";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 import PageMenu from "./PageMenu";
-import { isMobile, setTemplateItem } from "./BlockComponent";
+import { isMobile, setTemplateItem } from "../fn";
 import { fontStyleType, mobileSideMenuType } from "../containers/NotionRouter";
 import BlockStyler, { removeSelected } from "./BlockStyler";
 import MoveTargetBlock from "./MoveTargetBlock";

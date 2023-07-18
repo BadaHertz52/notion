@@ -21,7 +21,7 @@ import Menu, { MenuAndBlockStylerCommonProps } from "./Menu";
 import { Block, Page } from "../modules/notion";
 import LinkLoader from "./LinkLoader";
 import { mobileSideMenuType } from "../containers/NotionRouter";
-import { isMobile, selectContent } from "./BlockComponent";
+import { isMobile, selectContent } from "../fn";
 import ScreenOnly from "./ScreenOnly";
 /**
  * block의 content에서 selected class를 삭제하는 함수

@@ -19,7 +19,7 @@ import Rename from "./Rename";
 import { AiOutlinePlus } from "react-icons/ai";
 import { CgMenuGridO } from "react-icons/cg";
 import { ModalType } from "../containers/EditorContainer";
-import { setTemplateItem } from "./BlockComponent";
+import { setTemplateItem } from "../fn";
 import { ActionContext } from "../containers/NotionRouter";
 import ScreenOnly from "./ScreenOnly";
 

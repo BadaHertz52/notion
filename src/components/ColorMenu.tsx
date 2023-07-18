@@ -18,7 +18,7 @@ import {
   Page,
   red,
 } from "../modules/notion";
-import { setTemplateItem } from "./BlockComponent";
+import { setTemplateItem } from "../fn";
 import { ActionContext, selectionType } from "../containers/NotionRouter";
 
 type StyleColorInformProps = {

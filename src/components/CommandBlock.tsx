@@ -14,7 +14,7 @@ import {
   Page,
 } from "../modules/notion";
 import imgIcon from "../assets/img/vincent-van-gogh-ge1323790d_640.jpg";
-import { setTemplateItem } from "./BlockComponent";
+import { setTemplateItem } from "../fn";
 import { CSSProperties } from "styled-components";
 
 type CommandBlockProp = {
