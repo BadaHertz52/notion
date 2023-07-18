@@ -25,14 +25,14 @@ export const isMobile = () => {
   );
 };
 
-//Selection - onSelection 이벤트
+//Selection - onSelection 이벤트 ---
 /**
  * node가 contentEditable.current의 childNodes의 하위일 경우,childNodes중에  해당 node의 상위 node를 찾는 함수
  * @param node
  * @param childNodes contentEditable.current의 childNodes
  * @returns node를 하위 요소로 하는 contentEditable.current의 childNode
  */
-export const findNodeInChildNodes = (node: Node, childNodes: Node[]) => {
+const findNodeInChildNodes = (node: Node, childNodes: Node[]) => {
   const parentNode = node.parentNode as Node;
   let childNode: any | Node;
   if (parentNode.parentElement?.className === "contentEditable") {
@@ -48,7 +48,7 @@ export const findNodeInChildNodes = (node: Node, childNodes: Node[]) => {
  * @param block
  * @return block.contents에서 node.textContent의 index
  */
-export const getAccurateIndex = (
+const getAccurateIndex = (
   node: Node,
   block: Block,
   contentEditableHtml: HTMLElement | null
@@ -92,7 +92,7 @@ export const getAccurateIndex = (
  * @param block
  * @returns preChangedContent:선택 영역의 앞의 부분으로, selection 메소드로 인한 변경사항이 있는 경우 변경된 값을 가짐 , selectedStartIndex: 선택된 영역의 block.contents에서의 시작하는 지점
  */
-export const getFromStartNode = (
+const getFromStartNode = (
   startNode: Node,
   startOffset: number,
   block: Block,
@@ -202,7 +202,7 @@ export const getFromStartNode = (
  * @param block
  * @returns afterChangedContent:선택 영역의 앞의 부분으로, selection 메소드로 인한 변경사항이 있는 경우 변경된 값을 가짐 , selectedEndIndex: 선택된 영역의 block.contents에서의 시작하는 지점
  */
-export const getFromEndNode = (
+const getFromEndNode = (
   endNode: Node,
   endOffset: number,
   block: Block,
@@ -312,7 +312,7 @@ export const getFromEndNode = (
  * @param startNodeText :startNode.textContent
  * @param startParentNode :startNode.parentNode
  */
-export function updateStartParentNode(
+function updateStartParentNode(
   startOffset: number,
   startNode: Node,
   startNodeText: string,
@@ -334,7 +334,7 @@ export function updateStartParentNode(
  * @param endNodeText :endNode.textContent
  * @param endParentNode :endNode.parentNode
  */
-export function updateEndParentNode(
+function updateEndParentNode(
   endOffset: number,
   endNode: Node,
   endNodeText: string,
@@ -360,7 +360,7 @@ export function updateEndParentNode(
  * @param endNode: select가 끝난 node
  * @param childNodes: contentEditable.current.childNodes
  */
-export function updateMiddleChildren(
+function updateMiddleChildren(
   startIndex: number,
   endIndex: number,
   endNode: Node,
@@ -541,3 +541,79 @@ export const selectContent = (
     }
   }
 };
+
+//-- Selection - onSelection 이벤트
+
+// Selection - select 취소 변경  -----
+/**
+ *  select 하거나, 이를 취소한 경우, 변경된 블럭의 contents를 가져오는  함수로 만약 BlockStyler로 스타일을 변경하다면, 스타일 변경 후에 해당 함수를 사용해야 한다.
+ * @param block
+ * @returns
+ */
+export const getContent = (block: Block): Block => {
+  const contentEditableHtml = document.getElementById(
+    `${block.id}__contents`
+  )?.firstElementChild;
+  let newBlock = block;
+  if (contentEditableHtml) {
+    const children = contentEditableHtml.childNodes;
+    let contentsArr: string[] = [];
+    children.forEach((c: Node) => {
+      if (c.nodeType === 3) {
+        c.nodeValue && contentsArr.push(c.nodeValue);
+      }
+      //span
+      if (c.nodeType === 1) {
+        const element = c as Element;
+        contentsArr.push(element.outerHTML);
+      }
+    });
+    const newBlockContents = contentsArr.join("");
+    newBlock = {
+      ...block,
+      contents: newBlockContents,
+      editTime: JSON.stringify(Date.now()),
+    };
+  }
+  return newBlock;
+};
+
+/**
+ * block의 content에서 selected class를 삭제하는 함수
+ */
+export function removeSelected(
+  frameHtml: HTMLElement | null,
+  block: Block,
+  editBlock: (pageId: string, block: Block) => void,
+  page: Page,
+  setSelection: React.Dispatch<
+    React.SetStateAction<selectionType | null>
+  > | null
+) {
+  // 변경된 내용이 있고, selected 만 제거하면 되는 경우
+  const blockContentHtml = frameHtml?.querySelector(`#${block.id}__contents`);
+  const listOfSelected = blockContentHtml?.querySelectorAll(".selected");
+  if (listOfSelected && listOfSelected[0]) {
+    listOfSelected.forEach((selectedHtml: Element) => {
+      if (selectedHtml.classList.length > 1) {
+        selectedHtml?.classList.remove("selected");
+      } else {
+        selectedHtml.outerHTML = selectedHtml.innerHTML;
+      }
+    });
+  } else {
+    const spanElements = blockContentHtml?.querySelectorAll("span");
+    if (spanElements) {
+      spanElements.forEach((element: HTMLSpanElement) => {
+        if (element.className === "") {
+          element.outerHTML = element.innerHTML;
+        }
+      });
+    }
+  }
+  const editedBlock = getContent(block);
+  editBlock(page.id, editedBlock);
+  setSelection && setSelection(null);
+}
+
+// ----  Selection - select 취소 변경

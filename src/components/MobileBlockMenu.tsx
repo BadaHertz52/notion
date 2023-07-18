@@ -6,7 +6,8 @@ import { TiArrowSortedDown } from "react-icons/ti";
 import { CSSProperties } from "styled-components";
 import { ActionContext, msmWhatType } from "../containers/NotionRouter";
 import { Block, findBlock, makeNewBlock } from "../modules/notion";
-import BlockStyler, { removeSelected, StylerCommonProps } from "./BlockStyler";
+import BlockStyler, { StylerCommonProps } from "./BlockStyler";
+import { removeSelected } from "../fn";
 import ScreenOnly from "./ScreenOnly";
 
 type MobileBlockMenuProps = Omit<StylerCommonProps, "block"> & {

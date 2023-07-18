@@ -21,114 +21,9 @@ import Menu, { MenuAndBlockStylerCommonProps } from "./Menu";
 import { Block, Page } from "../modules/notion";
 import LinkLoader from "./LinkLoader";
 import { mobileSideMenuType } from "../containers/NotionRouter";
-import { isMobile, selectContent } from "../fn";
+import { getContent, isMobile, removeSelected, selectContent } from "../fn";
 import ScreenOnly from "./ScreenOnly";
-/**
- * block의 content에서 selected class를 삭제하는 함수
- */
-export function removeSelected(
-  frameHtml: HTMLElement | null,
-  block: Block,
-  editBlock: (pageId: string, block: Block) => void,
-  page: Page,
-  setSelection: React.Dispatch<
-    React.SetStateAction<selectionType | null>
-  > | null
-) {
-  // 변경된 내용이 있고, selected 만 제거하면 되는 경우
-  const blockContentHtml = frameHtml?.querySelector(`#${block.id}__contents`);
-  const listOfSelected = blockContentHtml?.querySelectorAll(".selected");
-  if (listOfSelected && listOfSelected[0]) {
-    listOfSelected.forEach((selectedHtml: Element) => {
-      if (selectedHtml.classList.length > 1) {
-        selectedHtml?.classList.remove("selected");
-      } else {
-        selectedHtml.outerHTML = selectedHtml.innerHTML;
-      }
-    });
-  } else {
-    const spanElements = blockContentHtml?.querySelectorAll("span");
-    if (spanElements) {
-      spanElements.forEach((element: HTMLSpanElement) => {
-        if (element.className === "") {
-          element.outerHTML = element.innerHTML;
-        }
-      });
-    }
-  }
-  const editedBlock = getContent(block);
-  editBlock(page.id, editedBlock);
-  setSelection && setSelection(null);
-}
-/**
- * BlockStyler의 타켓인 block에 대한 내용을 담고 있는 element중 mainBlock element의 domRect을 반환하는 함수
- * @returns DOMRect | undefined
- */
-export const getMainBlockDomRect = (
-  frameHtml: HTMLDivElement | null,
-  block: Block
-): DOMRect | undefined => {
-  const blockHtml = frameHtml?.querySelector(`#block-${block.id}`);
-  const mainBlockHtml = block.type.includes("List")
-    ? blockHtml?.parentElement?.parentElement
-    : blockHtml?.querySelector(".mainBlock");
-  const mainBlockDomRect = mainBlockHtml?.getClientRects()[0];
-  return mainBlockDomRect;
-};
-export const changeStylerStyle = (
-  frameHtml: HTMLDivElement | null,
-  block: Block,
-  setStyle: Dispatch<SetStateAction<CSSProperties | undefined>>
-) => {
-  const mainBlockDomRect = getMainBlockDomRect(frameHtml, block);
-  const pageContentInner = frameHtml?.querySelector(".page__contents__inner");
-  const pageContentDomRect = pageContentInner?.getClientRects()[0];
-  if (frameHtml && mainBlockDomRect && pageContentDomRect) {
-    const frameDomRect = frameHtml.getClientRects()[0];
-    const top = mainBlockDomRect.top - frameDomRect.top;
-    const left = mainBlockDomRect.left - frameDomRect.left;
-    setStyle({
-      top: `${top}px`,
-      left: `${left}px`,
-      width:
-        window.innerWidth < 768
-          ? `${pageContentDomRect.width}px`
-          : "fit-content",
-    });
-  }
-};
-/**
- *  select 하거나, 이를 취소한 경우, 변경된 블럭의 contents를 가져오는  함수로 만약 BlockStyler로 스타일을 변경하다면, 스타일 변경 후에 해당 함수를 사용해야 한다.
- * @param block
- * @returns
- */
-export const getContent = (block: Block): Block => {
-  const contentEditableHtml = document.getElementById(
-    `${block.id}__contents`
-  )?.firstElementChild;
-  let newBlock = block;
-  if (contentEditableHtml) {
-    const children = contentEditableHtml.childNodes;
-    let contentsArr: string[] = [];
-    children.forEach((c: Node) => {
-      if (c.nodeType === 3) {
-        c.nodeValue && contentsArr.push(c.nodeValue);
-      }
-      //span
-      if (c.nodeType === 1) {
-        const element = c as Element;
-        contentsArr.push(element.outerHTML);
-      }
-    });
-    const newBlockContents = contentsArr.join("");
-    newBlock = {
-      ...block,
-      contents: newBlockContents,
-      editTime: JSON.stringify(Date.now()),
-    };
-  }
-  return newBlock;
-};
+
 export type StylerCommonProps = MenuAndBlockStylerCommonProps & {
   pagesId: string[];
   recentPagesId: string[] | null;
@@ -228,6 +123,44 @@ const BlockStyler = ({
     | typeof commandBlockHtmlId
     | typeof linkLoaderHtmlId
     | typeof mainMenuHtmlId;
+
+  /**
+   * BlockStyler의 타켓인 block에 대한 내용을 담고 있는 element중 mainBlock element의 domRect을 반환하는 함수
+   * @returns DOMRect | undefined
+   */
+  const getMainBlockDomRect = (
+    frameHtml: HTMLDivElement | null,
+    block: Block
+  ): DOMRect | undefined => {
+    const blockHtml = frameHtml?.querySelector(`#block-${block.id}`);
+    const mainBlockHtml = block.type.includes("List")
+      ? blockHtml?.parentElement?.parentElement
+      : blockHtml?.querySelector(".mainBlock");
+    const mainBlockDomRect = mainBlockHtml?.getClientRects()[0];
+    return mainBlockDomRect;
+  };
+  const changeStylerStyle = (
+    frameHtml: HTMLDivElement | null,
+    block: Block,
+    setStyle: Dispatch<SetStateAction<CSSProperties | undefined>>
+  ) => {
+    const mainBlockDomRect = getMainBlockDomRect(frameHtml, block);
+    const pageContentInner = frameHtml?.querySelector(".page__contents__inner");
+    const pageContentDomRect = pageContentInner?.getClientRects()[0];
+    if (frameHtml && mainBlockDomRect && pageContentDomRect) {
+      const frameDomRect = frameHtml.getClientRects()[0];
+      const top = mainBlockDomRect.top - frameDomRect.top;
+      const left = mainBlockDomRect.left - frameDomRect.left;
+      setStyle({
+        top: `${top}px`,
+        left: `${left}px`,
+        width:
+          window.innerWidth < 768
+            ? `${pageContentDomRect.width}px`
+            : "fit-content",
+      });
+    }
+  };
 
   const closeOtherBtn = (event: MouseEvent<HTMLDivElement>) => {
     const target = event.target as HTMLElement | null;

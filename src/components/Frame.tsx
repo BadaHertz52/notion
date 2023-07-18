@@ -34,7 +34,8 @@ import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 import PageMenu from "./PageMenu";
 import { isMobile, setTemplateItem } from "../fn";
 import { fontStyleType, mobileSideMenuType } from "../containers/NotionRouter";
-import BlockStyler, { removeSelected } from "./BlockStyler";
+import BlockStyler from "./BlockStyler";
+import { removeSelected } from "../fn";
 import MoveTargetBlock from "./MoveTargetBlock";
 
 //icon
