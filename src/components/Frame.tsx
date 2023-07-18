@@ -900,7 +900,7 @@ const Frame = ({
     }
   };
   inner?.addEventListener("keyup", updateBlock);
-  inner?.addEventListener("touchstart", updateBlock);
+  inner?.addEventListener("touchstart", updateBlock, { passive: true });
   inner?.addEventListener("click", (event: globalThis.MouseEvent) => {
     updateBlock();
     document.getElementById("menu__main") && closeMenu(event);

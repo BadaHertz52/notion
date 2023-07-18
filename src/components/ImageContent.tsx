@@ -93,9 +93,11 @@ const ImageContent = ({ page, block, editBlock }: ImageContentProps) => {
   };
 
   imageContent?.addEventListener("mousemove", (event) => onMouseMove(event));
-  imageContent?.addEventListener("touchmove", (event) => onTouchMove(event));
+  imageContent?.addEventListener("touchmove", (event) => onTouchMove(event), {
+    passive: true,
+  });
   imageContent?.addEventListener("mouseup", onMouseUp);
-  imageContent?.addEventListener("touchend", onMouseUp);
+  imageContent?.addEventListener("touchend", onMouseUp, { passive: true });
   return (
     <div
       className="img-contents"

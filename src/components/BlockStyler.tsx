@@ -453,9 +453,13 @@ const BlockStyler = ({
   inner?.addEventListener("click", (event) => {
     executeCloseBlockStyler(event);
   });
-  inner?.addEventListener("touchend", (event) => {
-    executeCloseBlockStyler(event);
-  });
+  inner?.addEventListener(
+    "touchend",
+    (event) => {
+      executeCloseBlockStyler(event);
+    },
+    { passive: true }
+  );
 
   /**
    * 유저가 blockStyler를 통해 여는 sideMenu의 영역 밖을을 클릭 할 경우 열려있는 sideMenu 창을 닫는 함수
