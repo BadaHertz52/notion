@@ -4,6 +4,7 @@ import {
   MainCommentType,
   Page,
   SubCommentType,
+  findBlock,
 } from "../modules/notion";
 import { CSSProperties } from "styled-components";
 import { setTemplateItem } from "./BlockComponent";
@@ -13,7 +14,7 @@ import { IoTrashOutline } from "react-icons/io5";
 type CommentToolMoreProps = {
   pageId: string;
   page: Page;
-  block: Block | null;
+  blockId: string | null;
   editBlock: (pageId: string, block: Block) => void;
   editPage: ((pageId: string, newPage: Page) => void) | null;
   setAllComments: Dispatch<SetStateAction<MainCommentType[] | null>> | null;
@@ -23,7 +24,7 @@ type CommentToolMoreProps = {
 };
 const CommentToolMore = ({
   pageId,
-  block,
+  blockId,
   page,
   editBlock,
   editPage,
@@ -39,14 +40,16 @@ const CommentToolMore = ({
   const editTime = JSON.stringify(Date.now());
 
   const onClickDeleteComment = () => {
-    page && setTemplateItem(templateHtml, page);
+    setTemplateItem(templateHtml, page);
     setMoreOpen(false);
     //page.header.comments 가 아닐 경우
-    if (block) {
+    if (blockId) {
       //delete blockComment
+      const block = findBlock(page, blockId).BLOCK;
       if (comment && block && block.comments) {
         const blockComments: MainCommentType[] = [...block.comments];
         const mainCommentIds = blockComments.map((m: MainCommentType) => m.id);
+
         const updateBlock = (changeContent: boolean) => {
           const templateHtml = document.getElementById("template");
           setTemplateItem(templateHtml, page);
@@ -59,7 +62,7 @@ const CommentToolMore = ({
             ...block,
             contents: blockContents,
             editTime: editTime,
-            comments: blockComments[0] === undefined ? null : blockComments,
+            comments: !blockComments[0] ? null : blockComments,
           };
           editBlock(page.id, editedBlock);
           setAllComments && setAllComments(editedBlock.comments);
