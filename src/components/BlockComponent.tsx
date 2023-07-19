@@ -18,7 +18,7 @@ import ScreenOnly from "./ScreenOnly";
 
 import BlockContentEditable from "./BlockContentEditable";
 
-type BlockComponentProps = {
+export type BlockComponentProps = {
   pages: Page[];
   pagesId: string[];
   block: Block;
