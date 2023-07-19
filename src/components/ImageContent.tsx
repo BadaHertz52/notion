@@ -20,14 +20,15 @@ const ImageContent = ({ page, block, editBlock }: ImageContentProps) => {
   type dragBtnName = typeof left | typeof right | typeof bottom;
   const dragBtn = useRef<dragBtnName>(left);
   const [imageStyle, setImageStyle] = useState<CSSProperties>();
-  const targetImgContent = document.getElementById(`${block.id}__contents`);
   const resizeImage = (clientX: number, clientY: number) => {
+    const targetImgContent = document.getElementById(`${block.id}__contents`);
     const changeX = clientX - previousClientX.current;
     const changeY = clientX - previousClientX.current;
     previousClientX.current = clientX;
     previousClientY.current = clientY;
-    if (changeX !== 0 || changeY !== 0) {
-      const imgDomRect = targetImgContent?.getClientRects()[0];
+
+    if ((changeX || changeY) && targetImgContent) {
+      const imgDomRect = targetImgContent.getClientRects()[0];
       if (imgDomRect) {
         const imgWidth = imgDomRect.width;
         const imgHeight = imgDomRect.height;
@@ -69,7 +70,8 @@ const ImageContent = ({ page, block, editBlock }: ImageContentProps) => {
   };
 
   const onMouseUp = () => {
-    if (drag.current) {
+    const targetImgContent = document.getElementById(`${block.id}__contents`);
+    if (drag.current && targetImgContent) {
       previousClientX.current = 0;
       previousClientY.current = 0;
       drag.current = false;
