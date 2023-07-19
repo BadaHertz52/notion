@@ -6,6 +6,7 @@ import React, {
   useRef,
   useContext,
   useCallback,
+  useMemo,
 } from "react";
 
 import { MdOutlinePhotoSizeSelectActual } from "react-icons/md";
@@ -62,6 +63,13 @@ const BlockComponent = ({
   moveBlock,
 }: BlockComponentProps) => {
   const { editBlock } = useContext(ActionContext).actions;
+  const showBlockComment = useMemo(() => {
+    return block.comments
+      ? block.comments.some((i) => i.type === "open") &&
+          block.comments.some((m: MainCommentType) => !m.selectedText)
+      : false;
+  }, [block.comments]);
+
   /**
    * 모바일 브라우저에서, element을 터치 할때 사용자가 element을 이동하기 위해 touch 한 것인지 판별하기 위한 조건 중 하나
    */
@@ -218,14 +226,7 @@ const BlockComponent = ({
         <div
           id={`${block.id}__contents`}
           className={`contents 
-          ${
-            block.comments &&
-            block.comments
-              .map((m: MainCommentType) => m.selectedText === null)
-              .includes(true)
-              ? "btn-comment"
-              : ""
-          }`}
+          ${showBlockComment ? "btn-comment" : ""}`}
           onClick={onClickContent}
         >
           <BlockContentEditable

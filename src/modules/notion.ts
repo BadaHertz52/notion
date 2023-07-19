@@ -88,8 +88,9 @@ export type SubCommentType = {
   editTime: string;
   createTime: string;
 };
+export type CommentType ="open"|"resolve";
 export type MainCommentType = SubCommentType & {
-  type: "open" | "resolve";
+  type: CommentType;
   selectedText: null | string;
   subComments: SubCommentType[] | null;
   subCommentsId: string[] | null;

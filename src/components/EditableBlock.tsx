@@ -104,14 +104,10 @@ const EditableBlock = ({
     (id: string) => findBlock(page, id).BLOCK
   );
 
-  const blockComments =
-    block.comments === null
-      ? false
-      : block.comments.filter(
-          (comment: MainCommentType) => comment.type === "open"
-        )[0] === undefined
-      ? false
-      : true;
+  const showBlockComment = block.comments
+    ? block.comments.some((i) => i.type === "open")
+    : false;
+
   const blockContentsStyle = (block: Block): CSSProperties => {
     return {
       color: block.type !== "todo_done" ? block.style.color : "grey",
@@ -273,7 +269,7 @@ const EditableBlock = ({
                     />
                   </div>
                 </div>
-                {blockComments && (
+                {showBlockComment && (
                   <BlockComment
                     block={block}
                     onClickCommentBtn={onClickCommentBtn}
@@ -406,7 +402,7 @@ const EditableBlock = ({
                     />
                   </div>
                 </div>
-                {blockComments && (
+                {showBlockComment && (
                   <BlockComment
                     block={block}
                     onClickCommentBtn={onClickCommentBtn}
