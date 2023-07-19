@@ -1,4 +1,10 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import {
   Block,
   MainCommentType,
@@ -39,7 +45,7 @@ const CommentToolMore = ({
   >(null);
   const editTime = JSON.stringify(Date.now());
 
-  const onClickDeleteComment = () => {
+  const onClickDeleteComment = useCallback(() => {
     setTemplateItem(templateHtml, page);
     setMoreOpen(false);
     //page.header.comments 가 아닐 경우
@@ -150,13 +156,24 @@ const CommentToolMore = ({
       }
     }
     sessionStorage.removeItem("toolMoreItem");
-  };
+  }, [
+    blockId,
+    comment,
+    editBlock,
+    editPage,
+    editTime,
+    page,
+    pageId,
+    setAllComments,
+    setMoreOpen,
+    templateHtml,
+  ]);
 
-  const onClickEditComment = () => {
+  const onClickEditComment = useCallback(() => {
     setMoreOpen(false);
     comment && sessionStorage.setItem("editComment", comment.id);
     sessionStorage.removeItem("toolMoreItem");
-  };
+  }, [comment, setMoreOpen]);
   useEffect(() => {
     if (toolMoreItem) {
       const item = JSON.parse(toolMoreItem);

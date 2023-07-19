@@ -9,6 +9,7 @@ import React, {
   useRef,
   useState,
   useContext,
+  useCallback,
 } from "react";
 import {
   Block,
@@ -220,7 +221,7 @@ const Frame = ({
         ? -62
         : -16,
   };
-  const onMouseMoveOnPH = () => {
+  const onMouseMoveOnPH = useCallback(() => {
     if (
       (page.header.icon === null ||
         page.header.cover === null ||
@@ -229,10 +230,10 @@ const Frame = ({
     ) {
       setDecoOpen(true);
     }
-  };
-  const onMouseLeaveFromPH = () => {
+  }, [decoOpen, page.header.comments, page.header.cover, page.header.icon]);
+  const onMouseLeaveFromPH = useCallback(() => {
     decoOpen && setDecoOpen(false);
-  };
+  }, [decoOpen]);
   const closeModal = (event: globalThis.MouseEvent) => {
     const target = event.target as HTMLElement | null;
     if (target) {
@@ -247,7 +248,7 @@ const Frame = ({
     }
   };
 
-  const closeMenu = (event: globalThis.MouseEvent | MouseEvent) => {
+  const closeMenu = useCallback((event: globalThis.MouseEvent | MouseEvent) => {
     const mainMenu = document.getElementById("menu__main");
     const sideMenu = document.getElementById("sideMenu")?.firstElementChild;
     const mainMenuArea = mainMenu?.getClientRects()[0];
@@ -260,7 +261,7 @@ const Frame = ({
     } else {
       isInrMain ? setOpenMenu(true) : setOpenMenu(false);
     }
-  };
+  }, []);
   const closeComments = (event: globalThis.MouseEvent) => {
     if (openComment && commentBlock) {
       const commentsDoc = document.getElementById("block-comments");
@@ -280,40 +281,46 @@ const Frame = ({
     }
   };
 
-  const onClickPageIcon = (event: React.MouseEvent) => {
-    if (openIconModal !== true) {
-      const frame = document.getElementsByClassName("frame")[0];
-      const frameDomRect = frame.getClientRects()[0];
-      const currentTarget = event.currentTarget;
-      if (currentTarget.firstElementChild) {
-        const domeRect = currentTarget.firstElementChild.getClientRects()[0];
-        setIconStyle({
-          position: "absolute",
-          top: domeRect.bottom + 24,
-          left: domeRect.left - frameDomRect.left,
-        });
-        setOpenIconModal(true);
+  const onClickPageIcon = useCallback(
+    (event: React.MouseEvent) => {
+      if (openIconModal !== true) {
+        const frame = document.getElementsByClassName("frame")[0];
+        const frameDomRect = frame.getClientRects()[0];
+        const currentTarget = event.currentTarget;
+        if (currentTarget.firstElementChild) {
+          const domeRect = currentTarget.firstElementChild.getClientRects()[0];
+          setIconStyle({
+            position: "absolute",
+            top: domeRect.bottom + 24,
+            left: domeRect.left - frameDomRect.left,
+          });
+          setOpenIconModal(true);
+        } else {
+          console.error("Can't find currentTarget");
+        }
       } else {
-        console.error("Can't find currentTarget");
+        setOpenIconModal(false);
       }
-    } else {
-      setOpenIconModal(false);
-    }
-  };
-  const onChangePageTitle = (event: ContentEditableEvent) => {
-    const value = event.target.value;
-    openTemplates && setTemplateItem(templateHtml, page);
-    editPage(page.id, {
-      ...page,
-      header: {
-        ...page.header,
-        title: value,
-      },
-      editTime: editTime,
-    });
-  };
+    },
+    [openIconModal]
+  );
+  const onChangePageTitle = useCallback(
+    (event: ContentEditableEvent) => {
+      const value = event.target.value;
+      openTemplates && setTemplateItem(templateHtml, page);
+      editPage(page.id, {
+        ...page,
+        header: {
+          ...page.header,
+          title: value,
+        },
+        editTime: editTime,
+      });
+    },
+    [editPage, editTime, openTemplates, page, templateHtml]
+  );
 
-  const addRandomIcon = () => {
+  const addRandomIcon = useCallback(() => {
     const icon = randomIcon();
     const newPageWithIcon: Page = {
       ...page,
@@ -326,9 +333,9 @@ const Frame = ({
     };
     openTemplates && setTemplateItem(templateHtml, page);
     editPage(page.id, newPageWithIcon);
-  };
+  }, [editPage, editTime, openTemplates, page, templateHtml]);
 
-  const onClickAddCover = () => {
+  const onClickAddCover = useCallback(() => {
     const editedPage: Page = {
       ...page,
       header: {
@@ -338,19 +345,19 @@ const Frame = ({
       editTime: editTime,
     };
     editPage(page.id, editedPage);
-  };
+  }, [editPage, editTime, page]);
   /**
    * [moveBlock]
    */
-  const makeMoveBlockTrue = () => {
+  const makeMoveBlockTrue = useCallback(() => {
     if (moveTargetBlock) {
       moveBlock.current = true;
     }
-  };
+  }, [moveTargetBlock]);
   /**
    * [moveBlock]  블록의 위치를 변경하고, 변경된 위치에 따라 page의 data도 변경하는 함수
    */
-  const changeBlockPosition = () => {
+  const changeBlockPosition = useCallback(() => {
     if (
       pointBlockToMoveBlock.current &&
       moveTargetBlock &&
@@ -612,11 +619,20 @@ const Frame = ({
       setTemplateItem(templateHtml, page);
       editPage(page.id, newPage);
     }
-  };
+  }, [
+    addBlock,
+    editBlock,
+    editPage,
+    moveTargetBlock,
+    page,
+    pages,
+    pagesId,
+    templateHtml,
+  ]);
   /**
    * [moveBlock] block의 위치를 변경 시키는 것이 끝났을 때 (mouseUp | touchEnd) , 사용자가 지정한 위치대로 state를 변경하고 블록의 위치 변동을 위해 설정한 모든 것을 원래대로 되돌리는 함수
    */
-  const stopMovingBlock = () => {
+  const stopMovingBlock = useCallback(() => {
     if (moveBlock.current) {
       changeBlockPosition();
       moveBlock.current = false;
@@ -627,104 +643,115 @@ const Frame = ({
       const editableBlockOn = document.querySelector(".editableBlock.on");
       editableBlockOn?.classList.remove("on");
     }
-  };
+  }, [changeBlockPosition]);
   /**
    * [moveBlock] 마우스, 터치의 이동에 따라 moveTargetBlock을 이동시키는 함수
    * @param clientX mouseEvent.clientX | touchEvent.touches[0].clientX
    * @param clientY mouseEvent.clientY | touchEvent.touches[0].clientY
    */
-  const move_MoveTargetBlock = (clientX: number, clientY: number) => {
-    if (moveTargetBlock && moveBlock.current) {
-      const editor = document.querySelector(".editor");
-      const moveTargetBlockHtml = document.getElementById("moveTargetBlock");
-      if (moveTargetBlockHtml && editor) {
-        moveTargetBlockHtml.setAttribute(
-          "style",
-          `position:absolute; top:${clientY + editor.scrollTop + 5}px; left:${
-            clientX + 5
-          }px`
-        );
+  const move_MoveTargetBlock = useCallback(
+    (clientX: number, clientY: number) => {
+      if (moveTargetBlock && moveBlock.current) {
+        const editor = document.querySelector(".editor");
+        const moveTargetBlockHtml = document.getElementById("moveTargetBlock");
+        if (moveTargetBlockHtml && editor) {
+          moveTargetBlockHtml.setAttribute(
+            "style",
+            `position:absolute; top:${clientY + editor.scrollTop + 5}px; left:${
+              clientX + 5
+            }px`
+          );
+        }
       }
-    }
-  };
+    },
+    [moveTargetBlock]
+  );
   /**
    * [moveBlock - mobile] 모바일 브라우저에서, moveTargetBlock의 위치를 변경시키고 moveTargetBlock의 위치에 있는 element인지 여부에 따라 클래스를 변경하고, pointBlockToMoveBlock.current 의 value를 바꾸는 함수
    * @param event
    */
-  const move_MoveTargetBlockInMobile = (event: TouchEvent<HTMLDivElement>) => {
-    if (moveBlock.current) {
-      const clientX = event.touches[0].clientX;
-      const clientY = event.touches[0].clientY;
-      frameHtml?.scrollTo(0, clientY);
-      document.querySelectorAll(".mainBlock").forEach((element) => {
-        const domRect = element.getClientRects()[0];
-        const isPointBlock =
-          domRect.top <= clientY && domRect.bottom >= clientY;
-        if (isPointBlock) {
-          element.classList.add("on");
-          const blockId = element.closest(".block")?.id.replace("block-", "");
-          if (blockId) {
-            pointBlockToMoveBlock.current = findBlock(page, blockId).BLOCK;
+  const move_MoveTargetBlockInMobile = useCallback(
+    (event: TouchEvent<HTMLDivElement>) => {
+      if (moveBlock.current) {
+        const clientX = event.touches[0].clientX;
+        const clientY = event.touches[0].clientY;
+        frameHtml?.scrollTo(0, clientY);
+        document.querySelectorAll(".mainBlock").forEach((element) => {
+          const domRect = element.getClientRects()[0];
+          const isPointBlock =
+            domRect.top <= clientY && domRect.bottom >= clientY;
+          if (isPointBlock) {
+            element.classList.add("on");
+            const blockId = element.closest(".block")?.id.replace("block-", "");
+            if (blockId) {
+              pointBlockToMoveBlock.current = findBlock(page, blockId).BLOCK;
+            }
+          } else {
+            element.classList.contains("on") && element.classList.remove("on");
           }
-        } else {
-          element.classList.contains("on") && element.classList.remove("on");
-        }
-      });
-      move_MoveTargetBlock(clientX, clientY);
-    }
-  };
+        });
+        move_MoveTargetBlock(clientX, clientY);
+      }
+    },
+    [frameHtml, move_MoveTargetBlock, page]
+  );
   /**
    * .pageContent의 밑부분을 클릭 할때, 해당 페이지에 새로운 블록을 추가하는 함수
    * @param event
    */
-  const onClickPageContentBottom = (event: MouseEvent) => {
-    const pageContentEl = event.currentTarget;
-    const clientX = event.clientX;
-    const clientY = event.clientY;
+  const onClickPageContentBottom = useCallback(
+    (event: MouseEvent) => {
+      const pageContentEl = event.currentTarget;
+      const clientX = event.clientX;
+      const clientY = event.clientY;
 
-    if (pageContentEl) {
-      const pageContentDomRect = pageContentEl.getClientRects()[0];
-      const pageContentPadding = getComputedStyle(
-        pageContentEl,
-        null
-      ).getPropertyValue("padding-bottom");
-      const padding = Number(
-        pageContentPadding.slice(0, pageContentPadding.indexOf("px"))
-      );
+      if (pageContentEl) {
+        const pageContentDomRect = pageContentEl.getClientRects()[0];
+        const pageContentPadding = getComputedStyle(
+          pageContentEl,
+          null
+        ).getPropertyValue("padding-bottom");
+        const padding = Number(
+          pageContentPadding.slice(0, pageContentPadding.indexOf("px"))
+        );
 
-      const conditionX =
-        clientX >= pageContentDomRect.x && clientX <= pageContentDomRect.right;
+        const conditionX =
+          clientX >= pageContentDomRect.x &&
+          clientX <= pageContentDomRect.right;
 
-      const conditionY =
-        clientY >= pageContentDomRect.bottom - padding &&
-        clientY <= pageContentDomRect.bottom;
-      /**
-       * mouseEvent가  pageContent의 아래 부분에서 일어났는지에 대한 객체, event가 아래 부분에서 일어났으면 true, 밖의 영역에서 일어났으면 false
-       */
-      const isInner = conditionX && conditionY;
-      if (isInner) {
-        const randomNumber = Math.floor(Math.random() * (100000 - 1) + 1);
-        const newBlock: Block = {
-          ...blockSample,
-          id: `${page.id}_${JSON.stringify(Date.now)}_${randomNumber}`,
-          firstBlock: true,
-        };
+        const conditionY =
+          clientY >= pageContentDomRect.bottom - padding &&
+          clientY <= pageContentDomRect.bottom;
+        /**
+         * mouseEvent가  pageContent의 아래 부분에서 일어났는지에 대한 객체, event가 아래 부분에서 일어났으면 true, 밖의 영역에서 일어났으면 false
+         */
+        const isInner = conditionX && conditionY;
+        if (isInner) {
+          const randomNumber = Math.floor(Math.random() * (100000 - 1) + 1);
+          const newBlock: Block = {
+            ...blockSample,
+            id: `${page.id}_${JSON.stringify(Date.now)}_${randomNumber}`,
+            firstBlock: true,
+          };
 
-        if (page.firstBlocksId) {
-          page.blocks && addBlock(page.id, newBlock, page.blocks.length, null);
-        } else {
-          addBlock(page.id, newBlock, 0, null);
+          if (page.firstBlocksId) {
+            page.blocks &&
+              addBlock(page.id, newBlock, page.blocks.length, null);
+          } else {
+            addBlock(page.id, newBlock, 0, null);
+          }
+          setTemplateItem(templateHtml, page);
         }
-        setTemplateItem(templateHtml, page);
       }
-    }
-  };
+    },
+    [addBlock, page, templateHtml]
+  );
   //new Frame
   /**
    * 새로 만든 페이지에 firstBlock을 생성하면서 페이지에 내용을 작성할 수 있도록 하는 함수
    * @returns page
    */
-  const startNewPage = (): Page => {
+  const startNewPage = useCallback((): Page => {
     const firstBlock = makeNewBlock(page, null, "");
     const newPage: Page = {
       ...page,
@@ -737,9 +764,9 @@ const Frame = ({
       editTime: editTime,
     };
     return newPage;
-  };
+  }, [editTime, page]);
 
-  const onClickEmptyWithIconBtn = () => {
+  const onClickEmptyWithIconBtn = useCallback(() => {
     const icon = randomIcon();
     const newPage = startNewPage();
     const newPageWithIcon: Page = {
@@ -753,31 +780,41 @@ const Frame = ({
     setOpenTemplates(false);
     editPage(page.id, newPageWithIcon);
     setRoutePage(newPageWithIcon);
-  };
-  const onClickEmpty = () => {
+  }, [
+    editPage,
+    page.header,
+    page.id,
+    setOpenTemplates,
+    setRoutePage,
+    startNewPage,
+  ]);
+
+  const onClickEmpty = useCallback(() => {
     const newPage = startNewPage();
     setOpenTemplates(false);
     editPage(page.id, newPage);
     setRoutePage(newPage);
-  };
-  const onMouseEnterPC = (event: MouseEvent) => {
+  }, [editPage, page.id, setOpenTemplates, setRoutePage, startNewPage]);
+
+  const onMouseEnterPC = useCallback((event: MouseEvent) => {
     const currentTarget = event?.currentTarget;
     currentTarget.classList.add("on");
-  };
-  const onMouseLeavePC = (event: MouseEvent) => {
+  }, []);
+
+  const onMouseLeavePC = useCallback((event: MouseEvent) => {
     const currentTarget = event?.currentTarget;
     currentTarget.classList.remove("on");
-  };
+  }, []);
 
-  const onClickChangeCoverBtn = () => {
+  const onClickChangeCoverBtn = useCallback(() => {
     setOpenLoaderForCover(true);
     const pageCover = frameHtml?.querySelector(".page__header__cover");
     pageCover?.classList.remove("on");
-  };
-  const onClickTemplateBtn = () => {
+  }, [frameHtml]);
+  const onClickTemplateBtn = useCallback(() => {
     setOpenTemplates(true);
     sessionStorage.setItem("targetPageId", page.id);
-  };
+  }, [page.id, setOpenTemplates]);
   // edit block using sessionStorage
   const updateBlock = () => {
     const item = sessionStorage.getItem("itemsTobeEdited");
@@ -801,7 +838,7 @@ const Frame = ({
   /**
    * commandBlockPosition (type:CSSProperties)의 값을 변경하는 함수
    */
-  const changeCBSposition = () => {
+  const changeCBSposition = useCallback(() => {
     if (command.open && command.targetBlock) {
       const frameDomRect = frameHtml?.getClientRects()[0];
       const blockStyler = document.getElementById("blockStyler");
@@ -869,7 +906,7 @@ const Frame = ({
         }
       }
     }
-  };
+  }, [command.open, command.targetBlock, frameHtml]);
   window.onresize = () => {
     changeCBSposition();
   };
@@ -945,7 +982,7 @@ const Frame = ({
   }, [newPageFrame, firstBlocksId]);
   useEffect(() => {
     changeCBSposition();
-  }, [command.open, command.targetBlock, openTemplates]);
+  }, [command.open, command.targetBlock, openTemplates, changeCBSposition]);
 
   //window.onresize =changeCommentStyle;
   useEffect(() => {
@@ -1008,7 +1045,14 @@ const Frame = ({
         removeSelected(frameHtml, targetBlock, editBlock, page, null);
       }
     }
-  }, [mobileMenuTargetBlock, mobileSideMenu.what, modal.open]);
+  }, [
+    mobileMenuTargetBlock,
+    mobileSideMenu.what,
+    modal.open,
+    editBlock,
+    frameHtml,
+    page,
+  ]);
 
   useEffect(() => {
     if (openComment && (mobileMenuTargetBlock || mobileSideMenu.what)) {
@@ -1022,7 +1066,12 @@ const Frame = ({
         });
       }
     }
-  }, [openComment]);
+  }, [
+    openComment,
+    mobileMenuTargetBlock,
+    mobileSideMenu.what,
+    setMobileSideMenu,
+  ]);
   return (
     <div
       className={`frame ${newPageFrame ? "newPageFrame" : ""} ${

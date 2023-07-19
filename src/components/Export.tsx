@@ -3,6 +3,7 @@ import React, {
   Dispatch,
   MouseEvent,
   SetStateAction,
+  useCallback,
   useEffect,
   useState,
 } from "react";
@@ -52,7 +53,7 @@ const Export = ({
   const [format, setFormat] = useState<Format>(html);
   const [content, setContent] = useState<Content>(everything);
   const exportHtml = document.getElementById("export");
-  const openOptions = (event: MouseEvent) => {
+  const openOptions = useCallback((event: MouseEvent) => {
     const currentTarget = event.currentTarget;
     const targetOptions = currentTarget.nextElementSibling;
     const selectBtnGroup = document.querySelectorAll(".select__btn-group");
@@ -62,39 +63,46 @@ const Export = ({
       }
     });
     currentTarget.nextElementSibling?.classList.toggle("on");
-  };
-  const changeFormat = (event: MouseEvent, FORMAT: Format) => {
+  }, []);
+  const changeFormat = useCallback((event: MouseEvent, FORMAT: Format) => {
     event.currentTarget.parentElement?.classList.toggle("on");
     setFormat(FORMAT);
-  };
-  const changeContent = (event: MouseEvent, CONTENT: Content) => {
+  }, []);
+
+  const changeContent = useCallback((event: MouseEvent, CONTENT: Content) => {
     event.currentTarget.parentElement?.classList.toggle("on");
     setContent(CONTENT);
-  };
-  const onClickSwitchBtn = (event: MouseEvent) => {
+  }, []);
+
+  const onClickSwitchBtn = useCallback((event: MouseEvent) => {
     const currentTarget = event.currentTarget;
     const span = currentTarget.querySelector("span");
     if (span) {
       span.classList.toggle("on");
     }
-  };
-  function exportDocument(
-    targetPageTitle: string,
-    targetHtml: string,
-    type: string,
-    format: Format
-  ) {
-    const blob = new Blob([targetHtml], { type: type });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    const extension = format.toLowerCase();
-    a.href = url;
-    a.download = `${targetPageTitle}.${extension}`;
-    exportHtml?.appendChild(a);
-    a.click();
-    a.remove();
-    window.URL.revokeObjectURL(url);
-  }
+  }, []);
+
+  const exportDocument = useCallback(
+    (
+      targetPageTitle: string,
+      targetHtml: string,
+      type: string,
+      format: Format
+    ) => {
+      const blob = new Blob([targetHtml], { type: type });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      const extension = format.toLowerCase();
+      a.href = url;
+      a.download = `${targetPageTitle}.${extension}`;
+      exportHtml?.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    },
+    [exportHtml]
+  );
+
   function printPdf(targetHtml: string) {
     const printWindow = window.open("", "", "height=400,width=800");
     printWindow?.document.write(targetHtml);
@@ -106,7 +114,8 @@ const Export = ({
       };
     }
   }
-  const onClickExportBtn = () => {
+
+  const onClickExportBtn = useCallback(() => {
     const includeSubPagesSliderEl = document.getElementById(
       "includeSubPagesSlider"
     );
@@ -261,7 +270,36 @@ const Export = ({
           break;
       }
     }
-  };
+  }, [
+    commentBlock,
+    content,
+    discardEdit,
+    exportDocument,
+    firstList,
+    fontStyle,
+    format,
+    fullWidth,
+    mobileSideMenu,
+    modal,
+    openComment,
+    openTemplates,
+    page.header.title,
+    page.subPagesId,
+    pages,
+    pagesId,
+    recentPagesId,
+    setCommentBlock,
+    setDiscardEdit,
+    setMobileSideMenu,
+    setModal,
+    setOpenComment,
+    setOpenTemplates,
+    setRoutePage,
+    setTargetPageId,
+    showAllComments,
+    smallText,
+    userName,
+  ]);
   useEffect(() => {
     const aTags = document.querySelectorAll("a");
     if (aTags[0]) {
@@ -275,7 +313,7 @@ const Export = ({
           <div className="select">
             <div className="select__label">Export format</div>
             <div className="select__form">
-              <button onClick={(event) => openOptions(event)}>
+              <button onClick={openOptions}>
                 {format}
                 <MdKeyboardArrowDown />
               </button>
@@ -295,7 +333,7 @@ const Export = ({
           <div className="select">
             <div className="select__label">Include content</div>
             <div className="select__form">
-              <button onClick={(event) => openOptions(event)}>
+              <button onClick={openOptions}>
                 {content}
                 <MdKeyboardArrowDown />
               </button>

@@ -286,10 +286,10 @@ const CommandBlock = ({
       page,
     ]
   );
-  const onClickImgTypeBtn = () => {
+  const onClickImgTypeBtn = useCallback(() => {
     changeType("image");
     closeCommandBlock();
-  };
+  }, [changeType, closeCommandBlock]);
 
   useEffect(() => {
     showResult();

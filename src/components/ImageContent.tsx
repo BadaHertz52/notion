@@ -26,43 +26,55 @@ const ImageContent = ({ page, block, editBlock }: ImageContentProps) => {
   const dragBtn = useRef<DragBtnName>(LEFT);
   const [imageStyle, setImageStyle] = useState<CSSProperties>();
 
-  const resizeImage = (clientX: number, clientY: number) => {
-    const targetImgContent = document.getElementById(`${block.id}__contents`);
-    const changeX = clientX - previousClientX.current;
-    const changeY = clientX - previousClientX.current;
-    previousClientX.current = clientX;
-    previousClientY.current = clientY;
+  const resizeImage = useCallback(
+    (clientX: number, clientY: number) => {
+      const targetImgContent = document.getElementById(`${block.id}__contents`);
+      const changeX = clientX - previousClientX.current;
+      const changeY = clientX - previousClientX.current;
+      previousClientX.current = clientX;
+      previousClientY.current = clientY;
 
-    if ((changeX || changeY) && targetImgContent) {
-      const imgDomRect = targetImgContent.getClientRects()[0];
-      if (imgDomRect) {
-        const imgWidth = imgDomRect.width;
-        const imgHeight = imgDomRect.height;
-        const width =
-          dragBtn.current === RIGHT ? imgWidth + changeX : imgWidth - changeX;
-        const height =
-          dragBtn.current === LEFT ? imgHeight - changeY : imgHeight + changeY;
-        const changedStyle = {
-          width: dragBtn.current !== BOTTOM ? `${width}px` : block.style.width,
-          height: `${height}px`,
-        };
-        setImageStyle(changedStyle);
+      if ((changeX || changeY) && targetImgContent) {
+        const imgDomRect = targetImgContent.getClientRects()[0];
+        if (imgDomRect) {
+          const imgWidth = imgDomRect.width;
+          const imgHeight = imgDomRect.height;
+          const width =
+            dragBtn.current === RIGHT ? imgWidth + changeX : imgWidth - changeX;
+          const height =
+            dragBtn.current === LEFT
+              ? imgHeight - changeY
+              : imgHeight + changeY;
+          const changedStyle = {
+            width:
+              dragBtn.current !== BOTTOM ? `${width}px` : block.style.width,
+            height: `${height}px`,
+          };
+          setImageStyle(changedStyle);
+        }
       }
-    }
-  };
-  const onMouseMove = (event: MouseEvent) => {
-    if (drag.current) {
-      resizeImage(event.clientX, event.clientY);
-    }
-  };
-  const onTouchMove = (event: TouchEvent) => {
-    if (drag.current) {
-      resizeImage(
-        event.changedTouches[0].clientX,
-        event.changedTouches[0].clientY
-      );
-    }
-  };
+    },
+    [block.id, block.style.width]
+  );
+  const onMouseMove = useCallback(
+    (event: MouseEvent) => {
+      if (drag.current) {
+        resizeImage(event.clientX, event.clientY);
+      }
+    },
+    [resizeImage]
+  );
+  const onTouchMove = useCallback(
+    (event: TouchEvent) => {
+      if (drag.current) {
+        resizeImage(
+          event.changedTouches[0].clientX,
+          event.changedTouches[0].clientY
+        );
+      }
+    },
+    [resizeImage]
+  );
 
   const onMouseDownSizeBtn = useCallback(
     (event: MouseEvent<HTMLButtonElement>) => {
@@ -83,7 +95,7 @@ const ImageContent = ({ page, block, editBlock }: ImageContentProps) => {
     []
   );
 
-  const onMouseUp = () => {
+  const onMouseUp = useCallback(() => {
     const targetImgContent = document.getElementById(`${block.id}__contents`);
     if (drag.current && targetImgContent) {
       previousClientX.current = 0;
@@ -105,7 +117,7 @@ const ImageContent = ({ page, block, editBlock }: ImageContentProps) => {
       setTemplateItem(templateHtml, page);
       editBlock(page.id, editedBlock);
     }
-  };
+  }, [block, editBlock, page]);
 
   return (
     <div
@@ -121,8 +133,8 @@ const ImageContent = ({ page, block, editBlock }: ImageContentProps) => {
         title="left button to resize image"
         className="btn-size length left"
         name={LEFT}
-        onMouseDown={(event) => onMouseDownSizeBtn(event)}
-        onTouchStart={(event) => onTouchStartSizeBtn(event)}
+        onMouseDown={onMouseDownSizeBtn}
+        onTouchStart={onTouchStartSizeBtn}
       >
         <ScreenOnly text="left button to resize image" />
         <span></span>
@@ -131,8 +143,8 @@ const ImageContent = ({ page, block, editBlock }: ImageContentProps) => {
         title="right button to resize image"
         className="btn-size length right"
         name={RIGHT}
-        onMouseDown={(event) => onMouseDownSizeBtn(event)}
-        onTouchStart={(event) => onTouchStartSizeBtn(event)}
+        onMouseDown={onMouseDownSizeBtn}
+        onTouchStart={onTouchStartSizeBtn}
       >
         <ScreenOnly text="right button to resize image" />
         <span></span>
@@ -141,8 +153,8 @@ const ImageContent = ({ page, block, editBlock }: ImageContentProps) => {
         title="bottom button to resize image"
         className="btn-size transverse bottom "
         name={BOTTOM}
-        onMouseDown={(event) => onMouseDownSizeBtn(event)}
-        onTouchStart={(event) => onTouchStartSizeBtn(event)}
+        onMouseDown={onMouseDownSizeBtn}
+        onTouchStart={onTouchStartSizeBtn}
       >
         <ScreenOnly text="bottom button to resize image" />
         <span></span>

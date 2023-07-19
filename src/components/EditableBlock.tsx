@@ -6,15 +6,16 @@ import React, {
   SetStateAction,
   TouchEvent,
   useEffect,
-  useRef,
   useContext,
+  useMemo,
+  useCallback,
 } from "react";
-import { Block, MainCommentType, findBlock, Page } from "../modules/notion";
+import { Block, findBlock, Page } from "../modules/notion";
 import { Command } from "./Frame";
 import { ActionContext, selectionType } from "../containers/NotionRouter";
 import BlockComponent from "./BlockComponent";
 import { setTemplateItem } from "../fn";
-import { GoPrimitiveDot } from "react-icons/go";
+
 import { GrCheckbox, GrCheckboxSelected } from "react-icons/gr";
 import { MdPlayArrow } from "react-icons/md";
 import PageIcon from "./PageIcon";
@@ -105,48 +106,59 @@ const EditableBlock = ({
     (id: string) => findBlock(page, id).BLOCK
   );
 
-  const showBlockComment = block.comments
-    ? block.comments.some((i) => i.type === "open")
-    : false;
-
-  const blockContentsStyle = (block: Block): CSSProperties => {
+  const showBlockComment = useMemo(
+    () =>
+      block.comments ? block.comments.some((i) => i.type === "open") : false,
+    [block.comments]
+  );
+  const blockContentsStyle = useCallback((block: Block): CSSProperties => {
     return {
       color: block.type !== "todo_done" ? block.style.color : "grey",
       backgroundColor: block.style.bgColor,
       width: block.style.width === undefined ? "inherit" : block.style.width,
       height: block.style.height === undefined ? "inherit" : block.style.height,
     };
-  };
+  }, []);
   /**
    * [moveBlock] 현재 block을 moveTargetBlock (위치를 변경시킬 block)의 변경된 위치의 기준이 되는 pointBlock으로  지정하는 함수
    * @param event
    * @param targetBlock
    */
-  const markPointBlock = (
-    event: MouseEvent<HTMLDivElement> | TouchEvent<HTMLDivElement>,
-    targetBlock: Block
-  ) => {
-    if (moveBlock.current) {
-      pointBlockToMoveBlock.current = targetBlock;
-      event.currentTarget.classList.add("on");
-    }
-  };
+  const markPointBlock = useCallback(
+    (
+      event: MouseEvent<HTMLDivElement> | TouchEvent<HTMLDivElement>,
+      targetBlock: Block
+    ) => {
+      if (moveBlock.current) {
+        pointBlockToMoveBlock.current = targetBlock;
+        event.currentTarget.classList.add("on");
+      }
+    },
+    [moveBlock, pointBlockToMoveBlock]
+  );
   /**
    * [moveBlock] 현재 block을  moveTargetBlock (위치를 변경시킬 block)의 위치변경의 기준이 되는 pointBlock 지정을 취소시키는 함수
    * @param event
    */
-  const cancelPointBlock = (event: MouseEvent<HTMLDivElement>) => {
-    if (moveBlock.current && pointBlockToMoveBlock.current?.id === block.id) {
-      event.currentTarget.classList.remove("on");
-    }
-  };
-  const onClickCommentBtn = (block: Block) => {
-    if (!openComment) {
-      setCommentBlock(block);
-      setOpenComment(true);
-    }
-  };
-  const onClickTodoBtn = () => {
+  const cancelPointBlock = useCallback(
+    (event: MouseEvent<HTMLDivElement>) => {
+      if (moveBlock.current && pointBlockToMoveBlock.current?.id === block.id) {
+        event.currentTarget.classList.remove("on");
+      }
+    },
+    [block.id, moveBlock, pointBlockToMoveBlock]
+  );
+  const onClickCommentBtn = useCallback(
+    (block: Block) => {
+      if (!openComment) {
+        setCommentBlock(block);
+        setOpenComment(true);
+      }
+    },
+    [openComment, setCommentBlock, setOpenComment]
+  );
+
+  const onClickTodoBtn = useCallback(() => {
     const editedBlock: Block = {
       ...block,
       type: block.type === "todo" ? "todo_done" : "todo",
@@ -154,14 +166,15 @@ const EditableBlock = ({
     };
     setTemplateItem(templateHtml, page);
     editBlock(page.id, editedBlock);
-  };
-  const onClickToggle = (event: React.MouseEvent) => {
+  }, [block, editBlock, templateHtml, page]);
+
+  const onClickToggle = useCallback((event: React.MouseEvent) => {
     const target = event.currentTarget;
     const blockId = target.getAttribute("name");
     const toggleMainDoc = document.getElementById(`block-${blockId}`);
     target.classList.toggle("on");
     toggleMainDoc?.classList.toggle("on");
-  };
+  }, []);
 
   useEffect(() => {
     const newBlockItem = sessionStorage.getItem("newBlock");

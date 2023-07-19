@@ -6,6 +6,7 @@ import React, {
   useState,
   MouseEvent,
   useContext,
+  useCallback,
 } from "react";
 import { CSSProperties } from "styled-components";
 import { Block, MainCommentType, Page } from "../modules/notion";
@@ -93,11 +94,14 @@ const Comments = ({
       sessionStorage.removeItem("toolMoreItem");
     }
   };
-  const showComments = (what: "open" | "resolve") => {
-    what === "open"
-      ? setTargetComment(openComments)
-      : setTargetComment(resolveComments);
-  };
+  const showComments = useCallback(
+    (what: "open" | "resolve") => {
+      what === "open"
+        ? setTargetComment(openComments)
+        : setTargetComment(resolveComments);
+    },
+    [openComments, resolveComments]
+  );
   const updateOpenAndResolveComments = (comments: MainCommentType[]) => {
     setResolveComments(
       comments?.filter((comment: MainCommentType) => comment.type === "resolve")
@@ -109,7 +113,7 @@ const Comments = ({
   /**
    * frame 에서 block-comments를 열었을때 (openComment === true) block의 위치에 따라 commentsStyle을 설정하는 함수
    */
-  function changeCommentsStyle() {
+  const changeCommentsStyle = useCallback(() => {
     if (block && openComment) {
       const blockContentsEl = document.getElementById(`${block.id}__contents`);
       const editableBlock = document.getElementsByClassName("editableBlock")[0];
@@ -159,11 +163,11 @@ const Comments = ({
         setCommentsStyle(style);
       }
     }
-  }
+  }, [block, frameHtml, openComment]);
 
   useEffect(() => {
     openComment ? changeCommentsStyle() : setCommentsStyle(undefined);
-  }, [openComment]);
+  }, [openComment, changeCommentsStyle]);
 
   useEffect(() => {
     if (block?.comments) {
@@ -223,18 +227,6 @@ const Comments = ({
         ref={commentsRef}
         style={commentsStyle}
       >
-        {resolveComments && resolveComments.length > 0 && !select && (
-          <section className="comments__btn-group-type">
-            <button id="openTypeBtn" onClick={() => showComments("open")}>
-              <span>Open</span>
-              <span>{`(${openComments?.length})`}</span>
-            </button>
-            <button id="resolveTypeBtn" onClick={() => showComments("resolve")}>
-              <span>Resolve</span>
-              <span>{`(${resolveComments?.length})`}</span>
-            </button>
-          </section>
-        )}
         {targetComments && (
           <section className="comments__comments-group">
             {targetComments.map((comment: MainCommentType) => (
