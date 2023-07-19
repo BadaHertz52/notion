@@ -1,4 +1,10 @@
-import React, { MouseEvent, TouchEvent, useRef, useState } from "react";
+import React, {
+  MouseEvent,
+  TouchEvent,
+  useCallback,
+  useRef,
+  useState,
+} from "react";
 import { CSSProperties } from "styled-components";
 import { Block, Page } from "../modules/notion";
 import { setTemplateItem } from "../fn";
@@ -10,16 +16,16 @@ type ImageContentProps = {
   editBlock: (pageId: string, block: Block) => void;
 };
 const ImageContent = ({ page, block, editBlock }: ImageContentProps) => {
-  const imageContent = document.getElementById(`${block.id}__contents`);
   const previousClientX = useRef(0);
   const previousClientY = useRef(0);
   const drag = useRef<boolean>(false);
-  const left = "left";
-  const right = "right";
-  const bottom = "bottom";
-  type dragBtnName = typeof left | typeof right | typeof bottom;
-  const dragBtn = useRef<dragBtnName>(left);
+  const LEFT = "left";
+  const RIGHT = "right";
+  const BOTTOM = "bottom";
+  type DragBtnName = typeof LEFT | typeof RIGHT | typeof BOTTOM;
+  const dragBtn = useRef<DragBtnName>(LEFT);
   const [imageStyle, setImageStyle] = useState<CSSProperties>();
+
   const resizeImage = (clientX: number, clientY: number) => {
     const targetImgContent = document.getElementById(`${block.id}__contents`);
     const changeX = clientX - previousClientX.current;
@@ -33,23 +39,23 @@ const ImageContent = ({ page, block, editBlock }: ImageContentProps) => {
         const imgWidth = imgDomRect.width;
         const imgHeight = imgDomRect.height;
         const width =
-          dragBtn.current === right ? imgWidth + changeX : imgWidth - changeX;
+          dragBtn.current === RIGHT ? imgWidth + changeX : imgWidth - changeX;
         const height =
-          dragBtn.current === left ? imgHeight - changeY : imgHeight + changeY;
+          dragBtn.current === LEFT ? imgHeight - changeY : imgHeight + changeY;
         const changedStyle = {
-          width: dragBtn.current !== bottom ? `${width}px` : block.style.width,
+          width: dragBtn.current !== BOTTOM ? `${width}px` : block.style.width,
           height: `${height}px`,
         };
         setImageStyle(changedStyle);
       }
     }
   };
-  const onMouseMove = (event: globalThis.MouseEvent) => {
+  const onMouseMove = (event: MouseEvent) => {
     if (drag.current) {
       resizeImage(event.clientX, event.clientY);
     }
   };
-  const onTouchMove = (event: globalThis.TouchEvent) => {
+  const onTouchMove = (event: TouchEvent) => {
     if (drag.current) {
       resizeImage(
         event.changedTouches[0].clientX,
@@ -58,16 +64,24 @@ const ImageContent = ({ page, block, editBlock }: ImageContentProps) => {
     }
   };
 
-  const onMouseDownSizeBtn = (event: MouseEvent<HTMLButtonElement>) => {
-    previousClientX.current = event.clientX;
-    previousClientY.current = event.clientY;
-    drag.current = true;
-  };
-  const onTouchStartSizeBtn = (event: TouchEvent<HTMLButtonElement>) => {
-    previousClientX.current = event.changedTouches[0].clientX;
-    previousClientY.current = event.changedTouches[0].clientY;
-    drag.current = true;
-  };
+  const onMouseDownSizeBtn = useCallback(
+    (event: MouseEvent<HTMLButtonElement>) => {
+      previousClientX.current = event.clientX;
+      previousClientY.current = event.clientY;
+      drag.current = true;
+      dragBtn.current = event.currentTarget.name as DragBtnName;
+    },
+    []
+  );
+  const onTouchStartSizeBtn = useCallback(
+    (event: TouchEvent<HTMLButtonElement>) => {
+      previousClientX.current = event.changedTouches[0].clientX;
+      previousClientY.current = event.changedTouches[0].clientY;
+      drag.current = true;
+      dragBtn.current = event.currentTarget.name as DragBtnName;
+    },
+    []
+  );
 
   const onMouseUp = () => {
     const targetImgContent = document.getElementById(`${block.id}__contents`);
@@ -75,40 +89,38 @@ const ImageContent = ({ page, block, editBlock }: ImageContentProps) => {
       previousClientX.current = 0;
       previousClientY.current = 0;
       drag.current = false;
-      const width = targetImgContent?.offsetWidth;
-      const height = targetImgContent?.offsetHeight;
-      if (width && height) {
-        const editedBlock: Block = {
-          ...block,
-          style: {
-            ...block.style,
-            width: `${width}px`,
-            height: `${height}px`,
-          },
-          editTime: JSON.stringify(Date.now()),
-        };
-        const templateHtml = document.getElementById("template");
-        setTemplateItem(templateHtml, page);
-        editBlock(page.id, editedBlock);
-      }
+      const width = targetImgContent.offsetWidth;
+      const height = targetImgContent.offsetHeight;
+
+      const editedBlock: Block = {
+        ...block,
+        style: {
+          ...block.style,
+          width: `${width}px`,
+          height: `${height}px`,
+        },
+        editTime: JSON.stringify(Date.now()),
+      };
+      const templateHtml = document.getElementById("template");
+      setTemplateItem(templateHtml, page);
+      editBlock(page.id, editedBlock);
     }
   };
 
-  imageContent?.addEventListener("mousemove", (event) => onMouseMove(event));
-  imageContent?.addEventListener("touchmove", (event) => onTouchMove(event), {
-    passive: true,
-  });
-  imageContent?.addEventListener("mouseup", onMouseUp);
-  imageContent?.addEventListener("touchend", onMouseUp, { passive: true });
   return (
     <div
       className="img-contents"
       id={`${block.id}__contents`}
       style={imageStyle}
+      onMouseMove={onMouseMove}
+      onTouchMove={onTouchMove}
+      onMouseUp={onMouseUp}
+      onTouchEnd={onMouseUp}
     >
       <button
         title="left button to resize image"
         className="btn-size length left"
+        name={LEFT}
         onMouseDown={(event) => onMouseDownSizeBtn(event)}
         onTouchStart={(event) => onTouchStartSizeBtn(event)}
       >
@@ -118,6 +130,7 @@ const ImageContent = ({ page, block, editBlock }: ImageContentProps) => {
       <button
         title="right button to resize image"
         className="btn-size length right"
+        name={RIGHT}
         onMouseDown={(event) => onMouseDownSizeBtn(event)}
         onTouchStart={(event) => onTouchStartSizeBtn(event)}
       >
@@ -127,6 +140,7 @@ const ImageContent = ({ page, block, editBlock }: ImageContentProps) => {
       <button
         title="bottom button to resize image"
         className="btn-size transverse bottom "
+        name={BOTTOM}
         onMouseDown={(event) => onMouseDownSizeBtn(event)}
         onTouchStart={(event) => onTouchStartSizeBtn(event)}
       >
