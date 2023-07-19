@@ -9,6 +9,7 @@ import { CSSProperties } from "styled-components";
 import { setTemplateItem } from "../fn";
 import ScreenOnly from "./ScreenOnly";
 import { BsThreeDots } from "react-icons/bs";
+import ResolveBtn from "./ResolveBtn";
 type CommentToolProps = {
   mainComment: boolean;
   comment: SubCommentType | MainCommentType;
@@ -24,10 +25,6 @@ type CommentToolProps = {
   setToolMoreStyle: Dispatch<SetStateAction<CSSProperties | undefined>>;
   templateHtml: HTMLElement | null;
   showAllComments: boolean;
-};
-
-type ResolveBtnProps = {
-  comment: MainCommentType;
 };
 
 const CommentTool = ({
@@ -47,59 +44,7 @@ const CommentTool = ({
   showAllComments,
 }: CommentToolProps) => {
   const commentToolRef = useRef<HTMLDivElement>(null);
-  const ResolveBtn = ({ comment }: ResolveBtnProps) => {
-    const changeToResolve = () => {
-      if (page) {
-        setTemplateItem(templateHtml, page);
-      }
-      const editTime = JSON.stringify(Date.now());
-      const newComment: MainCommentType = {
-        ...comment,
-        type: "resolve",
-        editTime: editTime,
-      };
-      if (block) {
-        const comments = block.comments ? [...block.comments] : [];
-        const commentIdes: string[] = comments?.map(
-          (comment: MainCommentType) => comment.id
-        ) as string[];
-        const index = commentIdes.indexOf(comment.id);
-        comments.splice(index, 1, newComment);
-        const editedBlock: Block = {
-          ...block,
-          comments: comments,
-          editTime: editTime,
-        };
-        editBlock(pageId, editedBlock);
-        setAllComments && setAllComments(editedBlock.comments);
-      } else {
-        const pageComment = page.header.comments?.[0];
-        if (pageComment) {
-          const editedPageComment: MainCommentType = {
-            ...pageComment,
-            type: "resolve",
-            editTime: editTime,
-          };
-          const editedPage: Page = {
-            ...page,
-            header: {
-              ...page.header,
-              comments: [editedPageComment],
-            },
-            editTime: editTime,
-          };
-          setAllComments && setAllComments(editedPage.header.comments);
-          editPage && editPage(pageId, editedPage);
-        }
-      }
-    };
 
-    return (
-      <button className="comment__tool-resolve" onClick={changeToResolve}>
-        <span>Resolve</span>
-      </button>
-    );
-  };
   const openToolMore = (event: React.MouseEvent<HTMLButtonElement>) => {
     setMoreOpen(true);
     const target = event.currentTarget;
@@ -158,7 +103,18 @@ const CommentTool = ({
 
   return (
     <div className="comment__tool" ref={commentToolRef}>
-      {mainComment && <ResolveBtn comment={comment as MainCommentType} />}
+      {mainComment && (
+        <ResolveBtn
+          page={page}
+          pageId={pageId}
+          block={block}
+          templateHtml={templateHtml}
+          editBlock={editBlock}
+          editPage={editPage}
+          setAllComments={setAllComments}
+          comment={comment as MainCommentType}
+        />
+      )}
       <button
         className="comment__tool-more"
         onClick={
