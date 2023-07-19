@@ -92,7 +92,7 @@ const AllComments = ({
     <div id="allComments" style={style}>
       <div className="allComments__inner">
         <div className="allComments__header">
-          <span>Comments</span>
+          <div>Comments</div>
           <div className="allComments__btn-group">
             <button
               className="btn-select"
