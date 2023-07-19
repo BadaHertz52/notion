@@ -1,4 +1,4 @@
-import { Emoji, emojis } from "../components/IconModal";
+import { Emoji, EMOJI_ARR } from "../components/IconModal";
 export const emojiPath =
   "https://raw.githubusercontent.com/BadaHertz52/notion/master/image/emoji/";
 const catImg =
@@ -88,7 +88,7 @@ export type SubCommentType = {
   editTime: string;
   createTime: string;
 };
-export type CommentType ="open"|"resolve";
+export type CommentType = "open" | "resolve";
 export type MainCommentType = SubCommentType & {
   type: CommentType;
   selectedText: null | string;
@@ -534,7 +534,7 @@ const template1: Page = {
   header: {
     title: "To Do List ",
     iconType: "emoji",
-    icon: emojis[13],
+    icon: EMOJI_ARR[13],
     cover: null,
     comments: null,
   },
@@ -552,7 +552,7 @@ const template2: Page = {
   header: {
     title: "To Do List2 ",
     iconType: "emoji",
-    icon: emojis[19],
+    icon: EMOJI_ARR[19],
     cover: null,
     comments: null,
   },
@@ -816,7 +816,7 @@ const initialState: Notion = {
           parentBlocksId: null,
           type: "page",
           iconType: "emoji",
-          icon: emojis[8],
+          icon: EMOJI_ARR[8],
           editTime: Date.parse("2022-5-20-9:00").toString(),
           createTime: Date.parse("2022-5-19-20:00").toString(),
           style: basicBlockStyle,
@@ -1071,7 +1071,7 @@ const initialState: Notion = {
       header: {
         ...pageSample.header,
         iconType: "emoji",
-        icon: emojis[8],
+        icon: EMOJI_ARR[8],
         title: "page2",
       },
       editTime: JSON.stringify(Date.parse("2022-5-20-9:00")),
@@ -1084,7 +1084,7 @@ const initialState: Notion = {
       header: {
         title: "notion2",
         iconType: "emoji",
-        icon: emojis[2],
+        icon: EMOJI_ARR[2],
         cover: null,
         comments: null,
       },
@@ -1102,7 +1102,7 @@ const initialState: Notion = {
       header: {
         title: "notion3",
         iconType: "emoji",
-        icon: emojis[10],
+        icon: EMOJI_ARR[10],
         cover: null,
         comments: null,
       },

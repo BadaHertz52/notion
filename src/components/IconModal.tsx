@@ -93,7 +93,7 @@ export type Emoji =
   | typeof rainEmoji
   | typeof snowmanEmoji
   | typeof blossomEmoji;
-export const emojis: Emoji[] = [
+export const EMOJI_ARR: Emoji[] = [
   smileEmoji,
   heartEyesEmoji,
   angryEmoji,
