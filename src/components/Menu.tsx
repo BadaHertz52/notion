@@ -82,9 +82,15 @@ const Menu = ({
     : (document.querySelector(".blockFn") as HTMLElement | null);
   const menuRef = useRef<HTMLDivElement>(null);
   const [editBtnGroup, setEditBtnGroup] = useState<Element[] | null>(null);
-  const [turnInto, setTurnInto] = useState<boolean>(false);
-  const [color, setColor] = useState<boolean>(false);
-  const [turnInToPage, setTurnIntoPage] = useState<boolean>(false);
+  const COLOR = "color";
+  const TURN_INTO = "turnInto";
+  const TURN_INTO_PAGE = "turnIntoPage";
+  type SideMenuType =
+    | typeof COLOR
+    | typeof TURN_INTO
+    | typeof TURN_INTO_PAGE
+    | undefined;
+  const [sideMenu, setSideMenu] = useState<SideMenuType>();
   const blockStylerHtml = document.getElementById("blockStyler");
   const [menuStyle, setMenuStyle] = useState<CSSProperties | undefined>(
     style === undefined ? changeMenuStyle() : style
@@ -156,23 +162,15 @@ const Menu = ({
         const style = changeMenuStyle();
         setMenuStyle(style);
       }
-      if (turnInToPage || turnInto || color) {
+      if (sideMenu) {
         changeSideMenuStyle();
       }
     }
   };
-  useEffect(() => {
-    if (turnInToPage || turnInto || color) {
-      changeSideMenuStyle();
-    }
-  }, [turnInToPage, turnInto, color]);
 
   let modalStyle = blockFnElement?.getAttribute("style");
 
   const recoveryMenuState = () => {
-    turnInto && setTurnInto(false);
-    turnInToPage && setTurnIntoPage(false);
-    color && setColor(false);
     modal.open &&
       setModal({
         open: false,
@@ -180,20 +178,15 @@ const Menu = ({
       });
   };
   const showTurnInto = () => {
-    setTurnInto(true);
-    setColor(false);
-    setTurnIntoPage(false);
+    setSideMenu(TURN_INTO);
+    recoveryMenuState();
   };
   const showColorMenu = () => {
-    setColor(true);
-    setTurnInto(false);
-    setTurnIntoPage(false);
+    setSideMenu(COLOR);
     recoveryMenuState();
   };
   const showPageMenu = () => {
-    setTurnIntoPage(true);
-    setTurnInto(false);
-    setColor(false);
+    setSideMenu(TURN_INTO_PAGE);
     recoveryMenuState();
   };
   const showPageMenuInMobile = () => {
@@ -284,12 +277,16 @@ const Menu = ({
     closeMenu();
   };
   useEffect(() => {
-    if (!turnInto && !color && !turnInToPage && isMobile()) {
-      setSideMenuStyle({
-        transform: "translateY(110%)",
-      });
+    if (sideMenu) {
+      changeSideMenuStyle();
+    } else {
+      isMobile() &&
+        setSideMenuStyle({
+          transform: "translateY(110%)",
+        });
     }
-  }, [turnInto, color, turnInToPage]);
+  }, [sideMenu, changeSideMenuStyle]);
+
   return (
     <div className="menu" ref={menuRef} style={menuStyle}>
       <div id="menu__main" className="mainMenu">
@@ -434,18 +431,18 @@ const Menu = ({
         </div>
       </div>
       <div id="sideMenu" className="menu__sideMenu" style={sideMenuStyle}>
-        {turnInto && (
+        {sideMenu === TURN_INTO && (
           <CommandBlock
             style={undefined}
             page={page}
             block={block}
             command={null}
             setCommand={null}
-            closeCommand={() => setTurnInto(false)}
+            closeCommand={() => setSideMenu(undefined)}
             setSelection={setSelection}
           />
         )}
-        {color && (
+        {sideMenu === COLOR && (
           <ColorMenu
             page={page}
             block={block}
@@ -453,7 +450,7 @@ const Menu = ({
             setSelection={null}
           />
         )}
-        {turnInToPage && (
+        {sideMenu === TURN_INTO_PAGE && (
           <PageMenu
             what="block"
             currentPage={page}
