@@ -4,6 +4,7 @@ import React, {
   SetStateAction,
   useEffect,
   useState,
+  useCallback,
 } from "react";
 import { CSSProperties } from "styled-components";
 import { Block, Page } from "../modules/notion";
@@ -32,43 +33,52 @@ const Loader = ({
   const [loaderStyle, setLoaderStyle] = useState<CSSProperties | undefined>(
     undefined
   );
-  const onChangeImgFile = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function () {
-        const result = reader.result as string;
-        if (block) {
-          const editedBlock: Block = {
-            ...block,
-            type: "image",
-            contents: result,
-            editTime: JSON.stringify(Date.now()),
-          };
-          const templateHtml = document.getElementById("template");
-          setTemplateItem(templateHtml, page);
-          editBlock && editBlock(page.id, editedBlock);
-          closeLoader();
-        } else {
-          //change page cover
-          const editedPage: Page = {
-            ...page,
-            header: {
-              ...page.header,
-              cover: result,
-            },
-            editTime: JSON.stringify(Date.now()),
-          };
-          editPage && editPage(page.id, editedPage);
-          closeLoader();
-        }
-      };
-      reader.readAsDataURL(file);
-    } else {
-      console.error("can't find image file");
-    }
-  };
-  const removePageCover = () => {
+  const closeLoader = useCallback(() => {
+    setOpenLoader(false);
+    setLoaderTargetBlock && setLoaderTargetBlock(null);
+  }, [setOpenLoader, setLoaderTargetBlock]);
+
+  const onChangeImgFile = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function () {
+          const result = reader.result as string;
+          if (block) {
+            const editedBlock: Block = {
+              ...block,
+              type: "image",
+              contents: result,
+              editTime: JSON.stringify(Date.now()),
+            };
+            const templateHtml = document.getElementById("template");
+            setTemplateItem(templateHtml, page);
+            editBlock && editBlock(page.id, editedBlock);
+            closeLoader();
+          } else {
+            //change page cover
+            const editedPage: Page = {
+              ...page,
+              header: {
+                ...page.header,
+                cover: result,
+              },
+              editTime: JSON.stringify(Date.now()),
+            };
+            editPage && editPage(page.id, editedPage);
+            closeLoader();
+          }
+        };
+        reader.readAsDataURL(file);
+      } else {
+        console.error("can't find image file");
+      }
+    },
+    [block, closeLoader, editBlock, editPage, page]
+  );
+
+  const removePageCover = useCallback(() => {
     const editedPage: Page = {
       ...page,
       header: {
@@ -79,17 +89,14 @@ const Loader = ({
     };
     editPage && editPage(page.id, editedPage);
     setOpenLoader(false);
-  };
-  function closeLoader() {
-    setOpenLoader(false);
-    setLoaderTargetBlock && setLoaderTargetBlock(null);
-  }
+  }, [editPage, page, setOpenLoader]);
+
   inner?.addEventListener("click", (event) => {
     if (loaderHtml) {
       !detectRange(event, loaderHtml.getClientRects()[0]) && closeLoader();
     }
   });
-  function changeLoaderStyle() {
+  const changeLoaderStyle = useCallback(() => {
     if (block) {
       const blockHtml = document.getElementById(`block-${block.id}`);
       const blockDomRect = blockHtml?.getClientRects()[0];
@@ -143,10 +150,10 @@ const Loader = ({
         setLoaderStyle(style);
       }
     }
-  }
+  }, [block, frameHtml]);
   useEffect(() => {
-    loaderStyle === undefined && changeLoaderStyle();
-  }, [loaderStyle]);
+    !loaderStyle && changeLoaderStyle();
+  }, [loaderStyle, changeLoaderStyle]);
 
   window.onresize = () => {
     changeLoaderStyle();

@@ -1,18 +1,9 @@
-import React, {
-  Dispatch,
-  MouseEvent,
-  MutableRefObject,
-  SetStateAction,
-  TouchEvent,
-  useRef,
-} from "react";
-import { Block, Page, findBlock } from "../modules/notion";
+import React, { MouseEvent, TouchEvent, useRef } from "react";
+import { Block, findBlock } from "../modules/notion";
 import { CSSProperties } from "styled-components";
 import { GoPrimitiveDot } from "react-icons/go";
 import BlockComponent, { BlockComponentProps } from "./BlockComponent";
 import BlockComment from "./BlockComment";
-import { Command } from "./Frame";
-import { selectionType } from "../containers/NotionRouter";
 import EditableBlock, { EditableBlockProps } from "./EditableBlock";
 
 type ListSubProps = EditableBlockProps &

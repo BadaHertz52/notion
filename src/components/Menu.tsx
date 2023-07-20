@@ -6,6 +6,7 @@ import React, {
   useState,
   useRef,
   useContext,
+  useCallback,
 } from "react";
 import { Block, listItem, Page } from "../modules/notion";
 import CommandBlock from "./CommandBlock";
@@ -130,7 +131,7 @@ const Menu = ({
 
     return style;
   }
-  function changeSideMenuStyle() {
+  const changeSideMenuStyle = useCallback(() => {
     if (!isMobile() && menuRef.current) {
       const mainMenu = menuRef.current.firstElementChild;
       const innerWidth = window.innerWidth;
@@ -155,7 +156,8 @@ const Menu = ({
         transform: "translateY(0)",
       });
     }
-  }
+  }, [frameHtml]);
+
   window.onresize = () => {
     if (!isMobile()) {
       if (blockStylerHtml === null) {
@@ -198,21 +200,23 @@ const Menu = ({
       });
     }
   };
-  const closeMenu = () => {
+  const closeMenu = useCallback(() => {
     setOpenMenu
       ? setOpenMenu(false)
       : setMobileSideMenu &&
         setMobileSideMenu({ block: null, what: undefined });
-  };
-  const onClickMoveTo = () => {
+  }, [setOpenMenu, setMobileSideMenu]);
+
+  const onClickMoveTo = useCallback(() => {
     sessionStorage.setItem("modalStyle", JSON.stringify(modalStyle));
     setModal({
       open: true,
       what: modalMoveToPage,
     });
     closeMenu();
-  };
-  const onOpenCommentInput = () => {
+  }, [closeMenu, modalStyle, setModal]);
+
+  const onOpenCommentInput = useCallback(() => {
     setCommentBlock(block);
     closeMenu();
     setSelection && setSelection(null);
@@ -221,15 +225,15 @@ const Menu = ({
       open: true,
       what: modalComment,
     });
-  };
-  const removeBlock = () => {
+  }, [block, closeMenu, modalStyle, setCommentBlock, setModal, setSelection]);
+  const removeBlock = useCallback(() => {
     setSelection && setSelection(null);
     setTemplateItem(templateHtml, page);
     deleteBlock(page.id, block, true);
     closeMenu();
-  };
+  }, [block, closeMenu, deleteBlock, page, setSelection, templateHtml]);
 
-  const duplicateBlock = () => {
+  const duplicateBlock = useCallback(() => {
     setSelection && setSelection(null);
     if (page.blocks && page.blocksId) {
       setTemplateItem(templateHtml, page);
@@ -255,27 +259,41 @@ const Menu = ({
       }
       closeMenu();
     }
-  };
+  }, [
+    addBlock,
+    block,
+    closeMenu,
+    duplicatePage,
+    page,
+    setSelection,
+    templateHtml,
+  ]);
 
-  const onSetEditBtnGroup = () => {
+  const onSetEditBtnGroup = useCallback(() => {
     setEditBtnGroup([...document.getElementsByClassName("menu__editBtn")]);
-  };
-  const onSearch = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    editBtnGroup?.forEach((btn: Element) => {
-      const name = btn.getAttribute("name") as string;
-      if (name.includes(value)) {
-        btn.classList.remove("off");
-      } else {
-        btn.classList.add("off");
-      }
-    });
-  };
-  const onClickRename = () => {
+  }, []);
+
+  const onSearch = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.value;
+      editBtnGroup?.forEach((btn: Element) => {
+        const name = btn.getAttribute("name") as string;
+        if (name.includes(value)) {
+          btn.classList.remove("off");
+        } else {
+          btn.classList.add("off");
+        }
+      });
+    },
+    [editBtnGroup]
+  );
+
+  const onClickRename = useCallback(() => {
     setSelection && setSelection(null);
     setOpenRename && setOpenRename(true);
     closeMenu();
-  };
+  }, [closeMenu, setOpenRename, setSelection]);
+
   useEffect(() => {
     if (sideMenu) {
       changeSideMenuStyle();
@@ -460,7 +478,6 @@ const Menu = ({
             setTargetPageId={setTargetPageId}
           />
         )}
-        {}
       </div>
     </div>
   );
