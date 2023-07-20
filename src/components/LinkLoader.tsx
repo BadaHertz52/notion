@@ -5,21 +5,18 @@ import React, {
   SetStateAction,
   useEffect,
   useContext,
+  useCallback,
+  useMemo,
 } from "react";
 import { BsArrowUpRight, BsLink45Deg } from "react-icons/bs";
 import { IoMdCopy } from "react-icons/io";
 import { IoTrashOutline } from "react-icons/io5";
 import { CSSProperties } from "styled-components";
-import {
-  ActionContext,
-  makePagePath,
-  makeRoutePath,
-  pathType,
-} from "../containers/NotionRouter";
+import { ActionContext } from "../containers/NotionRouter";
 import { Block, findPage, Page } from "../modules/notion";
 import { selectionType } from "../containers/NotionRouter";
-import PageIcon from "./PageIcon";
 import ScreenOnly from "./ScreenOnly";
+import PageItem from "./PageItem";
 
 type LinkLoaderProps = {
   recentPagesId: string[] | null;
@@ -59,266 +56,269 @@ const LinkLoader = ({
     ? notTemplatePages.slice(0.4)
     : notTemplatePages;
 
-  const topDomain = [
-    ".com",
-    ".net",
-    ".org",
-    ".edu",
-    ".gov",
-    ".mil",
-    ".int",
-    ".biz",
-    ".info",
-    ".name",
-    ".aero",
-    ".cat",
-    ".coop",
-    ".lobs",
-    ".mobl",
-    ".museum",
-    ".pro",
-    ".travel",
-    ".ac",
-    ".ad",
-    ".ae",
-    ".af",
-    ".ag",
-    ".al",
-    ".ai",
-    ".am",
-    ".an",
-    ".ao",
-    "aq",
-    ".ar",
-    ".as",
-    ".at",
-    ".au",
-    ".aw",
-    ".ax",
-    ".az",
-    ".ba",
-    ".bb",
-    ".bb",
-    ".be",
-    ".bf",
-    ".bg",
-    ".bh",
-    ".bi",
-    ".bj",
-    ".bm",
-    ".bn",
-    ".bo",
-    ".br",
-    ".bs",
-    ".bt",
-    ".bw",
-    ".by",
-    ".bz",
-    ".ca",
-    ".cc",
-    ".cd",
-    ".cf",
-    ".cg",
-    ".ch",
-    ".ci",
-    ".ck",
-    ".cl",
-    ".cm",
-    ".cn",
-    ".co",
-    ".cr",
-    ".cu",
-    ".cv",
-    ".cx",
-    ".cy",
-    ".cz",
-    ".de",
-    ".dj",
-    ".dk",
-    ".dm",
-    ".do",
-    ".dz",
-    ".ec",
-    ".ee",
-    ".eg",
-    ".er",
-    ".es",
-    ".et",
-    ".eu",
-    ".fi",
-    ".fj",
-    ".fk",
-    ".fm",
-    ".fo",
-    ".fr",
-    ".ga",
-    ".gd",
-    ".ge",
-    ".gf",
-    ".gg",
-    ".gh",
-    ".gi",
-    ".gm",
-    ".gn",
-    ".gp",
-    ".gq",
-    ".gr",
-    ".gs",
-    ".gt",
-    ".gu",
-    ".gw",
-    ".gy",
-    ".hk",
-    ".hm",
-    ".hn",
-    ".hr",
-    ".ht",
-    ".hu",
-    ".id",
-    ".ie",
-    ".il",
-    ".im",
-    ".in",
-    ".io",
-    ".iq",
-    ".ir",
-    ".is",
-    ".it",
-    ".je",
-    ".jm",
-    ".jo",
-    ".jp",
-    ".ke",
-    ".kg",
-    ".kh",
-    ".ki",
-    ".km",
-    ".kn",
-    ".kp",
-    ".kr",
-    ".kw",
-    ".ky",
-    ".kz",
-    ".la",
-    ".lb",
-    ".lc",
-    ".li",
-    ".lk",
-    ".lr",
-    ".ls",
-    ".lt",
-    ".lu",
-    ".lv",
-    ".ly",
-    ".ma",
-    ".mc",
-    ".md",
-    ".me",
-    ".mg",
-    ".mh",
-    ".mk",
-    ".ml",
-    ".mm",
-    ".mn",
-    ".mo",
-    ".mp",
-    ".mq",
-    ".mr",
-    ".ms",
-    ".mt",
-    ".mu",
-    ".mv",
-    ".mw",
-    ".mx",
-    ".my",
-    ".mz",
-    ".na",
-    ".nc",
-    ".ne",
-    ".nf",
-    ".ng",
-    ".ni",
-    ".nl",
-    ".no",
-    ".np",
-    ".nr",
-    ".nu",
-    ".nz",
-    ".om",
-    ".pa",
-    ".pe",
-    ".pf",
-    ".pg",
-    ".ph",
-    ".pk",
-    ".pl",
-    ".pn",
-    ".pr",
-    ".ps",
-    ".pt",
-    ".pw",
-    ".py",
-    ".qa",
-    ".re",
-    ".ro",
-    ".rs",
-    ".ru",
-    ".rw",
-    ".sa",
-    ".sb",
-    ".sc",
-    ".sd",
-    ".se",
-    ".sg",
-    ".sh",
-    ".si",
-    ".sk",
-    ".sl",
-    ".sm",
-    ".sn",
-    ".so",
-    ".sr",
-    ".st",
-    ".su",
-    ".sv",
-    ".sy",
-    ".sz",
-    ".tc",
-    ".td",
-    ".tf",
-    ".tg",
-    ".th",
-    ".tj",
-    ".tk",
-    ".tl",
-    ".tm",
-    ".tn",
-    ".to",
-    ".tr",
-    ".tt",
-    ".tv",
-    ".tw",
-    ".tz",
-    ".ua",
-    ".ug",
-    ".uk",
-    ".us",
-    ".uy",
-    ".uz",
-    ".va",
-    ".vc",
-    ".ve",
-    ".vg",
-    ".vi",
-    ".vn",
-    ".vu",
-    ".wf",
-    ".ws",
-    ".ye",
-    ".za",
-    ".zm",
-    ".zw",
-  ];
+  const topDomain = useMemo(
+    () => [
+      ".com",
+      ".net",
+      ".org",
+      ".edu",
+      ".gov",
+      ".mil",
+      ".int",
+      ".biz",
+      ".info",
+      ".name",
+      ".aero",
+      ".cat",
+      ".coop",
+      ".lobs",
+      ".mobl",
+      ".museum",
+      ".pro",
+      ".travel",
+      ".ac",
+      ".ad",
+      ".ae",
+      ".af",
+      ".ag",
+      ".al",
+      ".ai",
+      ".am",
+      ".an",
+      ".ao",
+      "aq",
+      ".ar",
+      ".as",
+      ".at",
+      ".au",
+      ".aw",
+      ".ax",
+      ".az",
+      ".ba",
+      ".bb",
+      ".bb",
+      ".be",
+      ".bf",
+      ".bg",
+      ".bh",
+      ".bi",
+      ".bj",
+      ".bm",
+      ".bn",
+      ".bo",
+      ".br",
+      ".bs",
+      ".bt",
+      ".bw",
+      ".by",
+      ".bz",
+      ".ca",
+      ".cc",
+      ".cd",
+      ".cf",
+      ".cg",
+      ".ch",
+      ".ci",
+      ".ck",
+      ".cl",
+      ".cm",
+      ".cn",
+      ".co",
+      ".cr",
+      ".cu",
+      ".cv",
+      ".cx",
+      ".cy",
+      ".cz",
+      ".de",
+      ".dj",
+      ".dk",
+      ".dm",
+      ".do",
+      ".dz",
+      ".ec",
+      ".ee",
+      ".eg",
+      ".er",
+      ".es",
+      ".et",
+      ".eu",
+      ".fi",
+      ".fj",
+      ".fk",
+      ".fm",
+      ".fo",
+      ".fr",
+      ".ga",
+      ".gd",
+      ".ge",
+      ".gf",
+      ".gg",
+      ".gh",
+      ".gi",
+      ".gm",
+      ".gn",
+      ".gp",
+      ".gq",
+      ".gr",
+      ".gs",
+      ".gt",
+      ".gu",
+      ".gw",
+      ".gy",
+      ".hk",
+      ".hm",
+      ".hn",
+      ".hr",
+      ".ht",
+      ".hu",
+      ".id",
+      ".ie",
+      ".il",
+      ".im",
+      ".in",
+      ".io",
+      ".iq",
+      ".ir",
+      ".is",
+      ".it",
+      ".je",
+      ".jm",
+      ".jo",
+      ".jp",
+      ".ke",
+      ".kg",
+      ".kh",
+      ".ki",
+      ".km",
+      ".kn",
+      ".kp",
+      ".kr",
+      ".kw",
+      ".ky",
+      ".kz",
+      ".la",
+      ".lb",
+      ".lc",
+      ".li",
+      ".lk",
+      ".lr",
+      ".ls",
+      ".lt",
+      ".lu",
+      ".lv",
+      ".ly",
+      ".ma",
+      ".mc",
+      ".md",
+      ".me",
+      ".mg",
+      ".mh",
+      ".mk",
+      ".ml",
+      ".mm",
+      ".mn",
+      ".mo",
+      ".mp",
+      ".mq",
+      ".mr",
+      ".ms",
+      ".mt",
+      ".mu",
+      ".mv",
+      ".mw",
+      ".mx",
+      ".my",
+      ".mz",
+      ".na",
+      ".nc",
+      ".ne",
+      ".nf",
+      ".ng",
+      ".ni",
+      ".nl",
+      ".no",
+      ".np",
+      ".nr",
+      ".nu",
+      ".nz",
+      ".om",
+      ".pa",
+      ".pe",
+      ".pf",
+      ".pg",
+      ".ph",
+      ".pk",
+      ".pl",
+      ".pn",
+      ".pr",
+      ".ps",
+      ".pt",
+      ".pw",
+      ".py",
+      ".qa",
+      ".re",
+      ".ro",
+      ".rs",
+      ".ru",
+      ".rw",
+      ".sa",
+      ".sb",
+      ".sc",
+      ".sd",
+      ".se",
+      ".sg",
+      ".sh",
+      ".si",
+      ".sk",
+      ".sl",
+      ".sm",
+      ".sn",
+      ".so",
+      ".sr",
+      ".st",
+      ".su",
+      ".sv",
+      ".sy",
+      ".sz",
+      ".tc",
+      ".td",
+      ".tf",
+      ".tg",
+      ".th",
+      ".tj",
+      ".tk",
+      ".tl",
+      ".tm",
+      ".tn",
+      ".to",
+      ".tr",
+      ".tt",
+      ".tv",
+      ".tw",
+      ".tz",
+      ".ua",
+      ".ug",
+      ".uk",
+      ".us",
+      ".uy",
+      ".uz",
+      ".va",
+      ".vc",
+      ".ve",
+      ".vg",
+      ".vi",
+      ".vn",
+      ".vu",
+      ".wf",
+      ".ws",
+      ".ye",
+      ".za",
+      ".zm",
+      ".zw",
+    ],
+    []
+  );
   /**
    * 이미 link 되어 있는 지 여부
    */
@@ -333,33 +333,36 @@ const LinkLoader = ({
   const [searchValue, setSearchValue] = useState<string | null>(null);
   const [candidates, setCandidates] = useState<Page[] | null>(null);
   const [webLink, setWebLink] = useState<boolean>(false);
-  const onChangeSearch = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    if (value === "") {
-      setSearchValue(null);
-      setCandidates(null);
-      setWebLink(false);
-    } else {
-      setSearchValue(value);
-      const isWebLink = topDomain
-        .map((d: string) => value.includes(d))
-        .includes(true);
-      if (isWebLink) {
-        setWebLink(true);
+  const onChangeSearch = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.value;
+      if (value === "") {
+        setSearchValue(null);
         setCandidates(null);
-      } else {
         setWebLink(false);
-        const candidateArr = notTemplatePages.filter((page: Page) =>
-          page.header.title.includes(value)
-        );
-        candidateArr[0] ? setCandidates(candidateArr) : setCandidates(null);
+      } else {
+        setSearchValue(value);
+        const isWebLink = topDomain
+          .map((d: string) => value.includes(d))
+          .includes(true);
+        if (isWebLink) {
+          setWebLink(true);
+          setCandidates(null);
+        } else {
+          setWebLink(false);
+          const candidateArr = notTemplatePages.filter((page: Page) =>
+            page.header.title.includes(value)
+          );
+          candidateArr[0] ? setCandidates(candidateArr) : setCandidates(null);
+        }
       }
-    }
-  };
+    },
+    [notTemplatePages, topDomain]
+  );
   /**
    * dom에 변경이 읽을 때,  block의 내용을 담고 있는 element의 innerHTML을 읽어와서, 변경된 내용을 state에 업데이트하는 함수
    */
-  const getBlockContents = () => {
+  const getBlockContents = useCallback(() => {
     const targetBlockContentHtml = document
       .getElementById(`${block.id}__contents`)
       ?.querySelector(".contentEditable");
@@ -377,79 +380,97 @@ const LinkLoader = ({
           change: true,
         });
     }
-  };
-  const resetLinked = () => {
+  }, [block, editBlock, page.id, setSelection]);
+  const resetLinked = useCallback(() => {
     if (linked && linkElements) {
       setLinked(false);
       setLinkElements(null);
     }
-  };
+  }, [linkElements, linked]);
   /**
    * HTMLAnchorElement의 href 를 변경하는 함수
    * @param element
    * @param link
    */
-  const changeHref = (element: HTMLAnchorElement, link: string) => {
-    if (webLink) {
-      if (link.includes("https://") || link.includes("http://")) {
-        element.setAttribute("href", `${link}`);
+  const changeHref = useCallback(
+    (element: HTMLAnchorElement, link: string) => {
+      if (webLink) {
+        if (link.includes("https://") || link.includes("http://")) {
+          element.setAttribute("href", `${link}`);
+        } else {
+          element.setAttribute("href", `https://${link}`);
+        }
       } else {
-        element.setAttribute("href", `https://${link}`);
+        //page link
+        const originLocation = window.location.origin;
+        const location = `${originLocation}/notion`;
+        const path = `${location}/#/${link}`;
+        element.setAttribute("href", `${path}`);
       }
-    } else {
-      //page link
-      const originLocation = window.location.origin;
-      const location = `${originLocation}/notion`;
-      const path = `${location}/#/${link}`;
-      element.setAttribute("href", `${path}`);
-    }
-  };
+    },
+    [webLink]
+  );
   /**
    * 새로운  HTMLAnchorElement를 만드는 함수
    * @param innerHTML 새로운  HTMLAnchorElement 의 innerHTML의 value
    * @param link   HTMLAnchorElement 의 href의 value
    */
-  const makeNewAnchorElement = (innerHTML: string, link: string) => {
-    const newSelectedHtml = document.createElement("a");
-    newSelectedHtml.className = "selected link";
-    newSelectedHtml.setAttribute("target", "_blank");
-    newSelectedHtml.innerHTML = innerHTML;
-    changeHref(newSelectedHtml, link);
-    selectedHtml?.parentNode?.replaceChild(newSelectedHtml, selectedHtml);
-    getBlockContents();
-  };
+  const makeNewAnchorElement = useCallback(
+    (innerHTML: string, link: string) => {
+      const newSelectedHtml = document.createElement("a");
+      newSelectedHtml.className = "selected link";
+      newSelectedHtml.setAttribute("target", "_blank");
+      newSelectedHtml.innerHTML = innerHTML;
+      changeHref(newSelectedHtml, link);
+      selectedHtml?.parentNode?.replaceChild(newSelectedHtml, selectedHtml);
+      getBlockContents();
+    },
+    [changeHref, getBlockContents, selectedHtml]
+  );
 
-  const addLink = (link: string) => {
-    if (selectedHtml) {
-      if (linked && linkElements) {
-        if (linkElements[0] === selectedHtml) {
-          //href 만 변경
-          changeHref(selectedHtml as HTMLAnchorElement, link);
-          getBlockContents();
-        } else {
-          //기존 link 삭제 후 새로운 link
-          const selectedHtmlParent = selectedHtml.parentElement;
-          if (linkElements[0] === selectedHtmlParent) {
-            changeHref(selectedHtmlParent as HTMLAnchorElement, link);
+  const addLink = useCallback(
+    (link: string) => {
+      if (selectedHtml) {
+        if (linked && linkElements) {
+          if (linkElements[0] === selectedHtml) {
+            //href 만 변경
+            changeHref(selectedHtml as HTMLAnchorElement, link);
             getBlockContents();
           } else {
-            // 배열
-            linkElements.forEach((e: HTMLAnchorElement) => {
-              e.outerHTML = e.innerHTML;
-            });
-            const newSelectedHtml = document.querySelector(".selected");
-            newSelectedHtml &&
-              makeNewAnchorElement(newSelectedHtml.innerHTML, link);
+            //기존 link 삭제 후 새로운 link
+            const selectedHtmlParent = selectedHtml.parentElement;
+            if (linkElements[0] === selectedHtmlParent) {
+              changeHref(selectedHtmlParent as HTMLAnchorElement, link);
+              getBlockContents();
+            } else {
+              // 배열
+              linkElements.forEach((e: HTMLAnchorElement) => {
+                e.outerHTML = e.innerHTML;
+              });
+              const newSelectedHtml = document.querySelector(".selected");
+              newSelectedHtml &&
+                makeNewAnchorElement(newSelectedHtml.innerHTML, link);
+            }
           }
+        } else {
+          makeNewAnchorElement(selectedHtml.innerHTML, link);
         }
-      } else {
-        makeNewAnchorElement(selectedHtml.innerHTML, link);
       }
-    }
-    closeLink && closeLink();
-    resetLinked();
-  };
-  const copyLink = () => {
+      closeLink && closeLink();
+      resetLinked();
+    },
+    [
+      changeHref,
+      closeLink,
+      getBlockContents,
+      linkElements,
+      linked,
+      makeNewAnchorElement,
+      resetLinked,
+      selectedHtml,
+    ]
+  );
+  const copyLink = useCallback(() => {
     if (linkElements) {
       const href = linkElements[0].getAttribute("href");
       if (href) {
@@ -458,9 +479,9 @@ const LinkLoader = ({
       resetLinked();
       closeLink && closeLink();
     }
-  };
+  }, []);
 
-  const removeLink = () => {
+  const removeLink = useCallback(() => {
     if (linkElements) {
       linkElements.forEach((e: HTMLAnchorElement) => {
         e.outerHTML = e.innerHTML;
@@ -469,15 +490,8 @@ const LinkLoader = ({
       resetLinked();
       closeLink && closeLink();
     }
-  };
+  }, [closeLink, getBlockContents, linkElements, resetLinked]);
 
-  const setWidth = (lenght: number) => {
-    const n = 100 / lenght;
-    const style: CSSProperties = {
-      maxWidth: `${n}%`,
-    };
-    return style;
-  };
   useEffect(() => {
     if (blockStyler && blockStylerStyle) {
       const blockStylerTop = blockStylerStyle.top as string;
@@ -515,40 +529,7 @@ const LinkLoader = ({
       }
     }
   }, [selectedHtml]);
-  type PageItemProps = {
-    page: Page;
-  };
-  const PageItem = ({ page }: PageItemProps) => {
-    const pagePath = makeRoutePath(page, pagesId, pages).slice(1);
-    const paths = makePagePath(page, pagesId, pages);
-    return (
-      <button
-        title="button to open page"
-        className="page__inner"
-        onClick={() => addLink(pagePath)}
-      >
-        <ScreenOnly text="button to open page" />
-        <PageIcon
-          icon={page.header.icon}
-          iconType={page.header.iconType}
-          style={undefined}
-        />
-        <div className="page__inform">
-          <div className="page__title">{page.header.title}</div>
-          {page.parentsId && (
-            <div className="page__path-group">
-              {paths?.map((path: pathType) => (
-                <div className="path" style={setWidth(paths.length)}>
-                  {paths.indexOf(path) !== 0 && <div className="slash">/</div>}
-                  <div className="title">{path.title}</div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </button>
-    );
-  };
+
   return (
     <div id="linkLoader" style={linkLoaderStyle}>
       <div className="inner">
@@ -571,8 +552,22 @@ const LinkLoader = ({
           <header>LINK TO BLOCK</header>
           <div className="page-group__list">
             {searchValue === null && candidates === null
-              ? pageList.map((p: Page) => <PageItem page={p} />)
-              : candidates?.map((p: Page) => <PageItem page={p} />)}
+              ? pageList.map((p: Page) => (
+                  <PageItem
+                    page={p}
+                    pages={pages}
+                    pagesId={pagesId}
+                    addLink={addLink}
+                  />
+                ))
+              : candidates?.map((p: Page) => (
+                  <PageItem
+                    page={p}
+                    pages={pages}
+                    pagesId={pagesId}
+                    addLink={addLink}
+                  />
+                ))}
           </div>
         </div>
       </div>
