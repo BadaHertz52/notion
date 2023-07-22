@@ -68,15 +68,24 @@ const Templates = ({
     (state: RootState) => state.notion
   ).templatesId;
   const dispatch = useDispatch();
-  const addTemplate = (template: Page) => {
-    dispatch(add_template(template));
-  };
-  const cancelEditTemplate = (templateId: string) => {
-    dispatch(cancel_edit_template(templateId));
-  };
-  const deleteTemplate = (templateId: string) => {
-    dispatch(delete_template(templateId));
-  };
+  const addTemplate = useCallback(
+    (template: Page) => {
+      dispatch(add_template(template));
+    },
+    [dispatch]
+  );
+  const cancelEditTemplate = useCallback(
+    (templateId: string) => {
+      dispatch(cancel_edit_template(templateId));
+    },
+    [dispatch]
+  );
+  const deleteTemplate = useCallback(
+    (templateId: string) => {
+      dispatch(delete_template(templateId));
+    },
+    [dispatch]
+  );
   const templates = useMemo(
     () =>
       templatesId
