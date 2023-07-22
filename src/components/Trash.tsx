@@ -3,67 +3,24 @@ import React, {
   SetStateAction,
   useEffect,
   useState,
-  useContext,
+  useCallback,
 } from "react";
-import { IoTrashOutline } from "react-icons/io5";
-import { RiArrowGoBackLine } from "react-icons/ri";
+
 import { CSSProperties } from "styled-components";
-import { ActionContext } from "../containers/NotionRouter";
+
 import { Page } from "../modules/notion/type";
-import Result, { resultType } from "./Result";
+import { resultType } from "./Result";
 import { makeResultType } from "../fn";
 import ScreenOnly from "./ScreenOnly";
-type ResultItemProps = {
-  item: resultType;
-  setTargetPageId: Dispatch<SetStateAction<string>>;
-  setOpenTrash: Dispatch<React.SetStateAction<boolean>>;
-};
+import TrashResultItem from "./TrashResultItem";
+
 type TrashProps = {
   style: CSSProperties | undefined;
   trashPagesId: string[] | null;
   trashPages: Page[] | null;
   pagesId: string[] | null;
   setTargetPageId: Dispatch<SetStateAction<string>>;
-  setOpenTrash: Dispatch<React.SetStateAction<boolean>>;
-};
-const ResultItem = ({
-  item,
-  setTargetPageId,
-  setOpenTrash,
-}: ResultItemProps) => {
-  const { cleanTrash, restorePage } = useContext(ActionContext).actions;
-  const goPage = (event: React.MouseEvent) => {
-    const target = event.target as HTMLElement;
-    const tagName = target.tagName.toLowerCase();
-    setOpenTrash(false);
-    if (!["button", "svg", "path"].includes(tagName)) {
-      setTargetPageId(item.id);
-    }
-  };
-
-  return (
-    <div className="page" onClick={goPage}>
-      <Result item={item} />
-      <div className="btn-group">
-        <button
-          title="button to restore page"
-          className="btn-restore"
-          onClick={() => restorePage(item.id)}
-        >
-          <ScreenOnly text="button to restore page" />
-          <RiArrowGoBackLine />
-        </button>
-        <button
-          title="button to  permanently delete page"
-          className="btn-clean"
-          onClick={() => cleanTrash(item.id)}
-        >
-          <ScreenOnly text="button to permanently delete page" />
-          <IoTrashOutline />
-        </button>
-      </div>
-    </div>
-  );
+  setOpenTrash: Dispatch<SetStateAction<boolean>>;
 };
 
 const Trash = ({
@@ -81,15 +38,18 @@ const Trash = ({
   const [result, setResult] = useState<resultType[] | null>(null);
   //null 이면 검색의 결과값이 없는것
   const [sort, setSort] = useState<"all" | "current">("all");
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (trashList) {
-      const value = event.target.value.toLowerCase();
-      const resultList = trashList.filter((item: resultType) =>
-        item.title.toLowerCase().includes(value)
-      );
-      resultList?.[0] ? setResult(resultList) : setResult(null);
-    }
-  };
+  const onChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (trashList) {
+        const value = event.target.value.toLowerCase();
+        const resultList = trashList.filter((item: resultType) =>
+          item.title.toLowerCase().includes(value)
+        );
+        resultList?.[0] ? setResult(resultList) : setResult(null);
+      }
+    },
+    [trashList]
+  );
 
   useEffect(() => {
     if (pagesId) {
@@ -170,7 +130,7 @@ const Trash = ({
           {trashList ? (
             result ? (
               result.map((item: resultType) => (
-                <ResultItem
+                <TrashResultItem
                   item={item}
                   setTargetPageId={setTargetPageId}
                   setOpenTrash={setOpenTrash}
