@@ -30,22 +30,3 @@ export const findPosition = (
     eventTarget_position: eventTarget_position,
   };
 };
-
-export const detectRange = (
-  event: MouseEvent | React.MouseEvent,
-  targetArea: DOMRect | undefined
-): boolean => {
-  const target = event.target as Element;
-  const target_area = targetArea as DOMRect;
-  const { targetElement_position, eventTarget_position } = findPosition(
-    target,
-    target_area
-  );
-  const inner_x: boolean =
-    eventTarget_position.left >= targetElement_position.left &&
-    eventTarget_position.right <= targetElement_position.right;
-  const inner_y: boolean =
-    eventTarget_position.top >= targetElement_position.top &&
-    eventTarget_position.bottom <= targetElement_position.bottom;
-  return inner_x && inner_y;
-};

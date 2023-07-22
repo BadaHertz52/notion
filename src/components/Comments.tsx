@@ -10,8 +10,6 @@ import React, {
 } from "react";
 import { CSSProperties } from "styled-components";
 import { Block, MainCommentType, Page } from "../modules/notion/type";
-
-import { detectRange } from "../fn";
 import { ActionContext } from "../containers/NotionRouter";
 import Comment from "./Comment";
 import CommentToolMore from "./CommentToolMore";
@@ -82,26 +80,20 @@ const Comments = ({
   );
   const templateHtml = document.getElementById("template");
   const commentsRef = useRef<HTMLDivElement>(null);
-  const closeToolMore = (
-    event: MouseEvent | globalThis.MouseEvent,
-    setMoreOpen: Dispatch<SetStateAction<boolean>>
-  ) => {
-    const toolMore = document.getElementById("tool_more");
-    const toolMoreArea = toolMore?.getClientRects()[0];
-    const isInToolMore = detectRange(event, toolMoreArea);
-    if (!isInToolMore) {
-      setMoreOpen(false);
-      sessionStorage.removeItem("toolMoreItem");
-    }
-  };
-  const showComments = useCallback(
-    (what: "open" | "resolve") => {
-      what === "open"
-        ? setTargetComment(openComments)
-        : setTargetComment(resolveComments);
+  const closeToolMore = useCallback(
+    (event: MouseEvent | globalThis.MouseEvent) => {
+      if (moreOpen) {
+        const target = event.target as HTMLElement | null;
+        const isInToolMore = target?.closest("#tool-more");
+        if (!isInToolMore) {
+          setMoreOpen(false);
+          sessionStorage.removeItem("toolMoreItem");
+        }
+      }
     },
-    [openComments, resolveComments]
+    [moreOpen]
   );
+
   const updateOpenAndResolveComments = (comments: MainCommentType[]) => {
     setResolveComments(
       comments?.filter((comment: MainCommentType) => comment.type === "resolve")
@@ -213,11 +205,14 @@ const Comments = ({
     }
   }, [select, openComments, resolveComments]);
 
-  inner?.addEventListener("click", (event) => {
-    if (moreOpen) {
-      closeToolMore(event, setMoreOpen);
-    }
-  });
+  useEffect(() => {
+    inner?.addEventListener("click", closeToolMore);
+
+    return () => {
+      inner?.removeEventListener("click", closeToolMore);
+    };
+  }, [inner, closeToolMore]);
+
   window.onresize = changeCommentsStyle;
   return (
     <>

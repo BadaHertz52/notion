@@ -11,7 +11,7 @@ import {
 } from "./block";
 import { findPage } from "./page";
 import { closeModal } from "./modal";
-import { findPosition, detectRange } from "./position";
+import { findPosition } from "./position";
 export {
   isMobile,
   makeResultType,
@@ -27,5 +27,4 @@ export {
   findPage,
   closeModal,
   findPosition,
-  detectRange,
 };

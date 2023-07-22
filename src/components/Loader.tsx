@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import { CSSProperties } from "styled-components";
 import { Block, Page } from "../modules/notion/type";
-import { setTemplateItem, detectRange } from "../fn";
+import { setTemplateItem } from "../fn";
 
 type LoaderProps = {
   block: Block | null;
@@ -91,11 +91,17 @@ const Loader = ({
     setOpenLoader(false);
   }, [editPage, page, setOpenLoader]);
 
-  inner?.addEventListener("click", (event) => {
-    if (loaderHtml) {
-      !detectRange(event, loaderHtml.getClientRects()[0]) && closeLoader();
-    }
-  });
+  const handleClick = useCallback(
+    (event: globalThis.MouseEvent) => {
+      if (loaderHtml) {
+        const target = event.target as HTMLElement | null;
+        const isInLoader = target?.closest("#loader");
+        !isInLoader && closeLoader();
+      }
+    },
+    [closeLoader, loaderHtml]
+  );
+
   const changeLoaderStyle = useCallback(() => {
     if (block) {
       const blockHtml = document.getElementById(`block-${block.id}`);
@@ -152,12 +158,19 @@ const Loader = ({
     }
   }, [block, frameHtml]);
   useEffect(() => {
+    inner?.addEventListener("click", handleClick);
+    return () => inner?.removeEventListener("click", handleClick);
+  }, [inner, handleClick]);
+
+  useEffect(() => {
     !loaderStyle && changeLoaderStyle();
   }, [loaderStyle, changeLoaderStyle]);
 
-  window.onresize = () => {
-    changeLoaderStyle();
-  };
+  useEffect(() => {
+    window.addEventListener("resize", changeLoaderStyle);
+    return () => window.removeEventListener("resize", changeLoaderStyle);
+  }, [changeLoaderStyle]);
+
   return (
     <div id="loader" style={loaderStyle}>
       <div className="inner">

@@ -28,7 +28,7 @@ import PageMenu from "./PageMenu";
 import { isMobile, setTemplateItem } from "../fn";
 import { fontStyleType, mobileSideMenuType } from "../containers/NotionRouter";
 import BlockStyler from "./BlockStyler";
-import { removeSelected, detectRange } from "../fn";
+import { removeSelected } from "../fn";
 import MoveTargetBlock from "./MoveTargetBlock";
 
 //icon
@@ -226,52 +226,56 @@ const Frame = ({
   const onMouseLeaveFromPH = useCallback(() => {
     decoOpen && setDecoOpen(false);
   }, [decoOpen]);
-  const closeModalMenu = (event: globalThis.MouseEvent) => {
-    const target = event.target as HTMLElement | null;
-    if (target) {
-      const isInModal = target.closest("#modal__menu");
-      const isInMobileBlockMenu = target.closest("#mobileBlockMenu");
-      if (!isInModal && !isInMobileBlockMenu) {
-        setModal({
-          open: false,
-          what: null,
-        });
+  const closeModalMenu = useCallback(
+    (event: globalThis.MouseEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (target) {
+        const isInModal = target.closest("#modal__menu");
+        const isInMobileBlockMenu = target.closest("#mobileBlockMenu");
+        if (!isInModal && !isInMobileBlockMenu) {
+          setModal({
+            open: false,
+            what: null,
+          });
+        }
       }
-    }
-  };
+    },
+    [setModal]
+  );
 
   const closeMenu = useCallback((event: globalThis.MouseEvent | MouseEvent) => {
-    const mainMenu = document.getElementById("menu__main");
-    const sideMenu = document.getElementById("sideMenu")?.firstElementChild;
-    const mainMenuArea = mainMenu?.getClientRects()[0];
-    const sideMenuArea = sideMenu?.getClientRects()[0];
-    const isInrMain = detectRange(event, mainMenuArea);
-    const isInSide = detectRange(event, sideMenuArea);
+    const target = event.target as HTMLElement | null;
 
-    if (sideMenuArea) {
+    const isSideMenu = document.getElementById("sideMenu")?.firstElementChild;
+    const isInrMain = target?.closest("#menu_main");
+    const isInSide = target?.closest("#sideMenu");
+
+    if (isSideMenu) {
       isInrMain || isInSide ? setOpenMenu(true) : setOpenMenu(false);
     } else {
       isInrMain ? setOpenMenu(true) : setOpenMenu(false);
     }
   }, []);
-  const closeComments = (event: globalThis.MouseEvent) => {
-    if (openComment && commentBlock) {
-      const commentsDoc = document.getElementById("block-comments");
-      const commentBtn = document.getElementById(
-        `${commentBlock.id}__contents`
-      );
-      if (commentsDoc && commentBtn) {
-        const commentsDocDomRect = commentsDoc.getClientRects()[0];
-        const commentBtnDomRect = commentBtn.getClientRects()[0];
-        const isInComments = detectRange(event, commentsDocDomRect);
-        const isInCommentsBtn = detectRange(event, commentBtnDomRect);
-        if (!isInComments && !isInCommentsBtn) {
-          setCommentBlock(null);
-          setOpenComment(false);
+  const closeComments = useCallback(
+    (event: globalThis.MouseEvent) => {
+      if (openComment && commentBlock) {
+        const commentElId = "block-comments";
+        const commentBtnElId = `${commentBlock.id}__contents`;
+        const commentsDoc = document.getElementById(commentElId);
+        const commentBtn = document.getElementById(commentBtnElId);
+        if (commentsDoc && commentBtn) {
+          const target = event.target as HTMLElement | null;
+          const isInComments = target?.closest(commentElId);
+          const isInCommentsBtn = target?.closest(commentBtnElId);
+          if (!isInComments && !isInCommentsBtn) {
+            setCommentBlock(null);
+            setOpenComment(false);
+          }
         }
       }
-    }
-  };
+    },
+    [commentBlock, openComment, setCommentBlock, setOpenComment]
+  );
 
   const onClickPageIcon = useCallback(
     (event: React.MouseEvent) => {
@@ -808,7 +812,7 @@ const Frame = ({
     sessionStorage.setItem("targetPageId", page.id);
   }, [page.id, setOpenTemplates]);
   // edit block using sessionStorage
-  const updateBlock = () => {
+  const updateBlock = useCallback(() => {
     const item = sessionStorage.getItem("itemsTobeEdited");
     if (item) {
       const cursorElement = document.getSelection()?.anchorNode?.parentElement;
@@ -826,7 +830,7 @@ const Frame = ({
         sessionStorage.removeItem("itemsTobeEdited");
       }
     }
-  };
+  }, [editBlock]);
   /**
    * commandBlockPosition (type:CSSProperties)의 값을 변경하는 함수
    */
@@ -899,59 +903,104 @@ const Frame = ({
       }
     }
   }, [command.open, command.targetBlock, frameHtml]);
-  window.onresize = () => {
-    changeCBSposition();
-  };
+
   /**
    * 모바일 환경에서 Selection 객체 여부를 탐색하고, 유의미한 Selection일 경우 BlockStyler를 열기 위한 작업(mobileMenu 나 BlockComment 창 닫기, selection state 변경, 선택된 내용을 표시할 수 있도록 block content 변경)을 시행함
    */
-  const setItemForMobileMenu = (SELECTION: Selection) => {
-    const anchorNode = SELECTION.anchorNode;
-    let contentEditableElement: HTMLElement | null | undefined = null;
-    switch (anchorNode?.nodeType) {
-      case 3:
-        //text node
-        const parentElement = anchorNode.parentElement;
-        contentEditableElement = parentElement?.closest(".contentEditable");
+  const setItemForMobileMenu = useCallback(
+    (SELECTION: Selection) => {
+      const anchorNode = SELECTION.anchorNode;
+      let contentEditableElement: HTMLElement | null | undefined = null;
+      switch (anchorNode?.nodeType) {
+        case 3:
+          //text node
+          const parentElement = anchorNode.parentElement;
+          contentEditableElement = parentElement?.closest(".contentEditable");
 
-        break;
-      case 1:
-        //element node
-        break;
-      default:
-        break;
-    }
-    if (contentEditableElement && contentEditableElement) {
-      const blocKContentElement = contentEditableElement?.closest(".contents");
-      if (blocKContentElement) {
-        const blockId = blocKContentElement.id.replace("__contents", "");
-        setMobileMenuTargetBlock(findBlock(page, blockId).BLOCK);
+          break;
+        case 1:
+          //element node
+          break;
+        default:
+          break;
+      }
+      if (contentEditableElement && contentEditableElement) {
+        const blocKContentElement =
+          contentEditableElement?.closest(".contents");
+        if (blocKContentElement) {
+          const blockId = blocKContentElement.id.replace("__contents", "");
+          setMobileMenuTargetBlock(findBlock(page, blockId).BLOCK);
+        }
+      }
+    },
+    [page]
+  );
+  /**
+   * modal__menu, menu, block-comments 창이 열린 상태에서 이들의 영역 밖을 클릭 시, 열려있는 해당 창들을 다는 기능
+   */
+  const closePopupMenu = useCallback(
+    (event: globalThis.MouseEvent) => {
+      updateBlock();
+      document.getElementById("menu__main") && closeMenu(event);
+      document.getElementById("modal__menu") && closeModalMenu(event);
+      document.getElementById("block-comments") && closeComments(event);
+      if (command.open) {
+        const target = event.target as HTMLElement | null;
+        const commandInputHtml = document.getElementById("commandInput");
+        if (target && commandInputHtml) {
+          const isInnerCommand = target.closest("#block__commandBlock");
+          !isInnerCommand &&
+            target !== commandInputHtml &&
+            setCommand({
+              open: false,
+              command: null,
+              targetBlock: null,
+            });
+        }
+      }
+    },
+    [closeComments, closeMenu, closeModalMenu, command.open, updateBlock]
+  );
+  /**
+   * 모바일 환경에서 변경된  selection 을 반영하는 기능
+   */
+  const handleSelectionChange = useCallback(() => {
+    if (isMobile() && openComment) {
+      const SELECTION = document.getSelection();
+      const notSelect =
+        SELECTION?.anchorNode === SELECTION?.focusNode &&
+        SELECTION?.anchorOffset === SELECTION?.focusOffset;
+      if (!notSelect && SELECTION) {
+        if (openComment) {
+          setOpenComment(false);
+          setCommentBlock(null);
+        }
+        setItemForMobileMenu(SELECTION);
       }
     }
-  };
-  inner?.addEventListener("keyup", updateBlock);
-  inner?.addEventListener("touchstart", updateBlock, { passive: true });
-  inner?.addEventListener("click", (event: globalThis.MouseEvent) => {
-    updateBlock();
-    document.getElementById("menu__main") && closeMenu(event);
-    document.getElementById("modal__menu") && closeModalMenu(event);
-    document.getElementById("block-comments") && closeComments(event);
-    if (command.open) {
-      const blockCommandBlock = document.getElementById("block__commandBlock");
-      const commandDomRect = blockCommandBlock?.getClientRects()[0];
-      const commandInputHtml = document.getElementById("commandInput");
-      if (commandDomRect && commandInputHtml) {
-        const isInnerCommand = detectRange(event, commandDomRect);
-        !isInnerCommand &&
-          event.target !== commandInputHtml &&
-          setCommand({
-            open: false,
-            command: null,
-            targetBlock: null,
-          });
-      }
-    }
-  });
+  }, [openComment, setCommentBlock, setItemForMobileMenu, setOpenComment]);
+
+  useEffect(() => {
+    window.addEventListener("resize", changeCBSposition);
+    return () => window.removeEventListener("resize", changeCBSposition);
+  }, [changeCBSposition]);
+
+  useEffect(() => {
+    inner?.addEventListener("keyup", updateBlock);
+    inner?.addEventListener("touchstart", updateBlock, { passive: true });
+    return () => {
+      inner?.removeEventListener("keyup", updateBlock);
+      inner?.removeEventListener("touchstart", updateBlock);
+    };
+  }, [inner, updateBlock]);
+
+  useEffect(() => {
+    inner?.addEventListener("click", closePopupMenu);
+    return () => {
+      inner?.removeEventListener("click", closePopupMenu);
+    };
+  }, [inner, closePopupMenu]);
+
   useEffect(() => {
     openTemplates
       ? setTemplateHtml(document.getElementById("template"))
@@ -976,7 +1025,6 @@ const Frame = ({
     changeCBSposition();
   }, [command.open, command.targetBlock, openTemplates, changeCBSposition]);
 
-  //window.onresize =changeCommentStyle;
   useEffect(() => {
     // stop scroll when something open
     if (
@@ -1002,21 +1050,26 @@ const Frame = ({
     selection,
   ]);
 
-  document.onselectionchange = () => {
-    if (isMobile() && openComment) {
-      const SELECTION = document.getSelection();
-      const notSelect =
-        SELECTION?.anchorNode === SELECTION?.focusNode &&
-        SELECTION?.anchorOffset === SELECTION?.focusOffset;
-      if (!notSelect && SELECTION) {
-        if (openComment) {
-          setOpenComment(false);
-          setCommentBlock(null);
-        }
-        setItemForMobileMenu(SELECTION);
-      }
-    }
-  };
+  useEffect(() => {
+    document.addEventListener("selectionchange", handleSelectionChange);
+    return () =>
+      document.removeEventListener("selectionchange", handleSelectionChange);
+  }, [handleSelectionChange]);
+
+  //   if (isMobile() && openComment) {
+  //     const SELECTION = document.getSelection();
+  //     const notSelect =
+  //       SELECTION?.anchorNode === SELECTION?.focusNode &&
+  //       SELECTION?.anchorOffset === SELECTION?.focusOffset;
+  //     if (!notSelect && SELECTION) {
+  //       if (openComment) {
+  //         setOpenComment(false);
+  //         setCommentBlock(null);
+  //       }
+  //       setItemForMobileMenu(SELECTION);
+  //     }
+  //   }
+  // };
   useEffect(() => {
     if (modal.what === "modalComment") {
       const targetCommentInputHtml = document

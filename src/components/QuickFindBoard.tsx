@@ -4,6 +4,7 @@ import React, {
   useCallback,
   useRef,
   useState,
+  useEffect,
 } from "react";
 import { Page } from "../modules/notion/type";
 import { findPage } from "../fn";
@@ -11,7 +12,7 @@ import { findPage } from "../fn";
 import { AiOutlineCheck } from "react-icons/ai";
 import { BsChevronDown, BsSearch } from "react-icons/bs";
 import Result, { resultType } from "./Result";
-import { makeResultType, detectRange } from "../fn/";
+import { makeResultType } from "../fn/";
 import ScreenOnly from "./ScreenOnly";
 
 type QuickFindBoardProps = {
@@ -33,6 +34,7 @@ const QuickFindBoard = ({
   cleanRecentPage,
   setOpenQF,
 }: QuickFindBoardProps) => {
+  const inner = document.getElementById("inner");
   const bestMatches = "Best matches";
   const lastEditedNewest = "Last edited:Newest first";
   const lastEditedOldest = "Last edited:Oldest first";
@@ -191,7 +193,7 @@ const QuickFindBoard = ({
    * @param event QuickFindBoard에서 발생한 click 이벤트
    * @returns click 이벤트가 sortOptions에서 발생했는지 여부
    */
-  const checkOptionBtnClicked = useCallback((event: React.MouseEvent) => {
+  const checkOptionBtnClicked = useCallback((event: MouseEvent) => {
     const eventTarget = event.target as HTMLElement;
     let optionBtnIsClicked: boolean = false;
     const changeReturnValue = (condition: boolean) => {
@@ -217,22 +219,24 @@ const QuickFindBoard = ({
     }
     return optionBtnIsClicked;
   }, []);
+
   const closeQuickFindBoard = useCallback(
-    (event: React.MouseEvent) => {
-      const inner = document.getElementById("quickFindBoard__inner");
-      const innerDomRect = inner?.getClientRects()[0];
-      if (innerDomRect) {
-        const isInBoard = detectRange(event, innerDomRect);
-        if (!isInBoard) {
-          const optionBtnIsClicked = checkOptionBtnClicked(event);
-          !optionBtnIsClicked && setOpenQF(false);
-        }
+    (event: MouseEvent) => {
+      const target = event.target as HTMLElement | null;
+      const isInBoard = target?.closest("#quickFindBoard__inner");
+      if (!isInBoard) {
+        const optionBtnIsClicked = checkOptionBtnClicked(event);
+        !optionBtnIsClicked && setOpenQF(false);
       }
     },
     [checkOptionBtnClicked, setOpenQF]
   );
+  useEffect(() => {
+    inner?.addEventListener("click", closeQuickFindBoard);
+    return () => inner?.removeEventListener("click", closeQuickFindBoard);
+  }, [inner, closeQuickFindBoard]);
   return (
-    <div id="quickFindBoard" onClick={closeQuickFindBoard}>
+    <div id="quickFindBoard">
       <div className="inner" id="quickFindBoard__inner">
         <div>
           <div className="qf__search">

@@ -4,11 +4,11 @@ import React, {
   SetStateAction,
   useEffect,
   useState,
+  useCallback,
 } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { CSSProperties } from "styled-components";
 import { Block, MainCommentType, Page } from "../modules/notion/type";
-import { detectRange } from "../fn";
 import Comments from "./Comments";
 import ScreenOnly from "./ScreenOnly";
 
@@ -32,18 +32,19 @@ const AllComments = ({
   style,
 }: AllCommentsProps) => {
   const inner = document.getElementById("inner");
-  inner?.addEventListener("click", (event) => {
-    if (showAllComments) {
-      const allCommentsHtml = document.querySelector("#allComments");
-      const allCommentsHtmlDomRect = allCommentsHtml?.getClientRects()[0];
-      if (allCommentsHtmlDomRect) {
-        const isInAllComments = detectRange(event, allCommentsHtmlDomRect);
+  const closeAllComments = useCallback(
+    (event: globalThis.MouseEvent) => {
+      if (showAllComments) {
+        const target = event.target as HTMLElement | null;
+        const isInAllComments = target?.closest("#allComments");
         if (!isInAllComments) {
           setShowAllComments(false);
         }
       }
-    }
-  });
+    },
+    [setShowAllComments, showAllComments]
+  );
+
   const pageId = page.id;
   const commentsBlocks: Block[] | null = page.blocks
     ? page.blocks.filter((block: Block) => block.comments && block.comments)
@@ -87,7 +88,12 @@ const AllComments = ({
       }
     }
   }, [select, allComments]);
-
+  useEffect(() => {
+    inner?.addEventListener("click", closeAllComments);
+    return () => {
+      inner?.removeEventListener("click", closeAllComments);
+    };
+  }, [inner, closeAllComments]);
   return (
     <div id="allComments" style={style}>
       <div className="allComments__inner">

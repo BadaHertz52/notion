@@ -5,13 +5,14 @@ import React, {
   useState,
   useContext,
   useCallback,
+  useEffect,
 } from "react";
 import { BsEmojiSmile } from "react-icons/bs";
 import { CSSProperties } from "styled-components";
 import { ActionContext } from "../containers/NotionRouter";
 import { Block, IconType, Page, Emoji } from "../modules/notion/type";
 import { EMOJI_ARR, emojiPath } from "../modules/notion/emojiData";
-import { setTemplateItem, detectRange } from "../fn";
+import { setTemplateItem } from "../fn";
 import ScreenOnly from "./ScreenOnly";
 
 export const randomIcon = (): Emoji => {
@@ -91,17 +92,20 @@ const IconModal = ({
   );
 
   const inner = document.getElementById("inner");
-  inner?.addEventListener("click", (event: MouseEvent) => {
-    const iconModal = document.getElementById("iconModal");
-    if (iconModal) {
-      const iconModalDomRect = iconModal?.getClientRects()[0];
-      const isInIconModal = detectRange(event, iconModalDomRect);
-      const target = event.target as null | Element;
+  const closeIconModal = useCallback(
+    (event: MouseEvent) => {
+      const target = event.target as HTMLElement | null;
+      const isInIconModal = target?.closest("#iconModal");
       if (target?.id !== "inputImgIcon") {
         !isInIconModal && setOpenIconModal(false);
       }
-    }
-  });
+    },
+    [setOpenIconModal]
+  );
+  useEffect(() => {
+    inner?.addEventListener("click", closeIconModal);
+    return () => inner?.removeEventListener("click", closeIconModal);
+  }, [inner, closeIconModal]);
   return (
     <div id="iconModal" style={style}>
       <div className="inner">
