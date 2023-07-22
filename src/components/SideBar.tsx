@@ -275,8 +275,8 @@ const SideBar = ({
   const changeTrashStyle = useCallback(() => {
     const innerWidth = window.innerWidth;
     if (innerWidth >= 768) {
-      if (trashBtn.current) {
-        const domRect = trashBtn.current.getClientRects()[0];
+      const domRect = trashBtn.current?.getClientRects()[0];
+      if (domRect) {
         setTrashStyle({
           display: "flex",
           position: "absolute",
