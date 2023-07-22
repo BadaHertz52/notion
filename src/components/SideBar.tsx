@@ -294,13 +294,18 @@ const SideBar = ({
       });
     }
   }, []);
-
-  window.onresize = () => {
+  const handleResize = useCallback(() => {
     if (window.innerWidth < 800 && sideAppear === "lock" && showAllComments) {
       changeSide("close");
     }
     openTrash && changeTrashStyle();
-  };
+  }, [changeSide, changeTrashStyle, openTrash, showAllComments, sideAppear]);
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => window.addEventListener("resize", handleResize);
+  }, [handleResize]);
+
   const onClickTrashBtn = useCallback(
     (event: React.MouseEvent) => {
       setOpenTrash(true);

@@ -198,7 +198,11 @@ const TopBar = ({
       changePathWidth(innerWidth * 0.5 - 26);
     }
   }, [showAllComments]);
-  window.onresize = changeAllCommentAndTopBarStyle;
+  useEffect(() => {
+    window.addEventListener("resize", changeAllCommentAndTopBarStyle);
+    return () =>
+      window.removeEventListener("resize", changeAllCommentAndTopBarStyle);
+  }, [changeAllCommentAndTopBarStyle]);
 
   /**
    * pageMenu 창이 열려있을 경우, pageMenu 외의 구역을 클릭 시에 pageMenu 창을 닫는 기능

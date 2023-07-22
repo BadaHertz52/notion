@@ -157,8 +157,7 @@ const Menu = ({
       });
     }
   }, [frameHtml]);
-
-  window.onresize = () => {
+  const handleResize = useCallback(() => {
     if (!isMobile()) {
       if (blockStylerHtml === null) {
         const style = changeMenuStyle();
@@ -168,7 +167,12 @@ const Menu = ({
         changeSideMenuStyle();
       }
     }
-  };
+  }, [blockStylerHtml, changeMenuStyle, changeSideMenuStyle, sideMenu]);
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [handleResize]);
 
   let modalStyle = blockFnElement?.getAttribute("style");
 

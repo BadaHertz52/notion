@@ -213,7 +213,11 @@ const Comments = ({
     };
   }, [inner, closeToolMore]);
 
-  window.onresize = changeCommentsStyle;
+  useEffect(() => {
+    window.addEventListener("resize", changeCommentsStyle);
+    return () => window.removeEventListener("resize", changeCommentsStyle);
+  }, [changeCommentsStyle]);
+
   return (
     <>
       <div

@@ -5,6 +5,7 @@ import React, {
   useState,
   useContext,
   useCallback,
+  useEffect,
 } from "react";
 import { CSSProperties } from "styled-components";
 import { ActionContext } from "../containers/NotionRouter";
@@ -30,12 +31,22 @@ const Rename = ({
   const { editPage, editBlock } = useContext(ActionContext).actions;
   const inner = document.getElementById("inner");
   const [openIconModal, setOpenIconModal] = useState<boolean>(false);
-  inner?.addEventListener("click", (event) => {
-    if (document.getElementById("rename")) {
-      openIconModal && closeModal("iconModal", setOpenIconModal, event);
-      closeModal("rename", setOpenRename, event);
-    }
-  });
+  const handleInnerClick = useCallback(
+    (event: globalThis.MouseEvent) => {
+      if (document.getElementById("rename")) {
+        openIconModal && closeModal("iconModal", setOpenIconModal, event);
+        closeModal("rename", setOpenRename, event);
+      }
+    },
+    [openIconModal, setOpenRename]
+  );
+  useEffect(() => {
+    inner?.addEventListener("click", handleInnerClick);
+    return () => {
+      inner?.removeEventListener("click", handleInnerClick);
+    };
+  }, [inner, handleInnerClick]);
+
   const onClickRenameIcon = () => {
     setOpenIconModal(true);
   };

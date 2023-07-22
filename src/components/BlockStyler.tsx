@@ -257,51 +257,54 @@ const BlockStyler = ({
     setSelection,
   ]);
 
-  const changeMenuStyle = (param: menuType) => {
-    if (blockStyler && frameHtml) {
-      const blockStylerDomRect = blockStyler.getClientRects()[0];
-      const frameHtmlDomRect = frameHtml.getClientRects()[0];
-      const top = blockStylerDomRect.bottom + 5;
-      const left =
-        param === menu
-          ? blockStylerDomRect.right - frameHtmlDomRect.left - 240
-          : blockStylerDomRect.right - frameHtmlDomRect.left - 200;
-      const bottom = window.innerHeight - top + blockStylerDomRect.height;
-      const remainHeight = bottom - 50;
-      const style: CSSProperties =
-        remainHeight > 300
-          ? {
-              top: `${top}px`,
-              left: `${left}px`,
-              maxHeight: `${remainHeight}px`,
-              overflowY: "scroll",
-            }
-          : {
-              bottom: `${bottom}px`,
-              left: `${left}px`,
-              maxHeight: `${top - 50}px`,
-              overflowY: "scroll",
-            };
-      if (param === menu) {
-        const STYLE: CSSProperties = {
-          ...style,
-          overflowY: initial,
-        };
-        setMenuStyle(STYLE);
-      } else {
-        setMenuStyle(style);
+  const changeMenuStyle = useCallback(
+    (param: menuType) => {
+      if (blockStyler && frameHtml) {
+        const blockStylerDomRect = blockStyler.getClientRects()[0];
+        const frameHtmlDomRect = frameHtml.getClientRects()[0];
+        const top = blockStylerDomRect.bottom + 5;
+        const left =
+          param === menu
+            ? blockStylerDomRect.right - frameHtmlDomRect.left - 240
+            : blockStylerDomRect.right - frameHtmlDomRect.left - 200;
+        const bottom = window.innerHeight - top + blockStylerDomRect.height;
+        const remainHeight = bottom - 50;
+        const style: CSSProperties =
+          remainHeight > 300
+            ? {
+                top: `${top}px`,
+                left: `${left}px`,
+                maxHeight: `${remainHeight}px`,
+                overflowY: "scroll",
+              }
+            : {
+                bottom: `${bottom}px`,
+                left: `${left}px`,
+                maxHeight: `${top - 50}px`,
+                overflowY: "scroll",
+              };
+        if (param === menu) {
+          const STYLE: CSSProperties = {
+            ...style,
+            overflowY: initial,
+          };
+          setMenuStyle(STYLE);
+        } else {
+          setMenuStyle(style);
+        }
       }
-    }
-  };
+    },
+    [blockStyler, frameHtml]
+  );
 
-  const onClickColorBtn = () => {
+  const onClickColorBtn = useCallback(() => {
     if (openColor) {
       setOpenColor(false);
     } else {
       changeMenuStyle(color);
       setOpenColor(true);
     }
-  };
+  }, [openColor, setOpenColor, changeMenuStyle]);
   const onClickMenuBtn = useCallback(() => {
     if (openMenu) {
       setOpenMenu(false);
@@ -310,14 +313,25 @@ const BlockStyler = ({
       setOpenMenu(true);
     }
   }, [changeMenuStyle, openMenu]);
-
-  window.onresize = () => {
+  const handleResize = useCallback(() => {
     if (isMobile()) {
       changeStylerStyle(frameHtml, block, setBlockStylerStyle);
       openMenu && changeMenuStyle(menu);
       openColor && changeMenuStyle(color);
     }
-  };
+  }, [
+    changeMenuStyle,
+    openMenu,
+    frameHtml,
+    block,
+    setBlockStylerStyle,
+    openColor,
+    changeStylerStyle,
+  ]);
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [handleResize]);
 
   /**
    *  textDeco 스타일을 지정할 경우, 기존에 textDeco가 지정된 element의 클래스를 변경하거나, outerHtml의 값을 변경하는 함수
@@ -388,107 +402,131 @@ const BlockStyler = ({
     },
     [block, editBlock, page.id, removeOtherTextDeco, setSelection]
   );
-  const executeCloseBlockStyler = (
-    event: globalThis.MouseEvent | TouchEvent
-  ) => {
-    const commentInputHtml = document
-      .getElementById("modal__menu")
-      ?.querySelector(".commentInput");
-    if (
-      document.getElementById("blockStyler") &&
-      (commentInputHtml === null || commentInputHtml === undefined) &&
-      document.getElementById("mobileSideMenu") === null
-    ) {
-      closeBlockStyler(event);
-    }
-  };
-  inner?.addEventListener("click", (event) => {
-    executeCloseBlockStyler(event);
-  });
-  inner?.addEventListener(
-    "touchend",
-    (event) => {
-      executeCloseBlockStyler(event);
-    },
-    { passive: true }
-  );
 
   /**
    * 유저가 blockStyler를 통해 여는 sideMenu의 영역 밖을을 클릭 할 경우 열려있는 sideMenu 창을 닫는 함수
    * @param target event.target <HTMLElement>
    * @param htmlId
    */
-  const closeSideMenu = (target: HTMLElement, htmlId: sideMenuIdType) => {
-    const isIn = target.id === htmlId ? true : target.closest(`#${htmlId}`);
-    if (!isIn) {
-      switch (htmlId) {
-        case "block-styler__color":
-          setOpenColor(false);
-          break;
-        case "block__commandBlock":
-          setCommand({
-            open: false,
-            command: null,
-            targetBlock: null,
-          });
-          break;
-        case "linkLoader":
-          setOpenLink(false);
-          break;
-        case "menu__main":
-          const isInSideMenu =
-            target.id === "sideMenu" ? true : target.closest("#sideMenu");
-          !isInSideMenu && setOpenMenu(false);
-          break;
-        default:
-          break;
+  const closeSideMenu = useCallback(
+    (target: HTMLElement, htmlId: sideMenuIdType) => {
+      const isIn = target.id === htmlId ? true : target.closest(`#${htmlId}`);
+      if (!isIn) {
+        switch (htmlId) {
+          case "block-styler__color":
+            setOpenColor(false);
+            break;
+          case "block__commandBlock":
+            setCommand({
+              open: false,
+              command: null,
+              targetBlock: null,
+            });
+            break;
+          case "linkLoader":
+            setOpenLink(false);
+            break;
+          case "menu__main":
+            const isInSideMenu =
+              target.id === "sideMenu" ? true : target.closest("#sideMenu");
+            !isInSideMenu && setOpenMenu(false);
+            break;
+          default:
+            break;
+        }
       }
-    }
-  };
+    },
+    [setCommand]
+  );
   /**
    * 화면상에서 클릭한 곳이 blockStyler외의 곳일 경우, blockStyler 에 의한 변경사항의 여부에 따라 변경 사항이 있으면 블록의 contents 중 선택된 영역을 가리키는 selected 클래스를 제거하고, 변경이 없는 경우 원래의 블록으로 되돌린 후, selection 값은 null로 변경하여 BlockStyler component의 실행을 종료하는 함수
    * @param event globalThis.MouseEvent
    */
-  function closeBlockStyler(event: globalThis.MouseEvent | TouchEvent) {
-    const target = event.target as HTMLElement | null;
-    if (target) {
-      const isInBlockStyler = target.closest("#blockStyler");
-      const isInMenuComponent = target.closest(".menu");
-      const isInMobileBlockMenu = target.closest("#mobileBlockMenu");
-      const isInContents = target.closest(".contents");
-      if (
-        !isInBlockStyler &&
-        !isInMenuComponent &&
-        !isInMobileBlockMenu &&
-        !isInContents
-      ) {
-        const colorMenuHtml = document.getElementById("block-styler__color");
-        const commandBlockHtml = document.getElementById("block__commandBlock");
-        const mainMenu = document.getElementById("mainMenu");
-        const linkLoaderHtml = document.getElementById("linkLoader");
-
+  const closeBlockStyler = useCallback(
+    (event: globalThis.MouseEvent | TouchEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (target) {
+        const isInBlockStyler = target.closest("#blockStyler");
+        const isInMenuComponent = target.closest(".menu");
+        const isInMobileBlockMenu = target.closest("#mobileBlockMenu");
+        const isInContents = target.closest(".contents");
         if (
-          colorMenuHtml === null &&
-          commandBlockHtml === null &&
-          mainMenu === null &&
-          linkLoaderHtml === null
+          !isInBlockStyler &&
+          !isInMenuComponent &&
+          !isInMobileBlockMenu &&
+          !isInContents
         ) {
-          // 조건 : web에서 sideMenu가 닫혀 있을 경우
-          removeSelected(frameHtml, block, editBlock, page, setSelection);
-          setSelection && setSelection(null);
-          openMenu && setMobileMenuTargetBlock(null);
-        } else {
-          const eventTarget = event.target as HTMLElement | null;
-          if (eventTarget) {
-            openColor && closeSideMenu(eventTarget, "block-styler__color");
-            openLink && closeSideMenu(eventTarget, "linkLoader");
-            openMenu && closeSideMenu(eventTarget, "menu__main");
-            command.open && closeSideMenu(eventTarget, "block__commandBlock");
+          const colorMenuHtml = document.getElementById("block-styler__color");
+          const commandBlockHtml = document.getElementById(
+            "block__commandBlock"
+          );
+          const mainMenu = document.getElementById("mainMenu");
+          const linkLoaderHtml = document.getElementById("linkLoader");
+
+          if (
+            colorMenuHtml === null &&
+            commandBlockHtml === null &&
+            mainMenu === null &&
+            linkLoaderHtml === null
+          ) {
+            // 조건 : web에서 sideMenu가 닫혀 있을 경우
+            removeSelected(frameHtml, block, editBlock, page, setSelection);
+            setSelection && setSelection(null);
+            openMenu && setMobileMenuTargetBlock(null);
+          } else {
+            const eventTarget = event.target as HTMLElement | null;
+            if (eventTarget) {
+              openColor && closeSideMenu(eventTarget, "block-styler__color");
+              openLink && closeSideMenu(eventTarget, "linkLoader");
+              openMenu && closeSideMenu(eventTarget, "menu__main");
+              command.open && closeSideMenu(eventTarget, "block__commandBlock");
+            }
           }
         }
       }
-    }
-  }
+    },
+    [
+      block,
+      closeSideMenu,
+      command.open,
+      editBlock,
+      frameHtml,
+      openColor,
+      openLink,
+      openMenu,
+      page,
+      setMobileMenuTargetBlock,
+      setSelection,
+    ]
+  );
+  const executeCloseBlockStyler = useCallback(
+    (event: globalThis.MouseEvent | TouchEvent) => {
+      const commentInputHtml = document
+        .getElementById("modal__menu")
+        ?.querySelector(".commentInput");
+      if (
+        document.getElementById("blockStyler") &&
+        (commentInputHtml === null || commentInputHtml === undefined) &&
+        document.getElementById("mobileSideMenu") === null
+      ) {
+        closeBlockStyler(event);
+      }
+    },
+    [closeBlockStyler]
+  );
+
+  useEffect(() => {
+    inner?.addEventListener("click", executeCloseBlockStyler);
+    inner?.addEventListener("touchend", executeCloseBlockStyler, {
+      passive: true,
+    });
+
+    return () => {
+      inner?.removeEventListener("click", executeCloseBlockStyler);
+      inner?.removeEventListener("touchend", executeCloseBlockStyler);
+    };
+  }, [inner, executeCloseBlockStyler]);
+
   //mobile
   const prepareForChange = useCallback(() => {
     const mobileSelection = document.getSelection();
