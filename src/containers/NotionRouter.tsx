@@ -503,7 +503,6 @@ const NotionRouter = () => {
   return (
     <ActionContext.Provider value={{ actions: notionActions }}>
       <div id="inner" className="sideBar-lock">
-        {/* editor------ */}
         {loading ? (
           <Loading />
         ) : (
