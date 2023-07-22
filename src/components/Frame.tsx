@@ -1056,20 +1056,6 @@ const Frame = ({
       document.removeEventListener("selectionchange", handleSelectionChange);
   }, [handleSelectionChange]);
 
-  //   if (isMobile() && openComment) {
-  //     const SELECTION = document.getSelection();
-  //     const notSelect =
-  //       SELECTION?.anchorNode === SELECTION?.focusNode &&
-  //       SELECTION?.anchorOffset === SELECTION?.focusOffset;
-  //     if (!notSelect && SELECTION) {
-  //       if (openComment) {
-  //         setOpenComment(false);
-  //         setCommentBlock(null);
-  //       }
-  //       setItemForMobileMenu(SELECTION);
-  //     }
-  //   }
-  // };
   useEffect(() => {
     if (modal.what === "modalComment") {
       const targetCommentInputHtml = document
