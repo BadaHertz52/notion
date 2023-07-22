@@ -226,7 +226,7 @@ const Frame = ({
   const onMouseLeaveFromPH = useCallback(() => {
     decoOpen && setDecoOpen(false);
   }, [decoOpen]);
-  const closeModal = (event: globalThis.MouseEvent) => {
+  const closeModalMenu = (event: globalThis.MouseEvent) => {
     const target = event.target as HTMLElement | null;
     if (target) {
       const isInModal = target.closest("#modal__menu");
@@ -934,7 +934,7 @@ const Frame = ({
   inner?.addEventListener("click", (event: globalThis.MouseEvent) => {
     updateBlock();
     document.getElementById("menu__main") && closeMenu(event);
-    document.getElementById("modal__menu") && closeModal(event);
+    document.getElementById("modal__menu") && closeModalMenu(event);
     document.getElementById("block-comments") && closeComments(event);
     if (command.open) {
       const blockCommandBlock = document.getElementById("block__commandBlock");
