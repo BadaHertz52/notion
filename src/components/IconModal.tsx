@@ -11,8 +11,7 @@ import { CSSProperties } from "styled-components";
 import { ActionContext } from "../containers/NotionRouter";
 import { Block, IconType, Page, Emoji } from "../modules/notion/type";
 import { EMOJI_ARR, emojiPath } from "../modules/notion/emojiData";
-import { setTemplateItem } from "../fn";
-import { detectRange } from "./BlockFn";
+import { setTemplateItem, detectRange } from "../fn";
 import ScreenOnly from "./ScreenOnly";
 
 export const randomIcon = (): Emoji => {

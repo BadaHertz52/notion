@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { detectRange } from "../components/BlockFn";
+import { detectRange } from ".";
 
 export const closeModal = (
   elementId: string,

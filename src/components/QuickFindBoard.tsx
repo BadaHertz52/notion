@@ -10,9 +10,8 @@ import { findPage } from "../fn";
 //icon
 import { AiOutlineCheck } from "react-icons/ai";
 import { BsChevronDown, BsSearch } from "react-icons/bs";
-import { detectRange } from "./BlockFn";
 import Result, { resultType } from "./Result";
-import { makeResultType } from "../fn/";
+import { makeResultType, detectRange } from "../fn/";
 import ScreenOnly from "./ScreenOnly";
 
 type QuickFindBoardProps = {

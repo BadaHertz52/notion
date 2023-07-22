@@ -8,7 +8,7 @@ import React, {
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { CSSProperties } from "styled-components";
 import { Block, MainCommentType, Page } from "../modules/notion/type";
-import { detectRange } from "./BlockFn";
+import { detectRange } from "../fn";
 import Comments from "./Comments";
 import ScreenOnly from "./ScreenOnly";
 

@@ -20,7 +20,7 @@ import IconModal, { randomIcon } from "./IconModal";
 import CommandBlock from "./CommandBlock";
 import Comments from "./Comments";
 import CommentInput from "./CommentInput";
-import BlockFn, { detectRange } from "./BlockFn";
+import BlockFn from "./BlockFn";
 import Loader from "./Loader";
 import PageIcon from "./PageIcon";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
@@ -28,7 +28,7 @@ import PageMenu from "./PageMenu";
 import { isMobile, setTemplateItem } from "../fn";
 import { fontStyleType, mobileSideMenuType } from "../containers/NotionRouter";
 import BlockStyler from "./BlockStyler";
-import { removeSelected } from "../fn";
+import { removeSelected, detectRange } from "../fn";
 import MoveTargetBlock from "./MoveTargetBlock";
 
 //icon

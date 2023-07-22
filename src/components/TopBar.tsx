@@ -12,7 +12,6 @@ import { SideAppear } from "../modules/side/reducer";
 import PageMenu from "./PageMenu";
 import { CSSProperties } from "styled-components";
 import PageIcon from "./PageIcon";
-import { detectRange } from "./BlockFn";
 import {
   defaultFontFamily,
   fontStyleType,
@@ -28,7 +27,7 @@ import { BsThreeDots } from "react-icons/bs";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { IoArrowRedoOutline } from "react-icons/io5";
 import { GrDocumentUpload } from "react-icons/gr";
-import { isMobile } from "../fn";
+import { isMobile, detectRange } from "../fn";
 import ScreenOnly from "./ScreenOnly";
 type TopBarProps = {
   firstList: ListItem[];

@@ -11,7 +11,7 @@ import React, {
 import { CSSProperties } from "styled-components";
 import { Block, MainCommentType, Page } from "../modules/notion/type";
 
-import { detectRange } from "./BlockFn";
+import { detectRange } from "../fn";
 import { ActionContext } from "../containers/NotionRouter";
 import Comment from "./Comment";
 import CommentToolMore from "./CommentToolMore";

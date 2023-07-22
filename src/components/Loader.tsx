@@ -8,8 +8,8 @@ import React, {
 } from "react";
 import { CSSProperties } from "styled-components";
 import { Block, Page } from "../modules/notion/type";
-import { setTemplateItem } from "../fn";
-import { detectRange } from "./BlockFn";
+import { setTemplateItem, detectRange } from "../fn";
+
 type LoaderProps = {
   block: Block | null;
   page: Page;
