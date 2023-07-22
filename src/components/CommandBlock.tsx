@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useContext,
   useCallback,
+  useRef,
 } from "react";
 import { FcTodoList } from "react-icons/fc";
 import { IoIosList } from "react-icons/io";
@@ -38,11 +39,8 @@ const CommandBlock = ({
 }: CommandBlockProp) => {
   const { editBlock, changeBlockToPage, changePageToBlock, editPage } =
     useContext(ActionContext).actions;
-  const commandBlockInner = document.getElementById("commandBlockInner");
-  const commandBlock_noResult = document.getElementById(
-    "commandBlock-noResult"
-  );
-
+  const noResultRef = useRef<HTMLDivElement>(null);
+  const btnGroupRef = useRef<HTMLDivElement>(null);
   const showResult = useCallback(() => {
     const btnArr = [...document.getElementsByClassName("btn-command")];
     if (command) {
@@ -58,17 +56,17 @@ const CommandBlock = ({
         });
       const onBlocks = document.querySelectorAll(".btn-command.on");
       if (onBlocks[0] === undefined) {
-        commandBlockInner?.setAttribute("style", "display:none");
-        commandBlock_noResult?.setAttribute("style", "display:block");
+        noResultRef.current?.setAttribute("style", "display:block");
+        btnGroupRef.current?.setAttribute("style", "display:none");
       } else {
         onBlocks[0].classList.add("first");
-        commandBlockInner?.setAttribute("style", "display:block");
-        commandBlock_noResult?.setAttribute("style", "display:none");
+        btnGroupRef.current?.setAttribute("style", "display:block");
+        noResultRef.current?.setAttribute("style", "display:none");
       }
     } else {
       btnArr.forEach((btn) => btn.setAttribute("class", "btn-command on"));
     }
-  }, [command, commandBlockInner, commandBlock_noResult]);
+  }, [command, btnGroupRef, noResultRef]);
   /**
    * block의 type 을 numberList 나 bulletList로 바꾸는 함수
    * @param editedBlock
@@ -294,7 +292,7 @@ const CommandBlock = ({
       <div className="inner">
         <div className="command type-basic">
           <header className="command__header">BASIC BLOCKS</header>
-          <div className="command__btn-group type">
+          <div className="command__btn-group type" ref={btnGroupRef}>
             <button
               onClick={() => changeType("text")}
               className="btn-command on"
@@ -476,7 +474,7 @@ const CommandBlock = ({
           </div>
         </div>
       </div>
-      <div className="no-result" id="commandBlock-noResult">
+      <div className="no-result" id="commandBlock-noResult" ref={noResultRef}>
         No results
       </div>
     </div>
