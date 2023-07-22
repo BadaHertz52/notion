@@ -536,6 +536,8 @@ type UserAction =
 
 <img ait="comment" width="50%" src="./image/readMeFile/m_comment.gif" />
 
+<br/>
+
 - blockStyler - web browser
 
 <img 
@@ -547,25 +549,22 @@ type UserAction =
 - blockStyler - mobile browser
 
 <img alt="blockStyler_mobile" width="40%" src="./image/readMeFile/m_b%20.gif"/>
-  
-* 다른 페이지로 블럭 이동
 
-    alt="move block to other page"
-    width="50%"
+<br/>
 
-# <img
+- 다른 페이지로 블록 이동
+
+<img ait="changePosition"
+width="50%"
+src="https://user-images.githubusercontent.com/69838872/209688434-5db37fcc-7987-460b-80a7-43db53d410c3.gif">
 
 - 블록 위치 변경
 
-  <img
-
-  > > > > > > > develop
-
-      ait="changePosition"
-      width="50%"
-      src="https://user-images.githubusercontent.com/69838872/209688434-5db37fcc-7987-460b-80a7-43db53d410c3.gif"
-
-  />
+<img
+  ait="changePosition"
+  width="50%"
+  src="https://user-images.githubusercontent.com/69838872/209688434-5db37fcc-7987-460b-80a7-43db53d410c3.gif"/>
+<br/>
 
 - 블록 위치 변경 - mobile browser
 
