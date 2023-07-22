@@ -7,15 +7,14 @@ import {
   bg_grey,
   bg_yellow,
   bg_pink,
-  Block,
   blue,
   defaultColor,
   green,
   grey,
   orange,
-  Page,
   red,
-} from "../modules/notion";
+} from "../modules/notion/colorData";
+import { Block, Page } from "../modules/notion/type";
 import { ActionContext, selectionType } from "../containers/NotionRouter";
 import ColorInform from "./ColorInform";
 

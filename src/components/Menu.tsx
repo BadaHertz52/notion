@@ -8,7 +8,7 @@ import React, {
   useContext,
   useCallback,
 } from "react";
-import { Block, listItem, Page } from "../modules/notion";
+import { Block, ListItem, Page } from "../modules/notion/type";
 import CommandBlock from "./CommandBlock";
 import { CSSProperties } from "styled-components";
 import ColorMenu from "./ColorMenu";
@@ -39,7 +39,7 @@ import ScreenOnly from "./ScreenOnly";
 
 export type MenuAndBlockStylerCommonProps = {
   pages: Page[];
-  firstList: listItem[];
+  firstList: ListItem[];
   page: Page;
   block: Block;
   userName: string;

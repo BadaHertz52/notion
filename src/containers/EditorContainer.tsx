@@ -11,8 +11,8 @@ import Frame from "../components/Frame";
 import MobileSideMenu from "../components/MobileSideMenu";
 import TopBar from "../components/TopBar";
 import { RootState } from "../modules";
-import { Block, Page, listItem } from "../modules/notion";
-import { SideAppear } from "../modules/side";
+import { Block, Page, ListItem } from "../modules/notion/type";
+import { SideAppear } from "../modules/side/reducer";
 import {
   ActionContext,
   fontStyleType,
@@ -36,7 +36,7 @@ type EditorContainerProps = {
   pages: Page[];
   pagesId: string[];
   userName: string;
-  firstList: listItem[];
+  firstList: ListItem[];
   recentPagesId: string[] | null;
   sideAppear: SideAppear;
   page: Page;

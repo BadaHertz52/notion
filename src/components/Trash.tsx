@@ -9,8 +9,9 @@ import { IoTrashOutline } from "react-icons/io5";
 import { RiArrowGoBackLine } from "react-icons/ri";
 import { CSSProperties } from "styled-components";
 import { ActionContext } from "../containers/NotionRouter";
-import { Page } from "../modules/notion";
-import Result, { makeResultType, resultType } from "./Result";
+import { Page } from "../modules/notion/type";
+import Result, { resultType } from "./Result";
+import { makeResultType } from "../fn";
 import ScreenOnly from "./ScreenOnly";
 type ResultItemProps = {
   item: resultType;

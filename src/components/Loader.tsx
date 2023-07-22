@@ -7,7 +7,7 @@ import React, {
   useCallback,
 } from "react";
 import { CSSProperties } from "styled-components";
-import { Block, Page } from "../modules/notion";
+import { Block, Page } from "../modules/notion/type";
 import { setTemplateItem } from "../fn";
 import { detectRange } from "./BlockFn";
 type LoaderProps = {

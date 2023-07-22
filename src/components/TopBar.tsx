@@ -7,8 +7,8 @@ import React, {
 } from "react";
 
 import { ActionContext, pathType } from "../containers/NotionRouter";
-import { listItem, Page } from "../modules/notion";
-import { SideAppear } from "../modules/side";
+import { ListItem, Page } from "../modules/notion/type";
+import { SideAppear } from "../modules/side/reducer";
 import PageMenu from "./PageMenu";
 import { CSSProperties } from "styled-components";
 import PageIcon from "./PageIcon";
@@ -31,7 +31,7 @@ import { GrDocumentUpload } from "react-icons/gr";
 import { isMobile } from "../fn";
 import ScreenOnly from "./ScreenOnly";
 type TopBarProps = {
-  firstList: listItem[];
+  firstList: ListItem[];
   favorites: string[] | null;
   sideAppear: SideAppear;
   page: Page;

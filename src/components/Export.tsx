@@ -8,7 +8,8 @@ import React, {
   useState,
 } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
-import { findPage, Page } from "../modules/notion";
+import { Page } from "../modules/notion/type";
+import { findPage } from "../fn";
 import Frame, { FrameProps } from "./Frame";
 import ReactDOMServer from "react-dom/server";
 import ScreenOnly from "./ScreenOnly";

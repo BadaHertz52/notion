@@ -4,9 +4,8 @@ import {
   MainCommentType,
   Page,
   SubCommentType,
-} from "../modules/notion";
+} from "../modules/notion/type";
 import { CSSProperties } from "styled-components";
-import { setTemplateItem } from "../fn";
 import ScreenOnly from "./ScreenOnly";
 import { BsThreeDots } from "react-icons/bs";
 import ResolveBtn from "./ResolveBtn";

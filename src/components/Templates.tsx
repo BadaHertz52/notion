@@ -15,18 +15,19 @@ import { BsTrash } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { ActionContext } from "../containers/NotionRouter";
-import { RootState } from "../modules";
+
 import {
   add_template,
   cancel_edit_template,
   delete_template,
-  findPage,
-  Page,
   pageSample,
-} from "../modules/notion";
-import { UserState } from "../modules/user";
+} from "../modules/notion/reducer";
+import { Page } from "../modules/notion/type";
+import { findPage } from "../fn";
+import { UserState } from "../modules/user/reducer";
 import Frame, { Template_Frame_SAME_Props } from "./Frame";
 import PageIcon from "./PageIcon";
+import { RootState } from "../modules";
 
 type TemplatesProps = Template_Frame_SAME_Props & {
   user: UserState;

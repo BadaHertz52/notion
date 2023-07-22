@@ -10,7 +10,8 @@ import React, {
   useMemo,
   useCallback,
 } from "react";
-import { Block, findBlock, Page } from "../modules/notion";
+import { Block, Page } from "../modules/notion/type";
+import { findBlock } from "../fn";
 import { Command } from "./Frame";
 import { ActionContext, selectionType } from "../containers/NotionRouter";
 import BlockComponent from "./BlockComponent";

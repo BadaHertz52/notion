@@ -1,5 +1,10 @@
-import React, { Dispatch, SetStateAction } from "react";
-import { Block, CommentType, MainCommentType, Page } from "../modules/notion";
+import React, { Dispatch, SetStateAction, useCallback } from "react";
+import {
+  Block,
+  CommentType,
+  MainCommentType,
+  Page,
+} from "../modules/notion/type";
 import { setTemplateItem } from "../fn";
 
 type ResolveBtnProps = {
@@ -23,7 +28,7 @@ const ResolveBtn = ({
   editPage,
   setAllComments,
 }: ResolveBtnProps) => {
-  const changeCommentType = () => {
+  const changeCommentType = useCallback(() => {
     const newType: CommentType = comment.type === "open" ? "resolve" : "open";
     if (page) {
       setTemplateItem(templateHtml, page);
@@ -68,7 +73,16 @@ const ResolveBtn = ({
         editPage && editPage(pageId, editedPage);
       }
     }
-  };
+  }, [
+    block,
+    comment,
+    editBlock,
+    editPage,
+    page,
+    pageId,
+    setAllComments,
+    templateHtml,
+  ]);
 
   return (
     <button className="comment__tool-resolve" onClick={changeCommentType}>

@@ -4,7 +4,7 @@ import {
   makeRoutePath,
   pathType,
 } from "../containers/NotionRouter";
-import { Page } from "../modules/notion";
+import { Page } from "../modules/notion/type";
 import ScreenOnly from "./ScreenOnly";
 import PageIcon from "./PageIcon";
 import { CSSProperties } from "styled-components";

@@ -10,10 +10,9 @@ import {
   MainCommentType,
   Page,
   SubCommentType,
-  findBlock,
-} from "../modules/notion";
+} from "../modules/notion/type";
 import { CSSProperties } from "styled-components";
-import { setTemplateItem } from "../fn";
+import { setTemplateItem, findBlock } from "../fn";
 import { HiOutlinePencil } from "react-icons/hi";
 import { IoTrashOutline } from "react-icons/io5";
 

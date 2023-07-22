@@ -11,17 +11,9 @@ import React, {
   useContext,
   useCallback,
 } from "react";
-import {
-  Block,
-  MainCommentType,
-  blockSample,
-  findBlock,
-  findParentBlock,
-  listItem,
-  Page,
-  makeNewBlock,
-  findPage,
-} from "../modules/notion";
+import { Block, MainCommentType, Page, ListItem } from "../modules/notion/type";
+import { blockSample } from "../modules/notion/reducer";
+import { makeNewBlock, findPage, findBlock, findParentBlock } from "../fn";
 import { ActionContext, selectionType } from "../containers/NotionRouter";
 import EditableBlock from "./EditableBlock";
 import IconModal, { randomIcon } from "./IconModal";
@@ -56,7 +48,7 @@ export type Template_Frame_SAME_Props = {
   userName: string;
   pages: Page[];
   pagesId: string[];
-  firstList: listItem[];
+  firstList: ListItem[];
   recentPagesId: string[] | null;
   setTargetPageId: Dispatch<React.SetStateAction<string>>;
   setRoutePage: Dispatch<React.SetStateAction<Page | null>>;

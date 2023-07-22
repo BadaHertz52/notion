@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import { CSSProperties } from "styled-components";
-import { Block, Page } from "../modules/notion";
+import { Block, Page } from "../modules/notion/type";
 import { setTemplateItem } from "../fn";
 import ScreenOnly from "./ScreenOnly";
 

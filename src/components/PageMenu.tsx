@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { ActionContext } from "../containers/NotionRouter";
-import { Block, listItem, Page } from "../modules/notion";
+import { Block, ListItem, Page } from "../modules/notion/type";
 import { setTemplateItem } from "../fn";
 import ScreenOnly from "./ScreenOnly";
 import PageButton from "./PageButton";
@@ -17,7 +17,7 @@ type PageMenuProps = {
   what: "page" | "block";
   currentPage: Page;
   pages: Page[];
-  firstList: listItem[];
+  firstList: ListItem[];
   closeMenu?: () => void;
   setTargetPageId: Dispatch<SetStateAction<string>>;
 };
@@ -33,7 +33,7 @@ const PageMenu = ({
   const { changeBlockToPage } = useContext(ActionContext).actions;
 
   const [search, setSearch] = useState<boolean>(false);
-  const [result, setResult] = useState<listItem[] | null>(null);
+  const [result, setResult] = useState<ListItem[] | null>(null);
   const [block, setBlock] = useState<Block | null>(null);
   const sessionItem = sessionStorage.getItem("blockFnTargetBlock") as string;
 
@@ -86,7 +86,7 @@ const PageMenu = ({
         {search ? (
           result ? (
             <div className="page-group">
-              {result.map((item: listItem) => (
+              {result.map((item: ListItem) => (
                 <PageButton
                   key={`list_${item.id}`}
                   pages={pages}
@@ -106,7 +106,7 @@ const PageMenu = ({
           <>
             <div className="page-group">
               <header className="page-group__header">Suggested</header>
-              {firstList.map((item: listItem) => (
+              {firstList.map((item: ListItem) => (
                 <PageButton
                   key={`list_${item.id}`}
                   pages={pages}

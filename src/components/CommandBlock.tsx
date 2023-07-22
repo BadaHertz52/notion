@@ -12,13 +12,8 @@ import { RiPlayList2Fill } from "react-icons/ri";
 import { VscListOrdered } from "react-icons/vsc";
 import { Command } from "./Frame";
 import { ActionContext, selectionType } from "../containers/NotionRouter";
-import {
-  Block,
-  BlockType,
-  findParentBlock,
-  makeNewBlock,
-  Page,
-} from "../modules/notion";
+import { Block, BlockType, Page } from "../modules/notion/type";
+import { makeNewBlock, findParentBlock } from "../fn";
 import imgIcon from "../assets/img/vincent-van-gogh-ge1323790d_640.jpg";
 import { setTemplateItem } from "../fn";
 import { CSSProperties } from "styled-components";

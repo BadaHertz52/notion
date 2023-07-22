@@ -7,13 +7,8 @@ import React, {
   useCallback,
 } from "react";
 import Menu from "./Menu";
-import {
-  Block,
-  findPage,
-  listItem,
-  makeNewBlock,
-  Page,
-} from "../modules/notion";
+import { Block, ListItem, Page } from "../modules/notion/type";
+import { findPage, makeNewBlock } from "../fn";
 import { CSSProperties } from "styled-components";
 import Rename from "./Rename";
 
@@ -27,7 +22,7 @@ import ScreenOnly from "./ScreenOnly";
 type BlockFnProp = {
   pages: Page[];
   pagesId: string[];
-  firstList: listItem[];
+  firstList: ListItem[];
   page: Page;
   userName: string;
   commentBlock: Block | null;

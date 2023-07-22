@@ -4,7 +4,7 @@ import {
   MainCommentType,
   Page,
   SubCommentType,
-} from "../modules/notion";
+} from "../modules/notion/type";
 import { CSSProperties } from "styled-components";
 import { ModalType } from "../containers/EditorContainer";
 import CommentTool from "./CommentTool";

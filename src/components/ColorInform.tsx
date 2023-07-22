@@ -1,5 +1,5 @@
-import React, { Dispatch, SetStateAction, useCallback} from "react";
-import { BgColorType, Block, ColorType, Page } from "../modules/notion";
+import React, { Dispatch, SetStateAction, useCallback } from "react";
+import { BgColorType, Block, ColorType, Page } from "../modules/notion/type";
 import { selectionType } from "../containers/NotionRouter";
 import styled from "styled-components";
 import { setTemplateItem } from "../fn";

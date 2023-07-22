@@ -1,25 +1,27 @@
-import { Emoji, EMOJI_ARR } from "../components/IconModal";
-export const emojiPath =
-  "https://raw.githubusercontent.com/BadaHertz52/notion/master/image/emoji/";
+import { EMOJI_ARR } from "./emojiData";
+import { Notion, TrashPage, Page, Block, BlockStyle, BlockType } from "./type";
+import {
+  findBlock,
+  findParentBlock,
+  getBlockText,
+  findPreviousBlockInDoc,
+  findPage,
+} from "../../fn";
+import {
+  bg_blue,
+  bg_default,
+  bg_green,
+  bg_grey,
+  bg_pink,
+  bg_yellow,
+  blue,
+  defaultColor,
+} from "./colorData";
+
 const catImg =
   "https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assets/img/michael-sum-LEpfefQf4rU-unsplash.jpg";
 const imgBlockImg =
   "https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assets/img/roses-gfcb7dbdd4_640.jpg";
-
-export type BlockType =
-  | "text"
-  | "toggle"
-  | "todo"
-  | "todo_done"
-  | "image"
-  | "h1"
-  | "h2"
-  | "h3"
-  | "page"
-  | "numberList"
-  | "bulletList"
-  | "numberListArr"
-  | "bulletListArr";
 
 export const blockTypes: BlockType[] = [
   "text",
@@ -34,40 +36,7 @@ export const blockTypes: BlockType[] = [
   "numberList",
   "bulletList",
 ];
-export const defaultColor: string = "initial" as const;
-export const grey: string = "#bdbdbd" as const;
-export const orange: string = "#ffa726" as const;
-export const green: string = "#00701a" as const;
-export const blue: string = "#1565c0" as const;
-export const red: string = "#d32f2f" as const;
-export const bg_default: string = "initial" as const;
-export const bg_grey: string = "#e0e0e0" as const;
-export const bg_yellow: string = "#fff9c4" as const;
-export const bg_green: string = "#ebffd7" as const;
-export const bg_blue: string = "#e3f2fd" as const;
-export const bg_pink: string = "#fce4ec" as const;
 
-export type ColorType =
-  | typeof defaultColor
-  | typeof grey
-  | typeof orange
-  | typeof green
-  | typeof blue
-  | typeof red;
-export type BgColorType =
-  | typeof bg_default
-  | typeof bg_grey
-  | typeof bg_yellow
-  | typeof bg_green
-  | typeof bg_blue
-  | typeof bg_pink;
-
-export type BlockStyle = {
-  color: ColorType;
-  bgColor: BgColorType;
-  width: undefined | string;
-  height: undefined | string;
-};
 export const basicBlockStyle: BlockStyle = {
   color: defaultColor,
   bgColor: bg_default,
@@ -76,40 +45,6 @@ export const basicBlockStyle: BlockStyle = {
 };
 const userName = "user";
 const editTime = JSON.stringify(Date.now());
-
-const img = "img";
-const emoji = "emoji";
-export type IconType = typeof img | typeof emoji | null;
-
-export type SubCommentType = {
-  id: string;
-  userName: string;
-  content: string;
-  editTime: string;
-  createTime: string;
-};
-export type CommentType = "open" | "resolve";
-export type MainCommentType = SubCommentType & {
-  type: CommentType;
-  selectedText: null | string;
-  subComments: SubCommentType[] | null;
-  subCommentsId: string[] | null;
-};
-export type Block = {
-  /** 새로 만들어진 block.id 는 `${page.id}_${page.blocks.length}_${editTime}` 형식 */
-  id: string;
-  contents: string;
-  firstBlock: boolean;
-  subBlocksId: string[] | null;
-  parentBlocksId: string[] | null;
-  type: BlockType;
-  iconType: IconType;
-  icon: string | Emoji | null;
-  editTime: string;
-  createTime: string;
-  style: BlockStyle;
-  comments: MainCommentType[] | null;
-};
 
 export const blockSample: Block = {
   id: `blockSample_${editTime}`,
@@ -125,76 +60,7 @@ export const blockSample: Block = {
   style: basicBlockStyle,
   comments: null,
 };
-/**
- * 새로운 블록을 생성해 반환하는 함수
- * @param page  새로운 블록이 입력될 page
- * @param targetBlock  새로운 블록의 기준이 될 블록 (새로운 블록은 targetBlock의 firstBlock, subBlocksId, parentBlocksId의 값을 가짐 )
- * @param newBlockContents 새로운 블록의 contents 값
- * @returns 새로운 블록
- */
-export function makeNewBlock(
-  page: Page,
-  targetBlock: Block | null,
-  newBlockContents: string
-): Block {
-  const editTime = JSON.stringify(Date.now());
-  const blockNumber = page.blocks === null ? 0 : page.blocks.length;
-  const newBlock: Block = {
-    id: `${page.id}_${blockNumber}_${editTime}`,
-    editTime: editTime,
-    createTime: editTime,
-    type: targetBlock ? targetBlock.type : "text",
-    contents: newBlockContents === "<br>" ? "" : newBlockContents,
 
-    firstBlock: targetBlock ? targetBlock.firstBlock : true,
-    subBlocksId: targetBlock ? targetBlock.subBlocksId : null,
-    parentBlocksId: targetBlock ? targetBlock.parentBlocksId : null,
-    iconType: null,
-    icon: null,
-    style: basicBlockStyle,
-    comments: null,
-  };
-  return newBlock;
-}
-/**
- * path,page list 등 page의 block date를 제외한 page에 대한 간략한 정보를 담은 type
- */
-export type listItem = {
-  id: string;
-  title: string;
-  iconType: IconType;
-  icon: string | Emoji | null;
-  subPagesId: string[] | null;
-  parentsId: string[] | null;
-  editTime: string;
-  createTime: string;
-};
-
-type pageType = "page" | "template";
-export type Page = {
-  id: string;
-  type: pageType;
-  header: {
-    title: string;
-    iconType: IconType;
-    icon: string | Emoji | null;
-    cover: string | null;
-    comments: MainCommentType[] | null;
-  };
-  firstBlocksId: string[] | null;
-  blocks: Block[] | null;
-  blocksId: string[] | null;
-  subPagesId: string[] | null;
-  parentsId: string[] | null;
-  editTime: string;
-  createTime: string;
-};
-/**
- * 삭제된 page가 보여있는 trash에서의 page type
- */
-type TrashPage = Page & {
-  subPages: Page[] | null;
-};
 export const pageSample: Page = {
   id: editTime,
   type: "page",
@@ -213,18 +79,8 @@ export const pageSample: Page = {
   editTime: editTime,
   createTime: editTime,
 };
-export type Notion = {
-  pagesId: string[] | null;
-  firstPagesId: string[] | null;
-  templatesId: string[] | null;
-  pages: Page[] | null;
-  trash: {
-    pagesId: string[] | null;
-    pages: TrashPage[] | null;
-  };
-};
 
-//action
+//  < --- action---------------
 const ADD_BLOCK = "notion/ADD_BLOCK" as const;
 const EDIT_BLOCK = "notion/EDIT_BLOCK" as const;
 const CHANGE_BLOCK_TO_PAGE = "notion/CHANGE_BLOCK_TO_PAGE" as const;
@@ -409,6 +265,7 @@ export const delete_template = (templateId: string) => ({
   pageId: templateId,
   block: null,
 });
+// --- action----------->
 type NotionAction =
   | ReturnType<typeof add_block>
   | ReturnType<typeof edit_block>
@@ -1122,154 +979,7 @@ const initialState: Notion = {
     pages: null,
   },
 };
-/**
- *  block content에 있는 스타일 코드와 링크를 제외하고 글자 그대로를 반환하는 함수
- * @param block
- * @returns
- */
-export const getBlockText = (block: Block) => {
-  const contentEditableHtml = document.getElementById(
-    `${block.id}__contents`
-  )?.firstElementChild;
-  let text = "";
-  if (contentEditableHtml) {
-    const children = [...contentEditableHtml.childNodes];
-    let contentsArr: string[] = [];
-    children.forEach((c: Node) => {
-      if (c.nodeType === 3) {
-        c.nodeValue && contentsArr.push(c.nodeValue);
-      }
-      if (c.nodeType === 1) {
-        const element = c as HTMLElement;
-        contentsArr.push(element.innerText);
-      }
-    });
-    text = contentsArr.join("");
-  }
-  return text;
-};
-/**
- * block.id로 block을 찾을 수 있는 함수
- * @param page 찾을 block이 존재하는 페이지
- * @param blockId 찾을 block의 아이디
- * @returns index: block의 page.blocks에서의 index, BLOCK: 찾는 block
- */
-export function findBlock(
-  page: Page,
-  blockId: string
-): { index: number; BLOCK: Block } {
-  let index = 0;
-  let block = blockSample;
-  if (page.blocks && page.blocksId) {
-    index = page.blocksId.indexOf(blockId);
-    block = page.blocks[index];
-  } else {
-    console.error(
-      `page(id:${page.id}, title:${page.header.title}) doesn't have blocks`
-    );
-  }
 
-  return {
-    index: index,
-    BLOCK: block,
-  };
-}
-/**
- * subBlock 의 바로 윗대의 parentBlock를 찾는 함수
- * @param page subBlock이 존재하는 page
- * @param subBlock  parentBlock을 찾는데 기준이 되는 subBlock
- * @returns parentBlockIndex: parentBlock의 page.blocks에서의 index, parentBloc: 찾고자 한 parentBlock
- */
-export function findParentBlock(
-  page: Page,
-  subBlock: Block
-): { parentBlockIndex: number; parentBlock: Block } {
-  const parentBlocksId = subBlock.parentBlocksId as string[];
-  const last: number = parentBlocksId.length - 1;
-  const parentBlockId = parentBlocksId[last];
-  const { index, BLOCK } = findBlock(page, parentBlockId);
-  return {
-    parentBlockIndex: index,
-    parentBlock: BLOCK,
-  };
-}
-export const findPage = (
-  pagesId: string[],
-  pages: Page[],
-  pageId: string
-): Page | TrashPage => {
-  const index: number = pagesId.indexOf(pageId);
-  const PAGE: Page | TrashPage = pages[index];
-  return PAGE;
-};
-
-/**
- * 페이지 상의 block(=@param block)의 앞에 있는 block(=previousBlockInDoc)를 찾는 함수
- * @param page 현재 페이지
- * @param block  previousBlock의 기준이 되는 block
- * @returns  block의 앞에 있는 previousBlock과 previousBlockIndex(=page.blocksId.indexOf(previousBlock.id))
- */
-export const findPreviousBlockInDoc = (
-  page: Page,
-  block: Block
-): { previousBlockInDoc: Block; previousBlockInDocIndex: number } => {
-  let previousBlockInDoc = blockSample;
-  let previousBlockIndex = 0;
-  const findLastSubBLOCK = (targetBlock: Block) => {
-    if (targetBlock.subBlocksId) {
-      const lastSubBlockId =
-        targetBlock.subBlocksId[targetBlock.subBlocksId.length - 1];
-      const { BLOCK, index } = findBlock(page, lastSubBlockId);
-      if (BLOCK.subBlocksId === null) {
-        previousBlockInDoc = BLOCK;
-        previousBlockIndex = index;
-      } else {
-        findLastSubBLOCK(BLOCK);
-      }
-    }
-  };
-  if (page.firstBlocksId) {
-    if (block.firstBlock) {
-      const blockIndexAsFirstBlock = page.firstBlocksId.indexOf(block.id);
-      const previousFirstBlockId =
-        page.firstBlocksId[blockIndexAsFirstBlock - 1];
-      const { BLOCK, index } = findBlock(page, previousFirstBlockId);
-      const previousFirstBlock = BLOCK;
-      const previousFirstBlockIndex = index;
-      if (previousFirstBlock.subBlocksId === null) {
-        previousBlockInDoc = previousFirstBlock;
-        previousBlockIndex = previousFirstBlockIndex;
-      } else {
-        findLastSubBLOCK(previousFirstBlock);
-      }
-    }
-    if (!block.firstBlock) {
-      const { parentBlock, parentBlockIndex } = findParentBlock(page, block);
-      if (parentBlock.subBlocksId) {
-        const blockIndexAsSubBlock = parentBlock.subBlocksId.indexOf(block.id);
-        if (blockIndexAsSubBlock === 0) {
-          previousBlockInDoc = parentBlock;
-          previousBlockIndex = parentBlockIndex;
-        } else {
-          const previousSubBlockId =
-            parentBlock.subBlocksId[blockIndexAsSubBlock - 1];
-          const { BLOCK, index } = findBlock(page, previousSubBlockId);
-          const previousSubBlock = BLOCK;
-          if (previousSubBlock.subBlocksId === null) {
-            previousBlockInDoc = previousSubBlock;
-            previousBlockIndex = index;
-          } else {
-            findLastSubBLOCK(previousSubBlock);
-          }
-        }
-      }
-    }
-  }
-  return {
-    previousBlockInDoc: previousBlockInDoc,
-    previousBlockInDocIndex: previousBlockIndex,
-  };
-};
 export default function notion(
   state: Notion = initialState,
   action: NotionAction

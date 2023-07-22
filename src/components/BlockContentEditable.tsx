@@ -9,16 +9,14 @@ import React, {
   useRef,
   ChangeEvent,
 } from "react";
+import { blockTypes } from "../modules/notion/reducer";
+import { Block, BlockType, Page } from "../modules/notion/type";
 import {
-  Block,
-  BlockType,
-  Page,
-  blockTypes,
   findPage,
   findParentBlock,
   findPreviousBlockInDoc,
   makeNewBlock,
-} from "../modules/notion";
+} from "../fn";
 import { Command } from "./Frame";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 import ScreenOnly from "./ScreenOnly";

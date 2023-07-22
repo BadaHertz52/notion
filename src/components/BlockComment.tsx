@@ -1,6 +1,6 @@
 import React from "react";
 import { IoChatboxOutline } from "react-icons/io5";
-import { Block } from "../modules/notion";
+import { Block } from "../modules/notion/type";
 import ScreenOnly from "./ScreenOnly";
 
 type BlockCommentProps = {

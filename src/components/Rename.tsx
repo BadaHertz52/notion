@@ -4,10 +4,11 @@ import React, {
   SetStateAction,
   useState,
   useContext,
+  useCallback,
 } from "react";
 import { CSSProperties } from "styled-components";
 import { ActionContext } from "../containers/NotionRouter";
-import { Block, Page } from "../modules/notion";
+import { Block, Page } from "../modules/notion/type";
 import { setTemplateItem } from "../fn";
 import IconModal from "./IconModal";
 import PageIcon from "./PageIcon";
@@ -39,31 +40,34 @@ const Rename = ({
   const onClickRenameIcon = () => {
     setOpenIconModal(true);
   };
-  const changeTitle = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    const editTime = JSON.stringify(Date.now());
-    if (value !== page.header.title) {
-      const templateHtml = document.getElementById("template");
-      setTemplateItem(templateHtml, page);
-      const renamedPage: Page = {
-        ...page,
-        header: {
-          ...page.header,
-          title: value,
-        },
-        editTime: editTime,
-      };
-      editPage(renamedPage.id, renamedPage);
-      if (block && currentPageId) {
-        const editedBlock: Block = {
-          ...block,
-          contents: value,
+  const changeTitle = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.value;
+      const editTime = JSON.stringify(Date.now());
+      if (value !== page.header.title) {
+        const templateHtml = document.getElementById("template");
+        setTemplateItem(templateHtml, page);
+        const renamedPage: Page = {
+          ...page,
+          header: {
+            ...page.header,
+            title: value,
+          },
           editTime: editTime,
         };
-        editBlock(currentPageId, editedBlock);
+        editPage(renamedPage.id, renamedPage);
+        if (block && currentPageId) {
+          const editedBlock: Block = {
+            ...block,
+            contents: value,
+            editTime: editTime,
+          };
+          editBlock(currentPageId, editedBlock);
+        }
       }
-    }
-  };
+    },
+    [block, currentPageId, editBlock, editPage, page]
+  );
   return (
     <div id="rename" style={renameStyle}>
       <div className="inner">

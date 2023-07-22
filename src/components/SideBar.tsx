@@ -8,24 +8,18 @@ import React, {
   TouchEvent,
   useContext,
 } from "react";
-import {
-  Block,
-  blockSample,
-  findPage,
-  listItem,
-  Notion,
-  Page,
-  pageSample,
-} from "../modules/notion";
+import { blockSample, pageSample } from "../modules/notion/reducer";
+import { Block, ListItem, Notion, Page } from "../modules/notion/type";
+import { findPage } from "../fn";
 import { detectRange } from "./BlockFn";
-import { UserState } from "../modules/user";
+import { UserState } from "../modules/user/reducer";
 import Trash from "./Trash";
 import Rename from "./Rename";
 import Time from "./Time";
 import PageMenu from "./PageMenu";
 import PageIcon from "./PageIcon";
 import { SideBarContainerProp } from "../containers/SideBarContainer";
-import { SideAppear } from "../modules/side";
+import { SideAppear } from "../modules/side/reducer";
 
 //react-icon
 import { FiCode, FiChevronsLeft } from "react-icons/fi";
@@ -69,18 +63,18 @@ type SideBarProps = SideBarContainerProp & {
 };
 
 type ItemTemplateProp = {
-  item: listItem;
+  item: ListItem;
   setTargetPageId: Dispatch<SetStateAction<string>>;
-  onClickMoreBtn: (item: listItem, target: HTMLElement) => void;
-  addNewSubPage: (item: listItem) => void;
+  onClickMoreBtn: (item: ListItem, target: HTMLElement) => void;
+  addNewSubPage: (item: ListItem) => void;
   changeSide: (appear: SideAppear) => void;
 };
 type ListTemplateProp = {
   notion: Notion;
-  targetList: listItem[] | null;
+  targetList: ListItem[] | null;
   setTargetPageId: Dispatch<SetStateAction<string>>;
-  onClickMoreBtn: (item: listItem, target: HTMLElement) => void;
-  addNewSubPage: (item: listItem) => void;
+  onClickMoreBtn: (item: ListItem, target: HTMLElement) => void;
+  addNewSubPage: (item: ListItem) => void;
   changeSide: (appear: SideAppear) => void;
 };
 const ItemTemplate = ({
@@ -213,7 +207,7 @@ const ListTemplate = ({
     id: string,
     pagesId: string[],
     pages: Page[]
-  ): listItem => {
+  ): ListItem => {
     const index = pagesId.indexOf(id);
     const subPage: Page = pages[index];
     return {
@@ -231,15 +225,15 @@ const ListTemplate = ({
     ids: string[],
     pagesId: string[],
     pages: Page[]
-  ): listItem[] => {
-    const listItemArr: listItem[] = ids.map((id: string) =>
+  ): ListItem[] => {
+    const listItemArr: ListItem[] = ids.map((id: string) =>
       findSubPage(id, pagesId, pages)
     );
     return listItemArr;
   };
   return (
     <ul>
-      {targetList?.map((item: listItem) => (
+      {targetList?.map((item: ListItem) => (
         <li id={`item_${item.id}`} key={item.id}>
           <div className="mainPage">
             <ItemTemplate
@@ -312,7 +306,7 @@ const SideBar = ({
     pagesId && pages && firstPagesId
       ? firstPagesId.map((id: string) => findPage(pagesId, pages, id))
       : null;
-  const firstList: listItem[] | null = firstPages
+  const firstList: ListItem[] | null = firstPages
     ? firstPages.map((page: Page) => {
         return {
           id: page.id,
@@ -328,7 +322,7 @@ const SideBar = ({
     : null;
   const trashBtn = useRef<HTMLButtonElement>(null);
   const [target, setTarget] = useState<HTMLElement | null>(null);
-  const [targetItem, setTargetItem] = useState<listItem | null>(null);
+  const [targetItem, setTargetItem] = useState<ListItem | null>(null);
   const [targetPage, setTargetPage] = useState<Page | null>(null);
   const [openTrash, setOpenTrash] = useState<boolean>(false);
   const [openSideMoreMenu, setOpenSideMoreMenu] = useState<boolean>(false);
@@ -349,11 +343,11 @@ const SideBar = ({
     favorites: string[] | null,
     pagesId: string[],
     pages: Page[]
-  ): listItem[] | null => {
-    const list: listItem[] | null = favorites
+  ): ListItem[] | null => {
+    const list: ListItem[] | null = favorites
       ? favorites.map((id: string) => {
           const page = findPage(pagesId, pages, id);
-          const listItem = {
+          const ListItem = {
             id: page.id,
             title: page.header.title,
             iconType: page.header.iconType,
@@ -363,12 +357,12 @@ const SideBar = ({
             editTime: page.editTime,
             createTime: page.createTime,
           };
-          return listItem;
+          return ListItem;
         })
       : null;
     return list;
   };
-  const list: listItem[] | null = firstPages
+  const list: ListItem[] | null = firstPages
     ? firstPages
         .filter((page: Page) => page.parentsId === null)
         .map((page: Page) => ({
@@ -386,7 +380,7 @@ const SideBar = ({
     addPage(pageSample);
   };
 
-  const addNewSubPage = (item: listItem) => {
+  const addNewSubPage = (item: ListItem) => {
     if (pagesId && pages) {
       const targetPage = findPage(pagesId, pages, item.id);
       const newPageBlock: Block = {
@@ -410,7 +404,7 @@ const SideBar = ({
     }
   };
 
-  const onClickMoreBtn = (item: listItem, target: HTMLElement) => {
+  const onClickMoreBtn = (item: ListItem, target: HTMLElement) => {
     setOpenSideMoreMenu(true);
     setTargetItem(item);
     setTarget(target);

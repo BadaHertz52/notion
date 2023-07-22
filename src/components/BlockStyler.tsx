@@ -19,7 +19,7 @@ import {
   selectionType,
 } from "../containers/NotionRouter";
 import Menu, { MenuAndBlockStylerCommonProps } from "./Menu";
-import { Block, Page } from "../modules/notion";
+import { Block, Page } from "../modules/notion/type";
 import LinkLoader from "./LinkLoader";
 import { mobileSideMenuType } from "../containers/NotionRouter";
 import { getContent, isMobile, removeSelected, selectContent } from "../fn";

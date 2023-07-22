@@ -4,14 +4,15 @@ import React, {
   SetStateAction,
   useCallback,
 } from "react";
-import { Block, Page, delete_block, listItem } from "../modules/notion";
+import { delete_block } from "../modules/notion/reducer";
+import { Block, Page, ListItem } from "../modules/notion/type";
 import { setTemplateItem } from "../fn";
 import { ActionContext } from "../containers/NotionRouter";
 import PageIcon from "./PageIcon";
 
 type PageButtonProps = {
   pages: Page[];
-  item: listItem;
+  item: ListItem;
   currentPage: Page;
   closeMenu: (() => void) | undefined;
   what: "page" | "block";

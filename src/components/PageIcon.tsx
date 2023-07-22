@@ -1,6 +1,7 @@
 import React from "react";
 import { CSSProperties } from "styled-components";
-import { emojiPath, IconType } from "../modules/notion";
+import { emojiPath } from "../modules/notion/emojiData";
+import { IconType } from "../modules/notion/type";
 import pageDefaultImg from "../assets/img/icons8-페이지-개요-100.png";
 type PageItemProps = {
   icon: string | null;

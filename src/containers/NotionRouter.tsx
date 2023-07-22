@@ -5,14 +5,12 @@ import { CSSProperties } from "styled-components";
 import AllComments from "../components/AllComments";
 import Export from "../components/Export";
 import Loading from "../components/Loading";
-
 import QuickFindBoard from "../components/QuickFindBoard";
 import Templates from "../components/Templates";
 import { RootState } from "../modules";
 import {
   add_block,
   add_page,
-  Block,
   change_block_to_page,
   change_page_to_block,
   change_to_sub,
@@ -22,23 +20,21 @@ import {
   duplicate_page,
   edit_block,
   edit_page,
-  emojiPath,
-  findPage,
-  IconType,
-  listItem,
   move_page_to_page,
-  Page,
   pageSample,
   raise_block,
   restore_page,
-} from "../modules/notion";
-import { change_side, SideAppear } from "../modules/side";
+} from "../modules/notion/reducer";
+import { Block, Page, IconType, ListItem } from "../modules/notion/type";
+import { emojiPath } from "../modules/notion/emojiData";
+import { findPage } from "../fn";
+import { change_side, SideAppear } from "../modules/side/reducer";
 import {
   add_favorites,
   add_recent_page,
   clean_recent_page,
   remove_favorites,
-} from "../modules/user";
+} from "../modules/user/reducer";
 import EditorContainer, { ModalType } from "./EditorContainer";
 import SideBarContainer from "./SideBarContainer";
 const MOBILE_SIDE_MENU = {
@@ -169,7 +165,7 @@ const NotionRouter = () => {
   const pagesId = notion.pagesId;
   const pages = notion.pages;
   const firstPagesId = notion.firstPagesId;
-  const [firstList, setFirstList] = useState<listItem[] | null>(null);
+  const [firstList, setFirstList] = useState<ListItem[] | null>(null);
   const [firstPage, setFirstPage] = useState<Page | null>(null);
   const trashPagesId = notion.trash.pagesId;
   const trashPages = notion.trash.pages;

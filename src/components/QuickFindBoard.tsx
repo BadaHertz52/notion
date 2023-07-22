@@ -1,11 +1,18 @@
-import React, { Dispatch, SetStateAction, useRef, useState } from "react";
-import { findPage, Page } from "../modules/notion";
-
+import React, {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useRef,
+  useState,
+} from "react";
+import { Page } from "../modules/notion/type";
+import { findPage } from "../fn";
 //icon
 import { AiOutlineCheck } from "react-icons/ai";
 import { BsChevronDown, BsSearch } from "react-icons/bs";
 import { detectRange } from "./BlockFn";
-import Result, { makeResultType, resultType } from "./Result";
+import Result, { resultType } from "./Result";
+import { makeResultType } from "../fn/";
 import ScreenOnly from "./ScreenOnly";
 
 type QuickFindBoardProps = {
@@ -44,29 +51,31 @@ const QuickFindBoard = ({
     return makeResultType(page, pagesId, pages, null, null);
   });
 
-  const onChangeQuickFindInput = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const value = event.target.value.toLowerCase();
-    if (value === "") {
-      setResult(null);
-    } else {
-      const resultPage = pages.filter((page: Page) =>
-        page.header.title.toLowerCase().includes(value)
-      );
-
-      if (resultPage[0] === undefined) {
-        setResult("noResult");
+  const onChangeQuickFindInput = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.value.toLowerCase();
+      if (value === "") {
+        setResult(null);
       } else {
-        const listItems: resultType[] = resultPage.map((page: Page) =>
-          makeResultType(page, pagesId, pages, null, null)
+        const resultPage = pages.filter((page: Page) =>
+          page.header.title.toLowerCase().includes(value)
         );
-        setResult(listItems);
-        setBestMatchesResult(listItems);
+
+        if (resultPage[0] === undefined) {
+          setResult("noResult");
+        } else {
+          const listItems: resultType[] = resultPage.map((page: Page) =>
+            makeResultType(page, pagesId, pages, null, null)
+          );
+          setResult(listItems);
+          setBestMatchesResult(listItems);
+        }
       }
-    }
-  };
-  const openSortOptions = () => {
+    },
+    [pages, pagesId]
+  );
+
+  const openSortOptions = useCallback(() => {
     if (sortOptions.current) {
       sortOptions.current.classList.toggle("on");
       const qf_results = document.getElementsByClassName("qf__results")[0];
@@ -74,113 +83,116 @@ const QuickFindBoard = ({
         ? qf_results.setAttribute("style", "min-height:170px")
         : qf_results.setAttribute("style", "min-height:min-content");
     }
-  };
-  const onClickOption = (event: React.MouseEvent) => {
-    event.preventDefault();
-    const selected = document
-      .getElementById("quickFindBoard")
-      ?.getElementsByClassName("selected")[0];
-    if (selected) {
-      selected?.classList.remove("selected");
-    }
-    const target = event.target as HTMLElement;
-    let option: string = "";
-    switch (target.tagName.toLowerCase()) {
-      case "button":
-        option = target.firstChild?.textContent as string;
-        target.classList.add("selected");
-        break;
-      case "div":
-        target.parentElement?.classList.add("selected");
-        if (target.className === "optionName") {
-          option = target.textContent as string;
-        } else {
-          option = target.previousElementSibling?.textContent as string;
-        }
-        break;
-      case "svg":
-        option = target.parentElement?.previousElementSibling
-          ?.textContent as string;
-        target.parentElement?.parentElement?.classList.add("selected");
-        break;
-      case "path":
-        option = target.parentElement?.parentElement?.previousElementSibling
-          ?.textContent as string;
-        target.parentElement?.parentElement?.parentElement?.classList.add(
-          "selected"
-        );
-        break;
-      default:
-        break;
-    }
+  }, []);
+  const onClickOption = useCallback(
+    (event: React.MouseEvent) => {
+      event.preventDefault();
+      const selected = document
+        .getElementById("quickFindBoard")
+        ?.getElementsByClassName("selected")[0];
+      if (selected) {
+        selected?.classList.remove("selected");
+      }
+      const target = event.target as HTMLElement;
+      let option: string = "";
+      switch (target.tagName.toLowerCase()) {
+        case "button":
+          option = target.firstChild?.textContent as string;
+          target.classList.add("selected");
+          break;
+        case "div":
+          target.parentElement?.classList.add("selected");
+          if (target.className === "optionName") {
+            option = target.textContent as string;
+          } else {
+            option = target.previousElementSibling?.textContent as string;
+          }
+          break;
+        case "svg":
+          option = target.parentElement?.previousElementSibling
+            ?.textContent as string;
+          target.parentElement?.parentElement?.classList.add("selected");
+          break;
+        case "path":
+          option = target.parentElement?.parentElement?.previousElementSibling
+            ?.textContent as string;
+          target.parentElement?.parentElement?.parentElement?.classList.add(
+            "selected"
+          );
+          break;
+        default:
+          break;
+      }
 
-    setSelectedOption(option);
-    if (result && result !== "noResult") {
-      if (bestMatchesResult && bestMatchesResult !== "noResult") {
-        const compareResult = (
-          a: resultType,
-          b: resultType,
-          what: "editTime" | "createTime",
-          sort: "newest" | "oldest"
-        ) => {
-          const A =
-            what === "createTime" ? Number(a.createTime) : Number(a.editTime);
-          const B =
-            what === "createTime" ? Number(b.createTime) : Number(b.editTime);
-          let value: number = 0;
-          switch (sort) {
-            case "newest":
-              value = B - A;
+      setSelectedOption(option);
+      if (result && result !== "noResult") {
+        if (bestMatchesResult && bestMatchesResult !== "noResult") {
+          const compareResult = (
+            a: resultType,
+            b: resultType,
+            what: "editTime" | "createTime",
+            sort: "newest" | "oldest"
+          ) => {
+            const A =
+              what === "createTime" ? Number(a.createTime) : Number(a.editTime);
+            const B =
+              what === "createTime" ? Number(b.createTime) : Number(b.editTime);
+            let value: number = 0;
+            switch (sort) {
+              case "newest":
+                value = B - A;
+                break;
+              case "oldest":
+                value = A - B;
+                break;
+              default:
+                break;
+            }
+            return value;
+          };
+          let sortedResult: resultType[] | null = null;
+          switch (option) {
+            case bestMatches:
+              setResult(bestMatchesResult);
               break;
-            case "oldest":
-              value = A - B;
+            case lastEditedNewest:
+              sortedResult = bestMatchesResult.sort((a, b) =>
+                compareResult(a, b, "editTime", "newest")
+              );
+              break;
+            case lastEditedOldest:
+              sortedResult = bestMatchesResult.sort((a, b) =>
+                compareResult(a, b, "editTime", "oldest")
+              );
+              break;
+            case createdNewest:
+              sortedResult = bestMatchesResult.sort((a, b) =>
+                compareResult(a, b, "createTime", "newest")
+              );
+              break;
+            case createdOldest:
+              sortedResult = bestMatchesResult.sort((a, b) =>
+                compareResult(a, b, "createTime", "oldest")
+              );
               break;
             default:
               break;
           }
-          return value;
-        };
-        let sortedResult: resultType[] | null = null;
-        switch (option) {
-          case bestMatches:
-            setResult(bestMatchesResult);
-            break;
-          case lastEditedNewest:
-            sortedResult = bestMatchesResult.sort((a, b) =>
-              compareResult(a, b, "editTime", "newest")
-            );
-            break;
-          case lastEditedOldest:
-            sortedResult = bestMatchesResult.sort((a, b) =>
-              compareResult(a, b, "editTime", "oldest")
-            );
-            break;
-          case createdNewest:
-            sortedResult = bestMatchesResult.sort((a, b) =>
-              compareResult(a, b, "createTime", "newest")
-            );
-            break;
-          case createdOldest:
-            sortedResult = bestMatchesResult.sort((a, b) =>
-              compareResult(a, b, "createTime", "oldest")
-            );
-            break;
-          default:
-            break;
+          setResult(sortedResult);
+        } else {
+          setResult(bestMatchesResult);
         }
-        setResult(sortedResult);
-      } else {
-        setResult(bestMatchesResult);
       }
-    }
-    openSortOptions();
-  };
+      openSortOptions();
+    },
+    [bestMatchesResult, openSortOptions, result]
+  );
   /**
    * QuickFindBoard 에 click 이벤트가 일어날때, 해당 이벤트가 sortOptions에서 일어난 이벤트인지 확인하는 함수
    * @param event QuickFindBoard에서 발생한 click 이벤트
    * @returns click 이벤트가 sortOptions에서 발생했는지 여부
    */
-  const checkOptionBtnClicked = (event: React.MouseEvent) => {
+  const checkOptionBtnClicked = useCallback((event: React.MouseEvent) => {
     const eventTarget = event.target as HTMLElement;
     let optionBtnIsClicked: boolean = false;
     const changeReturnValue = (condition: boolean) => {
@@ -205,18 +217,21 @@ const QuickFindBoard = ({
         break;
     }
     return optionBtnIsClicked;
-  };
-  const closeQuickFindBoard = (event: React.MouseEvent) => {
-    const inner = document.getElementById("quickFindBoard__inner");
-    const innerDomRect = inner?.getClientRects()[0];
-    if (innerDomRect) {
-      const isInBoard = detectRange(event, innerDomRect);
-      if (!isInBoard) {
-        const optionBtnIsClicked = checkOptionBtnClicked(event);
-        !optionBtnIsClicked && setOpenQF(false);
+  }, []);
+  const closeQuickFindBoard = useCallback(
+    (event: React.MouseEvent) => {
+      const inner = document.getElementById("quickFindBoard__inner");
+      const innerDomRect = inner?.getClientRects()[0];
+      if (innerDomRect) {
+        const isInBoard = detectRange(event, innerDomRect);
+        if (!isInBoard) {
+          const optionBtnIsClicked = checkOptionBtnClicked(event);
+          !optionBtnIsClicked && setOpenQF(false);
+        }
       }
-    }
-  };
+    },
+    [checkOptionBtnClicked, setOpenQF]
+  );
   return (
     <div id="quickFindBoard" onClick={closeQuickFindBoard}>
       <div className="inner" id="quickFindBoard__inner">

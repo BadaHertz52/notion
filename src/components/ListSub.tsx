@@ -1,5 +1,6 @@
 import React, { MouseEvent, TouchEvent, useRef } from "react";
-import { Block, findBlock } from "../modules/notion";
+import { Block } from "../modules/notion/type";
+import { findBlock } from "../fn";
 import { CSSProperties } from "styled-components";
 import { GoPrimitiveDot } from "react-icons/go";
 import BlockComponent, { BlockComponentProps } from "./BlockComponent";

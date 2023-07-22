@@ -12,7 +12,7 @@ import {
   MainCommentType,
   Page,
   SubCommentType,
-} from "../modules/notion";
+} from "../modules/notion/type";
 import { ModalType } from "../containers/EditorContainer";
 import { CSSProperties } from "styled-components";
 import { removeSelected } from "../fn";
