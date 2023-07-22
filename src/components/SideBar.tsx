@@ -1,7 +1,5 @@
 import React, {
   CSSProperties,
-  Dispatch,
-  SetStateAction,
   useEffect,
   useRef,
   useState,
@@ -10,8 +8,6 @@ import React, {
 } from "react";
 import { blockSample, pageSample } from "../modules/notion/reducer";
 import { Block, ListItem, Notion, Page } from "../modules/notion/type";
-import { findPage } from "../fn";
-import { detectRange } from "./BlockFn";
 import { closeModal, findPage } from "../fn";
 import { UserState } from "../modules/user/reducer";
 import Trash from "./Trash";
@@ -20,7 +16,6 @@ import Time from "./Time";
 import PageMenu from "./PageMenu";
 import PageIcon from "./PageIcon";
 import { SideBarContainerProp } from "../containers/SideBarContainer";
-import { SideAppear } from "../modules/side/reducer";
 
 //react-icon
 import { FiCode, FiChevronsLeft } from "react-icons/fi";
@@ -30,233 +25,19 @@ import {
   AiOutlineStar,
 } from "react-icons/ai";
 import { BiSearchAlt2 } from "react-icons/bi";
-import {
-  BsFillTrash2Fill,
-  BsPencilSquare,
-  BsThreeDots,
-  BsTrash,
-} from "react-icons/bs";
+import { BsFillTrash2Fill, BsPencilSquare, BsTrash } from "react-icons/bs";
 import { IoIosSettings } from "react-icons/io";
 import { HiOutlineDuplicate, HiTemplate } from "react-icons/hi";
-import { MdPlayArrow } from "react-icons/md";
+
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { IoArrowRedoOutline } from "react-icons/io5";
 import { ActionContext } from "../containers/NotionRouter";
 import ScreenOnly from "./ScreenOnly";
+import ListTemplate from "./ListTemplate";
 
 type SideBarProps = SideBarContainerProp & {
   notion: Notion;
   user: UserState;
-};
-
-type ItemTemplateProp = {
-  item: ListItem;
-  setTargetPageId: Dispatch<SetStateAction<string>>;
-  onClickMoreBtn: (item: ListItem, target: HTMLElement) => void;
-  addNewSubPage: (item: ListItem) => void;
-  changeSide: (appear: SideAppear) => void;
-};
-type ListTemplateProp = {
-  notion: Notion;
-  targetList: ListItem[] | null;
-  setTargetPageId: Dispatch<SetStateAction<string>>;
-  onClickMoreBtn: (item: ListItem, target: HTMLElement) => void;
-  addNewSubPage: (item: ListItem) => void;
-  changeSide: (appear: SideAppear) => void;
-};
-const ItemTemplate = ({
-  item,
-  setTargetPageId,
-  onClickMoreBtn,
-  addNewSubPage,
-  changeSide,
-}: ItemTemplateProp) => {
-  const [toggleStyle, setToggleStyle] = useState<CSSProperties>({
-    transform: "rotate(0deg)",
-  });
-  const sideBarPageFn = useRef<HTMLDivElement>(null);
-  const onToggleSubPage = (event: React.MouseEvent) => {
-    const target = event.target as HTMLElement;
-    const toggleSubPage = (subPageElement: null | undefined | Element) => {
-      if (subPageElement) {
-        subPageElement.classList.toggle("on");
-        subPageElement.classList.contains("on")
-          ? setToggleStyle({
-              transform: "rotate(90deg)",
-            })
-          : setToggleStyle({
-              transform: "rotate(0deg)",
-            });
-      }
-    };
-    switch (target.tagName.toLocaleLowerCase()) {
-      case "path":
-        let subPageElement =
-          target.parentElement?.parentElement?.parentElement?.parentElement
-            ?.parentElement?.nextElementSibling;
-        toggleSubPage(subPageElement);
-        break;
-      case "svg":
-        subPageElement =
-          target.parentElement?.parentElement?.parentElement?.parentElement
-            ?.nextElementSibling;
-        toggleSubPage(subPageElement);
-        break;
-      case "button":
-        subPageElement =
-          target.parentElement?.parentElement?.parentElement
-            ?.nextElementSibling;
-        toggleSubPage(subPageElement);
-        break;
-
-      default:
-        break;
-    }
-  };
-  const showPageFn = () => {
-    if (sideBarPageFn.current) {
-      sideBarPageFn.current.classList.toggle("on");
-    }
-  };
-  const removeOn = () => {
-    if (sideBarPageFn.current) {
-      sideBarPageFn.current.classList.contains("on") &&
-        sideBarPageFn.current.classList.remove("on");
-    }
-  };
-  const onClickPageName = () => {
-    setTargetPageId(item.id);
-    if (window.innerWidth <= 768) {
-      changeSide("close");
-    }
-  };
-  return (
-    <div
-      className="item__inner page-link"
-      onMouseOver={showPageFn}
-      onMouseOut={removeOn}
-    >
-      <div className="pageItem">
-        <button
-          title="button to toggle page"
-          className="toggleBtn"
-          onClick={onToggleSubPage}
-          style={toggleStyle}
-        >
-          <ScreenOnly text="button to toggle page" />
-          <MdPlayArrow />
-        </button>
-        <button className="pageName" onClick={onClickPageName}>
-          <PageIcon
-            icon={item.icon}
-            iconType={item.iconType}
-            style={undefined}
-          />
-          <div>{item.title}</div>
-        </button>
-      </div>
-      <div className="sideBarPageFn" ref={sideBarPageFn}>
-        <button
-          className="moreBtn"
-          title="button to open menu to delete, duplicate or for more"
-          onClick={() => {
-            sideBarPageFn.current &&
-              onClickMoreBtn(item, sideBarPageFn.current);
-          }}
-        >
-          <ScreenOnly text="button to open menu to delete, duplicate or for more" />
-          <BsThreeDots />
-        </button>
-        <button
-          className="btn-addPage"
-          title="button to quickly add a page inside"
-          onClick={() => {
-            addNewSubPage(item);
-          }}
-        >
-          <ScreenOnly text="button to quickly add a page inside" />
-          <AiOutlinePlus />
-        </button>
-      </div>
-    </div>
-  );
-};
-
-const ListTemplate = ({
-  notion,
-  targetList,
-  setTargetPageId,
-  addNewSubPage,
-  onClickMoreBtn,
-}: ListTemplateProp) => {
-  const { changeSide } = useContext(ActionContext).actions;
-  const findSubPage = (
-    id: string,
-    pagesId: string[],
-    pages: Page[]
-  ): ListItem => {
-    const index = pagesId.indexOf(id);
-    const subPage: Page = pages[index];
-    return {
-      id: subPage.id,
-      title: subPage.header.title,
-      iconType: subPage.header.iconType,
-      icon: subPage.header.icon,
-      subPagesId: subPage.subPagesId,
-      parentsId: subPage.parentsId,
-      editTime: subPage.editTime,
-      createTime: subPage.createTime,
-    };
-  };
-  const makeTargetList = (
-    ids: string[],
-    pagesId: string[],
-    pages: Page[]
-  ): ListItem[] => {
-    const listItemArr: ListItem[] = ids.map((id: string) =>
-      findSubPage(id, pagesId, pages)
-    );
-    return listItemArr;
-  };
-  return (
-    <ul>
-      {targetList?.map((item: ListItem) => (
-        <li id={`item_${item.id}`} key={item.id}>
-          <div className="mainPage">
-            <ItemTemplate
-              item={item}
-              setTargetPageId={setTargetPageId}
-              onClickMoreBtn={onClickMoreBtn}
-              addNewSubPage={addNewSubPage}
-              changeSide={changeSide}
-            />
-          </div>
-          {notion.pages &&
-            notion.pagesId &&
-            (item.subPagesId ? (
-              <div className="subPage">
-                <ListTemplate
-                  notion={notion}
-                  targetList={makeTargetList(
-                    item.subPagesId,
-                    notion.pagesId,
-                    notion.pages
-                  )}
-                  setTargetPageId={setTargetPageId}
-                  onClickMoreBtn={onClickMoreBtn}
-                  addNewSubPage={addNewSubPage}
-                  changeSide={changeSide}
-                />
-              </div>
-            ) : (
-              <div className="subPage no">
-                <span>No page inside</span>
-              </div>
-            ))}
-        </li>
-      ))}
-    </ul>
-  );
 };
 
 const SideBar = ({
