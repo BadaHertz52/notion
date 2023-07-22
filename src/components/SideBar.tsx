@@ -12,6 +12,7 @@ import { blockSample, pageSample } from "../modules/notion/reducer";
 import { Block, ListItem, Notion, Page } from "../modules/notion/type";
 import { findPage } from "../fn";
 import { detectRange } from "./BlockFn";
+import { closeModal, findPage } from "../fn";
 import { UserState } from "../modules/user/reducer";
 import Trash from "./Trash";
 import Rename from "./Rename";
@@ -42,20 +43,6 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { IoArrowRedoOutline } from "react-icons/io5";
 import { ActionContext } from "../containers/NotionRouter";
 import ScreenOnly from "./ScreenOnly";
-
-export const closeModal = (
-  elementId: string,
-  setState: Dispatch<SetStateAction<boolean>>,
-  event: globalThis.MouseEvent
-) => {
-  const eventTarget = event.target as Element | null;
-  if (eventTarget?.id !== "inputImgIcon") {
-    const element = document.getElementById(elementId);
-    const elementDomRect = element?.getClientRects()[0];
-    const isInElement = detectRange(event, elementDomRect);
-    !isInElement && setState(false);
-  }
-};
 
 type SideBarProps = SideBarContainerProp & {
   notion: Notion;

@@ -10,6 +10,7 @@ import {
   findPreviousBlockInDoc,
 } from "./block";
 import { findPage } from "./page";
+import { closeModal } from "./modal";
 export {
   isMobile,
   makeResultType,
@@ -23,4 +24,5 @@ export {
   getBlockText,
   findPreviousBlockInDoc,
   findPage,
+  closeModal,
 };
