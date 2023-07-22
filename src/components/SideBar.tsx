@@ -5,6 +5,8 @@ import React, {
   useState,
   TouchEvent,
   useContext,
+  useMemo,
+  useCallback,
 } from "react";
 import { blockSample, pageSample } from "../modules/notion/reducer";
 import { Block, ListItem, Notion, Page } from "../modules/notion/type";
@@ -59,35 +61,45 @@ const SideBar = ({
     changeSide,
   } = useContext(ActionContext).actions;
   const inner = document.getElementById("inner");
-  const pages = notion.pages;
-  const pagesId = notion.pagesId;
-  const recentPages =
-    pages && pagesId && user.recentPagesId
-      ? user.recentPagesId.map(
-          (pageId: string) => findPage(pagesId, pages, pageId) as Page
-        )
-      : null;
-  const trashPages = notion.trash.pages;
-  const trashPagesId = notion.trash.pagesId;
-  const firstPagesId = notion.firstPagesId;
-  const firstPages =
-    pagesId && pages && firstPagesId
-      ? firstPagesId.map((id: string) => findPage(pagesId, pages, id))
-      : null;
-  const firstList: ListItem[] | null = firstPages
-    ? firstPages.map((page: Page) => {
-        return {
-          id: page.id,
-          title: page.header.title,
-          iconType: page.header.iconType,
-          icon: page.header.icon,
-          subPagesId: page.subPagesId,
-          parentsId: page.parentsId,
-          editTime: page.editTime,
-          createTime: page.createTime,
-        };
-      })
-    : null;
+  const { pages, pagesId, trash, firstPagesId } = notion;
+  const recentPages: Page[] | null = useMemo(
+    () =>
+      pages && pagesId && user.recentPagesId
+        ? user.recentPagesId.map(
+            (pageId: string) => findPage(pagesId, pages, pageId) as Page
+          )
+        : null,
+    [pages, pagesId, user.recentPagesId]
+  );
+
+  const trashPages = trash.pages;
+  const trashPagesId = trash.pagesId;
+  const firstPages: Page[] | null = useMemo(
+    () =>
+      pagesId && pages && firstPagesId
+        ? firstPagesId.map((id: string) => findPage(pagesId, pages, id) as Page)
+        : null,
+    [firstPagesId, pagesId, pages]
+  );
+
+  const firstList: ListItem[] | null = useMemo(
+    () =>
+      firstPages
+        ? firstPages.map((page: Page) => {
+            return {
+              id: page.id,
+              title: page.header.title,
+              iconType: page.header.iconType,
+              icon: page.header.icon,
+              subPagesId: page.subPagesId,
+              parentsId: page.parentsId,
+              editTime: page.editTime,
+              createTime: page.createTime,
+            };
+          })
+        : null,
+    [firstPages]
+  );
   const trashBtn = useRef<HTMLButtonElement>(null);
   const [target, setTarget] = useState<HTMLElement | null>(null);
   const [targetItem, setTargetItem] = useState<ListItem | null>(null);
@@ -107,72 +119,84 @@ const SideBar = ({
 
   const recordIcon = user.userName.substring(0, 1);
   const touchResizeBar = useRef<boolean>(false);
-  const makeFavoriteList = (
-    favorites: string[] | null,
-    pagesId: string[],
-    pages: Page[]
-  ): ListItem[] | null => {
-    const list: ListItem[] | null = favorites
-      ? favorites.map((id: string) => {
-          const page = findPage(pagesId, pages, id);
-          const ListItem = {
-            id: page.id,
-            title: page.header.title,
-            iconType: page.header.iconType,
-            icon: page.header.icon,
-            subPagesId: page.subPagesId,
-            parentsId: page.parentsId,
-            editTime: page.editTime,
-            createTime: page.createTime,
-          };
-          return ListItem;
-        })
-      : null;
-    return list;
-  };
-  const list: ListItem[] | null = firstPages
-    ? firstPages
-        .filter((page: Page) => page.parentsId === null)
-        .map((page: Page) => ({
-          id: page.id,
-          iconType: page.header.iconType,
-          icon: page.header.icon,
-          title: page.header.title,
-          subPagesId: page.subPagesId,
-          parentsId: page.parentsId,
-          editTime: page.editTime,
-          createTime: page.createTime,
-        }))
-    : null;
+  const list: ListItem[] | null = useMemo(
+    () =>
+      firstPages
+        ? firstPages
+            .filter((page: Page) => page.parentsId === null)
+            .map((page: Page) => ({
+              id: page.id,
+              iconType: page.header.iconType,
+              icon: page.header.icon,
+              title: page.header.title,
+              subPagesId: page.subPagesId,
+              parentsId: page.parentsId,
+              editTime: page.editTime,
+              createTime: page.createTime,
+            }))
+        : null,
+    [firstPages]
+  );
+
+  const makeFavoriteList = useCallback(
+    (
+      favorites: string[] | null,
+      pagesId: string[],
+      pages: Page[]
+    ): ListItem[] | null => {
+      const list: ListItem[] | null = favorites
+        ? favorites.map((id: string) => {
+            const page = findPage(pagesId, pages, id);
+            const ListItem = {
+              id: page.id,
+              title: page.header.title,
+              iconType: page.header.iconType,
+              icon: page.header.icon,
+              subPagesId: page.subPagesId,
+              parentsId: page.parentsId,
+              editTime: page.editTime,
+              createTime: page.createTime,
+            };
+            return ListItem;
+          })
+        : null;
+      return list;
+    },
+    []
+  );
+
   const addNewPage = () => {
     addPage(pageSample);
   };
 
-  const addNewSubPage = (item: ListItem) => {
-    if (pagesId && pages) {
-      const targetPage = findPage(pagesId, pages, item.id);
-      const newPageBlock: Block = {
-        ...blockSample,
-        contents: "untitle",
-        type: "page",
-        parentBlocksId: null,
-      };
-      if (targetPage.blocksId === null) {
-        addBlock(targetPage.id, newPageBlock, 0, null);
-      } else {
-        addBlock(
-          targetPage.id,
-          newPageBlock,
-          targetPage.blocksId.length,
-          targetPage.firstBlocksId === null
-            ? null
-            : targetPage.firstBlocksId[targetPage.firstBlocksId.length - 1]
-        );
+  const addNewSubPage = useCallback(
+    (item: ListItem) => {
+      if (pagesId && pages) {
+        const targetPage = findPage(pagesId, pages, item.id);
+        const newPageBlock: Block = {
+          ...blockSample,
+          contents: "untitle",
+          type: "page",
+          parentBlocksId: null,
+        };
+        if (targetPage.blocksId === null) {
+          addBlock(targetPage.id, newPageBlock, 0, null);
+        } else {
+          addBlock(
+            targetPage.id,
+            newPageBlock,
+            targetPage.blocksId.length,
+            targetPage.firstBlocksId === null
+              ? null
+              : targetPage.firstBlocksId[targetPage.firstBlocksId.length - 1]
+          );
+        }
       }
-    }
-  };
+    },
+    [addBlock, pages, pagesId]
+  );
 
-  const onClickMoreBtn = (item: ListItem, target: HTMLElement) => {
+  const onClickMoreBtn = useCallback((item: ListItem, target: HTMLElement) => {
     setOpenSideMoreMenu(true);
     setTargetItem(item);
     setTarget(target);
@@ -190,29 +214,30 @@ const SideBar = ({
         transform: "translateY(50vh)",
       });
     }
-  };
-
-  inner?.addEventListener("click", (event) => {
-    if (openSideMoreMenu) {
-      const target = event.target as HTMLElement | null;
-      if (target?.parentElement?.className !== "resizeBar") {
-        closeModal("moreFn", setOpenSideMoreMenu, event);
-        setMoreFnStyle(undefined);
+  }, []);
+  const handleClickToCloseModal = useCallback(
+    (event: globalThis.MouseEvent) => {
+      if (openSideMoreMenu) {
+        const target = event.target as HTMLElement | null;
+        if (target?.parentElement?.className !== "resizeBar") {
+          closeModal("moreFn", setOpenSideMoreMenu, event);
+          setMoreFnStyle(undefined);
+        }
       }
-    }
-    openPageMenu && closeModal("pageMenu", setOpenPageMenu, event);
-    openRename && closeModal("rename", setOpenRename, event);
+      openPageMenu && closeModal("pageMenu", setOpenPageMenu, event);
+      openRename && closeModal("rename", setOpenRename, event);
+      openTrash && closeModal("trash", setOpenTrash, event);
+    },
+    [openPageMenu, openRename, openSideMoreMenu, openTrash]
+  );
 
-    openTrash && closeModal("trash", setOpenTrash, event);
-  });
-
-  const onClickToDelete = () => {
+  const onClickToDelete = useCallback(() => {
     setOpenSideMoreMenu(false);
     if (targetItem) {
       deletePage(targetItem.id);
     }
-  };
-  const onClickMoveToBtn = () => {
+  }, [deletePage, targetItem]);
+  const onClickMoveToBtn = useCallback(() => {
     setOpenPageMenu(true);
     setOpenSideMoreMenu(false);
     if (window.innerWidth > 768) {
@@ -222,20 +247,20 @@ const SideBar = ({
         left: "50%",
       });
     }
-  };
-  const onClickToAddFavorite = () => {
+  }, []);
+  const onClickToAddFavorite = useCallback(() => {
     setOpenSideMoreMenu(false);
     targetItem && addFavorites(targetItem.id);
-  };
-  const onClickToRemoveFavorite = () => {
+  }, [addFavorites, targetItem]);
+  const onClickToRemoveFavorite = useCallback(() => {
     setOpenSideMoreMenu(false);
     targetItem && removeFavorites(targetItem.id);
-  };
-  const onClickToDuplicate = () => {
+  }, [targetItem, removeFavorites]);
+  const onClickToDuplicate = useCallback(() => {
     setOpenSideMoreMenu(false);
     targetItem && duplicatePage(targetItem.id);
-  };
-  const onClickToRename = () => {
+  }, [targetItem, duplicatePage]);
+  const onClickToRename = useCallback(() => {
     setOpenSideMoreMenu(false);
     setOpenRename(true);
     if (targetItem && target && target?.parentElement) {
@@ -246,8 +271,8 @@ const SideBar = ({
         left: domRect.left + 10,
       });
     }
-  };
-  const changeTrashStyle = () => {
+  }, [target, targetItem]);
+  const changeTrashStyle = useCallback(() => {
     const innerWidth = window.innerWidth;
     if (innerWidth >= 768) {
       if (trashBtn.current) {
@@ -268,7 +293,7 @@ const SideBar = ({
         transform: "translateY(0)",
       });
     }
-  };
+  }, []);
 
   window.onresize = () => {
     if (window.innerWidth < 800 && sideAppear === "lock" && showAllComments) {
@@ -276,35 +301,52 @@ const SideBar = ({
     }
     openTrash && changeTrashStyle();
   };
-  const onClickTrashBtn = (event: React.MouseEvent) => {
-    setOpenTrash(true);
-    changeTrashStyle();
-  };
-  const onMouseOutSideBar = () => {
+  const onClickTrashBtn = useCallback(
+    (event: React.MouseEvent) => {
+      setOpenTrash(true);
+      changeTrashStyle();
+    },
+    [changeTrashStyle]
+  );
+  const onMouseOutSideBar = useCallback(() => {
     sideAppear === "float" && changeSide("floatHide");
-  };
-  const onClickRecentPageItem = (pageId: string) => {
-    setTargetPageId(pageId);
-    changeSide("close");
-  };
-  const onTouchStartResizeBar = (event: TouchEvent<HTMLElement>) => {
+  }, [changeSide, sideAppear]);
+  const onClickRecentPageItem = useCallback(
+    (pageId: string) => {
+      setTargetPageId(pageId);
+      changeSide("close");
+    },
+    [changeSide, setTargetPageId]
+  );
+  const onTouchStartResizeBar = useCallback(() => {
     touchResizeBar.current = true;
-  };
-  const onTouchMoveSideBar = (event: TouchEvent<HTMLDivElement>) => {
-    if (touchResizeBar.current) {
-      const clientY = event.changedTouches[0].clientY;
-      const innerHeight = window.innerHeight;
-      if (innerHeight - 50 <= clientY) {
-        setMoreFnStyle(undefined);
-        touchResizeBar.current = false;
-      } else {
-        setMoreFnStyle({
-          display: "block",
-          transform: `translateY(${clientY}px)`,
-        });
+  }, []);
+  const onTouchMoveSideBar = useCallback(
+    (event: TouchEvent<HTMLDivElement>) => {
+      if (touchResizeBar.current) {
+        const clientY = event.changedTouches[0].clientY;
+        const innerHeight = window.innerHeight;
+        if (innerHeight - 50 <= clientY) {
+          setMoreFnStyle(undefined);
+          touchResizeBar.current = false;
+        } else {
+          setMoreFnStyle({
+            display: "block",
+            transform: `translateY(${clientY}px)`,
+          });
+        }
       }
-    }
-  };
+    },
+    []
+  );
+  useEffect(() => {
+    inner?.addEventListener("click", handleClickToCloseModal);
+
+    return () => {
+      inner?.removeEventListener("click", handleClickToCloseModal);
+    };
+  }, [inner, handleClickToCloseModal]);
+
   useEffect(() => {
     if (targetItem && pagesId && pages) {
       const page = findPage(pagesId, pages, targetItem.id);

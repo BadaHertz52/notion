@@ -4,6 +4,8 @@ import React, {
   useEffect,
   useState,
   useContext,
+  useCallback,
+  MouseEvent,
 } from "react";
 
 import { ActionContext, pathType } from "../containers/NotionRouter";
@@ -27,7 +29,7 @@ import { BsThreeDots } from "react-icons/bs";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { IoArrowRedoOutline } from "react-icons/io5";
 import { GrDocumentUpload } from "react-icons/gr";
-import { isMobile, detectRange } from "../fn";
+import { isMobile } from "../fn";
 import ScreenOnly from "./ScreenOnly";
 type TopBarProps = {
   firstList: ListItem[];
@@ -72,41 +74,44 @@ const TopBar = ({
   const [openPageMenu, setOpenPageMenu] = useState<boolean>(false);
   const pageInFavorites = favorites?.includes(page.id);
 
-  const onClickSideBarBtn = (event: React.MouseEvent) => {
-    const target = event.target as HTMLElement;
-    const targetTag = target.tagName.toLowerCase();
-    const width = window.outerWidth;
-    if (showAllComments && width < 1000) {
-      setShowAllComments(false);
-    }
-    switch (targetTag) {
-      case "button":
-        target.id === "topBar__btn-sideBar" && changeSide("lock");
-        break;
-      case "svg":
-        target.parentElement?.id === "topBar__btn-sideBar" &&
-          changeSide("lock");
-        break;
-      case "path":
-        target.parentElement?.parentElement?.id === "topBar__btn-sideBar" &&
-          changeSide("lock");
-        break;
-      default:
-        break;
-    }
-  };
-  const onMouseEnterSidBarBtn = () => {
+  const onClickSideBarBtn = useCallback(
+    (event: React.MouseEvent) => {
+      const target = event.target as HTMLElement;
+      const targetTag = target.tagName.toLowerCase();
+      const width = window.outerWidth;
+      if (showAllComments && width < 1000) {
+        setShowAllComments(false);
+      }
+      switch (targetTag) {
+        case "button":
+          target.id === "topBar__btn-sideBar" && changeSide("lock");
+          break;
+        case "svg":
+          target.parentElement?.id === "topBar__btn-sideBar" &&
+            changeSide("lock");
+          break;
+        case "path":
+          target.parentElement?.parentElement?.id === "topBar__btn-sideBar" &&
+            changeSide("lock");
+          break;
+        default:
+          break;
+      }
+    },
+    [changeSide, setShowAllComments, showAllComments]
+  );
+  const onMouseEnterSidBarBtn = useCallback(() => {
     const innerWidth = window.innerWidth;
     if (innerWidth > 768) {
       sideAppear === "close" || sideAppear === "floatHide"
         ? changeSide("float")
         : changeSide("floatHide");
     }
-  };
+  }, [changeSide, sideAppear]);
 
-  const addOrRemoveFavorite = () => {
+  const addOrRemoveFavorite = useCallback(() => {
     pageInFavorites ? removeFavorites(page.id) : addFavorites(page.id);
-  };
+  }, [addFavorites, page.id, pageInFavorites, removeFavorites]);
   const onClickViewAllComments = () => {
     setOpenPageMoreFun(false);
     setShowAllComments(!showAllComments);
@@ -126,43 +131,47 @@ const TopBar = ({
     };
     return style;
   };
-  const changeFontStyle = (event: React.MouseEvent, font: fontStyle) => {
-    const currentTarget = event.currentTarget;
-    const targetFontSample = currentTarget.firstElementChild;
-    const fontSample = [...document.getElementsByClassName("font-sample")];
-    fontSample.forEach((element: Element) => {
-      element.classList.contains("on") && element.classList.remove("on");
-    });
-    targetFontSample && targetFontSample.classList.add("on");
+  const changeFontStyle = useCallback(
+    (event: MouseEvent, font: fontStyle) => {
+      const currentTarget = event.currentTarget;
+      const targetFontSample = currentTarget.firstElementChild;
+      const fontSample = [...document.getElementsByClassName("font-sample")];
+      fontSample.forEach((element: Element) => {
+        element.classList.contains("on") && element.classList.remove("on");
+      });
+      targetFontSample && targetFontSample.classList.add("on");
 
-    switch (font) {
-      case "default":
-        setFontStyle(defaultFontFamily);
-        break;
-      case "serif":
-        setFontStyle(serifFontFamily);
-        break;
-      case "mono":
-        setFontStyle(monoFontFamily);
-        break;
-      default:
-        break;
-    }
-  };
+      switch (font) {
+        case "default":
+          setFontStyle(defaultFontFamily);
+          break;
+        case "serif":
+          setFontStyle(serifFontFamily);
+          break;
+        case "mono":
+          setFontStyle(monoFontFamily);
+          break;
+        default:
+          break;
+      }
+    },
+    [setFontStyle]
+  );
   const changeFontSize = () => {
     setSmallText(!smallText);
   };
 
-  const changeWidth = (event: React.MouseEvent) => {
+  const changeWidth = useCallback(() => {
     const width = window.innerWidth;
     !(width < 1024 && sideAppear === "lock") && setFullWidth(!fullWidth);
-  };
+  }, [sideAppear, setFullWidth, fullWidth]);
+
   const onClickMoveTo = () => {
     setOpenPageMoreFun(false);
     setOpenPageMenu(!openPageMenu);
   };
 
-  function changeAllCommentAndTopBarStyle() {
+  const changeAllCommentAndTopBarStyle = useCallback(() => {
     const innerWidth = window.innerWidth;
     const topBarLeftEl = document.querySelector(".topBar__left");
     const topBarPageToolEl = document.querySelector(".topBar__page-tool");
@@ -188,9 +197,22 @@ const TopBar = ({
       topBarLeftEl?.setAttribute("style", "width:50%");
       changePathWidth(innerWidth * 0.5 - 26);
     }
-  }
+  }, [showAllComments]);
   window.onresize = changeAllCommentAndTopBarStyle;
 
+  /**
+   * pageMenu 창이 열려있을 경우, pageMenu 외의 구역을 클릭 시에 pageMenu 창을 닫는 기능
+   */
+  const closePageMenu = useCallback(
+    (event: globalThis.MouseEvent) => {
+      if (openPageMenu) {
+        const target = event.target as HTMLElement | null;
+        const isInnerMenu = target?.closest("#pageMenu");
+        !isInnerMenu && setOpenPageMenu(false);
+      }
+    },
+    [openPageMenu]
+  );
   useEffect(() => {
     if (sideAppear === "float") {
       setTitle("Lock sideBar ");
@@ -200,14 +222,12 @@ const TopBar = ({
     }
   }, [sideAppear]);
 
-  inner?.addEventListener("click", function (event: MouseEvent) {
-    if (openPageMenu) {
-      const pageMenu = document.getElementById("pageMenu");
-      const pageMenuDomRect = pageMenu?.getClientRects()[0];
-      const isInnerMenu = detectRange(event, pageMenuDomRect);
-      !isInnerMenu && setOpenPageMenu(false);
-    }
-  });
+  useEffect(() => {
+    inner?.addEventListener("click", closePageMenu);
+    return () => {
+      inner?.addEventListener("click", closePageMenu);
+    };
+  }, [inner, closePageMenu]);
   return (
     <div className="topBar">
       <div className="topBar__left">

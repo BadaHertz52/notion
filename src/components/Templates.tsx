@@ -5,6 +5,8 @@ import React, {
   useRef,
   useState,
   useContext,
+  useMemo,
+  useCallback,
 } from "react";
 import {
   AiOutlineExpandAlt,
@@ -75,9 +77,13 @@ const Templates = ({
   const deleteTemplate = (templateId: string) => {
     dispatch(delete_template(templateId));
   };
-  const templates = templatesId
-    ? templatesId.map((id: string) => findPage(pagesId, pages, id))
-    : null;
+  const templates = useMemo(
+    () =>
+      templatesId
+        ? templatesId.map((id: string) => findPage(pagesId, pages, id))
+        : null,
+    [templatesId, pagesId, pages]
+  );
   const [template, setTemplate] = useState<Page | null>(
     templates === null ? null : templates[0]
   );
@@ -86,32 +92,35 @@ const Templates = ({
   const [openDeleteAlert, setOpenDeleteAlert] = useState<boolean>(false);
   const [expand, setExpand] = useState<boolean>(false);
 
-  const onClickTemplate = (event: MouseEvent<HTMLDivElement>) => {
-    const templateInner = event.currentTarget.firstElementChild;
-    if (templateInner) {
-      const templateInnerDomRect = templateInner.getClientRects()[0];
-      const clientX = event.clientX;
-      const clientY = event.clientY;
-      const isInX =
-        clientX >= templateInnerDomRect.left &&
-        clientX <= templateInnerDomRect.right;
-      const isInY =
-        clientY >= templateInnerDomRect.top &&
-        clientY <= templateInnerDomRect.bottom;
-      const isInInner = isInX && isInY;
-      if (!isInInner) {
-        if (template) {
-          // 수정이전의 버전인 originTemplate이 있으면, 수정된 버전으로 바꿀 것인지 아닌지를 묻는 창이 뜨고, originTemplate이 없다면 templates 창을 닫음
-          const item = sessionStorage.getItem("originTemplate");
-          item === null ? setOpenTemplates(false) : setOpenEditAlert(true);
-        } else {
-          setOpenTemplates(false);
+  const onClickTemplate = useCallback(
+    (event: MouseEvent<HTMLDivElement>) => {
+      const templateInner = event.currentTarget.firstElementChild;
+      if (templateInner) {
+        const templateInnerDomRect = templateInner.getClientRects()[0];
+        const clientX = event.clientX;
+        const clientY = event.clientY;
+        const isInX =
+          clientX >= templateInnerDomRect.left &&
+          clientX <= templateInnerDomRect.right;
+        const isInY =
+          clientY >= templateInnerDomRect.top &&
+          clientY <= templateInnerDomRect.bottom;
+        const isInInner = isInX && isInY;
+        if (!isInInner) {
+          if (template) {
+            // 수정이전의 버전인 originTemplate이 있으면, 수정된 버전으로 바꿀 것인지 아닌지를 묻는 창이 뜨고, originTemplate이 없다면 templates 창을 닫음
+            const item = sessionStorage.getItem("originTemplate");
+            item === null ? setOpenTemplates(false) : setOpenEditAlert(true);
+          } else {
+            setOpenTemplates(false);
+          }
         }
       }
-    }
-  };
+    },
+    [setOpenTemplates, template]
+  );
 
-  const onClickUseBtn = () => {
+  const onClickUseBtn = useCallback(() => {
     const targetPageId = sessionStorage.getItem("targetPageId");
     if (template) {
       const newPage: Page = {
@@ -132,37 +141,40 @@ const Templates = ({
       }
       setOpenTemplates(false);
     }
-  };
-  const showOtherTemplate = (otherTemplate: Page) => {
-    if (template) {
-      const item = sessionStorage.getItem("originTemplate");
-      openTarget.current = otherTemplate;
-      if (item === null) {
-        setTemplate(otherTemplate);
-      } else {
-        setOpenEditAlert(true);
+  }, [addPage, editPage, setOpenTemplates, setRoutePage, template]);
+  const showOtherTemplate = useCallback(
+    (otherTemplate: Page) => {
+      if (template) {
+        const item = sessionStorage.getItem("originTemplate");
+        openTarget.current = otherTemplate;
+        if (item === null) {
+          setTemplate(otherTemplate);
+        } else {
+          setOpenEditAlert(true);
+        }
       }
-    }
-  };
-  const closeTemplate = () => {
+    },
+    [template]
+  );
+  const closeTemplate = useCallback(() => {
     setOpenEditAlert(false);
     setOpenTemplates(false);
-  };
+  }, [setOpenTemplates]);
   /**
    * editAlert 창을 닫고, templates에서  다른  template (=openTarget.current)을 연다
    */
-  const closeAlertOpenOther = () => {
+  const closeAlertOpenOther = useCallback(() => {
     setOpenEditAlert(false);
     setTemplate(openTarget.current);
-  };
+  }, []);
   /**
    * editAlert에서 수정 사항을 취소하거나 저장한 후에, openTarget.current의 값에 따라 templates창을 닫거나, 다른 template을 연다.
    */
-  const afterEditAlert = () => {
+  const afterEditAlert = useCallback(() => {
     template && sessionStorage.removeItem("originTemplate");
     openTarget.current === null ? closeTemplate() : closeAlertOpenOther();
-  };
-  const onClickDiscardBtn = () => {
+  }, [closeTemplate, closeAlertOpenOther, template]);
+  const onClickDiscardBtn = useCallback(() => {
     if (template) {
       const item = sessionStorage.getItem("originTemplate");
       if (item) {
@@ -170,9 +182,9 @@ const Templates = ({
         afterEditAlert();
       }
     }
-  };
+  }, [template, cancelEditTemplate, afterEditAlert]);
 
-  const onClickMakeTemplateBtn = () => {
+  const onClickMakeTemplateBtn = useCallback(() => {
     const date = JSON.stringify(Date.now());
     const id =
       templatesId === null
@@ -193,9 +205,9 @@ const Templates = ({
     addTemplate(newTemplate);
     setOpenTemplates(false);
     setRoutePage(newTemplate);
-  };
+  }, [addTemplate, setOpenTemplates, setRoutePage, templatesId]);
 
-  const onClickDeleteTemplateBtn = () => {
+  const onClickDeleteTemplateBtn = useCallback(() => {
     if (template && templatesId && templates) {
       const index = templatesId?.indexOf(template.id);
       if (templatesId.length > 1) {
@@ -229,11 +241,23 @@ const Templates = ({
       deleteTemplate(template.id);
     }
     setOpenDeleteAlert(false);
-  };
+  }, [
+    deleteTemplate,
+    pages,
+    pagesId,
+    routePageId,
+    setOpenTemplates,
+    setRoutePage,
+    template,
+    templates,
+    templatesId,
+    user.favorites,
+    user.recentPagesId,
+  ]);
 
   return (
     <>
-      <div id="templates" onClick={(event) => onClickTemplate(event)}>
+      <div id="templates" onClick={onClickTemplate}>
         <div className="inner">
           <div id="template" className={expand ? "expand" : ""}>
             {template ? (
