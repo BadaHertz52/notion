@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { CSSProperties } from "styled-components";
@@ -290,9 +290,12 @@ const NotionRouter = () => {
   //page---
 
   //--user
-  const addRecentPage = (itemId: string) => {
-    dispatch(add_recent_page(itemId));
-  };
+  const addRecentPage = useCallback(
+    (itemId: string) => {
+      dispatch(add_recent_page(itemId));
+    },
+    [dispatch]
+  );
   const cleanRecentPage = () => {
     dispatch(clean_recent_page());
   };
@@ -305,9 +308,12 @@ const NotionRouter = () => {
   //---user
 
   //--side
-  const changeSide = (appear: SideAppear) => {
-    dispatch(change_side(appear));
-  };
+  const changeSide = useCallback(
+    (appear: SideAppear) => {
+      dispatch(change_side(appear));
+    },
+    [dispatch]
+  );
   //side--
 
   //action.function ---
@@ -332,26 +338,41 @@ const NotionRouter = () => {
     removeFavorites: removeFavorites,
     changeSide: changeSide,
   };
-  const findRoutePage = (pageId: string) => {
-    if (pages && pagesId) {
-      if (pagesId.includes(pageId)) {
-        const page = findPage(pagesId, pages, pageId);
-        setRoutePage(page);
-        setTargetPageId(page.id);
-        addRecentPage(pageId);
-      } else if (trashPagesId && trashPages && trashPagesId.includes(pageId)) {
-        const page = findPage(trashPagesId, trashPages, pageId);
-        setRoutePage(page);
-        setTargetPageId(page.id);
-        addRecentPage(pageId);
-      } else {
-        setRoutePage(firstPage);
-        firstPage &&
-          !user.recentPagesId?.includes(firstPage.id) &&
-          addRecentPage(firstPage.id);
+  const findRoutePage = useCallback(
+    (pageId: string) => {
+      if (pages && pagesId) {
+        if (pagesId.includes(pageId)) {
+          const page = findPage(pagesId, pages, pageId);
+          setRoutePage(page);
+          setTargetPageId(page.id);
+          addRecentPage(pageId);
+        } else if (
+          trashPagesId &&
+          trashPages &&
+          trashPagesId.includes(pageId)
+        ) {
+          const page = findPage(trashPagesId, trashPages, pageId);
+          setRoutePage(page);
+          setTargetPageId(page.id);
+          addRecentPage(pageId);
+        } else {
+          setRoutePage(firstPage);
+          firstPage &&
+            !user.recentPagesId?.includes(firstPage.id) &&
+            addRecentPage(firstPage.id);
+        }
       }
-    }
-  };
+    },
+    [
+      addRecentPage,
+      firstPage,
+      pages,
+      pagesId,
+      trashPages,
+      trashPagesId,
+      user.recentPagesId,
+    ]
+  );
   const onClickDiscardEdit = () => {
     discardEditHtml?.classList.remove("on");
     setDiscardEdit(true);
@@ -420,13 +441,13 @@ const NotionRouter = () => {
       setRoutePage(null);
       setLoading(false);
     }
-  }, [firstPagesId, pages, pagesId]);
+  }, [firstPagesId, pages, pagesId, user.favorites]);
   useEffect(() => {
     if (firstPage && routePage === null && hash === "") {
       setRoutePage(firstPage);
       setTargetPageId(firstPage.id);
     }
-  }, [firstPage]);
+  }, [firstPage, hash, routePage]);
 
   useEffect(() => {
     if (routePage && pagesId && pages) {
@@ -436,13 +457,13 @@ const NotionRouter = () => {
       changeFavicon(routePage.header.icon, routePage.header.iconType);
       setLoading(false);
     }
-  }, [routePage]);
+  }, [routePage, navigate, pages, pagesId]);
   useEffect(() => {
     //url 변경시
     const lastSlash = hash.lastIndexOf("/");
     const id = hash.slice(lastSlash + 1);
     findRoutePage(id);
-  }, [hash]);
+  }, [hash, findRoutePage]);
 
   useEffect(() => {
     //sideBar 에서 페이지 이동 시
@@ -452,7 +473,7 @@ const NotionRouter = () => {
       setRoutePage(null);
       changeSide("lock");
     }
-  }, [targetPageId, notion.pagesId]);
+  }, [targetPageId, notion.pagesId, changeSide, findRoutePage]);
 
   useEffect(() => {
     const innerWidth = window.innerWidth;
