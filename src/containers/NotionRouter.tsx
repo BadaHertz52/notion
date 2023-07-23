@@ -39,6 +39,7 @@ import {
   add_favorites,
   add_recent_page,
   clean_recent_page,
+  delete_recent_page,
   remove_favorites,
 } from "../modules/user/reducer";
 import EditorContainer, { ModalType } from "./EditorContainer";
@@ -249,7 +250,10 @@ const NotionRouter = () => {
         openOtherFirstPage();
       }
     }
-    dispatch(delete_page(pageId));
+    setTimeout(() => {
+      dispatch(delete_page(pageId));
+      dispatch(delete_recent_page(pageId));
+    }, 1000);
     if (user.favorites) {
       user.favorites?.includes(pageId) && dispatch(remove_favorites(pageId));
     }
