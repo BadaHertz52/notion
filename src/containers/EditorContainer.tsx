@@ -19,6 +19,7 @@ import {
   mobileSideMenuType,
   pathType,
 } from "./NotionRouter";
+import { makePagePath } from "../fn";
 
 export const modalMoveToPage = "modalMoveToPage";
 export const modalComment = "modalComment";
@@ -40,11 +41,6 @@ type EditorContainerProps = {
   recentPagesId: string[] | null;
   sideAppear: SideAppear;
   page: Page;
-  makePagePath: (
-    page: Page,
-    pagesId: string[],
-    pages: Page[]
-  ) => pathType[] | null;
   isInTrash: boolean;
   setTargetPageId: Dispatch<SetStateAction<string>>;
   setRoutePage: React.Dispatch<React.SetStateAction<Page | null>>;
@@ -81,7 +77,6 @@ const EditorContainer = ({
   pagesId,
   recentPagesId,
   isInTrash,
-  makePagePath,
   setTargetPageId,
   setRoutePage,
   openComment,
@@ -131,7 +126,7 @@ const EditorContainer = ({
 
   useEffect(() => {
     setPagePath(makePagePath(page, pagesId, pages));
-  }, [page, page.header.icon, page.header.title, makePagePath, pages, pagesId]);
+  }, [page, page.header.icon, page.header.title, pages, pagesId]);
   return (
     <div className="editor" style={editorStyle}>
       {isInTrash && (

@@ -1,12 +1,9 @@
 import React from "react";
-import {
-  makePagePath,
-  makeRoutePath,
-  pathType,
-} from "../containers/NotionRouter";
+import { pathType } from "../containers/NotionRouter";
 import { Page } from "../modules/notion/type";
 import ScreenOnly from "./ScreenOnly";
 import PageIcon from "./PageIcon";
+import { makePagePath, makeRoutePath } from "../fn";
 import { CSSProperties } from "styled-components";
 type PageItemProps = {
   page: Page;

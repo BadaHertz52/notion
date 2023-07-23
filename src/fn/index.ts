@@ -11,6 +11,7 @@ import {
 } from "./block";
 import { findPage } from "./page";
 import { closeModal } from "./modal";
+import { makePagePath, makeRoutePath } from "./path";
 import { findPosition } from "./position";
 export {
   isMobile,
@@ -27,4 +28,6 @@ export {
   findPage,
   closeModal,
   findPosition,
+  makePagePath,
+  makeRoutePath,
 };
