@@ -175,9 +175,9 @@ const NotionRouter = () => {
   const user = useSelector((state: RootState) => state.user);
   const sideAppear = useSelector((state: RootState) => state.side.appear);
 
-  const location = window.location;
-  const hash = location.hash;
-
+  const path = window.location.pathname;
+  const lastSlash = path.lastIndexOf("/");
+  const currentPageId = path.slice(lastSlash + 1);
   const firstList: ListItem[] | null = useMemo(() => {
     if (firstPagesId && pagesId && pages) {
       const FIRST_LIST = firstPagesId.map((id: string) => {
@@ -283,8 +283,6 @@ const NotionRouter = () => {
     dispatch(edit_page(pageId, newPage));
   }
   function deletePage(pageId: string) {
-    const lastSlash = hash.lastIndexOf("/");
-    const currentPageId = hash.slice(lastSlash + 1);
     if (pageId === currentPageId && firstPagesId) {
       const openOtherFirstPage = () => {
         firstPagesId[0] === pageId
@@ -430,14 +428,13 @@ const NotionRouter = () => {
 
   useEffect(() => {
     //url 변경시
-    const path = window.location.pathname.slice(1);
-    if (path !== routePage?.id) {
-      if (pagesId?.includes(path) && pages && pagesId) {
-        const page = findPage(pagesId, pages, path);
+    if (currentPageId !== routePage?.id) {
+      if (pagesId?.includes(currentPageId) && pages && pagesId) {
+        const page = findPage(pagesId, pages, currentPageId);
         setRoutePage(page);
         setTargetPageId(page.id);
-      } else if (trashPagesId?.includes(path) && trashPages) {
-        const page = findPage(trashPagesId, trashPages, path);
+      } else if (trashPagesId?.includes(currentPageId) && trashPages) {
+        const page = findPage(trashPagesId, trashPages, currentPageId);
         setRoutePage(page);
         setTargetPageId(page.id);
       } else {
@@ -445,7 +442,15 @@ const NotionRouter = () => {
         setTargetPageId(firstPage ? firstPage.id : "none");
       }
     }
-  }, [routePage, pages, pagesId, trashPagesId, trashPages, firstPage]);
+  }, [
+    routePage,
+    pages,
+    pagesId,
+    trashPagesId,
+    trashPages,
+    firstPage,
+    currentPageId,
+  ]);
 
   useEffect(() => {
     //sideBar 에서 페이지 이동 시

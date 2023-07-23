@@ -66,8 +66,7 @@ const Trash = ({
           filteringTargetList = makeFilteringTargetList(trashPages);
           break;
         case "current":
-          const location = window.location;
-          const path = location.hash;
+          const path = window.location.pathname;
           const lastSlash = path.lastIndexOf("/");
           const currentPageId = path.slice(lastSlash + 1);
           const filteredTrashPages = trashPages?.filter((page: Page) =>
