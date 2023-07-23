@@ -131,7 +131,7 @@ const EditorContainer = ({
 
   useEffect(() => {
     setPagePath(makePagePath(page, pagesId, pages));
-  }, [page, page.header.icon, page.header.title, makePagePath]);
+  }, [page, page.header.icon, page.header.title, makePagePath, pages, pagesId]);
   return (
     <div className="editor" style={editorStyle}>
       {isInTrash && (
