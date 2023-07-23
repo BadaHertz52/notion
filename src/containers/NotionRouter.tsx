@@ -33,7 +33,7 @@ import {
 } from "../modules/notion/reducer";
 import { Block, Page, IconType, ListItem } from "../modules/notion/type";
 import { emojiPath } from "../modules/notion/emojiData";
-import { findPage, makeRoutePath } from "../fn";
+import { findPage, getCurrentPageId, makeRoutePath } from "../fn";
 import { change_side, SideAppear } from "../modules/side/reducer";
 import {
   add_favorites,
@@ -121,10 +121,7 @@ const NotionRouter = () => {
   const trashPages = notion.trash.pages;
   const user = useSelector((state: RootState) => state.user);
   const sideAppear = useSelector((state: RootState) => state.side.appear);
-
-  const path = window.location.pathname;
-  const lastSlash = path.lastIndexOf("/");
-  const currentPageId = path.slice(lastSlash + 1);
+  const currentPageId = getCurrentPageId();
   const firstList: ListItem[] | null = useMemo(() => {
     if (firstPagesId && pagesId && pages) {
       const FIRST_LIST = firstPagesId.map((id: string) => {

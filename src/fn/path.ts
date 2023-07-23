@@ -2,6 +2,13 @@ import { pathType } from "../containers/NotionRouter";
 import { Page } from "../modules/notion/type";
 import { findPage } from ".";
 
+export const getCurrentPageId = () => {
+  const path = window.location.pathname;
+  const lastSlash = path.lastIndexOf("/");
+  const currentPageId = path.slice(lastSlash + 1);
+  return currentPageId;
+};
+
 export const makePagePath = (
   page: Page,
   pagesId: string[],

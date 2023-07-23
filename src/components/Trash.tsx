@@ -10,7 +10,7 @@ import { CSSProperties } from "styled-components";
 
 import { Page } from "../modules/notion/type";
 import { resultType } from "./Result";
-import { makeResultType } from "../fn";
+import { getCurrentPageId, makeResultType } from "../fn";
 import ScreenOnly from "./ScreenOnly";
 import TrashResultItem from "./TrashResultItem";
 
@@ -66,9 +66,7 @@ const Trash = ({
           filteringTargetList = makeFilteringTargetList(trashPages);
           break;
         case "current":
-          const path = window.location.pathname;
-          const lastSlash = path.lastIndexOf("/");
-          const currentPageId = path.slice(lastSlash + 1);
+          const currentPageId = getCurrentPageId();
           const filteredTrashPages = trashPages?.filter((page: Page) =>
             page.parentsId?.includes(currentPageId)
           );
