@@ -1,4 +1,10 @@
-import React, { createContext, useEffect, useState, useCallback } from "react";
+import React, {
+  createContext,
+  useEffect,
+  useState,
+  useCallback,
+  useMemo,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { CSSProperties } from "styled-components";
@@ -158,15 +164,12 @@ const initialNotionActions = {
   changeSide: (appear: SideAppear) => {},
 };
 export const ActionContext = createContext({ actions: initialNotionActions });
+
 const NotionRouter = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const notion = useSelector((state: RootState) => state.notion);
-  const pagesId = notion.pagesId;
-  const pages = notion.pages;
-  const firstPagesId = notion.firstPagesId;
-  const [firstList, setFirstList] = useState<ListItem[] | null>(null);
-  const [firstPage, setFirstPage] = useState<Page | null>(null);
+  const { pagesId, pages, firstPagesId } = notion;
   const trashPagesId = notion.trash.pagesId;
   const trashPages = notion.trash.pages;
   const user = useSelector((state: RootState) => state.user);
@@ -175,8 +178,42 @@ const NotionRouter = () => {
   const location = window.location;
   const hash = location.hash;
 
-  const [targetPageId, setTargetPageId] = useState<string>("none");
-  const [routePage, setRoutePage] = useState<Page | null>(null);
+  const firstList: ListItem[] | null = useMemo(() => {
+    if (firstPagesId && pagesId && pages) {
+      const FIRST_LIST = firstPagesId.map((id: string) => {
+        const PAGE: Page = findPage(pagesId, pages, id);
+        const item: ListItem = {
+          id: PAGE.id,
+          title: PAGE.header.title,
+          iconType: PAGE.header.iconType,
+          icon: PAGE.header.icon,
+          editTime: JSON.stringify(Date.now()),
+          createTime: JSON.stringify(Date.now()),
+          subPagesId: PAGE.subPagesId,
+          parentsId: PAGE.parentsId,
+        };
+        return item;
+      });
+      return FIRST_LIST;
+    } else {
+      return null;
+    }
+  }, [firstPagesId, pages, pagesId]);
+
+  const firstPage: Page | null = useMemo(() => {
+    if (pagesId && pages) {
+      return user.favorites
+        ? findPage(pagesId, pages, user.favorites[0])
+        : pages[0];
+    } else {
+      return null;
+    }
+  }, [pages, pagesId, user.favorites]);
+
+  const [targetPageId, setTargetPageId] = useState<string>(
+    firstPage ? firstPage.id : "none"
+  );
+  const [routePage, setRoutePage] = useState<Page | null>(firstPage);
   const [openQF, setOpenQF] = useState<boolean>(false);
   const [showAllComments, setShowAllComments] = useState<boolean>(false);
   const [allCommentsStyle, setAllCommentsStyle] = useState<CSSProperties>({
@@ -191,7 +228,7 @@ const NotionRouter = () => {
   const [fullWidth, setFullWidth] = useState<boolean>(false);
   const [openTemplates, setOpenTemplates] = useState<boolean>(false);
   const [fontStyle, setFontStyle] = useState<fontStyleType>(defaultFontFamily);
-  const [loading, setLoading] = useState<boolean>(true);
+  const loading: boolean = !routePage;
   const [modal, setModal] = useState<ModalType>({
     open: false,
     what: null,
@@ -338,41 +375,7 @@ const NotionRouter = () => {
     removeFavorites: removeFavorites,
     changeSide: changeSide,
   };
-  const findRoutePage = useCallback(
-    (pageId: string) => {
-      if (pages && pagesId) {
-        if (pagesId.includes(pageId)) {
-          const page = findPage(pagesId, pages, pageId);
-          setRoutePage(page);
-          setTargetPageId(page.id);
-          addRecentPage(pageId);
-        } else if (
-          trashPagesId &&
-          trashPages &&
-          trashPagesId.includes(pageId)
-        ) {
-          const page = findPage(trashPagesId, trashPages, pageId);
-          setRoutePage(page);
-          setTargetPageId(page.id);
-          addRecentPage(pageId);
-        } else {
-          setRoutePage(firstPage);
-          firstPage &&
-            !user.recentPagesId?.includes(firstPage.id) &&
-            addRecentPage(firstPage.id);
-        }
-      }
-    },
-    [
-      addRecentPage,
-      firstPage,
-      pages,
-      pagesId,
-      trashPages,
-      trashPagesId,
-      user.recentPagesId,
-    ]
-  );
+
   const onClickDiscardEdit = () => {
     discardEditHtml?.classList.remove("on");
     setDiscardEdit(true);
@@ -418,62 +421,54 @@ const NotionRouter = () => {
     }
   };
   useEffect(() => {
-    if (firstPagesId && pages && pagesId) {
-      const FIRST_LIST = firstPagesId.map((id: string) => {
-        const PAGE: Page = findPage(pagesId, pages, id);
-        return {
-          id: PAGE.id,
-          title: PAGE.header.title,
-          iconType: PAGE.header.iconType,
-          icon: PAGE.header.icon,
-          editTime: JSON.stringify(Date.now()),
-          createTime: JSON.stringify(Date.now()),
-          subPagesId: PAGE.subPagesId,
-          parentsId: PAGE.parentsId,
-        };
-      });
-      setFirstList(FIRST_LIST);
-      const newFirstPage = user.favorites
-        ? findPage(pagesId, pages, user.favorites[0])
-        : pages[0];
-      setFirstPage(newFirstPage);
-    } else {
-      setRoutePage(null);
-      setLoading(false);
-    }
-  }, [firstPagesId, pages, pagesId, user.favorites]);
-  useEffect(() => {
-    if (firstPage && routePage === null && hash === "") {
-      setRoutePage(firstPage);
-      setTargetPageId(firstPage.id);
-    }
-  }, [firstPage, hash, routePage]);
-
-  useEffect(() => {
     if (routePage && pagesId && pages) {
-      const path = makeRoutePath(routePage, pagesId, pages);
-      navigate(path);
       changeTitle(routePage.header.title);
       changeFavicon(routePage.header.icon, routePage.header.iconType);
-      setLoading(false);
+      addRecentPage(routePage.id);
     }
-  }, [routePage, navigate, pages, pagesId]);
+  }, [routePage, navigate, pages, pagesId, addRecentPage]);
+
   useEffect(() => {
     //url 변경시
-    const lastSlash = hash.lastIndexOf("/");
-    const id = hash.slice(lastSlash + 1);
-    findRoutePage(id);
-  }, [hash, findRoutePage]);
+    const path = window.location.pathname.slice(1);
+    if (path !== routePage?.id) {
+      if (pagesId?.includes(path) && pages && pagesId) {
+        const page = findPage(pagesId, pages, path);
+        setRoutePage(page);
+        setTargetPageId(page.id);
+      } else if (trashPagesId?.includes(path) && trashPages) {
+        const page = findPage(trashPagesId, trashPages, path);
+        setRoutePage(page);
+        setTargetPageId(page.id);
+      } else {
+        setRoutePage(firstPage);
+        setTargetPageId(firstPage ? firstPage.id : "none");
+      }
+    }
+  }, [routePage, pages, pagesId, trashPagesId, trashPages, firstPage]);
 
   useEffect(() => {
     //sideBar 에서 페이지 이동 시
-    if (targetPageId !== "none") {
-      findRoutePage(targetPageId);
-    } else {
+    if (targetPageId === "none") {
       setRoutePage(null);
       changeSide("lock");
+    } else {
+      if (targetPageId !== routePage?.id && pagesId && pages) {
+        const newRoutePage = findPage(pagesId, pages, targetPageId);
+        setRoutePage(newRoutePage);
+        const path = makeRoutePath(newRoutePage, pagesId, pages);
+        navigate(path);
+      }
     }
-  }, [targetPageId, notion.pagesId, changeSide, findRoutePage]);
+  }, [
+    pages,
+    pagesId,
+    targetPageId,
+    notion.pagesId,
+    changeSide,
+    routePage,
+    navigate,
+  ]);
 
   useEffect(() => {
     const innerWidth = window.innerWidth;
