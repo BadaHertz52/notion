@@ -43,7 +43,7 @@ export const makeRoutePath = (
 ): string => {
   let path = "";
   if (page.parentsId === null) {
-    path = `/${page.id}`;
+    path = `/notion/${page.id}`;
   } else {
     const pagePath = makePagePath(page, pagesId, pages);
     if (pagePath) {
@@ -52,7 +52,7 @@ export const makeRoutePath = (
         if (i < pagePath.length) {
           const element: pathType = pagePath[i];
           const id: string = element.id;
-          PATH = PATH.concat(`/${id}`);
+          PATH = PATH.concat(`/notion/${id}`);
           if (i === pagePath.length - 1) {
             path = PATH;
           }
