@@ -156,9 +156,14 @@ const NotionRouter = () => {
   }, [pages, pagesId, user.favorites]);
 
   const [targetPageId, setTargetPageId] = useState<string>(
-    firstPage ? firstPage.id : "none"
+    user.favorites?.[0] ? user.favorites[0] : firstPage ? firstPage.id : "none"
   );
-  const [routePage, setRoutePage] = useState<Page | null>(firstPage);
+
+  const [routePage, setRoutePage] = useState<Page | null>(
+    targetPageId !== "none" && pagesId && pages
+      ? findPage(pagesId, pages, targetPageId)
+      : null
+  );
   const [openQF, setOpenQF] = useState<boolean>(false);
   const [showAllComments, setShowAllComments] = useState<boolean>(false);
   const [allCommentsStyle, setAllCommentsStyle] = useState<CSSProperties>({
@@ -366,6 +371,12 @@ const NotionRouter = () => {
       console.error("Can't find shortcut icon");
     }
   };
+  useEffect(() => {
+    if (!currentPageId && routePage && pagesId && pages) {
+      const path = makeRoutePath(routePage, pagesId, pages);
+      navigate(path);
+    }
+  }, [currentPageId, routePage, pagesId, pages, navigate]);
   useEffect(() => {
     if (routePage && pagesId && pages) {
       changeTitle(routePage.header.title);
