@@ -44,6 +44,7 @@ import {
 } from "../modules/user/reducer";
 import EditorContainer, { ModalType } from "./EditorContainer";
 import SideBarContainer from "./SideBarContainer";
+import NonePage from "../components/NonePage";
 const MOBILE_SIDE_MENU = {
   ms_turnInto: "ms_turnInto",
   ms_movePage: "ms_movePage",
@@ -118,8 +119,12 @@ const NotionRouter = () => {
   const dispatch = useDispatch();
   const notion = useSelector((state: RootState) => state.notion);
   const { pagesId, pages, firstPagesId } = notion;
-  const trashPagesId = notion.trash.pagesId;
-  const trashPages = notion.trash.pages;
+  /**
+   * template이 아닌 type이 "page"인 페이지들이 존재하는 지 여부
+   */
+  const pageExist: boolean = pages
+    ? !!pages.filter((page) => page.type === "page")[0]
+    : false;
   const user = useSelector((state: RootState) => state.user);
   const sideAppear = useSelector((state: RootState) => state.side.appear);
   const currentPageId = getCurrentPageId();
@@ -177,7 +182,6 @@ const NotionRouter = () => {
   const [fullWidth, setFullWidth] = useState<boolean>(false);
   const [openTemplates, setOpenTemplates] = useState<boolean>(false);
   const [fontStyle, setFontStyle] = useState<fontStyleType>(defaultFontFamily);
-  const loading: boolean = !currentPage;
   const [modal, setModal] = useState<ModalType>({
     open: false,
     what: null,
@@ -231,27 +235,30 @@ const NotionRouter = () => {
   function editPage(pageId: string, newPage: Page) {
     dispatch(edit_page(pageId, newPage));
   }
+  const openOtherFirstPage = (pageId: string) => {
+    if (firstPagesId) {
+      firstPagesId[0] === pageId
+        ? firstPagesId.length > 1
+          ? navigate(makeRoutePath(firstPagesId[1]))
+          : navigate("/")
+        : navigate(makeRoutePath(firstPagesId[0]));
+    }
+  };
+
   function deletePage(pageId: string) {
     if (pageId === currentPageId && firstPagesId) {
-      const openOtherFirstPage = () => {
-        firstPagesId[0] === pageId
-          ? firstPagesId.length > 1
-            ? navigate(makeRoutePath(firstPagesId[1]))
-            : navigate("/")
-          : navigate(makeRoutePath(firstPagesId[0]));
-      };
       if (user.favorites) {
         if (user.favorites.includes(pageId)) {
           user.favorites[0] === pageId
             ? user.favorites.length > 1
               ? navigate(makeRoutePath(user.favorites[1]))
-              : openOtherFirstPage()
+              : openOtherFirstPage(pageId)
             : navigate(makeRoutePath(user.favorites[0]));
         } else {
           navigate(makeRoutePath(user.favorites[0]));
         }
       } else {
-        openOtherFirstPage();
+        openOtherFirstPage(pageId);
       }
     }
     setTimeout(() => {
@@ -422,20 +429,21 @@ const NotionRouter = () => {
       }
     }
   }, [showAllComments]);
+
   return (
     <ActionContext.Provider value={{ actions: notionActions }}>
       <div id="inner" className="sideBar-lock">
-        {loading ? (
-          <Loading />
+        <SideBarContainer
+          sideAppear={sideAppear}
+          setOpenQF={setOpenQF}
+          setOpenTemplates={setOpenTemplates}
+          showAllComments={showAllComments}
+        />
+        {!pageExist || !currentPage ? (
+          <NonePage addPage={addPage} />
         ) : (
           <>
-            <SideBarContainer
-              sideAppear={sideAppear}
-              setOpenQF={setOpenQF}
-              setOpenTemplates={setOpenTemplates}
-              showAllComments={showAllComments}
-            />
-            {pagesId && pages && firstList ? (
+            {pagesId && pages && firstList && (
               <>
                 <Routes>
                   {pages.map((p) => (
@@ -555,19 +563,7 @@ const NotionRouter = () => {
                   />
                 )}
               </>
-            ) : (
-              <div className="editor nonePage">
-                <p>Page doesn't existence</p>
-                <p>Try make new Page</p>
-                <button
-                  title="button to make new page"
-                  onClick={() => addPage(pageSample)}
-                >
-                  Make new page
-                </button>
-              </div>
             )}
-            {/* ----editor */}
           </>
         )}
         <div id="discardEdit" className="discardEdit">
