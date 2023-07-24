@@ -35,29 +35,6 @@ export const makePagePath = (
     ];
   }
 };
-export const makeRoutePath = (
-  page: Page,
-  pagesId: string[],
-  pages: Page[]
-): string => {
-  let path = "";
-  if (page.parentsId === null) {
-    path = `/notion/${page.id}`;
-  } else {
-    const pagePath = makePagePath(page, pagesId, pages);
-    if (pagePath) {
-      let PATH = "";
-      for (let i = 0; i <= pagePath.length; i++) {
-        if (i < pagePath.length) {
-          const element: pathType = pagePath[i];
-          const id: string = element.id;
-          PATH = PATH.concat(`/notion/${id}`);
-          if (i === pagePath.length - 1) {
-            path = PATH;
-          }
-        }
-      }
-    }
-  }
-  return path;
+export const makeRoutePath = (pageId: string): string => {
+  return `/notion/${pageId}`;
 };

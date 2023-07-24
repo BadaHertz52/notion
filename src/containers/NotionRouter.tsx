@@ -373,7 +373,7 @@ const NotionRouter = () => {
   };
   useEffect(() => {
     if (!currentPageId && routePage && pagesId && pages) {
-      const path = makeRoutePath(routePage, pagesId, pages);
+      const path = makeRoutePath(routePage.id);
       navigate(path);
     }
   }, [currentPageId, routePage, pagesId, pages, navigate]);
@@ -420,7 +420,7 @@ const NotionRouter = () => {
       if (targetPageId !== routePage?.id && pagesId && pages) {
         const newRoutePage = findPage(pagesId, pages, targetPageId);
         setRoutePage(newRoutePage);
-        const path = makeRoutePath(newRoutePage, pagesId, pages);
+        const path = makeRoutePath(newRoutePage.id);
         navigate(path);
       }
     }
@@ -516,7 +516,7 @@ const NotionRouter = () => {
                   /> */}
                   {pages.map((p) => (
                     <Route
-                      path={makeRoutePath(p, pagesId, pages)}
+                      path={makeRoutePath(p.id)}
                       element={
                         <EditorContainer
                           sideAppear={sideAppear}

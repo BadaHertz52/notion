@@ -12,7 +12,7 @@ type PageItemProps = {
   addLink: (link: string) => void;
 };
 const PageItem = ({ page, pages, pagesId, addLink }: PageItemProps) => {
-  const pagePath = makeRoutePath(page, pagesId, pages).slice(1);
+  const pagePath = makeRoutePath(page.id).slice(1);
   const paths = makePagePath(page, pagesId, pages);
   const setWidth = (length: number) => {
     const n = 100 / length;
