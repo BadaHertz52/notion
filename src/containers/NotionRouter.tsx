@@ -476,7 +476,7 @@ const NotionRouter = () => {
             {routePage && pagesId && pages && firstList ? (
               <>
                 <Routes>
-                  <Route
+                  {/* <Route
                     path={makeRoutePath(routePage, pagesId, pages)}
                     element={
                       <EditorContainer
@@ -513,7 +513,47 @@ const NotionRouter = () => {
                         setMobileSideMenu={setMobileSideMenu}
                       />
                     }
-                  />
+                  /> */}
+                  {pages.map((p) => (
+                    <Route
+                      path={makeRoutePath(p, pagesId, pages)}
+                      element={
+                        <EditorContainer
+                          sideAppear={sideAppear}
+                          firstList={firstList}
+                          userName={user.userName}
+                          recentPagesId={user.recentPagesId}
+                          page={p}
+                          pages={pages}
+                          pagesId={pagesId}
+                          isInTrash={!pagesId.includes(p.id)}
+                          setTargetPageId={setTargetPageId}
+                          setRoutePage={setRoutePage}
+                          showAllComments={showAllComments}
+                          setShowAllComments={setShowAllComments}
+                          discardEdit={discard_edit}
+                          setDiscardEdit={setDiscardEdit}
+                          setOpenExport={setOpenExport}
+                          modal={modal}
+                          setModal={setModal}
+                          openComment={openComment}
+                          setOpenComment={setOpenComment}
+                          commentBlock={commentBlock}
+                          setCommentBlock={setCommentBlock}
+                          smallText={smallText}
+                          setSmallText={setSmallText}
+                          fullWidth={fullWidth}
+                          setFullWidth={setFullWidth}
+                          openTemplates={openTemplates}
+                          setOpenTemplates={setOpenTemplates}
+                          fontStyle={fontStyle}
+                          setFontStyle={setFontStyle}
+                          mobileSideMenu={mobileSideMenu}
+                          setMobileSideMenu={setMobileSideMenu}
+                        />
+                      }
+                    />
+                  ))}
                 </Routes>
                 {openExport && (
                   <Export

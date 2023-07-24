@@ -98,6 +98,9 @@ type ListItem = {
 
 type pageType = "page" | "template";
 type Page = {
+  /**
+   * "/" 사용 x , 만들어진 시간을 활용
+   */
   id: string;
   type: pageType;
   header: {

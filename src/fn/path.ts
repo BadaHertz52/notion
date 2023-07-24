@@ -4,8 +4,7 @@ import { findPage } from ".";
 
 export const getCurrentPageId = () => {
   const path = window.location.pathname;
-  const lastSlash = path.lastIndexOf("/");
-  const currentPageId = path.slice(lastSlash + 1);
+  const currentPageId = path.replaceAll("/", "").replace("notion", "");
   return currentPageId;
 };
 
