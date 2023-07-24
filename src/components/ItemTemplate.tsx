@@ -47,29 +47,30 @@ const ItemTemplate = ({
             });
       }
     };
+    let subPageElement = null;
     switch (target.tagName.toLocaleLowerCase()) {
       case "path":
-        let subPageElement =
+        subPageElement =
           target.parentElement?.parentElement?.parentElement?.parentElement
             ?.parentElement?.nextElementSibling;
-        toggleSubPage(subPageElement);
+
         break;
       case "svg":
         subPageElement =
           target.parentElement?.parentElement?.parentElement?.parentElement
             ?.nextElementSibling;
-        toggleSubPage(subPageElement);
+
         break;
       case "button":
         subPageElement =
           target.parentElement?.parentElement?.parentElement
             ?.nextElementSibling;
-        toggleSubPage(subPageElement);
         break;
 
       default:
         break;
     }
+    toggleSubPage(subPageElement);
   }, []);
   const showPageFn = useCallback(() => {
     if (sideBarPageFn.current) {
