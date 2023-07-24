@@ -11,11 +11,10 @@ import React, {
   useCallback,
 } from "react";
 import { Block, Page } from "../modules/notion/type";
-import { findBlock } from "../fn";
+import { findBlock, setTemplateItem } from "../fn";
 import { Command } from "./Frame";
 import { ActionContext, selectionType } from "../containers/NotionRouter";
 import BlockComponent from "./BlockComponent";
-import { setTemplateItem } from "../fn";
 
 import { GrCheckbox, GrCheckboxSelected } from "react-icons/gr";
 import { MdPlayArrow } from "react-icons/md";

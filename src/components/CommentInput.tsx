@@ -15,8 +15,7 @@ import {
 } from "../modules/notion/type";
 import { ModalType } from "../containers/EditorContainer";
 import { CSSProperties } from "styled-components";
-import { removeSelected } from "../fn";
-import { setTemplateItem } from "../fn";
+import { removeSelected, setTemplateItem } from "../fn";
 import ScreenOnly from "./ScreenOnly";
 import { IoMdCloseCircle } from "react-icons/io";
 import { IoArrowUpCircleSharp, IoCheckmarkCircle } from "react-icons/io5";

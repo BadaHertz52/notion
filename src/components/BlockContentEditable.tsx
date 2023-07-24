@@ -16,11 +16,13 @@ import {
   findParentBlock,
   findPreviousBlockInDoc,
   makeNewBlock,
-} from "../fn";
+  isMobile,
+  selectContent,
+  setTemplateItem,
+} from "../fn/index";
 import { Command } from "./Frame";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 import ScreenOnly from "./ScreenOnly";
-import { isMobile, selectContent, setTemplateItem } from "../fn";
 import { ActionContext, selectionType } from "../containers/NotionRouter";
 
 type BlockContendEditableProps = {

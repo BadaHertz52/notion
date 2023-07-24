@@ -13,7 +13,15 @@ import React, {
 } from "react";
 import { Block, MainCommentType, Page, ListItem } from "../modules/notion/type";
 import { blockSample } from "../modules/notion/reducer";
-import { makeNewBlock, findPage, findBlock, findParentBlock } from "../fn";
+import {
+  makeNewBlock,
+  findPage,
+  findBlock,
+  findParentBlock,
+  isMobile,
+  setTemplateItem,
+  removeSelected,
+} from "../fn";
 import { ActionContext, selectionType } from "../containers/NotionRouter";
 import EditableBlock from "./EditableBlock";
 import IconModal, { randomIcon } from "./IconModal";
@@ -25,10 +33,10 @@ import Loader from "./Loader";
 import PageIcon from "./PageIcon";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 import PageMenu from "./PageMenu";
-import { isMobile, setTemplateItem } from "../fn";
+
 import { fontStyleType, mobileSideMenuType } from "../containers/NotionRouter";
 import BlockStyler from "./BlockStyler";
-import { removeSelected } from "../fn";
+
 import MoveTargetBlock from "./MoveTargetBlock";
 
 //icon

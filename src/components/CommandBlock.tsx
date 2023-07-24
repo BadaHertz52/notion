@@ -14,9 +14,8 @@ import { VscListOrdered } from "react-icons/vsc";
 import { Command } from "./Frame";
 import { ActionContext, selectionType } from "../containers/NotionRouter";
 import { Block, BlockType, Page } from "../modules/notion/type";
-import { makeNewBlock, findParentBlock } from "../fn";
+import { makeNewBlock, findParentBlock, setTemplateItem } from "../fn/index";
 import imgIcon from "../assets/img/vincent-van-gogh-ge1323790d_640.jpg";
-import { setTemplateItem } from "../fn";
 import { CSSProperties } from "styled-components";
 
 type CommandBlockProp = {

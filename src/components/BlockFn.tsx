@@ -8,14 +8,14 @@ import React, {
 } from "react";
 import Menu from "./Menu";
 import { Block, ListItem, Page } from "../modules/notion/type";
-import { findPage, findPosition, makeNewBlock } from "../fn";
+import { findPage, makeNewBlock, setTemplateItem } from "../fn/index";
 import { CSSProperties } from "styled-components";
 import Rename from "./Rename";
 
 import { AiOutlinePlus } from "react-icons/ai";
 import { CgMenuGridO } from "react-icons/cg";
 import { ModalType } from "../containers/EditorContainer";
-import { setTemplateItem } from "../fn";
+
 import { ActionContext } from "../containers/NotionRouter";
 import ScreenOnly from "./ScreenOnly";
 

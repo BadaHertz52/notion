@@ -10,7 +10,7 @@ import React, {
 } from "react";
 import { blockSample, pageSample } from "../modules/notion/reducer";
 import { Block, ListItem, Notion, Page } from "../modules/notion/type";
-import { closeModal, findPage } from "../fn";
+import { closeModal, findPage, makeRoutePath } from "../fn";
 import { UserState } from "../modules/user/reducer";
 import Trash from "./Trash";
 import Rename from "./Rename";
