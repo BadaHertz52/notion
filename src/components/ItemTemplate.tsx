@@ -13,10 +13,11 @@ import { MdPlayArrow } from "react-icons/md";
 import PageIcon from "./PageIcon";
 import { BsThreeDots } from "react-icons/bs";
 import { AiOutlinePlus } from "react-icons/ai";
+import { Link } from "react-router-dom";
+import { makeRoutePath } from "../fn";
 
 type ItemTemplateProp = {
   item: ListItem;
-  setTargetPageId: Dispatch<SetStateAction<string>>;
   onClickMoreBtn: (item: ListItem, target: HTMLElement) => void;
   addNewSubPage: (item: ListItem) => void;
   changeSide: (appear: SideAppear) => void;
@@ -24,7 +25,6 @@ type ItemTemplateProp = {
 
 const ItemTemplate = ({
   item,
-  setTargetPageId,
   onClickMoreBtn,
   addNewSubPage,
   changeSide,
@@ -83,11 +83,10 @@ const ItemTemplate = ({
     }
   }, []);
   const onClickPageName = useCallback(() => {
-    setTargetPageId(item.id);
     if (window.innerWidth <= 768) {
       changeSide("close");
     }
-  }, [changeSide, item.id, setTargetPageId]);
+  }, [changeSide]);
   return (
     <div
       className="item__inner page-link"
@@ -104,14 +103,18 @@ const ItemTemplate = ({
           <ScreenOnly text="button to toggle page" />
           <MdPlayArrow />
         </button>
-        <button className="pageName" onClick={onClickPageName}>
+        <Link
+          className="pageName"
+          to={makeRoutePath(item.id)}
+          onClick={onClickPageName}
+        >
           <PageIcon
             icon={item.icon}
             iconType={item.iconType}
             style={undefined}
           />
           <div>{item.title}</div>
-        </button>
+        </Link>
       </div>
       <div className="sideBarPageFn" ref={sideBarPageFn}>
         <button

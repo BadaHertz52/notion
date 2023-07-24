@@ -36,6 +36,7 @@ import { IoArrowRedoOutline } from "react-icons/io5";
 import { ActionContext } from "../containers/NotionRouter";
 import ScreenOnly from "./ScreenOnly";
 import ListTemplate from "./ListTemplate";
+import { Link } from "react-router-dom";
 
 type SideBarProps = SideBarContainerProp & {
   notion: Notion;
@@ -46,7 +47,6 @@ const SideBar = ({
   notion,
   user,
   sideAppear,
-  setTargetPageId,
   setOpenQF,
   setOpenTemplates,
   showAllComments,
@@ -316,13 +316,9 @@ const SideBar = ({
   const onMouseOutSideBar = useCallback(() => {
     sideAppear === "float" && changeSide("floatHide");
   }, [changeSide, sideAppear]);
-  const onClickRecentPageItem = useCallback(
-    (pageId: string) => {
-      setTargetPageId(pageId);
-      changeSide("close");
-    },
-    [changeSide, setTargetPageId]
-  );
+  const onClickRecentPageItem = useCallback(() => {
+    changeSide("close");
+  }, [changeSide]);
   const onTouchStartResizeBar = useCallback(() => {
     touchResizeBar.current = true;
   }, []);
@@ -416,6 +412,7 @@ const SideBar = ({
                 </button>
               </div>
             </div>
+            {/* 모바일 */}
             <div className="recentPages">
               <div className="header">
                 <span>RECENTLY VISITED PAGE </span>
@@ -425,12 +422,13 @@ const SideBar = ({
                   <div>No pages visited recently </div>
                 ) : (
                   recentPages.map((page: Page, i) => (
-                    <button
-                      title={`button to move page that is ${page.header.title}`}
+                    <Link
+                      to={makeRoutePath(page.id)}
+                      title={`link to open page that is ${page.header.title}`}
                       key={`recentPage_${i}`}
                       id={`item_${page.id}`}
                       className="item"
-                      onClick={() => onClickRecentPageItem(page.id)}
+                      onClick={onClickRecentPageItem}
                     >
                       {page.header.cover ? (
                         <img
@@ -447,7 +445,7 @@ const SideBar = ({
                         style={undefined}
                       />
                       <div className="title">{page.header.title}</div>
-                    </button>
+                    </Link>
                   ))
                 )}
               </div>
@@ -489,7 +487,6 @@ const SideBar = ({
                         pagesId,
                         pages
                       )}
-                      setTargetPageId={setTargetPageId}
                       onClickMoreBtn={onClickMoreBtn}
                       addNewSubPage={addNewSubPage}
                       changeSide={changeSide}
@@ -515,7 +512,6 @@ const SideBar = ({
                       <ListTemplate
                         notion={notion}
                         targetList={list}
-                        setTargetPageId={setTargetPageId}
                         onClickMoreBtn={onClickMoreBtn}
                         addNewSubPage={addNewSubPage}
                         changeSide={changeSide}
@@ -653,7 +649,6 @@ const SideBar = ({
             pages={pages}
             firstList={firstList}
             closeMenu={() => setOpenSideMoreMenu(false)}
-            setTargetPageId={setTargetPageId}
           />
         </div>
       )}
@@ -671,7 +666,6 @@ const SideBar = ({
         trashPagesId={trashPagesId}
         trashPages={trashPages}
         pagesId={pagesId}
-        setTargetPageId={setTargetPageId}
         setOpenTrash={setOpenTrash}
       />
     </div>

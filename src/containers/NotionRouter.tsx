@@ -123,6 +123,14 @@ const NotionRouter = () => {
   const user = useSelector((state: RootState) => state.user);
   const sideAppear = useSelector((state: RootState) => state.side.appear);
   const currentPageId = getCurrentPageId();
+  const currentPage = useMemo(
+    () =>
+      pages &&
+      pagesId &&
+      currentPageId &&
+      findPage(pagesId, pages, currentPageId),
+    [pages, pagesId, currentPageId]
+  ) as Page | null;
   const firstList: ListItem[] | null = useMemo(() => {
     if (firstPagesId && pagesId && pages) {
       const FIRST_LIST = firstPagesId.map((id: string) => {
@@ -155,15 +163,6 @@ const NotionRouter = () => {
     }
   }, [pages, pagesId, user.favorites]);
 
-  const [targetPageId, setTargetPageId] = useState<string>(
-    user.favorites?.[0] ? user.favorites[0] : firstPage ? firstPage.id : "none"
-  );
-
-  const [routePage, setRoutePage] = useState<Page | null>(
-    targetPageId !== "none" && pagesId && pages
-      ? findPage(pagesId, pages, targetPageId)
-      : null
-  );
   const [openQF, setOpenQF] = useState<boolean>(false);
   const [showAllComments, setShowAllComments] = useState<boolean>(false);
   const [allCommentsStyle, setAllCommentsStyle] = useState<CSSProperties>({
@@ -178,7 +177,7 @@ const NotionRouter = () => {
   const [fullWidth, setFullWidth] = useState<boolean>(false);
   const [openTemplates, setOpenTemplates] = useState<boolean>(false);
   const [fontStyle, setFontStyle] = useState<fontStyleType>(defaultFontFamily);
-  const loading: boolean = !routePage;
+  const loading: boolean = !currentPage;
   const [modal, setModal] = useState<ModalType>({
     open: false,
     what: null,
@@ -224,7 +223,7 @@ const NotionRouter = () => {
   //--page
   function addPage(newPage: Page) {
     dispatch(add_page(newPage));
-    setRoutePage(newPage);
+    navigate(makeRoutePath(newPage.id));
   }
   function duplicatePage(targetPageId: string) {
     dispatch(duplicate_page(targetPageId));
@@ -237,19 +236,19 @@ const NotionRouter = () => {
       const openOtherFirstPage = () => {
         firstPagesId[0] === pageId
           ? firstPagesId.length > 1
-            ? setTargetPageId(firstPagesId[1])
-            : setTargetPageId("none")
-          : setTargetPageId(firstPagesId[0]);
+            ? navigate(makeRoutePath(firstPagesId[1]))
+            : navigate("/")
+          : navigate(makeRoutePath(firstPagesId[0]));
       };
       if (user.favorites) {
         if (user.favorites.includes(pageId)) {
           user.favorites[0] === pageId
             ? user.favorites.length > 1
-              ? setTargetPageId(user.favorites[1])
+              ? navigate(makeRoutePath(user.favorites[1]))
               : openOtherFirstPage()
-            : setTargetPageId(user.favorites[0]);
+            : navigate(makeRoutePath(user.favorites[0]));
         } else {
-          setTargetPageId(user.favorites[0]);
+          navigate(makeRoutePath(user.favorites[0]));
         }
       } else {
         openOtherFirstPage();
@@ -271,8 +270,8 @@ const NotionRouter = () => {
   };
   const cleanTrash = (pageId: string) => {
     dispatch(clean_trash(pageId));
-    if (routePage?.id === pageId) {
-      setRoutePage(firstPage);
+    if (currentPage?.id === pageId) {
+      navigate("/");
     }
   };
   //page---
@@ -371,68 +370,32 @@ const NotionRouter = () => {
       console.error("Can't find shortcut icon");
     }
   };
+  // pathname === "/notion" 일때, 지정된 페이지 열기 (즐겨찾기 -> 페이지)
   useEffect(() => {
-    if (!currentPageId && routePage && pagesId && pages) {
-      const path = makeRoutePath(routePage.id);
+    if (!currentPageId && pagesId && pages) {
+      let pageId = "";
+      if (user.favorites) {
+        pageId = user.favorites[0];
+      } else if (firstPage) {
+        pageId = firstPage.id;
+      }
+      const path = makeRoutePath(pageId);
       navigate(path);
     }
-  }, [currentPageId, routePage, pagesId, pages, navigate]);
-  useEffect(() => {
-    if (routePage && pagesId && pages) {
-      changeTitle(routePage.header.title);
-      changeFavicon(routePage.header.icon, routePage.header.iconType);
-      addRecentPage(routePage.id);
-    }
-  }, [routePage, navigate, pages, pagesId, addRecentPage]);
+  }, [currentPageId, firstPage, user.favorites, pagesId, pages, navigate]);
 
   useEffect(() => {
-    //url 변경시
-    if (currentPageId !== routePage?.id) {
-      if (pagesId?.includes(currentPageId) && pages && pagesId) {
-        const page = findPage(pagesId, pages, currentPageId);
-        setRoutePage(page);
-        setTargetPageId(page.id);
-      } else if (trashPagesId?.includes(currentPageId) && trashPages) {
-        const page = findPage(trashPagesId, trashPages, currentPageId);
-        setRoutePage(page);
-        setTargetPageId(page.id);
-      } else {
-        setRoutePage(firstPage);
-        setTargetPageId(firstPage ? firstPage.id : "none");
+    const title = document.querySelector("title")?.text;
+    if (currentPage?.header) {
+      title !== currentPage.header.title &&
+        changeTitle(currentPage.header.title);
+      changeFavicon(currentPage.header.icon, currentPage.header.iconType);
+      if (user.recentPagesId) {
+        user.recentPagesId[user.recentPagesId.length - 1] !== currentPage.id &&
+          addRecentPage(currentPage.id);
       }
     }
-  }, [
-    routePage,
-    pages,
-    pagesId,
-    trashPagesId,
-    trashPages,
-    firstPage,
-    currentPageId,
-  ]);
-
-  useEffect(() => {
-    //sideBar 에서 페이지 이동 시
-    if (targetPageId === "none") {
-      setRoutePage(null);
-      changeSide("lock");
-    } else {
-      if (targetPageId !== routePage?.id && pagesId && pages) {
-        const newRoutePage = findPage(pagesId, pages, targetPageId);
-        setRoutePage(newRoutePage);
-        const path = makeRoutePath(newRoutePage.id);
-        navigate(path);
-      }
-    }
-  }, [
-    pages,
-    pagesId,
-    targetPageId,
-    notion.pagesId,
-    changeSide,
-    routePage,
-    navigate,
-  ]);
+  }, [currentPage?.header, currentPage?.id, addRecentPage, user.recentPagesId]);
 
   useEffect(() => {
     const innerWidth = window.innerWidth;
@@ -468,54 +431,16 @@ const NotionRouter = () => {
           <>
             <SideBarContainer
               sideAppear={sideAppear}
-              setTargetPageId={setTargetPageId}
               setOpenQF={setOpenQF}
               setOpenTemplates={setOpenTemplates}
               showAllComments={showAllComments}
             />
-            {routePage && pagesId && pages && firstList ? (
+            {pagesId && pages && firstList ? (
               <>
                 <Routes>
-                  {/* <Route
-                    path={makeRoutePath(routePage, pagesId, pages)}
-                    element={
-                      <EditorContainer
-                        sideAppear={sideAppear}
-                        firstList={firstList}
-                        userName={user.userName}
-                        recentPagesId={user.recentPagesId}
-                        page={routePage}
-                        pages={pages}
-                        pagesId={pagesId}
-                        isInTrash={!pagesId.includes(routePage.id)}
-                        setTargetPageId={setTargetPageId}
-                        setRoutePage={setRoutePage}
-                        showAllComments={showAllComments}
-                        setShowAllComments={setShowAllComments}
-                        discardEdit={discard_edit}
-                        setDiscardEdit={setDiscardEdit}
-                        setOpenExport={setOpenExport}
-                        modal={modal}
-                        setModal={setModal}
-                        openComment={openComment}
-                        setOpenComment={setOpenComment}
-                        commentBlock={commentBlock}
-                        setCommentBlock={setCommentBlock}
-                        smallText={smallText}
-                        setSmallText={setSmallText}
-                        fullWidth={fullWidth}
-                        setFullWidth={setFullWidth}
-                        openTemplates={openTemplates}
-                        setOpenTemplates={setOpenTemplates}
-                        fontStyle={fontStyle}
-                        setFontStyle={setFontStyle}
-                        mobileSideMenu={mobileSideMenu}
-                        setMobileSideMenu={setMobileSideMenu}
-                      />
-                    }
-                  /> */}
                   {pages.map((p) => (
                     <Route
+                      key={`page_${p.id}`}
                       path={makeRoutePath(p.id)}
                       element={
                         <EditorContainer
@@ -527,8 +452,6 @@ const NotionRouter = () => {
                           pages={pages}
                           pagesId={pagesId}
                           isInTrash={!pagesId.includes(p.id)}
-                          setTargetPageId={setTargetPageId}
-                          setRoutePage={setRoutePage}
                           showAllComments={showAllComments}
                           setShowAllComments={setShowAllComments}
                           discardEdit={discard_edit}
@@ -555,9 +478,9 @@ const NotionRouter = () => {
                     />
                   ))}
                 </Routes>
-                {openExport && (
+                {openExport && currentPage && (
                   <Export
-                    page={routePage}
+                    page={currentPage}
                     pagesId={pagesId}
                     pages={pages}
                     firstList={firstList}
@@ -568,8 +491,6 @@ const NotionRouter = () => {
                     openComment={openComment}
                     modal={modal}
                     setModal={setModal}
-                    setTargetPageId={setTargetPageId}
-                    setRoutePage={setRoutePage}
                     setOpenComment={setOpenComment}
                     setCommentBlock={setCommentBlock}
                     showAllComments={showAllComments}
@@ -584,17 +505,15 @@ const NotionRouter = () => {
                     setMobileSideMenu={setMobileSideMenu}
                   />
                 )}
-                {openTemplates && (
+                {openTemplates && currentPage && (
                   <Templates
-                    routePageId={routePage.id}
+                    routePageId={currentPage.id}
                     user={user}
                     userName={user.userName}
                     pagesId={pagesId}
                     pages={pages}
                     firstList={firstList}
                     recentPagesId={user.recentPagesId}
-                    setRoutePage={setRoutePage}
-                    setTargetPageId={setTargetPageId}
                     commentBlock={commentBlock}
                     openComment={openComment}
                     setOpenComment={setOpenComment}
@@ -613,9 +532,9 @@ const NotionRouter = () => {
                     setMobileSideMenu={setMobileSideMenu}
                   />
                 )}
-                {routePage && (
+                {currentPage && (
                   <AllComments
-                    page={routePage}
+                    page={currentPage}
                     userName={user.userName}
                     favorites={user.favorites}
                     showAllComments={showAllComments}
@@ -632,7 +551,6 @@ const NotionRouter = () => {
                     pages={pages}
                     pagesId={pagesId}
                     cleanRecentPage={cleanRecentPage}
-                    setTargetPageId={setTargetPageId}
                     setOpenQF={setOpenQF}
                   />
                 )}

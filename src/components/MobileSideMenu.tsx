@@ -26,7 +26,6 @@ const MobileSideMenu = ({
   setModal,
   modal,
   setCommentBlock,
-  setTargetPageId,
   frameHtml,
   mobileSideMenu,
   setMobileSideMenu,
@@ -88,7 +87,6 @@ const MobileSideMenu = ({
               modal={modal}
               setModal={setModal}
               setCommentBlock={setCommentBlock}
-              setTargetPageId={setTargetPageId}
               setOpenRename={null}
               setSelection={null}
               frameHtml={frameHtml}
@@ -135,7 +133,6 @@ const MobileSideMenu = ({
               pages={pages}
               firstList={firstList}
               closeMenu={closeSideMenu}
-              setTargetPageId={setTargetPageId}
             />
           )}
         </div>

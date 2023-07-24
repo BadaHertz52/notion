@@ -34,7 +34,6 @@ import { RootState } from "../modules";
 type TemplatesProps = Template_Frame_SAME_Props & {
   user: UserState;
   routePageId: string; // 현재 page
-  setRoutePage: Dispatch<SetStateAction<Page | null>>;
   setOpenTemplates: Dispatch<SetStateAction<boolean>>;
 };
 const Templates = ({
@@ -44,8 +43,7 @@ const Templates = ({
   pages,
   firstList,
   recentPagesId,
-  setRoutePage,
-  setTargetPageId,
+
   commentBlock,
   openComment,
   openTemplates,
@@ -146,11 +144,10 @@ const Templates = ({
         };
         sessionStorage.removeItem("targetPageId");
         editPage(targetPageId, editedPage);
-        setRoutePage(editedPage);
       }
       setOpenTemplates(false);
     }
-  }, [addPage, editPage, setOpenTemplates, setRoutePage, template]);
+  }, [addPage, editPage, setOpenTemplates, template]);
   const showOtherTemplate = useCallback(
     (otherTemplate: Page) => {
       if (template) {
@@ -213,8 +210,7 @@ const Templates = ({
 
     addTemplate(newTemplate);
     setOpenTemplates(false);
-    setRoutePage(newTemplate);
-  }, [addTemplate, setOpenTemplates, setRoutePage, templatesId]);
+  }, [addTemplate, setOpenTemplates, templatesId]);
 
   const onClickDeleteTemplateBtn = useCallback(() => {
     if (template && templatesId && templates) {
@@ -228,41 +224,11 @@ const Templates = ({
         }
       } else {
         setOpenTemplates(false);
-        if (routePageId === template.id) {
-          const recentPagesId = user.recentPagesId;
-          if (recentPagesId) {
-            const lastPageId = recentPagesId[recentPagesId.length - 2];
-            const recentPageIndex = pagesId.indexOf(lastPageId);
-            const recentPage = pages[recentPageIndex];
-            setRoutePage(recentPage);
-          } else {
-            const favorites = user.favorites;
-            if (favorites) {
-              const favoritePageIndex = pagesId.indexOf(favorites[0]);
-              const favoritePage = pages[favoritePageIndex];
-              setRoutePage(favoritePage);
-            } else {
-              setRoutePage(pages[0]);
-            }
-          }
-        }
       }
       deleteTemplate(template.id);
     }
     setOpenDeleteAlert(false);
-  }, [
-    deleteTemplate,
-    pages,
-    pagesId,
-    routePageId,
-    setOpenTemplates,
-    setRoutePage,
-    template,
-    templates,
-    templatesId,
-    user.favorites,
-    user.recentPagesId,
-  ]);
+  }, [deleteTemplate, setOpenTemplates, template, templates, templatesId]);
 
   return (
     <>
@@ -322,8 +288,6 @@ const Templates = ({
                   recentPagesId={recentPagesId}
                   commentBlock={commentBlock}
                   openComment={openComment}
-                  setTargetPageId={setTargetPageId}
-                  setRoutePage={setRoutePage}
                   setOpenComment={setOpenComment}
                   setCommentBlock={setCommentBlock}
                   modal={modal}

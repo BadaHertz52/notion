@@ -6,14 +6,12 @@ import { RootState } from "../modules";
 
 export type SideBarContainerProp = {
   sideAppear: SideAppear;
-  setTargetPageId: Dispatch<SetStateAction<string>>;
   setOpenQF: Dispatch<SetStateAction<boolean>>;
   setOpenTemplates: Dispatch<SetStateAction<boolean>>;
   showAllComments: boolean;
 };
 const SideBarContainer = ({
   sideAppear,
-  setTargetPageId,
   setOpenQF,
   setOpenTemplates,
   showAllComments,
@@ -27,7 +25,6 @@ const SideBarContainer = ({
       notion={notion}
       user={user}
       sideAppear={sideAppear}
-      setTargetPageId={setTargetPageId}
       setOpenQF={setOpenQF}
       setOpenTemplates={setOpenTemplates}
       showAllComments={showAllComments}

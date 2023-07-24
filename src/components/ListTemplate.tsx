@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useContext } from "react";
+import React, { useContext, useCallback } from "react";
 import { ListItem, Notion, Page } from "../modules/notion/type";
 import { SideAppear } from "../modules/side/reducer";
 import { ActionContext } from "../containers/NotionRouter";
@@ -7,7 +7,6 @@ import ItemTemplate from "./ItemTemplate";
 type ListTemplateProp = {
   notion: Notion;
   targetList: ListItem[] | null;
-  setTargetPageId: Dispatch<SetStateAction<string>>;
   onClickMoreBtn: (item: ListItem, target: HTMLElement) => void;
   addNewSubPage: (item: ListItem) => void;
   changeSide: (appear: SideAppear) => void;
@@ -16,7 +15,6 @@ type ListTemplateProp = {
 const ListTemplate = ({
   notion,
   targetList,
-  setTargetPageId,
   addNewSubPage,
   onClickMoreBtn,
 }: ListTemplateProp) => {
@@ -39,16 +37,15 @@ const ListTemplate = ({
       createTime: subPage.createTime,
     };
   };
-  const makeTargetList = (
-    ids: string[],
-    pagesId: string[],
-    pages: Page[]
-  ): ListItem[] => {
-    const listItemArr: ListItem[] = ids.map((id: string) =>
-      findSubPage(id, pagesId, pages)
-    );
-    return listItemArr;
-  };
+  const makeTargetList = useCallback(
+    (ids: string[], pagesId: string[], pages: Page[]): ListItem[] => {
+      const listItemArr: ListItem[] = ids.map((id: string) =>
+        findSubPage(id, pagesId, pages)
+      );
+      return listItemArr;
+    },
+    []
+  );
   return (
     <ul>
       {targetList?.map((item: ListItem) => (
@@ -56,7 +53,6 @@ const ListTemplate = ({
           <div className="mainPage">
             <ItemTemplate
               item={item}
-              setTargetPageId={setTargetPageId}
               onClickMoreBtn={onClickMoreBtn}
               addNewSubPage={addNewSubPage}
               changeSide={changeSide}
@@ -73,7 +69,6 @@ const ListTemplate = ({
                     notion.pagesId,
                     notion.pages
                   )}
-                  setTargetPageId={setTargetPageId}
                   onClickMoreBtn={onClickMoreBtn}
                   addNewSubPage={addNewSubPage}
                   changeSide={changeSide}

@@ -17,6 +17,8 @@ import { ActionContext, selectionType } from "../containers/NotionRouter";
 import ScreenOnly from "./ScreenOnly";
 
 import BlockContentEditable from "./BlockContentEditable";
+import { useNavigate } from "react-router-dom";
+import { makeRoutePath } from "../fn";
 
 export type BlockComponentProps = {
   pages: Page[];
@@ -26,7 +28,6 @@ export type BlockComponentProps = {
   command: Command;
   setCommand: Dispatch<SetStateAction<Command>>;
   setOpenComment: Dispatch<SetStateAction<boolean>>;
-  setTargetPageId: Dispatch<SetStateAction<string>>;
   setOpenLoader: Dispatch<SetStateAction<boolean>>;
   setLoaderTargetBlock: Dispatch<SetStateAction<Block | null>>;
   closeMenu: (event: globalThis.MouseEvent | MouseEvent) => void;
@@ -51,7 +52,6 @@ const BlockComponent = ({
   command,
   setCommand,
   setOpenComment,
-  setTargetPageId,
   setOpenLoader,
   setLoaderTargetBlock,
   closeMenu,
@@ -63,6 +63,7 @@ const BlockComponent = ({
   moveBlock,
 }: BlockComponentProps) => {
   const { editBlock } = useContext(ActionContext).actions;
+  const navigate = useNavigate();
   const showBlockComment = useMemo(() => {
     return block.comments
       ? block.comments.some((i) => i.type === "open") &&
@@ -118,8 +119,8 @@ const BlockComponent = ({
    * block type이 page인 block에 대한 BlockComponent를 클릭 할 경우, 해당 page로 이동하는 함수
    */
   const onClickBlockContents = useCallback(() => {
-    block.type === "page" && setTargetPageId(block.id);
-  }, [block.type, block.id, setTargetPageId]);
+    block.type === "page" && navigate(makeRoutePath(block.id));
+  }, [block.type, block.id, navigate]);
   /**
    * image type의 block에 넣은 이미지 파일을 선택하기 위한 버튼을 클릭한 경우 작동하는 함수로, Loader component를 엶
    */

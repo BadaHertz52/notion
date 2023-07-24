@@ -46,7 +46,6 @@ export type MenuAndBlockStylerCommonProps = {
   setModal: Dispatch<SetStateAction<ModalType>>;
   modal: ModalType;
   setCommentBlock: Dispatch<SetStateAction<Block | null>>;
-  setTargetPageId: Dispatch<SetStateAction<string>>;
   frameHtml: HTMLDivElement | null;
 };
 
@@ -68,7 +67,6 @@ const Menu = ({
   setModal,
   modal,
   setCommentBlock,
-  setTargetPageId,
   setOpenRename,
   frameHtml,
   setSelection,
@@ -93,18 +91,7 @@ const Menu = ({
     | undefined;
   const [sideMenu, setSideMenu] = useState<SideMenuType>();
   const blockStylerHtml = document.getElementById("blockStyler");
-  const [menuStyle, setMenuStyle] = useState<CSSProperties | undefined>(
-    style === undefined ? changeMenuStyle() : style
-  );
-  const [sideMenuStyle, setSideMenuStyle] = useState<CSSProperties | undefined>(
-    isMobile()
-      ? {
-          transform: "translateY(110%)",
-        }
-      : undefined
-  );
-
-  function changeMenuStyle() {
+  const changeMenuStyle = useCallback(() => {
     const menu = document.querySelector(".menu");
     const menuHeight = menu ? menu.clientHeight : 400;
     const innerWidth = window.innerWidth;
@@ -130,7 +117,19 @@ const Menu = ({
     }
 
     return style;
-  }
+  }, [blockFnElement, frameHtml]);
+
+  const [menuStyle, setMenuStyle] = useState<CSSProperties | undefined>(
+    style === undefined ? changeMenuStyle() : style
+  );
+  const [sideMenuStyle, setSideMenuStyle] = useState<CSSProperties | undefined>(
+    isMobile()
+      ? {
+          transform: "translateY(110%)",
+        }
+      : undefined
+  );
+
   const changeSideMenuStyle = useCallback(() => {
     if (!isMobile() && menuRef.current) {
       const mainMenu = menuRef.current.firstElementChild;
@@ -479,7 +478,6 @@ const Menu = ({
             pages={pages}
             firstList={firstList}
             closeMenu={setOpenMenu ? () => setOpenMenu(false) : undefined}
-            setTargetPageId={setTargetPageId}
           />
         )}
       </div>

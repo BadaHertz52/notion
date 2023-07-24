@@ -52,7 +52,6 @@ const BlockStyler = ({
   modal,
   setModal,
   setCommentBlock,
-  setTargetPageId,
   selection,
   setSelection,
   setModalStyle,
@@ -737,7 +736,6 @@ const BlockStyler = ({
           modal={modal}
           setModal={setModal}
           setCommentBlock={setCommentBlock}
-          setTargetPageId={setTargetPageId}
           setOpenRename={null}
           setSelection={setSelection}
           frameHtml={frameHtml}

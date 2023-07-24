@@ -15,7 +15,6 @@ const MoveTargetBlock = ({
   pointBlockToMoveBlock,
   command,
   setCommand,
-  setTargetPageId,
   openComment,
   setOpenComment,
   setCommentBlock,
@@ -68,7 +67,6 @@ const MoveTargetBlock = ({
           pointBlockToMoveBlock={pointBlockToMoveBlock}
           command={command}
           setCommand={setCommand}
-          setTargetPageId={setTargetPageId}
           openComment={openComment}
           setOpenComment={setOpenComment}
           setCommentBlock={setCommentBlock}

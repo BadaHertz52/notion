@@ -29,7 +29,6 @@ const ListSub = ({
   command,
   setCommand,
   openComment,
-  setTargetPageId,
   setOpenComment,
   setCommentBlock,
   setOpenLoader,
@@ -119,7 +118,6 @@ const ListSub = ({
                     command={command}
                     setCommand={setCommand}
                     setOpenComment={setOpenComment}
-                    setTargetPageId={setTargetPageId}
                     setOpenLoader={setOpenLoader}
                     setLoaderTargetBlock={setLoaderTargetBlock}
                     closeMenu={closeMenu}
@@ -159,7 +157,6 @@ const ListSub = ({
                       openComment={openComment}
                       setOpenComment={setOpenComment}
                       setCommentBlock={setCommentBlock}
-                      setTargetPageId={setTargetPageId}
                       setOpenLoader={setOpenLoader}
                       setLoaderTargetBlock={setLoaderTargetBlock}
                       closeMenu={closeMenu}

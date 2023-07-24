@@ -7,20 +7,20 @@ import React, {
   useEffect,
 } from "react";
 import { Page } from "../modules/notion/type";
-import { findPage } from "../fn";
+import { findPage, makeRoutePath } from "../fn";
 //icon
 import { AiOutlineCheck } from "react-icons/ai";
 import { BsChevronDown, BsSearch } from "react-icons/bs";
 import Result, { resultType } from "./Result";
 import { makeResultType } from "../fn/";
 import ScreenOnly from "./ScreenOnly";
+import { Link } from "react-router-dom";
 
 type QuickFindBoardProps = {
   userName: string;
   recentPagesId: string[] | null;
   pages: Page[];
   pagesId: string[];
-  setTargetPageId: Dispatch<SetStateAction<string>>;
   cleanRecentPage: () => void;
   setOpenQF: Dispatch<React.SetStateAction<boolean>>;
 };
@@ -30,7 +30,6 @@ const QuickFindBoard = ({
   recentPagesId,
   pages,
   pagesId,
-  setTargetPageId,
   cleanRecentPage,
   setOpenQF,
 }: QuickFindBoardProps) => {
@@ -340,12 +339,12 @@ const QuickFindBoard = ({
               {result ? (
                 result !== "noResult" ? (
                   result.map((item: resultType) => (
-                    <button
-                      title="button to select result"
-                      onClick={() => setTargetPageId(item.id)}
+                    <Link
+                      title="Link to select result"
+                      to={makeRoutePath(item.id)}
                     >
                       <Result item={item} />
-                    </button>
+                    </Link>
                   ))
                 ) : (
                   <div className="no-result">
@@ -356,12 +355,9 @@ const QuickFindBoard = ({
                 )
               ) : recentPagesList ? (
                 recentPagesList.map((item: resultType) => (
-                  <button
-                    title="button to select page"
-                    onClick={() => setTargetPageId(item.id)}
-                  >
+                  <Link title="Link to select page" to={makeRoutePath(item.id)}>
                     <Result item={item} />
-                  </button>
+                  </Link>
                 ))
               ) : (
                 <div className="noRecentPages">

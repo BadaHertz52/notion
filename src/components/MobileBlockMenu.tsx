@@ -25,7 +25,6 @@ const MobileBlockMenu = ({
   modal,
   setModal,
   setCommentBlock,
-  setTargetPageId,
   setModalStyle,
   command,
   setCommand,
@@ -358,7 +357,6 @@ const MobileBlockMenu = ({
               command={command}
               setCommand={setCommand}
               setCommentBlock={setCommentBlock}
-              setTargetPageId={setTargetPageId}
               selection={null}
               setSelection={null}
               frameHtml={frameHtml}

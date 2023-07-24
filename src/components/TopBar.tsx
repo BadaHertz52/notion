@@ -29,8 +29,9 @@ import { BsThreeDots } from "react-icons/bs";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { IoArrowRedoOutline } from "react-icons/io5";
 import { GrDocumentUpload } from "react-icons/gr";
-import { isMobile } from "../fn";
+import { isMobile, makeRoutePath } from "../fn";
 import ScreenOnly from "./ScreenOnly";
+import { Link } from "react-router-dom";
 type TopBarProps = {
   firstList: ListItem[];
   favorites: string[] | null;
@@ -38,7 +39,6 @@ type TopBarProps = {
   page: Page;
   pages: Page[];
   pagePath: pathType[] | null;
-  setTargetPageId: Dispatch<SetStateAction<string>>;
   showAllComments: boolean;
   setShowAllComments: Dispatch<SetStateAction<boolean>>;
   smallText: boolean;
@@ -56,7 +56,6 @@ const TopBar = ({
   page,
   pages,
   pagePath,
-  setTargetPageId,
   showAllComments,
   setShowAllComments,
   smallText,
@@ -255,10 +254,10 @@ const TopBar = ({
         )}
         <div className="page__path-group">
           {pagePath === null ? (
-            <button
-              title="button to move page"
+            <Link
+              title="Link to move page"
               className="pagePath"
-              onClick={() => setTargetPageId(page.id)}
+              to={makeRoutePath(page.id)}
             >
               <PageIcon
                 icon={page.header.icon}
@@ -266,33 +265,27 @@ const TopBar = ({
                 style={undefined}
               />
               <div>{page.header.title}</div>
-            </button>
+            </Link>
           ) : (
             pagePath.map((path: pathType) => (
-              <button
-                title="button to move page"
-                className="pagePath"
-                key={pagePath.indexOf(path)}
-                onClick={() => setTargetPageId(path.id)}
-              >
+              <div className="pagePath" key={pagePath.indexOf(path)}>
                 {pagePath.indexOf(path) !== 0 && (
                   <div className="pathSlash">/</div>
                 )}
-                <div className="page-link">
-                  <a href="path" onClick={() => setTargetPageId(path.id)}>
-                    <div className="icon-path">
-                      <PageIcon
-                        icon={path.icon}
-                        iconType={path.iconType}
-                        style={undefined}
-                      />
-                    </div>
-                    <div className="path-title">
-                      <div>{path.title}</div>
-                    </div>
-                  </a>
-                </div>
-              </button>
+
+                <Link className="page-link" to={makeRoutePath(path.id)}>
+                  <div className="icon-path">
+                    <PageIcon
+                      icon={path.icon}
+                      iconType={path.iconType}
+                      style={undefined}
+                    />
+                  </div>
+                  <div className="path-title">
+                    <div>{path.title}</div>
+                  </div>
+                </Link>
+              </div>
             ))
           )}
         </div>
@@ -447,7 +440,6 @@ const TopBar = ({
             firstList={firstList}
             pages={pages}
             closeMenu={() => setOpenPageMenu(false)}
-            setTargetPageId={setTargetPageId}
           />
         )}
       </div>

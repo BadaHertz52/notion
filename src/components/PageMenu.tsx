@@ -20,7 +20,6 @@ type PageMenuProps = {
   pages: Page[];
   firstList: ListItem[];
   closeMenu?: () => void;
-  setTargetPageId: Dispatch<SetStateAction<string>>;
 };
 
 const PageMenu = ({
@@ -29,7 +28,6 @@ const PageMenu = ({
   pages,
   firstList,
   closeMenu,
-  setTargetPageId,
 }: PageMenuProps) => {
   const { changeBlockToPage } = useContext(ActionContext).actions;
 
@@ -98,7 +96,6 @@ const PageMenu = ({
                   closeMenu={closeMenu}
                   what={what}
                   block={block}
-                  setTargetPageId={setTargetPageId}
                   item={item}
                 />
               ))}
@@ -118,7 +115,6 @@ const PageMenu = ({
                   closeMenu={closeMenu}
                   what={what}
                   block={block}
-                  setTargetPageId={setTargetPageId}
                   item={item}
                 />
               ))}

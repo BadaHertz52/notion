@@ -9,6 +9,7 @@ import { Block, Page, ListItem } from "../modules/notion/type";
 import { setTemplateItem } from "../fn";
 import { ActionContext } from "../containers/NotionRouter";
 import PageIcon from "./PageIcon";
+import { useNavigate } from "react-router-dom";
 
 type PageButtonProps = {
   pages: Page[];
@@ -17,7 +18,6 @@ type PageButtonProps = {
   closeMenu: (() => void) | undefined;
   what: "page" | "block";
   block: Block | null;
-  setTargetPageId: Dispatch<SetStateAction<string>>;
 };
 
 const PageButton = ({
@@ -27,10 +27,9 @@ const PageButton = ({
   closeMenu,
   what,
   block,
-  setTargetPageId,
 }: PageButtonProps) => {
   const { addBlock, movePageToPage } = useContext(ActionContext).actions;
-
+  const navigate = useNavigate();
   const templateHtml = document.getElementById("template");
   const moveBlockToPage = useCallback(
     (destinationPageId: string, block: Block) => {
@@ -78,7 +77,7 @@ const PageButton = ({
         break;
       case "page":
         movePageToPage(currentPage.id, id);
-        setTargetPageId(id);
+        navigate(id);
         break;
       default:
         break;
@@ -89,8 +88,8 @@ const PageButton = ({
     item.id,
     moveBlockToPage,
     movePageToPage,
-    setTargetPageId,
     what,
+    navigate,
   ]);
 
   return (

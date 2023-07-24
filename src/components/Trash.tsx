@@ -19,7 +19,6 @@ type TrashProps = {
   trashPagesId: string[] | null;
   trashPages: Page[] | null;
   pagesId: string[] | null;
-  setTargetPageId: Dispatch<SetStateAction<string>>;
   setOpenTrash: Dispatch<SetStateAction<boolean>>;
 };
 
@@ -28,7 +27,6 @@ const Trash = ({
   trashPages,
   trashPagesId,
   pagesId,
-  setTargetPageId,
   setOpenTrash,
 }: TrashProps) => {
   const [trashList, setTrashList] = useState<resultType[] | undefined>(
@@ -127,11 +125,7 @@ const Trash = ({
           {trashList ? (
             result ? (
               result.map((item: resultType) => (
-                <TrashResultItem
-                  item={item}
-                  setTargetPageId={setTargetPageId}
-                  setOpenTrash={setOpenTrash}
-                />
+                <TrashResultItem item={item} setOpenTrash={setOpenTrash} />
               ))
             ) : (
               <div className="no-result">No matches found.</div>

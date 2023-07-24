@@ -33,7 +33,6 @@ export type EditableBlockProps = {
   pointBlockToMoveBlock: MutableRefObject<Block | null>;
   command: Command;
   setCommand: Dispatch<SetStateAction<Command>>;
-  setTargetPageId: Dispatch<SetStateAction<string>>;
   openComment: boolean;
   setOpenComment: Dispatch<SetStateAction<boolean>>;
   setCommentBlock: Dispatch<SetStateAction<Block | null>>;
@@ -86,7 +85,6 @@ const EditableBlock = ({
   command,
   setCommand,
   openComment,
-  setTargetPageId,
   setOpenComment,
   setCommentBlock,
   setOpenLoader,
@@ -218,7 +216,6 @@ const EditableBlock = ({
               openComment={openComment}
               setOpenComment={setOpenComment}
               setCommentBlock={setCommentBlock}
-              setTargetPageId={setTargetPageId}
               setOpenLoader={setOpenLoader}
               setLoaderTargetBlock={setLoaderTargetBlock}
               closeMenu={closeMenu}
@@ -297,7 +294,6 @@ const EditableBlock = ({
                       page={page}
                       command={command}
                       setCommand={setCommand}
-                      setTargetPageId={setTargetPageId}
                       setOpenComment={setOpenComment}
                       setOpenLoader={setOpenLoader}
                       setLoaderTargetBlock={setLoaderTargetBlock}
@@ -336,7 +332,6 @@ const EditableBlock = ({
                       openComment={openComment}
                       setOpenComment={setOpenComment}
                       setCommentBlock={setCommentBlock}
-                      setTargetPageId={setTargetPageId}
                       setOpenLoader={setOpenLoader}
                       setLoaderTargetBlock={setLoaderTargetBlock}
                       closeMenu={closeMenu}

@@ -58,13 +58,11 @@ export type Template_Frame_SAME_Props = {
   pagesId: string[];
   firstList: ListItem[];
   recentPagesId: string[] | null;
-  setTargetPageId: Dispatch<React.SetStateAction<string>>;
-  setRoutePage: Dispatch<React.SetStateAction<Page | null>>;
   commentBlock: Block | null;
   openComment: boolean;
   setOpenComment: Dispatch<SetStateAction<boolean>>;
   openTemplates: boolean;
-  setOpenTemplates: Dispatch<React.SetStateAction<boolean>>;
+  setOpenTemplates: Dispatch<SetStateAction<boolean>>;
   modal: ModalType;
   setModal: Dispatch<SetStateAction<ModalType>>;
   setCommentBlock: Dispatch<SetStateAction<Block | null>>;
@@ -97,8 +95,6 @@ const Frame = ({
   recentPagesId,
   commentBlock,
   openComment,
-  setRoutePage,
-  setTargetPageId,
   setOpenComment,
   setCommentBlock,
   modal,
@@ -783,22 +779,13 @@ const Frame = ({
     };
     setOpenTemplates(false);
     editPage(page.id, newPageWithIcon);
-    setRoutePage(newPageWithIcon);
-  }, [
-    editPage,
-    page.header,
-    page.id,
-    setOpenTemplates,
-    setRoutePage,
-    startNewPage,
-  ]);
+  }, [editPage, page.header, page.id, setOpenTemplates, startNewPage]);
 
   const onClickEmpty = useCallback(() => {
     const newPage = startNewPage();
     setOpenTemplates(false);
     editPage(page.id, newPage);
-    setRoutePage(newPage);
-  }, [editPage, page.id, setOpenTemplates, setRoutePage, startNewPage]);
+  }, [editPage, page.id, setOpenTemplates, startNewPage]);
 
   const onMouseEnterPC = useCallback((event: MouseEvent) => {
     const currentTarget = event?.currentTarget;
@@ -1300,7 +1287,6 @@ const Frame = ({
                         pointBlockToMoveBlock={pointBlockToMoveBlock}
                         command={command}
                         setCommand={setCommand}
-                        setTargetPageId={setTargetPageId}
                         openComment={openComment}
                         setOpenComment={setOpenComment}
                         setCommentBlock={setCommentBlock}
@@ -1386,7 +1372,6 @@ const Frame = ({
           menuOpen={menuOpen}
           setOpenMenu={setOpenMenu}
           setModalStyle={setModalStyle}
-          setTargetPageId={setTargetPageId}
         />
       )}
 
@@ -1399,7 +1384,6 @@ const Frame = ({
               pages={pages}
               firstList={firstList}
               closeMenu={() => setModal({ open: false, what: null })}
-              setTargetPageId={setTargetPageId}
             />
           )}
           {modal.what === "modalComment" && commentBlock && (
@@ -1450,7 +1434,6 @@ const Frame = ({
           pointBlockToMoveBlock={pointBlockToMoveBlock}
           command={command}
           setCommand={setCommand}
-          setTargetPageId={setTargetPageId}
           openComment={openComment}
           setOpenComment={setOpenComment}
           setCommentBlock={setCommentBlock}
@@ -1478,7 +1461,6 @@ const Frame = ({
           command={command}
           setCommand={setCommand}
           setCommentBlock={setCommentBlock}
-          setTargetPageId={setTargetPageId}
           selection={selection}
           setSelection={setSelection}
           frameHtml={frameHtml}
@@ -1501,7 +1483,6 @@ const Frame = ({
           command={command}
           setCommand={setCommand}
           setCommentBlock={setCommentBlock}
-          setTargetPageId={setTargetPageId}
           frameHtml={frameHtml}
           mobileMenuTargetBlock={mobileMenuTargetBlock}
           setMobileSideMenu={setMobileSideMenu}

@@ -42,8 +42,6 @@ type EditorContainerProps = {
   sideAppear: SideAppear;
   page: Page;
   isInTrash: boolean;
-  setTargetPageId: Dispatch<SetStateAction<string>>;
-  setRoutePage: React.Dispatch<React.SetStateAction<Page | null>>;
   modal: ModalType;
   setModal: Dispatch<SetStateAction<ModalType>>;
   openComment: boolean;
@@ -77,8 +75,6 @@ const EditorContainer = ({
   pagesId,
   recentPagesId,
   isInTrash,
-  setTargetPageId,
-  setRoutePage,
   openComment,
   setOpenComment,
   commentBlock,
@@ -155,7 +151,6 @@ const EditorContainer = ({
         page={page}
         pages={pages}
         pagePath={pagePath}
-        setTargetPageId={setTargetPageId}
         showAllComments={showAllComments}
         setShowAllComments={setShowAllComments}
         smallText={smallText}
@@ -174,8 +169,6 @@ const EditorContainer = ({
         recentPagesId={recentPagesId}
         commentBlock={commentBlock}
         openComment={openComment}
-        setTargetPageId={setTargetPageId}
-        setRoutePage={setRoutePage}
         setOpenComment={setOpenComment}
         setCommentBlock={setCommentBlock}
         modal={modal}
@@ -203,7 +196,6 @@ const EditorContainer = ({
           setModal={setModal}
           modal={modal}
           setCommentBlock={setCommentBlock}
-          setTargetPageId={setTargetPageId}
           frameHtml={null}
           mobileSideMenu={mobileSideMenu}
           setMobileSideMenu={setMobileSideMenu}

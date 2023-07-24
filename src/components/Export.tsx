@@ -27,8 +27,6 @@ const Export = ({
   userName,
   commentBlock,
   openComment,
-  setTargetPageId,
-  setRoutePage,
   setOpenComment,
   setCommentBlock,
   modal,
@@ -179,8 +177,6 @@ const Export = ({
               openComment={openComment}
               modal={modal}
               setModal={setModal}
-              setRoutePage={setRoutePage}
-              setTargetPageId={setTargetPageId}
               setOpenComment={setOpenComment}
               setCommentBlock={setCommentBlock}
               showAllComments={showAllComments}
@@ -295,8 +291,6 @@ const Export = ({
     setModal,
     setOpenComment,
     setOpenTemplates,
-    setRoutePage,
-    setTargetPageId,
     showAllComments,
     smallText,
     userName,

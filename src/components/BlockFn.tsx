@@ -35,7 +35,6 @@ type BlockFnProp = {
   menuOpen: boolean;
   setOpenMenu: Dispatch<SetStateAction<boolean>>;
   setModalStyle: Dispatch<SetStateAction<CSSProperties | undefined>>;
-  setTargetPageId: Dispatch<SetStateAction<string>>;
 };
 
 const BlockFn = ({
@@ -53,7 +52,6 @@ const BlockFn = ({
   menuOpen,
   setOpenMenu,
   setModalStyle,
-  setTargetPageId,
 }: BlockFnProp) => {
   const { addBlock } = useContext(ActionContext).actions;
 
@@ -177,7 +175,6 @@ const BlockFn = ({
               modal={modal}
               setModal={setModal}
               setCommentBlock={setCommentBlock}
-              setTargetPageId={setTargetPageId}
               setOpenRename={setOpenRename}
               setSelection={null}
               frameHtml={frameHtml}

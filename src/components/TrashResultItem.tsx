@@ -1,42 +1,24 @@
-import React, {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useContext,
-  MouseEvent,
-} from "react";
+import React, { Dispatch, SetStateAction, useContext } from "react";
 import Result, { resultType } from "./Result";
 import { ActionContext } from "../containers/NotionRouter";
 import ScreenOnly from "./ScreenOnly";
 import { RiArrowGoBackLine } from "react-icons/ri";
 import { IoTrashOutline } from "react-icons/io5";
+import { Link } from "react-router-dom";
+import { makeRoutePath } from "../fn";
 type TrashResultItemProps = {
   item: resultType;
-  setTargetPageId: Dispatch<SetStateAction<string>>;
   setOpenTrash: Dispatch<SetStateAction<boolean>>;
 };
 
-const TrashResultItem = ({
-  item,
-  setTargetPageId,
-  setOpenTrash,
-}: TrashResultItemProps) => {
+const TrashResultItem = ({ item, setOpenTrash }: TrashResultItemProps) => {
   const { cleanTrash, restorePage } = useContext(ActionContext).actions;
-  const goPage = useCallback(
-    (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      const tagName = target.tagName.toLowerCase();
-      setOpenTrash(false);
-      if (!["button", "svg", "path"].includes(tagName)) {
-        setTargetPageId(item.id);
-      }
-    },
-    [item.id, setOpenTrash, setTargetPageId]
-  );
 
   return (
-    <div className="page" onClick={goPage}>
-      <Result item={item} />
+    <div className="page" onClick={() => setOpenTrash(false)}>
+      <Link to={makeRoutePath(item.id)}>
+        <Result item={item} />
+      </Link>
       <div className="btn-group">
         <button
           title="button to restore page"
