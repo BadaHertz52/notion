@@ -104,7 +104,7 @@
     justify-content: space-between;
   }
   .switcher,
-  .fun1 {
+  .fn-group-1 {
     .item__inner {
       font-size: 13px;
     }
@@ -203,8 +203,8 @@
   .recentPages {
     display: none;
   }
-  // fun1--
-  .fun1 {
+  // fn-group-1--
+  .fn-group-1 {
     border-top: none;
     padding-bottom: 20px;
     .item__inner span {
@@ -213,7 +213,7 @@
       font-weight: initial;
     }
   }
-  // --fun1
+  // --fn-group-1
   .sideBar___inner__scroll,
   .recentPages {
     .header {
@@ -318,7 +318,7 @@
       }
     }
   }
-  .fun2 {
+  .fn-group-2 {
     display: flex;
     flex-direction: column;
     font-weight: 500;
@@ -369,11 +369,11 @@
   }
   //--addNewPage
 }
-#moreFn,
+#sideBar__moreFn,
 #sideBar__pageMenu {
   z-index: 20;
 }
-#moreFn {
+#sideBar__moreFn {
   @include modalStyle;
   display: none;
   z-index: 20;
@@ -453,6 +453,8 @@
       justify-content: center;
       div {
         font-size: 1.8rem;
+        width: fit-content;
+        height: fit-content;
       }
     }
     .userEmail {
@@ -467,8 +469,8 @@
     .page-link:hover {
       background-color: rgba(222, 222, 222, 0.833);
     }
-    .fun1,
-    .fun2,
+    .fn-group-1,
+    .fn-group-2,
     .addNewPageBtn {
       display: none;
     }
@@ -552,7 +554,7 @@
       }
     }
   }
-  #moreFn {
+  #sideBar__moreFn {
     display: block;
     position: absolute;
     transform: translateY(100vh);

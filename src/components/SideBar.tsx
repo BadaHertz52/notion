@@ -3,40 +3,35 @@ import React, {
   useEffect,
   useRef,
   useState,
-  TouchEvent,
   useContext,
   useMemo,
   useCallback,
 } from "react";
 import { blockSample, pageSample } from "../modules/notion/reducer";
 import { Block, ListItem, Notion, Page } from "../modules/notion/type";
-import { closeModal, findPage, makeRoutePath } from "../fn";
+import { closeModal, findPage } from "../fn";
 import { UserState } from "../modules/user/reducer";
 import Trash from "./Trash";
 import Rename from "./Rename";
-import Time from "./Time";
+
 import PageMenu from "./PageMenu";
-import PageIcon from "./PageIcon";
+
 import { SideBarContainerProp } from "../containers/SideBarContainer";
 
 //react-icon
 import { FiCode, FiChevronsLeft } from "react-icons/fi";
-import {
-  AiOutlineClockCircle,
-  AiOutlinePlus,
-  AiOutlineStar,
-} from "react-icons/ai";
+import { AiOutlineClockCircle, AiOutlinePlus } from "react-icons/ai";
 import { BiSearchAlt2 } from "react-icons/bi";
-import { BsFillTrash2Fill, BsPencilSquare, BsTrash } from "react-icons/bs";
+import { BsFillTrash2Fill, BsTrash } from "react-icons/bs";
 import { IoIosSettings } from "react-icons/io";
-import { HiOutlineDuplicate, HiTemplate } from "react-icons/hi";
+import { HiTemplate } from "react-icons/hi";
 
-import { RiDeleteBin6Line } from "react-icons/ri";
-import { IoArrowRedoOutline } from "react-icons/io5";
 import { ActionContext } from "../containers/NotionRouter";
 import ScreenOnly from "./ScreenOnly";
-import ListTemplate from "./ListTemplate";
-import { Link } from "react-router-dom";
+import RecentPages from "./RecentPages";
+import Favorites from "./Favorites";
+import Private from "./Private";
+import SideBarMoreFn from "./SideBarMoreFn";
 
 type SideBarProps = SideBarContainerProp & {
   notion: Notion;
@@ -51,26 +46,9 @@ const SideBar = ({
   setOpenTemplates,
   showAllComments,
 }: SideBarProps) => {
-  const {
-    addBlock,
-    addPage,
-    duplicatePage,
-    deletePage,
-    addFavorites,
-    removeFavorites,
-    changeSide,
-  } = useContext(ActionContext).actions;
+  const { addBlock, addPage, changeSide } = useContext(ActionContext).actions;
   const inner = document.getElementById("inner");
   const { pages, pagesId, trash, firstPagesId } = notion;
-  const recentPages: Page[] | null = useMemo(
-    () =>
-      pages && pagesId && user.recentPagesId
-        ? user.recentPagesId.map(
-            (pageId: string) => findPage(pagesId, pages, pageId) as Page
-          )
-        : null,
-    [pages, pagesId, user.recentPagesId]
-  );
 
   const trashPages = trash.pages;
   const trashPagesId = trash.pagesId;
@@ -118,52 +96,6 @@ const SideBar = ({
   const [pageMenuStyle, setPageMenuStyle] = useState<CSSProperties>();
 
   const recordIcon = user.userName.substring(0, 1);
-  const touchResizeBar = useRef<boolean>(false);
-  const list: ListItem[] | null = useMemo(
-    () =>
-      firstPages
-        ? firstPages
-            .filter((page: Page) => page.parentsId === null)
-            .map((page: Page) => ({
-              id: page.id,
-              iconType: page.header.iconType,
-              icon: page.header.icon,
-              title: page.header.title,
-              subPagesId: page.subPagesId,
-              parentsId: page.parentsId,
-              editTime: page.editTime,
-              createTime: page.createTime,
-            }))
-        : null,
-    [firstPages]
-  );
-
-  const makeFavoriteList = useCallback(
-    (
-      favorites: string[] | null,
-      pagesId: string[],
-      pages: Page[]
-    ): ListItem[] | null => {
-      const list: ListItem[] | null = favorites
-        ? favorites.map((id: string) => {
-            const page = findPage(pagesId, pages, id);
-            const ListItem = {
-              id: page.id,
-              title: page.header.title,
-              iconType: page.header.iconType,
-              icon: page.header.icon,
-              subPagesId: page.subPagesId,
-              parentsId: page.parentsId,
-              editTime: page.editTime,
-              createTime: page.createTime,
-            };
-            return ListItem;
-          })
-        : null;
-      return list;
-    },
-    []
-  );
 
   const addNewPage = () => {
     addPage(pageSample);
@@ -220,7 +152,7 @@ const SideBar = ({
       if (openSideMoreMenu) {
         const target = event.target as HTMLElement | null;
         if (target?.parentElement?.className !== "resizeBar") {
-          closeModal("moreFn", setOpenSideMoreMenu, event);
+          closeModal("sideBar__moreFn", setOpenSideMoreMenu, event);
           setMoreFnStyle(undefined);
         }
       }
@@ -230,48 +162,6 @@ const SideBar = ({
     },
     [openPageMenu, openRename, openSideMoreMenu, openTrash]
   );
-
-  const onClickToDelete = useCallback(() => {
-    setOpenSideMoreMenu(false);
-    if (targetItem) {
-      deletePage(targetItem.id);
-    }
-  }, [deletePage, targetItem]);
-  const onClickMoveToBtn = useCallback(() => {
-    setOpenPageMenu(true);
-    setOpenSideMoreMenu(false);
-    if (window.innerWidth > 768) {
-      setPageMenuStyle({
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-      });
-    }
-  }, []);
-  const onClickToAddFavorite = useCallback(() => {
-    setOpenSideMoreMenu(false);
-    targetItem && addFavorites(targetItem.id);
-  }, [addFavorites, targetItem]);
-  const onClickToRemoveFavorite = useCallback(() => {
-    setOpenSideMoreMenu(false);
-    targetItem && removeFavorites(targetItem.id);
-  }, [targetItem, removeFavorites]);
-  const onClickToDuplicate = useCallback(() => {
-    setOpenSideMoreMenu(false);
-    targetItem && duplicatePage(targetItem.id);
-  }, [targetItem, duplicatePage]);
-  const onClickToRename = useCallback(() => {
-    setOpenSideMoreMenu(false);
-    setOpenRename(true);
-    if (targetItem && target && target?.parentElement) {
-      const domRect = target.parentElement.getClientRects()[0];
-      setRenameStyle({
-        position: "absolute",
-        top: domRect.bottom,
-        left: domRect.left + 10,
-      });
-    }
-  }, [target, targetItem]);
   const changeTrashStyle = useCallback(() => {
     const innerWidth = window.innerWidth;
     if (innerWidth >= 768) {
@@ -316,30 +206,7 @@ const SideBar = ({
   const onMouseOutSideBar = useCallback(() => {
     sideAppear === "float" && changeSide("floatHide");
   }, [changeSide, sideAppear]);
-  const onClickRecentPageItem = useCallback(() => {
-    changeSide("close");
-  }, [changeSide]);
-  const onTouchStartResizeBar = useCallback(() => {
-    touchResizeBar.current = true;
-  }, []);
-  const onTouchMoveSideBar = useCallback(
-    (event: TouchEvent<HTMLDivElement>) => {
-      if (touchResizeBar.current) {
-        const clientY = event.changedTouches[0].clientY;
-        const innerHeight = window.innerHeight;
-        if (innerHeight - 50 <= clientY) {
-          setMoreFnStyle(undefined);
-          touchResizeBar.current = false;
-        } else {
-          setMoreFnStyle({
-            display: "block",
-            transform: `translateY(${clientY}px)`,
-          });
-        }
-      }
-    },
-    []
-  );
+
   useEffect(() => {
     inner?.addEventListener("click", handleClickToCloseModal);
 
@@ -404,42 +271,12 @@ const SideBar = ({
               </div>
             </div>
             {/* recentPages - 모바일 */}
-            <div className="recentPages">
-              <div className="header">RECENTLY VISITED PAGE</div>
-              <div className="list">
-                {recentPages === null ? (
-                  <div>No pages visited recently </div>
-                ) : (
-                  recentPages.map((page: Page, i) => (
-                    <Link
-                      to={makeRoutePath(page.id)}
-                      title={`link to open page that is ${page.header.title}`}
-                      key={`recentPage_${i}`}
-                      id={`item_${page.id}`}
-                      className="item"
-                      onClick={onClickRecentPageItem}
-                    >
-                      {page.header.cover ? (
-                        <img
-                          className="cover"
-                          src={page.header.cover}
-                          alt="pageCover"
-                        />
-                      ) : (
-                        <div className="cover none"></div>
-                      )}
-                      <PageIcon
-                        icon={page.header.icon}
-                        iconType={page.header.iconType}
-                        style={undefined}
-                      />
-                      <div className="title">{page.header.title}</div>
-                    </Link>
-                  ))
-                )}
-              </div>
-            </div>
-            <div className="fun1">
+            <RecentPages
+              pages={pages}
+              pagesId={pagesId}
+              recentPagesId={user.recentPagesId}
+            />
+            <div className="fn-group-1">
               <button
                 title="button to open quick find board"
                 onClick={() => setOpenQF(true)}
@@ -463,54 +300,24 @@ const SideBar = ({
               </div>
             </div>
             <div className="sideBar__inner__scroll">
-              <div className="favorites">
-                <div className="header">
-                  <span>FAVORITES </span>
-                </div>
-                {user.favorites && pagesId && pages && (
-                  <div className="list">
-                    <ListTemplate
-                      notion={notion}
-                      targetList={makeFavoriteList(
-                        user.favorites,
-                        pagesId,
-                        pages
-                      )}
-                      onClickMoreBtn={onClickMoreBtn}
-                      addNewSubPage={addNewSubPage}
-                      changeSide={changeSide}
-                    />
-                  </div>
-                )}
-              </div>
-              <div className="private">
-                <div className="header">
-                  <span>PRIVATE</span>
-                  <button
-                    className="btn-addPage"
-                    title="Quickly add a page inside"
-                    onClick={addNewPage}
-                  >
-                    <ScreenOnly text="Quickly add a page inside" />
-                    <AiOutlinePlus />
-                  </button>
-                </div>
-                {notion.pages && (
-                  <div className="list">
-                    {notion.pages[0] && (
-                      <ListTemplate
-                        notion={notion}
-                        targetList={list}
-                        onClickMoreBtn={onClickMoreBtn}
-                        addNewSubPage={addNewSubPage}
-                        changeSide={changeSide}
-                      />
-                    )}
-                  </div>
-                )}
-              </div>
+              <Favorites
+                favorites={user.favorites}
+                notion={notion}
+                pages={pages}
+                pagesId={pagesId}
+                onClickMoreBtn={onClickMoreBtn}
+                addNewSubPage={addNewSubPage}
+              />
+
+              <Private
+                notion={notion}
+                firstPages={firstPages}
+                addNewPage={addNewPage}
+                addNewSubPage={addNewSubPage}
+                onClickMoreBtn={onClickMoreBtn}
+              />
             </div>
-            <div className="fun2">
+            <div className="fn-group-2">
               <button
                 title="button to open templates"
                 onClick={() => setOpenTemplates(true)}
@@ -552,94 +359,18 @@ const SideBar = ({
           </div>
         </div>
       </div>
-      <div id="moreFn" style={moreFnStyle} onTouchMove={onTouchMoveSideBar}>
-        <button
-          title="button to resize moreFn "
-          className="resizeBar"
-          onTouchStart={onTouchStartResizeBar}
-        >
-          <ScreenOnly text="button to resize moreFn" />
-          <div></div>
-        </button>
-        {targetItem && (
-          <div className="page__inform">
-            <PageIcon
-              icon={targetItem.icon}
-              iconType={targetItem.iconType}
-              style={undefined}
-            />
-            <div className="page__title">{targetItem.title}</div>
-          </div>
-        )}
-        <button
-          title="button to delete"
-          className="moreFn__btn btn-delete"
-          onClick={onClickToDelete}
-        >
-          <div>
-            <RiDeleteBin6Line />
-            <span>Delete</span>
-          </div>
-        </button>
-        {targetItem && user.favorites?.includes(targetItem.id) ? (
-          <button
-            title="button to remove to favorite"
-            className="moreFn__btn"
-            onClick={onClickToRemoveFavorite}
-          >
-            <div>
-              <AiOutlineStar />
-              <span>Remove to Favorites</span>
-            </div>
-          </button>
-        ) : (
-          <button
-            title="button to add to favorite"
-            className="moreFn__btn"
-            onClick={onClickToAddFavorite}
-          >
-            <div>
-              <AiOutlineStar />
-              <span>Add to Favorites</span>
-            </div>
-          </button>
-        )}
-        <button
-          title="button to duplicate"
-          className="moreFn__btn"
-          onClick={onClickToDuplicate}
-        >
-          <div>
-            <HiOutlineDuplicate />
-            <span>Duplicate</span>
-            <span></span>
-          </div>
-        </button>
-        <button
-          title="button to rename"
-          className="moreFn__btn"
-          onClick={onClickToRename}
-        >
-          <div>
-            <BsPencilSquare />
-            <span>Rename</span>
-          </div>
-        </button>
-        <button
-          title="butotn to move  it to other page"
-          className="moreFn__btn"
-          onClick={onClickMoveToBtn}
-        >
-          <div>
-            <IoArrowRedoOutline />
-            <span>Move to</span>
-          </div>
-        </button>
-        <div className="edit__inform">
-          <p>Last edited by {user.userName}</p>
-          {targetItem && <Time editTime={targetItem.editTime} />}
-        </div>
-      </div>
+      <SideBarMoreFn
+        user={user}
+        moreFnStyle={moreFnStyle}
+        setMoreFnStyle={setMoreFnStyle}
+        targetItem={targetItem}
+        setOpenSideMoreMenu={setOpenSideMoreMenu}
+        setOpenRename={setOpenRename}
+        target={target}
+        setRenameStyle={setRenameStyle}
+        setOpenPageMenu={setOpenPageMenu}
+        setPageMenuStyle={setPageMenuStyle}
+      />
 
       {openPageMenu && targetItem && firstList && pages && pagesId && (
         <div id="sideBar__pageMenu" style={pageMenuStyle}>
