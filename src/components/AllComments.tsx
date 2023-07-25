@@ -11,6 +11,7 @@ import { CSSProperties } from "styled-components";
 import { Block, MainCommentType, Page } from "../modules/notion/type";
 import Comments from "./Comments";
 import ScreenOnly from "./ScreenOnly";
+import { isMobile } from "../fn";
 
 type AllCommentsProps = {
   page: Page;
@@ -20,7 +21,6 @@ type AllCommentsProps = {
   setShowAllComments: Dispatch<SetStateAction<boolean>>;
   discardEdit: boolean;
   setDiscardEdit: Dispatch<SetStateAction<boolean>>;
-  style: CSSProperties;
 };
 const AllComments = ({
   page,
@@ -29,7 +29,6 @@ const AllComments = ({
   setShowAllComments,
   discardEdit,
   setDiscardEdit,
-  style,
 }: AllCommentsProps) => {
   const inner = document.getElementById("inner");
   const closeAllComments = useCallback(
@@ -37,7 +36,8 @@ const AllComments = ({
       if (showAllComments) {
         const target = event.target as HTMLElement | null;
         const isInAllComments = target?.closest("#allComments");
-        if (!isInAllComments) {
+        const isInAllCommentsBtn = target?.closest("#allCommentsBtn");
+        if (!isInAllComments && !isInAllCommentsBtn) {
           setShowAllComments(false);
         }
       }
@@ -94,8 +94,12 @@ const AllComments = ({
       inner?.removeEventListener("click", closeAllComments);
     };
   }, [inner, closeAllComments]);
+
   return (
-    <div id="allComments" style={style}>
+    <div
+      id="allComments"
+      className={`allComments  ${showAllComments ? "on" : ""}`}
+    >
       <div className="allComments__inner">
         <div className="allComments__header">
           <div>Comments</div>

@@ -111,15 +111,47 @@ const TopBar = ({
   const addOrRemoveFavorite = useCallback(() => {
     pageInFavorites ? removeFavorites(page.id) : addFavorites(page.id);
   }, [addFavorites, page.id, pageInFavorites, removeFavorites]);
-  const onClickViewAllComments = () => {
-    setOpenPageMoreFun(false);
+
+  const changeAllCommentAndTopBarStyle = useCallback(() => {
+    const innerWidth = window.innerWidth;
+    const topBarLeftEl = document.querySelector(".topBar__left");
+    const topBarPageToolEl = document.querySelector(".topBar__page-tool");
+    const pagePath = document.querySelectorAll(".pagePath");
+    const changePathWidth = (topBarLeftWidth: number) => {
+      const width: number = (topBarLeftWidth - 32) / pagePath.length;
+      pagePath.forEach((e: Element) =>
+        e.setAttribute("style", `max-width:${width}px`)
+      );
+    };
+    if (showAllComments) {
+      if (innerWidth >= 385) {
+        const newWidth = innerWidth - (12 + 385 + 5);
+        topBarLeftEl?.setAttribute("style", `width: ${newWidth}px`);
+        topBarPageToolEl?.setAttribute("style", "width:385px");
+        changePathWidth(newWidth);
+      } else {
+        changePathWidth(innerWidth * 0.5);
+        topBarLeftEl?.setAttribute("style", "width:50%");
+        topBarPageToolEl?.setAttribute("style", "width:50%");
+      }
+    } else {
+      topBarLeftEl?.setAttribute("style", "width:50%");
+      changePathWidth(innerWidth * 0.5 - 26);
+    }
+  }, [showAllComments]);
+
+  const onClickViewAllComments = useCallback(() => {
+    if (!showAllComments) {
+      setOpenPageMoreFun(false);
+      changeAllCommentAndTopBarStyle();
+    }
     setShowAllComments(!showAllComments);
-    changeAllCommentAndTopBarStyle();
-  };
-  const onClickMoreBtn = () => {
-    setOpenPageMoreFun(!openPageMoreFun);
+  }, [changeAllCommentAndTopBarStyle, setShowAllComments, showAllComments]);
+
+  const onClickMoreBtn = useCallback(() => {
+    setOpenPageMoreFun((prev) => !prev);
     setShowAllComments(false);
-  };
+  }, [setShowAllComments, setOpenPageMoreFun]);
   const defaultStyle = "default";
   const serif = "serif";
   const mono = "mono";
@@ -169,34 +201,6 @@ const TopBar = ({
     setOpenPageMoreFun(false);
     setOpenPageMenu(!openPageMenu);
   };
-
-  const changeAllCommentAndTopBarStyle = useCallback(() => {
-    const innerWidth = window.innerWidth;
-    const topBarLeftEl = document.querySelector(".topBar__left");
-    const topBarPageToolEl = document.querySelector(".topBar__page-tool");
-    const pagePath = document.querySelectorAll(".pagePath");
-    const changePathWidth = (topBarLeftWidth: number) => {
-      const width: number = (topBarLeftWidth - 32) / pagePath.length;
-      pagePath.forEach((e: Element) =>
-        e.setAttribute("style", `max-width:${width}px`)
-      );
-    };
-    if (showAllComments) {
-      if (innerWidth >= 385) {
-        const newWidth = innerWidth - (12 + 385 + 5);
-        topBarLeftEl?.setAttribute("style", `width: ${newWidth}px`);
-        topBarPageToolEl?.setAttribute("style", "width:385px");
-        changePathWidth(newWidth);
-      } else {
-        changePathWidth(innerWidth * 0.5);
-        topBarLeftEl?.setAttribute("style", "width:50%");
-        topBarPageToolEl?.setAttribute("style", "width:50%");
-      }
-    } else {
-      topBarLeftEl?.setAttribute("style", "width:50%");
-      changePathWidth(innerWidth * 0.5 - 26);
-    }
-  }, [showAllComments]);
   useEffect(() => {
     window.addEventListener("resize", changeAllCommentAndTopBarStyle);
     return () =>
