@@ -3,7 +3,7 @@ const REMOVE_FAVORITES = "user/REMOVE_FAVORITES" as const;
 const ADD_RECENT_PAGE = "user/ADD_RECENT_PAGE" as const;
 const DELETE_RECENT_PAGE = "user/DELETE_RECENT_PAGE" as const;
 const CLEAN_RECENT_PAGE = "user/CLEAN_RECENT_PAGE" as const;
-
+export const recentPagesSessionKey = "recent_pages";
 export const add_favorites = (itemId: string) => ({
   type: ADD_FAVORITES,
   itemId: itemId,
@@ -12,7 +12,6 @@ export const remove_favorites = (itemId: string) => ({
   type: REMOVE_FAVORITES,
   itemId: itemId,
 });
-
 export const add_recent_page = (itemId: string) => ({
   type: ADD_RECENT_PAGE,
   itemId: itemId,
@@ -38,11 +37,14 @@ type UserAction =
   | ReturnType<typeof delete_recent_page>
   | ReturnType<typeof clean_recent_page>;
 
+const recentPagesSessionItem = sessionStorage.getItem(recentPagesSessionKey);
 const initialState: UserState = {
   userName: "badahertz52",
   userEmail: "badahertz52@notion.com",
   favorites: ["12345"],
-  recentPagesId: null,
+  recentPagesId: recentPagesSessionItem
+    ? (JSON.parse(recentPagesSessionItem) as string[])
+    : null,
 };
 
 export default function user(
@@ -75,7 +77,7 @@ export default function user(
       };
     case ADD_RECENT_PAGE:
       let recentPagesId;
-      if (state.recentPagesId == null) {
+      if (!state.recentPagesId) {
         recentPagesId = [action.itemId];
       } else {
         recentPagesId = [...state.recentPagesId];
@@ -86,6 +88,11 @@ export default function user(
         }
         recentPagesId.splice(0, 0, action.itemId);
       }
+      // session storage 에 추가
+      sessionStorage.setItem(
+        recentPagesSessionKey,
+        JSON.stringify(recentPagesId)
+      );
       return {
         ...state,
         recentPagesId: recentPagesId,

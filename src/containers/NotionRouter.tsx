@@ -40,6 +40,7 @@ import {
   add_recent_page,
   clean_recent_page,
   delete_recent_page,
+  recentPagesSessionKey,
   remove_favorites,
 } from "../modules/user/reducer";
 import EditorContainer, { ModalType } from "./EditorContainer";
@@ -284,6 +285,10 @@ const NotionRouter = () => {
   //page---
 
   //--user
+  /**
+   * 최근 방문한 페이지 목록에 itemId가 있지 않을 때, 최근 방문한 페이지 목록과 sessionStorage 에 itemId를 추가
+   * @param itemId  방문 목록에 추가할 페이지 id
+   */
   const addRecentPage = useCallback(
     (itemId: string) => {
       dispatch(add_recent_page(itemId));
@@ -377,9 +382,13 @@ const NotionRouter = () => {
       console.error("Can't find shortcut icon");
     }
   };
-  // pathname === "/notion" 일때, 지정된 페이지 열기 (즐겨찾기 -> 페이지)
+
   useEffect(() => {
-    if (!currentPageId && pagesId && pages) {
+    const sessionItem = sessionStorage.getItem(recentPagesSessionKey);
+    const recentPagesId = sessionItem ? JSON.parse(sessionItem) : null;
+    const openFirst = !recentPagesId && !currentPageId;
+    if (openFirst && pagesId && pages) {
+      // 처음 페이지를 열었을 떼, 지정된 페이지 열기 (즐겨찾기 -> 페이지)
       let pageId = "";
       if (user.favorites) {
         pageId = user.favorites[0];
@@ -388,21 +397,36 @@ const NotionRouter = () => {
       }
       const path = makeRoutePath(pageId);
       navigate(path);
+    } else {
+      if (recentPagesId) {
+        const last = recentPagesId[recentPagesId.length - 1];
+        if (last !== currentPageId) {
+          //동일 페이지 내에서 새로 고침 시, recentPagesId 에 추가되는 거 막음
+          addRecentPage(currentPageId);
+        }
+      } else {
+        addRecentPage(currentPageId);
+      }
     }
-  }, [currentPageId, firstPage, user.favorites, pagesId, pages, navigate]);
+  }, [
+    currentPageId,
+    firstPage,
+    user.favorites,
+    pagesId,
+    pages,
+    navigate,
+    addRecentPage,
+  ]);
 
+  // change title and favicon
   useEffect(() => {
     const title = document.querySelector("title")?.text;
     if (currentPage?.header) {
       title !== currentPage.header.title &&
         changeTitle(currentPage.header.title);
       changeFavicon(currentPage.header.icon, currentPage.header.iconType);
-      if (user.recentPagesId) {
-        user.recentPagesId[user.recentPagesId.length - 1] !== currentPage.id &&
-          addRecentPage(currentPage.id);
-      }
     }
-  }, [currentPage?.header, currentPage?.id, addRecentPage, user.recentPagesId]);
+  }, [currentPage?.header, currentPage?.id, user.recentPagesId]);
 
   useEffect(() => {
     const innerWidth = window.innerWidth;
