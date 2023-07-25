@@ -1,11 +1,15 @@
 @import "./common";
 
-#allComments {
+.allComments.on {
+  transform: translateX(0);
+}
+.allComments {
   position: absolute;
   top: 0;
   right: 0;
   display: flex;
   padding-top: 45px;
+  transform: translateX(calc(100% + 50px));
   flex-direction: column;
   flex-grow: 0;
   flex-shrink: 0;
@@ -126,7 +130,7 @@
 }
 
 @media screen and (max-width: 768px) {
-  #allComments {
+  .allComments {
     width: 100%;
     border-left: none;
   }

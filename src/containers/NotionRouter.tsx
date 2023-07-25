@@ -6,11 +6,10 @@ import React, {
   useMemo,
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Route, Routes, useNavigate, useSearchParams } from "react-router-dom";
-import { CSSProperties } from "styled-components";
+import { Route, Routes, useNavigate } from "react-router-dom";
+
 import AllComments from "../components/AllComments";
-import Export from "../components/Export";
-import Loading from "../components/Loading";
+
 import QuickFindBoard from "../components/QuickFindBoard";
 import Templates from "../components/Templates";
 import { RootState } from "../modules";
@@ -27,7 +26,6 @@ import {
   edit_block,
   edit_page,
   move_page_to_page,
-  pageSample,
   raise_block,
   restore_page,
 } from "../modules/notion/reducer";
@@ -46,6 +44,7 @@ import {
 import EditorContainer, { ModalType } from "./EditorContainer";
 import SideBarContainer from "./SideBarContainer";
 import NonePage from "../components/NonePage";
+import Export from "../components/Export";
 const MOBILE_SIDE_MENU = {
   ms_turnInto: "ms_turnInto",
   ms_movePage: "ms_movePage",
@@ -171,9 +170,6 @@ const NotionRouter = () => {
 
   const [openQF, setOpenQF] = useState<boolean>(false);
   const [showAllComments, setShowAllComments] = useState<boolean>(false);
-  const [allCommentsStyle, setAllCommentsStyle] = useState<CSSProperties>({
-    transform: `translateX(${window.innerWidth}px)`,
-  });
   const [discard_edit, setDiscardEdit] = useState<boolean>(false);
   const discardEditHtml = document.getElementById("discardEdit");
   const [openExport, setOpenExport] = useState<boolean>(false);
@@ -434,32 +430,6 @@ const NotionRouter = () => {
     }
   }, [currentPage?.header, currentPage?.id, user.recentPagesId]);
 
-  useEffect(() => {
-    const innerWidth = window.innerWidth;
-    if (showAllComments) {
-      innerWidth > 768
-        ? setAllCommentsStyle({
-            transform: `translateX(0)`,
-          })
-        : setAllCommentsStyle({
-            transform: `translateY(0)`,
-          });
-    } else {
-      const allCommentsHtml = document.getElementById("allComments");
-      const width = allCommentsHtml?.clientWidth;
-      if (innerWidth > 768) {
-        width &&
-          setAllCommentsStyle({
-            transform: `translateX(${width + 50}px)`,
-          });
-      } else {
-        setAllCommentsStyle({
-          transform: `translateY(110%)`,
-        });
-      }
-    }
-  }, [showAllComments]);
-
   return (
     <ActionContext.Provider value={{ actions: notionActions }}>
       <div id="inner" className="sideBar-lock">
@@ -579,7 +549,6 @@ const NotionRouter = () => {
                     setShowAllComments={setShowAllComments}
                     discardEdit={discard_edit}
                     setDiscardEdit={setDiscardEdit}
-                    style={allCommentsStyle}
                   />
                 )}
                 {openQF && (
