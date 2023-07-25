@@ -5,6 +5,7 @@ import React, {
   TouchEvent,
   useCallback,
   useContext,
+  useEffect,
   useRef,
 } from "react";
 import ScreenOnly from "./ScreenOnly";
@@ -42,6 +43,7 @@ function SideBarMoreFn({
   setOpenPageMenu,
   setPageMenuStyle,
 }: SideBarMoreFnProps) {
+  const moreFnRef = useRef<HTMLDivElement>(null);
   const { deletePage, removeFavorites, addFavorites, duplicatePage } =
     useContext(ActionContext).actions;
   const touchResizeBar = useRef<boolean>(false);
@@ -113,9 +115,16 @@ function SideBarMoreFn({
     }
   }, []);
 
+  useEffect(() => {
+    if (!moreFnStyle && moreFnRef.current) {
+      moreFnRef.current.classList.toggle("on");
+    }
+  }, [moreFnStyle]);
   return (
     <div
       id="sideBar__moreFn"
+      className="sideBar__moreFn"
+      ref={moreFnRef}
       style={moreFnStyle}
       onTouchMove={onTouchMoveSideBar}
     >

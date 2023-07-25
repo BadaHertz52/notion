@@ -141,10 +141,16 @@ const SideBar = ({
         left: position.right,
       });
     } else {
-      setMoreFnStyle({
-        display: "block",
-        transform: "translateY(50vh)",
-      });
+      const moreFnEl = document.querySelector("#sideBar__moreFn");
+      if (moreFnEl) {
+        moreFnEl.classList.add("on");
+        setTimeout(() => {
+          setMoreFnStyle({
+            display: "block",
+            transform: "translateY(50vh)",
+          });
+        }, 500);
+      }
     }
   }, []);
   const handleClickToCloseModal = useCallback(
@@ -153,7 +159,17 @@ const SideBar = ({
         const target = event.target as HTMLElement | null;
         if (target?.parentElement?.className !== "resizeBar") {
           closeModal("sideBar__moreFn", setOpenSideMoreMenu, event);
-          setMoreFnStyle(undefined);
+          if (window.innerWidth > 768) {
+            setMoreFnStyle(undefined);
+          } else {
+            setMoreFnStyle({
+              display: "block",
+              transform: "translateY(100vh)",
+            });
+            setTimeout(() => {
+              setMoreFnStyle(undefined);
+            }, 500);
+          }
         }
       }
       openPageMenu && closeModal("pageMenu", setOpenPageMenu, event);
