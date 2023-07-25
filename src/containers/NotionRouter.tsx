@@ -6,7 +6,7 @@ import React, {
   useMemo,
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate, useSearchParams } from "react-router-dom";
 import { CSSProperties } from "styled-components";
 import AllComments from "../components/AllComments";
 import Export from "../components/Export";
@@ -382,7 +382,11 @@ const NotionRouter = () => {
       console.error("Can't find shortcut icon");
     }
   };
-
+  useEffect(() => {
+    if (window.location.search) {
+      navigate(makeRoutePath(currentPageId));
+    }
+  }, [currentPageId, navigate]);
   useEffect(() => {
     const sessionItem = sessionStorage.getItem(recentPagesSessionKey);
     const recentPagesId = sessionItem ? JSON.parse(sessionItem) : null;
@@ -398,7 +402,7 @@ const NotionRouter = () => {
       const path = makeRoutePath(pageId);
       navigate(path);
     } else {
-      if(pagesId?.includes(currentPageId)){
+      if (pagesId?.includes(currentPageId)) {
         if (recentPagesId) {
           const last = recentPagesId[recentPagesId.length - 1];
           if (last !== currentPageId) {
@@ -409,7 +413,6 @@ const NotionRouter = () => {
           addRecentPage(currentPageId);
         }
       }
-
     }
   }, [
     currentPageId,

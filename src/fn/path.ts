@@ -3,8 +3,9 @@ import { Page } from "../modules/notion/type";
 import { findPage } from ".";
 
 export const getCurrentPageId = () => {
-  const path = window.location.pathname;
-  const currentPageId = path.replaceAll("/", "").replace("notion", "");
+  const href = window.location.href;
+  const lastSlashIndex = href.lastIndexOf("/");
+  const currentPageId = href.slice(lastSlashIndex + 1);
   return currentPageId;
 };
 
