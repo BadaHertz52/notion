@@ -1,5 +1,10 @@
 @import "./common";
-
+@mixin headerStyle {
+  color: $darkgrey;
+  margin-left: 16px;
+  margin-bottom: 14px;
+  font-size: 14px;
+}
 .sideBar-close,
 .sideBar-float,
 .sideBar-floatHide {
@@ -149,10 +154,8 @@
         align-items: center;
       }
     }
-    .trashBtn {
-      display: none;
-    }
   }
+
   .record-icon {
     display: flex;
     align-items: center;
@@ -214,16 +217,11 @@
   .sideBar___inner__scroll,
   .recentPages {
     .header {
-      padding: 0 14px;
       margin-bottom: 10px;
-      font : {
-        size: 11px;
-        weight: 500;
-      }
-      color: $itemSvg;
-      fill: $itemSvg;
+      @include headerStyle;
     }
   }
+
   //sideBar__inner__scroll--
   .sideBar__inner__scroll {
     padding: 16px 0;
@@ -235,10 +233,7 @@
     .private {
       margin-bottom: 20px;
       .header {
-        color: $itemText;
-        margin-left: 16px;
-        margin-bottom: 14px;
-        font-size: 14px;
+        @include headerStyle;
       }
     }
     ul {
@@ -337,7 +332,9 @@
     }
   }
   //--scroll
-
+  .mobile-trash-btn-container {
+    display: none;
+  }
   // addNewPageBtn --
   .addNewPageBtn {
     width: 100%;
@@ -416,14 +413,11 @@
   .sideBar {
     background-color: rgb(240, 240, 240);
     width: 100vw;
-    .closeSideBarBtn {
-      display: none;
-    }
     .item__inner {
       padding: 0.5rem 1rem;
     }
     .sideBar__inner__scroll {
-      height: calc(90vh - 40px - 26px - 2rem - 25vw);
+      max-height: calc(90vh - 40px - 26px - 2rem - 25vw);
       box-sizing: border-box;
     }
     .switcher .item__inner,
@@ -434,14 +428,6 @@
     .switcher {
       .item__inner {
         padding-top: 1rem;
-      }
-      .trashBtn {
-        display: block;
-        &:hover {
-          svg {
-            fill: black;
-          }
-        }
       }
     }
     .user,
@@ -540,6 +526,29 @@
             weight: bolder;
           }
         }
+      }
+    }
+    .mobile-trash-btn-container {
+      display: block;
+      position: absolute;
+      bottom: 32px;
+      left: 0;
+      width: 100%;
+      button {
+        width: 100%;
+        display: flex;
+        svg {
+          color: $darkgrey;
+        }
+        &:hover {
+          svg {
+            color: $black;
+          }
+        }
+      }
+      .header {
+        @include headerStyle;
+        margin-right: 10px;
       }
     }
   }

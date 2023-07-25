@@ -401,22 +401,11 @@ const SideBar = ({
                   <ScreenOnly text="button to close side menu" />
                   <FiChevronsLeft />
                 </button>
-                <button
-                  title="button to open form that has deleted page"
-                  className="trashBtn"
-                  onClick={onClickTrashBtn}
-                  ref={trashBtn}
-                >
-                  <ScreenOnly text="button to open form that has deleted page" />
-                  <BsTrash />
-                </button>
               </div>
             </div>
-            {/* 모바일 */}
+            {/* recentPages - 모바일 */}
             <div className="recentPages">
-              <div className="header">
-                <span>RECENTLY VISITED PAGE </span>
-              </div>
+              <div className="header">RECENTLY VISITED PAGE</div>
               <div className="list">
                 {recentPages === null ? (
                   <div>No pages visited recently </div>
@@ -543,9 +532,20 @@ const SideBar = ({
               </button>
             </div>
           </div>
+          <div className="mobile-trash-btn-container">
+            <button
+              title="open form that has deleted page"
+              className="trashBtn"
+              onClick={onClickTrashBtn}
+              ref={trashBtn}
+            >
+              <div className="header">TRASH</div>
+              <BsTrash />
+            </button>
+          </div>
           {/* <a href="https://icons8.com/icon/11732/페이지-개요">페이지 개요 icon by Icons8</a> */}
           <div className="addNewPageBtn">
-            <button title="button to make new page" onClick={addNewPage}>
+            <button title="make new page" onClick={addNewPage}>
               <AiOutlinePlus />
               <span>New page</span>
             </button>
