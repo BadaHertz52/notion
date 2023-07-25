@@ -127,7 +127,7 @@ const NotionRouter = () => {
     : false;
   const user = useSelector((state: RootState) => state.user);
   const sideAppear = useSelector((state: RootState) => state.side.appear);
-  const currentPageId = getCurrentPageId();
+  const currentPageId: string = getCurrentPageId();
   const currentPage = useMemo(
     () =>
       pages &&
