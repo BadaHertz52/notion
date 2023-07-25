@@ -85,7 +85,7 @@ const Trash = ({
   }, [sort, pagesId, trashPages, trashPagesId]);
 
   return (
-    <div id="trash" style={style}>
+    <div id="trash" className="trash" style={style}>
       <div className="inner">
         <div className="header">
           <div className="range">

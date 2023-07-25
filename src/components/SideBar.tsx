@@ -78,7 +78,7 @@ const SideBar = ({
         : null,
     [firstPages]
   );
-  const trashBtn = useRef<HTMLButtonElement>(null);
+  const trashBtnRef = useRef<HTMLButtonElement>(null);
   const [target, setTarget] = useState<HTMLElement | null>(null);
   const [targetItem, setTargetItem] = useState<ListItem | null>(null);
   const [targetPage, setTargetPage] = useState<Page | null>(null);
@@ -180,8 +180,8 @@ const SideBar = ({
   );
   const changeTrashStyle = useCallback(() => {
     const innerWidth = window.innerWidth;
-    if (innerWidth >= 768) {
-      const domRect = trashBtn.current?.getClientRects()[0];
+    if (innerWidth > 768 && trashBtnRef.current) {
+      const domRect = trashBtnRef.current.getClientRects()[0];
       if (domRect) {
         setTrashStyle({
           display: "flex",
@@ -194,12 +194,18 @@ const SideBar = ({
         });
       }
     } else {
-      setTrashStyle({
-        display: "block",
-        transform: "translateY(0)",
-      });
+      const trashEl = document.getElementById("trash");
+      if (trashEl) {
+        trashEl.classList.add("on");
+        setTimeout(() => {
+          setTrashStyle({
+            display: "block",
+            transform: "translateY(0)",
+          });
+        }, 500);
+      }
     }
-  }, []);
+  }, [trashBtnRef]);
   const handleResize = useCallback(() => {
     if (window.innerWidth < 800 && sideAppear === "lock" && showAllComments) {
       changeSide("close");
@@ -212,13 +218,10 @@ const SideBar = ({
     return () => window.addEventListener("resize", handleResize);
   }, [handleResize]);
 
-  const onClickTrashBtn = useCallback(
-    (event: React.MouseEvent) => {
-      setOpenTrash(true);
-      changeTrashStyle();
-    },
-    [changeTrashStyle]
-  );
+  const onClickTrashBtn = useCallback(() => {
+    setOpenTrash(true);
+    changeTrashStyle();
+  }, [changeTrashStyle]);
   const onMouseOutSideBar = useCallback(() => {
     sideAppear === "float" && changeSide("floatHide");
   }, [changeSide, sideAppear]);
@@ -241,11 +244,18 @@ const SideBar = ({
   useEffect(() => {
     if (!openTrash) {
       const innerWidth = window.innerWidth;
-      innerWidth > 768
-        ? setTrashStyle({ display: "none" })
-        : setTrashStyle({
-            transform: "translateY(105vh)",
-          });
+      if (innerWidth > 768) {
+        setTrashStyle({ display: "none" });
+      } else {
+        const trashEl = document.getElementById("trash");
+        setTrashStyle({
+          display: "block",
+          transform: "translateY(105vh)",
+        });
+        setTimeout(() => {
+          trashEl?.classList.toggle("on");
+        }, 1000);
+      }
     }
   }, [openTrash]);
   useEffect(() => {
@@ -346,7 +356,7 @@ const SideBar = ({
               <button
                 title="button to open form that has deleted pages"
                 onClick={onClickTrashBtn}
-                ref={trashBtn}
+                ref={trashBtnRef}
               >
                 <div className="item__inner">
                   <BsFillTrash2Fill />
@@ -360,7 +370,6 @@ const SideBar = ({
               title="open form that has deleted page"
               className="trashBtn"
               onClick={onClickTrashBtn}
-              ref={trashBtn}
             >
               <div className="header">TRASH</div>
               <BsTrash />
