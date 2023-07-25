@@ -398,15 +398,18 @@ const NotionRouter = () => {
       const path = makeRoutePath(pageId);
       navigate(path);
     } else {
-      if (recentPagesId) {
-        const last = recentPagesId[recentPagesId.length - 1];
-        if (last !== currentPageId) {
-          //동일 페이지 내에서 새로 고침 시, recentPagesId 에 추가되는 거 막음
+      if(pagesId?.includes(currentPageId)){
+        if (recentPagesId) {
+          const last = recentPagesId[recentPagesId.length - 1];
+          if (last !== currentPageId) {
+            //동일 페이지 내에서 새로 고침 시, recentPagesId 에 추가되는 거 막음
+            addRecentPage(currentPageId);
+          }
+        } else {
           addRecentPage(currentPageId);
         }
-      } else {
-        addRecentPage(currentPageId);
       }
+
     }
   }, [
     currentPageId,
@@ -463,7 +466,7 @@ const NotionRouter = () => {
           setOpenTemplates={setOpenTemplates}
           showAllComments={showAllComments}
         />
-        {!pageExist || !currentPage ? (
+        {!pageExist || (currentPageId && !pagesId?.includes(currentPageId)) ? (
           <NonePage addPage={addPage} />
         ) : (
           <>
