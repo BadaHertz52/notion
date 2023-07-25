@@ -129,9 +129,17 @@
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1024px) {
   .allComments {
+    display: none;
     width: 100%;
     border-left: none;
+    &.on {
+      display: flex;
+      transform: translateX(calc(100% + 50px));
+    }
+    &.mobile {
+      transform: translateX(0);
+    }
   }
 }

@@ -78,7 +78,7 @@ const TopBar = ({
       const target = event.target as HTMLElement;
       const targetTag = target.tagName.toLowerCase();
       const width = window.outerWidth;
-      if (showAllComments && width < 1000) {
+      if (showAllComments && width < 1024) {
         setShowAllComments(false);
       }
       switch (targetTag) {

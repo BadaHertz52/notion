@@ -5,13 +5,12 @@ import React, {
   useEffect,
   useState,
   useCallback,
+  useRef,
 } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
-import { CSSProperties } from "styled-components";
 import { Block, MainCommentType, Page } from "../modules/notion/type";
 import Comments from "./Comments";
 import ScreenOnly from "./ScreenOnly";
-import { isMobile } from "../fn";
 
 type AllCommentsProps = {
   page: Page;
@@ -31,6 +30,7 @@ const AllComments = ({
   setDiscardEdit,
 }: AllCommentsProps) => {
   const inner = document.getElementById("inner");
+  const allCommentsRef = useRef<HTMLDivElement>(null);
   const closeAllComments = useCallback(
     (event: globalThis.MouseEvent) => {
       if (showAllComments) {
@@ -94,12 +94,34 @@ const AllComments = ({
       inner?.removeEventListener("click", closeAllComments);
     };
   }, [inner, closeAllComments]);
+  const changeStyle = useCallback(() => {
+    const editorEl = document.getElementsByClassName("editor")[0];
+    const isMobile = editorEl.clientWidth < 1024;
+    if (showAllComments) {
+      allCommentsRef.current?.classList.add("on");
+      isMobile &&
+        setTimeout(() => {
+          allCommentsRef.current?.classList.add("mobile");
+        }, 100);
+    } else {
+      if (isMobile) {
+        allCommentsRef.current?.classList.remove("mobile");
+        setTimeout(() => {
+          allCommentsRef.current?.classList.remove("mobile");
+        }, 2500);
+      } else {
+        allCommentsRef.current?.classList.remove("on");
+      }
+    }
+  }, [showAllComments, allCommentsRef]);
 
+  useEffect(() => {
+    changeStyle();
+    window.addEventListener("resize", changeStyle);
+    return () => window.removeEventListener("resize", changeStyle);
+  }, [changeStyle]);
   return (
-    <div
-      id="allComments"
-      className={`allComments  ${showAllComments ? "on" : ""}`}
-    >
+    <div id="allComments" className="allComments" ref={allCommentsRef}>
       <div className="allComments__inner">
         <div className="allComments__header">
           <div>Comments</div>
