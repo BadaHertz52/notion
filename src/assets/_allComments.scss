@@ -1,9 +1,12 @@
 @import "./common";
 
-.allComments.on {
-  transform: translateX(0);
-}
 .allComments {
+  &.hide {
+    display: none;
+  }
+  &.on {
+    transform: translateX(0);
+  }
   position: absolute;
   top: 0;
   right: 0;
@@ -131,15 +134,7 @@
 
 @media screen and (max-width: 1024px) {
   .allComments {
-    display: none;
     width: 100%;
     border-left: none;
-    &.on {
-      display: flex;
-      transform: translateX(calc(100% + 50px));
-    }
-    &.mobile {
-      transform: translateX(0);
-    }
   }
 }

@@ -69,6 +69,24 @@ const AllComments = ({
       target.parentElement?.classList.remove("open");
     }
   };
+
+  const changeStyle = useCallback(() => {
+    if (showAllComments) {
+      allCommentsRef.current?.classList.remove("hide");
+      setTimeout(() => {
+        allCommentsRef.current?.classList.add("on");
+      }, 50);
+    } else {
+      const classList = allCommentsRef.current?.classList;
+      classList?.contains("on") &&
+        allCommentsRef.current?.classList.remove("on");
+      !classList?.contains("hide") &&
+        setTimeout(() => {
+          allCommentsRef.current?.classList.add("hide");
+        }, 2500);
+    }
+  }, [showAllComments, allCommentsRef]);
+
   useEffect(() => {
     if (allComments) {
       let resultComments: MainCommentType[] = [];
@@ -94,26 +112,6 @@ const AllComments = ({
       inner?.removeEventListener("click", closeAllComments);
     };
   }, [inner, closeAllComments]);
-  const changeStyle = useCallback(() => {
-    const editorEl = document.getElementsByClassName("editor")[0];
-    const isMobile = editorEl.clientWidth < 1024;
-    if (showAllComments) {
-      allCommentsRef.current?.classList.add("on");
-      isMobile &&
-        setTimeout(() => {
-          allCommentsRef.current?.classList.add("mobile");
-        }, 100);
-    } else {
-      if (isMobile) {
-        allCommentsRef.current?.classList.remove("mobile");
-        setTimeout(() => {
-          allCommentsRef.current?.classList.remove("mobile");
-        }, 2500);
-      } else {
-        allCommentsRef.current?.classList.remove("on");
-      }
-    }
-  }, [showAllComments, allCommentsRef]);
 
   useEffect(() => {
     changeStyle();
@@ -121,7 +119,7 @@ const AllComments = ({
     return () => window.removeEventListener("resize", changeStyle);
   }, [changeStyle]);
   return (
-    <div id="allComments" className="allComments" ref={allCommentsRef}>
+    <div id="allComments" className="allComments hide" ref={allCommentsRef}>
       <div className="allComments__inner">
         <div className="allComments__header">
           <div>Comments</div>
