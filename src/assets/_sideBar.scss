@@ -375,7 +375,11 @@
 }
 .sideBar__moreFn {
   @include modalStyle;
-  display: none;
+  display: block;
+  position: absolute;
+  &.hide {
+    display: none;
+  }
   z-index: 20;
   width: 230px;
   .resizeBar {
@@ -555,13 +559,11 @@
     }
   }
   .sideBar__moreFn {
-    display: none;
+    transition: transform 500ms ease;
+    transform: translateY(100vh);
     &.on {
-      display: block;
-      transition: transform 500ms ease;
-      transform: translateY(100vh);
+      transform: translateY(50vh);
     }
-    position: absolute;
     top: 0;
     width: 100vw;
     height: 100vh;

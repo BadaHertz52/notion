@@ -52,18 +52,18 @@ function SideBarMoreFn({
       if (touchResizeBar.current) {
         const clientY = event.changedTouches[0].clientY;
         const innerHeight = window.innerHeight;
-        if (innerHeight - 50 <= clientY) {
+        if (innerHeight * 0.9 <= clientY) {
           setMoreFnStyle(undefined);
           touchResizeBar.current = false;
         } else {
-          setMoreFnStyle({
-            display: "block",
-            transform: `translateY(${clientY}px)`,
-          });
+          clientY >= 120 &&
+            setMoreFnStyle({
+              transform: `translateY(${clientY}px)`,
+            });
         }
       }
     },
-    []
+    [setMoreFnStyle]
   );
   const onTouchStartResizeBar = useCallback(() => {
     touchResizeBar.current = true;
@@ -113,17 +113,35 @@ function SideBarMoreFn({
         left: "50%",
       });
     }
-  }, []);
-
+  }, [setOpenPageMenu, setOpenSideMoreMenu, setPageMenuStyle]);
   useEffect(() => {
-    if (!moreFnStyle && moreFnRef.current) {
-      moreFnRef.current.classList.toggle("on");
+    if (moreFnRef.current) {
+      if (moreFnStyle) {
+        moreFnRef.current.classList.remove("hide");
+        if (window.innerWidth <= 768) {
+          setTimeout(() => moreFnRef.current?.classList.add("on"), 500);
+        } else {
+          moreFnRef.current.classList.add("on");
+        }
+      } else {
+        //close
+        const classList = moreFnRef.current.classList;
+        classList.contains("on") && moreFnRef.current.classList.remove("on");
+        if (!classList.contains("hide")) {
+          if (window.innerWidth <= 768) {
+            setTimeout(() => moreFnRef.current?.classList.add("hide"), 500);
+          } else {
+            moreFnRef.current.classList.add("hide");
+          }
+        }
+      }
     }
   }, [moreFnStyle]);
+
   return (
     <div
       id="sideBar__moreFn"
-      className="sideBar__moreFn"
+      className="sideBar__moreFn hide"
       ref={moreFnRef}
       style={moreFnStyle}
       onTouchMove={onTouchMoveSideBar}

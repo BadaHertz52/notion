@@ -135,8 +135,6 @@ const SideBar = ({
     if (window.innerWidth > 768) {
       const position = target.getClientRects()[0];
       setMoreFnStyle({
-        display: "block",
-        position: "absolute",
         top: position.top,
         left: position.right,
       });
@@ -146,7 +144,6 @@ const SideBar = ({
         moreFnEl.classList.add("on");
         setTimeout(() => {
           setMoreFnStyle({
-            display: "block",
             transform: "translateY(50vh)",
           });
         }, 500);
@@ -261,6 +258,7 @@ const SideBar = ({
   useEffect(() => {
     if (sideAppear === "close") {
       setOpenTrash(false);
+      setMoreFnStyle(undefined);
     }
   }, [sideAppear]);
   return (
