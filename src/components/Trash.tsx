@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useState,
   useCallback,
+  useRef,
 } from "react";
 
 import { CSSProperties } from "styled-components";
@@ -19,6 +20,7 @@ type TrashProps = {
   trashPagesId: string[] | null;
   trashPages: Page[] | null;
   pagesId: string[] | null;
+  openTrash: boolean;
   setOpenTrash: Dispatch<SetStateAction<boolean>>;
 };
 
@@ -27,8 +29,10 @@ const Trash = ({
   trashPages,
   trashPagesId,
   pagesId,
+  openTrash,
   setOpenTrash,
 }: TrashProps) => {
+  const trashRef = useRef<HTMLDivElement>(null);
   const [trashList, setTrashList] = useState<resultType[] | undefined>(
     undefined
   );
@@ -84,8 +88,35 @@ const Trash = ({
     }
   }, [sort, pagesId, trashPages, trashPagesId]);
 
+  useEffect(() => {
+    const classList = trashRef.current?.classList;
+    const isMobile = window.innerWidth <= 768;
+    if (openTrash) {
+      trashRef.current?.classList.remove("hide");
+      if (isMobile) {
+        setTimeout(() => {
+          trashRef.current?.classList.add("on");
+        }, 100);
+      } else {
+        trashRef.current?.classList.add("on");
+      }
+    } else {
+      // add hide  from classList
+      if (!classList?.contains("hide")) {
+        if (isMobile) {
+          setTimeout(() => {
+            trashRef.current?.classList.add("hide");
+          }, 800);
+        } else {
+          trashRef.current?.classList.add("hide");
+        }
+      }
+      //remove on to classList
+      classList?.contains("on") && trashRef.current?.classList.remove("on");
+    }
+  }, [openTrash]);
   return (
-    <div id="trash" className="trash" style={style}>
+    <div id="trash" className="trash hide" style={style} ref={trashRef}>
       <div className="inner">
         <div className="header">
           <div className="range">

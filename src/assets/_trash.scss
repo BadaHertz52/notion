@@ -2,6 +2,11 @@
 
 .trash {
   @include modalStyle;
+  &.hide {
+    display: none;
+  }
+  display: flex;
+  position: absolute;
   width: 400px;
   min-width: 180px;
   max-width: calc(100vw - 24px);
@@ -79,11 +84,10 @@
 
 @media screen and (max-width: 768px) {
   .trash {
-    display: none;
+    transition: transform 800ms ease;
+    transform: translateY(200vh);
     &.on {
-      display: block;
-      transform: translateY(200vh);
-      transition: transform 1000ms ease;
+      transform: translateY(0);
     }
     max-width: 100vw;
     max-height: 100vh;
@@ -92,21 +96,6 @@
     position: absolute;
     top: 0;
     left: 0;
-  }
-}
-@media screen and (max-width: 425px) {
-  .trash {
-    .range {
-      button {
-        font-size: 14px;
-      }
-    }
-  }
-}
-@media screen and (max-width: 768px) {
-  .trash {
-    // 수정
-    display: none;
     .header {
       margin-bottom: 24px;
     }
@@ -123,4 +112,15 @@
       font-size: 32px;
     }
   }
+}
+@media screen and (max-width: 425px) {
+  .trash {
+    .range {
+      button {
+        font-size: 14px;
+      }
+    }
+  }
+}
+@media screen and (max-width: 768px) {
 }

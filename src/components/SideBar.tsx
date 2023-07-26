@@ -181,25 +181,12 @@ const SideBar = ({
       const domRect = trashBtnRef.current.getClientRects()[0];
       if (domRect) {
         setTrashStyle({
-          display: "flex",
-          position: "absolute",
           top: domRect.top - 100,
           left:
             window.innerWidth >= 768
               ? domRect.right + 50
               : window.innerWidth * 0.2,
         });
-      }
-    } else {
-      const trashEl = document.getElementById("trash");
-      if (trashEl) {
-        trashEl.classList.add("on");
-        setTimeout(() => {
-          setTrashStyle({
-            display: "block",
-            transform: "translateY(0)",
-          });
-        }, 500);
       }
     }
   }, [trashBtnRef]);
@@ -238,23 +225,6 @@ const SideBar = ({
     }
   }, [targetItem, pages, pagesId]);
 
-  useEffect(() => {
-    if (!openTrash) {
-      const innerWidth = window.innerWidth;
-      if (innerWidth > 768) {
-        setTrashStyle({ display: "none" });
-      } else {
-        const trashEl = document.getElementById("trash");
-        setTrashStyle({
-          display: "block",
-          transform: "translateY(105vh)",
-        });
-        setTimeout(() => {
-          trashEl?.classList.toggle("on");
-        }, 1000);
-      }
-    }
-  }, [openTrash]);
   useEffect(() => {
     if (sideAppear === "close") {
       setOpenTrash(false);
@@ -420,6 +390,7 @@ const SideBar = ({
         trashPagesId={trashPagesId}
         trashPages={trashPages}
         pagesId={pagesId}
+        openTrash={openTrash}
         setOpenTrash={setOpenTrash}
       />
     </div>
