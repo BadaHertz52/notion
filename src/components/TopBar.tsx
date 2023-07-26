@@ -32,6 +32,16 @@ import { GrDocumentUpload } from "react-icons/gr";
 import { isMobile, makeRoutePath } from "../fn";
 import ScreenOnly from "./ScreenOnly";
 import { Link } from "react-router-dom";
+import FontBtn from "./FontBtn";
+//frame font
+const defaultStyle = "default";
+const serif = "serif";
+const mono = "mono";
+export type FrameFontStyleType =
+  | typeof defaultStyle
+  | typeof serif
+  | typeof mono;
+
 type TopBarProps = {
   firstList: ListItem[];
   favorites: string[] | null;
@@ -72,7 +82,9 @@ const TopBar = ({
   const [openPageMoreFun, setOpenPageMoreFun] = useState<boolean>(false);
   const [openPageMenu, setOpenPageMenu] = useState<boolean>(false);
   const pageInFavorites = favorites?.includes(page.id);
-
+  const FONT_BTN_ARRAY: FrameFontStyleType[] = ["default", "mono", "serif"];
+  const [selectedFontStyle, setSelectedFontStyle] =
+    useState<FrameFontStyleType>("default");
   const onClickSideBarBtn = useCallback(
     (event: React.MouseEvent) => {
       const target = event.target as HTMLElement;
@@ -152,18 +164,15 @@ const TopBar = ({
     setOpenPageMoreFun((prev) => !prev);
     setShowAllComments(false);
   }, [setShowAllComments, setOpenPageMoreFun]);
-  const defaultStyle = "default";
-  const serif = "serif";
-  const mono = "mono";
-  type fontStyle = typeof defaultStyle | typeof serif | typeof mono;
-  const returnFontFamily = (font: fontStyle) => {
+
+  const returnFontFamily = (font: FrameFontStyleType) => {
     const style: CSSProperties = {
       fontFamily: font,
     };
     return style;
   };
   const changeFontStyle = useCallback(
-    (event: MouseEvent, font: fontStyle) => {
+    (event: MouseEvent, font: FrameFontStyleType) => {
       const currentTarget = event.currentTarget;
       const targetFontSample = currentTarget.firstElementChild;
       const fontSample = [...document.getElementsByClassName("font-sample")];
@@ -171,7 +180,7 @@ const TopBar = ({
         element.classList.contains("on") && element.classList.remove("on");
       });
       targetFontSample && targetFontSample.classList.add("on");
-
+      setSelectedFontStyle(font);
       switch (font) {
         case "default":
           setFontStyle(defaultFontFamily);
@@ -271,7 +280,7 @@ const TopBar = ({
               <div>{page.header.title}</div>
             </Link>
           ) : (
-            pagePath.map((path: pathType) => (
+            pagePath.map((path: PathType) => (
               <div className="pagePath" key={pagePath.indexOf(path)}>
                 {pagePath.indexOf(path) !== 0 && (
                   <div className="pathSlash">/</div>
@@ -322,42 +331,14 @@ const TopBar = ({
               <div className="fontStyle">
                 <div className="fontStyle__header">STYLE</div>
                 <div className="fontStyle__btn-group">
-                  <button
-                    title="button to change font to default"
-                    onClick={(event) => changeFontStyle(event, "default")}
-                  >
-                    <div
-                      className="font-sample on"
-                      style={returnFontFamily("default")}
-                    >
-                      Ag
-                    </div>
-                    <div className="font-name">Default</div>
-                  </button>
-                  <button
-                    title="button to change font to serif"
-                    onClick={(event) => changeFontStyle(event, "serif")}
-                  >
-                    <div
-                      className="font-sample"
-                      style={returnFontFamily("serif")}
-                    >
-                      Ag
-                    </div>
-                    <div className="font-name">Serif</div>
-                  </button>
-                  <button
-                    title="button to change font to mono"
-                    onClick={(event) => changeFontStyle(event, "mono")}
-                  >
-                    <div
-                      className="font-sample"
-                      style={returnFontFamily("mono")}
-                    >
-                      Ag
-                    </div>
-                    <div className="font-name">Mono</div>
-                  </button>
+                  {FONT_BTN_ARRAY.map((i) => (
+                    <FontBtn
+                      selectedFonStyle={selectedFontStyle}
+                      fontStyle={i}
+                      changeFontStyle={changeFontStyle}
+                      returnFontFamily={returnFontFamily}
+                    />
+                  ))}
                 </div>
               </div>
               <div className="size">
