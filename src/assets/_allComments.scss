@@ -134,6 +134,13 @@
 
 @media screen and (max-width: 1024px) {
   .allComments {
+    width: calc(100vw - 300px);
+    border-left: none;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .allComments {
     width: 100%;
     border-left: none;
   }
