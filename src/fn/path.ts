@@ -1,4 +1,4 @@
-import { pathType } from "../containers/NotionRouter";
+import { PathType } from "../containers/NotionRouter";
 import { Page } from "../modules/notion/type";
 import { findPage } from ".";
 
@@ -13,12 +13,12 @@ export const makePagePath = (
   page: Page,
   pagesId: string[],
   pages: Page[]
-): pathType[] | null => {
+): PathType[] | null => {
   if (page.parentsId) {
     const parentPages: Page[] = page.parentsId.map((id: string) =>
       findPage(pagesId, pages, id)
     );
-    const pagePath: pathType[] = parentPages.concat(page).map((p: Page) => ({
+    const pagePath: PathType[] = parentPages.concat(page).map((p: Page) => ({
       id: p.id,
       title: p.header.title,
       icon: p.header.icon,

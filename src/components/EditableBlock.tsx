@@ -13,7 +13,7 @@ import React, {
 import { Block, Page } from "../modules/notion/type";
 import { findBlock, setTemplateItem } from "../fn";
 import { Command } from "./Frame";
-import { ActionContext, selectionType } from "../containers/NotionRouter";
+import { ActionContext, SelectionType } from "../containers/NotionRouter";
 import BlockComponent from "./BlockComponent";
 
 import { GrCheckbox, GrCheckboxSelected } from "react-icons/gr";
@@ -40,7 +40,7 @@ export type EditableBlockProps = {
   setLoaderTargetBlock: Dispatch<SetStateAction<Block | null>>;
   closeMenu: (event: globalThis.MouseEvent | MouseEvent) => void;
   templateHtml: HTMLElement | null;
-  setSelection: Dispatch<SetStateAction<selectionType | null>>;
+  setSelection: Dispatch<SetStateAction<SelectionType | null>>;
   mobileMenuTargetBlock: Block | null;
   setMobileMenuTargetBlock: Dispatch<SetStateAction<Block | null>>;
 };

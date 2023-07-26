@@ -13,7 +13,7 @@ import { MdOutlinePhotoSizeSelectActual } from "react-icons/md";
 import { Block, MainCommentType, Page } from "../modules/notion/type";
 import { Command } from "./Frame";
 import ImageContent from "./ImageContent";
-import { ActionContext, selectionType } from "../containers/NotionRouter";
+import { ActionContext, SelectionType } from "../containers/NotionRouter";
 import ScreenOnly from "./ScreenOnly";
 
 import BlockContentEditable from "./BlockContentEditable";
@@ -32,7 +32,7 @@ export type BlockComponentProps = {
   setLoaderTargetBlock: Dispatch<SetStateAction<Block | null>>;
   closeMenu: (event: globalThis.MouseEvent | MouseEvent) => void;
   templateHtml: HTMLElement | null;
-  setSelection: Dispatch<SetStateAction<selectionType | null>>;
+  setSelection: Dispatch<SetStateAction<SelectionType | null>>;
   setMobileMenuTargetBlock: Dispatch<SetStateAction<Block | null>>;
   onClickCommentBtn: (block: Block) => void;
   setMoveTargetBlock: Dispatch<SetStateAction<Block | null>>;

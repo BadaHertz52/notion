@@ -23,7 +23,7 @@ import {
 import { Command } from "./Frame";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 import ScreenOnly from "./ScreenOnly";
-import { ActionContext, selectionType } from "../containers/NotionRouter";
+import { ActionContext, SelectionType } from "../containers/NotionRouter";
 
 type BlockContendEditableProps = {
   page: Page;
@@ -34,7 +34,7 @@ type BlockContendEditableProps = {
   command: Command;
   setCommand: Dispatch<SetStateAction<Command>>;
   setOpenComment: Dispatch<SetStateAction<boolean>>;
-  setSelection: Dispatch<SetStateAction<selectionType | null>>;
+  setSelection: Dispatch<SetStateAction<SelectionType | null>>;
   setMobileMenuTargetBlock: Dispatch<SetStateAction<Block | null>>;
   onClickCommentBtn: (block: Block) => void;
 };

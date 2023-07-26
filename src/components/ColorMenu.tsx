@@ -15,14 +15,14 @@ import {
   red,
 } from "../modules/notion/colorData";
 import { Block, Page } from "../modules/notion/type";
-import { ActionContext, selectionType } from "../containers/NotionRouter";
+import { ActionContext, SelectionType } from "../containers/NotionRouter";
 import ColorInform from "./ColorInform";
 
 type ColorMenuProps = {
   page: Page;
   block: Block;
-  selection: selectionType | null;
-  setSelection: Dispatch<SetStateAction<selectionType | null>> | null;
+  selection: SelectionType | null;
+  setSelection: Dispatch<SetStateAction<SelectionType | null>> | null;
   closeMenu?: () => void;
 };
 const ColorMenu = ({

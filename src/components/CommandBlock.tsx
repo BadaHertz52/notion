@@ -12,7 +12,7 @@ import { IoDocumentTextOutline, IoTextOutline } from "react-icons/io5";
 import { RiPlayList2Fill } from "react-icons/ri";
 import { VscListOrdered } from "react-icons/vsc";
 import { Command } from "./Frame";
-import { ActionContext, selectionType } from "../containers/NotionRouter";
+import { ActionContext, SelectionType } from "../containers/NotionRouter";
 import { Block, BlockType, Page } from "../modules/notion/type";
 import { makeNewBlock, findParentBlock, setTemplateItem } from "../fn/index";
 import imgIcon from "../assets/img/vincent-van-gogh-ge1323790d_640.jpg";
@@ -24,7 +24,7 @@ type CommandBlockProp = {
   command: Command | null;
   setCommand: Dispatch<SetStateAction<Command>> | null;
   closeCommand?: () => void;
-  setSelection: Dispatch<SetStateAction<selectionType | null>> | null;
+  setSelection: Dispatch<SetStateAction<SelectionType | null>> | null;
   style: CSSProperties | undefined;
 };
 const CommandBlock = ({

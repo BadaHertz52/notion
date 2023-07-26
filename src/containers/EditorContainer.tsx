@@ -15,9 +15,9 @@ import { Block, Page, ListItem } from "../modules/notion/type";
 import { SideAppear } from "../modules/side/reducer";
 import {
   ActionContext,
-  fontStyleType,
+  FontStyleType,
   mobileSideMenuType,
-  pathType,
+  PathType,
 } from "./NotionRouter";
 import { makePagePath } from "../fn";
 
@@ -60,8 +60,8 @@ type EditorContainerProps = {
   setOpenExport: Dispatch<SetStateAction<boolean>>;
   openTemplates: boolean;
   setOpenTemplates: Dispatch<SetStateAction<boolean>>;
-  fontStyle: fontStyleType;
-  setFontStyle: Dispatch<SetStateAction<fontStyleType>>;
+  fontStyle: FontStyleType;
+  setFontStyle: Dispatch<SetStateAction<FontStyleType>>;
   mobileSideMenu: mobileSideMenuType;
   setMobileSideMenu: Dispatch<SetStateAction<mobileSideMenuType>>;
 };
@@ -102,7 +102,7 @@ const EditorContainer = ({
   const [editorStyle, setEditorStyle] = useState<CSSProperties | undefined>(
     undefined
   );
-  const [pagePath, setPagePath] = useState<pathType[] | null>(null);
+  const [pagePath, setPagePath] = useState<PathType[] | null>(null);
 
   useEffect(() => {
     if (sideAppear === "lock") {

@@ -8,7 +8,7 @@ import React, {
   MouseEvent,
 } from "react";
 
-import { ActionContext, pathType } from "../containers/NotionRouter";
+import { ActionContext, PathType } from "../containers/NotionRouter";
 import { ListItem, Page } from "../modules/notion/type";
 import { SideAppear } from "../modules/side/reducer";
 import PageMenu from "./PageMenu";
@@ -16,7 +16,7 @@ import { CSSProperties } from "styled-components";
 import PageIcon from "./PageIcon";
 import {
   defaultFontFamily,
-  fontStyleType,
+  FontStyleType,
   monoFontFamily,
   serifFontFamily,
 } from "../containers/NotionRouter";
@@ -38,7 +38,7 @@ type TopBarProps = {
   sideAppear: SideAppear;
   page: Page;
   pages: Page[];
-  pagePath: pathType[] | null;
+  pagePath: PathType[] | null;
   showAllComments: boolean;
   setShowAllComments: Dispatch<SetStateAction<boolean>>;
   smallText: boolean;
@@ -46,7 +46,7 @@ type TopBarProps = {
   fullWidth: boolean;
   setFullWidth: Dispatch<SetStateAction<boolean>>;
   setOpenExport: Dispatch<SetStateAction<boolean>>;
-  setFontStyle: Dispatch<SetStateAction<fontStyleType>>;
+  setFontStyle: Dispatch<SetStateAction<FontStyleType>>;
 };
 
 const TopBar = ({

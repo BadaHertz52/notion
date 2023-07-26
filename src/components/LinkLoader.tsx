@@ -15,7 +15,7 @@ import { CSSProperties } from "styled-components";
 import { ActionContext } from "../containers/NotionRouter";
 import { Block, Page } from "../modules/notion/type";
 import { findPage } from "../fn";
-import { selectionType } from "../containers/NotionRouter";
+import { SelectionType } from "../containers/NotionRouter";
 import ScreenOnly from "./ScreenOnly";
 import PageItem from "./PageItem";
 
@@ -27,7 +27,7 @@ type LinkLoaderProps = {
   block: Block;
   closeLink?: () => void;
   blockStylerStyle: CSSProperties | undefined;
-  setSelection: Dispatch<SetStateAction<selectionType | null>> | null;
+  setSelection: Dispatch<SetStateAction<SelectionType | null>> | null;
 };
 const LinkLoader = ({
   recentPagesId,

@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction, useCallback } from "react";
 import { BgColorType, Block, ColorType, Page } from "../modules/notion/type";
-import { selectionType } from "../containers/NotionRouter";
+import { SelectionType } from "../containers/NotionRouter";
 import styled from "styled-components";
 import { setTemplateItem } from "../fn";
 
@@ -12,8 +12,8 @@ type ColorInformProps = {
   block: Block;
   editBlock: (pageId: string, block: Block) => void;
   templateHtml: HTMLElement | null;
-  selection: selectionType | null;
-  setSelection: Dispatch<SetStateAction<selectionType | null>> | null;
+  selection: SelectionType | null;
+  setSelection: Dispatch<SetStateAction<SelectionType | null>> | null;
   closeMenu?: () => void;
 };
 

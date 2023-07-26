@@ -33,7 +33,7 @@ import { isMobile, setTemplateItem } from "../fn";
 import {
   ActionContext,
   mobileSideMenuType,
-  selectionType,
+  SelectionType,
 } from "../containers/NotionRouter";
 import ScreenOnly from "./ScreenOnly";
 
@@ -52,7 +52,7 @@ export type MenuAndBlockStylerCommonProps = {
 export type MenuProps = MenuAndBlockStylerCommonProps & {
   setOpenMenu?: Dispatch<SetStateAction<boolean>>;
   setOpenRename: Dispatch<SetStateAction<boolean>> | null;
-  setSelection: Dispatch<SetStateAction<selectionType | null>> | null;
+  setSelection: Dispatch<SetStateAction<SelectionType | null>> | null;
   style: CSSProperties | undefined;
   setMobileSideMenu?: Dispatch<SetStateAction<mobileSideMenuType>>;
 };

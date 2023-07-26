@@ -1,5 +1,5 @@
 import React from "react";
-import { pathType } from "../containers/NotionRouter";
+import { PathType } from "../containers/NotionRouter";
 import { Page } from "../modules/notion/type";
 import ScreenOnly from "./ScreenOnly";
 import PageIcon from "./PageIcon";
@@ -37,7 +37,7 @@ const PageItem = ({ page, pages, pagesId, addLink }: PageItemProps) => {
         <div className="page__title">{page.header.title}</div>
         {page.parentsId && (
           <div className="page__path-group">
-            {paths?.map((path: pathType) => (
+            {paths?.map((path: PathType) => (
               <div className="path" style={setWidth(paths.length)}>
                 {paths.indexOf(path) !== 0 && <div className="slash">/</div>}
                 <div className="title">{path.title}</div>

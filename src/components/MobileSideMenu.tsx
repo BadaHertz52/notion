@@ -3,7 +3,7 @@ import { CSSProperties } from "styled-components";
 import { mobileSideMenuType } from "../containers/NotionRouter";
 import ColorMenu from "./ColorMenu";
 import CommandBlock from "./CommandBlock";
-import { selectionType } from "../containers/NotionRouter";
+import { SelectionType } from "../containers/NotionRouter";
 import LinkLoader from "./LinkLoader";
 
 import Menu, { MenuAndBlockStylerCommonProps } from "./Menu";
@@ -30,7 +30,7 @@ const MobileSideMenu = ({
   mobileSideMenu,
   setMobileSideMenu,
 }: MobileSideMenuProps) => {
-  const mobileSelection: selectionType | null =
+  const mobileSelection: SelectionType | null =
     document.querySelector(".selected") === null
       ? null
       : {

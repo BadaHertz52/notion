@@ -15,8 +15,8 @@ import ColorMenu from "./ColorMenu";
 import { Command } from "./Frame";
 import {
   ActionContext,
-  msmWhatType,
-  selectionType,
+  MobileSideMenuWhatType,
+  SelectionType,
 } from "../containers/NotionRouter";
 import Menu, { MenuAndBlockStylerCommonProps } from "./Menu";
 import { Block, Page } from "../modules/notion/type";
@@ -37,8 +37,8 @@ export type StylerCommonProps = MenuAndBlockStylerCommonProps & {
   setMobileMenuTargetBlock: Dispatch<SetStateAction<Block | null>>;
 };
 export type BlockStylerProps = StylerCommonProps & {
-  selection: selectionType | null;
-  setSelection: Dispatch<SetStateAction<selectionType | null>> | null;
+  selection: SelectionType | null;
+  setSelection: Dispatch<SetStateAction<SelectionType | null>> | null;
   setOpenMobileBlockStyler: Dispatch<SetStateAction<boolean>> | null;
 };
 const BlockStyler = ({
@@ -68,9 +68,9 @@ const BlockStyler = ({
   const italic = "italic";
   const underline = "underline";
   const lineThrough = "lineThrough";
-  type fontWeightType = typeof bold | typeof initial;
-  type fontStyleType = typeof italic | typeof initial;
-  type textDecoType = typeof underline | typeof lineThrough;
+  type BlockFontWeightType = typeof bold | typeof initial;
+  type BlockFontStyleType = typeof italic | typeof initial;
+  type TextDecoType = typeof underline | typeof lineThrough;
   const getBlockType = () => {
     const blockType = block.type;
     switch (blockType) {
@@ -338,7 +338,7 @@ const BlockStyler = ({
    * * @param selectedHtml : 선택된 node
    */
   const removeOtherTextDeco = useCallback(
-    (deco: textDecoType, selectedHtml: HTMLElement) => {
+    (deco: TextDecoType, selectedHtml: HTMLElement) => {
       const decoSpan = selectedHtml.querySelectorAll(`.${deco}`);
       if (decoSpan[0]) {
         decoSpan.forEach((e: Element) => {
@@ -357,7 +357,7 @@ const BlockStyler = ({
    * @param btnName 클릭한 버튼의 이름
    */
   const onClickFontStyleBtn = useCallback(
-    (btnName: fontWeightType | fontStyleType | textDecoType) => {
+    (btnName: BlockFontWeightType | BlockFontStyleType | TextDecoType) => {
       const listOfSelected = document.querySelectorAll(
         ".selected"
       ) as NodeListOf<HTMLElement>;
@@ -544,7 +544,7 @@ const BlockStyler = ({
     }
   }, [block, editBlock, page]);
   const openMobileSideMenu = useCallback(
-    (what: msmWhatType) => {
+    (what: MobileSideMenuWhatType) => {
       setMobileSideMenu({
         block: block,
         what: what,

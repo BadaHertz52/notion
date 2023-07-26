@@ -53,12 +53,12 @@ const MOBILE_SIDE_MENU = {
   ms_link: "ms_link",
 } as const;
 
-export type msmWhatType = keyof typeof MOBILE_SIDE_MENU | undefined;
+export type MobileSideMenuWhatType = keyof typeof MOBILE_SIDE_MENU | undefined;
 export type mobileSideMenuType = {
   block: Block | null;
-  what: msmWhatType;
+  what: MobileSideMenuWhatType;
 };
-export type pathType = {
+export type PathType = {
   id: string;
   title: string;
   icon: string | null;
@@ -67,7 +67,7 @@ export type pathType = {
 export type DiscardItemType = {
   discard: boolean;
 };
-export type selectionType = {
+export type SelectionType = {
   /**
    * origin block data (수정이전에 block data)
    */
@@ -81,7 +81,7 @@ export const defaultFontFamily =
   'ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"';
 export const serifFontFamily = "Lyon-Text, Georgia, ui-serif, serif";
 export const monoFontFamily = "iawriter-mono, Nitti, Menlo, Courier, monospace";
-export type fontStyleType =
+export type FontStyleType =
   | typeof serifFontFamily
   | typeof monoFontFamily
   | typeof defaultFontFamily;
@@ -178,7 +178,7 @@ const NotionRouter = () => {
   const [smallText, setSmallText] = useState<boolean>(false);
   const [fullWidth, setFullWidth] = useState<boolean>(false);
   const [openTemplates, setOpenTemplates] = useState<boolean>(false);
-  const [fontStyle, setFontStyle] = useState<fontStyleType>(defaultFontFamily);
+  const [fontStyle, setFontStyle] = useState<FontStyleType>(defaultFontFamily);
   const [modal, setModal] = useState<ModalType>({
     open: false,
     what: null,

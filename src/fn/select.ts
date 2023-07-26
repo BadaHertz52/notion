@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import { Block, Page } from "../modules/notion/type";
-import { selectionType } from "../containers/NotionRouter";
+import { SelectionType } from "../containers/NotionRouter";
 import { isMobile } from ".";
 
 // onSelection 이벤트 ---
@@ -368,7 +368,7 @@ export const selectContent = (
   contentEditableHtml: HTMLElement | null,
   editBlock: ((pageId: string, block: Block) => void) | null,
   page: Page,
-  setSelection: Dispatch<SetStateAction<selectionType | null>> | null
+  setSelection: Dispatch<SetStateAction<SelectionType | null>> | null
 ) => {
   const notSelect =
     SELECTION?.anchorNode === SELECTION?.focusNode &&
@@ -564,7 +564,7 @@ export function removeSelected(
   block: Block,
   editBlock: (pageId: string, block: Block) => void,
   page: Page,
-  setSelection: Dispatch<SetStateAction<selectionType | null>> | null
+  setSelection: Dispatch<SetStateAction<SelectionType | null>> | null
 ) {
   // 변경된 내용이 있고, selected 만 제거하면 되는 경우
   const blockContentHtml = frameHtml?.querySelector(`#${block.id}__contents`);

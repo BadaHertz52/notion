@@ -22,7 +22,7 @@ import {
   setTemplateItem,
   removeSelected,
 } from "../fn";
-import { ActionContext, selectionType } from "../containers/NotionRouter";
+import { ActionContext, SelectionType } from "../containers/NotionRouter";
 import EditableBlock from "./EditableBlock";
 import IconModal, { randomIcon } from "./IconModal";
 import CommandBlock from "./CommandBlock";
@@ -34,7 +34,7 @@ import PageIcon from "./PageIcon";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 import PageMenu from "./PageMenu";
 
-import { fontStyleType, mobileSideMenuType } from "../containers/NotionRouter";
+import { FontStyleType, mobileSideMenuType } from "../containers/NotionRouter";
 import BlockStyler from "./BlockStyler";
 
 import MoveTargetBlock from "./MoveTargetBlock";
@@ -71,7 +71,7 @@ export type Template_Frame_SAME_Props = {
   fullWidth: boolean;
   discardEdit: boolean;
   setDiscardEdit: Dispatch<SetStateAction<boolean>>;
-  fontStyle: fontStyleType;
+  fontStyle: FontStyleType;
   mobileSideMenu: mobileSideMenuType;
   setMobileSideMenu: Dispatch<SetStateAction<mobileSideMenuType>>;
 };
@@ -145,7 +145,7 @@ const Frame = ({
     CSSProperties | undefined
   >(undefined);
   const [menuOpen, setOpenMenu] = useState<boolean>(false);
-  const [selection, setSelection] = useState<selectionType | null>(null);
+  const [selection, setSelection] = useState<SelectionType | null>(null);
   const [modalStyle, setModalStyle] = useState<CSSProperties | undefined>(
     undefined
   );
