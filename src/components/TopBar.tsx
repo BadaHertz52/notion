@@ -101,7 +101,7 @@ const TopBar = ({
   );
   const onMouseEnterSidBarBtn = useCallback(() => {
     const innerWidth = window.innerWidth;
-    if (innerWidth > 768) {
+    if (innerWidth >= 1024) {
       sideAppear === "close" || sideAppear === "floatHide"
         ? changeSide("float")
         : changeSide("floatHide");
@@ -249,7 +249,7 @@ const TopBar = ({
             <ScreenOnly text={title} />
             {sideAppear === "float" ? (
               <FiChevronsLeft />
-            ) : window.innerWidth > 768 ? (
+            ) : window.innerWidth >= 1024 ? (
               <AiOutlineMenu />
             ) : (
               <IoIosArrowBack />
