@@ -15,7 +15,7 @@ import {
   red,
 } from "../modules/notion/colorData";
 import { Block, Page } from "../modules/notion/type";
-import { ActionContext, SelectionType } from "../containers/NotionRouter";
+import { ActionContext, SelectionType } from "../route/NotionRouter";
 import ColorInform from "./ColorInform";
 
 type ColorMenuProps = {

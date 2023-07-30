@@ -1,5 +1,5 @@
 import React from "react";
-import { PathType } from "../containers/NotionRouter";
+import { PathType } from "../route/NotionRouter";
 import { Page } from "../modules/notion/type";
 import ScreenOnly from "./ScreenOnly";
 import PageIcon from "./PageIcon";

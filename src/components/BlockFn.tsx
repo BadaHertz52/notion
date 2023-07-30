@@ -16,7 +16,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { CgMenuGridO } from "react-icons/cg";
 import { ModalType } from "../containers/EditorContainer";
 
-import { ActionContext } from "../containers/NotionRouter";
+import { ActionContext } from "../route/NotionRouter";
 import ScreenOnly from "./ScreenOnly";
 
 type BlockFnProp = {

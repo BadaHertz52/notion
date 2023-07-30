@@ -8,7 +8,7 @@ import React, {
   MouseEvent,
 } from "react";
 
-import { ActionContext, PathType } from "../containers/NotionRouter";
+import { ActionContext, PathType } from "../route/NotionRouter";
 import { ListItem, Page } from "../modules/notion/type";
 import { SideAppear } from "../modules/side/reducer";
 import PageMenu from "./PageMenu";
@@ -19,7 +19,7 @@ import {
   FontStyleType,
   monoFontFamily,
   serifFontFamily,
-} from "../containers/NotionRouter";
+} from "../route/NotionRouter";
 import { IoIosArrowBack } from "react-icons/io";
 import { AiOutlineMenu } from "react-icons/ai";
 import { FiChevronsLeft } from "react-icons/fi";

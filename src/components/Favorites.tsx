@@ -2,7 +2,7 @@ import React, { useCallback, useContext } from "react";
 import { ListItem, Notion, Page } from "../modules/notion/type";
 import { findPage } from "../fn";
 import ListTemplate from "./ListTemplate";
-import { ActionContext } from "../containers/NotionRouter";
+import { ActionContext } from "../route/NotionRouter";
 type FavoritesProps = {
   favorites: string[] | null;
   notion: Notion;

@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import { Block, Page } from "../modules/notion/type";
-import { SelectionType } from "../containers/NotionRouter";
+import { SelectionType } from "../route/NotionRouter";
 import { isMobile } from ".";
 
 // onSelection 이벤트 ---

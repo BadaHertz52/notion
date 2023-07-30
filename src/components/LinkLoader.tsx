@@ -12,10 +12,10 @@ import { BsArrowUpRight, BsLink45Deg } from "react-icons/bs";
 import { IoMdCopy } from "react-icons/io";
 import { IoTrashOutline } from "react-icons/io5";
 import { CSSProperties } from "styled-components";
-import { ActionContext } from "../containers/NotionRouter";
+import { ActionContext } from "../route/NotionRouter";
 import { Block, Page } from "../modules/notion/type";
 import { findPage } from "../fn";
-import { SelectionType } from "../containers/NotionRouter";
+import { SelectionType } from "../route/NotionRouter";
 import ScreenOnly from "./ScreenOnly";
 import PageItem from "./PageItem";
 

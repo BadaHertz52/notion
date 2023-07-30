@@ -12,7 +12,7 @@ import { IoDocumentTextOutline, IoTextOutline } from "react-icons/io5";
 import { RiPlayList2Fill } from "react-icons/ri";
 import { VscListOrdered } from "react-icons/vsc";
 import { Command } from "./Frame";
-import { ActionContext, SelectionType } from "../containers/NotionRouter";
+import { ActionContext, SelectionType } from "../route/NotionRouter";
 import { Block, BlockType, Page } from "../modules/notion/type";
 import { makeNewBlock, findParentBlock, setTemplateItem } from "../fn/index";
 import imgIcon from "../assets/img/vincent-van-gogh-ge1323790d_640.jpg";

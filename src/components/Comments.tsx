@@ -10,7 +10,7 @@ import React, {
 } from "react";
 import { CSSProperties } from "styled-components";
 import { Block, MainCommentType, Page } from "../modules/notion/type";
-import { ActionContext } from "../containers/NotionRouter";
+import { ActionContext } from "../route/NotionRouter";
 import Comment from "./Comment";
 import CommentToolMore from "./CommentToolMore";
 

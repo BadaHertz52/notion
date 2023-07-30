@@ -23,7 +23,7 @@ import {
 import { Command } from "./Frame";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 import ScreenOnly from "./ScreenOnly";
-import { ActionContext, SelectionType } from "../containers/NotionRouter";
+import { ActionContext, SelectionType } from "../route/NotionRouter";
 
 type BlockContendEditableProps = {
   page: Page;

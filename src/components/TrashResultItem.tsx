@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction, useContext } from "react";
 import Result, { resultType } from "./Result";
-import { ActionContext } from "../containers/NotionRouter";
+import { ActionContext } from "../route/NotionRouter";
 import ScreenOnly from "./ScreenOnly";
 import { RiArrowGoBackLine } from "react-icons/ri";
 import { IoTrashOutline } from "react-icons/io5";

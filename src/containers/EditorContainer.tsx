@@ -18,7 +18,7 @@ import {
   FontStyleType,
   mobileSideMenuType,
   PathType,
-} from "./NotionRouter";
+} from "../route/NotionRouter";
 import { makePagePath } from "../fn";
 
 export const modalMoveToPage = "modalMoveToPage";

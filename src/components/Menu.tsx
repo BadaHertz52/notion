@@ -34,7 +34,7 @@ import {
   ActionContext,
   mobileSideMenuType,
   SelectionType,
-} from "../containers/NotionRouter";
+} from "../route/NotionRouter";
 import ScreenOnly from "./ScreenOnly";
 
 export type MenuAndBlockStylerCommonProps = {

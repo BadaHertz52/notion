@@ -13,7 +13,7 @@ import React, {
 import { Block, Page } from "../modules/notion/type";
 import { findBlock, setTemplateItem } from "../fn";
 import { Command } from "./Frame";
-import { ActionContext, SelectionType } from "../containers/NotionRouter";
+import { ActionContext, SelectionType } from "../route/NotionRouter";
 import BlockComponent from "./BlockComponent";
 
 import { GrCheckbox, GrCheckboxSelected } from "react-icons/gr";

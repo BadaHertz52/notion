@@ -4,10 +4,7 @@ import { BiCommentDetail } from "react-icons/bi";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { TiArrowSortedDown } from "react-icons/ti";
 import { CSSProperties } from "styled-components";
-import {
-  ActionContext,
-  MobileSideMenuWhatType,
-} from "../containers/NotionRouter";
+import { ActionContext, MobileSideMenuWhatType } from "../route/NotionRouter";
 import { Block } from "../modules/notion/type";
 import { makeNewBlock, findBlock, removeSelected } from "../fn";
 import BlockStyler, { StylerCommonProps } from "./BlockStyler";

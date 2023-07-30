@@ -13,7 +13,7 @@ import { MdOutlinePhotoSizeSelectActual } from "react-icons/md";
 import { Block, MainCommentType, Page } from "../modules/notion/type";
 import { Command } from "./Frame";
 import ImageContent from "./ImageContent";
-import { ActionContext, SelectionType } from "../containers/NotionRouter";
+import { ActionContext, SelectionType } from "../route/NotionRouter";
 import ScreenOnly from "./ScreenOnly";
 
 import BlockContentEditable from "./BlockContentEditable";

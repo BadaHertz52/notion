@@ -1,5 +1,5 @@
 import React from "react";
-import NotionRouter from "./containers/NotionRouter";
+import NotionRouter from "./route/NotionRouter";
 import "./assets/main.scss";
 function App() {
   return <NotionRouter />;

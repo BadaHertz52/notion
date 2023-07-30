@@ -8,7 +8,7 @@ import React, {
   useEffect,
 } from "react";
 import { CSSProperties } from "styled-components";
-import { ActionContext } from "../containers/NotionRouter";
+import { ActionContext } from "../route/NotionRouter";
 import { Block, Page } from "../modules/notion/type";
 import { setTemplateItem, closeModal } from "../fn";
 import IconModal from "./IconModal";

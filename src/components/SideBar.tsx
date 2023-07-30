@@ -26,7 +26,7 @@ import { BsFillTrash2Fill, BsTrash } from "react-icons/bs";
 import { IoIosSettings } from "react-icons/io";
 import { HiTemplate } from "react-icons/hi";
 
-import { ActionContext } from "../containers/NotionRouter";
+import { ActionContext } from "../route/NotionRouter";
 import ScreenOnly from "./ScreenOnly";
 import RecentPages from "./RecentPages";
 import Favorites from "./Favorites";

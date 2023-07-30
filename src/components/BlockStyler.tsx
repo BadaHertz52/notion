@@ -17,11 +17,11 @@ import {
   ActionContext,
   MobileSideMenuWhatType,
   SelectionType,
-} from "../containers/NotionRouter";
+} from "../route/NotionRouter";
 import Menu, { MenuAndBlockStylerCommonProps } from "./Menu";
 import { Block, Page } from "../modules/notion/type";
 import LinkLoader from "./LinkLoader";
-import { mobileSideMenuType } from "../containers/NotionRouter";
+import { mobileSideMenuType } from "../route/NotionRouter";
 import { getContent, isMobile, removeSelected, selectContent } from "../fn";
 import ScreenOnly from "./ScreenOnly";
 

@@ -41,10 +41,11 @@ import {
   recentPagesSessionKey,
   remove_favorites,
 } from "../modules/user/reducer";
-import EditorContainer, { ModalType } from "./EditorContainer";
-import SideBarContainer from "./SideBarContainer";
+import EditorContainer, { ModalType } from "../containers/EditorContainer";
+import SideBarContainer from "../containers/SideBarContainer";
 import NonePage from "../components/NonePage";
 import Export from "../components/Export";
+import DiscardEditForm from "../components/DiscardEditForm";
 const MOBILE_SIDE_MENU = {
   ms_turnInto: "ms_turnInto",
   ms_movePage: "ms_movePage",
@@ -439,129 +440,127 @@ const NotionRouter = () => {
           setOpenTemplates={setOpenTemplates}
           showAllComments={showAllComments}
         />
-        {!pageExist || (currentPageId && !pagesId?.includes(currentPageId)) ? (
-          <NonePage addPage={addPage} />
-        ) : (
-          <>
-            {pagesId && pages && firstList && (
-              <>
-                <Routes>
-                  {pages.map((p) => (
-                    <Route
-                      key={`page_${p.id}`}
-                      path={makeRoutePath(p.id)}
-                      element={
-                        <EditorContainer
-                          sideAppear={sideAppear}
-                          firstList={firstList}
-                          userName={user.userName}
-                          recentPagesId={user.recentPagesId}
-                          page={p}
-                          pages={pages}
-                          pagesId={pagesId}
-                          isInTrash={!pagesId.includes(p.id)}
-                          showAllComments={showAllComments}
-                          setShowAllComments={setShowAllComments}
-                          discardEdit={discard_edit}
-                          setDiscardEdit={setDiscardEdit}
-                          setOpenExport={setOpenExport}
-                          modal={modal}
-                          setModal={setModal}
-                          openComment={openComment}
-                          setOpenComment={setOpenComment}
-                          commentBlock={commentBlock}
-                          setCommentBlock={setCommentBlock}
-                          smallText={smallText}
-                          setSmallText={setSmallText}
-                          fullWidth={fullWidth}
-                          setFullWidth={setFullWidth}
-                          openTemplates={openTemplates}
-                          setOpenTemplates={setOpenTemplates}
-                          fontStyle={fontStyle}
-                          setFontStyle={setFontStyle}
-                          mobileSideMenu={mobileSideMenu}
-                          setMobileSideMenu={setMobileSideMenu}
-                        />
-                      }
-                    />
-                  ))}
-                </Routes>
-                {openExport && currentPage && (
-                  <Export
-                    page={currentPage}
-                    pagesId={pagesId}
-                    pages={pages}
+        <Routes>
+          {pagesId &&
+            pages &&
+            firstList &&
+            pages.map((p) => (
+              <Route
+                key={`page_${p.id}`}
+                path={makeRoutePath(p.id)}
+                element={
+                  <EditorContainer
+                    sideAppear={sideAppear}
                     firstList={firstList}
                     userName={user.userName}
                     recentPagesId={user.recentPagesId}
-                    setOpenExport={setOpenExport}
-                    commentBlock={commentBlock}
-                    openComment={openComment}
-                    modal={modal}
-                    setModal={setModal}
-                    setOpenComment={setOpenComment}
-                    setCommentBlock={setCommentBlock}
-                    showAllComments={showAllComments}
-                    smallText={smallText}
-                    fullWidth={fullWidth}
-                    discardEdit={discard_edit}
-                    setDiscardEdit={setDiscardEdit}
-                    openTemplates={openTemplates}
-                    setOpenTemplates={setOpenTemplates}
-                    fontStyle={fontStyle}
-                    mobileSideMenu={mobileSideMenu}
-                    setMobileSideMenu={setMobileSideMenu}
-                  />
-                )}
-                {openTemplates && currentPage && (
-                  <Templates
-                    routePageId={currentPage.id}
-                    user={user}
-                    userName={user.userName}
-                    pagesId={pagesId}
+                    page={p}
                     pages={pages}
-                    firstList={firstList}
-                    recentPagesId={user.recentPagesId}
-                    commentBlock={commentBlock}
-                    openComment={openComment}
-                    setOpenComment={setOpenComment}
-                    modal={modal}
-                    setModal={setModal}
-                    openTemplates={openTemplates}
-                    setOpenTemplates={setOpenTemplates}
-                    setCommentBlock={setCommentBlock}
-                    showAllComments={showAllComments}
-                    smallText={smallText}
-                    fullWidth={fullWidth}
-                    discardEdit={discard_edit}
-                    setDiscardEdit={setDiscardEdit}
-                    fontStyle={fontStyle}
-                    mobileSideMenu={mobileSideMenu}
-                    setMobileSideMenu={setMobileSideMenu}
-                  />
-                )}
-                {currentPage && (
-                  <AllComments
-                    page={currentPage}
-                    userName={user.userName}
-                    favorites={user.favorites}
+                    pagesId={pagesId}
+                    isInTrash={!pagesId.includes(p.id)}
                     showAllComments={showAllComments}
                     setShowAllComments={setShowAllComments}
                     discardEdit={discard_edit}
                     setDiscardEdit={setDiscardEdit}
+                    setOpenExport={setOpenExport}
+                    modal={modal}
+                    setModal={setModal}
+                    openComment={openComment}
+                    setOpenComment={setOpenComment}
+                    commentBlock={commentBlock}
+                    setCommentBlock={setCommentBlock}
+                    smallText={smallText}
+                    setSmallText={setSmallText}
+                    fullWidth={fullWidth}
+                    setFullWidth={setFullWidth}
+                    openTemplates={openTemplates}
+                    setOpenTemplates={setOpenTemplates}
+                    fontStyle={fontStyle}
+                    setFontStyle={setFontStyle}
+                    mobileSideMenu={mobileSideMenu}
+                    setMobileSideMenu={setMobileSideMenu}
                   />
-                )}
-                {openQF && (
-                  <QuickFindBoard
-                    userName={user.userName}
-                    recentPagesId={user.recentPagesId}
-                    pages={pages}
-                    pagesId={pagesId}
-                    cleanRecentPage={cleanRecentPage}
-                    setOpenQF={setOpenQF}
-                  />
-                )}
-              </>
+                }
+              />
+            ))}
+          <Route path={"*"} element={<NonePage addPage={addPage} />} />
+        </Routes>
+        {pagesId && pages && firstList && (
+          <>
+            {openExport && currentPage && (
+              <Export
+                page={currentPage}
+                pagesId={pagesId}
+                pages={pages}
+                firstList={firstList}
+                userName={user.userName}
+                recentPagesId={user.recentPagesId}
+                setOpenExport={setOpenExport}
+                commentBlock={commentBlock}
+                openComment={openComment}
+                modal={modal}
+                setModal={setModal}
+                setOpenComment={setOpenComment}
+                setCommentBlock={setCommentBlock}
+                showAllComments={showAllComments}
+                smallText={smallText}
+                fullWidth={fullWidth}
+                discardEdit={discard_edit}
+                setDiscardEdit={setDiscardEdit}
+                openTemplates={openTemplates}
+                setOpenTemplates={setOpenTemplates}
+                fontStyle={fontStyle}
+                mobileSideMenu={mobileSideMenu}
+                setMobileSideMenu={setMobileSideMenu}
+              />
+            )}
+            {openTemplates && currentPage && (
+              <Templates
+                routePageId={currentPage.id}
+                user={user}
+                userName={user.userName}
+                pagesId={pagesId}
+                pages={pages}
+                firstList={firstList}
+                recentPagesId={user.recentPagesId}
+                commentBlock={commentBlock}
+                openComment={openComment}
+                setOpenComment={setOpenComment}
+                modal={modal}
+                setModal={setModal}
+                openTemplates={openTemplates}
+                setOpenTemplates={setOpenTemplates}
+                setCommentBlock={setCommentBlock}
+                showAllComments={showAllComments}
+                smallText={smallText}
+                fullWidth={fullWidth}
+                discardEdit={discard_edit}
+                setDiscardEdit={setDiscardEdit}
+                fontStyle={fontStyle}
+                mobileSideMenu={mobileSideMenu}
+                setMobileSideMenu={setMobileSideMenu}
+              />
+            )}
+            {currentPage && (
+              <AllComments
+                page={currentPage}
+                userName={user.userName}
+                favorites={user.favorites}
+                showAllComments={showAllComments}
+                setShowAllComments={setShowAllComments}
+                discardEdit={discard_edit}
+                setDiscardEdit={setDiscardEdit}
+              />
+            )}
+            {openQF && (
+              <QuickFindBoard
+                userName={user.userName}
+                recentPagesId={user.recentPagesId}
+                pages={pages}
+                pagesId={pagesId}
+                cleanRecentPage={cleanRecentPage}
+                setOpenQF={setOpenQF}
+              />
             )}
           </>
         )}

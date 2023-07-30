@@ -1,9 +1,9 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { CSSProperties } from "styled-components";
-import { mobileSideMenuType } from "../containers/NotionRouter";
+import { mobileSideMenuType } from "../route/NotionRouter";
 import ColorMenu from "./ColorMenu";
 import CommandBlock from "./CommandBlock";
-import { SelectionType } from "../containers/NotionRouter";
+import { SelectionType } from "../route/NotionRouter";
 import LinkLoader from "./LinkLoader";
 
 import Menu, { MenuAndBlockStylerCommonProps } from "./Menu";

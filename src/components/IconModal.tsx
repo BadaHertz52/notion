@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import { BsEmojiSmile } from "react-icons/bs";
 import { CSSProperties } from "styled-components";
-import { ActionContext } from "../containers/NotionRouter";
+import { ActionContext } from "../route/NotionRouter";
 import { Block, IconType, Page, Emoji } from "../modules/notion/type";
 import { EMOJI_ARR, emojiPath } from "../modules/notion/emojiData";
 import { setTemplateItem } from "../fn";

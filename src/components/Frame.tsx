@@ -22,7 +22,7 @@ import {
   setTemplateItem,
   removeSelected,
 } from "../fn";
-import { ActionContext, SelectionType } from "../containers/NotionRouter";
+import { ActionContext, SelectionType } from "../route/NotionRouter";
 import EditableBlock from "./EditableBlock";
 import IconModal, { randomIcon } from "./IconModal";
 import CommandBlock from "./CommandBlock";
@@ -34,7 +34,7 @@ import PageIcon from "./PageIcon";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 import PageMenu from "./PageMenu";
 
-import { FontStyleType, mobileSideMenuType } from "../containers/NotionRouter";
+import { FontStyleType, mobileSideMenuType } from "../route/NotionRouter";
 import BlockStyler from "./BlockStyler";
 
 import MoveTargetBlock from "./MoveTargetBlock";

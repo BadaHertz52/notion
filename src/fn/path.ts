@@ -1,4 +1,4 @@
-import { PathType } from "../containers/NotionRouter";
+import { PathType } from "../route/NotionRouter";
 import { Page } from "../modules/notion/type";
 import { findPage } from ".";
 

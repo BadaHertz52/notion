@@ -449,8 +449,8 @@ const CommentInput = ({
   );
   const openDiscardEdit = useCallback((event: MouseEvent) => {
     event.preventDefault();
-    const discardEdit = document.getElementById("discardEdit");
-    discardEdit?.classList.add("on");
+    const discardEditEl = document.getElementById("discardEditForm");
+    discardEditEl?.classList.add("on");
   }, []);
 
   useEffect(() => {
