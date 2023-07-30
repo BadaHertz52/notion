@@ -120,12 +120,6 @@ const NotionRouter = () => {
   const dispatch = useDispatch();
   const notion = useSelector((state: RootState) => state.notion);
   const { pagesId, pages, firstPagesId } = notion;
-  /**
-   * template이 아닌 type이 "page"인 페이지들이 존재하는 지 여부
-   */
-  const pageExist: boolean = pages
-    ? !!pages.filter((page) => page.type === "page")[0]
-    : false;
   const user = useSelector((state: RootState) => state.user);
   const sideAppear = useSelector((state: RootState) => state.side.appear);
   const currentPageId: string = getCurrentPageId();
