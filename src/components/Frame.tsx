@@ -249,9 +249,8 @@ const Frame = ({
 
   const closeMenu = useCallback((event: globalThis.MouseEvent | MouseEvent) => {
     const target = event.target as HTMLElement | null;
-
     const isSideMenu = document.getElementById("sideMenu")?.firstElementChild;
-    const isInrMain = target?.closest("#menu_main");
+    const isInrMain = target?.closest("#menu__main");
     const isInSide = target?.closest("#sideMenu");
 
     if (isSideMenu) {
@@ -265,13 +264,23 @@ const Frame = ({
       if (openComment && commentBlock) {
         const commentElId = "block-comments";
         const commentBtnElId = `${commentBlock.id}__contents`;
-        const commentsDoc = document.getElementById(commentElId);
+        const commentsEl = document.getElementById(commentElId);
         const commentBtn = document.getElementById(commentBtnElId);
-        if (commentsDoc && commentBtn) {
+        if (commentsEl && commentBtn) {
           const target = event.target as HTMLElement | null;
-          const isInComments = target?.closest(commentElId);
-          const isInCommentsBtn = target?.closest(commentBtnElId);
-          if (!isInComments && !isInCommentsBtn) {
+          const isInComments = target?.closest(`#${commentElId}`);
+          const isInCommentsBtn = target?.closest(`#${commentBtnElId}`);
+          const isInToolMoreBtn = target?.closest("#tool-more");
+          /**
+           * block comments 창을 닫는 조건
+           */
+          const isInDiscardEditFrom = target?.closest("#discardEditForm");
+          const condition =
+            !isInComments &&
+            !isInCommentsBtn &&
+            !isInToolMoreBtn &&
+            !isInDiscardEditFrom;
+          if (condition) {
             setCommentBlock(null);
             setOpenComment(false);
           }

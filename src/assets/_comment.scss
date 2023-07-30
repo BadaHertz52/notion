@@ -298,7 +298,7 @@ form button {
     fill: $itemSvg;
   }
 }
-#tool_more {
+#tool-more {
   @include modalStyle;
   width: 200px;
   z-index: 25;
