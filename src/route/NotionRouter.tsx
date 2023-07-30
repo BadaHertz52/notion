@@ -172,7 +172,6 @@ const NotionRouter = () => {
   const [openQF, setOpenQF] = useState<boolean>(false);
   const [showAllComments, setShowAllComments] = useState<boolean>(false);
   const [discard_edit, setDiscardEdit] = useState<boolean>(false);
-  const discardEditHtml = document.getElementById("discardEdit");
   const [openExport, setOpenExport] = useState<boolean>(false);
   const [openComment, setOpenComment] = useState<boolean>(false);
   const [commentBlock, setCommentBlock] = useState<Block | null>(null);
@@ -333,16 +332,6 @@ const NotionRouter = () => {
     addFavorites: addFavorites,
     removeFavorites: removeFavorites,
     changeSide: changeSide,
-  };
-
-  const onClickDiscardEdit = () => {
-    discardEditHtml?.classList.remove("on");
-    setDiscardEdit(true);
-  };
-
-  const onClickCloseEdit = () => {
-    discardEditHtml?.classList.remove("on");
-    setDiscardEdit(false);
   };
   const changeTitle = (title: string) => {
     const titleHtml = document.querySelector("title");
@@ -564,21 +553,7 @@ const NotionRouter = () => {
             )}
           </>
         )}
-        <div id="discardEdit" className="discardEdit">
-          <div className="inner">
-            <div className="question">
-              <div>Do you want to discard this edit?</div>
-            </div>
-            <div className="btn-group">
-              <button title="button to discard" onClick={onClickDiscardEdit}>
-                Discard
-              </button>
-              <button title="close button" onClick={onClickCloseEdit}>
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
+        <DiscardEditForm setDiscardEdit={setDiscardEdit} />
       </div>
     </ActionContext.Provider>
   );
