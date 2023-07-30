@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes, useNavigate } from "react-router-dom";
 
 import AllComments from "../components/AllComments";
-
 import QuickFindBoard from "../components/QuickFindBoard";
 import Templates from "../components/Templates";
 import { RootState } from "../modules";
@@ -120,12 +119,6 @@ const NotionRouter = () => {
   const dispatch = useDispatch();
   const notion = useSelector((state: RootState) => state.notion);
   const { pagesId, pages, firstPagesId } = notion;
-  /**
-   * template이 아닌 type이 "page"인 페이지들이 존재하는 지 여부
-   */
-  const pageExist: boolean = pages
-    ? !!pages.filter((page) => page.type === "page")[0]
-    : false;
   const user = useSelector((state: RootState) => state.user);
   const sideAppear = useSelector((state: RootState) => state.side.appear);
   const currentPageId: string = getCurrentPageId();
