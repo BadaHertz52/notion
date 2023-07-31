@@ -619,6 +619,9 @@ src="https://user-images.githubusercontent.com/69838872/209688434-5db37fcc-7987-
  -2023.7 업데이트 및 수정
   - 이미지 크기 조절 버튼 오류 수정
   - 최적화 완료
+  - 찾는 페이지가 없거나, 페이지 자체가 없을때 보이는 화면 오류 수정
+  - 모바일 브라우저의 스크롤 오류 수정
+  - HashRouter 에서 BrowserRouter 변경
 ---
 
 - 🔎 [Notion 프로젝트 후기 보러가기](https://velog.io/@badahertz52/Notion-프로젝트-후기)
