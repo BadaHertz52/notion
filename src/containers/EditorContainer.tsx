@@ -20,6 +20,7 @@ import {
   PathType,
 } from "../route/NotionRouter";
 import { makePagePath } from "../fn";
+import NotionHelmet from "../components/NotionHelmet";
 
 export const modalMoveToPage = "modalMoveToPage";
 export const modalComment = "modalComment";
@@ -124,84 +125,87 @@ const EditorContainer = ({
     setPagePath(makePagePath(page, pagesId, pages));
   }, [page, page.header.icon, page.header.title, pages, pagesId]);
   return (
-    <div className="editor" style={editorStyle}>
-      {isInTrash && (
-        <div className="isInTrash">
-          <div>This is page is in Trash.</div>
-          <div className="isInTrash__btn-group">
-            <button
-              title="button to restore page"
-              onClick={() => restorePage(page.id)}
-            >
-              Restore page
-            </button>
-            <button
-              title="button to delete page  permanently "
-              onClick={() => cleanTrash(page.id)}
-            >
-              Delete permanently
-            </button>
+    <>
+      <NotionHelmet pageHeader={page.header} pageId={page.id} />
+      <div className="editor" style={editorStyle}>
+        {isInTrash && (
+          <div className="isInTrash">
+            <div>This is page is in Trash.</div>
+            <div className="isInTrash__btn-group">
+              <button
+                title="button to restore page"
+                onClick={() => restorePage(page.id)}
+              >
+                Restore page
+              </button>
+              <button
+                title="button to delete page  permanently "
+                onClick={() => cleanTrash(page.id)}
+              >
+                Delete permanently
+              </button>
+            </div>
           </div>
-        </div>
-      )}
-      <TopBar
-        firstList={firstList}
-        favorites={user.favorites}
-        sideAppear={sideAppear}
-        page={page}
-        pages={pages}
-        pagePath={pagePath}
-        showAllComments={showAllComments}
-        setShowAllComments={setShowAllComments}
-        smallText={smallText}
-        setSmallText={setSmallText}
-        fullWidth={fullWidth}
-        setFullWidth={setFullWidth}
-        setOpenExport={setOpenExport}
-        setFontStyle={setFontStyle}
-      />
-      <Frame
-        page={page}
-        userName={userName}
-        pagesId={pagesId}
-        pages={pages}
-        firstList={firstList}
-        recentPagesId={recentPagesId}
-        commentBlock={commentBlock}
-        openComment={openComment}
-        setOpenComment={setOpenComment}
-        setCommentBlock={setCommentBlock}
-        modal={modal}
-        setModal={setModal}
-        showAllComments={showAllComments}
-        smallText={smallText}
-        fullWidth={fullWidth}
-        discardEdit={discardEdit}
-        setDiscardEdit={setDiscardEdit}
-        openTemplates={openTemplates}
-        setOpenTemplates={setOpenTemplates}
-        fontStyle={fontStyle}
-        mobileSideMenu={mobileSideMenu}
-        setMobileSideMenu={setMobileSideMenu}
-      />
-      {mobileSideMenu.block && (
-        <MobileSideMenu
-          pages={pages}
-          pagesId={pagesId}
-          recentPagesId={recentPagesId}
+        )}
+        <TopBar
           firstList={firstList}
-          userName={userName}
+          favorites={user.favorites}
+          sideAppear={sideAppear}
           page={page}
-          block={mobileSideMenu.block}
-          setModal={setModal}
-          modal={modal}
+          pages={pages}
+          pagePath={pagePath}
+          showAllComments={showAllComments}
+          setShowAllComments={setShowAllComments}
+          smallText={smallText}
+          setSmallText={setSmallText}
+          fullWidth={fullWidth}
+          setFullWidth={setFullWidth}
+          setOpenExport={setOpenExport}
+          setFontStyle={setFontStyle}
+        />
+        <Frame
+          page={page}
+          userName={userName}
+          pagesId={pagesId}
+          pages={pages}
+          firstList={firstList}
+          recentPagesId={recentPagesId}
+          commentBlock={commentBlock}
+          openComment={openComment}
+          setOpenComment={setOpenComment}
           setCommentBlock={setCommentBlock}
-          frameHtml={null}
+          modal={modal}
+          setModal={setModal}
+          showAllComments={showAllComments}
+          smallText={smallText}
+          fullWidth={fullWidth}
+          discardEdit={discardEdit}
+          setDiscardEdit={setDiscardEdit}
+          openTemplates={openTemplates}
+          setOpenTemplates={setOpenTemplates}
+          fontStyle={fontStyle}
           mobileSideMenu={mobileSideMenu}
           setMobileSideMenu={setMobileSideMenu}
         />
-      )}
-    </div>
+        {mobileSideMenu.block && (
+          <MobileSideMenu
+            pages={pages}
+            pagesId={pagesId}
+            recentPagesId={recentPagesId}
+            firstList={firstList}
+            userName={userName}
+            page={page}
+            block={mobileSideMenu.block}
+            setModal={setModal}
+            modal={modal}
+            setCommentBlock={setCommentBlock}
+            frameHtml={null}
+            mobileSideMenu={mobileSideMenu}
+            setMobileSideMenu={setMobileSideMenu}
+          />
+        )}
+      </div>
+    </>
   );
 };
 

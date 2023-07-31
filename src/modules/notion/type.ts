@@ -96,20 +96,21 @@ type ListItem = {
   createTime: string;
 };
 
-type pageType = "page" | "template";
+type PageType = "page" | "template";
+export type PageHeader = {
+  title: string;
+  iconType: IconType;
+  icon: string | Emoji | null;
+  cover: string | null;
+  comments: MainCommentType[] | null;
+};
 type Page = {
   /**
    * "/" 사용 x , 만들어진 시간을 활용
    */
   id: string;
-  type: pageType;
-  header: {
-    title: string;
-    iconType: IconType;
-    icon: string | Emoji | null;
-    cover: string | null;
-    comments: MainCommentType[] | null;
-  };
+  type: PageType;
+  header: PageHeader;
   firstBlocksId: string[] | null;
   blocks: Block[] | null;
   blocksId: string[] | null;

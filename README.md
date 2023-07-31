@@ -113,10 +113,10 @@ npm run start
   ```
 - Page type
   ```typescript
-  type pageType = typeof page | typeof template;
+  type PageType = typeof page | typeof template;
   type Page = {
     id: string;
-    type: pageType;
+    type: PageType;
     header: {
       title: string;
       iconType: IconType;

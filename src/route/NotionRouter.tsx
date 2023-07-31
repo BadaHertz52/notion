@@ -29,7 +29,6 @@ import {
   restore_page,
 } from "../modules/notion/reducer";
 import { Block, Page, IconType, ListItem } from "../modules/notion/type";
-import { emojiPath } from "../modules/notion/emojiData";
 import { findPage, getCurrentPageId, makeRoutePath } from "../fn";
 import { change_side, SideAppear } from "../modules/side/reducer";
 import {
@@ -326,41 +325,6 @@ const NotionRouter = () => {
     removeFavorites: removeFavorites,
     changeSide: changeSide,
   };
-  const changeTitle = (title: string) => {
-    const titleHtml = document.querySelector("title");
-    if (titleHtml) {
-      titleHtml.innerText = title;
-    } else {
-      console.error("Can't find <title>");
-    }
-  };
-
-  const changeFavicon = (icon: string | null, iconType: IconType) => {
-    const shortcutIcon = document.querySelector(
-      "link[rel='shortcut icon']"
-    ) as HTMLLinkElement | null;
-    const changeHref = (href: string) =>
-      shortcutIcon?.setAttribute("href", href);
-    if (shortcutIcon) {
-      switch (iconType) {
-        case null:
-          changeHref("./favicon.ico");
-          break;
-        case "img":
-          if (icon) {
-            changeHref(icon);
-          }
-          break;
-        case "emoji":
-          changeHref(`${emojiPath}${icon}.png`);
-          break;
-        default:
-          break;
-      }
-    } else {
-      console.error("Can't find shortcut icon");
-    }
-  };
   useEffect(() => {
     if (window.location.search) {
       navigate(makeRoutePath(currentPageId));
@@ -402,16 +366,6 @@ const NotionRouter = () => {
     navigate,
     addRecentPage,
   ]);
-
-  // change title and favicon
-  useEffect(() => {
-    const title = document.querySelector("title")?.text;
-    if (currentPage?.header) {
-      title !== currentPage.header.title &&
-        changeTitle(currentPage.header.title);
-      changeFavicon(currentPage.header.icon, currentPage.header.iconType);
-    }
-  }, [currentPage?.header, currentPage?.id, user.recentPagesId]);
 
   return (
     <ActionContext.Provider value={{ actions: notionActions }}>

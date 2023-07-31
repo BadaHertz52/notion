@@ -1,0 +1,69 @@
+import React from "react";
+import { PageHeader } from "../modules/notion/type";
+import { Helmet } from "react-helmet-async";
+import { emojiPath } from "../modules/notion/emojiData";
+import { pageSample } from "../modules/notion/reducer";
+type MetaTagProps = {
+  pageId?: string;
+  pageHeader?: PageHeader;
+};
+
+const NotionHelmet = ({ pageHeader, pageId }: MetaTagProps) => {
+  const { icon, iconType, title } = pageHeader
+    ? pageHeader
+    : { icon: null, iconType: null, title: "none-page" };
+  const BASIC_FAVICON_HREF = "./favicon.ico";
+  const BASIC_MEAT_TAG_IMG_URL =
+    "https://badahertz52.github.io/notion/image/default.png";
+  const BASIC_META_TAG_TITLE =
+    "Notion (clone coding project) – The all-in-one workspace for your notes, tasks, wikis, and databases.";
+  const emojiFaviconHref = `${emojiPath}${icon}.png`;
+  const getFaviconHref = () => {
+    switch (iconType) {
+      case null:
+        return BASIC_FAVICON_HREF;
+      case "emoji":
+        return emojiFaviconHref;
+      case "img":
+        return icon as string;
+      default:
+        return BASIC_FAVICON_HREF;
+    }
+  };
+  const faviconHref: string = getFaviconHref();
+
+  const pageUrl = `${window.location.protocol}//${
+    window.location.host
+  }/notion/${pageId ? pageId : ""}`;
+
+  const imgUrl = !iconType || !icon ? BASIC_MEAT_TAG_IMG_URL : emojiFaviconHref;
+
+  const metaTagTitle =
+    title === pageSample.header.title
+      ? BASIC_META_TAG_TITLE
+      : `${title}- Notion clone coding project`;
+
+  const description = "This  is a project that cloned the Notion site.";
+  return (
+    <Helmet>
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={metaTagTitle} />
+      <meta name="twitter:description" content={description} />
+      <meta name="twitter:url" content={pageUrl} />
+      <meta name="twitter:image" content={imgUrl} />
+      <meta
+        property="og:site_name"
+        content={`${title} -Notion clone coding project`}
+      />
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content={pageUrl} />
+      <meta property="og:title" content={metaTagTitle} />
+      <meta property="og:description" content={description} />
+      <meta property="og:image" content={imgUrl} />
+      <title>{title}</title>
+      <link rel="shortcut icon" type="image/x-icon" href={faviconHref} />
+    </Helmet>
+  );
+};
+
+export default React.memo(NotionHelmet);
