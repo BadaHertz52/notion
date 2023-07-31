@@ -436,7 +436,7 @@ const template2: Page = {
   editTime: Date.parse("2022-8-23-15:00").toString(),
   createTime: Date.parse("2022-8-23-12:00").toString(),
 };
-const initialState: Notion = {
+export const initialNotionState: Notion = {
   pagesId: ["12345", "page1", "page2", "1234", "123", "template1", "template2"],
   firstPagesId: ["12345", "1234", "123"],
   templatesId: ["template1", "template2"],
@@ -981,7 +981,7 @@ const initialState: Notion = {
 };
 
 export default function notion(
-  state: Notion = initialState,
+  state: Notion = initialNotionState,
   action: NotionAction
 ): Notion {
   const pagesId = state.pagesId ? [...state.pagesId] : null;

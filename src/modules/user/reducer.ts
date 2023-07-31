@@ -1,3 +1,5 @@
+import { initialNotionState } from "../notion/reducer";
+
 const ADD_FAVORITES = "user/ADD_FAVORITES" as const;
 const REMOVE_FAVORITES = "user/REMOVE_FAVORITES" as const;
 const ADD_RECENT_PAGE = "user/ADD_RECENT_PAGE" as const;
@@ -38,13 +40,22 @@ type UserAction =
   | ReturnType<typeof clean_recent_page>;
 
 const recentPagesSessionItem = sessionStorage.getItem(recentPagesSessionKey);
+const item = recentPagesSessionItem
+  ? (JSON.parse(recentPagesSessionItem) as string[])
+  : null;
+const recentPagesId =
+  item && initialNotionState.pagesId
+    ? item.filter((i) => initialNotionState.pagesId?.includes(i))
+    : null;
+// 새로고침 시, state가 초기화 되기 때문에 최근 페이지에 initialNotionState.pagesId에 없는 페이지는 세션에서 삭제
+if (recentPagesId !== item) {
+  sessionStorage.setItem(recentPagesSessionKey, JSON.stringify(item));
+}
 const initialState: UserState = {
   userName: "badahertz52",
   userEmail: "badahertz52@notion.com",
   favorites: ["12345"],
-  recentPagesId: recentPagesSessionItem
-    ? (JSON.parse(recentPagesSessionItem) as string[])
-    : null,
+  recentPagesId: recentPagesId,
 };
 
 export default function user(

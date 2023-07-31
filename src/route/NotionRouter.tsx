@@ -332,7 +332,9 @@ const NotionRouter = () => {
   }, [currentPageId, navigate]);
   useEffect(() => {
     const sessionItem = sessionStorage.getItem(recentPagesSessionKey);
-    const recentPagesId = sessionItem ? JSON.parse(sessionItem) : null;
+    const recentPagesId = sessionItem
+      ? (JSON.parse(sessionItem) as string[])
+      : null;
     const openFirst = !recentPagesId && !currentPageId;
     if (openFirst && pagesId && pages) {
       // 처음 페이지를 열었을 떼, 지정된 페이지 열기 (즐겨찾기 -> 페이지)
