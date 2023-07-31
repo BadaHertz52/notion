@@ -43,7 +43,7 @@ const NotionHelmet = ({ pageHeader, pageId }: MetaTagProps) => {
       ? BASIC_META_TAG_TITLE
       : `${title}- Notion clone coding project`;
 
-  const description = "This  is a project that cloned the Notion site.";
+  const description = `${title} is  page of project that cloned the Notion site.`;
   return (
     <Helmet>
       <meta name="twitter:card" content="summary_large_image" />
@@ -51,15 +51,13 @@ const NotionHelmet = ({ pageHeader, pageId }: MetaTagProps) => {
       <meta name="twitter:description" content={description} />
       <meta name="twitter:url" content={pageUrl} />
       <meta name="twitter:image" content={imgUrl} />
-      <meta
-        property="og:site_name"
-        content={`${title} -Notion clone coding project`}
-      />
+      <meta property="og:site_name" content={metaTagTitle} />
       <meta property="og:type" content="website" />
       <meta property="og:url" content={pageUrl} />
       <meta property="og:title" content={metaTagTitle} />
       <meta property="og:description" content={description} />
       <meta property="og:image" content={imgUrl} />
+      <meta name="description " content={description} />
       <title>{title}</title>
       <link rel="shortcut icon" type="image/x-icon" href={faviconHref} />
     </Helmet>
