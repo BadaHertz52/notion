@@ -44,6 +44,7 @@ import SideBarContainer from "../containers/SideBarContainer";
 import NonePage from "../components/NonePage";
 import Export from "../components/Export";
 import DiscardEditForm from "../components/DiscardEditForm";
+import NotionHelmet from "../components/NotionHelmet";
 const MOBILE_SIDE_MENU = {
   ms_turnInto: "ms_turnInto",
   ms_movePage: "ms_movePage",
@@ -370,141 +371,144 @@ const NotionRouter = () => {
   ]);
 
   return (
-    <ActionContext.Provider value={{ actions: notionActions }}>
-      <div id="inner" className="sideBar-lock">
-        <SideBarContainer
-          sideAppear={sideAppear}
-          setOpenQF={setOpenQF}
-          setOpenTemplates={setOpenTemplates}
-          showAllComments={showAllComments}
-        />
-        <Routes>
-          {pagesId &&
-            pages &&
-            firstList &&
-            pages.map((p) => (
-              <Route
-                key={`page_${p.id}`}
-                path={makeRoutePath(p.id)}
-                element={
-                  <EditorContainer
-                    sideAppear={sideAppear}
-                    firstList={firstList}
-                    userName={user.userName}
-                    recentPagesId={user.recentPagesId}
-                    page={p}
-                    pages={pages}
-                    pagesId={pagesId}
-                    isInTrash={!pagesId.includes(p.id)}
-                    showAllComments={showAllComments}
-                    setShowAllComments={setShowAllComments}
-                    discardEdit={discard_edit}
-                    setDiscardEdit={setDiscardEdit}
-                    setOpenExport={setOpenExport}
-                    modal={modal}
-                    setModal={setModal}
-                    openComment={openComment}
-                    setOpenComment={setOpenComment}
-                    commentBlock={commentBlock}
-                    setCommentBlock={setCommentBlock}
-                    smallText={smallText}
-                    setSmallText={setSmallText}
-                    fullWidth={fullWidth}
-                    setFullWidth={setFullWidth}
-                    openTemplates={openTemplates}
-                    setOpenTemplates={setOpenTemplates}
-                    fontStyle={fontStyle}
-                    setFontStyle={setFontStyle}
-                    mobileSideMenu={mobileSideMenu}
-                    setMobileSideMenu={setMobileSideMenu}
-                  />
-                }
-              />
-            ))}
-          <Route path={"*"} element={<NonePage addPage={addPage} />} />
-        </Routes>
-        {pagesId && pages && firstList && (
-          <>
-            {openExport && currentPage && (
-              <Export
-                page={currentPage}
-                pagesId={pagesId}
-                pages={pages}
-                firstList={firstList}
-                userName={user.userName}
-                recentPagesId={user.recentPagesId}
-                setOpenExport={setOpenExport}
-                commentBlock={commentBlock}
-                openComment={openComment}
-                modal={modal}
-                setModal={setModal}
-                setOpenComment={setOpenComment}
-                setCommentBlock={setCommentBlock}
-                showAllComments={showAllComments}
-                smallText={smallText}
-                fullWidth={fullWidth}
-                discardEdit={discard_edit}
-                setDiscardEdit={setDiscardEdit}
-                openTemplates={openTemplates}
-                setOpenTemplates={setOpenTemplates}
-                fontStyle={fontStyle}
-                mobileSideMenu={mobileSideMenu}
-                setMobileSideMenu={setMobileSideMenu}
-              />
-            )}
-            {openTemplates && currentPage && (
-              <Templates
-                routePageId={currentPage.id}
-                user={user}
-                userName={user.userName}
-                pagesId={pagesId}
-                pages={pages}
-                firstList={firstList}
-                recentPagesId={user.recentPagesId}
-                commentBlock={commentBlock}
-                openComment={openComment}
-                setOpenComment={setOpenComment}
-                modal={modal}
-                setModal={setModal}
-                openTemplates={openTemplates}
-                setOpenTemplates={setOpenTemplates}
-                setCommentBlock={setCommentBlock}
-                showAllComments={showAllComments}
-                smallText={smallText}
-                fullWidth={fullWidth}
-                discardEdit={discard_edit}
-                setDiscardEdit={setDiscardEdit}
-                fontStyle={fontStyle}
-                mobileSideMenu={mobileSideMenu}
-                setMobileSideMenu={setMobileSideMenu}
-              />
-            )}
-            {currentPage && (
-              <AllComments
-                page={currentPage}
-                userName={user.userName}
-                favorites={user.favorites}
-                showAllComments={showAllComments}
-                setShowAllComments={setShowAllComments}
-                discardEdit={discard_edit}
-                setDiscardEdit={setDiscardEdit}
-              />
-            )}
-            {openQF && (
-              <QuickFindBoard
-                userName={user.userName}
-                recentPagesId={user.recentPagesId}
-                pages={pages}
-                pagesId={pagesId}
-                cleanRecentPage={cleanRecentPage}
-                setOpenQF={setOpenQF}
-              />
-            )}
-          </>
-        )}
-        <DiscardEditForm setDiscardEdit={setDiscardEdit} />
-      </div>
-    </ActionContext.Provider>
+    <>
+      <NotionHelmet pageHeader={currentPage?.header} pageId={currentPage?.id} />
+      <ActionContext.Provider value={{ actions: notionActions }}>
+        <div id="inner" className="sideBar-lock">
+          <SideBarContainer
+            sideAppear={sideAppear}
+            setOpenQF={setOpenQF}
+            setOpenTemplates={setOpenTemplates}
+            showAllComments={showAllComments}
+          />
+          <Routes>
+            {pagesId &&
+              pages &&
+              firstList &&
+              pages.map((p) => (
+                <Route
+                  key={`page_${p.id}`}
+                  path={makeRoutePath(p.id)}
+                  element={
+                    <EditorContainer
+                      sideAppear={sideAppear}
+                      firstList={firstList}
+                      userName={user.userName}
+                      recentPagesId={user.recentPagesId}
+                      page={p}
+                      pages={pages}
+                      pagesId={pagesId}
+                      isInTrash={!pagesId.includes(p.id)}
+                      showAllComments={showAllComments}
+                      setShowAllComments={setShowAllComments}
+                      discardEdit={discard_edit}
+                      setDiscardEdit={setDiscardEdit}
+                      setOpenExport={setOpenExport}
+                      modal={modal}
+                      setModal={setModal}
+                      openComment={openComment}
+                      setOpenComment={setOpenComment}
+                      commentBlock={commentBlock}
+                      setCommentBlock={setCommentBlock}
+                      smallText={smallText}
+                      setSmallText={setSmallText}
+                      fullWidth={fullWidth}
+                      setFullWidth={setFullWidth}
+                      openTemplates={openTemplates}
+                      setOpenTemplates={setOpenTemplates}
+                      fontStyle={fontStyle}
+                      setFontStyle={setFontStyle}
+                      mobileSideMenu={mobileSideMenu}
+                      setMobileSideMenu={setMobileSideMenu}
+                    />
+                  }
+                />
+              ))}
+            <Route path={"*"} element={<NonePage addPage={addPage} />} />
+          </Routes>
+          {pagesId && pages && firstList && (
+            <>
+              {openExport && currentPage && (
+                <Export
+                  page={currentPage}
+                  pagesId={pagesId}
+                  pages={pages}
+                  firstList={firstList}
+                  userName={user.userName}
+                  recentPagesId={user.recentPagesId}
+                  setOpenExport={setOpenExport}
+                  commentBlock={commentBlock}
+                  openComment={openComment}
+                  modal={modal}
+                  setModal={setModal}
+                  setOpenComment={setOpenComment}
+                  setCommentBlock={setCommentBlock}
+                  showAllComments={showAllComments}
+                  smallText={smallText}
+                  fullWidth={fullWidth}
+                  discardEdit={discard_edit}
+                  setDiscardEdit={setDiscardEdit}
+                  openTemplates={openTemplates}
+                  setOpenTemplates={setOpenTemplates}
+                  fontStyle={fontStyle}
+                  mobileSideMenu={mobileSideMenu}
+                  setMobileSideMenu={setMobileSideMenu}
+                />
+              )}
+              {openTemplates && currentPage && (
+                <Templates
+                  routePageId={currentPage.id}
+                  user={user}
+                  userName={user.userName}
+                  pagesId={pagesId}
+                  pages={pages}
+                  firstList={firstList}
+                  recentPagesId={user.recentPagesId}
+                  commentBlock={commentBlock}
+                  openComment={openComment}
+                  setOpenComment={setOpenComment}
+                  modal={modal}
+                  setModal={setModal}
+                  openTemplates={openTemplates}
+                  setOpenTemplates={setOpenTemplates}
+                  setCommentBlock={setCommentBlock}
+                  showAllComments={showAllComments}
+                  smallText={smallText}
+                  fullWidth={fullWidth}
+                  discardEdit={discard_edit}
+                  setDiscardEdit={setDiscardEdit}
+                  fontStyle={fontStyle}
+                  mobileSideMenu={mobileSideMenu}
+                  setMobileSideMenu={setMobileSideMenu}
+                />
+              )}
+              {currentPage && (
+                <AllComments
+                  page={currentPage}
+                  userName={user.userName}
+                  favorites={user.favorites}
+                  showAllComments={showAllComments}
+                  setShowAllComments={setShowAllComments}
+                  discardEdit={discard_edit}
+                  setDiscardEdit={setDiscardEdit}
+                />
+              )}
+              {openQF && (
+                <QuickFindBoard
+                  userName={user.userName}
+                  recentPagesId={user.recentPagesId}
+                  pages={pages}
+                  pagesId={pagesId}
+                  cleanRecentPage={cleanRecentPage}
+                  setOpenQF={setOpenQF}
+                />
+              )}
+            </>
+          )}
+          <DiscardEditForm setDiscardEdit={setDiscardEdit} />
+        </div>
+      </ActionContext.Provider>
+    </>
   );
 };
 
