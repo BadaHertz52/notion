@@ -1,8 +1,8 @@
 import React from "react";
 import { CSSProperties } from "styled-components";
-import { emojiPath } from "../modules/notion/emojiData";
+import { EMOJI_DATA, Emoji } from "../modules/notion/emojiData";
 import { IconType } from "../modules/notion/type";
-import pageDefaultImg from "../assets/img/icons8-페이지-개요-100.png";
+import pageDefaultImg from "../assets/img/icons8-페이지-개요-100.jpeg";
 type PageItemProps = {
   icon: string | null;
   iconType: IconType;
@@ -14,7 +14,7 @@ const PageIcon = ({ icon, iconType, style }: PageItemProps) => {
   const imgSrc = icon
     ? iconType === "img"
       ? icon
-      : `${emojiPath}${icon}.png`
+      : EMOJI_DATA[icon as Emoji]
     : pageDefaultImg;
   return (
     <div className={pageIconClassName} style={style}>

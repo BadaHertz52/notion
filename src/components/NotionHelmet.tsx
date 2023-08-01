@@ -1,7 +1,7 @@
 import React from "react";
 import { PageHeader } from "../modules/notion/type";
 import { Helmet } from "react-helmet-async";
-import { emojiPath } from "../modules/notion/emojiData";
+import { EMOJI_DATA, Emoji } from "../modules/notion/emojiData";
 import { pageSample } from "../modules/notion/reducer";
 import BASIC_MEAT_TAG_IMG_URL from "../assets/img/default.jpeg";
 type MetaTagProps = {
@@ -16,13 +16,12 @@ const NotionHelmet = ({ pageHeader, pageId }: MetaTagProps) => {
   const BASIC_FAVICON_HREF = "./favicon.ico";
   const BASIC_META_TAG_TITLE =
     "Notion (clone coding project) – The all-in-one workspace for your notes, tasks, wikis, and databases.";
-  const emojiFaviconHref = `${emojiPath}${icon}.png`;
   const getFaviconHref = () => {
     switch (iconType) {
       case null:
         return BASIC_FAVICON_HREF;
       case "emoji":
-        return emojiFaviconHref;
+        return EMOJI_DATA[icon as Emoji];
       case "img":
         return icon as string;
       default:
@@ -35,7 +34,8 @@ const NotionHelmet = ({ pageHeader, pageId }: MetaTagProps) => {
     window.location.host
   }/notion/${pageId ? pageId : ""}`;
 
-  const imgUrl = !iconType || !icon ? BASIC_MEAT_TAG_IMG_URL : emojiFaviconHref;
+  const imgUrl =
+    !iconType || !icon ? BASIC_MEAT_TAG_IMG_URL : EMOJI_DATA[icon as Emoji];
 
   const metaTagTitle =
     title === pageSample.header.title

@@ -11,7 +11,7 @@ import { BsEmojiSmile } from "react-icons/bs";
 import { CSSProperties } from "styled-components";
 import { ActionContext } from "../route/NotionRouter";
 import { Block, IconType, Page, Emoji } from "../modules/notion/type";
-import { EMOJI_ARR, emojiPath } from "../modules/notion/emojiData";
+import { EMOJI_ARR, EMOJI_DATA } from "../modules/notion/emojiData";
 import { setTemplateItem } from "../fn";
 import ScreenOnly from "./ScreenOnly";
 
@@ -153,7 +153,7 @@ const IconModal = ({
                 onClick={() => changePageIcon(i, "emoji")}
               >
                 <ScreenOnly text={`button to select ${i} emoji`} />
-                <img alt={i} src={`${emojiPath}${i}.png`} />
+                <img alt={i} src={EMOJI_DATA[i]} />
               </button>
             ))
           ) : (
