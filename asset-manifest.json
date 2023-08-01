@@ -1,14 +1,18 @@
 {
   "files": {
     "main.css": "/notion/static/css/main.a65b5b15.css",
-    "main.js": "/notion/static/js/main.129d0be1.js",
-    "static/media/vincent-van-gogh-ge1323790d_640.jpg": "/notion/static/media/vincent-van-gogh-ge1323790d_640.692c91b79db1462ea21a.jpg",
+    "main.js": "/notion/static/js/main.0ffc2830.js",
+    "static/media/michael-sum-LEpfefQf4rU-unsplash.jpeg": "/notion/static/media/michael-sum-LEpfefQf4rU-unsplash.faf41fc022c37378fcac.jpeg",
+    "static/media/artificial-turf-g6e884a1d4_1920.jpeg": "/notion/static/media/artificial-turf-g6e884a1d4_1920.4375958056bfc59486f0.jpeg",
+    "static/media/vincent-van-gogh-ge1323790d_640.jpeg": "/notion/static/media/vincent-van-gogh-ge1323790d_640.be8cbd0160c3f98dccb7.jpeg",
+    "static/media/roses-gfcb7dbdd4_640.jpeg": "/notion/static/media/roses-gfcb7dbdd4_640.1a57e8775dfb38ee052d.jpeg",
+    "static/media/default.jpeg": "/notion/static/media/default.57b9d713e0831a260edb.jpeg",
     "index.html": "/notion/index.html",
     "main.a65b5b15.css.map": "/notion/static/css/main.a65b5b15.css.map",
-    "main.129d0be1.js.map": "/notion/static/js/main.129d0be1.js.map"
+    "main.0ffc2830.js.map": "/notion/static/js/main.0ffc2830.js.map"
   },
   "entrypoints": [
     "static/css/main.a65b5b15.css",
-    "static/js/main.129d0be1.js"
+    "static/js/main.0ffc2830.js"
   ]
 }
