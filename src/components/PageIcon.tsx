@@ -19,7 +19,12 @@ const PageIcon = ({ icon, iconType, style }: PageItemProps) => {
   return (
     <div className={pageIconClassName} style={style}>
       <span>
-        <img className="page__icon__img" alt="pageImgIcon" src={imgSrc} />
+        <img
+          className="page__icon__img"
+          alt="pageImgIcon"
+          style={{ maxWidth: "100px", maxHeight: "100px" }}
+          src={imgSrc}
+        />
       </span>
     </div>
   );
