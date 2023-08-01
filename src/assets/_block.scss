@@ -237,7 +237,8 @@
     background-color: $itemHover;
   }
 }
-.todon_done.block {
+.todo_done.block {
+  text-decoration: line-through grey;
   path {
     stroke: grey;
   }
