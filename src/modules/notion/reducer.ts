@@ -17,11 +17,8 @@ import {
   blue,
   defaultColor,
 } from "./colorData";
-
-const catImg =
-  "https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assets/img/michael-sum-LEpfefQf4rU-unsplash.jpg";
-const imgBlockImg =
-  "https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assets/img/roses-gfcb7dbdd4_640.jpg";
+import catImg from "../../assets/img/michael-sum-LEpfefQf4rU-unsplash.jpeg";
+import imgBlockImg from "../../assets/img/roses-gfcb7dbdd4_640.jpeg";
 
 export const blockTypes: BlockType[] = [
   "text",

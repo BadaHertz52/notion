@@ -15,7 +15,7 @@ import { Command } from "./Frame";
 import { ActionContext, SelectionType } from "../route/NotionRouter";
 import { Block, BlockType, Page } from "../modules/notion/type";
 import { makeNewBlock, findParentBlock, setTemplateItem } from "../fn/index";
-import imgIcon from "../assets/img/vincent-van-gogh-ge1323790d_640.jpg";
+import imgIcon from "../assets/img/vincent-van-gogh-ge1323790d_640.jpeg";
 import { CSSProperties } from "styled-components";
 
 type CommandBlockProp = {

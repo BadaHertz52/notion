@@ -47,6 +47,7 @@ import { MdInsertPhoto } from "react-icons/md";
 import { HiTemplate } from "react-icons/hi";
 import MobileBlockMenu from "./MobileBlockMenu";
 import { ModalType } from "../containers/EditorContainer";
+import basicPageCover from "../assets/img/artificial-turf-g6e884a1d4_1920.jpeg";
 export type Command = {
   open: boolean;
   command: string | null;
@@ -78,8 +79,6 @@ export type Template_Frame_SAME_Props = {
 export type FrameProps = Template_Frame_SAME_Props & {
   page: Page;
 };
-const basicPageCover =
-  "https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assets/img/artificial-turf-g6e884a1d4_1920.jpg";
 /**
  * mouse drag로 위치를 변경시킬 블록의 내용을 보여주는 component
  * @param param0

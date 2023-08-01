@@ -3,6 +3,7 @@ import { PageHeader } from "../modules/notion/type";
 import { Helmet } from "react-helmet-async";
 import { emojiPath } from "../modules/notion/emojiData";
 import { pageSample } from "../modules/notion/reducer";
+import BASIC_MEAT_TAG_IMG_URL from "../assets/img/default.jpeg";
 type MetaTagProps = {
   pageId?: string;
   pageHeader?: PageHeader;
@@ -13,8 +14,6 @@ const NotionHelmet = ({ pageHeader, pageId }: MetaTagProps) => {
     ? pageHeader
     : { icon: null, iconType: null, title: "none-page" };
   const BASIC_FAVICON_HREF = "./favicon.ico";
-  const BASIC_MEAT_TAG_IMG_URL =
-    "https://badahertz52.github.io/notion/image/default.png";
   const BASIC_META_TAG_TITLE =
     "Notion (clone coding project) – The all-in-one workspace for your notes, tasks, wikis, and databases.";
   const emojiFaviconHref = `${emojiPath}${icon}.png`;
