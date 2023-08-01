@@ -49,7 +49,7 @@ const ListTemplate = ({
   return (
     <ul>
       {targetList?.map((item: ListItem) => (
-        <li aria-details={`page:${item.id}`} key={item.id}>
+        <li key={item.id}>
           <div className="mainPage">
             <ItemTemplate
               item={item}

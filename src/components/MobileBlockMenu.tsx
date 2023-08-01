@@ -327,7 +327,6 @@ const MobileBlockMenu = ({
             </button>
             <button
               className="btn-open-menu"
-              aria-details="open menu"
               onTouchEnd={() => openMobileSideMenu("ms_moreMenu")}
             >
               <div className="mobileBlock__btn__inner">
