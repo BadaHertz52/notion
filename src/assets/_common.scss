@@ -1,4 +1,4 @@
-$pistachioshell: rgb(242, 241, 238);
+$pistachioshell: rgb(245, 244, 243);
 $mud: #929292;
 $lightMud: #d6d6d6;
 $brightMud: rgba(242, 241, 238, 0.6);
@@ -8,9 +8,9 @@ $itemHover: #edece9;
 $commentHover: rgba(255, 198, 11, 0.658);
 $comment: rgba(255, 196, 0, 0.347);
 $comment_text: rgba(255, 196, 0, 0.183);
-$darkgrey: rgb(112, 112, 112);
+$darkgrey: rgb(60, 60, 60);
 $turkeyBlue: rgb(46, 170, 220);
-$black: rgb(55, 54, 47);
+$black: rgb(40, 40, 40);
 @mixin initialBtn {
   border: none;
   background-color: transparent;
@@ -156,7 +156,7 @@ $black: rgb(55, 54, 47);
     }
   }
 }
-label{
+label {
   width: 100%;
 }
 .btn-switch {
