@@ -36,7 +36,6 @@ const RecentPages = ({ pages, pagesId, recentPagesId }: RecentPagesProps) => {
               to={makeRoutePath(page.id)}
               title={`link to open page that is ${page.header.title}`}
               key={`recentPage_${i}`}
-              id={`item_${page.id}`}
               className="item"
               onClick={onClickRecentPageItem}
             >
