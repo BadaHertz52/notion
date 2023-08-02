@@ -11,9 +11,12 @@ const EmojiIcon = ({ otherClassName, icon }: EmojiIconProps) => {
     getEmojiUrl(icon, setUrl);
   }, [icon]);
   return (
-    <>
-      <img className={className} src={url} alt={`${icon} emoji`} />
-    </>
+    <img
+      className={className}
+      src={url}
+      alt={`${icon} emoji`}
+      style={{ maxWidth: "124px", maxHeight: "124px" }}
+    />
   );
 };
 
