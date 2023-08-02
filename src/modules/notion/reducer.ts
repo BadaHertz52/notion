@@ -938,7 +938,7 @@ export const initialNotionState: Notion = {
       header: {
         title: "notion2",
         iconType: "emoji",
-        icon: EMOJI_ARR[2],
+        icon: EMOJI_ARR[6],
         cover: null,
         comments: null,
       },
@@ -956,7 +956,7 @@ export const initialNotionState: Notion = {
       header: {
         title: "notion3",
         iconType: "emoji",
-        icon: EMOJI_ARR[10],
+        icon: EMOJI_ARR[31],
         cover: null,
         comments: null,
       },

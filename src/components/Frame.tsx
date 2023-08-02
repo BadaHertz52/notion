@@ -24,7 +24,7 @@ import {
 } from "../fn";
 import { ActionContext, SelectionType } from "../route/NotionRouter";
 import EditableBlock from "./EditableBlock";
-import IconModal, { randomIcon } from "./IconModal";
+import IconModal from "./IconModal";
 import CommandBlock from "./CommandBlock";
 import Comments from "./Comments";
 import CommentInput from "./CommentInput";
@@ -48,6 +48,7 @@ import { HiTemplate } from "react-icons/hi";
 import MobileBlockMenu from "./MobileBlockMenu";
 import { ModalType } from "../containers/EditorContainer";
 import basicPageCover from "../assets/img/artificial-turf-g6e884a1d4_1920.jpeg";
+import { randomEmojiIcon } from "../modules/notion/emojiData";
 export type Command = {
   open: boolean;
   command: string | null;
@@ -195,13 +196,7 @@ const Frame = ({
     fontSize: `${fontSize * 2}rem`,
   };
   const size =
-    page.header.iconType === null
-      ? innerWidth >= 768
-        ? 72
-        : 48
-      : innerWidth >= 768
-      ? 124
-      : 72;
+    page.header.iconType === null ? (innerWidth >= 768 ? 72 : 48) : 72;
   const pageIconStyle: CSSProperties = {
     width: size,
     height: size,
@@ -329,7 +324,7 @@ const Frame = ({
   );
 
   const addRandomIcon = useCallback(() => {
-    const icon = randomIcon();
+    const icon = randomEmojiIcon();
     const newPageWithIcon: Page = {
       ...page,
       header: {
@@ -775,7 +770,7 @@ const Frame = ({
   }, [editTime, page]);
 
   const onClickEmptyWithIconBtn = useCallback(() => {
-    const icon = randomIcon();
+    const icon = randomEmojiIcon();
     const newPage = startNewPage();
     const newPageWithIcon: Page = {
       ...newPage,

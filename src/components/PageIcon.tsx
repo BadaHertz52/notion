@@ -1,26 +1,27 @@
 import React from "react";
 import { CSSProperties } from "styled-components";
-import { EMOJI_DATA, Emoji } from "../modules/notion/emojiData";
+import { Emoji } from "../modules/notion/emojiData";
 import { IconType } from "../modules/notion/type";
 import pageDefaultImg from "../assets/img/icons8-페이지-개요-100.jpeg";
+import EmojiIcon from "./EmojiIcon";
 type PageItemProps = {
   icon: string | null;
   iconType: IconType;
   style: CSSProperties | undefined;
 };
 const PageIcon = ({ icon, iconType, style }: PageItemProps) => {
-  const pageIconClassName =
+  const pageIconClassName: string =
     icon === null ? "page__icon iconNull" : "page__icon";
-  const imgSrc = icon
-    ? iconType === "img"
-      ? icon
-      : EMOJI_DATA[icon as Emoji]
-    : pageDefaultImg;
+  const imgSrc: string = icon && iconType === "img" ? icon : pageDefaultImg;
   return (
     <div className={pageIconClassName} style={style}>
-      <span>
+      {iconType === "emoji" ? (
+        icon && (
+          <EmojiIcon icon={icon as Emoji} otherClassName="page__icon__img" />
+        )
+      ) : (
         <img className="page__icon__img" alt="pageImgIcon" src={imgSrc} />
-      </span>
+      )}
     </div>
   );
 };

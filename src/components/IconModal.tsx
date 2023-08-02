@@ -11,14 +11,10 @@ import { BsEmojiSmile } from "react-icons/bs";
 import { CSSProperties } from "styled-components";
 import { ActionContext } from "../route/NotionRouter";
 import { Block, IconType, Page, Emoji } from "../modules/notion/type";
-import { EMOJI_ARR, EMOJI_DATA } from "../modules/notion/emojiData";
+import { EMOJI_ARR, randomEmojiIcon } from "../modules/notion/emojiData";
 import { setTemplateItem } from "../fn";
 import ScreenOnly from "./ScreenOnly";
-
-export const randomIcon = (): Emoji => {
-  const index = Math.floor(Math.random() * (EMOJI_ARR.length, 0) + 0);
-  return EMOJI_ARR[index];
-};
+import EmojiIcon from "./EmojiIcon";
 
 type IconModalProps = {
   currentPageId: string | null;
@@ -73,7 +69,7 @@ const IconModal = ({
   };
 
   const onClickRandom = () => {
-    changePageIcon(randomIcon(), "emoji");
+    changePageIcon(randomEmojiIcon(), "emoji");
   };
 
   const onChangeImgIcon = useCallback(
@@ -153,7 +149,7 @@ const IconModal = ({
                 onClick={() => changePageIcon(i, "emoji")}
               >
                 <ScreenOnly text={`button to select ${i} emoji`} />
-                <img alt={i} src={EMOJI_DATA[i]} />
+                <EmojiIcon icon={i} />
               </button>
             ))
           ) : (
