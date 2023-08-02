@@ -1,7 +1,7 @@
 @import "./common";
 @mixin headerStyle {
   color: $darkgrey;
-  margin-left: 16px;
+  margin-left: 1rem;
   margin-bottom: 14px;
   font-size: 14px;
 }
@@ -224,7 +224,7 @@
 
   //sideBar__inner__scroll--
   .sideBar__inner__scroll {
-    padding: 16px 0;
+    padding: 1rem 0;
     height: 50%;
     overflow: hidden auto;
     //scroll//
@@ -264,6 +264,7 @@
       justify-content: flex-start;
     }
     .toggleBtn {
+      margin-right: 0.5rem;
       svg {
         margin-right: 0;
       }
@@ -280,7 +281,7 @@
         font-size: 13px;
         margin-right: 0;
       }
-      span:first-child {
+      .page__icon {
         margin-right: 5px;
       }
     }
@@ -295,7 +296,7 @@
       height: 18px;
       svg {
         margin-right: 0;
-        font-size: 16px;
+        font-size: 1rem;
       }
     }
     .inside {
@@ -311,7 +312,7 @@
       button {
         position: absolute;
         top: 0;
-        right: 16px;
+        right: 1rem;
       }
       svg {
         color: $mud;
@@ -413,6 +414,7 @@
     width: 95%;
   }
 }
+
 @media screen and (max-width: 768px) {
   .sideBar {
     background-color: rgb(240, 240, 240);
@@ -426,12 +428,19 @@
     .sideBar__inner__scroll {
       max-height: calc(90vh - 40px - 26px - 2rem - 25vw);
       box-sizing: border-box;
+      .favorites,
+      .private {
+        .header {
+          font-size: 1rem;
+        }
+      }
     }
     .switcher .item__inner,
     .sideBar__inner__scroll .header,
     .recentPages .header {
       font-size: 1rem;
     }
+
     .switcher {
       .item__inner {
         padding-top: 1rem;
@@ -468,7 +477,7 @@
       display: block;
     }
     .item__inner {
-      font-size: 14px;
+      font-size: 1rem;
     }
     .private .header svg {
       color: $darkgrey;
