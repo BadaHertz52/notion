@@ -1,5 +1,5 @@
 import React from "react";
-import styled, { CSSProperties } from "styled-components";
+import { CSSProperties } from "styled-components";
 
 type ScreenOnlyProps = {
   text: string;
