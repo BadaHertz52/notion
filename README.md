@@ -34,12 +34,14 @@
 
 ### 2) Built with
 
+- sass
 - node-html-markdown
-- [react-contenteditable](https://www.npmjs.com/package/react-contenteditable)
-- [react-icons](https://www.npmjs.com/package/react-icons)
+- react-contenteditable
+- react-icons
 - react-redux, redux
 - react-router-dom
-- [styled-component](https://styled-components.com/)
+- styled-component
+- react-helmet-async
 
 ---
 
@@ -91,326 +93,43 @@ npm run start
 
 ## A. State
 
-## a. Notion State
+### a. Notion
 
-- Notion State type
-  ```typescript
-  type Notion = {
-    //모든 page와 template의 id
-    pagesId: string[] | null;
-    //모든 page와 template
-    pages: Page[] | null;
-    //부모 page가 없는, 최상위에 있는 page들의 id
-    firstPagesId: string[] | null;
-    //모든 template의 id
-    templatesId: string[] | null;
-    // 삭제된 page의 id와 page들
-    trash: {
-      pagesId: string[] | null;
-      pages: TrashPage[] | null;
-    };
-  };
-  ```
-- Page type
-  ```typescript
-  type PageType = typeof page | typeof template;
-  type Page = {
-    id: string;
-    type: PageType;
-    header: {
-      title: string;
-      iconType: IconType;
-      icon: string | Emoji | null;
-      cover: string | null;
-      comments: MainCommentType[] | null;
-    };
-    // block.firstBlock === true인, 부모 block이 없는 블럭을 firstBlock라고 함
-    firstBlocksId: string[] | null;
-    blocks: Block[] | null;
-    blocksId: string[] | null;
-    // 해당 page의 자식 page를 subPage라고 함
-    subPagesId: string[] | null;
-    // 해당 page의 상위 page의 id를 원소로 하는 배열
-    parentsId: string[] | null;
-    editTime: string;
-    createTime: string;
-  };
-  ```
-- Trash type
-  ```typescript
-  type TrashPage = Page & {
-    subPages: Page[] | null;
-  };
-  ```
-- Block type
+    Notion state는 사이트에서 생성되는 page,block,comment들 에 대한 데이터를 가집니다.
 
-  ```typescript
-  //block.style.color(block의 글자색)의 type
-  type ColorType =
-    | typeof defaultColor
-    | typeof grey
-    | typeof orange
-    | typeof green
-    | typeof blue
-    | typeof red;
+    * Notion state 가 담고 있는 data
+      * page : 유저가 생성한 페이지
+      * trash : 삭제된 페이지
+      * template : 페이지의 템플릿들
 
-  //block.style,bgColor (block의 배경색)의 type
-  type BgColorType =
-    | typeof bg_default
-    | typeof bg_grey
-    | typeof bg_yellow
-    | typeof bg_green
-    | typeof bg_blue
-    | typeof bg_pink;
+### b. User
 
-  //block.style의  type
-  type BlockStyle = {
-    color: ColorType;
-    bgColor: BgColorType;
-    width: undefined | string;
-    height: undefined | string;
-  };
+    User state 는 해당 Notion을 사용하는 user에 대한 데이터를 가집니다.
 
-  // block.type의  type
-  type BlockType =
-    | typeof text
-    | typeof toggle
-    | typeof todo
-    | typeof todo_done
-    | typeof image
-    | typeof bookmark
-    | typeof h1
-    | typeof h2
-    | typeof h3
-    | typeof page
-    | typeof numberList
-    | typeof bulletList
-    | typeof numberListArr
-    | typeof bulletListArr;
+- User state 가 담고 있는 data
+  - user name
+  - user email
+  - 즐겨 찾기 목록
+  - 최근 방문한 페이지 목록
 
-  //block.icon의 type
-  type IconType = typeof img | typeof emoji | null;
+### c. Side
 
-  //block.comments 에 대한 type
-  //block.comments는 mainComment-subComment 구조
-  type SubCommentType = {
-    id: string;
-    userName: string;
-    content: string;
-    editTime: string;
-    createTime: string;
-  };
+    Side state는 side bar의 형태에 대한 것입니다.
 
-  type MainCommentType = SubCommentType & {
-    type: "open" | "resolve";
-    selectedText: null | string;
-    subComments: SubCommentType[] | null;
-    subCommentsId: string[] | null;
-  };
+    * side bar 형태
+      * lock : 왼쪽에 고정됨
+      * close : 왼쪽에 고정되었던 side bar가 화면상에서 사라짐
+      * float , floatHide : 버튼에 마우스를 되면 side bar가 나타나고 (float) 마우스를 떼면 사라지는(floatHide) 형태
 
-  type Block = {
-    id: string;
-    contents: string;
-    firstBlock: boolean;
-    //해당 block의 자식block을 subBlock이라 함
-    subBlocksId: string[] | null;
-    //해당 block의 모든 상위 block의 id
-    parentBlocksId: string[] | null;
-    type: BlockType;
-    iconType: IconType;
-    icon: string | Emoji | null;
-    editTime: string;
-    createTime: string;
-    style: BlockStyle;
-    comments: MainCommentType[] | null;
-  };
-  ```
-
-- Notion Action type
-  ```typescript
-  type NotionAction =
-    | ReturnType<typeof add_block>
-    | ReturnType<typeof edit_block>
-    | ReturnType<typeof change_block_to_page>
-    | ReturnType<typeof change_page_to_block>
-    | ReturnType<typeof delete_block>
-    | ReturnType<typeof change_to_sub>
-    | ReturnType<typeof raise_block>
-    | ReturnType<typeof add_page>
-    | ReturnType<typeof duplicate_page>
-    | ReturnType<typeof edit_page>
-    | ReturnType<typeof move_page_to_page>
-    | ReturnType<typeof delete_page>
-    | ReturnType<typeof restore_page>
-    | ReturnType<typeof clean_trash>
-    | ReturnType<typeof add_template>
-    | ReturnType<typeof cancel_edit_template>
-    | ReturnType<typeof delete_template>;
-  ```
-
-## b. User State
-
-- User State type
-
-```typescript
-type UserState = {
-  userName: string;
-  userEmail: string;
-  favorites: string[] | null;
-  //최근에 방문한 page의 id
-  recentPagesId: string[] | null;
-};
-```
-
-- User Action type
-
-```typescript
-type UserAction =
-  | ReturnType<typeof add_favorites>
-  | ReturnType<typeof remove_favorites>
-  | ReturnType<typeof add_recent_page>
-  | ReturnType<typeof clean_recent_page>;
-```
-
-## c. Side State
-
-- Side State type
-
-  ```typescript
-  type SideAppear =
-    | typeof lock
-    | typeof float
-    | typeof floatHide
-    | typeof close;
-
-  type Side = {
-    appear: SideAppear;
-  };
-  ```
-
-- Side Action type
-  ```typescript
-  type SideAction = ReturnType<typeof change_side>;
-  ```
+[🔗 State에서 사용된 type들에 대한 wiki 페이지로 이동](https://github.com/BadaHertz52/notion/wiki/Type)
 
 ## B. Component
 
-- AllComments
-
-  - 페이지 내의 모든 comment를 보여주는 component
-
-- BlockComponent ,BlockContentEditable
-
-  - BlockComponent : EditableBlock component 의 자식 component이자 BlockContentEditable의 부모 component로 block의 type별 다른 html element를 보여준다
-  - BlockContentEditable : block 의 content에 대한 component로 content를 수정할 수 있음
-
-- BlockFn
-
-  - 웹 브라우저 환경에서 block에 마우스를 가져다 내면 block 왼편에 나타나는 component로 block을 생성하는 add 버튼과 Menu를 여는 버튼을 가짐
-
-- BlockStyler
-
-  - block 의 일부 내용을 선택 시 나타나고, 일부 내용에 대한 스타일 변경,링크 추가, block의 타입 변경등을 담당
-
-- ColorMenu
-
-  - block의 글자 색과 배경색을 변경할 수 있음
-
-- CommandBlock
-
-  - block의 타입을 변경함
-  - 웹 브라우저에서 "/"를 선두로 block type을 작성함으로써 block type을 변경할 수 있음
-
-- Comments
-
-  - block에 대한 comments들을 보여주고, comment를 생성,수정,삭제할 수 있음
-
-- EditableBlock
-
-  - BlockComponent의 부모 component로 block 의 type, block의 subBlocksId의 여부에 따라 다른 html을 보여줌
-
-- Export
-  - 현재 페이지를 pdf,html,markdown으로 내보낼 수 있는 기능을 담당
-  - 현재 페이지를 내보낼 때 해당 페이지의 subPage를 같이 내보낼 것 인지, 해당 페이지 내 이미지들도 같이 내보낼 것인지 선택할 수 있음
-- Frame
-
-  - page를 화면에 보여줌
-
-- IconModal
-
-  - 아이콘을 추가,수정 시 사용됨
-
-- ImageContent
-
-  - block 타입이 image인 block의 image 파일을 보여주는 component
-  - 이미지 상하좌우에 있는 버튼을 통해 이미지의 사이즈를 조절할 수 있음
-
-- LinkLoader
-
-  - BlockStyler에서 링크를 추가할 때 사용됨
-
-- Loader
-
-  - icon이나 cover에서 image 파일을 사용할 경우 사용되는 component
-
-- Loading
-
-  - 페이지 로딩 시 나타남
-
-- Menu
-  - block에 대한 복제,삭제,이동,타입 변경,comment 추가,color 변경등을 할 수 있는 component
-- MobileBlockMenu
-  - 모바일 브라우저에서 특정 블록을 선택하면 해당 블럭에대한 여러 기능을 하는 메뉴 컴포넌트
-    - 새로운 블록 추가
-    - 해당 블록 삭제
-    - 해당 블록에 대한 comment 추가
-    - 해당 블록의 type 변경
-    - 해당 블록에 대한 폰트 색깔, 배경 색깔 설정
-    - Menu 창을 여는 기능
-- MobileSideBlockMenu
-  - MobileBlockMenu 의 sideMenu
-- MoveTargetBlock
-
-  - block의 위치를 이동 시킬 때, 이동되는 block을 화면상에 보여주는 component
-
-- PageIcon
-
-  - page.header.icon을 보여주는 component
-
-- PageMenu
-
-  - block이나 page를 다른 page로 이동시킬 경우 page를 검색할때 검색 결과를 보여주고, block이나 page를 다른 page로 이동시켜줌
-
-- QuickFindBoard
-
-  - Sidebar에서 page를 검색하고 page 클릭 시 해당 page를 열 수 있는 기능을 담당함
-
-- Rename
-
-  - page의 title이나 icon를 변경할 경우 나타나는 component로 해당 component를 통해 title이나 icon을 변경할 수 있음
-
-- SideBar
-
-  - 페이지 목록을 볼 수 있고, 페이지를 열 수 있으며 페이지의 icon,title을 수정할 수 있고 페이지를 생성,삭제할 수 있고 Templates,Trash,QuickFindBoard를 열 수 있음
-
-- Templates
-
-  - user의 template들을 보여주고, 수정하고 삭제할 수 있으면 새로운 template를 만들 수 있는 component
-
-- Time
-
-  - block이나 page의 생성,수정등의 시간을 보여주는 component
-
-- TopBar
-
-  - Editor 상단에 위치하는 component로 페이지 경로 표시와 <a href="#topBar_function">페이지에 대한 여러 기능</a>을 담당하는 버튼들이 있음
-
-- Trash
-  - 삭제된 page들을 볼 수 있고 삭제된 page를 영구삭제하거나 복원할 수 있음
+[🔗 Component에 대한 wiki 페이지로 이동](https://github.com/BadaHertz52/notion/wiki/Component)
 
 ## <div id="function"> 3) Function </div>
 
-레이아웃을 기준으로 notion에서 사용할 수 있는 기능들을 설명하겠습니다.
+레이아웃을 기준으로 notion에서 사용할 수 있는 기능들 입니다.
 
 ### A. Sidebar
 
@@ -616,12 +335,15 @@ src="https://user-images.githubusercontent.com/69838872/209688434-5db37fcc-7987-
   - 모바일 브라우저에서 블럭간 이동이 안되는 오류 수정
 
 <br/>
- -2023.7 업데이트 및 수정
+
+- 2023.7 업데이트 및 수정
   - 이미지 크기 조절 버튼 오류 수정
-  - 최적화 완료
+  - react, 이미지 최적화 완료
   - 찾는 페이지가 없거나, 페이지 자체가 없을때 보이는 화면 오류 수정
   - 모바일 브라우저의 스크롤 오류 수정
   - HashRouter 에서 BrowserRouter 변경
+  - react-helmet-async과 robots.txt를 활용한 SEO 개선
+
 ---
 
 - 🔎 [Notion 프로젝트 후기 보러가기](https://velog.io/@badahertz52/Notion-프로젝트-후기)
