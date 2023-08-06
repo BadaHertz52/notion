@@ -333,9 +333,7 @@ src="https://user-images.githubusercontent.com/69838872/209688434-5db37fcc-7987-
   - block 전체 뿐만 아니라 일부 내용에 대해서도 comment 추가 할 수 있음
 
   - 모바일 브라우저에서 블럭간 이동이 안되는 오류 수정
-
 <br/>
-
 - 2023.7 업데이트 및 수정
   - 이미지 크기 조절 버튼 오류 수정
   - react, 이미지 최적화 완료
