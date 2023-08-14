@@ -35,6 +35,7 @@ export type PageHeaderProps = {
   setDiscardEdit: Dispatch<SetStateAction<boolean>>;
   showAllComments: boolean;
   newPageFrame: boolean;
+  handleImgLoad?: () => void;
 };
 function PageHeader({
   userName,
@@ -47,6 +48,7 @@ function PageHeader({
   setDiscardEdit,
   showAllComments,
   newPageFrame,
+  handleImgLoad,
 }: PageHeaderProps) {
   const { editPage, editBlock } = useContext(ActionContext).actions;
 
@@ -196,7 +198,11 @@ function PageHeader({
           onMouseEnter={(event) => onMouseEnterPC(event)}
           onMouseLeave={(event) => onMouseLeavePC(event)}
         >
-          <img src={page.header.cover} alt="page cover " />
+          <img
+            src={page.header.cover}
+            alt="page cover "
+            onLoad={handleImgLoad}
+          />
           <button
             title="button to change page cover"
             className="btn-change-cover"
@@ -227,6 +233,7 @@ function PageHeader({
             icon={page.header.icon}
             iconType={page.header.iconType}
             style={pageIconStyle}
+            handleImgLoad={handleImgLoad}
           />
           {openIconModal && (
             <IconModal

@@ -8,6 +8,8 @@ import React, {
   useState,
   RefObject,
   memo,
+  useLayoutEffect,
+  useRef,
 } from "react";
 import { Block, Page } from "../modules/notion/type";
 import { Command } from "./Frame";
@@ -19,7 +21,6 @@ import {
   CellMeasurerCache,
   List,
   ListRowProps,
-  WindowScroller,
 } from "react-virtualized";
 export type PageContent_BlockList_Props = {
   pages: Page[];
@@ -48,7 +49,7 @@ type BlockListProps = PageContent_BlockList_Props & {
 };
 const BlockList = (props: BlockListProps) => {
   const [height, setHeight] = useState<number>(window.innerHeight - 45);
-
+  const blockListRef = useRef<HTMLDivElement>(null);
   type RowProps = {
     index: number;
     measure?: () => void;
@@ -110,41 +111,48 @@ const BlockList = (props: BlockListProps) => {
         pageHeaderDomRect.bottom < 0
           ? window.innerHeight - topBarEl.clientHeight
           : window.innerHeight - pageHeaderDomRect.bottom;
-
-      console.log("height", newHeight, "rect", pageHeaderDomRect);
       setHeight(newHeight);
     }
   }, []);
-  useEffect(() => {
+  // const changeOverFlow = useCallback(() => {
+  //   const targetEl = blockListRef.current?.querySelector(
+  //     ".ReactVirtualized__Grid.ReactVirtualized__List"
+  //   ) as HTMLElement | null;
+  //   if (targetEl?.style) {
+  //     targetEl.style.overflow = "hidden";
+  //   }
+  // }, [blockListRef]);
+
+  const handleScroll = useCallback(() => {
     changeHeight();
-    window.addEventListener("resize", changeHeight);
-    props.frameRef.current?.addEventListener("scroll", changeHeight);
-    return () => {
-      window.removeEventListener("resize", changeHeight);
-      props.frameRef.current?.removeEventListener("scroll", changeHeight);
-    };
-  }, [changeHeight, props.frameRef]);
+    //changeOverFlow();
+  }, [changeHeight]);
+  // useEffect(() => {
+  //   changeHeight();
+  //   window.addEventListener("resize", changeHeight);
+  //   props.frameRef.current?.addEventListener("scroll", handleScroll);
+  //   return () => {
+  //     window.removeEventListener("resize", changeHeight);
+  //     props.frameRef.current?.removeEventListener("scroll", handleScroll);
+  //   };
+  // }, [changeHeight, props.frameRef, blockListRef, handleScroll]);
   return (
-    <WindowScroller>
-      {() => (
-        <AutoSizer disableHeight={false} style={{ height: height }}>
-          {({ width, height }) => (
-            <List
-              autoHeight
-              height={height}
-              width={width}
-              overscanRowCount={0}
-              rowCount={props.firstBlocks.length}
-              rowHeight={cache.rowHeight}
-              rowRenderer={rowRenderer}
-              deferredMeasurementCache={cache}
-            />
-          )}
-        </AutoSizer>
-      )}
-    </WindowScroller>
+    <div ref={blockListRef}>
+      <AutoSizer disableHeight={false} style={{ height: height }}>
+        {({ width, height }) => (
+          <List
+            height={height}
+            width={width}
+            overscanRowCount={0}
+            rowCount={props.firstBlocks.length}
+            rowHeight={cache.rowHeight}
+            rowRenderer={rowRenderer}
+            deferredMeasurementCache={cache}
+          />
+        )}
+      </AutoSizer>
+    </div>
   );
 };
 
-export default BlockList;
 export default memo(BlockList);

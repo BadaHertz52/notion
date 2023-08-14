@@ -21,6 +21,7 @@ type ItemTemplateProp = {
   onClickMoreBtn: (item: ListItem, target: HTMLElement) => void;
   addNewSubPage: (item: ListItem) => void;
   changeSide: (appear: SideAppear) => void;
+  handleImgLoad?: () => void;
 };
 
 const ItemTemplate = ({
@@ -28,6 +29,7 @@ const ItemTemplate = ({
   onClickMoreBtn,
   addNewSubPage,
   changeSide,
+  handleImgLoad,
 }: ItemTemplateProp) => {
   const [toggleStyle, setToggleStyle] = useState<CSSProperties>({
     transform: "rotate(0deg)",
@@ -113,6 +115,7 @@ const ItemTemplate = ({
             icon={item.icon}
             iconType={item.iconType}
             style={undefined}
+            handleImgLoad={handleImgLoad}
           />
           <div>{item.title}</div>
         </Link>

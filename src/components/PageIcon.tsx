@@ -8,8 +8,9 @@ type PageItemProps = {
   icon: string | null;
   iconType: IconType;
   style: CSSProperties | undefined;
+  handleImgLoad?: () => void;
 };
-const PageIcon = ({ icon, iconType, style }: PageItemProps) => {
+const PageIcon = ({ icon, iconType, style, handleImgLoad }: PageItemProps) => {
   const pageIconClassName: string =
     icon === null ? "page__icon iconNull" : "page__icon";
   const imgSrc: string = icon && iconType === "img" ? icon : pageDefaultImg;
@@ -17,10 +18,19 @@ const PageIcon = ({ icon, iconType, style }: PageItemProps) => {
     <div className={pageIconClassName} style={style}>
       {iconType === "emoji" ? (
         icon && (
-          <EmojiIcon icon={icon as Emoji} otherClassName="page__icon__img" />
+          <EmojiIcon
+            icon={icon as Emoji}
+            otherClassName="page__icon__img"
+            handleImgLoad={handleImgLoad}
+          />
         )
       ) : (
-        <img className="page__icon__img" alt="pageImgIcon" src={imgSrc} />
+        <img
+          className="page__icon__img"
+          alt="pageImgIcon"
+          src={imgSrc}
+          onLoad={handleImgLoad}
+        />
       )}
     </div>
   );

@@ -890,12 +890,12 @@ const Frame = ({
         isMobile() ? "mobile" : "web"
       }`}
       ref={frameRef}
-      style={{
-        overflowY:
-          mobileMenuTargetBlock || (isMobile() && modal.open)
-            ? "hidden"
-            : "scroll",
-      }}
+      // style={{
+      //   overflowY:
+      //     mobileMenuTargetBlock || (isMobile() && modal.open)
+      //       ? "hidden"
+      //       : "scroll",
+      // }}
     >
       {/* frame__inner ---- */}
       <div

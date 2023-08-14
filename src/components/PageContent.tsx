@@ -79,12 +79,7 @@ const PageContent = (props: PageContentProps) => {
 
   return (
     <div className="page__contents" onClick={onClickPageContentBottom}>
-      <div
-        className="page__contents__inner"
-        onMouseMove={props.makeMoveBlockTrue}
-        onTouchMove={props.makeMoveBlockTrue}
-        ref={contentInnerRef}
-      >
+      <div className="page__contents__inner" ref={contentInnerRef}>
         {!props.newPageFrame ? (
           props.firstBlocks && (
             <BlockList
