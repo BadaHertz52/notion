@@ -49,6 +49,7 @@ import MobileBlockMenu from "./MobileBlockMenu";
 import { ModalType } from "../containers/EditorContainer";
 import basicPageCover from "../assets/img/artificial-turf-g6e884a1d4_1920.jpeg";
 import { randomEmojiIcon } from "../modules/notion/emojiData";
+import PageComponent from "./PageComponent";
 export type Command = {
   open: boolean;
   command: string | null;
@@ -117,29 +118,23 @@ const Frame = ({
   const frameRef = useRef<HTMLDivElement>(null);
   const frameHtml = frameRef.current;
   const [templateHtml, setTemplateHtml] = useState<HTMLElement | null>(null);
-  const editTime = JSON.stringify(Date.now());
   const firstBlocksId = page.firstBlocksId;
   const firstBlocks = firstBlocksId
     ? firstBlocksId.map((id: string) => findBlock(page, id).BLOCK)
     : null;
   const newPageFrame: boolean = page.firstBlocksId === null;
-  const [openLoaderForCover, setOpenLoaderForCover] = useState<boolean>(false);
-  const [decoOpen, setDecoOpen] = useState<boolean>(false);
+
   const [command, setCommand] = useState<Command>({
     open: false,
     command: null,
     targetBlock: null,
   });
-  const [openIconModal, setOpenIconModal] = useState<boolean>(false);
-  const [openPageCommentInput, setOpenPageCommentInput] =
-    useState<boolean>(false);
+
   const [openLoader, setOpenLoader] = useState<boolean>(false);
   const [loaderTargetBlock, setLoaderTargetBlock] = useState<Block | null>(
     null
   );
-  const [iconStyle, setIconStyle] = useState<CSSProperties | undefined>(
-    undefined
-  );
+
   const [commandBlockPosition, setCBPosition] = useState<CSSProperties>();
   const [commandBlockStyle, setCommandBlockStyle] = useState<
     CSSProperties | undefined
@@ -186,44 +181,7 @@ const Frame = ({
       ? "900px"
       : "75%",
   };
-  const pageCommentStyle: CSSProperties = {
-    fontSize: `${fontSize}rem`,
-  };
-  const headerStyle: CSSProperties = {
-    marginTop: page.header.cover ? "10px" : "30px",
-  };
-  const pageTitleStyle: CSSProperties = {
-    fontSize: `${fontSize * 2}rem`,
-  };
-  const size =
-    page.header.iconType === null ? (innerWidth >= 768 ? 72 : 48) : 72;
-  const pageIconStyle: CSSProperties = {
-    width: size,
-    height: size,
-    marginTop:
-      page.header.cover === null
-        ? 0
-        : page.header.iconType === null
-        ? innerWidth >= 768
-          ? -39
-          : -16
-        : innerWidth >= 768
-        ? -62
-        : -16,
-  };
-  const onMouseMoveOnPH = useCallback(() => {
-    if (
-      (page.header.icon === null ||
-        page.header.cover === null ||
-        page.header.comments === null) &&
-      !decoOpen
-    ) {
-      setDecoOpen(true);
-    }
-  }, [decoOpen, page.header.comments, page.header.cover, page.header.icon]);
-  const onMouseLeaveFromPH = useCallback(() => {
-    decoOpen && setDecoOpen(false);
-  }, [decoOpen]);
+
   const closeModalMenu = useCallback(
     (event: globalThis.MouseEvent) => {
       const target = event.target as HTMLElement | null;
@@ -284,81 +242,16 @@ const Frame = ({
     [commentBlock, openComment, setCommentBlock, setOpenComment]
   );
 
-  const onClickPageIcon = useCallback(
-    (event: React.MouseEvent) => {
-      if (openIconModal !== true) {
-        const frame = document.getElementsByClassName("frame")[0];
-        const frameDomRect = frame.getClientRects()[0];
-        const currentTarget = event.currentTarget;
-        if (currentTarget.firstElementChild) {
-          const domeRect = currentTarget.firstElementChild.getClientRects()[0];
-          setIconStyle({
-            position: "absolute",
-            top: domeRect.bottom + 24,
-            left: domeRect.left - frameDomRect.left,
-          });
-          setOpenIconModal(true);
-        } else {
-          console.error("Can't find currentTarget");
-        }
-      } else {
-        setOpenIconModal(false);
-      }
-    },
-    [openIconModal]
-  );
-  const onChangePageTitle = useCallback(
-    (event: ContentEditableEvent) => {
-      const value = event.target.value;
-      openTemplates && setTemplateItem(templateHtml, page);
-      editPage(page.id, {
-        ...page,
-        header: {
-          ...page.header,
-          title: value,
-        },
-        editTime: editTime,
-      });
-    },
-    [editPage, editTime, openTemplates, page, templateHtml]
-  );
-
-  const addRandomIcon = useCallback(() => {
-    const icon = randomEmojiIcon();
-    const newPageWithIcon: Page = {
-      ...page,
-      header: {
-        ...page.header,
-        icon: icon,
-        iconType: "emoji",
-      },
-      editTime: editTime,
-    };
-    openTemplates && setTemplateItem(templateHtml, page);
-    editPage(page.id, newPageWithIcon);
-  }, [editPage, editTime, openTemplates, page, templateHtml]);
-
-  const onClickAddCover = useCallback(() => {
-    const editedPage: Page = {
-      ...page,
-      header: {
-        ...page.header,
-        cover: basicPageCover,
-      },
-      editTime: editTime,
-    };
-    editPage(page.id, editedPage);
-  }, [editPage, editTime, page]);
   /**
-   * [moveBlock]
+   * [isMoved]
    */
   const makeMoveBlockTrue = useCallback(() => {
     if (moveTargetBlock) {
-      moveBlock.current = true;
+      isMoved.current = true;
     }
   }, [moveTargetBlock]);
   /**
-   * [moveBlock]  블록의 위치를 변경하고, 변경된 위치에 따라 page의 data도 변경하는 함수
+   * [isMoved]  블록의 위치를 변경하고, 변경된 위치에 따라 page의 data도 변경하는 함수
    */
   const changeBlockPosition = useCallback(() => {
     if (
@@ -633,12 +526,12 @@ const Frame = ({
     templateHtml,
   ]);
   /**
-   * [moveBlock] block의 위치를 변경 시키는 것이 끝났을 때 (mouseUp | touchEnd) , 사용자가 지정한 위치대로 state를 변경하고 블록의 위치 변동을 위해 설정한 모든 것을 원래대로 되돌리는 함수
+   * [isMoved] block의 위치를 변경 시키는 것이 끝났을 때 (mouseUp | touchEnd) , 사용자가 지정한 위치대로 state를 변경하고 블록의 위치 변동을 위해 설정한 모든 것을 원래대로 되돌리는 함수
    */
   const stopMovingBlock = useCallback(() => {
-    if (moveBlock.current) {
+    if (isMoved.current) {
       changeBlockPosition();
-      moveBlock.current = false;
+      isMoved.current = false;
       setMoveTargetBlock(null);
       pointBlockToMoveBlock.current = null;
       const mainBlockOn = document.querySelector(".mainBlock.on");
@@ -648,13 +541,13 @@ const Frame = ({
     }
   }, [changeBlockPosition]);
   /**
-   * [moveBlock] 마우스, 터치의 이동에 따라 moveTargetBlock을 이동시키는 함수
+   * [isMoved] 마우스, 터치의 이동에 따라 moveTargetBlock을 이동시키는 함수
    * @param clientX mouseEvent.clientX | touchEvent.touches[0].clientX
    * @param clientY mouseEvent.clientY | touchEvent.touches[0].clientY
    */
   const move_MoveTargetBlock = useCallback(
     (clientX: number, clientY: number) => {
-      if (moveTargetBlock && moveBlock.current) {
+      if (moveTargetBlock && isMoved.current) {
         const editor = document.querySelector(".editor");
         const moveTargetBlockHtml = document.getElementById("moveTargetBlock");
         if (moveTargetBlockHtml && editor) {
@@ -670,12 +563,12 @@ const Frame = ({
     [moveTargetBlock]
   );
   /**
-   * [moveBlock - mobile] 모바일 브라우저에서, moveTargetBlock의 위치를 변경시키고 moveTargetBlock의 위치에 있는 element인지 여부에 따라 클래스를 변경하고, pointBlockToMoveBlock.current 의 value를 바꾸는 함수
+   * [isMoved - mobile] 모바일 브라우저에서, moveTargetBlock의 위치를 변경시키고 moveTargetBlock의 위치에 있는 element인지 여부에 따라 클래스를 변경하고, pointBlockToMoveBlock.current 의 value를 바꾸는 함수
    * @param event
    */
   const move_MoveTargetBlockInMobile = useCallback(
     (event: TouchEvent<HTMLDivElement>) => {
-      if (moveBlock.current) {
+      if (isMoved.current) {
         const clientX = event.touches[0].clientX;
         const clientY = event.touches[0].clientY;
         frameHtml?.scrollTo(0, clientY);
@@ -698,117 +591,7 @@ const Frame = ({
     },
     [frameHtml, move_MoveTargetBlock, page]
   );
-  /**
-   * .pageContent의 밑부분을 클릭 할때, 해당 페이지에 새로운 블록을 추가하는 함수
-   * @param event
-   */
-  const onClickPageContentBottom = useCallback(
-    (event: MouseEvent) => {
-      const pageContentEl = event.currentTarget;
-      const clientX = event.clientX;
-      const clientY = event.clientY;
 
-      if (pageContentEl) {
-        const pageContentDomRect = pageContentEl.getClientRects()[0];
-        const pageContentPadding = getComputedStyle(
-          pageContentEl,
-          null
-        ).getPropertyValue("padding-bottom");
-        const padding = Number(
-          pageContentPadding.slice(0, pageContentPadding.indexOf("px"))
-        );
-
-        const conditionX =
-          clientX >= pageContentDomRect.x &&
-          clientX <= pageContentDomRect.right;
-
-        const conditionY =
-          clientY >= pageContentDomRect.bottom - padding &&
-          clientY <= pageContentDomRect.bottom;
-        /**
-         * mouseEvent가  pageContent의 아래 부분에서 일어났는지에 대한 객체, event가 아래 부분에서 일어났으면 true, 밖의 영역에서 일어났으면 false
-         */
-        const isInner = conditionX && conditionY;
-        if (isInner) {
-          const randomNumber = Math.floor(Math.random() * (100000 - 1) + 1);
-          const newBlock: Block = {
-            ...blockSample,
-            id: `${page.id}_${JSON.stringify(Date.now)}_${randomNumber}`,
-            firstBlock: true,
-          };
-
-          if (page.firstBlocksId) {
-            page.blocks &&
-              addBlock(page.id, newBlock, page.blocks.length, null);
-          } else {
-            addBlock(page.id, newBlock, 0, null);
-          }
-          setTemplateItem(templateHtml, page);
-        }
-      }
-    },
-    [addBlock, page, templateHtml]
-  );
-  //new Frame
-  /**
-   * 새로 만든 페이지에 firstBlock을 생성하면서 페이지에 내용을 작성할 수 있도록 하는 함수
-   * @returns page
-   */
-  const startNewPage = useCallback((): Page => {
-    const firstBlock = makeNewBlock(page, null, "");
-    const newPage: Page = {
-      ...page,
-      header: {
-        ...page.header,
-      },
-      blocks: [firstBlock],
-      blocksId: [firstBlock.id],
-      firstBlocksId: [firstBlock.id],
-      editTime: editTime,
-    };
-    return newPage;
-  }, [editTime, page]);
-
-  const onClickEmptyWithIconBtn = useCallback(() => {
-    const icon = randomEmojiIcon();
-    const newPage = startNewPage();
-    const newPageWithIcon: Page = {
-      ...newPage,
-      header: {
-        ...page.header,
-        icon: icon,
-        iconType: "emoji",
-      },
-    };
-    setOpenTemplates(false);
-    editPage(page.id, newPageWithIcon);
-  }, [editPage, page.header, page.id, setOpenTemplates, startNewPage]);
-
-  const onClickEmpty = useCallback(() => {
-    const newPage = startNewPage();
-    setOpenTemplates(false);
-    editPage(page.id, newPage);
-  }, [editPage, page.id, setOpenTemplates, startNewPage]);
-
-  const onMouseEnterPC = useCallback((event: MouseEvent) => {
-    const currentTarget = event?.currentTarget;
-    currentTarget.classList.add("on");
-  }, []);
-
-  const onMouseLeavePC = useCallback((event: MouseEvent) => {
-    const currentTarget = event?.currentTarget;
-    currentTarget.classList.remove("on");
-  }, []);
-
-  const onClickChangeCoverBtn = useCallback(() => {
-    setOpenLoaderForCover(true);
-    const pageCover = frameHtml?.querySelector(".page__header__cover");
-    pageCover?.classList.remove("on");
-  }, [frameHtml]);
-  const onClickTemplateBtn = useCallback(() => {
-    setOpenTemplates(true);
-    sessionStorage.setItem("targetPageId", page.id);
-  }, [page.id, setOpenTemplates]);
   // edit block using sessionStorage
   const updateBlock = useCallback(() => {
     const item = sessionStorage.getItem("itemsTobeEdited");
@@ -1114,6 +897,7 @@ const Frame = ({
             : "scroll",
       }}
     >
+      {/* frame__inner ---- */}
       <div
         className="frame__inner"
         id={`page-${page.id}`}
@@ -1125,215 +909,39 @@ const Frame = ({
         onTouchMove={(event) => move_MoveTargetBlockInMobile(event)}
         onTouchEnd={stopMovingBlock}
       >
-        <div className="page">
-          <div
-            className="page__header"
-            style={headerStyle}
-            onMouseMove={onMouseMoveOnPH}
-            onMouseLeave={onMouseLeaveFromPH}
-          >
-            {page.header.cover && (
-              <div
-                className="page__header__cover"
-                onMouseEnter={(event) => onMouseEnterPC(event)}
-                onMouseLeave={(event) => onMouseLeavePC(event)}
-              >
-                <img src={page.header.cover} alt="page cover " />
-                <button
-                  title="button to change page cover"
-                  className="btn-change-cover"
-                  onClick={onClickChangeCoverBtn}
-                >
-                  change cover
-                </button>
-              </div>
-            )}
-            {openLoaderForCover && (
-              <Loader
-                block={null}
-                page={page}
-                editBlock={null}
-                editPage={editPage}
-                frameHtml={frameHtml}
-                setOpenLoader={setOpenLoaderForCover}
-                setLoaderTargetBlock={null}
-              />
-            )}
-            <div className="page__header_notCover">
-              <div
-                className="page__icon-outBox"
-                style={pageTitleStyle}
-                onClick={onClickPageIcon}
-              >
-                <PageIcon
-                  icon={page.header.icon}
-                  iconType={page.header.iconType}
-                  style={pageIconStyle}
-                />
-              </div>
-              <div className="deco">
-                {decoOpen && (
-                  <div>
-                    {page.header.icon === null && (
-                      <button
-                        title="button to  open menu to add page icon"
-                        className="deco__btn-icon"
-                        onClick={addRandomIcon}
-                      >
-                        <BsFillEmojiSmileFill />
-                        <span>Add Icon</span>
-                      </button>
-                    )}
-                    {page.header.cover === null && (
-                      <button
-                        title="button to  open menu to add page cover"
-                        className="deco__btn-cover"
-                        onClick={onClickAddCover}
-                      >
-                        <MdInsertPhoto />
-                        <span>Add Cover</span>
-                      </button>
-                    )}
-                    {page.header.comments === null && (
-                      <button
-                        title="button to  open menu to add comment about page"
-                        className="deco__btn-comment"
-                        onClick={() => setOpenPageCommentInput(true)}
-                      >
-                        <BiMessageDetail />
-                        <span>Add Comment</span>
-                      </button>
-                    )}
-                  </div>
-                )}
-              </div>
-              <div className="page__title" style={pageTitleStyle}>
-                <ContentEditable
-                  html={page.header.title}
-                  onChange={onChangePageTitle}
-                />
-              </div>
-              <div className="page__comments" style={pageCommentStyle}>
-                {page.header.comments ? (
-                  page.header.comments.map((comment: MainCommentType) => (
-                    <Comments
-                      key={`pageComment_${comment.id}`}
-                      block={null}
-                      page={page}
-                      pageId={page.id}
-                      userName={userName}
-                      frameHtml={frameHtml}
-                      discardEdit={discardEdit}
-                      setDiscardEdit={setDiscardEdit}
-                      select={null}
-                      openComment={false}
-                      showAllComments={showAllComments}
-                    />
-                  ))
-                ) : openPageCommentInput ? (
-                  <CommentInput
-                    page={page}
-                    pageId={page.id}
-                    userName={userName}
-                    mainComment={null}
-                    subComment={null}
-                    editBlock={editBlock}
-                    editPage={editPage}
-                    commentBlock={null}
-                    allComments={page.header.comments}
-                    setAllComments={null}
-                    setModal={null}
-                    addOrEdit={"add"}
-                    setEdit={setOpenPageCommentInput}
-                    templateHtml={templateHtml}
-                    frameHtml={frameHtml}
-                  />
-                ) : (
-                  newPageFrame && (
-                    <div>
-                      Press Enter to continue with an empty page or pick a
-                      template
-                    </div>
-                  )
-                )}
-              </div>
-            </div>
-          </div>
-          {openIconModal && (
-            <IconModal
-              currentPageId={page.id}
-              block={null}
-              page={page}
-              style={iconStyle}
-              setOpenIconModal={setOpenIconModal}
-            />
-          )}
-          <div className="page__contents" onClick={onClickPageContentBottom}>
-            {!newPageFrame ? (
-              <div
-                className="page__contents__inner"
-                onMouseMove={makeMoveBlockTrue}
-                onTouchMove={makeMoveBlockTrue}
-              >
-                {firstBlocks &&
-                  firstBlocks.map((block: Block) => {
-                    return (
-                      <EditableBlock
-                        key={block.id}
-                        pages={pages}
-                        pagesId={pagesId}
-                        page={page}
-                        block={block}
-                        fontSize={fontSize}
-                        moveBlock={moveBlock}
-                        setMoveTargetBlock={setMoveTargetBlock}
-                        pointBlockToMoveBlock={pointBlockToMoveBlock}
-                        command={command}
-                        setCommand={setCommand}
-                        openComment={openComment}
-                        setOpenComment={setOpenComment}
-                        setCommentBlock={setCommentBlock}
-                        setOpenLoader={setOpenLoader}
-                        setLoaderTargetBlock={setLoaderTargetBlock}
-                        closeMenu={closeMenu}
-                        templateHtml={templateHtml}
-                        setSelection={setSelection}
-                        setMobileMenuTargetBlock={setMobileMenuTargetBlock}
-                        mobileMenuTargetBlock={mobileMenuTargetBlock}
-                      />
-                    );
-                  })}
-              </div>
-            ) : (
-              <div className="page__contents__inner">
-                <button
-                  title="button to start empty page with icon"
-                  onClick={onClickEmptyWithIconBtn}
-                >
-                  <GrDocumentText />
-                  <span>Empty with icon</span>
-                </button>
-                <button
-                  title="button to start empty page "
-                  onClick={onClickEmpty}
-                >
-                  <GrDocument />
-                  <span>Empty</span>
-                </button>
-                {page.type !== "template" && (
-                  <button
-                    title="button to start  page with template"
-                    onClick={onClickTemplateBtn}
-                  >
-                    <HiTemplate />
-                    <span>Templates</span>
-                  </button>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
+        <PageComponent
+          userName={userName}
+          pages={pages}
+          pagesId={pagesId}
+          firstBlocks={firstBlocks}
+          page={page}
+          frameHtml={frameHtml}
+          fontSize={fontSize}
+          openTemplates={openTemplates}
+          templateHtml={templateHtml}
+          discardEdit={discardEdit}
+          setDiscardEdit={setDiscardEdit}
+          showAllComments={showAllComments}
+          newPageFrame={newPageFrame}
+          pointBlockToMoveBlock={pointBlockToMoveBlock}
+          makeMoveBlockTrue={makeMoveBlockTrue}
+          isMoved={isMoved}
+          setMoveTargetBlock={setMobileMenuTargetBlock}
+          command={command}
+          setCommand={setCommand}
+          openComment={openComment}
+          setOpenComment={setOpenComment}
+          setCommentBlock={setCommentBlock}
+          setOpenLoader={setOpenLoader}
+          setLoaderTargetBlock={setLoaderTargetBlock}
+          closeMenu={closeMenu}
+          setSelection={setSelection}
+          setMobileMenuTargetBlock={setMobileMenuTargetBlock}
+          mobileMenuTargetBlock={mobileMenuTargetBlock}
+          setOpenTemplates={setOpenTemplates}
+        />
       </div>
+      {/* --- frame__inner */}
       {command.open && command.targetBlock && (
         <div id="block__commandBlock" style={commandBlockPosition}>
           <CommandBlock
@@ -1432,7 +1040,7 @@ const Frame = ({
           page={page}
           block={moveTargetBlock}
           fontSize={fontSize}
-          moveBlock={moveBlock}
+          isMoved={isMoved}
           setMoveTargetBlock={setMoveTargetBlock}
           pointBlockToMoveBlock={pointBlockToMoveBlock}
           command={command}
