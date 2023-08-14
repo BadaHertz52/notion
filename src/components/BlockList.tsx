@@ -114,28 +114,6 @@ const BlockList = (props: BlockListProps) => {
       setHeight(newHeight);
     }
   }, []);
-  // const changeOverFlow = useCallback(() => {
-  //   const targetEl = blockListRef.current?.querySelector(
-  //     ".ReactVirtualized__Grid.ReactVirtualized__List"
-  //   ) as HTMLElement | null;
-  //   if (targetEl?.style) {
-  //     targetEl.style.overflow = "hidden";
-  //   }
-  // }, [blockListRef]);
-
-  const handleScroll = useCallback(() => {
-    changeHeight();
-    //changeOverFlow();
-  }, [changeHeight]);
-  // useEffect(() => {
-  //   changeHeight();
-  //   window.addEventListener("resize", changeHeight);
-  //   props.frameRef.current?.addEventListener("scroll", handleScroll);
-  //   return () => {
-  //     window.removeEventListener("resize", changeHeight);
-  //     props.frameRef.current?.removeEventListener("scroll", handleScroll);
-  //   };
-  // }, [changeHeight, props.frameRef, blockListRef, handleScroll]);
   return (
     <div ref={blockListRef}>
       <AutoSizer disableHeight={false} style={{ height: height }}>
