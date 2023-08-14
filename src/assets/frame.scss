@@ -159,25 +159,15 @@
     word-break: break-all;
   }
 }
-.page__contents {
-  height: fit-content;
-  padding-bottom: 50px;
-}
-.frame.mobile {
-  .page__contents {
-    padding-bottom: 100px;
-  }
-}
-.page__contents__inner {
+.page__firstBlock {
   position: relative;
-  width: 100%;
 }
 .newPageFrame {
   color: $mud;
   span {
     color: $mud;
   }
-  .page__contents__inner {
+  .page__firstBlock {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -205,6 +195,9 @@
 }
 
 @media screen and (max-width: 767px) {
+  .frame {
+    @include hiddenScrollBar;
+  }
   .page__header {
     margin-bottom: 5px;
   }
@@ -212,7 +205,7 @@
     height: 100px;
   }
   .page__header_notCover,
-  .page__contents {
+  .page__firstBlock {
     padding-left: 1rem;
   }
   .page__header .page__title,
