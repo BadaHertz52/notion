@@ -8,13 +8,10 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useState,
 } from "react";
 import PageHeader, { PageHeaderProps } from "./PageHeader";
-import PageContent, { PageContentProps } from "./PageContent";
 import { Block, Page } from "../modules/notion/type";
-import BlockList from "./BlockList";
-import EditableBlock, { EditableBlockProps } from "./EditableBlock";
+import EditableBlock from "./EditableBlock";
 import {
   AutoSizer,
   CellMeasurer,
