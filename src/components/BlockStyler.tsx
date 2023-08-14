@@ -141,30 +141,23 @@ const BlockStyler = ({
   );
   const changeStylerStyle = useCallback(
     (
-      frameHtml: HTMLDivElement | null,
       block: Block,
       setStyle: Dispatch<SetStateAction<CSSProperties | undefined>>
     ) => {
       const mainBlockDomRect = getMainBlockDomRect(frameHtml, block);
-      const pageContentInner = frameHtml?.querySelector(
-        ".page__contents__inner"
-      );
-      const pageContentDomRect = pageContentInner?.getClientRects()[0];
-      if (frameHtml && mainBlockDomRect && pageContentDomRect) {
-        const frameDomRect = frameHtml.getClientRects()[0];
-        const top = mainBlockDomRect.top - frameDomRect.top;
-        const left = mainBlockDomRect.left - frameDomRect.left;
+      const pageHeaderEl = frameHtml?.querySelector(".page__header");
+      if (mainBlockDomRect && pageHeaderEl) {
+        const top = mainBlockDomRect.top + pageHeaderEl.clientHeight - 30;
+        const left = mainBlockDomRect.left - pageHeaderEl.clientLeft;
         setStyle({
           top: `${top}px`,
           left: `${left}px`,
           width:
-            window.innerWidth < 768
-              ? `${pageContentDomRect.width}px`
-              : "fit-content",
+            window.innerWidth < 768 ? pageHeaderEl.clientWidth : "fit-content",
         });
       }
     },
-    [getMainBlockDomRect]
+    [getMainBlockDomRect, frameHtml]
   );
 
   const closeOtherBtn = useCallback(
@@ -314,14 +307,13 @@ const BlockStyler = ({
   }, [changeMenuStyle, openMenu]);
   const handleResize = useCallback(() => {
     if (isMobile()) {
-      changeStylerStyle(frameHtml, block, setBlockStylerStyle);
+      changeStylerStyle(block, setBlockStylerStyle);
       openMenu && changeMenuStyle(menu);
       openColor && changeMenuStyle(color);
     }
   }, [
     changeMenuStyle,
     openMenu,
-    frameHtml,
     block,
     setBlockStylerStyle,
     openColor,
@@ -567,7 +559,7 @@ const BlockStyler = ({
 
   useEffect(() => {
     if (!isMobile()) {
-      changeStylerStyle(frameHtml, block, setBlockStylerStyle);
+      changeStylerStyle(block, setBlockStylerStyle);
       if (selection?.change) {
         openColor && setOpenColor(false);
         openLink && setOpenLink(false);
