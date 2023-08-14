@@ -14,8 +14,14 @@ type ImageContentProps = {
   page: Page;
   block: Block;
   editBlock: (pageId: string, block: Block) => void;
+  measure?: () => void;
 };
-const ImageContent = ({ page, block, editBlock }: ImageContentProps) => {
+const ImageContent = ({
+  page,
+  block,
+  editBlock,
+  measure,
+}: ImageContentProps) => {
   const previousClientX = useRef(0);
   const previousClientY = useRef(0);
   const drag = useRef<boolean>(false);
@@ -159,7 +165,7 @@ const ImageContent = ({ page, block, editBlock }: ImageContentProps) => {
         <ScreenOnly text="bottom button to resize image" />
         <span></span>
       </button>
-      <img src={block.contents} alt="block_photo" />
+      <img src={block.contents} alt="block_photo" onLoad={measure} />
     </div>
   );
 };

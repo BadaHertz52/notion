@@ -43,6 +43,7 @@ const ListSub = ({
   showBlockComment,
   markPointBlock,
   cancelPointBlock,
+  measure,
 }: ListSubProps) => {
   const blockContentsRef = useRef<HTMLDivElement>(null);
   const getListMarker = (subBlock: Block) => {
@@ -127,6 +128,7 @@ const ListSub = ({
                     onClickCommentBtn={onClickCommentBtn}
                     isMoved={isMoved}
                     setMoveTargetBlock={setMoveTargetBlock}
+                    measure={measure}
                   />
                 </div>
               </div>
@@ -164,6 +166,7 @@ const ListSub = ({
                       setSelection={setSelection}
                       setMobileMenuTargetBlock={setMobileMenuTargetBlock}
                       mobileMenuTargetBlock={mobileMenuTargetBlock}
+                      measure={measure}
                     />
                   ))}
               </div>

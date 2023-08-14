@@ -43,6 +43,7 @@ export type EditableBlockProps = {
   setSelection: Dispatch<SetStateAction<SelectionType | null>>;
   mobileMenuTargetBlock: Block | null;
   setMobileMenuTargetBlock: Dispatch<SetStateAction<Block | null>>;
+  measure?: () => void;
 };
 export type CommentOpenType = {
   open: boolean;
@@ -94,6 +95,7 @@ const EditableBlock = ({
   setSelection,
   setMobileMenuTargetBlock,
   mobileMenuTargetBlock,
+  measure,
 }: EditableBlockProps) => {
   const { editBlock } = useContext(ActionContext).actions;
   const className =
@@ -228,6 +230,7 @@ const EditableBlock = ({
               showBlockComment={showBlockComment}
               markPointBlock={markPointBlock}
               cancelPointBlock={cancelPointBlock}
+              measure={measure}
             />
           ) : (
             <>
@@ -304,6 +307,7 @@ const EditableBlock = ({
                       onClickCommentBtn={onClickCommentBtn}
                       isMoved={isMoved}
                       setMoveTargetBlock={setMoveTargetBlock}
+                      measure={measure}
                     />
                   </div>
                 </div>
@@ -339,6 +343,7 @@ const EditableBlock = ({
                       setSelection={setSelection}
                       setMobileMenuTargetBlock={setMobileMenuTargetBlock}
                       mobileMenuTargetBlock={mobileMenuTargetBlock}
+                      measure={measure}
                     />
                   ))}
                 </div>

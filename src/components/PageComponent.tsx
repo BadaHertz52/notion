@@ -9,7 +9,7 @@ const PageComponent = (props: PageComponentProps) => {
       <PageHeader
         userName={props.userName}
         page={props.page}
-        frameHtml={props.frameHtml}
+        frameRef={props.frameRef}
         fontSize={props.fontSize}
         openTemplates={props.openTemplates}
         templateHtml={props.templateHtml}
@@ -22,6 +22,7 @@ const PageComponent = (props: PageComponentProps) => {
         pages={props.pages}
         pagesId={props.pagesId}
         page={props.page}
+        frameRef={props.frameRef}
         templateHtml={props.templateHtml}
         newPageFrame={props.newPageFrame}
         firstBlocks={props.firstBlocks}

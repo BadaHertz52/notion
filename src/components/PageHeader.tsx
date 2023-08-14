@@ -1,6 +1,7 @@
 import React, {
   Dispatch,
   MouseEvent,
+  RefObject,
   SetStateAction,
   memo,
   useCallback,
@@ -26,7 +27,7 @@ import CommentInput from "./CommentInput";
 export type PageHeaderProps = {
   userName: string;
   page: Page;
-  frameHtml: HTMLDivElement | null;
+  frameRef: RefObject<HTMLDivElement>;
   fontSize: number;
   openTemplates: boolean;
   templateHtml: HTMLElement | null;
@@ -38,7 +39,7 @@ export type PageHeaderProps = {
 function PageHeader({
   userName,
   page,
-  frameHtml,
+  frameRef,
   fontSize,
   openTemplates,
   templateHtml,
@@ -114,9 +115,9 @@ function PageHeader({
 
   const onClickChangeCoverBtn = useCallback(() => {
     setOpenLoaderForCover(true);
-    const pageCover = frameHtml?.querySelector(".page__header__cover");
+    const pageCover = frameRef.current?.querySelector(".page__header__cover");
     pageCover?.classList.remove("on");
-  }, [frameHtml]);
+  }, [frameRef]);
 
   const onClickPageIcon = useCallback(
     (event: React.MouseEvent) => {
@@ -211,7 +212,7 @@ function PageHeader({
           page={page}
           editBlock={null}
           editPage={editPage}
-          frameHtml={frameHtml}
+          frameHtml={frameRef.current}
           setOpenLoader={setOpenLoaderForCover}
           setLoaderTargetBlock={null}
         />
@@ -288,7 +289,7 @@ function PageHeader({
                 page={page}
                 pageId={page.id}
                 userName={userName}
-                frameHtml={frameHtml}
+                frameHtml={frameRef.current}
                 discardEdit={discardEdit}
                 setDiscardEdit={setDiscardEdit}
                 select={null}
@@ -312,7 +313,7 @@ function PageHeader({
               addOrEdit={"add"}
               setEdit={setOpenPageCommentInput}
               templateHtml={templateHtml}
-              frameHtml={frameHtml}
+              frameHtml={frameRef.current}
             />
           ) : (
             newPageFrame && (

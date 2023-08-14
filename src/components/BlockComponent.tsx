@@ -37,6 +37,7 @@ export type BlockComponentProps = {
   onClickCommentBtn: (block: Block) => void;
   setMoveTargetBlock: Dispatch<SetStateAction<Block | null>>;
   isMoved: React.MutableRefObject<boolean>;
+  measure?: () => void;
 };
 
 export type itemType = {
@@ -61,6 +62,7 @@ const BlockComponent = ({
   onClickCommentBtn,
   setMoveTargetBlock,
   isMoved,
+  measure,
 }: BlockComponentProps) => {
   const { editBlock } = useContext(ActionContext).actions;
   const navigate = useNavigate();
@@ -220,7 +222,12 @@ const BlockComponent = ({
           </button>
         ) : (
           <>
-            <ImageContent page={page} block={block} editBlock={editBlock} />
+            <ImageContent
+              page={page}
+              block={block}
+              editBlock={editBlock}
+              measure={measure}
+            />
           </>
         )
       ) : (

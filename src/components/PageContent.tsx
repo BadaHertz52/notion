@@ -1,71 +1,29 @@
 import React, {
   Dispatch,
   MouseEvent,
-  MutableRefObject,
   SetStateAction,
   useCallback,
   useContext,
+  useRef,
 } from "react";
 import { Block, Page } from "../modules/notion/type";
 import { blockSample } from "../modules/notion/reducer";
-import { ActionContext, SelectionType } from "../route/NotionRouter";
+import { ActionContext } from "../route/NotionRouter";
 import { setTemplateItem } from "../fn";
-import EditableBlock from "./EditableBlock";
-import { Command } from "./Frame";
 import EmptyPageContent from "./EmptyPageContent";
+import BlockList, { PageContent_BlockList_Props } from "./BlockList";
 
-export type PageContentProps = {
-  pages: Page[];
-  pagesId: string[];
+export type PageContentProps = PageContent_BlockList_Props & {
   page: Page;
-  templateHtml: HTMLElement | null;
   newPageFrame: boolean;
   firstBlocks: Block[] | null;
-  fontSize: number;
-  isMoved: MutableRefObject<boolean>;
-  pointBlockToMoveBlock: MutableRefObject<Block | null>;
-  setMoveTargetBlock: Dispatch<SetStateAction<Block | null>>;
   makeMoveBlockTrue: () => void;
-  command: Command;
-  setCommand: Dispatch<SetStateAction<Command>>;
-  openComment: boolean;
-  setOpenComment: Dispatch<SetStateAction<boolean>>;
-  setCommentBlock: Dispatch<SetStateAction<Block | null>>;
-  setOpenLoader: Dispatch<SetStateAction<boolean>>;
-  setLoaderTargetBlock: Dispatch<SetStateAction<Block | null>>;
-  closeMenu: (event: globalThis.MouseEvent | MouseEvent) => void;
-  setSelection: Dispatch<SetStateAction<SelectionType | null>>;
-  setMobileMenuTargetBlock: Dispatch<SetStateAction<Block | null>>;
-  mobileMenuTargetBlock: Block | null;
   setOpenTemplates: Dispatch<SetStateAction<boolean>>;
 };
-const PageContent = ({
-  pages,
-  pagesId,
-  page,
-  templateHtml,
-  newPageFrame,
-  firstBlocks,
-  fontSize,
-  isMoved,
-  pointBlockToMoveBlock,
-  makeMoveBlockTrue,
-  setMoveTargetBlock,
-  command,
-  setCommand,
-  openComment,
-  setOpenComment,
-  setCommentBlock,
-  setOpenLoader,
-  setLoaderTargetBlock,
-  closeMenu,
-  setSelection,
-  setMobileMenuTargetBlock,
-  mobileMenuTargetBlock,
-  setOpenTemplates,
-}: PageContentProps) => {
+const PageContent = (props: PageContentProps) => {
   const { addBlock } = useContext(ActionContext).actions;
-
+  const { page, templateHtml } = props;
+  const contentInnerRef = useRef<HTMLDivElement>(null);
   /**
    * .pageContent의 밑부분을 클릭 할때, 해당 페이지에 새로운 블록을 추가하는 함수
    * @param event
@@ -122,39 +80,41 @@ const PageContent = ({
     <div className="page__contents" onClick={onClickPageContentBottom}>
       <div
         className="page__contents__inner"
-        onMouseMove={makeMoveBlockTrue}
-        onTouchMove={makeMoveBlockTrue}
+        onMouseMove={props.makeMoveBlockTrue}
+        onTouchMove={props.makeMoveBlockTrue}
+        ref={contentInnerRef}
       >
-        {!newPageFrame ? (
-          firstBlocks?.map((block: Block) => {
-            return (
-              <EditableBlock
-                key={block.id}
-                pages={pages}
-                pagesId={pagesId}
-                page={page}
-                block={block}
-                fontSize={fontSize}
-                isMoved={isMoved}
-                setMoveTargetBlock={setMoveTargetBlock}
-                pointBlockToMoveBlock={pointBlockToMoveBlock}
-                command={command}
-                setCommand={setCommand}
-                openComment={openComment}
-                setOpenComment={setOpenComment}
-                setCommentBlock={setCommentBlock}
-                setOpenLoader={setOpenLoader}
-                setLoaderTargetBlock={setLoaderTargetBlock}
-                closeMenu={closeMenu}
-                templateHtml={templateHtml}
-                setSelection={setSelection}
-                setMobileMenuTargetBlock={setMobileMenuTargetBlock}
-                mobileMenuTargetBlock={mobileMenuTargetBlock}
-              />
-            );
-          })
+        {!props.newPageFrame ? (
+          props.firstBlocks && (
+            <BlockList
+              pages={props.pages}
+              pagesId={props.pagesId}
+              page={props.page}
+              firstBlocks={props.firstBlocks}
+              frameRef={props.frameRef}
+              fontSize={props.fontSize}
+              isMoved={props.isMoved}
+              setMoveTargetBlock={props.setMoveTargetBlock}
+              pointBlockToMoveBlock={props.pointBlockToMoveBlock}
+              command={props.command}
+              setCommand={props.setCommand}
+              openComment={props.openComment}
+              setOpenComment={props.setOpenComment}
+              setCommentBlock={props.setCommentBlock}
+              setOpenLoader={props.setOpenLoader}
+              setLoaderTargetBlock={props.setLoaderTargetBlock}
+              closeMenu={props.closeMenu}
+              templateHtml={props.templateHtml}
+              setSelection={props.setSelection}
+              setMobileMenuTargetBlock={props.setMobileMenuTargetBlock}
+              mobileMenuTargetBlock={props.mobileMenuTargetBlock}
+            />
+          )
         ) : (
-          <EmptyPageContent page={page} setOpenTemplates={setOpenTemplates} />
+          <EmptyPageContent
+            page={props.page}
+            setOpenTemplates={props.setOpenTemplates}
+          />
         )}
       </div>
     </div>

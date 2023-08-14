@@ -25,6 +25,7 @@ const MoveTargetBlock = ({
   setSelection,
   setMobileMenuTargetBlock,
   mobileMenuTargetBlock,
+  measure,
 }: EditableBlockProps) => {
   return (
     <div id="moveTargetBlock">
@@ -77,6 +78,7 @@ const MoveTargetBlock = ({
           setSelection={setSelection}
           setMobileMenuTargetBlock={setMobileMenuTargetBlock}
           mobileMenuTargetBlock={mobileMenuTargetBlock}
+          measure={measure}
         />
       )}
     </div>
