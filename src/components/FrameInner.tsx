@@ -54,9 +54,6 @@ type FrameInnerProps = PageHeaderProps & {
   setSelection: Dispatch<SetStateAction<SelectionType | null>>;
   setMobileMenuTargetBlock: Dispatch<SetStateAction<Block | null>>;
   mobileMenuTargetBlock: Block | null;
-  move_MoveTargetBlock: (clientX: number, clientY: number) => void;
-  stopMovingBlock: () => void;
-  move_MoveTargetBlockInMobile: (event: TouchEvent<HTMLDivElement>) => void;
   frameInnerStyle: CSSProperties;
 };
 const FrameInner = (props: FrameInnerProps) => {
@@ -194,12 +191,8 @@ const FrameInner = (props: FrameInnerProps) => {
     <div
       className="frame__inner"
       id={`page-${page.id}`}
-      onMouseMove={(event) =>
-        props.move_MoveTargetBlock(event.clientX, event.clientY)
-      }
-      onMouseUp={props.stopMovingBlock}
-      onTouchMove={(event) => props.move_MoveTargetBlockInMobile(event)}
-      onTouchEnd={props.stopMovingBlock}
+      onMouseMove={props.makeMoveBlockTrue}
+      onTouchMove={props.makeMoveBlockTrue}
     >
       <AutoSizer>
         {({ width }) => (

@@ -895,6 +895,12 @@ const Frame = ({
       //       ? "hidden"
       //       : "scroll",
       // }}
+      onMouseMove={(event) =>
+        move_MoveTargetBlock(event.clientX, event.clientY)
+      }
+      onMouseUp={stopMovingBlock}
+      onTouchMove={(event) => move_MoveTargetBlockInMobile(event)}
+      onTouchEnd={stopMovingBlock}
     >
       <FrameInner
         userName={userName}
@@ -927,9 +933,6 @@ const Frame = ({
         mobileMenuTargetBlock={mobileMenuTargetBlock}
         setOpenTemplates={setOpenTemplates}
         frameInnerStyle={frameInnerStyle}
-        move_MoveTargetBlock={move_MoveTargetBlock}
-        move_MoveTargetBlockInMobile={move_MoveTargetBlockInMobile}
-        stopMovingBlock={stopMovingBlock}
       />
       {command.open && command.targetBlock && (
         <div id="block__commandBlock" style={commandBlockPosition}>
