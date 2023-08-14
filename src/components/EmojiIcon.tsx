@@ -3,8 +3,9 @@ import { Emoji, getEmojiUrl } from "../modules/notion/emojiData";
 type EmojiIconProps = {
   otherClassName?: string;
   icon: Emoji;
+  handleImgLoad?: () => void;
 };
-const EmojiIcon = ({ otherClassName, icon }: EmojiIconProps) => {
+const EmojiIcon = ({ otherClassName, icon, handleImgLoad }: EmojiIconProps) => {
   const [url, setUrl] = useState<string>();
   const className: string = `${otherClassName ? otherClassName : ""} emojiIcon`;
   useEffect(() => {
@@ -16,6 +17,7 @@ const EmojiIcon = ({ otherClassName, icon }: EmojiIconProps) => {
       src={url}
       alt={`${icon} emoji`}
       style={{ maxWidth: "124px", maxHeight: "124px" }}
+      onLoad={handleImgLoad}
     />
   );
 };
