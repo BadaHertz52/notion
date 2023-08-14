@@ -201,27 +201,19 @@ const FrameInner = (props: FrameInnerProps) => {
       onTouchMove={(event) => props.move_MoveTargetBlockInMobile(event)}
       onTouchEnd={props.stopMovingBlock}
     >
-      <WindowScroller
-        scrollElement={
-          frameRef.current ? (frameRef.current as HTMLElement) : undefined
-        }
-      >
-        {({ height }) => (
-          <AutoSizer>
-            {({ width }) => (
-              <List
-                height={height}
-                width={width}
-                overscanRowCount={0}
-                rowCount={list.length}
-                rowHeight={cache.rowHeight}
-                rowRenderer={rowRenderer}
-                deferredMeasurementCache={cache}
-              />
-            )}
-          </AutoSizer>
+      <AutoSizer>
+        {({ width }) => (
+          <List
+            height={window.innerHeight}
+            width={width}
+            overscanRowCount={0}
+            rowCount={list.length}
+            rowHeight={cache.rowHeight}
+            rowRenderer={rowRenderer}
+            deferredMeasurementCache={cache}
+          />
         )}
-      </WindowScroller>
+      </AutoSizer>
 
       {props.newPageFrame && (
         <EmptyPageContent
