@@ -141,23 +141,30 @@ const BlockStyler = ({
   );
   const changeStylerStyle = useCallback(
     (
+      frameHtml: HTMLDivElement | null,
       block: Block,
       setStyle: Dispatch<SetStateAction<CSSProperties | undefined>>
     ) => {
       const mainBlockDomRect = getMainBlockDomRect(frameHtml, block);
-      const pageHeaderEl = frameHtml?.querySelector(".page__header");
-      if (mainBlockDomRect && pageHeaderEl) {
-        const top = mainBlockDomRect.top + pageHeaderEl.clientHeight - 30;
-        const left = mainBlockDomRect.left - pageHeaderEl.clientLeft;
+      const pageContentInner = frameHtml?.querySelector(
+        ".page__contents__inner"
+      );
+      const pageContentDomRect = pageContentInner?.getClientRects()[0];
+      if (frameHtml && mainBlockDomRect && pageContentDomRect) {
+        const frameDomRect = frameHtml.getClientRects()[0];
+        const top = mainBlockDomRect.top - frameDomRect.top;
+        const left = mainBlockDomRect.left - frameDomRect.left;
         setStyle({
           top: `${top}px`,
           left: `${left}px`,
           width:
-            window.innerWidth < 768 ? pageHeaderEl.clientWidth : "fit-content",
+            window.innerWidth < 768
+              ? `${pageContentDomRect.width}px`
+              : "fit-content",
         });
       }
     },
-    [getMainBlockDomRect, frameHtml]
+    [getMainBlockDomRect]
   );
 
   const closeOtherBtn = useCallback(
@@ -307,13 +314,14 @@ const BlockStyler = ({
   }, [changeMenuStyle, openMenu]);
   const handleResize = useCallback(() => {
     if (isMobile()) {
-      changeStylerStyle(block, setBlockStylerStyle);
+      changeStylerStyle(frameHtml, block, setBlockStylerStyle);
       openMenu && changeMenuStyle(menu);
       openColor && changeMenuStyle(color);
     }
   }, [
     changeMenuStyle,
     openMenu,
+    frameHtml,
     block,
     setBlockStylerStyle,
     openColor,
@@ -544,7 +552,7 @@ const BlockStyler = ({
     },
     [setMobileSideMenu, block]
   );
-  document.onselectionchange = () => {
+  const handleSelectionChange = useCallback(() => {
     if (isMobile()) {
       const SELECTION = document.getSelection();
       const notSelect =
@@ -555,11 +563,15 @@ const BlockStyler = ({
         setMobileMenuTargetBlock(null);
       }
     }
-  };
-
+  }, [setMobileMenuTargetBlock, setOpenMobileBlockStyler]);
+  useEffect(() => {
+    document.addEventListener("selectionchange", handleSelectionChange);
+    return () =>
+      document.removeEventListener("selectionchange", handleSelectionChange);
+  }, [handleSelectionChange]);
   useEffect(() => {
     if (!isMobile()) {
-      changeStylerStyle(block, setBlockStylerStyle);
+      changeStylerStyle(frameHtml, block, setBlockStylerStyle);
       if (selection?.change) {
         openColor && setOpenColor(false);
         openLink && setOpenLink(false);
