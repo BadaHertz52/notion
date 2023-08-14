@@ -260,10 +260,6 @@ const MobileBlockMenu = ({
         changeMBMstyle(block);
       }
     }
-    if (openMobileBlockStyler) {
-      //setOpenMobileBlockStyler(false);
-      removeSelected(frameHtml, mobileMenuTargetBlock, editBlock, page, null);
-    }
   }, [
     mobileMenuTargetBlock,
     changeMBMstyle,
