@@ -442,7 +442,7 @@ const BlockContentEditable = ({
    * 모바일 브라우저에서 특정 이벤트가 발생 했을 때 mobileBlockMenu 를 열어 주는 함수
    */
   const openMobileBlockMenu = useCallback(() => {
-    if (block.comments === null) {
+    if (!block.comments) {
       setMobileMenuTargetBlock(block);
       setSelection(null);
     }
