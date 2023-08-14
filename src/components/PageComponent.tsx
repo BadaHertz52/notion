@@ -62,7 +62,9 @@ type PageComponentProps = PageHeaderProps & {
 const PageComponent = (props: PageComponentProps) => {
   const sideAppear = useSelector((state: RootState) => state.side);
   const editorEl = props.frameRef.current?.closest(".editor");
+
   const { page, firstBlocks, frameRef, templateHtml } = props;
+
   const { addBlock } = useContext(ActionContext).actions;
   const topBarEl = document.querySelector(".topBar");
   const topeBarHeight = topBarEl ? topBarEl.clientHeight : 45;
@@ -82,6 +84,32 @@ const PageComponent = (props: PageComponentProps) => {
     defaultWidth: frameRef.current?.clientWidth,
     fixedWidth: true,
   });
+  const changeScrollStyle = useCallback((el: HTMLElement) => {
+    const style: CSSProperties = {
+      width: "inherit",
+      height: "auto",
+      maxWidth: "auto",
+      maxHeight: "auto",
+      position: "relative",
+    };
+    el?.setAttribute("style", JSON.stringify(style));
+  }, []);
+  useEffect(() => {
+    const scrollContainerEl = frameRef.current?.querySelector(
+      ".ReactVirtualized__Grid__innerScrollContainer"
+    );
+    if (!scrollContainerEl) {
+      const time = setInterval(() => {
+        const el = frameRef.current?.querySelector(
+          ".ReactVirtualized__Grid__innerScrollContainer"
+        ) as HTMLElement | undefined | null;
+        if (el) {
+          changeScrollStyle(el);
+          clearInterval(time);
+        }
+      }, 500);
+    }
+  }, [changeScrollStyle, frameRef]);
   const Row = ({ index, measure }: RowProps) => {
     const item: Page | Block =
       index === 0 ? (list[index] as Page) : (list[index] as Block);
@@ -164,12 +192,15 @@ const PageComponent = (props: PageComponentProps) => {
       onMouseMove={props.makeMoveBlockTrue}
       onTouchMove={props.makeMoveBlockTrue}
     >
-      <WindowScroller>
+      <WindowScroller
+        scrollElement={
+          frameRef.current ? (frameRef.current as HTMLElement) : undefined
+        }
+      >
         {({ height }) => (
           <AutoSizer>
             {({ width }) => (
               <List
-                autoHeight
                 height={height}
                 width={width}
                 overscanRowCount={0}
