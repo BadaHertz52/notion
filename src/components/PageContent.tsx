@@ -2,6 +2,7 @@ import React, {
   Dispatch,
   MouseEvent,
   SetStateAction,
+  memo,
   useCallback,
   useContext,
   useRef,
@@ -121,4 +122,4 @@ const PageContent = (props: PageContentProps) => {
   );
 };
 
-export default PageContent;
+export default memo(PageContent);

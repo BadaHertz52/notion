@@ -7,6 +7,7 @@ import React, {
   useEffect,
   useState,
   RefObject,
+  memo,
 } from "react";
 import { Block, Page } from "../modules/notion/type";
 import { Command } from "./Frame";
@@ -146,3 +147,4 @@ const BlockList = (props: BlockListProps) => {
 };
 
 export default BlockList;
+export default memo(BlockList);
