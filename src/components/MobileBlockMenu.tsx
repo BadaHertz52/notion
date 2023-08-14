@@ -50,24 +50,20 @@ const MobileBlockMenu = ({
   const closeMM = useCallback(() => {
     setMobileMenuTargetBlock(null);
   }, [setMobileMenuTargetBlock]);
-
   // mobileBlockMenu 창이 열려있을 때, mobileBlockMenu 나 contentEditable 이외의 영역을 클릭 시, mobileBlockMenu 창을 닫는  동작 (+ Selection 이 있는 경우, 이를 해제 )
   const closeMobileBlockMenu = useCallback(
-    (event: MouseEvent) => {
+    (event: TouchEvent) => {
       const target = event.target as HTMLElement | null;
       const mobileBlockMenuElement = target?.closest("#mobileBlockMenu");
-      const contentEditableElement = target?.closest(".contentEditable");
-      const conditionForClosing_notMobileBlock =
-        mobileBlockMenuElement === null || mobileBlockMenuElement === undefined;
-
+      const blockEl = target?.closest(`#block-${targetBlock.id}`);
+      const conditionForClosing_notMobileBlock = !mobileBlockMenuElement;
       const conditionForClosing_notContentEditable =
-        (contentEditableElement === null ||
-          contentEditableElement === undefined) &&
-        target?.className !== "contentEditable";
+        !blockEl && target?.className !== "contentEditable";
       if (
         conditionForClosing_notMobileBlock &&
         conditionForClosing_notContentEditable
       ) {
+        console.log("1");
         closeMM();
       }
     },
@@ -78,26 +74,23 @@ const MobileBlockMenu = ({
     (block: Block) => {
       const innerHeight = window.innerHeight;
       /**
-       *Select event로 인해 가상키보드가 나타날 때 줄어든 window.innerHeight 의 값이자
+       *Select event로 인해 가상키보드가 나타날 때 줄어든 window.innerHeight 의 값
        */
       const heightGap = initialInnerHeight - innerHeight;
       const blockElement = document.getElementById(`${block.id}__contents`);
       const blockElementDomRect = blockElement?.getClientRects()[0];
-      const pageContentInner = frameHtml?.querySelector(
-        ".page__contents__inner"
-      );
-      const pageContentInnerDomRect = pageContentInner?.getClientRects()[0];
+      const pageHeaderEl = frameHtml?.querySelector(".page__header_notCover");
+      const pageHeaderElDomRect = pageHeaderEl?.getBoundingClientRect();
       const frameDomRect = frameHtml?.getClientRects()[0];
-
       if (
         frameHtml &&
         frameDomRect &&
-        pageContentInnerDomRect &&
+        pageHeaderElDomRect &&
         blockElement &&
         blockElementDomRect
       ) {
-        const top = blockElementDomRect.bottom + 16;
-        const left = pageContentInnerDomRect.left - frameDomRect.left;
+        const top = blockElementDomRect.top + pageHeaderElDomRect.y;
+        const left = pageHeaderElDomRect.left;
         let newTop = top;
         /**
          * 가상 키보드롤 인해 가려지는 부분의 y축 시작점 (기준: window)
@@ -111,7 +104,7 @@ const MobileBlockMenu = ({
         setMBMstyle({
           top: `${newTop}px`,
           left: `${left}px`,
-          width: `${pageContentInnerDomRect.width}px`,
+          width: `${pageHeaderElDomRect.width}px`,
         });
       }
     },
@@ -169,7 +162,6 @@ const MobileBlockMenu = ({
         `translateY(${pageHtml.clientTop - frameHtml.clientTop - 50}px)`
       );
     }
-
     closeMM();
   }, [
     closeMM,
@@ -181,58 +173,78 @@ const MobileBlockMenu = ({
     targetBlock,
   ]);
 
-  const detectSelectionInMobile = (SELECTION: Selection) => {
-    const anchorNode = SELECTION.anchorNode;
-    let contentEditableElement: HTMLElement | null | undefined = null;
-    switch (anchorNode?.nodeType) {
-      case 3:
-        //text node
-        const parentElement = anchorNode.parentElement;
-        contentEditableElement = parentElement?.closest(".contentEditable");
+  const detectSelectionInMobile = useCallback(
+    (SELECTION: Selection) => {
+      const anchorNode = SELECTION.anchorNode;
+      let contentEditableElement: HTMLElement | null | undefined = null;
+      switch (anchorNode?.nodeType) {
+        case 3:
+          //text node
+          const parentElement = anchorNode.parentElement;
+          contentEditableElement = parentElement?.closest(".contentEditable");
 
-        break;
-      case 1:
-        //element node
-        contentEditableElement = anchorNode as HTMLElement;
-        break;
-      default:
-        break;
-    }
-    if (contentEditableElement) {
-      const blockContentElement = contentEditableElement?.closest(".contents");
-      if (blockContentElement) {
-        const id = blockContentElement.id;
-        const index = id.indexOf("__contents");
-        const blockId = id.slice(0, index);
-        const newTargetBlock = findBlock(page, blockId).BLOCK;
-        setTargetBlock(newTargetBlock);
-        changeMBMstyle(newTargetBlock);
+          break;
+        case 1:
+          //element node
+          contentEditableElement = anchorNode as HTMLElement;
+          break;
+        default:
+          break;
       }
-    }
-  };
-  document.onselectionchange = (event) => {
-    const SELECTION = document.getSelection();
-    const notSelect =
-      SELECTION?.anchorNode === SELECTION?.focusNode &&
-      SELECTION?.anchorOffset === SELECTION?.focusOffset;
-    if (SELECTION === null) {
-      closeMM();
-    }
-    if (notSelect && SELECTION) {
-      detectSelectionInMobile(SELECTION);
-    }
-    if (SELECTION && !notSelect && !openMobileBlockStyler) {
-      setOpenMobileBlockStyler(true);
-    }
-  };
+      if (contentEditableElement) {
+        const blockContentElement =
+          contentEditableElement?.closest(".contents");
+        if (blockContentElement) {
+          const id = blockContentElement.id;
+          const index = id.indexOf("__contents");
+          const blockId = id.slice(0, index);
+          const newTargetBlock = findBlock(page, blockId).BLOCK;
+          setTargetBlock(newTargetBlock);
+          changeMBMstyle(newTargetBlock);
+        }
+      }
+    },
+    [changeMBMstyle, page]
+  );
+  const handleSelectionChange = useCallback(
+    (event) => {
+      const SELECTION = document.getSelection();
+      const notSelect =
+        SELECTION?.anchorNode === SELECTION?.focusNode &&
+        SELECTION?.anchorOffset === SELECTION?.focusOffset;
+      if (SELECTION === null) {
+        closeMM();
+      }
+      if (SELECTION) {
+        if (notSelect) {
+          detectSelectionInMobile(SELECTION);
+        } else if (!openMobileBlockStyler) {
+          setOpenMobileBlockStyler(true);
+        }
+      }
+    },
+    [
+      closeMM,
+      detectSelectionInMobile,
+      setOpenMobileBlockStyler,
+      openMobileBlockStyler,
+    ]
+  );
+
   useEffect(() => {
-    inner?.addEventListener("click", (event) => closeMobileBlockMenu(event));
+    frameHtml?.classList.add("stop");
+    document.addEventListener("selectionchange", handleSelectionChange);
+    inner?.addEventListener("touchstart", (event) =>
+      closeMobileBlockMenu(event)
+    );
     return () => {
-      inner?.removeEventListener("click", (event) =>
+      inner?.removeEventListener("touchstart", (event) =>
         closeMobileBlockMenu(event)
       );
+      document.removeEventListener("selectionchange", handleSelectionChange);
+      frameHtml?.classList.remove("stop");
     };
-  }, [inner, closeMobileBlockMenu]);
+  }, [inner, closeMobileBlockMenu, handleSelectionChange, frameHtml]);
   useEffect(() => {
     if (mobileMenuTargetBlock) {
       sessionStorage.setItem(
@@ -249,7 +261,7 @@ const MobileBlockMenu = ({
       }
     }
     if (openMobileBlockStyler) {
-      setOpenMobileBlockStyler(false);
+      //setOpenMobileBlockStyler(false);
       removeSelected(frameHtml, mobileMenuTargetBlock, editBlock, page, null);
     }
   }, [

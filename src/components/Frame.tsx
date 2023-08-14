@@ -758,7 +758,6 @@ const Frame = ({
       }
     }
   }, [openComment, setCommentBlock, setItemForMobileMenu, setOpenComment]);
-
   useEffect(() => {
     window.addEventListener("resize", changeCBSposition);
     return () => window.removeEventListener("resize", changeCBSposition);

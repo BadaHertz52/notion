@@ -471,7 +471,9 @@ const BlockStyler = ({
             // 조건 : web에서 sideMenu가 닫혀 있을 경우
             removeSelected(frameHtml, block, editBlock, page, setSelection);
             setSelection && setSelection(null);
-            openMenu && setMobileMenuTargetBlock(null);
+            if (openMenu) {
+              setMobileMenuTargetBlock(null);
+            }
           } else {
             const eventTarget = event.target as HTMLElement | null;
             if (eventTarget) {
@@ -552,23 +554,10 @@ const BlockStyler = ({
     },
     [setMobileSideMenu, block]
   );
-  const handleSelectionChange = useCallback(() => {
-    if (isMobile()) {
-      const SELECTION = document.getSelection();
-      const notSelect =
-        SELECTION?.anchorNode === SELECTION?.focusNode &&
-        SELECTION?.anchorOffset === SELECTION?.focusOffset;
-      if (notSelect) {
-        setOpenMobileBlockStyler && setOpenMobileBlockStyler(false);
-        setMobileMenuTargetBlock(null);
-      }
-    }
-  }, [setMobileMenuTargetBlock, setOpenMobileBlockStyler]);
   useEffect(() => {
-    document.addEventListener("selectionchange", handleSelectionChange);
-    return () =>
-      document.removeEventListener("selectionchange", handleSelectionChange);
-  }, [handleSelectionChange]);
+    console.log("open");
+    return () => console.log("close");
+  }, []);
   useEffect(() => {
     if (!isMobile()) {
       changeStylerStyle(frameHtml, block, setBlockStylerStyle);
