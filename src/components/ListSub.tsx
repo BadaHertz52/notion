@@ -23,7 +23,7 @@ const ListSub = ({
   page,
   block,
   fontSize,
-  moveBlock,
+  isMoved,
   setMoveTargetBlock,
   pointBlockToMoveBlock,
   command,
@@ -125,7 +125,7 @@ const ListSub = ({
                     setSelection={setSelection}
                     setMobileMenuTargetBlock={setMobileMenuTargetBlock}
                     onClickCommentBtn={onClickCommentBtn}
-                    moveBlock={moveBlock}
+                    isMoved={isMoved}
                     setMoveTargetBlock={setMoveTargetBlock}
                   />
                 </div>
@@ -149,7 +149,7 @@ const ListSub = ({
                       page={page}
                       block={sub}
                       fontSize={fontSize}
-                      moveBlock={moveBlock}
+                      isMoved={isMoved}
                       setMoveTargetBlock={setMoveTargetBlock}
                       pointBlockToMoveBlock={pointBlockToMoveBlock}
                       command={command}

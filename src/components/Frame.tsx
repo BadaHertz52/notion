@@ -156,7 +156,7 @@ const Frame = ({
   /**
    * page내의 블록의 위치 변경이 있는 지 여부를 나타냄
    */
-  const moveBlock = useRef<boolean>(false);
+  const isMoved = useRef<boolean>(false);
   /** block 이동 시, 이동 할 위치의 기준이 되는 block(block 은 pointBlockToMoveBlock.current의 앞에 위치하게됨) */
   const pointBlockToMoveBlock = useRef<Block | null>(null);
   const [mobileMenuTargetBlock, setMobileMenuTargetBlock] =

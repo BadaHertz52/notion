@@ -36,7 +36,7 @@ export type BlockComponentProps = {
   setMobileMenuTargetBlock: Dispatch<SetStateAction<Block | null>>;
   onClickCommentBtn: (block: Block) => void;
   setMoveTargetBlock: Dispatch<SetStateAction<Block | null>>;
-  moveBlock: React.MutableRefObject<boolean>;
+  isMoved: React.MutableRefObject<boolean>;
 };
 
 export type itemType = {
@@ -60,7 +60,7 @@ const BlockComponent = ({
   setMobileMenuTargetBlock,
   onClickCommentBtn,
   setMoveTargetBlock,
-  moveBlock,
+  isMoved,
 }: BlockComponentProps) => {
   const { editBlock } = useContext(ActionContext).actions;
   const navigate = useNavigate();
@@ -138,7 +138,7 @@ const BlockComponent = ({
     [block, onClickCommentBtn]
   );
   /**
-   * [moveBlock - mobile] readyToMoveBlock 을 통해 위치를 변경시킬 블럭으로 해당 요소에 touch move 이벤트가 감지 되었을때,
+   * [isMoved - mobile] readyToMoveBlock 을 통해 위치를 변경시킬 블럭으로 해당 요소에 touch move 이벤트가 감지 되었을때,
    * moveTargetBlock을 설정하고 해당 요소의 클래스를 원래대로 복귀하는 함수
    * @param event TouchEvent
    */
@@ -153,12 +153,12 @@ const BlockComponent = ({
     [block, setMoveTargetBlock]
   );
   /**
-   *[moveBlock - mobile]  moveBlock.current 로 Frame 내에서 움직임이 감지 되었다면, startMarkMoveBlock.current 를 true로 변환하고,  블록 위치변경을 위한 블록 선택임을 구별하기 위해 setTimeOut 을 사용해서 일정 시간이 지난후에도 startMoveBlock.current가 참일 때 event의 타켓인 요소의 클래스에 on을 추가해 moveTargetBlock을 설정할 준비를 하는 함수
+   *[isMoved - mobile]  isMoved.current 로 Frame 내에서 움직임이 감지 되었다면, startMarkMoveBlock.current 를 true로 변환하고,  블록 위치변경을 위한 블록 선택임을 구별하기 위해 setTimeOut 을 사용해서 일정 시간이 지난후에도 startMoveBlock.current가 참일 때 event의 타켓인 요소의 클래스에 on을 추가해 moveTargetBlock을 설정할 준비를 하는 함수
    * @param event ToucheEvent
    */
   const readyToMoveBlock = useCallback(
     (event: TouchEvent<HTMLDivElement>) => {
-      if (!moveBlock.current) {
+      if (!isMoved.current) {
         startMarkMoveBlock.current = true;
       }
       setTimeout(() => {
@@ -168,7 +168,7 @@ const BlockComponent = ({
         }
       }, 2000);
     },
-    [moveBlock]
+    [isMoved]
   );
   return (
     <div
@@ -177,7 +177,7 @@ const BlockComponent = ({
       onMouseOver={showBlockFn}
       onTouchStart={(event) => readyToMoveBlock(event)}
       onTouchEnd={() => {
-        if (!moveBlock.current) startMarkMoveBlock.current = false;
+        if (!isMoved.current) startMarkMoveBlock.current = false;
       }}
       onTouchCancel={() => (startMarkMoveBlock.current = false)}
       onTouchMove={(event) => markMoveTargetBlock(event)}

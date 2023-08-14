@@ -28,7 +28,7 @@ export type EditableBlockProps = {
   page: Page;
   block: Block;
   fontSize: number;
-  moveBlock: MutableRefObject<boolean>;
+  isMoved: MutableRefObject<boolean>;
   setMoveTargetBlock: Dispatch<SetStateAction<Block | null>>;
   pointBlockToMoveBlock: MutableRefObject<Block | null>;
   command: Command;
@@ -79,7 +79,7 @@ const EditableBlock = ({
   page,
   block,
   fontSize,
-  moveBlock,
+  isMoved,
   setMoveTargetBlock,
   pointBlockToMoveBlock,
   command,
@@ -118,7 +118,7 @@ const EditableBlock = ({
     };
   }, []);
   /**
-   * [moveBlock] 현재 block을 moveTargetBlock (위치를 변경시킬 block)의 변경된 위치의 기준이 되는 pointBlock으로  지정하는 함수
+   * [isMoved] 현재 block을 moveTargetBlock (위치를 변경시킬 block)의 변경된 위치의 기준이 되는 pointBlock으로  지정하는 함수
    * @param event
    * @param targetBlock
    */
@@ -127,24 +127,24 @@ const EditableBlock = ({
       event: MouseEvent<HTMLDivElement> | TouchEvent<HTMLDivElement>,
       targetBlock: Block
     ) => {
-      if (moveBlock.current) {
+      if (isMoved.current) {
         pointBlockToMoveBlock.current = targetBlock;
         event.currentTarget.classList.add("on");
       }
     },
-    [moveBlock, pointBlockToMoveBlock]
+    [isMoved, pointBlockToMoveBlock]
   );
   /**
-   * [moveBlock] 현재 block을  moveTargetBlock (위치를 변경시킬 block)의 위치변경의 기준이 되는 pointBlock 지정을 취소시키는 함수
+   * [isMoved] 현재 block을  moveTargetBlock (위치를 변경시킬 block)의 위치변경의 기준이 되는 pointBlock 지정을 취소시키는 함수
    * @param event
    */
   const cancelPointBlock = useCallback(
     (event: MouseEvent<HTMLDivElement>) => {
-      if (moveBlock.current && pointBlockToMoveBlock.current?.id === block.id) {
+      if (isMoved.current && pointBlockToMoveBlock.current?.id === block.id) {
         event.currentTarget.classList.remove("on");
       }
     },
-    [block.id, moveBlock, pointBlockToMoveBlock]
+    [block.id, isMoved, pointBlockToMoveBlock]
   );
   const onClickCommentBtn = useCallback(
     (block: Block) => {
@@ -208,7 +208,7 @@ const EditableBlock = ({
               page={page}
               block={block}
               fontSize={fontSize}
-              moveBlock={moveBlock}
+              isMoved={isMoved}
               setMoveTargetBlock={setMoveTargetBlock}
               pointBlockToMoveBlock={pointBlockToMoveBlock}
               command={command}
@@ -302,7 +302,7 @@ const EditableBlock = ({
                       setSelection={setSelection}
                       setMobileMenuTargetBlock={setMobileMenuTargetBlock}
                       onClickCommentBtn={onClickCommentBtn}
-                      moveBlock={moveBlock}
+                      isMoved={isMoved}
                       setMoveTargetBlock={setMoveTargetBlock}
                     />
                   </div>
@@ -324,7 +324,7 @@ const EditableBlock = ({
                       page={page}
                       block={subBlock}
                       fontSize={fontSize}
-                      moveBlock={moveBlock}
+                      isMoved={isMoved}
                       setMoveTargetBlock={setMoveTargetBlock}
                       pointBlockToMoveBlock={pointBlockToMoveBlock}
                       command={command}

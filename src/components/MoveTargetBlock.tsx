@@ -10,7 +10,7 @@ const MoveTargetBlock = ({
   page,
   block,
   fontSize,
-  moveBlock,
+  isMoved,
   setMoveTargetBlock,
   pointBlockToMoveBlock,
   command,
@@ -62,7 +62,7 @@ const MoveTargetBlock = ({
           page={page}
           block={block}
           fontSize={fontSize}
-          moveBlock={moveBlock}
+          isMoved={isMoved}
           setMoveTargetBlock={setMoveTargetBlock}
           pointBlockToMoveBlock={pointBlockToMoveBlock}
           command={command}
