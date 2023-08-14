@@ -881,6 +881,14 @@ const Frame = ({
     mobileSideMenu.what,
     setMobileSideMenu,
   ]);
+  useEffect(() => {
+    const condition = !!mobileMenuTargetBlock || (isMobile() && modal.open);
+    console.log("condition", condition);
+    frameHtml?.classList.toggle("stop", condition);
+    return () => {
+      frameHtml?.classList.remove("stop");
+    };
+  }, [mobileMenuTargetBlock, modal.open, frameHtml]);
   return (
     <div
       className={`frame ${newPageFrame ? "newPageFrame" : ""} ${
@@ -1048,7 +1056,7 @@ const Frame = ({
           mobileMenuTargetBlock={mobileMenuTargetBlock}
         />
       )}
-      {selection && (
+      {selection && !isMobile() && (
         <BlockStyler
           pages={pages}
           pagesId={pagesId}
