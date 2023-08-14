@@ -21,8 +21,6 @@
   flex-grow: 1;
   flex-shrink: 1;
   z-index: inherit;
-  display: flex !important;
-  justify-content: center;
 }
 .frame__inner {
   width: 100%;
@@ -35,6 +33,10 @@
 }
 .page__header {
   width: 100%;
+}
+.page__header,
+.page__firstBlock {
+  margin: 0 auto;
 }
 .page__header_notCover,
 .page__firstBlock {
@@ -87,7 +89,8 @@
       }
     }
   }
-  .page__header_notConver {
+  .page__header_notCover {
+    width: 100%;
     display: flex;
     flex-direction: column;
   }

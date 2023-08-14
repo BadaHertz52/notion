@@ -11,8 +11,8 @@ import React, {
   useContext,
   useCallback,
 } from "react";
-import { Block, MainCommentType, Page, ListItem } from "../modules/notion/type";
-import { blockSample } from "../modules/notion/reducer";
+import { Block, Page, ListItem } from "../modules/notion/type";
+
 import {
   makeNewBlock,
   findPage,
@@ -23,15 +23,12 @@ import {
   removeSelected,
 } from "../fn";
 import { ActionContext, SelectionType } from "../route/NotionRouter";
-import EditableBlock from "./EditableBlock";
-import IconModal from "./IconModal";
+
 import CommandBlock from "./CommandBlock";
 import Comments from "./Comments";
 import CommentInput from "./CommentInput";
 import BlockFn from "./BlockFn";
 import Loader from "./Loader";
-import PageIcon from "./PageIcon";
-import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 import PageMenu from "./PageMenu";
 
 import { FontStyleType, mobileSideMenuType } from "../route/NotionRouter";
@@ -40,16 +37,11 @@ import BlockStyler from "./BlockStyler";
 import MoveTargetBlock from "./MoveTargetBlock";
 
 //icon
-import { BiMessageDetail } from "react-icons/bi";
-import { BsFillEmojiSmileFill } from "react-icons/bs";
-import { GrDocumentText, GrDocument } from "react-icons/gr";
-import { MdInsertPhoto } from "react-icons/md";
-import { HiTemplate } from "react-icons/hi";
 import MobileBlockMenu from "./MobileBlockMenu";
 import { ModalType } from "../containers/EditorContainer";
-import basicPageCover from "../assets/img/artificial-turf-g6e884a1d4_1920.jpeg";
-import { randomEmojiIcon } from "../modules/notion/emojiData";
-import PageComponent from "./PageComponent";
+import FrameInner from "./FrameInner";
+import { useSelector } from "react-redux";
+import { RootState } from "../modules";
 export type Command = {
   open: boolean;
   command: string | null;
@@ -111,6 +103,7 @@ const Frame = ({
   mobileSideMenu,
   setMobileSideMenu,
 }: FrameProps) => {
+  const sideAppear = useSelector((state: RootState) => state.side.appear);
   const { editPage, editBlock, addBlock } = useContext(ActionContext).actions;
   const innerWidth = window.innerWidth;
   const innerHeight = window.innerHeight;
@@ -156,7 +149,11 @@ const Frame = ({
   const pointBlockToMoveBlock = useRef<Block | null>(null);
   const [mobileMenuTargetBlock, setMobileMenuTargetBlock] =
     useState<Block | null>(null);
-  const maxWidth = innerWidth - 60;
+  const scrollbarWidth = 10;
+  const sideBarEl = document.querySelector(".sideBar");
+  const sideBarWidth =
+    sideAppear === "lock" && sideBarEl ? sideBarEl.clientWidth : 0;
+  const maxWidth = innerWidth - sideBarWidth - scrollbarWidth;
   const fontSize: number = isMobile()
     ? openTemplates
       ? 1.5
@@ -168,9 +165,11 @@ const Frame = ({
     : smallText
     ? 0.8
     : 1;
-  const frameInnerStyle: CSSProperties = {
+  const frameStyle: CSSProperties = {
     fontFamily: fontStyle,
     fontSize: `${fontSize}rem`,
+  };
+  const frameInnerStyle: CSSProperties = {
     width: isMobile()
       ? "90%"
       : openTemplates
@@ -178,10 +177,9 @@ const Frame = ({
       : fullWidth
       ? `${maxWidth}px`
       : innerWidth > 900
-      ? "900px"
+      ? "890px"
       : "75%",
   };
-
   const closeModalMenu = useCallback(
     (event: globalThis.MouseEvent) => {
       const target = event.target as HTMLElement | null;
@@ -889,6 +887,7 @@ const Frame = ({
       className={`frame ${newPageFrame ? "newPageFrame" : ""} ${
         isMobile() ? "mobile" : "web"
       }`}
+      style={frameStyle}
       ref={frameRef}
       // style={{
       //   overflowY:
@@ -897,51 +896,41 @@ const Frame = ({
       //       : "scroll",
       // }}
     >
-      {/* frame__inner ---- */}
-      <div
-        className="frame__inner"
-        id={`page-${page.id}`}
-        style={frameInnerStyle}
-        onMouseMove={(event) =>
-          move_MoveTargetBlock(event.clientX, event.clientY)
-        }
-        onMouseUp={stopMovingBlock}
-        onTouchMove={(event) => move_MoveTargetBlockInMobile(event)}
-        onTouchEnd={stopMovingBlock}
-      >
-        <PageComponent
-          userName={userName}
-          pages={pages}
-          pagesId={pagesId}
-          firstBlocks={firstBlocks}
-          page={page}
-          frameRef={frameRef}
-          fontSize={fontSize}
-          openTemplates={openTemplates}
-          templateHtml={templateHtml}
-          discardEdit={discardEdit}
-          setDiscardEdit={setDiscardEdit}
-          showAllComments={showAllComments}
-          newPageFrame={newPageFrame}
-          pointBlockToMoveBlock={pointBlockToMoveBlock}
-          makeMoveBlockTrue={makeMoveBlockTrue}
-          isMoved={isMoved}
-          setMoveTargetBlock={setMobileMenuTargetBlock}
-          command={command}
-          setCommand={setCommand}
-          openComment={openComment}
-          setOpenComment={setOpenComment}
-          setCommentBlock={setCommentBlock}
-          setOpenLoader={setOpenLoader}
-          setLoaderTargetBlock={setLoaderTargetBlock}
-          closeMenu={closeMenu}
-          setSelection={setSelection}
-          setMobileMenuTargetBlock={setMobileMenuTargetBlock}
-          mobileMenuTargetBlock={mobileMenuTargetBlock}
-          setOpenTemplates={setOpenTemplates}
-        />
-      </div>
-      {/* --- frame__inner */}
+      <FrameInner
+        userName={userName}
+        pages={pages}
+        pagesId={pagesId}
+        firstBlocks={firstBlocks}
+        page={page}
+        frameRef={frameRef}
+        fontSize={fontSize}
+        openTemplates={openTemplates}
+        templateHtml={templateHtml}
+        discardEdit={discardEdit}
+        setDiscardEdit={setDiscardEdit}
+        showAllComments={showAllComments}
+        newPageFrame={newPageFrame}
+        pointBlockToMoveBlock={pointBlockToMoveBlock}
+        makeMoveBlockTrue={makeMoveBlockTrue}
+        isMoved={isMoved}
+        setMoveTargetBlock={setMobileMenuTargetBlock}
+        command={command}
+        setCommand={setCommand}
+        openComment={openComment}
+        setOpenComment={setOpenComment}
+        setCommentBlock={setCommentBlock}
+        setOpenLoader={setOpenLoader}
+        setLoaderTargetBlock={setLoaderTargetBlock}
+        closeMenu={closeMenu}
+        setSelection={setSelection}
+        setMobileMenuTargetBlock={setMobileMenuTargetBlock}
+        mobileMenuTargetBlock={mobileMenuTargetBlock}
+        setOpenTemplates={setOpenTemplates}
+        frameInnerStyle={frameInnerStyle}
+        move_MoveTargetBlock={move_MoveTargetBlock}
+        move_MoveTargetBlockInMobile={move_MoveTargetBlockInMobile}
+        stopMovingBlock={stopMovingBlock}
+      />
       {command.open && command.targetBlock && (
         <div id="block__commandBlock" style={commandBlockPosition}>
           <CommandBlock

@@ -8,6 +8,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  TouchEvent,
 } from "react";
 import PageHeader, { PageHeaderProps } from "./PageHeader";
 import { Block, Page } from "../modules/notion/type";
@@ -26,10 +27,8 @@ import { ActionContext, SelectionType } from "../route/NotionRouter";
 import EmptyPageContent from "./EmptyPageContent";
 import { Command } from "./Frame";
 import { CSSProperties } from "styled-components";
-import { useSelector } from "react-redux";
-import { RootState } from "../modules";
 
-type PageComponentProps = PageHeaderProps & {
+type FrameInnerProps = PageHeaderProps & {
   isExport?: boolean;
   firstBlocks: Block[] | null;
   newPageFrame: boolean;
@@ -55,24 +54,20 @@ type PageComponentProps = PageHeaderProps & {
   setSelection: Dispatch<SetStateAction<SelectionType | null>>;
   setMobileMenuTargetBlock: Dispatch<SetStateAction<Block | null>>;
   mobileMenuTargetBlock: Block | null;
+  move_MoveTargetBlock: (clientX: number, clientY: number) => void;
+  stopMovingBlock: () => void;
+  move_MoveTargetBlockInMobile: (event: TouchEvent<HTMLDivElement>) => void;
+  frameInnerStyle: CSSProperties;
 };
-const PageComponent = (props: PageComponentProps) => {
-  const sideAppear = useSelector((state: RootState) => state.side);
-  const editorEl = props.frameRef.current?.closest(".editor");
-
+const FrameInner = (props: FrameInnerProps) => {
   const { page, firstBlocks, frameRef, templateHtml } = props;
-
   const { addBlock } = useContext(ActionContext).actions;
-  const topBarEl = document.querySelector(".topBar");
-  const topeBarHeight = topBarEl ? topBarEl.clientHeight : 45;
   const bottomHeight = 80;
-  const autoSizeInitialHeight =
-    window.innerHeight - bottomHeight - topeBarHeight;
-  const autoSizeStyle: CSSProperties = {
-    width: "100%",
-    height: autoSizeInitialHeight,
-  };
-  const list: (Page | Block)[] = firstBlocks ? [page, ...firstBlocks] : [page];
+
+  const list: (Page | Block | undefined)[] = firstBlocks
+    ? [page, ...firstBlocks, undefined]
+    : [page];
+
   type RowProps = {
     index: number;
     measure: () => void;
@@ -81,32 +76,17 @@ const PageComponent = (props: PageComponentProps) => {
     defaultWidth: frameRef.current?.clientWidth,
     fixedWidth: true,
   });
-  const changeScrollStyle = useCallback((el: HTMLElement) => {
-    const style: CSSProperties = {
-      width: "inherit",
-      height: "auto",
-      maxWidth: "auto",
-      maxHeight: "auto",
-      position: "relative",
-    };
-    el?.setAttribute("style", JSON.stringify(style));
-  }, []);
-  useEffect(() => {
-    const scrollContainerEl = frameRef.current?.querySelector(
+
+  const changeScrollStyle = useCallback(() => {
+    const el = frameRef.current?.querySelector(
       ".ReactVirtualized__Grid__innerScrollContainer"
+    ) as HTMLElement;
+    el.setAttribute(
+      "style",
+      "width:100%; height:auto; max-height:initial; max-width:initial; position:relative;"
     );
-    if (!scrollContainerEl) {
-      const time = setInterval(() => {
-        const el = frameRef.current?.querySelector(
-          ".ReactVirtualized__Grid__innerScrollContainer"
-        ) as HTMLElement | undefined | null;
-        if (el) {
-          changeScrollStyle(el);
-          clearInterval(time);
-        }
-      }, 500);
-    }
-  }, [changeScrollStyle, frameRef]);
+  }, [frameRef]);
+
   const Row = ({ index, measure }: RowProps) => {
     const item: Page | Block =
       index === 0 ? (list[index] as Page) : (list[index] as Block);
@@ -123,9 +103,10 @@ const PageComponent = (props: PageComponentProps) => {
         showAllComments={props.showAllComments}
         newPageFrame={props.newPageFrame}
         handleImgLoad={measure}
+        frameInnerStyle={props.frameInnerStyle}
       />
-    ) : (
-      <div className="page__firstBlock">
+    ) : list[index] ? (
+      <div className="page__firstBlock" style={props.frameInnerStyle}>
         <EditableBlock
           key={(item as Block).id}
           pages={props.pages}
@@ -151,6 +132,12 @@ const PageComponent = (props: PageComponentProps) => {
           measure={measure}
         />
       </div>
+    ) : (
+      <div
+        className="bottom"
+        onClick={onClickBottom}
+        style={{ height: bottomHeight }}
+      ></div>
     );
   };
 
@@ -183,11 +170,36 @@ const PageComponent = (props: PageComponentProps) => {
     }
     setTemplateItem(templateHtml, page);
   }, [addBlock, page, templateHtml]);
+
+  useEffect(() => {
+    const scrollContainerEl = frameRef.current?.querySelector(
+      ".ReactVirtualized__Grid__innerScrollContainer"
+    );
+    if (!scrollContainerEl) {
+      const time = setInterval(() => {
+        const el = frameRef.current?.querySelector(
+          ".ReactVirtualized__Grid__innerScrollContainer"
+        ) as HTMLElement | undefined | null;
+        if (el) {
+          changeScrollStyle();
+          clearInterval(time);
+        }
+      }, 1000);
+    }
+    window.addEventListener("scroll", changeScrollStyle);
+    return window.removeEventListener("scroll", changeScrollStyle);
+  }, [changeScrollStyle, frameRef]);
+
   return (
     <div
-      className="page"
-      onMouseMove={props.makeMoveBlockTrue}
-      onTouchMove={props.makeMoveBlockTrue}
+      className="frame__inner"
+      id={`page-${page.id}`}
+      onMouseMove={(event) =>
+        props.move_MoveTargetBlock(event.clientX, event.clientY)
+      }
+      onMouseUp={props.stopMovingBlock}
+      onTouchMove={(event) => props.move_MoveTargetBlockInMobile(event)}
+      onTouchEnd={props.stopMovingBlock}
     >
       <WindowScroller
         scrollElement={
@@ -217,13 +229,8 @@ const PageComponent = (props: PageComponentProps) => {
           setOpenTemplates={props.setOpenTemplates}
         />
       )}
-      <div
-        className="bottom"
-        onClick={onClickBottom}
-        style={{ height: bottomHeight }}
-      ></div>
     </div>
   );
 };
 
-export default memo(PageComponent);
+export default memo(FrameInner);
