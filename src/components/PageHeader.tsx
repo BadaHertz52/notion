@@ -238,15 +238,6 @@ function PageHeader({
             style={pageIconStyle}
             handleImgLoad={handleImgLoad}
           />
-          {openIconModal && (
-            <IconModal
-              currentPageId={page.id}
-              block={null}
-              page={page}
-              style={iconStyle}
-              setOpenIconModal={setOpenIconModal}
-            />
-          )}
         </div>
         <div className="deco">
           {decoOpen && (
@@ -334,6 +325,15 @@ function PageHeader({
           )}
         </div>
       </div>
+      {openIconModal && (
+        <IconModal
+          currentPageId={page.id}
+          block={null}
+          page={page}
+          style={iconStyle}
+          setOpenIconModal={setOpenIconModal}
+        />
+      )}
     </div>
   );
 }
