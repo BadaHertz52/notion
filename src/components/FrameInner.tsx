@@ -19,6 +19,8 @@ import {
   CellMeasurerCache,
   List,
   ListRowProps,
+  ScrollParams,
+  WindowScroller,
 } from "react-virtualized";
 import { blockSample } from "../modules/notion/reducer";
 import { setTemplateItem } from "../fn";
@@ -60,9 +62,9 @@ const FrameInner = (props: FrameInnerProps) => {
   const { addBlock } = useContext(ActionContext).actions;
   const bottomHeight = 80;
 
-  const list: (Page | Block | undefined)[] = firstBlocks
-    ? [page, ...firstBlocks, undefined]
-    : [page];
+  const list: (Block | undefined)[] = firstBlocks
+    ? [...firstBlocks, undefined]
+    : [undefined];
 
   type RowProps = {
     index: number;
@@ -74,41 +76,28 @@ const FrameInner = (props: FrameInnerProps) => {
   });
 
   const changeScrollStyle = useCallback(() => {
-    const el = frameRef.current?.querySelector(
+    const listEl = frameRef?.current?.querySelector(
+      ".ReactVirtualized__Grid ReactVirtualized__List"
+    ) as HTMLElement | null | undefined;
+    if (listEl?.style) listEl.style.overflow = "hidden";
+    const scrollEl = frameRef.current?.querySelector(
       ".ReactVirtualized__Grid__innerScrollContainer"
     ) as HTMLElement;
-    el.setAttribute(
+    scrollEl.setAttribute(
       "style",
       "width:100%; height:auto; max-height:initial; max-width:initial; position:relative;"
     );
   }, [frameRef]);
 
   const Row = ({ index, measure }: RowProps) => {
-    const item: Page | Block =
-      index === 0 ? (list[index] as Page) : (list[index] as Block);
-    return index === 0 ? (
-      <PageHeader
-        userName={props.userName}
-        page={props.page}
-        frameRef={props.frameRef}
-        fontSize={props.fontSize}
-        openTemplates={props.openTemplates}
-        templateHtml={props.templateHtml}
-        discardEdit={props.discardEdit}
-        setDiscardEdit={props.setDiscardEdit}
-        showAllComments={props.showAllComments}
-        newPageFrame={props.newPageFrame}
-        handleImgLoad={measure}
-        frameInnerStyle={props.frameInnerStyle}
-      />
-    ) : list[index] ? (
+    return list[index] ? (
       <div className="page__firstBlock" style={props.frameInnerStyle}>
         <EditableBlock
-          key={(item as Block).id}
+          key={(list[index] as Block).id}
           pages={props.pages}
           pagesId={props.pagesId}
           page={props.page}
-          block={item as Block}
+          block={list[index] as Block}
           fontSize={props.fontSize}
           isMoved={props.isMoved}
           setMoveTargetBlock={props.setMoveTargetBlock}
@@ -167,6 +156,18 @@ const FrameInner = (props: FrameInnerProps) => {
     setTemplateItem(templateHtml, page);
   }, [addBlock, page, templateHtml]);
 
+  const handleListScroll = (params: ScrollParams) => {
+    const { scrollTop } = params;
+    const frameEl = frameRef.current;
+    const listEl = frameEl?.querySelector(
+      ".ReactVirtualized__Grid.ReactVirtualized__List"
+    );
+    console.log("scroll", scrollTop, listEl);
+    if (frameEl && listEl) {
+      frameEl.scrollTop = scrollTop;
+      //listEl.scrollTop = 0;
+    }
+  };
   useEffect(() => {
     const scrollContainerEl = frameRef.current?.querySelector(
       ".ReactVirtualized__Grid__innerScrollContainer"
@@ -194,22 +195,44 @@ const FrameInner = (props: FrameInnerProps) => {
       onTouchMove={props.makeMoveBlockTrue}
       style={props.openExport ? { overflowY: "scroll" } : undefined}
     >
+      <PageHeader
+        userName={props.userName}
+        page={props.page}
+        frameRef={props.frameRef}
+        fontSize={props.fontSize}
+        openTemplates={props.openTemplates}
+        templateHtml={props.templateHtml}
+        discardEdit={props.discardEdit}
+        setDiscardEdit={props.setDiscardEdit}
+        showAllComments={props.showAllComments}
+        newPageFrame={props.newPageFrame}
+        frameInnerStyle={props.frameInnerStyle}
+      />
       {props.openExport ? (
         list.map((e, i) => <Row index={i} />)
       ) : (
-        <AutoSizer>
-          {({ width }) => (
-            <List
-              height={window.innerHeight}
-              width={width}
-              overscanRowCount={0}
-              rowCount={list.length}
-              rowHeight={cache.rowHeight}
-              rowRenderer={rowRenderer}
-              deferredMeasurementCache={cache}
-            />
+        <WindowScroller
+          scrollElement={
+            frameRef.current ? (frameRef.current as Element) : undefined
+          }
+        >
+          {() => (
+            <AutoSizer>
+              {({ width }) => (
+                <List
+                  height={window.innerHeight}
+                  width={width}
+                  overscanRowCount={0}
+                  rowCount={list.length}
+                  rowHeight={cache.rowHeight}
+                  rowRenderer={rowRenderer}
+                  deferredMeasurementCache={cache}
+                  onScroll={handleListScroll}
+                />
+              )}
+            </AutoSizer>
           )}
-        </AutoSizer>
+        </WindowScroller>
       )}
       {props.newPageFrame && (
         <EmptyPageContent

@@ -95,7 +95,7 @@ function PageHeader({
         : -16,
   };
 
-  const onMouseMoveOnPH = useCallback(() => {
+  const openDeco = useCallback(() => {
     if (
       (page.header.icon === null ||
         page.header.cover === null ||
@@ -106,7 +106,7 @@ function PageHeader({
     }
   }, [decoOpen, page.header.comments, page.header.cover, page.header.icon]);
 
-  const onMouseLeaveFromPH = useCallback(() => {
+  const closeDeco = useCallback(() => {
     decoOpen && setDecoOpen(false);
   }, [decoOpen]);
 
@@ -189,12 +189,7 @@ function PageHeader({
   );
 
   return (
-    <div
-      className="page__header"
-      style={headerStyle}
-      onMouseMove={onMouseMoveOnPH}
-      onMouseLeave={onMouseLeaveFromPH}
-    >
+    <div className="page__header" style={headerStyle}>
       {page.header.cover && (
         <div
           className="page__header__cover"
@@ -228,9 +223,13 @@ function PageHeader({
       )}
       <div className="page__header_notCover">
         <div
-          className="page__icon-outBox"
+          className={`page__icon-outBox ${
+            !page.header.cover && !page.header.icon ? "none" : ""
+          }`}
           style={pageTitleStyle}
           onClick={onClickPageIcon}
+          onMouseMove={openDeco}
+          onMouseLeave={closeDeco}
         >
           <PageIcon
             icon={page.header.icon}

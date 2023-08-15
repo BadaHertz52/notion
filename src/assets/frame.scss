@@ -12,6 +12,11 @@
   }
 }
 //frame ----
+.frame {
+  .ReactVirtualized__Grid.ReactVirtualized__List {
+    @include hiddenScrollBar;
+  }
+}
 .frame.stop {
   .ReactVirtualized__Grid.ReactVirtualized__List {
     overflow: hidden !important;
@@ -24,6 +29,7 @@
   flex-shrink: 1;
   z-index: inherit;
   position: relative;
+  overflow-y: scroll;
 }
 .frame__inner {
   width: 100%;
@@ -104,6 +110,10 @@
   .page__icon-outBox {
     width: fit-content;
     height: fit-content;
+    &.none {
+      min-width: 100%;
+      height: 20px;
+    }
   }
   .page__icon.iconNull {
     display: none;
