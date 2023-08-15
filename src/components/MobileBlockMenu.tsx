@@ -88,9 +88,12 @@ const MobileBlockMenu = ({
         blockElement &&
         blockElementDomRect
       ) {
-        const top = blockElementDomRect.top + pageHeaderElDomRect.y;
+        const top =
+          blockElementDomRect.top +
+          frameHtml.scrollTop -
+          frameDomRect.top -
+          blockElementDomRect.height * 1.5;
         const left = pageHeaderElDomRect.left;
-        let newTop = top;
         /**
          * 가상 키보드롤 인해 가려지는 부분의 y축 시작점 (기준: window)
          */
@@ -98,12 +101,11 @@ const MobileBlockMenu = ({
         const gap = blockElementDomRect.bottom + (16 + 32) - pointBlinding;
         if (gap >= 0) {
           frameHtml.scrollTo(0, blockElementDomRect.bottom + 10);
-          newTop = blockElement.getClientRects()[0].bottom + 16;
         }
         setMBMstyle({
-          top: `${newTop}px`,
-          left: `${left}px`,
-          width: `${pageHeaderElDomRect.width}px`,
+          top: top,
+          left: left,
+          width: pageHeaderElDomRect.width,
         });
       }
     },
@@ -267,6 +269,16 @@ const MobileBlockMenu = ({
     openMobileBlockStyler,
     page,
   ]);
+  useEffect(() => {
+    window.addEventListener("resize", () =>
+      changeMBMstyle(mobileMenuTargetBlock)
+    );
+    return () => {
+      window.removeEventListener("resize", () =>
+        changeMBMstyle(mobileMenuTargetBlock)
+      );
+    };
+  }, []);
   return (
     <>
       <div id="mobileBlockMenu" style={mbmStyle}>
