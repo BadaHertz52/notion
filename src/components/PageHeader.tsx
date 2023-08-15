@@ -140,8 +140,6 @@ function PageHeader({
         } else {
           console.error("Can't find currentTarget");
         }
-      } else {
-        setOpenIconModal(false);
       }
     },
     [openIconModal, pageIconStyle.width]

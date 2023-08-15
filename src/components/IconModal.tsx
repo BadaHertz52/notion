@@ -144,6 +144,7 @@ const IconModal = ({
           {category === EMOJI ? (
             EMOJI_ARR.map((i: Emoji) => (
               <button
+                key={`emoji_${i}`}
                 title={`button to select ${i} emoji`}
                 className="btn-emoji"
                 onClick={() => changePageIcon(i, "emoji")}
