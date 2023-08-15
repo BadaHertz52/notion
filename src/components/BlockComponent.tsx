@@ -87,9 +87,7 @@ const BlockComponent = ({
       const currentTarget = event.currentTarget;
       const mainBlock =
         currentTarget.parentElement?.parentElement?.parentElement;
-      const frameInnerEl = document.getElementById(`page-${page.id}`);
-      const frameInnerDomRect = frameInnerEl?.getBoundingClientRect();
-      if (mainBlock && mainBlock && frameInnerDomRect) {
+      if (mainBlock && mainBlock) {
         const mainBlockDomRect = mainBlock?.getClientRects()[0];
         const editor = document.getElementsByClassName("editor")[0];
         const blockFn = !templateHtml
@@ -101,16 +99,23 @@ const BlockComponent = ({
           : sessionStorage.removeItem("blockFnTargetBlock");
         if (mainBlockDomRect) {
           if (!templateHtml) {
-            const top = mainBlockDomRect.top - frameInnerDomRect.top;
-            const left = mainBlockDomRect.x - frameInnerDomRect.x - 45;
-            const blockFnStyle = `top:${top}px; left:${left}px`;
-            blockFn?.setAttribute("style", blockFnStyle);
+            const frameHtml = document.querySelector(".frame");
+            const frameDomRect = frameHtml?.getClientRects()[0];
+            if (frameDomRect) {
+              const top =
+                mainBlockDomRect.top - frameDomRect.top + frameHtml.scrollTop;
+              const left = mainBlockDomRect.x - frameDomRect.x - 45;
+              const blockFnStyle = `top:${top}px; left:${left}px`;
+              blockFn?.setAttribute("style", blockFnStyle);
+            }
           } else {
-            const targetFrameDomRect = templateHtml
-              .querySelector(".frame")
-              ?.getBoundingClientRect();
-            if (targetFrameDomRect) {
-              const top = mainBlockDomRect.top - targetFrameDomRect.top;
+            const targetFrameEl = templateHtml.querySelector(".frame");
+            if (targetFrameEl) {
+              const targetFrameDomRect = targetFrameEl.getBoundingClientRect();
+              const top =
+                mainBlockDomRect.top -
+                targetFrameDomRect.top +
+                targetFrameEl?.scrollTop;
               const left = mainBlockDomRect.x - targetFrameDomRect.x - 45;
               blockFn?.setAttribute("style", `top:${top}px; left:${left}px`);
             }
