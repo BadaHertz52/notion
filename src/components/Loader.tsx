@@ -108,33 +108,27 @@ const Loader = ({
       const blockHtml = document.querySelector(
         `#block-${block.id} .btn-addBlockFile`
       );
+      const topBarEl = document.querySelector(".topBar");
       const blockDomRect = blockHtml?.getClientRects()[0];
-      if (blockDomRect && frameHtml) {
+      if (blockDomRect && frameHtml && topBarEl) {
         const frameDomRect = frameHtml.getClientRects()[0];
         const top =
-          blockDomRect.bottom + frameDomRect.top + blockDomRect.height + 10;
-        const possibleHeight =
-          frameDomRect.top > 0
-            ? window.innerHeight - frameDomRect.top
-            : window.innerHeight;
-        const remainHeight = possibleHeight - top;
-        const bottom = remainHeight + blockDomRect.height + 10;
+          blockDomRect.bottom - frameDomRect.top + frameHtml.scrollTop;
+        const possibleHeight = window.innerHeight - topBarEl.clientHeight;
+        const remainingHeight = possibleHeight - top;
+        const loaderHeight = 126;
+        const top2 = top - loaderHeight - blockDomRect.height - 10;
         const left = blockDomRect.left - frameDomRect.left;
         const basicStyle: CSSProperties = {
           position: "absolute",
           left: left,
           width: blockDomRect.width,
         };
-        const style: CSSProperties =
-          remainHeight > 135
-            ? {
-                ...basicStyle,
-                top: top,
-              }
-            : {
-                ...basicStyle,
-                bottom: bottom,
-              };
+        console.log("?", remainingHeight, top2, top);
+        const style: CSSProperties = {
+          ...basicStyle,
+          top: remainingHeight > loaderHeight + 20 ? top + 10 : top2,
+        };
         setLoaderStyle(style);
       }
     } else {
