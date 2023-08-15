@@ -7,6 +7,7 @@ import React, {
   useCallback,
   useContext,
   useState,
+  useRef,
 } from "react";
 import { MainCommentType, Page } from "../modules/notion/type";
 import { CSSProperties } from "styled-components";
@@ -94,7 +95,7 @@ function PageHeader({
         ? -62
         : -16,
   };
-
+  const notCoverRef = useRef<HTMLDivElement>(null);
   const openDeco = useCallback(() => {
     if (
       (page.header.icon === null ||
@@ -130,11 +131,14 @@ function PageHeader({
     (event: React.MouseEvent) => {
       if (openIconModal !== true) {
         const currentTarget = event.currentTarget;
-        if (currentTarget.firstElementChild) {
+        if (currentTarget.firstElementChild && notCoverRef.current) {
+          const paddingLeft = window.getComputedStyle(
+            notCoverRef.current
+          ).paddingLeft;
           setIconStyle({
             position: "absolute",
             top: (pageIconStyle.width as number) + 4,
-            left: 0,
+            left: paddingLeft,
           });
           setOpenIconModal(true);
         } else {
@@ -221,7 +225,7 @@ function PageHeader({
           setLoaderTargetBlock={null}
         />
       )}
-      <div className="page__header_notCover">
+      <div className="page__header_notCover" ref={notCoverRef}>
         <div
           className={`page__icon-outBox ${
             !page.header.cover && !page.header.icon ? "none" : ""

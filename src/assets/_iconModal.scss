@@ -47,6 +47,9 @@
       color: $itemText;
       button {
         color: inherit;
+        svg {
+          margin-right: 5px;
+        }
       }
     }
     .bottom-line {
