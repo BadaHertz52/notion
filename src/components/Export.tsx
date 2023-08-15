@@ -120,8 +120,9 @@ const Export = ({
     );
     if (includeSubPagesSliderEl) {
       const frame = document.getElementsByClassName("frame")[0] as HTMLElement;
-      const styleTag = [...document.querySelectorAll("style")];
-      const styleCode = styleTag[1].outerHTML;
+      const styleCode = [...document.querySelectorAll("style")]
+        .map((e) => e.outerHTML)
+        .join(" ");
       const includeSubPage: boolean =
         includeSubPagesSliderEl.classList.contains("on");
       const convertHtml = (title: string, frameHtml: string) => {

@@ -17,12 +17,14 @@ import PageIcon from "./PageIcon";
 import { randomEmojiIcon } from "../modules/notion/emojiData";
 import { setTemplateItem } from "../fn";
 import { BsFillEmojiSmileFill } from "react-icons/bs";
-import basicPageCover from "../assets/img/artificial-turf-g6e884a1d4_1920.jpeg";
 import { MdInsertPhoto } from "react-icons/md";
 import { BiMessageDetail } from "react-icons/bi";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 import Comments from "./Comments";
 import CommentInput from "./CommentInput";
+
+const basicPageCover =
+  "https://github.com/BadaHertz52/notion/blob/master/src/assets/img/artificial-turf-g6e884a1d4_1920.jpeg?raw=true";
 
 export type PageHeaderProps = {
   userName: string;

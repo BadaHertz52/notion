@@ -420,6 +420,7 @@ const NotionRouter = () => {
                       setFontStyle={setFontStyle}
                       mobileSideMenu={mobileSideMenu}
                       setMobileSideMenu={setMobileSideMenu}
+                      openExport={openExport}
                     />
                   }
                 />

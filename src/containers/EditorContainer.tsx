@@ -64,6 +64,7 @@ type EditorContainerProps = {
   setFontStyle: Dispatch<SetStateAction<FontStyleType>>;
   mobileSideMenu: mobileSideMenuType;
   setMobileSideMenu: Dispatch<SetStateAction<mobileSideMenuType>>;
+  openExport?: boolean;
 };
 
 const EditorContainer = ({
@@ -96,6 +97,7 @@ const EditorContainer = ({
   setModal,
   mobileSideMenu,
   setMobileSideMenu,
+  openExport,
 }: EditorContainerProps) => {
   const { restorePage, cleanTrash } = useContext(ActionContext).actions;
   const user = useSelector((state: RootState) => state.user);
@@ -183,6 +185,7 @@ const EditorContainer = ({
         fontStyle={fontStyle}
         mobileSideMenu={mobileSideMenu}
         setMobileSideMenu={setMobileSideMenu}
+        openExport={openExport}
       />
       {mobileSideMenu.block && (
         <MobileSideMenu

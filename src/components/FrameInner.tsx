@@ -19,7 +19,6 @@ import {
   CellMeasurerCache,
   List,
   ListRowProps,
-  WindowScroller,
 } from "react-virtualized";
 import { blockSample } from "../modules/notion/reducer";
 import { setTemplateItem } from "../fn";
@@ -28,8 +27,8 @@ import EmptyPageContent from "./EmptyPageContent";
 import { Command } from "./Frame";
 import { CSSProperties } from "styled-components";
 
-type FrameInnerProps = PageHeaderProps & {
-  isExport?: boolean;
+export type FrameInnerProps = PageHeaderProps & {
+  openExport?: boolean;
   firstBlocks: Block[] | null;
   newPageFrame: boolean;
   makeMoveBlockTrue: () => void;
@@ -67,7 +66,7 @@ const FrameInner = (props: FrameInnerProps) => {
 
   type RowProps = {
     index: number;
-    measure: () => void;
+    measure?: () => void;
   };
   const cache = new CellMeasurerCache({
     defaultWidth: frameRef.current?.clientWidth,
@@ -193,21 +192,25 @@ const FrameInner = (props: FrameInnerProps) => {
       id={`page-${page.id}`}
       onMouseMove={props.makeMoveBlockTrue}
       onTouchMove={props.makeMoveBlockTrue}
+      style={props.openExport ? { overflowY: "scroll" } : undefined}
     >
-      <AutoSizer>
-        {({ width }) => (
-          <List
-            height={window.innerHeight}
-            width={width}
-            overscanRowCount={0}
-            rowCount={list.length}
-            rowHeight={cache.rowHeight}
-            rowRenderer={rowRenderer}
-            deferredMeasurementCache={cache}
-          />
-        )}
-      </AutoSizer>
-
+      {props.openExport ? (
+        list.map((e, i) => <Row index={i} />)
+      ) : (
+        <AutoSizer>
+          {({ width }) => (
+            <List
+              height={window.innerHeight}
+              width={width}
+              overscanRowCount={0}
+              rowCount={list.length}
+              rowHeight={cache.rowHeight}
+              rowRenderer={rowRenderer}
+              deferredMeasurementCache={cache}
+            />
+          )}
+        </AutoSizer>
+      )}
       {props.newPageFrame && (
         <EmptyPageContent
           page={props.page}

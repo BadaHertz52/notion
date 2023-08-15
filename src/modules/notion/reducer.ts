@@ -17,9 +17,11 @@ import {
   blue,
   defaultColor,
 } from "./colorData";
-import catImg from "../../assets/img/michael-sum-LEpfefQf4rU-unsplash.jpeg";
-import imgBlockImg from "../../assets/img/roses-gfcb7dbdd4_640.jpeg";
+const catImg =
+  "https://github.com/BadaHertz52/notion/blob/master/src/assets/img/michael-sum-LEpfefQf4rU-unsplash.jpeg?raw=true";
 
+const imgBlockImg =
+  "https://github.com/BadaHertz52/notion/blob/master/src/assets/img/roses-gfcb7dbdd4_640.jpeg?raw=true";
 export const blockTypes: BlockType[] = [
   "text",
   "toggle",

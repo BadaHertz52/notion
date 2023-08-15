@@ -72,6 +72,7 @@ export type Template_Frame_SAME_Props = {
 };
 export type FrameProps = Template_Frame_SAME_Props & {
   page: Page;
+  openExport?: boolean;
 };
 /**
  * mouse drag로 위치를 변경시킬 블록의 내용을 보여주는 component
@@ -102,6 +103,7 @@ const Frame = ({
   fontStyle,
   mobileSideMenu,
   setMobileSideMenu,
+  openExport,
 }: FrameProps) => {
   const sideAppear = useSelector((state: RootState) => state.side.appear);
   const { editPage, editBlock, addBlock } = useContext(ActionContext).actions;
@@ -933,6 +935,7 @@ const Frame = ({
         mobileMenuTargetBlock={mobileMenuTargetBlock}
         setOpenTemplates={setOpenTemplates}
         frameInnerStyle={frameInnerStyle}
+        openExport={openExport}
       />
       {command.open && command.targetBlock && (
         <div id="block__commandBlock" style={commandBlockPosition}>
