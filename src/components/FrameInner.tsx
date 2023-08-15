@@ -156,18 +156,6 @@ const FrameInner = (props: FrameInnerProps) => {
     setTemplateItem(templateHtml, page);
   }, [addBlock, page, templateHtml]);
 
-  const handleListScroll = (params: ScrollParams) => {
-    const { scrollTop } = params;
-    const frameEl = frameRef.current;
-    const listEl = frameEl?.querySelector(
-      ".ReactVirtualized__Grid.ReactVirtualized__List"
-    );
-    console.log("scroll", scrollTop, listEl);
-    if (frameEl && listEl) {
-      frameEl.scrollTop = scrollTop;
-      //listEl.scrollTop = 0;
-    }
-  };
   useEffect(() => {
     const scrollContainerEl = frameRef.current?.querySelector(
       ".ReactVirtualized__Grid__innerScrollContainer"
@@ -227,7 +215,6 @@ const FrameInner = (props: FrameInnerProps) => {
                   rowHeight={cache.rowHeight}
                   rowRenderer={rowRenderer}
                   deferredMeasurementCache={cache}
-                  onScroll={handleListScroll}
                 />
               )}
             </AutoSizer>
