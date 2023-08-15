@@ -883,7 +883,6 @@ const Frame = ({
   ]);
   useEffect(() => {
     const condition = !!mobileMenuTargetBlock || (isMobile() && modal.open);
-    console.log("condition", condition);
     frameHtml?.classList.toggle("stop", condition);
     return () => {
       frameHtml?.classList.remove("stop");
@@ -896,12 +895,6 @@ const Frame = ({
       }`}
       style={frameStyle}
       ref={frameRef}
-      // style={{
-      //   overflowY:
-      //     mobileMenuTargetBlock || (isMobile() && modal.open)
-      //       ? "hidden"
-      //       : "scroll",
-      // }}
       onMouseMove={(event) =>
         move_MoveTargetBlock(event.clientX, event.clientY)
       }

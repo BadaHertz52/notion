@@ -87,29 +87,33 @@ const BlockComponent = ({
       const currentTarget = event.currentTarget;
       const mainBlock =
         currentTarget.parentElement?.parentElement?.parentElement;
-      if (mainBlock && mainBlock) {
+      const frameInnerEl = document.getElementById(`page-${page.id}`);
+      const frameInnerDomRect = frameInnerEl?.getBoundingClientRect();
+      if (mainBlock && mainBlock && frameInnerDomRect) {
         const mainBlockDomRect = mainBlock?.getClientRects()[0];
         const editor = document.getElementsByClassName("editor")[0];
-        const blockFn =
-          templateHtml === null
-            ? editor.querySelector(".blockFn")
-            : templateHtml.querySelector(".blockFn");
+        const blockFn = !templateHtml
+          ? editor.querySelector(".blockFn")
+          : templateHtml.querySelector(".blockFn");
         blockFn?.classList.toggle("on");
         blockFn?.classList.contains("on")
           ? sessionStorage.setItem("blockFnTargetBlock", JSON.stringify(block))
           : sessionStorage.removeItem("blockFnTargetBlock");
         if (mainBlockDomRect) {
-          if (templateHtml === null) {
-            const editorDomRect = editor.getClientRects()[0];
-            const top = mainBlockDomRect.top + editor.scrollTop;
-            const left = mainBlockDomRect.x - editorDomRect.x - 45;
+          if (!templateHtml) {
+            const top = mainBlockDomRect.top - frameInnerDomRect.top;
+            const left = mainBlockDomRect.x - frameInnerDomRect.x - 45;
             const blockFnStyle = `top:${top}px; left:${left}px`;
             blockFn?.setAttribute("style", blockFnStyle);
           } else {
-            const templateDomRect = templateHtml.getClientRects()[0];
-            const top = mainBlockDomRect.top - templateDomRect.top;
-            const left = mainBlockDomRect.x - templateDomRect.x - 45;
-            blockFn?.setAttribute("style", `top:${top}px; left:${left}px`);
+            const targetFrameDomRect = templateHtml
+              .querySelector(".frame")
+              ?.getBoundingClientRect();
+            if (targetFrameDomRect) {
+              const top = mainBlockDomRect.top - targetFrameDomRect.top;
+              const left = mainBlockDomRect.x - targetFrameDomRect.x - 45;
+              blockFn?.setAttribute("style", `top:${top}px; left:${left}px`);
+            }
           }
         }
       }
