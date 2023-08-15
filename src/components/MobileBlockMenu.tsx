@@ -63,7 +63,6 @@ const MobileBlockMenu = ({
         conditionForClosing_notMobileBlock &&
         conditionForClosing_notContentEditable
       ) {
-        console.log("1");
         closeMM();
       }
     },

@@ -555,10 +555,6 @@ const BlockStyler = ({
     [setMobileSideMenu, block]
   );
   useEffect(() => {
-    console.log("open");
-    return () => console.log("close");
-  }, []);
-  useEffect(() => {
     if (!isMobile()) {
       changeStylerStyle(frameHtml, block, setBlockStylerStyle);
       if (selection?.change) {
