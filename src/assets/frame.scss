@@ -18,6 +18,7 @@
   }
 }
 .frame.stop {
+  overflow-y: hidden;
   .ReactVirtualized__Grid.ReactVirtualized__List {
     overflow: hidden !important;
   }

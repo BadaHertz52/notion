@@ -618,6 +618,7 @@ const Frame = ({
   const changeCBSposition = useCallback(() => {
     if (command.open && command.targetBlock) {
       const frameDomRect = frameHtml?.getClientRects()[0];
+      const topBarEl = document.querySelector(".topBar");
       const blockStyler = document.getElementById("blockStyler");
       if (blockStyler) {
         //blockStyler
@@ -654,25 +655,25 @@ const Frame = ({
         //typing 으로 type 변경 시
         const commandInput = document.getElementById("commandInput");
         const commandInputDomRect = commandInput?.getClientRects()[0];
-        if (frameDomRect && commandInputDomRect) {
-          const top = commandInputDomRect.top + commandInputDomRect.height + 14;
+        if (frameDomRect && commandInputDomRect && topBarEl) {
+          const top = commandInputDomRect.bottom + frameHtml.scrollTop - 32;
           const left = `${commandInputDomRect.left - frameDomRect.left}px`;
-          const remainingHeight = frameDomRect.height - top;
+          const possibleHeight = window.innerHeight - topBarEl.clientHeight;
+          const remainingHeight = possibleHeight - commandInputDomRect.top - 50;
+          console.log("r", remainingHeight);
           const toDown = remainingHeight > 150;
-          const bottom =
-            frameDomRect.height -
-            commandInputDomRect.top +
-            commandInputDomRect.height;
           const maxHeight = toDown
             ? remainingHeight
-            : frameDomRect.top - bottom - 50;
+            : commandInputDomRect.top - 50;
+          const top2 = top - maxHeight - commandInputDomRect.height - 14;
+
           const style: CSSProperties = toDown
             ? {
                 top: `${top}px`,
                 left: left,
               }
             : {
-                bottom: `${bottom}px`,
+                top: top2,
                 left: left,
               };
           setCBPosition(style);
@@ -808,8 +809,8 @@ const Frame = ({
   useEffect(() => {
     // stop scroll when something open
     if (
+      command.open ||
       modal.open ||
-      command.command ||
       openLoader ||
       openComment ||
       moveTargetBlock ||
@@ -823,7 +824,7 @@ const Frame = ({
     }
   }, [
     modal.open,
-    command.command,
+    command.open,
     openLoader,
     openComment,
     moveTargetBlock,
