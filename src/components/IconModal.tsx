@@ -11,7 +11,11 @@ import { BsEmojiSmile } from "react-icons/bs";
 import { CSSProperties } from "styled-components";
 import { ActionContext } from "../route/NotionRouter";
 import { Block, IconType, Page, Emoji } from "../modules/notion/type";
-import { EMOJI_ARR, randomEmojiIcon } from "../modules/notion/emojiData";
+import {
+  EMOJI_ARR,
+  getEmojiUrl,
+  randomEmojiIcon,
+} from "../modules/notion/emojiData";
 import { setTemplateItem } from "../fn";
 import ScreenOnly from "./ScreenOnly";
 import EmojiIcon from "./EmojiIcon";
@@ -35,7 +39,6 @@ const IconModal = ({
   const IMAGE = "image";
   type Category = typeof EMOJI | typeof IMAGE;
   const [category, setCategory] = useState<Category>(EMOJI);
-
   const changePageIcon = useCallback(
     (icon: string | Emoji | null, iconType: IconType) => {
       const editTime = JSON.stringify(Date.now());
