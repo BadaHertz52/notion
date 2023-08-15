@@ -233,7 +233,7 @@ const Templates = ({
   return (
     <>
       <div id="templates" onClick={onClickTemplate}>
-        <div className="inner">
+        <div className="inner templates__inner">
           <div id="template" className={expand ? "expand" : ""}>
             {template ? (
               <>
@@ -356,7 +356,7 @@ const Templates = ({
       </div>
       {openEditAlert && (
         <div className="template__alert">
-          <div className="inner">
+          <div className="inner template__alert__inner">
             <div>
               The template has been modified. <br />
               Do you want to save the edits?

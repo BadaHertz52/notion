@@ -3,15 +3,16 @@
 #templates,
 .template__alert {
   @include modal;
-  .inner {
-    top: 0;
-    left: 0;
-    width: 85vw;
-    height: 85vh;
-    display: flex;
-    max-width: none;
-    max-height: none;
-  }
+}
+#templates .templates__inner,
+.template__alert .template__alert__inner {
+  top: 0;
+  left: 0;
+  width: 85vw;
+  height: 85vh;
+  display: flex;
+  max-width: none;
+  max-height: none;
 }
 #template.expand {
   width: 100%;

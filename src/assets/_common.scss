@@ -67,7 +67,7 @@ $black: rgb(40, 40, 40);
   align-items: center;
   justify-content: center;
   z-index: 10;
-  .inner {
+  & > .inner {
     background-color: #ffff;
     border-radius: 3px;
     position: relative;
