@@ -196,37 +196,39 @@ const FrameInner = (props: FrameInnerProps) => {
         newPageFrame={props.newPageFrame}
         frameInnerStyle={props.frameInnerStyle}
       />
-      {props.openExport ? (
-        list.map((e, i) => <Row index={i} />)
-      ) : (
-        <WindowScroller
-          scrollElement={
-            frameRef.current ? (frameRef.current as Element) : undefined
-          }
-        >
-          {() => (
-            <AutoSizer>
-              {({ width }) => (
-                <List
-                  height={window.innerHeight}
-                  width={width}
-                  overscanRowCount={0}
-                  rowCount={list.length}
-                  rowHeight={cache.rowHeight}
-                  rowRenderer={rowRenderer}
-                  deferredMeasurementCache={cache}
-                />
-              )}
-            </AutoSizer>
-          )}
-        </WindowScroller>
-      )}
-      {props.newPageFrame && (
-        <EmptyPageContent
-          page={props.page}
-          setOpenTemplates={props.setOpenTemplates}
-        />
-      )}
+      <div className="page__contents">
+        {props.openExport ? (
+          list.map((e, i) => <Row index={i} />)
+        ) : (
+          <WindowScroller
+            scrollElement={
+              frameRef.current ? (frameRef.current as Element) : undefined
+            }
+          >
+            {() => (
+              <AutoSizer>
+                {({ width }) => (
+                  <List
+                    height={window.innerHeight}
+                    width={width}
+                    overscanRowCount={0}
+                    rowCount={list.length}
+                    rowHeight={cache.rowHeight}
+                    rowRenderer={rowRenderer}
+                    deferredMeasurementCache={cache}
+                  />
+                )}
+              </AutoSizer>
+            )}
+          </WindowScroller>
+        )}
+        {props.newPageFrame && (
+          <EmptyPageContent
+            page={props.page}
+            setOpenTemplates={props.setOpenTemplates}
+          />
+        )}
+      </div>
     </div>
   );
 };
