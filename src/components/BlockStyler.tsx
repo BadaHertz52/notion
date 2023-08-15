@@ -146,21 +146,21 @@ const BlockStyler = ({
       setStyle: Dispatch<SetStateAction<CSSProperties | undefined>>
     ) => {
       const mainBlockDomRect = getMainBlockDomRect(frameHtml, block);
-      const pageContentInner = frameHtml?.querySelector(
-        ".page__contents__inner"
-      );
-      const pageContentDomRect = pageContentInner?.getClientRects()[0];
-      if (frameHtml && mainBlockDomRect && pageContentDomRect) {
-        const frameDomRect = frameHtml.getClientRects()[0];
-        const top = mainBlockDomRect.top - frameDomRect.top;
-        const left = mainBlockDomRect.left - frameDomRect.left;
+      const firstBlockEl = frameHtml?.querySelector(".page__firstBlock");
+      if (frameHtml && mainBlockDomRect && firstBlockEl) {
+        const frameDomRect = frameHtml.getBoundingClientRect();
+        const blockStyleHeight = 50;
+        const top =
+          mainBlockDomRect.top -
+          frameDomRect.top +
+          frameHtml.scrollTop -
+          blockStyleHeight;
+        const left = mainBlockDomRect.left - frameDomRect.x;
         setStyle({
-          top: `${top}px`,
-          left: `${left}px`,
+          top: top,
+          left: left,
           width:
-            window.innerWidth < 768
-              ? `${pageContentDomRect.width}px`
-              : "fit-content",
+            window.innerWidth < 768 ? firstBlockEl.clientWidth : "fit-content",
         });
       }
     },
