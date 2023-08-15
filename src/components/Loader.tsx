@@ -9,6 +9,7 @@ import React, {
 import { CSSProperties } from "styled-components";
 import { Block, Page } from "../modules/notion/type";
 import { setTemplateItem } from "../fn";
+import { BiDoughnutChart } from "react-icons/bi";
 
 type LoaderProps = {
   block: Block | null;
@@ -104,25 +105,21 @@ const Loader = ({
 
   const changeLoaderStyle = useCallback(() => {
     if (block) {
-      const blockHtml = document.getElementById(`block-${block.id}`);
+      const blockHtml = document.querySelector(
+        `#block-${block.id} .btn-addBlockFile`
+      );
       const blockDomRect = blockHtml?.getClientRects()[0];
-      const editorHtml = document.querySelector(".editor");
-      const editorDomRect = editorHtml?.getClientRects()[0];
-
-      if (blockDomRect && frameHtml && editorDomRect) {
+      if (blockDomRect && frameHtml) {
         const frameDomRect = frameHtml.getClientRects()[0];
-        const frameInner = frameHtml.getElementsByClassName(
-          "frame__inner"
-        )[0] as HTMLElement;
-        const frameInnerDomRect = frameInner.getClientRects()[0];
-
         const top =
-          blockDomRect.bottom - frameDomRect.top + blockDomRect.height + 10;
-        const remainHeight = frameDomRect.height - top;
-        const left =
-          (frameDomRect.width - frameInner.offsetWidth) * 0.5 +
-          (blockDomRect.left - frameInnerDomRect.left) -
-          editorDomRect.left;
+          blockDomRect.bottom + frameDomRect.top + blockDomRect.height + 10;
+        const possibleHeight =
+          frameDomRect.top > 0
+            ? window.innerHeight - frameDomRect.top
+            : window.innerHeight;
+        const remainHeight = possibleHeight - top;
+        const bottom = remainHeight + blockDomRect.height + 10;
+        const left = blockDomRect.left - frameDomRect.left;
         const basicStyle: CSSProperties = {
           position: "absolute",
           left: left,
@@ -136,11 +133,7 @@ const Loader = ({
               }
             : {
                 ...basicStyle,
-                bottom:
-                  frameDomRect.height -
-                  blockDomRect.top +
-                  blockDomRect.height +
-                  10,
+                bottom: bottom,
               };
         setLoaderStyle(style);
       }
