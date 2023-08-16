@@ -96,6 +96,8 @@ const SideBar = ({
   const [pageMenuStyle, setPageMenuStyle] = useState<CSSProperties>();
 
   const recordIcon = user.userName.substring(0, 1);
+  const itemSize = window.innerHeight * 0.3;
+  const listHeight = itemSize;
 
   const addNewPage = () => {
     addPage(pageSample);
@@ -269,6 +271,8 @@ const SideBar = ({
               pages={pages}
               pagesId={pagesId}
               recentPagesId={user.recentPagesId}
+              listHeight={listHeight}
+              itemSize={itemSize}
             />
             <div className="fn-group-1">
               <button

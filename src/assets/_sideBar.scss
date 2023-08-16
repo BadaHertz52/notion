@@ -412,6 +412,8 @@
   }
   .sideBar__inner {
     width: 95%;
+    margin: 0 auto;
+    overflow-x: hidden;
   }
 }
 
@@ -498,7 +500,9 @@
       }
       .list {
         padding: 0 1rem;
-        display: flex;
+        & > div > div {
+          display: flex;
+        }
       }
       .item {
         @include modalStyle;
