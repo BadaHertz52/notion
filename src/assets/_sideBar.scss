@@ -222,8 +222,8 @@
     }
   }
 
-  //sideBar__inner__scroll--
-  .sideBar__inner__scroll {
+  //sideBar__inner__list--
+  .sideBar__inner__list {
     padding: 1rem 0;
     height: 50%;
     overflow: hidden auto;
@@ -425,7 +425,7 @@
     .sideBar__inner {
       justify-content: initial;
     }
-    .sideBar__inner__scroll {
+    .sideBar__inner__list {
       max-height: calc(90vh - 40px - 26px - 2rem - 25vw);
       box-sizing: border-box;
       .favorites,
@@ -436,7 +436,7 @@
       }
     }
     .switcher .item__inner,
-    .sideBar__inner__scroll .header,
+    .sideBar__inner__list .header,
     .recentPages .header {
       font-size: 1rem;
     }

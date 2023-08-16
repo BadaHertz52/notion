@@ -293,7 +293,7 @@ const SideBar = ({
                 </div>
               </div>
             </div>
-            <div className="sideBar__inner__scroll">
+            <div className="sideBar__inner__list">
               <Favorites
                 favorites={user.favorites}
                 notion={notion}
