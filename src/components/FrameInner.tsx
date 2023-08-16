@@ -8,7 +8,6 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  TouchEvent,
 } from "react";
 import PageHeader, { PageHeaderProps } from "./PageHeader";
 import { Block, Page } from "../modules/notion/type";
@@ -19,7 +18,6 @@ import {
   CellMeasurerCache,
   List,
   ListRowProps,
-  ScrollParams,
   WindowScroller,
 } from "react-virtualized";
 import { blockSample } from "../modules/notion/reducer";
@@ -201,9 +199,7 @@ const FrameInner = (props: FrameInnerProps) => {
           list.map((e, i) => <Row index={i} />)
         ) : (
           <WindowScroller
-            scrollElement={
-              frameRef.current ? (frameRef.current as Element) : undefined
-            }
+            scrollElement={(frameRef.current as Element | null) || undefined}
           >
             {() => (
               <AutoSizer>
