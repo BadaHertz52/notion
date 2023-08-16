@@ -16,9 +16,7 @@ const TrashResultItem = ({ item, setOpenTrash }: TrashResultItemProps) => {
 
   return (
     <div className="page" onClick={() => setOpenTrash(false)}>
-      <Link to={makeRoutePath(item.id)}>
-        <Result item={item} />
-      </Link>
+      <Result item={item} />
       <div className="btn-group">
         <button
           title="button to restore page"

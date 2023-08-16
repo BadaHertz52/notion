@@ -1,6 +1,8 @@
 import React from "react";
 import { IconType } from "../modules/notion/type";
 import PageIcon from "./PageIcon";
+import { Link } from "react-router-dom";
+import { makeRoutePath } from "../fn";
 export type resultType = {
   id: string;
   title: string;
@@ -16,7 +18,7 @@ export type ResultProps = {
 
 const Result = ({ item }: ResultProps) => {
   return (
-    <div className="result">
+    <Link className="result" to={makeRoutePath(item.id)}>
       <PageIcon icon={item.icon} iconType={item.iconType} style={undefined} />
       <div>
         <div className="page__title">{item.title}</div>
@@ -27,7 +29,7 @@ const Result = ({ item }: ResultProps) => {
           </div>
         )}
       </div>
-    </div>
+    </Link>
   );
 };
 

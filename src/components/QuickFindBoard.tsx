@@ -338,14 +338,7 @@ const QuickFindBoard = ({
             <div className="body">
               {result ? (
                 result !== "noResult" ? (
-                  result.map((item: resultType) => (
-                    <Link
-                      title="Link to select result"
-                      to={makeRoutePath(item.id)}
-                    >
-                      <Result item={item} />
-                    </Link>
-                  ))
+                  result.map((item: resultType) => <Result item={item} />)
                 ) : (
                   <div className="no-result">
                     <p>No result</p>
@@ -355,9 +348,7 @@ const QuickFindBoard = ({
                 )
               ) : recentPagesList ? (
                 recentPagesList.map((item: resultType) => (
-                  <Link title="Link to select page" to={makeRoutePath(item.id)}>
-                    <Result item={item} />
-                  </Link>
+                  <Result item={item} />
                 ))
               ) : (
                 <div className="noRecentPages">
