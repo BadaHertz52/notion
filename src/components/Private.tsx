@@ -19,7 +19,7 @@ function Private({
   onClickMoreBtn,
 }: PrivateProps) {
   const { changeSide } = useContext(ActionContext).actions;
-  const list: ListItem[] | null = useMemo(
+  const targetList: ListItem[] | null = useMemo(
     () =>
       firstPages
         ? firstPages
@@ -52,10 +52,10 @@ function Private({
       </div>
       {notion.pages && (
         <div className="list">
-          {notion.pages[0] && (
+          {notion.pages[0] && targetList && (
             <ListTemplate
               notion={notion}
-              targetList={list}
+              targetList={targetList}
               onClickMoreBtn={onClickMoreBtn}
               addNewSubPage={addNewSubPage}
               changeSide={changeSide}
