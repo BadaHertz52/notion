@@ -128,10 +128,10 @@ const TopBar = ({
     const innerWidth = window.innerWidth;
     const topBarLeftEl = document.querySelector(".topBar__left");
     const topBarPageToolEl = document.querySelector(".topBar__page-tool");
-    const pagePath = document.querySelectorAll(".pagePath");
+    const pagePathEl = document.querySelectorAll(".pagePath");
     const changePathWidth = (topBarLeftWidth: number) => {
-      const width: number = (topBarLeftWidth - 32) / pagePath.length;
-      pagePath.forEach((e: Element) =>
+      const width: number = (topBarLeftWidth - 32) / pagePathEl.length;
+      pagePathEl.forEach((e: Element) =>
         e.setAttribute("style", `max-width:${width}px`)
       );
     };
