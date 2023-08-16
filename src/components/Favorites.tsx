@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from "react";
+import React, { useCallback, useContext, useMemo } from "react";
 import { ListItem, Notion, Page } from "../modules/notion/type";
 import { findPage } from "../fn";
 import ListTemplate from "./ListTemplate";
@@ -47,16 +47,22 @@ function Favorites({
     []
   );
 
+  const targetList = useMemo(
+    () =>
+      pagesId && pages ? makeFavoriteList(favorites, pagesId, pages) : null,
+    [favorites, pagesId, pages, makeFavoriteList]
+  );
+
   return (
     <div className="favorites">
       <div className="header">
         <span>FAVORITES </span>
       </div>
-      {favorites && pagesId && pages && (
+      {targetList && (
         <div className="list">
           <ListTemplate
             notion={notion}
-            targetList={makeFavoriteList(favorites, pagesId, pages)}
+            targetList={targetList}
             onClickMoreBtn={onClickMoreBtn}
             addNewSubPage={addNewSubPage}
             changeSide={changeSide}
