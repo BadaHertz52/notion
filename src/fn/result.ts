@@ -5,30 +5,27 @@ function makePath(
   parentsId: string[],
   pagesId: string[],
   pages: Page[],
-  trashParentPagesId: string[] | null,
-  trashParentPages: Page[] | null
+  trashPagesId: string[] | null,
+  trashPages: Page[] | null
 ): string {
-  let path = "";
-  parentsId.forEach((id: string) => {
-    const title = parentsId.includes(id)
+  const pathArray = parentsId.map((id: string) => {
+    const title = pagesId.includes(id)
       ? findPage(pagesId, pages, id).header.title
-      : trashParentPages && trashParentPagesId
-      ? findPage(trashParentPagesId, trashParentPages, id).header.title
+      : trashPages && trashPagesId
+      ? findPage(trashPagesId, trashPages, id).header.title
       : "";
-    if (parentsId.indexOf(id) === 0) {
-      path = title;
-    } else {
-      path.concat(`/${title}`);
-    }
+    console.log("title", title);
+    return title;
   });
-  return path;
+  console.log("path", pathArray.join("/"));
+  return pathArray.join("/");
 }
 export function makeResultType(
   page: Page,
   pagesId: string[],
   pages: Page[],
-  trashParentPagesId: string[] | null,
-  trashParentPages: Page[] | null
+  trashPagesId: string[] | null,
+  trashPages: Page[] | null
 ): resultType {
   return {
     id: page.id,
@@ -38,13 +35,9 @@ export function makeResultType(
     createTime: page.createTime,
     editTime: page.editTime,
     path: page.parentsId
-      ? makePath(
-          page.parentsId,
-          pagesId,
-          pages,
-          trashParentPagesId,
-          trashParentPages
-        )
+      ? makePath(page.parentsId, pagesId, pages, trashPagesId, trashPages) +
+        "/" +
+        page.header.title
       : null,
   };
 }
