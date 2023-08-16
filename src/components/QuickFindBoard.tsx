@@ -15,6 +15,7 @@ import Result, { resultType } from "./Result";
 import { makeResultType } from "../fn/";
 import ScreenOnly from "./ScreenOnly";
 import { Link } from "react-router-dom";
+import ResultList from "./ResultList";
 
 type QuickFindBoardProps = {
   userName: string;
@@ -39,11 +40,15 @@ const QuickFindBoard = ({
   const lastEditedOldest = "Last edited:Oldest first";
   const createdNewest = "Created:Newest first";
   const createdOldest = "Created:Oldest first";
+  const resultBodyRef = useRef<HTMLDivElement>(null);
+  const listWidth: number = resultBodyRef.current?.clientWidth || 300 - 10 * 2;
   const [selectedOption, setSelectedOption] = useState<string>(bestMatches);
   const [result, setResult] = useState<resultType[] | null | "noResult">(null);
   const [bestMatchesResult, setBestMatchesResult] = useState<
     resultType[] | null | "noResult"
   >(null);
+  const itemSize = 16 * 1.1 + 16;
+  const listHeight = itemSize * 4;
   const sortOptions = useRef<HTMLDivElement>(null);
   const openSortOptionsBtn = useRef<HTMLButtonElement>(null);
   const recentPagesList = recentPagesId?.map((id: string) => {
@@ -335,10 +340,16 @@ const QuickFindBoard = ({
                 </>
               )}
             </div>
-            <div className="body">
+            <div className="body" ref={resultBodyRef}>
               {result ? (
                 result !== "noResult" ? (
-                  result.map((item: resultType) => <Result item={item} />)
+                  <ResultList
+                    list={result}
+                    listWidth={listWidth}
+                    listHeight={listHeight}
+                    layout="vertical"
+                    itemSize={itemSize}
+                  />
                 ) : (
                   <div className="no-result">
                     <p>No result</p>
@@ -347,9 +358,13 @@ const QuickFindBoard = ({
                   </div>
                 )
               ) : recentPagesList ? (
-                recentPagesList.map((item: resultType) => (
-                  <Result item={item} />
-                ))
+                <ResultList
+                  list={recentPagesList}
+                  listWidth={listWidth}
+                  listHeight={listHeight}
+                  layout="vertical"
+                  itemSize={itemSize}
+                />
               ) : (
                 <div className="noRecentPages">
                   There are no pages visited recently.

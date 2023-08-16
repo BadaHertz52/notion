@@ -14,12 +14,14 @@ import { resultType } from "./Result";
 import { getCurrentPageId, makeResultType } from "../fn";
 import ScreenOnly from "./ScreenOnly";
 import TrashResultItem from "./TrashResultItem";
+import ResultList from "./ResultList";
 
 type TrashProps = {
   style: CSSProperties | undefined;
   trashPagesId: string[] | null;
   trashPages: Page[] | null;
   pagesId: string[] | null;
+  pages: Page[] | null;
   openTrash: boolean;
   setOpenTrash: Dispatch<SetStateAction<boolean>>;
 };
@@ -29,6 +31,7 @@ const Trash = ({
   trashPages,
   trashPagesId,
   pagesId,
+  pages,
   openTrash,
   setOpenTrash,
 }: TrashProps) => {
@@ -40,6 +43,7 @@ const Trash = ({
   const [result, setResult] = useState<resultType[] | null>(null);
   //null 이면 검색의 결과값이 없는것
   const [sort, setSort] = useState<"all" | "current">("all");
+  //const itemSize =
   const onChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       if (trashList) {
@@ -54,12 +58,12 @@ const Trash = ({
   );
 
   useEffect(() => {
-    if (pagesId) {
+    if (pagesId && pages) {
       let filteringTargetList: resultType[] | undefined = undefined;
       const makeFilteringTargetList = (
-        pages: Page[] | null
+        targetPages: Page[] | null
       ): resultType[] | undefined =>
-        pages?.map((page: Page) =>
+        targetPages?.map((page: Page) =>
           makeResultType(page, pagesId, pages, trashPagesId, trashPages)
         );
 
@@ -86,7 +90,7 @@ const Trash = ({
     } else {
       setTrashList(undefined);
     }
-  }, [sort, pagesId, trashPages, trashPagesId]);
+  }, [sort, pagesId, pages, trashPages, trashPagesId]);
 
   useEffect(() => {
     const classList = trashRef.current?.classList;
@@ -155,9 +159,13 @@ const Trash = ({
         <div className="trash__list">
           {trashList ? (
             result ? (
-              result.map((item: resultType) => (
-                <TrashResultItem item={item} setOpenTrash={setOpenTrash} />
-              ))
+              <ResultList
+                list={result}
+                listWidth={300}
+                listHeight={40 * 3}
+                layout="vertical"
+                itemSize={40}
+              />
             ) : (
               <div className="no-result">No matches found.</div>
             )

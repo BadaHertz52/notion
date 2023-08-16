@@ -72,7 +72,6 @@
       }
     }
     .btn-clear {
-      padding: 5px;
       &:hover {
         background-color: $itemHover;
       }
@@ -148,7 +147,8 @@
     }
     .no-result {
       p {
-        margin: 0;
+        margin: 8px 5px;
+        text-align: left;
       }
       p:nth-child(2) {
         color: $mud;

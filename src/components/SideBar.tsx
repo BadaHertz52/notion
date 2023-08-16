@@ -394,6 +394,7 @@ const SideBar = ({
         trashPagesId={trashPagesId}
         trashPages={trashPages}
         pagesId={pagesId}
+        pages={pages}
         openTrash={openTrash}
         setOpenTrash={setOpenTrash}
       />
