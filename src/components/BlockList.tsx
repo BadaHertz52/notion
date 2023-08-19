@@ -102,18 +102,6 @@ const BlockList = (props: BlockListProps) => {
       </CellMeasurer>
     );
   };
-  const changeHeight = useCallback(() => {
-    const pageHeaderEl = document.querySelector(".page__header");
-    const topBarEl = document.querySelector(".topBar");
-    if (pageHeaderEl && topBarEl) {
-      const pageHeaderDomRect = pageHeaderEl.getClientRects()[0];
-      const newHeight =
-        pageHeaderDomRect.bottom < 0
-          ? window.innerHeight - topBarEl.clientHeight
-          : window.innerHeight - pageHeaderDomRect.bottom;
-      setHeight(newHeight);
-    }
-  }, []);
   return (
     <div ref={blockListRef}>
       <AutoSizer disableHeight={false} style={{ height: height }}>
