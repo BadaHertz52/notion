@@ -177,8 +177,6 @@ const FrameInner = (props: FrameInnerProps) => {
     <div
       className="frame__inner"
       id={`page-${page.id}`}
-      onMouseMove={props.makeMoveBlockTrue}
-      onTouchMove={props.makeMoveBlockTrue}
       style={props.openExport ? { overflowY: "scroll" } : undefined}
     >
       <PageHeader

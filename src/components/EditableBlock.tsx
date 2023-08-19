@@ -305,7 +305,6 @@ const EditableBlock = ({
                       setSelection={setSelection}
                       setMobileMenuTargetBlock={setMobileMenuTargetBlock}
                       onClickCommentBtn={onClickCommentBtn}
-                      isMoved={isMoved}
                       setMoveTargetBlock={setMoveTargetBlock}
                       measure={measure}
                     />

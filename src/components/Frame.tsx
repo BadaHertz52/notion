@@ -146,7 +146,7 @@ const Frame = ({
   /**
    * page내의 블록의 위치 변경이 있는 지 여부를 나타냄
    */
-  const isMoved = useRef<boolean>(false);
+  const isMoved = useRef<boolean>(!!moveTargetBlock);
   /** block 이동 시, 이동 할 위치의 기준이 되는 block(block 은 pointBlockToMoveBlock.current의 앞에 위치하게됨) */
   const pointBlockToMoveBlock = useRef<Block | null>(null);
   const [mobileMenuTargetBlock, setMobileMenuTargetBlock] =
@@ -589,9 +589,8 @@ const Frame = ({
         move_MoveTargetBlock(clientX, clientY);
       }
     },
-    [frameHtml, move_MoveTargetBlock, page]
+    [move_MoveTargetBlock, page, moveTargetBlock]
   );
-
   // edit block using sessionStorage
   const updateBlock = useCallback(() => {
     const item = sessionStorage.getItem("itemsTobeEdited");
@@ -750,8 +749,10 @@ const Frame = ({
     if (isMobile() && openComment) {
       const SELECTION = document.getSelection();
       const notSelect =
-        SELECTION?.anchorNode === SELECTION?.focusNode &&
-        SELECTION?.anchorOffset === SELECTION?.focusOffset;
+        (SELECTION?.anchorNode === SELECTION?.focusNode &&
+          SELECTION?.anchorOffset === SELECTION?.focusOffset) ||
+        SELECTION?.anchorNode?.nodeName !== "#text" ||
+        SELECTION?.focusNode?.nodeName !== "#text";
       if (!notSelect && SELECTION) {
         if (openComment) {
           setOpenComment(false);
@@ -867,7 +868,10 @@ const Frame = ({
   ]);
 
   useEffect(() => {
-    if (openComment && (mobileMenuTargetBlock || mobileSideMenu.what)) {
+    if (
+      (openComment && (mobileMenuTargetBlock || mobileSideMenu.what)) ||
+      moveTargetBlock
+    ) {
       if (mobileMenuTargetBlock) {
         setMobileMenuTargetBlock(null);
       }
@@ -883,6 +887,7 @@ const Frame = ({
     mobileMenuTargetBlock,
     mobileSideMenu.what,
     setMobileSideMenu,
+    moveTargetBlock,
   ]);
   useEffect(() => {
     const condition = !!mobileMenuTargetBlock || (isMobile() && modal.open);
@@ -891,6 +896,9 @@ const Frame = ({
       frameHtml?.classList.remove("stop");
     };
   }, [mobileMenuTargetBlock, modal.open, frameHtml]);
+  useEffect(() => {
+    isMoved.current = !!moveTargetBlock;
+  }, [moveTargetBlock]);
   return (
     <div
       className={`frame ${newPageFrame ? "newPageFrame" : ""} ${
@@ -902,7 +910,7 @@ const Frame = ({
         move_MoveTargetBlock(event.clientX, event.clientY)
       }
       onMouseUp={stopMovingBlock}
-      onTouchMove={(event) => move_MoveTargetBlockInMobile(event)}
+      onTouchMove={move_MoveTargetBlockInMobile}
       onTouchEnd={stopMovingBlock}
     >
       <FrameInner
@@ -922,7 +930,7 @@ const Frame = ({
         pointBlockToMoveBlock={pointBlockToMoveBlock}
         makeMoveBlockTrue={makeMoveBlockTrue}
         isMoved={isMoved}
-        setMoveTargetBlock={setMobileMenuTargetBlock}
+        setMoveTargetBlock={setMoveTargetBlock}
         command={command}
         setCommand={setCommand}
         openComment={openComment}

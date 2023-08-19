@@ -453,6 +453,7 @@ const BlockContentEditable = ({
    */
   const onClickContentEditable = useCallback(
     (event: MouseEvent) => {
+      if (event.currentTarget !== event.target) return;
       const target = event.target as HTMLElement;
       if (target.className === "link") {
         const href = target.getAttribute("href");
