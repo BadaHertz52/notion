@@ -74,8 +74,10 @@
     background-color: $itemHover;
   }
 }
+.editableBlock .contentEditable {
+  width: fit-content;
+}
 .contentEditable {
-  width: 100%;
   white-space: normal;
   word-break: break-all;
   overflow: hidden;

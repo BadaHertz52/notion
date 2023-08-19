@@ -500,6 +500,8 @@
       }
       .list {
         padding: 0 1rem;
+        width: 100%;
+        overflow: hidden;
         & > div > div {
           display: flex;
         }
@@ -510,6 +512,8 @@
         position: relative;
         height: 25vw;
         width: 25vw;
+        min-width: 130px;
+        height: 130px;
         display: flex;
         flex-direction: column;
         box-sizing: border-box;

@@ -156,17 +156,7 @@ const Frame = ({
   const sideBarWidth =
     sideAppear === "lock" && sideBarEl ? sideBarEl.clientWidth : 0;
   const maxWidth = innerWidth - sideBarWidth - scrollbarWidth;
-  const fontSize: number = isMobile()
-    ? openTemplates
-      ? 1.5
-      : smallText
-      ? 1
-      : 1.2
-    : openTemplates
-    ? 1.25
-    : smallText
-    ? 0.8
-    : 1;
+  const fontSize: number = openTemplates ? 1.25 : smallText ? 0.8 : 1;
   const frameStyle: CSSProperties = {
     fontFamily: fontStyle,
     fontSize: `${fontSize}rem`,

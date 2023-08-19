@@ -96,7 +96,8 @@ const SideBar = ({
   const [pageMenuStyle, setPageMenuStyle] = useState<CSSProperties>();
 
   const recordIcon = user.userName.substring(0, 1);
-  const itemSize = window.innerHeight * 0.3;
+  const size = window.innerWidth * 0.25;
+  const itemSize = size >= 130 ? size : 130;
   const listHeight = itemSize;
 
   const addNewPage = () => {
