@@ -8,6 +8,7 @@ import React, {
   MouseEvent,
   useRef,
   ChangeEvent,
+  TouchEvent,
 } from "react";
 import { blockTypes } from "../modules/notion/reducer";
 import { Block, BlockType, Page } from "../modules/notion/type";
@@ -316,6 +317,7 @@ const BlockContentEditable = ({
    */
   const onKeyDownContents = useCallback(
     (event: KeyboardEvent<HTMLDivElement>) => {
+      if (event.currentTarget !== event.target) return;
       const code = event.code.toLowerCase();
       switch (code) {
         case "tab":
@@ -422,31 +424,39 @@ const BlockContentEditable = ({
   /**
    *block의 content 를 마우스로 선택 시, block의 content를 선택된 부분(class 가 selected인 span element)과 아닌 부분으로 수정하는 함수
    */
-  const onSelectInPC = useCallback(() => {
-    if (!isMobile()) {
-      const SELECTION = window.getSelection();
-      if (block) {
-        selectContent(
-          SELECTION,
-          block,
-          contentEditableRef.current,
-          editBlock,
-          page,
-          setSelection
-        );
+  const onSelectInPC = useCallback(
+    (event: React.SyntheticEvent<HTMLDivElement, Event>) => {
+      if (event.currentTarget !== event.target) return;
+      if (!isMobile()) {
+        const SELECTION = window.getSelection();
+        if (block) {
+          selectContent(
+            SELECTION,
+            block,
+            contentEditableRef.current,
+            editBlock,
+            page,
+            setSelection
+          );
+        }
       }
-    }
-  }, [block, editBlock, page, setSelection, contentEditableRef]);
+    },
+    [block, editBlock, page, setSelection, contentEditableRef]
+  );
 
   /**
    * 모바일 브라우저에서 특정 이벤트가 발생 했을 때 mobileBlockMenu 를 열어 주는 함수
    */
-  const openMobileBlockMenu = useCallback(() => {
-    if (!block.comments) {
-      setMobileMenuTargetBlock(block);
-      setSelection(null);
-    }
-  }, [block, setMobileMenuTargetBlock, setSelection]);
+  const openMobileBlockMenu = useCallback(
+    (event: TouchEvent) => {
+      if (event.currentTarget !== event.target) return;
+      if (!block.comments) {
+        setMobileMenuTargetBlock(block);
+        setSelection(null);
+      }
+    },
+    [block, setMobileMenuTargetBlock, setSelection]
+  );
 
   /**
    * BlockComponent 중 link 가 있는 element를 클릭 했을 경우 , 해당 링크를 여는 함수
