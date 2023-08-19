@@ -124,7 +124,6 @@ const Loader = ({
           left: left,
           width: blockDomRect.width,
         };
-        console.log("?", remainingHeight, top2, top);
         const style: CSSProperties = {
           ...basicStyle,
           top: remainingHeight > loaderHeight + 20 ? top + 10 : top2,

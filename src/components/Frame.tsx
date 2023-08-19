@@ -659,7 +659,6 @@ const Frame = ({
           const left = `${commandInputDomRect.left - frameDomRect.left}px`;
           const possibleHeight = window.innerHeight - topBarEl.clientHeight;
           const remainingHeight = possibleHeight - commandInputDomRect.top - 50;
-          console.log("r", remainingHeight);
           const toDown = remainingHeight > 150;
           const maxHeight = toDown
             ? remainingHeight
