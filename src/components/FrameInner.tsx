@@ -89,7 +89,7 @@ const FrameInner = (props: FrameInnerProps) => {
 
   const Row = ({ index, measure }: RowProps) => {
     return list[index] ? (
-      <div className="page__firstBlock" style={props.frameInnerStyle}>
+      <div className="page__firstBlock">
         <EditableBlock
           key={(list[index] as Block).id}
           pages={props.pages}
@@ -177,7 +177,10 @@ const FrameInner = (props: FrameInnerProps) => {
     <div
       className="frame__inner"
       id={`page-${page.id}`}
-      style={props.openExport ? { overflowY: "scroll" } : undefined}
+      style={{
+        ...props.frameInnerStyle,
+        overflowY: props.openExport ? "scroll" : "initial",
+      }}
     >
       <PageHeader
         userName={props.userName}
@@ -190,7 +193,6 @@ const FrameInner = (props: FrameInnerProps) => {
         setDiscardEdit={props.setDiscardEdit}
         showAllComments={props.showAllComments}
         newPageFrame={props.newPageFrame}
-        frameInnerStyle={props.frameInnerStyle}
       />
       <div className="page__contents">
         {props.openExport ? (

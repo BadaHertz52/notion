@@ -36,6 +36,7 @@
 .frame__inner {
   width: 100%;
   height: 100%;
+  margin: 0 auto;
   div,
   input,
   button {
@@ -46,11 +47,11 @@
   width: 100%;
 }
 .page__header,
-.page__firstBlock {
+.page__contents {
   margin: 0 auto;
 }
 .page__header_notCover,
-.page__firstBlock {
+.page__contents {
   padding-left: calc(96px + env(safe-area-inset-left));
 }
 .page__header .page__title,

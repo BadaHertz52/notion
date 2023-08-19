@@ -39,7 +39,6 @@ export type PageHeaderProps = {
   showAllComments: boolean;
   newPageFrame: boolean;
   handleImgLoad?: () => void;
-  frameInnerStyle: CSSProperties;
 };
 function PageHeader({
   userName,
@@ -53,7 +52,6 @@ function PageHeader({
   showAllComments,
   newPageFrame,
   handleImgLoad,
-  frameInnerStyle,
 }: PageHeaderProps) {
   const { editPage, editBlock } = useContext(ActionContext).actions;
 
@@ -68,7 +66,6 @@ function PageHeader({
     undefined
   );
   const headerStyle: CSSProperties = {
-    ...frameInnerStyle,
     marginTop: page.header.cover ? "10px" : "30px",
   };
   const pageCommentStyle: CSSProperties = {
