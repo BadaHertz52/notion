@@ -61,7 +61,7 @@ const EmptyPageContent = ({
     sessionStorage.setItem("targetPageId", page.id);
   }, [page.id, setOpenTemplates]);
   return (
-    <>
+    <div className="empty-page__btn-group">
       <button
         title="button to start empty page with icon"
         onClick={onClickEmptyWithIconBtn}
@@ -82,7 +82,7 @@ const EmptyPageContent = ({
           <span>Templates</span>
         </button>
       )}
-    </>
+    </div>
   );
 };
 

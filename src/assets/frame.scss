@@ -183,21 +183,21 @@
   span {
     color: $mud;
   }
-  .page__firstBlock {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: flex-start;
+}
+.empty-page__btn-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  font-size: 1rem;
+  button {
     font-size: 1rem;
-    button {
-      font-size: 1rem;
-      display: block;
-      margin: 10px;
-      svg {
-        color: $itemSvg;
-        fill: $itemSvg;
-        margin-right: 10px;
-      }
+    display: block;
+    margin: 10px;
+    svg {
+      color: $itemSvg;
+      fill: $itemSvg;
+      margin-right: 10px;
     }
   }
 }
