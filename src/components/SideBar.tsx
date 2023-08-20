@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import { blockSample, pageSample } from "../modules/notion/reducer";
 import { Block, ListItem, Notion, Page } from "../modules/notion/type";
-import { closeModal, findPage } from "../fn";
+import { closeModal, findPage, isMobile } from "../fn";
 import { UserState } from "../modules/user/reducer";
 import Trash from "./Trash";
 import Rename from "./Rename";
@@ -153,31 +153,49 @@ const SideBar = ({
       }
     }
   }, []);
+  const changeMoreFnStyleToClose = useCallback(() => {
+    if (window.innerWidth > 768) {
+      setMoreFnStyle(undefined);
+    } else {
+      setMoreFnStyle({
+        display: "block",
+        transform: "translateY(100vh)",
+      });
+      setTimeout(() => {
+        setMoreFnStyle(undefined);
+      }, 500);
+    }
+  }, []);
+  const closePageMenu = () => {
+    setOpenPageMenu(false);
+  };
+  const closeSideBarMoreFn = () => {
+    setOpenSideMoreMenu(false);
+    changeMoreFnStyleToClose();
+  };
   const handleClickToCloseModal = useCallback(
     (event: globalThis.MouseEvent) => {
       if (openSideMoreMenu) {
         const target = event.target as HTMLElement | null;
-        if (target?.parentElement?.className !== "resizeBar") {
-          closeModal("sideBar__moreFn", setOpenSideMoreMenu, event);
-          if (window.innerWidth > 768) {
-            setMoreFnStyle(undefined);
-          } else {
-            setMoreFnStyle({
-              display: "block",
-              transform: "translateY(100vh)",
-            });
-            setTimeout(() => {
-              setMoreFnStyle(undefined);
-            }, 500);
-          }
+        if (!target?.closest(".sideBar__moreFn")) {
+          changeMoreFnStyleToClose();
         }
       }
+      openSideMoreMenu &&
+        closeModal("sideBar__moreFn", setOpenSideMoreMenu, event);
       openPageMenu && closeModal("pageMenu", setOpenPageMenu, event);
       openRename && closeModal("rename", setOpenRename, event);
       openTrash && closeModal("trash", setOpenTrash, event);
     },
-    [openPageMenu, openRename, openSideMoreMenu, openTrash]
+    [
+      openPageMenu,
+      openRename,
+      openSideMoreMenu,
+      openTrash,
+      changeMoreFnStyleToClose,
+    ]
   );
+
   const changeTrashStyle = useCallback(() => {
     const innerWidth = window.innerWidth;
     if (innerWidth > 768 && trashBtnRef.current) {
@@ -368,17 +386,25 @@ const SideBar = ({
         setRenameStyle={setRenameStyle}
         setOpenPageMenu={setOpenPageMenu}
         setPageMenuStyle={setPageMenuStyle}
+        closeSideMoreFn={closeSideBarMoreFn}
       />
 
-      {openPageMenu && targetItem && firstList && pages && pagesId && (
-        <div id="sideBar__pageMenu" style={pageMenuStyle}>
-          <PageMenu
-            what="page"
-            currentPage={findPage(pagesId, pages, targetItem.id)}
-            pages={pages}
-            firstList={firstList}
-            closeMenu={() => setOpenSideMoreMenu(false)}
-          />
+      {targetItem && firstList && pages && pagesId && (
+        <div
+          id="sideBar__pageMenu"
+          className={`sideBar__pageMenu ${openPageMenu ? "on" : ""}`}
+          style={pageMenuStyle}
+        >
+          {openPageMenu && (
+            <PageMenu
+              what="page"
+              currentPage={findPage(pagesId, pages, targetItem.id)}
+              pages={pages}
+              firstList={firstList}
+              closeMenu={closePageMenu}
+              setPageMenuStyle={setPageMenuStyle}
+            />
+          )}
         </div>
       )}
       {openRename && targetPage && (

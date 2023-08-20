@@ -7,6 +7,7 @@ import React, {
   useContext,
   useEffect,
   useRef,
+  MouseEvent,
 } from "react";
 import ScreenOnly from "./ScreenOnly";
 import PageIcon from "./PageIcon";
@@ -30,6 +31,7 @@ type SideBarMoreFnProps = {
   setRenameStyle: Dispatch<SetStateAction<CSSProperties | undefined>>;
   setOpenPageMenu: Dispatch<SetStateAction<boolean>>;
   setPageMenuStyle: Dispatch<SetStateAction<CSSProperties | undefined>>;
+  closeSideMoreFn: () => void;
 };
 function SideBarMoreFn({
   user,
@@ -42,6 +44,7 @@ function SideBarMoreFn({
   setRenameStyle,
   setOpenPageMenu,
   setPageMenuStyle,
+  closeSideMoreFn,
 }: SideBarMoreFnProps) {
   const moreFnRef = useRef<HTMLDivElement>(null);
   const { deletePage, removeFavorites, addFavorites, duplicatePage } =
@@ -69,29 +72,29 @@ function SideBarMoreFn({
     touchResizeBar.current = true;
   }, []);
   const onClickToDelete = useCallback(() => {
-    setOpenSideMoreMenu(false);
+    closeSideMoreFn();
     if (targetItem) {
       deletePage(targetItem.id);
     }
-  }, [deletePage, targetItem, setOpenSideMoreMenu]);
+  }, [deletePage, targetItem, closeSideMoreFn]);
 
   const onClickToRemoveFavorite = useCallback(() => {
-    setOpenSideMoreMenu(false);
+    closeSideMoreFn();
     targetItem && removeFavorites(targetItem.id);
-  }, [targetItem, removeFavorites, setOpenSideMoreMenu]);
+  }, [targetItem, removeFavorites, closeSideMoreFn]);
 
   const onClickToAddFavorite = useCallback(() => {
-    setOpenSideMoreMenu(false);
+    closeSideMoreFn();
     targetItem && addFavorites(targetItem.id);
-  }, [addFavorites, targetItem, setOpenSideMoreMenu]);
+  }, [addFavorites, targetItem, closeSideMoreFn]);
 
   const onClickToDuplicate = useCallback(() => {
-    setOpenSideMoreMenu(false);
+    closeSideMoreFn();
     targetItem && duplicatePage(targetItem.id);
-  }, [targetItem, duplicatePage, setOpenSideMoreMenu]);
+  }, [targetItem, duplicatePage, closeSideMoreFn]);
 
   const onClickToRename = useCallback(() => {
-    setOpenSideMoreMenu(false);
+    closeSideMoreFn();
     setOpenRename(true);
     if (targetItem && target && target?.parentElement) {
       const domRect = target.parentElement.getClientRects()[0];
@@ -101,19 +104,32 @@ function SideBarMoreFn({
         left: domRect.left + 10,
       });
     }
-  }, [target, targetItem, setRenameStyle, setOpenRename, setOpenSideMoreMenu]);
+  }, [target, targetItem, setRenameStyle, setOpenRename, closeSideMoreFn]);
 
-  const onClickMoveToBtn = useCallback(() => {
-    setOpenPageMenu(true);
-    setOpenSideMoreMenu(false);
-    if (window.innerWidth > 768) {
-      setPageMenuStyle({
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-      });
-    }
-  }, [setOpenPageMenu, setOpenSideMoreMenu, setPageMenuStyle]);
+  const onClickMoveToBtn = useCallback(
+    (event: MouseEvent) => {
+      const target = event.target as HTMLElement | null;
+      const targetDomRect = target?.getClientRects()[0];
+      console.log("ta", targetDomRect, target);
+      if (window.innerWidth > 768) {
+        setPageMenuStyle({
+          top: moreFnStyle ? moreFnStyle.top : "50%",
+          left: moreFnStyle ? moreFnStyle.left : "50%",
+        });
+      } else {
+        //mobile
+        setTimeout(() => {
+          setPageMenuStyle({
+            top: 0,
+            left: 0,
+          });
+        }, 500);
+      }
+      setOpenPageMenu(true);
+      closeSideMoreFn();
+    },
+    [setOpenPageMenu, setPageMenuStyle, moreFnStyle, closeSideMoreFn]
+  );
   useEffect(() => {
     if (moreFnRef.current) {
       if (moreFnStyle) {
@@ -128,11 +144,7 @@ function SideBarMoreFn({
         const classList = moreFnRef.current.classList;
         classList.contains("on") && moreFnRef.current.classList.remove("on");
         if (!classList.contains("hide")) {
-          if (window.innerWidth <= 768) {
-            setTimeout(() => moreFnRef.current?.classList.add("hide"), 500);
-          } else {
-            moreFnRef.current.classList.add("hide");
-          }
+          moreFnRef.current.classList.add("hide");
         }
       }
     }
