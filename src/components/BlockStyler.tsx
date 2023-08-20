@@ -160,7 +160,7 @@ const BlockStyler = ({
           top: top,
           left: left,
           width:
-            window.innerWidth < 768 ? firstBlockEl.clientWidth : "fit-content",
+            window.innerWidth <= 768 ? firstBlockEl.clientWidth : "fit-content",
         });
       }
     },

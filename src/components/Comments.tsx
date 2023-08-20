@@ -128,11 +128,11 @@ const Comments = ({
         const overHeight = top + 200 >= window.innerHeight;
         const bottom = innerHeight - blockDocDomRect.top + 10;
         const left =
-          innerWidth >= 768
+          innerWidth > 768
             ? editableBlockDomRect.x - frameDomRect.x
             : innerWidth * 0.1;
         const width =
-          innerWidth >= 768
+          innerWidth > 768
             ? editableBlock.clientWidth - paddingValue
             : innerWidth * 0.8;
 

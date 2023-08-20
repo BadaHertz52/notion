@@ -106,12 +106,12 @@ const Menu = ({
       style = overHeight
         ? {
             bottom: `${bottom}px`,
-            left: innerWidth > 767 ? "2rem" : "1rem",
+            left: innerWidth > 768 ? "2rem" : "1rem",
             maxHeight: `${blockFnDomRect.top - frameDomRect.top}px`,
           }
         : {
             top: `${top}px`,
-            left: innerWidth > 767 ? "2rem" : "1rem",
+            left: innerWidth > 768 ? "2rem" : "1rem",
             maxHeight: `${frameDomRect.bottom - blockFnDomRect.bottom}px`,
           };
     }
@@ -140,9 +140,9 @@ const Menu = ({
         const maxHeight = frameBottom - menuTop - 32;
         const left = mainMenu?.clientWidth * 0.7;
         const style: CSSProperties = {
-          top: innerWidth > 767 ? "-10px" : "10px",
+          top: innerWidth > 768 ? "-10px" : "10px",
           left:
-            innerWidth > 767
+            innerWidth > 768
               ? left
               : `${mainMenu.clientWidth * (innerWidth >= 375 ? 0.5 : 0.3)}px`,
           maxHeight: `${maxHeight}px`,

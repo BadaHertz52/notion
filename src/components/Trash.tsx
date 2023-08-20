@@ -37,7 +37,7 @@ const Trash = ({
   const trashRef = useRef<HTMLDivElement>(null);
   const trashPadding = 12;
   const listWidth =
-    (window.innerWidth >= 768 ? 400 : window.innerWidth) - trashPadding * 2;
+    (window.innerWidth > 768 ? 400 : window.innerWidth) - trashPadding * 2;
   const [trashList, setTrashList] = useState<resultType[] | undefined>(
     undefined
   );

@@ -77,7 +77,7 @@ function PageHeader({
     position: "relative",
   };
   const size =
-    page.header.iconType === null ? (window.innerWidth >= 768 ? 72 : 48) : 72;
+    page.header.iconType === null ? (window.innerWidth > 768 ? 72 : 48) : 72;
   const pageIconStyle: CSSProperties = {
     width: size,
     height: size,
@@ -85,10 +85,10 @@ function PageHeader({
       page.header.cover === null
         ? 0
         : page.header.iconType === null
-        ? window.innerWidth >= 768
+        ? window.innerWidth > 768
           ? -39
           : -16
-        : window.innerWidth >= 768
+        : window.innerWidth > 768
         ? -62
         : -16,
   };

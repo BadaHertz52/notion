@@ -5,13 +5,16 @@ import React, {
   useState,
   useContext,
   useCallback,
+  Dispatch,
+  SetStateAction,
 } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { ActionContext } from "../route/NotionRouter";
 import { Block, ListItem, Page } from "../modules/notion/type";
-import { setTemplateItem } from "../fn";
+import { isMobile, setTemplateItem } from "../fn";
 import ScreenOnly from "./ScreenOnly";
 import PageBtnList from "./PageBtnList";
+import { CSSProperties } from "styled-components";
 
 type PageMenuProps = {
   what: "page" | "block";
@@ -19,6 +22,7 @@ type PageMenuProps = {
   pages: Page[];
   firstList: ListItem[];
   closeMenu?: () => void;
+  setPageMenuStyle?: Dispatch<SetStateAction<CSSProperties | undefined>>;
 };
 
 const PageMenu = ({
@@ -27,6 +31,7 @@ const PageMenu = ({
   pages,
   firstList,
   closeMenu,
+  setPageMenuStyle,
 }: PageMenuProps) => {
   const { changeBlockToPage } = useContext(ActionContext).actions;
   const pageMenuRef = useRef<HTMLDivElement>(null);
@@ -60,6 +65,22 @@ const PageMenu = ({
     },
     [pages]
   );
+  const handleClose = () => {
+    if (closeMenu) {
+      if (isMobile() && setPageMenuStyle) {
+        setPageMenuStyle({
+          top: "100vh",
+        });
+        setTimeout(() => {
+          closeMenu();
+        }, 1000);
+      } else {
+        closeMenu();
+      }
+    } else {
+      return undefined;
+    }
+  };
   const makeNewSubPage = useCallback(() => {
     if (block) {
       setTemplateItem(templateHtml, currentPage);
@@ -80,6 +101,13 @@ const PageMenu = ({
   return (
     <div id="pageMenu" ref={pageMenuRef}>
       <div className="inner">
+        {isMobile() && (
+          <div className="pageMenu__btn-container">
+            <button className="pageMenu__btn-close" onClick={handleClose}>
+              close
+            </button>
+          </div>
+        )}
         <div className="search">
           <label>
             <ScreenOnly text="input in pageMenu to search page" />
@@ -102,7 +130,7 @@ const PageMenu = ({
                 listWidth={listWidth}
                 pages={pages}
                 currentPage={currentPage}
-                closeMenu={closeMenu}
+                closeMenu={handleClose}
                 what={what}
                 block={block}
               />
@@ -117,7 +145,7 @@ const PageMenu = ({
                 listWidth={listWidth}
                 pages={pages}
                 currentPage={currentPage}
-                closeMenu={closeMenu}
+                closeMenu={handleClose}
                 what={what}
                 block={block}
               />

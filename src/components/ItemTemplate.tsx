@@ -34,7 +34,7 @@ const ItemTemplate = ({
   const [toggleStyle, setToggleStyle] = useState<CSSProperties>({
     transform: "rotate(0deg)",
   });
-  const sideBarPageFn = useRef<HTMLDivElement>(null);
+  const sideBarPageFnRef = useRef<HTMLDivElement>(null);
   const onToggleSubPage = useCallback((event: React.MouseEvent) => {
     const target = event.target as HTMLElement;
     const toggleSubPage = (subPageElement: null | undefined | Element) => {
@@ -75,14 +75,14 @@ const ItemTemplate = ({
     toggleSubPage(subPageElement);
   }, []);
   const showPageFn = useCallback(() => {
-    if (sideBarPageFn.current) {
-      sideBarPageFn.current.classList.toggle("on");
+    if (sideBarPageFnRef.current) {
+      sideBarPageFnRef.current.classList.toggle("on");
     }
   }, []);
   const removeOn = useCallback(() => {
-    if (sideBarPageFn.current) {
-      sideBarPageFn.current.classList.contains("on") &&
-        sideBarPageFn.current.classList.remove("on");
+    if (sideBarPageFnRef.current) {
+      sideBarPageFnRef.current.classList.contains("on") &&
+        sideBarPageFnRef.current.classList.remove("on");
     }
   }, []);
   const onClickPageName = useCallback(() => {
@@ -120,13 +120,13 @@ const ItemTemplate = ({
           <div>{item.title}</div>
         </Link>
       </div>
-      <div className="sideBarPageFn" ref={sideBarPageFn}>
+      <div className="sideBarPageFn" ref={sideBarPageFnRef}>
         <button
           className="moreBtn"
           title="button to open menu to delete, duplicate or for more"
           onClick={() => {
-            sideBarPageFn.current &&
-              onClickMoreBtn(item, sideBarPageFn.current);
+            sideBarPageFnRef.current &&
+              onClickMoreBtn(item, sideBarPageFnRef.current);
           }}
         >
           <ScreenOnly text="button to open menu to delete, duplicate or for more" />

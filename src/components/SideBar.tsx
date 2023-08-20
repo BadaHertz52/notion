@@ -186,7 +186,7 @@ const SideBar = ({
         setTrashStyle({
           top: domRect.top - 100,
           left:
-            window.innerWidth >= 768
+            window.innerWidth > 768
               ? domRect.right + 50
               : window.innerWidth * 0.2,
         });
