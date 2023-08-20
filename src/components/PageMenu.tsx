@@ -87,6 +87,13 @@ const PageMenu = ({
       changeBlockToPage(currentPage.id, block);
     }
   }, [block, changeBlockToPage, currentPage, templateHtml]);
+
+  const handleTouchMove = (event: React.TouchEvent) => {
+    const currentTarget = event.currentTarget as HTMLElement | null;
+    if (currentTarget) {
+      currentTarget.classList.toggle("on");
+    }
+  };
   useEffect(() => {
     if (sessionItem && what === "block") {
       const block: Block = JSON.parse(sessionItem);
@@ -103,12 +110,19 @@ const PageMenu = ({
       <div className="inner">
         {isMobile() && (
           <div className="pageMenu__btn-container">
-            <button className="pageMenu__btn-close" onClick={handleClose}>
+            <button
+              className="pageMenu__btn-close"
+              onClick={handleClose}
+              onTouchMove={handleTouchMove}
+            >
               close
             </button>
           </div>
         )}
-        <div className="search">
+        <div
+          className="search"
+          style={{ width: listWidth, marginLeft: "auto", marginRight: "auto" }}
+        >
           <label>
             <ScreenOnly text="input in pageMenu to search page" />
             <input
@@ -121,7 +135,7 @@ const PageMenu = ({
         </div>
         <div
           className="page-list"
-          style={{ width: listWidth, margin: "0 auto" }}
+          style={{ width: listWidth, marginLeft: "auto", marginRight: "auto" }}
         >
           {search ? (
             result ? (
@@ -155,8 +169,10 @@ const PageMenu = ({
         {!search && (
           <button
             id="new_sub_page"
+            className="new_sub_page"
             title="button to add new subpage"
             onClick={makeNewSubPage}
+            onTouchMove={handleTouchMove}
           >
             <AiOutlinePlus />
             <span>New sub-page</span>

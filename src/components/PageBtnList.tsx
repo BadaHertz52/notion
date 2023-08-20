@@ -3,6 +3,7 @@ import { FixedSizeList } from "react-window";
 import { Block, ListItem, Page } from "../modules/notion/type";
 import PageButton from "./PageButton";
 import { CSSProperties } from "styled-components";
+import { isMobile } from "../fn";
 
 type PageBtnListProps = {
   list: ListItem[];
@@ -16,9 +17,18 @@ type PageBtnListProps = {
 const PageBtnList = (props: PageBtnListProps) => {
   const btnPadding = 5;
   const itemSize = 18;
-  const listHeight =
-    (itemSize + btnPadding * 2) *
-    (props.list.length > 2 ? 2.5 : props.list.length);
+  const totalItemSize = itemSize + btnPadding * 2;
+  const searchHeight = 12 + 10 * 2;
+  const newBtnHeight = 40;
+  const closeBtnHeight = 30;
+  const maxHeightInMobile =
+    window.innerHeight - searchHeight - newBtnHeight - closeBtnHeight;
+  const totalListHeight = props.list.length * totalItemSize;
+  const listHeight = isMobile()
+    ? maxHeightInMobile > totalListHeight
+      ? totalListHeight
+      : maxHeightInMobile
+    : totalItemSize * (props.list.length > 2 ? 2.5 : props.list.length);
   const btnStyle: CSSProperties = {
     padding: btnPadding,
     height: itemSize,

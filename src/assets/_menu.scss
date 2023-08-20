@@ -135,8 +135,16 @@
     height: fit-content;
   }
 }
-#sideBar__pageMenu #pageMenu {
-  background-color: #ffff;
+.sideBar__pageMenu {
+  position: absolute;
+  left: 0;
+  display: none;
+  &.on {
+    display: block;
+  }
+  #pageMenu {
+    background-color: #ffff;
+  }
 }
 #pageMenu {
   @include modalStyle;
@@ -147,10 +155,17 @@
     padding: 10px 0;
     display: flex;
     flex-direction: column;
+    position: relative;
   }
   .search {
+    label {
+      display: block;
+      width: 100%;
+    }
     input {
       @include searchInput;
+      width: calc(100% - 10px);
+      margin: 0 auto;
       font-size: 14px;
     }
   }
@@ -189,28 +204,40 @@
     line-height: 1rem;
     text-align: center;
   }
-  #new_sub_page {
+  .new_sub_page {
     width: 100%;
     text-align: left;
     border-top: 1px solid $lightMud;
     padding-top: 10px;
     padding-left: 10px;
+    &.on {
+      svg,
+      span {
+        color: $black;
+      }
+    }
     svg {
       color: $itemText;
       font-weight: bolder;
       margin-right: 5px;
+      &:hover {
+        color: $black;
+      }
     }
     span {
       color: $itemText;
       font-size: 14px;
       font-weight: 400;
+      &:hover {
+        color: $black;
+      }
     }
   }
 }
 
 #moveTo_pageMenu {
   #page-list__header,
-  #new_sub_page {
+  .new_sub_page {
     display: none;
   }
 }
@@ -226,6 +253,41 @@
   #modal__menu {
     .commentInput {
       width: 100%;
+    }
+  }
+  .sideBar__pageMenu {
+    transition: top ease 1s;
+    top: 100vh;
+  }
+  #pageMenu {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    .inner {
+      padding: 0;
+      height: 100%;
+    }
+    .page-list .page-list__header {
+      margin: 16px 0;
+    }
+    .pageMenu__btn-container {
+      height: 30px;
+    }
+    .pageMenu__btn-close {
+      position: absolute;
+      top: 0;
+      right: 6%;
+      height: inherit;
+      text-align: center;
+      color: $itemText;
+      &:hover,
+      &.on {
+        color: $black;
+      }
+    }
+    .new_sub_page {
+      border: none;
+      padding-top: 16px;
     }
   }
 }
