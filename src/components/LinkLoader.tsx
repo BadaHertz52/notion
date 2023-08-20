@@ -18,6 +18,7 @@ import { findPage } from "../fn";
 import { SelectionType } from "../route/NotionRouter";
 import ScreenOnly from "./ScreenOnly";
 import PageItem from "./PageItem";
+import { FixedSizeList } from "react-window";
 
 type LinkLoaderProps = {
   recentPagesId: string[] | null;
@@ -334,6 +335,16 @@ const LinkLoader = ({
   const [searchValue, setSearchValue] = useState<string | null>(null);
   const [candidates, setCandidates] = useState<Page[] | null>(null);
   const [webLink, setWebLink] = useState<boolean>(false);
+  const listArray = !searchValue && !candidates ? pageList : candidates;
+  const iconHeight = 18;
+  const itemSize = 30;
+  const itemMargin = 14;
+  const totalItemSize = itemSize + itemMargin;
+  const listWidth: number = 300;
+  const maxHeight = totalItemSize * 4.5;
+  const totalListHeight = totalItemSize * (listArray ? listArray.length : 1);
+  const listHeight: number =
+    totalListHeight > maxHeight ? maxHeight : totalListHeight;
   const onChangeSearch = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       const value = event.target.value;
@@ -550,28 +561,37 @@ const LinkLoader = ({
             />
           </label>
         </div>
-        <div className=".page-list">
-          <header>LINK TO BLOCK</header>
-          <div className="..page-list__item-group">
-            {searchValue === null && candidates === null
-              ? pageList.map((p: Page) => (
+        {listArray && (
+          <div className="page-list">
+            <header>LINK TO BLOCK</header>
+            <div className="page-list__item-group">
+              <FixedSizeList
+                height={listHeight}
+                width={listWidth}
+                layout="vertical"
+                itemCount={listArray.length}
+                itemData={listArray}
+                itemKey={(index) => `page-item__${index}`}
+                itemSize={itemSize}
+              >
+                {({ index }) => (
                   <PageItem
-                    page={p}
+                    page={listArray[index]}
                     pages={pages}
                     pagesId={pagesId}
                     addLink={addLink}
+                    style={{
+                      width: listWidth,
+                      height: itemSize,
+                      marginBottom: itemMargin,
+                    }}
+                    iconHeight={iconHeight}
                   />
-                ))
-              : candidates?.map((p: Page) => (
-                  <PageItem
-                    page={p}
-                    pages={pages}
-                    pagesId={pagesId}
-                    addLink={addLink}
-                  />
-                ))}
+                )}
+              </FixedSizeList>
+            </div>
           </div>
-        </div>
+        )}
       </div>
       {(webLink || linked || searchValue) && (
         <div id="linkLoader_moreFn">

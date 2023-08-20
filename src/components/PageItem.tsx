@@ -1,5 +1,4 @@
 import React from "react";
-import { PathType } from "../route/NotionRouter";
 import { Page } from "../modules/notion/type";
 import ScreenOnly from "./ScreenOnly";
 import PageIcon from "./PageIcon";
@@ -9,40 +8,52 @@ type PageItemProps = {
   page: Page;
   pagesId: string[];
   pages: Page[];
+  style: CSSProperties;
+  iconHeight: number;
   addLink: (link: string) => void;
 };
-const PageItem = ({ page, pages, pagesId, addLink }: PageItemProps) => {
+const PageItem = ({
+  page,
+  pages,
+  pagesId,
+  addLink,
+  style,
+  iconHeight,
+}: PageItemProps) => {
   const pagePath = makeRoutePath(page.id).slice(1);
-  const paths = makePagePath(page, pagesId, pages);
-  const setWidth = (length: number) => {
-    const n = 100 / length;
-    const style: CSSProperties = {
-      maxWidth: `${n}%`,
-    };
-    return style;
-  };
+  const path = makePagePath(page, pagesId, pages)
+    ?.map((p) => p.title)
+    .join("/");
+  const btnPadding = 14;
+  const iconMargin = 10;
+  const informWidth = style.width
+    ? (typeof style.width === "number"
+        ? style.width
+        : Number(style.width?.replace("px", ""))) -
+      iconHeight -
+      btnPadding * 2 -
+      iconMargin
+    : 0;
   return (
     <button
       title="button to open page"
       className="page-item"
       onClick={() => addLink(pagePath)}
+      style={style}
     >
       <ScreenOnly text="button to open page" />
       <PageIcon
         icon={page.header.icon}
         iconType={page.header.iconType}
-        style={undefined}
+        style={{ width: iconHeight, height: iconHeight }}
       />
       <div className="page__inform">
-        <div className="page__title">{page.header.title}</div>
-        {page.parentsId && (
-          <div className="page__path-group">
-            {paths?.map((path: PathType) => (
-              <div className="path" style={setWidth(paths.length)}>
-                {paths.indexOf(path) !== 0 && <div className="slash">/</div>}
-                <div className="title">{path.title}</div>
-              </div>
-            ))}
+        <div className="page__title" style={{ width: informWidth }}>
+          {page.header.title}
+        </div>
+        {path && (
+          <div className="page__path" style={{ width: informWidth }}>
+            {path}
           </div>
         )}
       </div>

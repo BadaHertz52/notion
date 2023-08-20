@@ -9,9 +9,11 @@
     align-items: center;
   }
   .search,
-  .page-item,
   .page-list header {
     padding: 7px 14px;
+  }
+  .page-item {
+    padding: 0px 14px;
   }
   .search,
   .page-list {
@@ -33,7 +35,7 @@
     }
     box-sizing: border-box;
   }
-  ...page-list__item-group {
+  .page-list__item-group {
     margin-top: 10px;
   }
   .page-item {
@@ -45,8 +47,6 @@
     }
   }
   .page__icon {
-    width: 1.5rem;
-    height: 100%;
     margin-right: 10px;
   }
   .page__icon__img {
@@ -59,37 +59,24 @@
     flex-direction: column;
     justify-content: left;
   }
+  .page__title,
+  .page__path {
+    text-overflow: ellipsis;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
   .page__title {
     height: 100%;
     font-size: 1rem;
-    text-overflow: ellipsis;
-    text-align: left;
   }
-  .page__path-group {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
+
+  .page__path {
     margin-top: 6px;
-    font-size: 14px;
+    font-size: 13px;
     line-height: 1rem;
     color: $mud;
-    .path {
-      display: flex;
-      flex-direction: row;
-    }
-    .title {
-      width: calc(100% - 4px);
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      margin: 0;
-      flex-grow: 1;
-      flex-shrink: 1;
-      text-align: initial;
-    }
-    .slash {
-      margin: 0 4px;
-    }
   }
 }
 #linkLoader_moreFn {
