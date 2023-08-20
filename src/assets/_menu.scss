@@ -154,34 +154,31 @@
       font-size: 14px;
     }
   }
-  .page-group {
-    display: flex;
-    flex-direction: column;
+  .page-list {
     margin-top: 10px;
-    width: 90%;
-    margin: 5%;
-    .page-group__header {
+    .page-list__header {
       color: $itemText;
       font : {
         size: 12px;
         weight: 500;
       }
-      margin-bottom: 10px;
+      margin: 10px 0;
+    }
+    .page-list__btn-group > div > div {
+      display: flex;
+      flex-direction: column;
     }
   }
   .btn-page {
     font-size: 14px;
-    padding: 5px 0;
     &__inner {
       display: flex;
-      height: 1rem;
       & > div {
         height: inherit;
       }
     }
   }
   .page__icon {
-    width: 1rem;
     margin-right: 12px;
     img {
       width: 100%;
@@ -212,7 +209,7 @@
 }
 
 #moveTo_pageMenu {
-  #page-group__header,
+  #page-list__header,
   #new_sub_page {
     display: none;
   }

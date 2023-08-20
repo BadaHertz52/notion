@@ -1,23 +1,21 @@
-import React, {
-  useContext,
-  Dispatch,
-  SetStateAction,
-  useCallback,
-} from "react";
+import React, { useContext, useCallback } from "react";
 import { delete_block } from "../modules/notion/reducer";
 import { Block, Page, ListItem } from "../modules/notion/type";
 import { setTemplateItem } from "../fn";
 import { ActionContext } from "../route/NotionRouter";
 import PageIcon from "./PageIcon";
 import { useNavigate } from "react-router-dom";
+import { CSSProperties } from "styled-components";
 
 type PageButtonProps = {
+  itemSize: number;
   pages: Page[];
   item: ListItem;
   currentPage: Page;
   closeMenu: (() => void) | undefined;
   what: "page" | "block";
   block: Block | null;
+  style: CSSProperties;
 };
 
 const PageButton = ({
@@ -27,6 +25,7 @@ const PageButton = ({
   closeMenu,
   what,
   block,
+  style,
 }: PageButtonProps) => {
   const { addBlock, movePageToPage } = useContext(ActionContext).actions;
   const navigate = useNavigate();
@@ -97,9 +96,14 @@ const PageButton = ({
       title="button to move page"
       className="btn-page"
       onClick={onClickToMove}
+      style={{ paddingTop: style.padding, paddingBottom: style.padding }}
     >
-      <div className="btn-page__inner">
-        <PageIcon icon={item.icon} iconType={item.iconType} style={undefined} />
+      <div className="btn-page__inner" style={{ height: style.height }}>
+        <PageIcon
+          icon={item.icon}
+          iconType={item.iconType}
+          style={{ width: style.height, height: style.height }}
+        />
         <div className="btn-page__title">
           <span>{item.title}</span>
         </div>

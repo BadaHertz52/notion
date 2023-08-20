@@ -1,7 +1,6 @@
 import React, {
   ChangeEvent,
-  Dispatch,
-  SetStateAction,
+  useRef,
   useEffect,
   useState,
   useContext,
@@ -12,7 +11,7 @@ import { ActionContext } from "../route/NotionRouter";
 import { Block, ListItem, Page } from "../modules/notion/type";
 import { setTemplateItem } from "../fn";
 import ScreenOnly from "./ScreenOnly";
-import PageButton from "./PageButton";
+import PageBtnList from "./PageBtnList";
 
 type PageMenuProps = {
   what: "page" | "block";
@@ -30,10 +29,12 @@ const PageMenu = ({
   closeMenu,
 }: PageMenuProps) => {
   const { changeBlockToPage } = useContext(ActionContext).actions;
-
+  const pageMenuRef = useRef<HTMLDivElement>(null);
   const [search, setSearch] = useState<boolean>(false);
   const [result, setResult] = useState<ListItem[] | null>(null);
   const [block, setBlock] = useState<Block | null>(null);
+  const listMargin = 16;
+  const [listWidth, setListWidth] = useState<number>(320 - listMargin * 2);
   const sessionItem = sessionStorage.getItem("blockFnTargetBlock") as string;
 
   const templateHtml = document.getElementById("template");
@@ -71,8 +72,13 @@ const PageMenu = ({
       setBlock(block);
     }
   }, [sessionItem, what]);
+  useEffect(() => {
+    if (pageMenuRef.current) {
+      setListWidth(pageMenuRef.current.clientWidth - listMargin * 2);
+    }
+  }, [pageMenuRef]);
   return (
-    <div id="pageMenu">
+    <div id="pageMenu" ref={pageMenuRef}>
       <div className="inner">
         <div className="search">
           <label>
@@ -85,49 +91,48 @@ const PageMenu = ({
             />
           </label>
         </div>
-        {search ? (
-          result ? (
-            <div className="page-group">
-              {result.map((item: ListItem) => (
-                <PageButton
-                  key={`list_${item.id}`}
-                  pages={pages}
-                  currentPage={currentPage}
-                  closeMenu={closeMenu}
-                  what={what}
-                  block={block}
-                  item={item}
-                />
-              ))}
-            </div>
+        <div
+          className="page-list"
+          style={{ width: listWidth, margin: "0 auto" }}
+        >
+          {search ? (
+            result ? (
+              <PageBtnList
+                list={result}
+                listWidth={listWidth}
+                pages={pages}
+                currentPage={currentPage}
+                closeMenu={closeMenu}
+                what={what}
+                block={block}
+              />
+            ) : (
+              <div className="no-result">no result</div>
+            )
           ) : (
-            <div className="page-group no-result">No result</div>
-          )
-        ) : (
-          <>
-            <div className="page-group">
-              <header className="page-group__header">Suggested</header>
-              {firstList.map((item: ListItem) => (
-                <PageButton
-                  key={`list_${item.id}`}
-                  pages={pages}
-                  currentPage={currentPage}
-                  closeMenu={closeMenu}
-                  what={what}
-                  block={block}
-                  item={item}
-                />
-              ))}
-            </div>
-            <button
-              id="new_sub_page"
-              title="button to add new subpage"
-              onClick={makeNewSubPage}
-            >
-              <AiOutlinePlus />
-              <span>New sub-page</span>
-            </button>
-          </>
+            <>
+              <header className="page-list__header">Suggested</header>
+              <PageBtnList
+                list={firstList}
+                listWidth={listWidth}
+                pages={pages}
+                currentPage={currentPage}
+                closeMenu={closeMenu}
+                what={what}
+                block={block}
+              />
+            </>
+          )}
+        </div>
+        {!search && (
+          <button
+            id="new_sub_page"
+            title="button to add new subpage"
+            onClick={makeNewSubPage}
+          >
+            <AiOutlinePlus />
+            <span>New sub-page</span>
+          </button>
         )}
       </div>
     </div>
