@@ -210,15 +210,6 @@ const Menu = ({
         setMobileSideMenu({ block: null, what: undefined });
   }, [setOpenMenu, setMobileSideMenu]);
 
-  const onClickMoveTo = useCallback(() => {
-    sessionStorage.setItem("modalStyle", JSON.stringify(modalStyle));
-    setModal({
-      open: true,
-      what: modalMoveToPage,
-    });
-    closeMenu();
-  }, [closeMenu, modalStyle, setModal]);
-
   const onOpenCommentInput = useCallback(() => {
     setCommentBlock(block);
     closeMenu();
@@ -397,18 +388,6 @@ const Menu = ({
                   </div>
                 </button>
               )}
-              <button
-                title="button to move to"
-                className="underline menu__editBtn"
-                name="move to"
-                onClick={onClickMoveTo}
-                style={{ display: isMobile() ? "none" : "block" }}
-              >
-                <div>
-                  <IoArrowRedoOutline />
-                  <span>Move to</span>
-                </div>
-              </button>
               {block.type !== "page" && (
                 <button
                   title="button to comment"
