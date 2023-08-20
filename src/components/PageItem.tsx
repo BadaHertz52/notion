@@ -24,7 +24,7 @@ const PageItem = ({ page, pages, pagesId, addLink }: PageItemProps) => {
   return (
     <button
       title="button to open page"
-      className="page__inner"
+      className="page-item"
       onClick={() => addLink(pagePath)}
     >
       <ScreenOnly text="button to open page" />

@@ -9,16 +9,16 @@
     align-items: center;
   }
   .search,
-  .page__inner,
-  .page-group header {
+  .page-item,
+  .page-list header {
     padding: 7px 14px;
   }
   .search,
-  .page-group {
+  .page-list {
     width: 100%;
     margin-top: 10px;
   }
-  .page-group {
+  .page-list {
     header {
       font-size: 12px;
       color: $mud;
@@ -33,10 +33,10 @@
     }
     box-sizing: border-box;
   }
-  .page-group__list {
+  ...page-list__item-group {
     margin-top: 10px;
   }
-  .page__inner {
+  .page-item {
     width: 100%;
     display: flex;
     align-items: center;

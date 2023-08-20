@@ -494,11 +494,12 @@ const LinkLoader = ({
   }, [closeLink, getBlockContents, linkElements, resetLinked]);
 
   useEffect(() => {
-    if (blockStyler && blockStylerStyle) {
-      const blockStylerTop = blockStylerStyle.top as string;
-      const blockStylerTopValue = Number(
-        blockStylerTop.slice(0, blockStylerTop.indexOf("px"))
-      );
+    if (blockStyler && blockStylerStyle?.top && blockStylerStyle?.left) {
+      const blockStylerTop = blockStylerStyle.top;
+      const blockStylerTopValue: number =
+        typeof blockStylerTop === "string"
+          ? +blockStylerTop.replace("px", "")
+          : blockStylerTop;
       const top = blockStylerTopValue + blockStyler.clientHeight;
       const left = blockStylerStyle.left as string;
       setLinkLoaderStyle({
@@ -549,9 +550,9 @@ const LinkLoader = ({
             />
           </label>
         </div>
-        <div className="page-group">
+        <div className=".page-list">
           <header>LINK TO BLOCK</header>
-          <div className="page-group__list">
+          <div className="..page-list__item-group">
             {searchValue === null && candidates === null
               ? pageList.map((p: Page) => (
                   <PageItem
