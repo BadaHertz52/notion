@@ -53,10 +53,15 @@ const MobileSideMenu = ({
     }
   };
   const closeSideMenu = () => {
-    setMobileSideMenu({
-      what: undefined,
-      block: null,
+    setMobileSideMenuStyle({
+      transform: "translateY(110%)",
     });
+    setTimeout(() => {
+      setMobileSideMenu({
+        what: undefined,
+        block: null,
+      });
+    }, 1000);
   };
   useEffect(() => {
     if (!mobileSideMenu.what) {
