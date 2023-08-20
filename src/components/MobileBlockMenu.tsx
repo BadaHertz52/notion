@@ -6,7 +6,7 @@ import { TiArrowSortedDown } from "react-icons/ti";
 import { CSSProperties } from "styled-components";
 import { ActionContext, MobileSideMenuWhatType } from "../route/NotionRouter";
 import { Block } from "../modules/notion/type";
-import { makeNewBlock, findBlock, removeSelected } from "../fn";
+import { makeNewBlock, findBlock } from "../fn";
 import BlockStyler, { StylerCommonProps } from "./BlockStyler";
 import ScreenOnly from "./ScreenOnly";
 
@@ -66,7 +66,7 @@ const MobileBlockMenu = ({
         closeMM();
       }
     },
-    [closeMM]
+    [closeMM, targetBlock.id]
   );
 
   const changeMBMstyle = useCallback(
@@ -278,7 +278,7 @@ const MobileBlockMenu = ({
         changeMBMstyle(mobileMenuTargetBlock)
       );
     };
-  }, []);
+  }, [changeMBMstyle, mobileMenuTargetBlock]);
   return (
     <>
       <div id="mobileBlockMenu" style={mbmStyle}>

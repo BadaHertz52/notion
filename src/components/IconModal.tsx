@@ -11,11 +11,7 @@ import { BsEmojiSmile } from "react-icons/bs";
 import { CSSProperties } from "styled-components";
 import { ActionContext } from "../route/NotionRouter";
 import { Block, IconType, Page, Emoji } from "../modules/notion/type";
-import {
-  EMOJI_ARR,
-  getEmojiUrl,
-  randomEmojiIcon,
-} from "../modules/notion/emojiData";
+import { EMOJI_ARR, randomEmojiIcon } from "../modules/notion/emojiData";
 import { setTemplateItem } from "../fn";
 import ScreenOnly from "./ScreenOnly";
 import EmojiIcon from "./EmojiIcon";

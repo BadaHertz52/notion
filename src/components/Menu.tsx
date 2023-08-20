@@ -14,11 +14,7 @@ import { CSSProperties } from "styled-components";
 import ColorMenu from "./ColorMenu";
 import { HiOutlineDuplicate, HiOutlinePencilAlt } from "react-icons/hi";
 import PageMenu from "./PageMenu";
-import {
-  modalComment,
-  modalMoveToPage,
-  ModalType,
-} from "../containers/EditorContainer";
+import { modalComment, ModalType } from "../containers/EditorContainer";
 import Time from "./Time";
 
 //icon
@@ -26,7 +22,6 @@ import { BiCommentDetail } from "react-icons/bi";
 import { BsArrowClockwise } from "react-icons/bs";
 import { MdOutlineRestorePage } from "react-icons/md";
 import { TiArrowSortedDown } from "react-icons/ti";
-import { IoArrowRedoOutline } from "react-icons/io5";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { AiOutlineFormatPainter } from "react-icons/ai";
 import { isMobile, setTemplateItem } from "../fn";

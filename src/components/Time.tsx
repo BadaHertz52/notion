@@ -14,7 +14,7 @@ const Time = ({ editTime }: TimeProps) => {
   const today = new Date().getDate();
   const currentHour = new Date().getHours();
   const currentMin = new Date().getMinutes();
-  const time = new Date(Number(editTime));
+  const time = useMemo(() => new Date(Number(editTime)), [editTime]);
   const time_date = time.getDate();
   const time_hour = time.getHours();
   const time_min = time.getMinutes();

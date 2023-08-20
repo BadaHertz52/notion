@@ -1,20 +1,18 @@
 import React, {
   Dispatch,
-  SetStateAction,
   useCallback,
   useRef,
   useState,
   useEffect,
 } from "react";
 import { Page } from "../modules/notion/type";
-import { findPage, makeRoutePath } from "../fn";
+import { findPage } from "../fn";
 //icon
 import { AiOutlineCheck } from "react-icons/ai";
 import { BsChevronDown, BsSearch } from "react-icons/bs";
-import Result, { resultType } from "./Result";
+import { resultType } from "./Result";
 import { makeResultType } from "../fn/";
 import ScreenOnly from "./ScreenOnly";
-import { Link } from "react-router-dom";
 import ResultList from "./ResultList";
 
 type QuickFindBoardProps = {

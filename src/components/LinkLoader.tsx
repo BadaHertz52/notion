@@ -491,7 +491,7 @@ const LinkLoader = ({
       resetLinked();
       closeLink && closeLink();
     }
-  }, []);
+  }, [closeLink, linkElements, resetLinked]);
 
   const removeLink = useCallback(() => {
     if (linkElements) {

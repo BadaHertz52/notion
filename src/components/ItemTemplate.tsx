@@ -1,10 +1,4 @@
-import React, {
-  Dispatch,
-  SetStateAction,
-  useState,
-  useRef,
-  useCallback,
-} from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { ListItem } from "../modules/notion/type";
 import { SideAppear } from "../modules/side/reducer";
 import { CSSProperties } from "styled-components";

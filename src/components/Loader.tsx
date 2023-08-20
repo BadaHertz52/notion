@@ -9,7 +9,6 @@ import React, {
 import { CSSProperties } from "styled-components";
 import { Block, Page } from "../modules/notion/type";
 import { setTemplateItem } from "../fn";
-import { BiDoughnutChart } from "react-icons/bi";
 
 type LoaderProps = {
   block: Block | null;
