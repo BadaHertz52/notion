@@ -13,7 +13,6 @@ import { Page } from "../modules/notion/type";
 import { resultType } from "./Result";
 import { getCurrentPageId, makeResultType } from "../fn";
 import ScreenOnly from "./ScreenOnly";
-import TrashResultItem from "./TrashResultItem";
 import ResultList from "./ResultList";
 
 type TrashProps = {
@@ -36,6 +35,9 @@ const Trash = ({
   setOpenTrash,
 }: TrashProps) => {
   const trashRef = useRef<HTMLDivElement>(null);
+  const trashPadding = 12;
+  const listWidth =
+    (window.innerWidth >= 768 ? 400 : window.innerWidth) - trashPadding * 2;
   const [trashList, setTrashList] = useState<resultType[] | undefined>(
     undefined
   );
@@ -161,10 +163,12 @@ const Trash = ({
             result ? (
               <ResultList
                 list={result}
-                listWidth={300}
-                listHeight={40 * 3}
+                listWidth={listWidth}
+                listHeight={50 * 3}
                 layout="vertical"
                 itemSize={40}
+                isTrash={true}
+                setOpenTrash={setOpenTrash}
               />
             ) : (
               <div className="no-result">No matches found.</div>

@@ -1,6 +1,7 @@
-import React, { memo } from "react";
+import React, { Dispatch, SetStateAction, memo } from "react";
 import Result, { resultType } from "./Result";
 import { FixedSizeList, Layout } from "react-window";
+import TrashResultItem from "./TrashResultItem";
 
 type ResultListProps = {
   list: resultType[];
@@ -8,6 +9,8 @@ type ResultListProps = {
   listWidth: number;
   layout: Layout;
   itemSize: number;
+  isTrash?: boolean;
+  setOpenTrash?: Dispatch<SetStateAction<boolean>>;
 };
 const ResultList = (props: ResultListProps) => {
   return (
@@ -20,9 +23,17 @@ const ResultList = (props: ResultListProps) => {
       itemKey={(index) => `result-list_${props.list[index].id}`}
       itemSize={props.itemSize}
     >
-      {({ index }) => (
-        <Result item={props.list[index]} width={props.listWidth} />
-      )}
+      {({ index }) =>
+        props.isTrash && props.setOpenTrash ? (
+          <TrashResultItem
+            item={props.list[index]}
+            width={props.listWidth}
+            setOpenTrash={props.setOpenTrash}
+          />
+        ) : (
+          <Result item={props.list[index]} width={props.listWidth} />
+        )
+      }
     </FixedSizeList>
   );
 };
