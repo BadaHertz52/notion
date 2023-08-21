@@ -155,7 +155,7 @@ const Frame = ({
   const sideBarEl = document.querySelector(".sideBar");
   const sideBarWidth =
     sideAppear === "lock" && sideBarEl ? sideBarEl.clientWidth : 0;
-  const maxWidth = innerWidth - sideBarWidth - scrollbarWidth;
+  const maxWidth = innerWidth - sideBarWidth - scrollbarWidth - 90;
   const fontSize: number = openTemplates ? 1.25 : smallText ? 0.8 : 1;
   const frameStyle: CSSProperties = {
     fontFamily: fontStyle,

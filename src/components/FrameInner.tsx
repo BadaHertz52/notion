@@ -72,7 +72,11 @@ const FrameInner = (props: FrameInnerProps) => {
     defaultWidth: frameRef.current?.clientWidth,
     fixedWidth: true,
   });
-
+  const frameInnerWidth = props.frameInnerStyle.width as string;
+  const listWidth: number = frameInnerWidth.includes("%")
+    ? (frameRef.current ? frameRef.current.clientWidth : window.innerWidth) *
+      (Number(frameInnerWidth.replace("%", "")) / 100)
+    : Number(frameInnerWidth.replace("px", ""));
   const changeScrollStyle = useCallback(() => {
     const listEl = frameRef?.current?.querySelector(
       ".ReactVirtualized__Grid ReactVirtualized__List"
@@ -203,10 +207,10 @@ const FrameInner = (props: FrameInnerProps) => {
           >
             {() => (
               <AutoSizer>
-                {({ width }) => (
+                {() => (
                   <List
                     height={window.innerHeight}
-                    width={width}
+                    width={listWidth}
                     overscanRowCount={0}
                     rowCount={list.length}
                     rowHeight={cache.rowHeight}
