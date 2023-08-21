@@ -2,7 +2,7 @@ import React from "react";
 import { CSSProperties } from "styled-components";
 import { Emoji } from "../modules/notion/emojiData";
 import { IconType } from "../modules/notion/type";
-import pageDefaultImg from "../assets/img/icons8-페이지-개요-100.webp";
+import pageDefaultImg from "../assets/img/pageIcon.webp";
 import EmojiIcon from "./EmojiIcon";
 import Img from "./Img";
 type PageItemProps = {
