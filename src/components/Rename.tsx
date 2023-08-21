@@ -14,6 +14,8 @@ import { setTemplateItem, closeModal } from "../fn";
 import IconModal from "./IconModal";
 import PageIcon from "./PageIcon";
 import ScreenOnly from "./ScreenOnly";
+import "../assets/rename.scss";
+
 type RenameProps = {
   currentPageId: string | null;
   block: Block | null;

@@ -16,7 +16,7 @@ import { HiOutlineDuplicate, HiOutlinePencilAlt } from "react-icons/hi";
 import PageMenu from "./PageMenu";
 import { modalComment, ModalType } from "../containers/EditorContainer";
 import Time from "./Time";
-
+import "../assets/menu.scss";
 //icon
 import { BiCommentDetail } from "react-icons/bi";
 import { BsArrowClockwise } from "react-icons/bs";

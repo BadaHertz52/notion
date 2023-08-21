@@ -19,12 +19,12 @@ import {
   SelectionType,
 } from "../route/NotionRouter";
 import Menu, { MenuAndBlockStylerCommonProps } from "./Menu";
-import { Block, Page } from "../modules/notion/type";
+import { Block } from "../modules/notion/type";
 import LinkLoader from "./LinkLoader";
 import { mobileSideMenuType } from "../route/NotionRouter";
 import { getContent, isMobile, removeSelected, selectContent } from "../fn";
 import ScreenOnly from "./ScreenOnly";
-
+import "../assets/blockStyler.scss";
 export type StylerCommonProps = MenuAndBlockStylerCommonProps & {
   pagesId: string[];
   recentPagesId: string[] | null;
@@ -60,7 +60,6 @@ const BlockStyler = ({
   frameHtml,
   setMobileSideMenu,
   setMobileMenuTargetBlock,
-  setOpenMobileBlockStyler,
 }: BlockStylerProps) => {
   const { editBlock } = useContext(ActionContext).actions;
   const bold = "bold";

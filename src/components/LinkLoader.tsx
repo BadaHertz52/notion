@@ -19,7 +19,7 @@ import { SelectionType } from "../route/NotionRouter";
 import ScreenOnly from "./ScreenOnly";
 import PageItem from "./PageItem";
 import { FixedSizeList } from "react-window";
-
+import "../assets/linkLoader.scss";
 type LinkLoaderProps = {
   recentPagesId: string[] | null;
   pages: Page[];

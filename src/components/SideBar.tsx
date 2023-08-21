@@ -13,11 +13,9 @@ import { closeModal, findPage } from "../fn";
 import { UserState } from "../modules/user/reducer";
 import Trash from "./Trash";
 import Rename from "./Rename";
-
 import PageMenu from "./PageMenu";
-
 import { SideBarContainerProp } from "../containers/SideBarContainer";
-
+import "../assets/sideBar.scss";
 //react-icon
 import { FiCode, FiChevronsLeft } from "react-icons/fi";
 import { AiOutlineClockCircle, AiOutlinePlus } from "react-icons/ai";

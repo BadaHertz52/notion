@@ -9,7 +9,7 @@ import React, {
 import { CSSProperties } from "styled-components";
 import { Block, Page } from "../modules/notion/type";
 import { setTemplateItem } from "../fn";
-
+import "../assets/loader.scss";
 type LoaderProps = {
   block: Block | null;
   page: Page;

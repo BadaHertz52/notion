@@ -9,7 +9,7 @@ import { Block } from "../modules/notion/type";
 import { makeNewBlock, findBlock } from "../fn";
 import BlockStyler, { StylerCommonProps } from "./BlockStyler";
 import ScreenOnly from "./ScreenOnly";
-
+import "../assets/mobileBlockMenu.scss";
 type MobileBlockMenuProps = Omit<StylerCommonProps, "block"> & {
   mobileMenuTargetBlock: Block;
   initialInnerHeight: number;

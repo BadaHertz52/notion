@@ -30,6 +30,7 @@ import { UserState } from "../modules/user/reducer";
 import Frame, { Template_Frame_SAME_Props } from "./Frame";
 import PageIcon from "./PageIcon";
 import { RootState } from "../modules";
+import "../assets/templates.scss";
 
 type TemplatesProps = Template_Frame_SAME_Props & {
   user: UserState;

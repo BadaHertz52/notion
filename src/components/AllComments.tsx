@@ -11,7 +11,7 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import { Block, MainCommentType, Page } from "../modules/notion/type";
 import Comments from "./Comments";
 import ScreenOnly from "./ScreenOnly";
-
+import "../assets/allComments.scss";
 type AllCommentsProps = {
   page: Page;
   userName: string;

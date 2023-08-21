@@ -20,6 +20,7 @@ import {
   PathType,
 } from "../route/NotionRouter";
 import { makePagePath } from "../fn";
+import "../assets/editor.scss";
 
 export const modalMoveToPage = "modalMoveToPage";
 export const modalComment = "modalComment";

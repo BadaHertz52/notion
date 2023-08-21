@@ -15,7 +15,7 @@ import { EMOJI_ARR, randomEmojiIcon } from "../modules/notion/emojiData";
 import { setTemplateItem } from "../fn";
 import ScreenOnly from "./ScreenOnly";
 import EmojiIcon from "./EmojiIcon";
-
+import "../assets/iconModal.scss";
 type IconModalProps = {
   currentPageId: string | null;
   block: Block | null;

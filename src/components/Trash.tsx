@@ -15,6 +15,8 @@ import { getCurrentPageId, makeResultType } from "../fn";
 import ScreenOnly from "./ScreenOnly";
 import ResultList from "./ResultList";
 
+import "../assets/trash.scss";
+
 type TrashProps = {
   style: CSSProperties | undefined;
   trashPagesId: string[] | null;

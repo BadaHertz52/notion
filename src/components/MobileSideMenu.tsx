@@ -5,10 +5,9 @@ import ColorMenu from "./ColorMenu";
 import CommandBlock from "./CommandBlock";
 import { SelectionType } from "../route/NotionRouter";
 import LinkLoader from "./LinkLoader";
-
 import Menu, { MenuAndBlockStylerCommonProps } from "./Menu";
 import PageMenu from "./PageMenu";
-
+import "../assets/mobileSideMenu.scss";
 type MobileSideMenuProps = MenuAndBlockStylerCommonProps & {
   recentPagesId: string[] | null;
   pagesId: string[];

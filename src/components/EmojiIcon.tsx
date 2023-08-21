@@ -2,6 +2,7 @@ import React from "react";
 import { EMOJI_ARR, EMOJI_DATA, Emoji } from "../modules/notion/emojiData";
 import transparentImg from "../assets/img/transparent.jpeg";
 import { CSSProperties } from "styled-components";
+import "../assets/emoji.scss";
 type EmojiIconProps = {
   otherClassName?: string;
   emojiSrc?: string;
@@ -22,6 +23,7 @@ const EmojiIcon = ({ otherClassName, icon, handleImgLoad }: EmojiIconProps) => {
     <img
       className={className}
       src={transparentImg}
+      loading="lazy"
       alt={EMOJI_DATA[icon]}
       style={style}
       onLoad={handleImgLoad}

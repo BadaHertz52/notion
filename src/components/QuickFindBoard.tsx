@@ -14,6 +14,7 @@ import { resultType } from "./Result";
 import { makeResultType } from "../fn/";
 import ScreenOnly from "./ScreenOnly";
 import ResultList from "./ResultList";
+import "../assets/quickFindBoard.scss";
 
 type QuickFindBoardProps = {
   userName: string;

@@ -4,6 +4,8 @@ import PageIcon from "./PageIcon";
 import { Link } from "react-router-dom";
 import { makeRoutePath } from "../fn";
 import { CSSProperties } from "styled-components";
+import "../assets/result.scss";
+
 export type resultType = {
   id: string;
   title: string;

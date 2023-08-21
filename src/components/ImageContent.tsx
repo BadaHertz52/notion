@@ -9,7 +9,7 @@ import { CSSProperties } from "styled-components";
 import { Block, Page } from "../modules/notion/type";
 import { setTemplateItem } from "../fn";
 import ScreenOnly from "./ScreenOnly";
-
+import "../assets/imageContent.scss";
 type ImageContentProps = {
   page: Page;
   block: Block;
@@ -165,7 +165,12 @@ const ImageContent = ({
         <ScreenOnly text="bottom button to resize image" />
         <span></span>
       </button>
-      <img src={block.contents} alt="block_photo" onLoad={measure} />
+      <img
+        src={block.contents}
+        alt="block_photo"
+        loading="lazy"
+        onLoad={measure}
+      />
     </div>
   );
 };

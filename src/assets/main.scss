@@ -1,23 +1,5 @@
-@import "./allComments";
-@import "./blockStyler";
-@import "./comment";
-@import "./commandBlock";
-@import "./editor";
-@import "./emoji";
-@import "./export";
-@import "./iconModal";
-@import "./imageContent";
-@import "./loader";
-@import "./loading";
-@import "./menu";
-@import "./mobileBlockMenu";
-@import "./sideBar";
-@import "./templates";
-@import "./trash";
-@import "./quickFindBoard";
-@import "./rename";
 @import "./reset";
-@import "./result";
+@import "./common";
 body,
 #root,
 #inner {

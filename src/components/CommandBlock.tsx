@@ -17,7 +17,7 @@ import { Block, BlockType, Page } from "../modules/notion/type";
 import { makeNewBlock, findParentBlock, setTemplateItem } from "../fn/index";
 import imgIcon from "../assets/img/vincent-van-gogh-ge1323790d_640.jpeg";
 import { CSSProperties } from "styled-components";
-
+import "../assets/commandBlock.scss";
 type CommandBlockProp = {
   page: Page;
   block: Block;

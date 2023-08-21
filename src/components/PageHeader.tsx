@@ -200,6 +200,7 @@ function PageHeader({
           <img
             src={page.header.cover}
             alt="page cover "
+            loading="lazy"
             onLoad={handleImgLoad}
           />
           <button

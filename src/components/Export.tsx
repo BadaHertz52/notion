@@ -13,7 +13,7 @@ import { findPage } from "../fn";
 import Frame, { FrameProps } from "./Frame";
 import ReactDOMServer from "react-dom/server";
 import ScreenOnly from "./ScreenOnly";
-
+import "../assets/export.scss";
 type ExportProps = FrameProps & {
   setOpenExport: Dispatch<SetStateAction<boolean>>;
 };

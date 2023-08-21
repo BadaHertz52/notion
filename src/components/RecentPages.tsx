@@ -54,6 +54,7 @@ const RecentPages = ({
             className="cover"
             src={recentPage.header.cover}
             alt="pageCover"
+            loading="lazy"
             onLoad={measure}
           />
         ) : (
