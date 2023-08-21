@@ -19,24 +19,20 @@ function Private({
   onClickMoreBtn,
 }: PrivateProps) {
   const { changeSide } = useContext(ActionContext).actions;
-  const targetList: ListItem[] | null = useMemo(
-    () =>
-      firstPages
-        ? firstPages
-            .filter((page: Page) => page.parentsId === null)
-            .map((page: Page) => ({
-              id: page.id,
-              iconType: page.header.iconType,
-              icon: page.header.icon,
-              title: page.header.title,
-              subPagesId: page.subPagesId,
-              parentsId: page.parentsId,
-              editTime: page.editTime,
-              createTime: page.createTime,
-            }))
-        : null,
-    [firstPages]
-  );
+  const targetList: ListItem[] | null = firstPages
+    ? firstPages
+        .filter((page: Page) => page.parentsId === null)
+        .map((page: Page) => ({
+          id: page.id,
+          iconType: page.header.iconType,
+          icon: page.header.icon,
+          title: page.header.title,
+          subPagesId: page.subPagesId,
+          parentsId: page.parentsId,
+          editTime: page.editTime,
+          createTime: page.createTime,
+        }))
+    : null;
   return (
     <div className="private">
       <div className="header">

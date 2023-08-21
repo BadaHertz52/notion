@@ -47,11 +47,8 @@ function Favorites({
     []
   );
 
-  const targetList = useMemo(
-    () =>
-      pagesId && pages ? makeFavoriteList(favorites, pagesId, pages) : null,
-    [favorites, pagesId, pages, makeFavoriteList]
-  );
+  const targetList =
+    pagesId && pages ? makeFavoriteList(favorites, pagesId, pages) : null;
 
   return (
     <div className="favorites">
