@@ -30,7 +30,6 @@ const PageIcon = ({ icon, iconType, style, handleImgLoad }: PageItemProps) => {
           style={{ width: "100%", height: "100%" }}
           alt="pageImgIcon"
           src={imgSrc}
-          loading="lazy"
           onLoad={handleImgLoad}
         />
       )}

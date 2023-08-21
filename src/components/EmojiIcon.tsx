@@ -23,7 +23,6 @@ const EmojiIcon = ({ otherClassName, icon, handleImgLoad }: EmojiIconProps) => {
     <img
       className={className}
       src={transparentImg}
-      loading="lazy"
       alt={EMOJI_DATA[icon]}
       style={style}
       onLoad={handleImgLoad}

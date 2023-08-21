@@ -170,7 +170,7 @@ const ImageContent = ({
         <ScreenOnly text="bottom button to resize image" />
         <span></span>
       </button>
-      <img src={imgSrc} alt="block_photo" loading="lazy" onLoad={measure} />
+      <img src={imgSrc} alt="block_photo" onLoad={measure} />
     </div>
   );
 };
