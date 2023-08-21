@@ -5,6 +5,7 @@ import { Emoji, getEmojiUrl } from "../modules/notion/emojiData";
 import { pageSample } from "../modules/notion/reducer";
 import BASIC_MEAT_TAG_IMG_URL from "../assets/img/default.jpeg";
 import { changeImgToJpeg } from "../fn/imgLoad";
+import { isFocusable } from "@testing-library/user-event/dist/utils";
 
 type MetaTagProps = {
   pageId?: string;
@@ -20,9 +21,6 @@ const NotionHelmet = ({ pageHeader, pageId }: MetaTagProps) => {
     "Notion (clone coding project) – The all-in-one workspace for your notes, tasks, wikis, and databases.";
   const webPAble = localStorage.getItem("webP_able") === "true";
   const [emojiUrl, setEmojiUrl] = useState<string>();
-  const [basicImgUrl, setBasicImgUrl] = useState<string>(
-    BASIC_MEAT_TAG_IMG_URL
-  );
   const getFaviconHref = () => {
     switch (iconType) {
       case null:
@@ -30,7 +28,16 @@ const NotionHelmet = ({ pageHeader, pageId }: MetaTagProps) => {
       case "emoji":
         return emojiUrl as string;
       case "img":
-        return icon as string;
+        const isFromGithub =
+          icon?.includes(
+            "https://github.com/BadaHertz52/notion/blob/master/src/assets/img"
+          ) ||
+          icon?.includes(
+            "https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assets/img"
+          );
+        return isFromGithub && icon
+          ? icon.replace(".webp", ".jpeg")
+          : (icon as string);
       default:
         return BASIC_FAVICON_HREF;
     }
@@ -41,8 +48,7 @@ const NotionHelmet = ({ pageHeader, pageId }: MetaTagProps) => {
     window.location.host
   }/notion/${pageId ? pageId : ""}`;
 
-  const imgUrl: string =
-    !iconType || !icon ? basicImgUrl : (emojiUrl as string);
+  const imgUrl: string = BASIC_MEAT_TAG_IMG_URL;
 
   const metaTagTitle =
     title === pageSample.header.title
