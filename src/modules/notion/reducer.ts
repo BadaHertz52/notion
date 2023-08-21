@@ -18,10 +18,13 @@ import {
   defaultColor,
 } from "./colorData";
 const catImg =
-  "https://github.com/BadaHertz52/notion/blob/master/src/assets/img/michael-sum-LEpfefQf4rU-unsplash.webp?raw=true";
+  "https://github.com/BadaHertz52/notion/blob/master/src/assets/img/cat.webp?raw=true";
 
 const imgBlockImg =
-  "https://github.com/BadaHertz52/notion/blob/master/src/assets/img/roses-gfcb7dbdd4_640.webp?raw=true";
+  "https://github.com/BadaHertz52/notion/blob/master/src/assets/img/roses.webp?raw=true";
+
+const basicPageIcon =
+  "https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assets/img/pageIcon.webp";
 export const blockTypes: BlockType[] = [
   "text",
   "toggle",
@@ -65,8 +68,8 @@ export const pageSample: Page = {
   type: "page",
   header: {
     title: "untitle",
-    iconType: null,
-    icon: null,
+    iconType: "img",
+    icon: basicPageIcon,
     cover: null,
     comments: null,
   },
