@@ -209,8 +209,7 @@ const Templates = ({
     };
 
     addTemplate(newTemplate);
-    setOpenTemplates(false);
-  }, [addTemplate, setOpenTemplates, templatesId]);
+  }, [addTemplate, templatesId]);
 
   const onClickDeleteTemplateBtn = useCallback(() => {
     if (template && templatesId && templates) {
