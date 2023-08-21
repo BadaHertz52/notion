@@ -3,7 +3,7 @@ import { PageHeader } from "../modules/notion/type";
 import { Helmet } from "react-helmet-async";
 import { Emoji, getEmojiUrl } from "../modules/notion/emojiData";
 import { pageSample } from "../modules/notion/reducer";
-import BASIC_MEAT_TAG_IMG_URL from "../assets/img/default.webp";
+import BASIC_MEAT_TAG_IMG_URL from "../assets/img/default.jpeg";
 import { changeImgToJpeg } from "../fn/imgLoad";
 
 type MetaTagProps = {
@@ -50,11 +50,6 @@ const NotionHelmet = ({ pageHeader, pageId }: MetaTagProps) => {
       : `${title}- Notion clone coding project`;
 
   const description = `${title} is  page of project that cloned the Notion site.`;
-  useEffect(() => {
-    if (!webPAble) {
-      changeImgToJpeg(BASIC_MEAT_TAG_IMG_URL, (url) => setBasicImgUrl(url));
-    }
-  }, [webPAble]);
   useEffect(() => {
     if (iconType === "emoji" && icon) {
       getEmojiUrl(icon as Emoji, setEmojiUrl);
