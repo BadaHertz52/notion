@@ -113,7 +113,10 @@ const Export = ({
       };
     }
   }
-
+  const closeExport = useCallback(() => {
+    setOpenExport(false);
+    window.location.reload();
+  }, [setOpenExport]);
   const onClickExportBtn = useCallback(() => {
     const includeSubPagesSliderEl = document.getElementById(
       "includeSubPagesSlider"
@@ -268,6 +271,7 @@ const Export = ({
           break;
       }
     }
+    closeExport();
   }, [
     commentBlock,
     content,
@@ -295,6 +299,7 @@ const Export = ({
     showAllComments,
     smallText,
     userName,
+    closeExport,
   ]);
   useEffect(() => {
     const aTags = document.querySelectorAll("a");
@@ -356,7 +361,7 @@ const Export = ({
           </div>
         </div>
         <div className="btn-group">
-          <button title="cancel button" onClick={() => setOpenExport(false)}>
+          <button title="cancel button" onClick={closeExport}>
             Cancel
           </button>
           <button title="export button" onClick={onClickExportBtn}>
