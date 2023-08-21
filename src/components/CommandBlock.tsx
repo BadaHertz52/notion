@@ -460,7 +460,7 @@ const CommandBlock = ({
             >
               <div className="btn-command__inner">
                 <div className="btn-command__left">
-                  <img src={imgIcon} alt="imgIcon" />
+                  <img src={imgIcon} alt="imgIcon" loading="lazy" />
                 </div>
                 <div className="btn-command__right">
                   <header>Image</header>
