@@ -28,16 +28,7 @@ const NotionHelmet = ({ pageHeader, pageId }: MetaTagProps) => {
       case "emoji":
         return emojiUrl as string;
       case "img":
-        const isFromGithub =
-          icon?.includes(
-            "https://github.com/BadaHertz52/notion/blob/master/src/assets/img"
-          ) ||
-          icon?.includes(
-            "https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assets/img"
-          );
-        return isFromGithub && icon
-          ? icon.replace(".webp", ".jpeg")
-          : (icon as string);
+        return icon as string;
       default:
         return BASIC_FAVICON_HREF;
     }

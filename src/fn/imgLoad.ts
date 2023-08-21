@@ -22,31 +22,19 @@ export const changeImgToWebP = (
 };
 
 export const changeImgToJpeg = (src: string, getUrl: (url: string) => void) => {
-  const isFromGithub =
-    src.includes(
-      "https://github.com/BadaHertz52/notion/blob/master/src/assets/img"
-    ) ||
-    src.includes(
-      "https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assets/img"
-    );
-  if (!isFromGithub) {
-    const image = new Image();
-    image.onload = function () {
-      const canvas = document.createElement("canvas");
-      canvas.width = image.width;
-      canvas.height = image.height;
-      const context = canvas.getContext("2d");
-      if (context) {
-        context.drawImage(image, 0, 0);
-        const jpegDataURL = canvas.toDataURL("image/jpeg", 0.8);
-        getUrl(jpegDataURL);
-        canvas.parentNode?.removeChild(canvas);
-        image.parentNode?.removeChild(image);
-      }
-    };
-    image.src = src;
-  } else {
-    const jpegUrl = src.replace(".webp", ".jpeg");
-    getUrl(jpegUrl);
-  }
+  const image = new Image();
+  image.onload = function () {
+    const canvas = document.createElement("canvas");
+    canvas.width = image.width;
+    canvas.height = image.height;
+    const context = canvas.getContext("2d");
+    if (context) {
+      context.drawImage(image, 0, 0);
+      const jpegDataURL = canvas.toDataURL("image/jpeg", 0.8);
+      getUrl(jpegDataURL);
+      canvas.parentNode?.removeChild(canvas);
+      image.parentNode?.removeChild(image);
+    }
+  };
+  image.src = src;
 };

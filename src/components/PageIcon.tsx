@@ -2,10 +2,10 @@ import React from "react";
 import { CSSProperties } from "styled-components";
 import { Emoji } from "../modules/notion/emojiData";
 import { IconType } from "../modules/notion/type";
-import pageDefaultImg from "../assets/img/basic-page.webp";
 import EmojiIcon from "./EmojiIcon";
 import Img from "./Img";
-type PageItemProps = {
+import { pageSample } from "../modules/notion/reducer";
+type PageIconProps = {
   icon: string | null;
   iconType: IconType;
   style: CSSProperties | undefined;
@@ -18,10 +18,10 @@ const PageIcon = ({
   style,
   handleImgLoad,
   isInPageHeader = false,
-}: PageItemProps) => {
+}: PageIconProps) => {
   const pageIconClassName: string =
     icon === null ? "page__icon iconNull" : "page__icon";
-  const img: string = icon ? icon : pageDefaultImg;
+  const img = icon ? icon : (pageSample.header.icon as string);
   const imgSrc =
     isInPageHeader && !img.includes(";base64")
       ? img + "?&height=72&width=72"

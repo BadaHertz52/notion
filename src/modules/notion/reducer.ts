@@ -17,13 +17,10 @@ import {
   blue,
   defaultColor,
 } from "./colorData";
-const catImg =
-  "https://github.com/BadaHertz52/notion/blob/master/src/assets/img/cat.webp?raw=true";
+import catImg from "../../assets/img/cat.webp";
+import imgBlockImg from "../../assets/img/roses.webp";
+import basicPageIcon from "../../assets/img/basic-page.webp";
 
-const imgBlockImg =
-  "https://github.com/BadaHertz52/notion/blob/master/src/assets/img/roses.webp?raw=true";
-const basicPageIcon =
-  "https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assets/img/basic-page.webp";
 export const blockTypes: BlockType[] = [
   "text",
   "toggle",
