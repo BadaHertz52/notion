@@ -12,7 +12,8 @@
   display: flex;
   flex-direction: column;
   div {
-    width: 100%;
+    width: inherit;
+    height: inherit;
   }
   .listItem-marker,
   .comments-bubble {

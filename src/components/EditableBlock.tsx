@@ -115,8 +115,18 @@ const EditableBlock = ({
     return {
       color: block.type !== "todo_done" ? block.style.color : "grey",
       backgroundColor: block.style.bgColor,
-      width: block.style.width === undefined ? "inherit" : block.style.width,
-      height: block.style.height === undefined ? "inherit" : block.style.height,
+      width:
+        block.style.width === undefined
+          ? block.type === "image"
+            ? "auto"
+            : "inherit"
+          : block.style.width,
+      height:
+        block.style.height === undefined
+          ? block.type === "image"
+            ? "150px"
+            : "inherit"
+          : block.style.height,
     };
   }, []);
   /**
