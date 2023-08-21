@@ -200,7 +200,7 @@ const FrameInner = (props: FrameInnerProps) => {
       />
       <div className="page__contents">
         {props.openExport ? (
-          list.map((e, i) => <Row index={i} />)
+          list.map((e, i) => <Row index={i} key={`block_${i}`} />)
         ) : (
           <WindowScroller
             scrollElement={(frameRef.current as Element | null) || undefined}
