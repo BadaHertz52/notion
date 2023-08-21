@@ -31,7 +31,12 @@ const ImageContent = ({
   type DragBtnName = typeof LEFT | typeof RIGHT | typeof BOTTOM;
   const dragBtn = useRef<DragBtnName>(LEFT);
   const [imageStyle, setImageStyle] = useState<CSSProperties>();
-
+  const imgSrc = block.contents.includes(";base64")
+    ? block.contents
+    : block.contents +
+      `?&height=${block.style.height ? block.style.height : 150}&width=${
+        block.style.width || "auto"
+      }`;
   const resizeImage = useCallback(
     (clientX: number, clientY: number) => {
       const targetImgContent = document.getElementById(`${block.id}__contents`);
@@ -165,12 +170,7 @@ const ImageContent = ({
         <ScreenOnly text="bottom button to resize image" />
         <span></span>
       </button>
-      <img
-        src={block.contents}
-        alt="block_photo"
-        loading="lazy"
-        onLoad={measure}
-      />
+      <img src={imgSrc} alt="block_photo" loading="lazy" onLoad={measure} />
     </div>
   );
 };
