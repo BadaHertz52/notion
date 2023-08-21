@@ -84,7 +84,7 @@ const IconModal = ({
         const reader = new FileReader();
         reader.onload = function () {
           const result = reader.result as string;
-          if (file.type.includes("gif")) {
+          if (file.type.includes("gif") || file.type.includes("webP")) {
             changePageIcon(result, "img");
           } else {
             changeImgToWebP(reader, changeImg);

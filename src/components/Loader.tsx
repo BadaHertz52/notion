@@ -74,7 +74,7 @@ const Loader = ({
         const reader = new FileReader();
         reader.onload = function () {
           const result = reader.result as string;
-          if (file.type.includes("gif")) {
+          if (file.type.includes("gif") || file.type.includes("webP")) {
             changeImg(result);
           } else {
             changeImgToWebP(reader, changeImg);
