@@ -93,7 +93,7 @@ const FrameInner = (props: FrameInnerProps) => {
 
   const Row = ({ index, measure }: RowProps) => {
     return list[index] ? (
-      <div className="page__firstBlock">
+      <div className="page__firstBlock" role="row">
         <EditableBlock
           key={(list[index] as Block).id}
           pages={props.pages}
@@ -122,6 +122,7 @@ const FrameInner = (props: FrameInnerProps) => {
     ) : (
       <div
         className="bottom"
+        role="row"
         onClick={onClickBottom}
         style={{ height: bottomHeight }}
       ></div>
