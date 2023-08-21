@@ -77,7 +77,6 @@ const TopBar = ({
 }: TopBarProps) => {
   const { deletePage, changeSide, addFavorites, removeFavorites } =
     useContext(ActionContext).actions;
-  const inner = document.getElementById("inner");
   const [title, setTitle] = useState<string>("");
   const [openPageMoreFun, setOpenPageMoreFun] = useState<boolean>(false);
   const [openPageMenu, setOpenPageMenu] = useState<boolean>(false);
@@ -210,25 +209,38 @@ const TopBar = ({
     setOpenPageMoreFun(false);
     setOpenPageMenu(!openPageMenu);
   };
+  /**
+   * pageMenu 창  또는 page-tool-more창 이 열려있을 경우, 해당 창이 아닌 구역을 클릭 시에 해당 창을 닫는 기능
+   */
+  const closePopUp = useCallback(
+    (event: globalThis.MouseEvent) => {
+      if (openPageMenu) {
+        const target = event.target as HTMLElement | null;
+        if (
+          !target?.closest("#pageMenu") &&
+          !target?.closest(".page-tool__more")
+        ) {
+          setOpenPageMenu(false);
+        }
+      }
+      if (openPageMoreFun) {
+        const target = event.target as HTMLElement | null;
+        if (
+          !target?.closest(".page-tool__more") &&
+          !target?.closest(".btn-page-tool-more")
+        ) {
+          setOpenPageMoreFun(false);
+        }
+      }
+    },
+    [openPageMenu, openPageMoreFun]
+  );
   useEffect(() => {
     window.addEventListener("resize", changeAllCommentAndTopBarStyle);
     return () =>
       window.removeEventListener("resize", changeAllCommentAndTopBarStyle);
   }, [changeAllCommentAndTopBarStyle]);
 
-  /**
-   * pageMenu 창이 열려있을 경우, pageMenu 외의 구역을 클릭 시에 pageMenu 창을 닫는 기능
-   */
-  const closePageMenu = useCallback(
-    (event: globalThis.MouseEvent) => {
-      if (openPageMenu) {
-        const target = event.target as HTMLElement | null;
-        const isInnerMenu = target?.closest("#pageMenu");
-        !isInnerMenu && setOpenPageMenu(false);
-      }
-    },
-    [openPageMenu]
-  );
   useEffect(() => {
     if (sideAppear === "float") {
       setTitle("Lock sideBar ");
@@ -239,11 +251,11 @@ const TopBar = ({
   }, [sideAppear]);
 
   useEffect(() => {
-    inner?.addEventListener("click", closePageMenu);
+    window.addEventListener("click", closePopUp);
     return () => {
-      inner?.addEventListener("click", closePageMenu);
+      window.addEventListener("click", closePopUp);
     };
-  }, [inner, closePageMenu]);
+  }, [closePopUp]);
   return (
     <div className="topBar">
       <div className="topBar__left">
@@ -321,7 +333,11 @@ const TopBar = ({
           <ScreenOnly text="Pin this page in your sidebar" />
           {pageInFavorites ? <AiFillStar /> : <AiOutlineStar />}
         </button>
-        <button title=" Style, export, and more" onClick={onClickMoreBtn}>
+        <button
+          className="btn-page-tool-more"
+          title=" Style, export, and more"
+          onClick={onClickMoreBtn}
+        >
           <ScreenOnly text="Style, export, and more" />
           <BsThreeDots />
         </button>
