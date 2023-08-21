@@ -26,7 +26,7 @@ import CommentInput from "./CommentInput";
 import Img from "./Img";
 
 const basicPageCover =
-  "https://github.com/BadaHertz52/notion/blob/master/src/assets/img/artificial-turf-g6e884a1d4_1920.webp?raw=true";
+  "https://github.com/BadaHertz52/notion/blob/master/src/assets/img/artificial-turf.webp?raw=true";
 
 export type PageHeaderProps = {
   userName: string;
