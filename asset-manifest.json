@@ -1,19 +1,22 @@
 {
   "files": {
     "main.css": "/notion/static/css/main.81453f8e.css",
-    "main.js": "/notion/static/js/main.307bc4ac.js",
+    "main.js": "/notion/static/js/main.e4c82753.js",
+    "static/media/artificial-turf.webp": "/notion/static/media/artificial-turf.2068aba71b346df4c281.webp",
+    "static/media/cat.webp": "/notion/static/media/cat.9fd88ae5767a987c61f6.webp",
     "static/media/emoji_sprite.png": "/notion/static/media/emoji_sprite.d93f4200cf4280ce3711.png",
     "static/media/emoji_sprite.webp": "/notion/static/media/emoji_sprite.2a6c0d3fe804bb8d1987.webp",
     "static/media/vincent-van-gogh-ge1323790d_640.webp": "/notion/static/media/vincent-van-gogh-ge1323790d_640.42ee0a376c5f73cef0e3.webp",
+    "static/media/roses.webp": "/notion/static/media/roses.d31bb8e5498cd0fa44a0.webp",
     "static/media/default.jpeg": "/notion/static/media/default.57b9d713e0831a260edb.jpeg",
     "static/media/basic-page.webp": "/notion/static/media/basic-page.283a4f041697f0942c10.webp",
     "index.html": "/notion/index.html",
     "static/media/transparent.webp": "/notion/static/media/transparent.21f2186739b956eb4395.webp",
     "main.81453f8e.css.map": "/notion/static/css/main.81453f8e.css.map",
-    "main.307bc4ac.js.map": "/notion/static/js/main.307bc4ac.js.map"
+    "main.e4c82753.js.map": "/notion/static/js/main.e4c82753.js.map"
   },
   "entrypoints": [
     "static/css/main.81453f8e.css",
-    "static/js/main.307bc4ac.js"
+    "static/js/main.e4c82753.js"
   ]
 }
