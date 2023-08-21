@@ -106,7 +106,7 @@ export const getEmojiUrl = (
     ctx?.clearRect(0, 0, canvas.width, canvas.height);
     ctx?.drawImage(
       image,
-      EMOJI_ARR.indexOf(icon) * (size + 10),
+      EMOJI_ARR.indexOf(icon) * size,
       0,
       size,
       size,
