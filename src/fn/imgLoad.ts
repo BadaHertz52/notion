@@ -22,9 +22,13 @@ export const changeImgToWebP = (
 };
 
 export const changeImgToJpeg = (src: string, getUrl: (url: string) => void) => {
-  const isFromGithub = src.includes(
-    "https://github.com/BadaHertz52/notion/blob/master/src/assets/img"
-  );
+  const isFromGithub =
+    src.includes(
+      "https://github.com/BadaHertz52/notion/blob/master/src/assets/img"
+    ) ||
+    src.includes(
+      "https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assets/img"
+    );
   if (!isFromGithub) {
     const image = new Image();
     image.onload = function () {

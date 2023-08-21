@@ -22,9 +22,8 @@ const catImg =
 
 const imgBlockImg =
   "https://github.com/BadaHertz52/notion/blob/master/src/assets/img/roses.webp?raw=true";
-
 const basicPageIcon =
-  "https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assets/img/pageIcon.webp";
+  "https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assets/img/basic-page.webp";
 export const blockTypes: BlockType[] = [
   "text",
   "toggle",

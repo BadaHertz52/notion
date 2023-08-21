@@ -2,7 +2,7 @@ import React from "react";
 import { CSSProperties } from "styled-components";
 import { Emoji } from "../modules/notion/emojiData";
 import { IconType } from "../modules/notion/type";
-import pageDefaultImg from "../assets/img/pageIcon.webp";
+import pageDefaultImg from "../assets/img/basic-page.webp";
 import EmojiIcon from "./EmojiIcon";
 import Img from "./Img";
 type PageItemProps = {
@@ -21,7 +21,7 @@ const PageIcon = ({
 }: PageItemProps) => {
   const pageIconClassName: string =
     icon === null ? "page__icon iconNull" : "page__icon";
-  const img: string = icon && iconType === "img" ? icon : pageDefaultImg;
+  const img: string = icon ? icon : pageDefaultImg;
   const imgSrc =
     isInPageHeader && !img.includes(";base64")
       ? img + "?&height=72&width=72"
