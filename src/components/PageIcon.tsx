@@ -9,11 +9,22 @@ type PageItemProps = {
   iconType: IconType;
   style: CSSProperties | undefined;
   handleImgLoad?: () => void;
+  isInPageHeader?: boolean;
 };
-const PageIcon = ({ icon, iconType, style, handleImgLoad }: PageItemProps) => {
+const PageIcon = ({
+  icon,
+  iconType,
+  style,
+  handleImgLoad,
+  isInPageHeader = false,
+}: PageItemProps) => {
   const pageIconClassName: string =
     icon === null ? "page__icon iconNull" : "page__icon";
-  const imgSrc: string = icon && iconType === "img" ? icon : pageDefaultImg;
+  const img: string = icon && iconType === "img" ? icon : pageDefaultImg;
+  const imgSrc =
+    isInPageHeader && !img.includes(";base64")
+      ? img + "?&height=72&width=72"
+      : img;
   return (
     <div className={pageIconClassName} style={style}>
       {iconType === "emoji" ? (

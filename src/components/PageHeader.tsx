@@ -237,6 +237,7 @@ function PageHeader({
             iconType={page.header.iconType}
             style={pageIconStyle}
             handleImgLoad={handleImgLoad}
+            isInPageHeader={true}
           />
         </div>
         <div className="deco">
