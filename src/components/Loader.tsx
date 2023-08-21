@@ -10,6 +10,7 @@ import { CSSProperties } from "styled-components";
 import { Block, Page } from "../modules/notion/type";
 import { setTemplateItem } from "../fn";
 import "../assets/loader.scss";
+import { changeImgToWebP } from "../fn/imgLoad";
 type LoaderProps = {
   block: Block | null;
   page: Page;
@@ -37,7 +38,35 @@ const Loader = ({
     setOpenLoader(false);
     setLoaderTargetBlock && setLoaderTargetBlock(null);
   }, [setOpenLoader, setLoaderTargetBlock]);
-
+  const changeImg = useCallback(
+    (src: string) => {
+      if (block) {
+        const editedBlock: Block = {
+          ...block,
+          type: "image",
+          contents: src,
+          editTime: JSON.stringify(Date.now()),
+        };
+        const templateHtml = document.getElementById("template");
+        setTemplateItem(templateHtml, page);
+        editBlock && editBlock(page.id, editedBlock);
+        closeLoader();
+      } else {
+        //change page cover
+        const editedPage: Page = {
+          ...page,
+          header: {
+            ...page.header,
+            cover: src,
+          },
+          editTime: JSON.stringify(Date.now()),
+        };
+        editPage && editPage(page.id, editedPage);
+        closeLoader();
+      }
+    },
+    [block, closeLoader, editBlock, editPage, page]
+  );
   const onChangeImgFile = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
@@ -45,29 +74,10 @@ const Loader = ({
         const reader = new FileReader();
         reader.onload = function () {
           const result = reader.result as string;
-          if (block) {
-            const editedBlock: Block = {
-              ...block,
-              type: "image",
-              contents: result,
-              editTime: JSON.stringify(Date.now()),
-            };
-            const templateHtml = document.getElementById("template");
-            setTemplateItem(templateHtml, page);
-            editBlock && editBlock(page.id, editedBlock);
-            closeLoader();
+          if (file.type.includes("gif")) {
+            changeImg(result);
           } else {
-            //change page cover
-            const editedPage: Page = {
-              ...page,
-              header: {
-                ...page.header,
-                cover: result,
-              },
-              editTime: JSON.stringify(Date.now()),
-            };
-            editPage && editPage(page.id, editedPage);
-            closeLoader();
+            changeImgToWebP(reader, changeImg);
           }
         };
         reader.readAsDataURL(file);
@@ -75,7 +85,7 @@ const Loader = ({
         console.error("can't find image file");
       }
     },
-    [block, closeLoader, editBlock, editPage, page]
+    [changeImg]
   );
 
   const removePageCover = useCallback(() => {

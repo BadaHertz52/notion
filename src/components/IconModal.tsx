@@ -16,6 +16,7 @@ import { setTemplateItem } from "../fn";
 import ScreenOnly from "./ScreenOnly";
 import EmojiIcon from "./EmojiIcon";
 import "../assets/iconModal.scss";
+import { changeImgToWebP } from "../fn/imgLoad";
 type IconModalProps = {
   currentPageId: string | null;
   block: Block | null;
@@ -70,7 +71,12 @@ const IconModal = ({
   const onClickRandom = () => {
     changePageIcon(randomEmojiIcon(), "emoji");
   };
-
+  const changeImg = useCallback(
+    (src: string) => {
+      changePageIcon(src, "img");
+    },
+    [changePageIcon]
+  );
   const onChangeImgIcon = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
@@ -78,12 +84,16 @@ const IconModal = ({
         const reader = new FileReader();
         reader.onload = function () {
           const result = reader.result as string;
-          changePageIcon(result, "img");
+          if (file.type.includes("gif")) {
+            changePageIcon(result, "img");
+          } else {
+            changeImgToWebP(reader, changeImg);
+          }
         };
         reader.readAsDataURL(file);
       }
     },
-    [changePageIcon]
+    [changePageIcon, changeImg]
   );
 
   const inner = document.getElementById("inner");

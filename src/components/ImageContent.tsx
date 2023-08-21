@@ -10,6 +10,7 @@ import { Block, Page } from "../modules/notion/type";
 import { setTemplateItem } from "../fn";
 import ScreenOnly from "./ScreenOnly";
 import "../assets/imageContent.scss";
+import Img from "./Img";
 type ImageContentProps = {
   page: Page;
   block: Block;
@@ -170,7 +171,7 @@ const ImageContent = ({
         <ScreenOnly text="bottom button to resize image" />
         <span></span>
       </button>
-      <img src={imgSrc} alt="block_photo" onLoad={measure} />
+      <Img src={imgSrc} alt="block_photo" onLoad={measure} />
     </div>
   );
 };

@@ -3,7 +3,8 @@ import { PageHeader } from "../modules/notion/type";
 import { Helmet } from "react-helmet-async";
 import { Emoji, getEmojiUrl } from "../modules/notion/emojiData";
 import { pageSample } from "../modules/notion/reducer";
-import BASIC_MEAT_TAG_IMG_URL from "../assets/img/default.jpeg";
+import BASIC_MEAT_TAG_IMG_URL from "../assets/img/default.webp";
+import { changeImgToJpeg } from "../fn/imgLoad";
 
 type MetaTagProps = {
   pageId?: string;
@@ -17,8 +18,11 @@ const NotionHelmet = ({ pageHeader, pageId }: MetaTagProps) => {
   const BASIC_FAVICON_HREF = "./favicon.ico";
   const BASIC_META_TAG_TITLE =
     "Notion (clone coding project) – The all-in-one workspace for your notes, tasks, wikis, and databases.";
+  const webPAble = localStorage.getItem("webP_able") === "true";
   const [emojiUrl, setEmojiUrl] = useState<string>();
-
+  const [basicImgUrl, setBasicImgUrl] = useState<string>(
+    BASIC_MEAT_TAG_IMG_URL
+  );
   const getFaviconHref = () => {
     switch (iconType) {
       case null:
@@ -38,7 +42,7 @@ const NotionHelmet = ({ pageHeader, pageId }: MetaTagProps) => {
   }/notion/${pageId ? pageId : ""}`;
 
   const imgUrl: string =
-    !iconType || !icon ? BASIC_MEAT_TAG_IMG_URL : (emojiUrl as string);
+    !iconType || !icon ? basicImgUrl : (emojiUrl as string);
 
   const metaTagTitle =
     title === pageSample.header.title
@@ -46,6 +50,11 @@ const NotionHelmet = ({ pageHeader, pageId }: MetaTagProps) => {
       : `${title}- Notion clone coding project`;
 
   const description = `${title} is  page of project that cloned the Notion site.`;
+  useEffect(() => {
+    if (!webPAble) {
+      changeImgToJpeg(BASIC_MEAT_TAG_IMG_URL, (url) => setBasicImgUrl(url));
+    }
+  }, [webPAble]);
   useEffect(() => {
     if (iconType === "emoji" && icon) {
       getEmojiUrl(icon as Emoji, setEmojiUrl);

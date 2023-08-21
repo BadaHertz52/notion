@@ -125,7 +125,7 @@ const EditableBlock = ({
           : block.style.width,
       height:
         block.style.height === undefined
-          ? block.type === "image"
+          ? block.type === "image" && block.contents !== ""
             ? "150px"
             : "inherit"
           : block.style.height,

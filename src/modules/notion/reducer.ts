@@ -18,10 +18,10 @@ import {
   defaultColor,
 } from "./colorData";
 const catImg =
-  "https://github.com/BadaHertz52/notion/blob/master/src/assets/img/michael-sum-LEpfefQf4rU-unsplash.jpeg?raw=true";
+  "https://github.com/BadaHertz52/notion/blob/master/src/assets/img/michael-sum-LEpfefQf4rU-unsplash.webp?raw=true";
 
 const imgBlockImg =
-  "https://github.com/BadaHertz52/notion/blob/master/src/assets/img/roses-gfcb7dbdd4_640.jpeg?raw=true";
+  "https://github.com/BadaHertz52/notion/blob/master/src/assets/img/roses-gfcb7dbdd4_640.webp?raw=true";
 export const blockTypes: BlockType[] = [
   "text",
   "toggle",

@@ -23,9 +23,10 @@ import { BiMessageDetail } from "react-icons/bi";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 import Comments from "./Comments";
 import CommentInput from "./CommentInput";
+import Img from "./Img";
 
 const basicPageCover =
-  "https://github.com/BadaHertz52/notion/blob/master/src/assets/img/artificial-turf-g6e884a1d4_1920.jpeg?raw=true";
+  "https://github.com/BadaHertz52/notion/blob/master/src/assets/img/artificial-turf-g6e884a1d4_1920.webp?raw=true";
 
 export type PageHeaderProps = {
   userName: string;
@@ -197,7 +198,7 @@ function PageHeader({
           onMouseEnter={(event) => onMouseEnterPC(event)}
           onMouseLeave={(event) => onMouseLeavePC(event)}
         >
-          <img
+          <Img
             src={page.header.cover}
             alt="page cover "
             onLoad={handleImgLoad}

@@ -2,8 +2,9 @@ import React from "react";
 import { CSSProperties } from "styled-components";
 import { Emoji } from "../modules/notion/emojiData";
 import { IconType } from "../modules/notion/type";
-import pageDefaultImg from "../assets/img/icons8-페이지-개요-100.jpeg";
+import pageDefaultImg from "../assets/img/icons8-페이지-개요-100.webp";
 import EmojiIcon from "./EmojiIcon";
+import Img from "./Img";
 type PageItemProps = {
   icon: string | null;
   iconType: IconType;
@@ -36,7 +37,7 @@ const PageIcon = ({
           />
         )
       ) : (
-        <img
+        <Img
           className="page__icon__img"
           style={{ width: "100%", height: "100%" }}
           alt="pageImgIcon"

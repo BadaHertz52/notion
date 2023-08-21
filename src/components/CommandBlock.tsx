@@ -15,9 +15,10 @@ import { Command } from "./Frame";
 import { ActionContext, SelectionType } from "../route/NotionRouter";
 import { Block, BlockType, Page } from "../modules/notion/type";
 import { makeNewBlock, findParentBlock, setTemplateItem } from "../fn/index";
-import imgIcon from "../assets/img/vincent-van-gogh-ge1323790d_640.jpeg";
+import imgIcon from "../assets/img/vincent-van-gogh-ge1323790d_640.webp";
 import { CSSProperties } from "styled-components";
 import "../assets/commandBlock.scss";
+import Img from "./Img";
 type CommandBlockProp = {
   page: Page;
   block: Block;
@@ -38,6 +39,7 @@ const CommandBlock = ({
 }: CommandBlockProp) => {
   const { editBlock, changeBlockToPage, changePageToBlock, editPage } =
     useContext(ActionContext).actions;
+  const imgSrc = imgIcon + "?&width=36$height=36";
   const noResultRef = useRef<HTMLDivElement>(null);
   const btnGroupRef = useRef<HTMLDivElement>(null);
   const showResult = useCallback(() => {
@@ -460,7 +462,7 @@ const CommandBlock = ({
             >
               <div className="btn-command__inner">
                 <div className="btn-command__left">
-                  <img src={imgIcon + "?&width=36$height=36"} alt="imgIcon" />
+                  <Img src={imgSrc} alt="imgIcon" />
                 </div>
                 <div className="btn-command__right">
                   <header>Image</header>

@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { ActionContext } from "../route/NotionRouter";
 import PageIcon from "./PageIcon";
 import { FixedSizeList } from "react-window";
+import Img from "./Img";
 
 type RecentPagesProps = {
   listHeight: number | string;
@@ -50,7 +51,7 @@ const RecentPages = ({
         onClick={onClickRecentPageItem}
       >
         {recentPage.header.cover ? (
-          <img
+          <Img
             className="cover"
             src={recentPage.header.cover}
             alt="pageCover"
