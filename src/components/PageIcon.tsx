@@ -27,6 +27,7 @@ const PageIcon = ({ icon, iconType, style, handleImgLoad }: PageItemProps) => {
       ) : (
         <img
           className="page__icon__img"
+          style={{ width: "100%", height: "100%" }}
           alt="pageImgIcon"
           src={imgSrc}
           onLoad={handleImgLoad}

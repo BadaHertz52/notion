@@ -1,47 +1,48 @@
 import { Dispatch, SetStateAction } from "react";
 import EmojiSpritesImg from "../../assets/img/emoji_sprite.png";
-export type Emoji =
-  | "smile"
-  | "heartEyes"
-  | "angry"
-  | "sob"
-  | "heart"
-  | "purpleHeart"
-  | "noEntrySign"
-  | "warning"
-  | "memo"
-  | "alarm"
-  | "phone"
-  | "game"
-  | "computer"
-  | "pray"
-  | "tada"
-  | "gift"
-  | "popcorn"
-  | "musicalNote"
-  | "dollar"
-  | "creditCard"
-  | "calendar"
-  | "chart"
-  | "bulb"
-  | "shoppingTrolley"
-  | "bath"
-  | "fries"
-  | "cake"
-  | "apple"
-  | "carrot"
-  | "airplane"
-  | "bus"
-  | "metro"
-  | "house"
-  | "tent"
-  | "star"
-  | "sunny"
-  | "rainbow"
-  | "rain"
-  | "snowman"
-  | "blossom";
-
+export const EMOJI_DATA = {
+  smile: "😄",
+  heartEyes: "😍",
+  angry: "😠",
+  sob: "😭",
+  heart: "❤️",
+  purpleHeart: "💜",
+  noEntrySign: "🚫",
+  warning: "⚠️",
+  memo: "📝",
+  alarm: "⏰",
+  phone: "📱",
+  game: "🎮",
+  computer: "💻",
+  pray: "🙏",
+  tada: "🎉",
+  gift: "🎁",
+  popcorn: "🍿",
+  musicalNote: "🎵",
+  dollar: "💵",
+  creditCard: "💳",
+  calendar: "📆",
+  chart: "📊",
+  bulb: "💡",
+  shoppingTrolley: "🛒",
+  bath: "🛁",
+  fries: "🍟",
+  cake: "🍰",
+  apple: "🍎",
+  carrot: "🥕",
+  airplane: "✈️",
+  bus: "🚍",
+  metro: "🚇",
+  house: "🏠",
+  tent: "🏕️",
+  star: "⭐",
+  sunny: "☀️",
+  rainbow: "🌈",
+  rain: "☂️",
+  snowman: "☃️",
+  blossom: "🌸",
+};
+export type Emoji = keyof typeof EMOJI_DATA;
 export const EMOJI_ARR: Emoji[] = [
   "airplane",
   "alarm",

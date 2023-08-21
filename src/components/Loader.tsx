@@ -180,7 +180,7 @@ const Loader = ({
             <label htmlFor="loader-img">Or upload file</label>
             <input
               type="file"
-              accept="image/jpeg , image/jpeg, image/png"
+              accept="image/*"
               name="loader-img"
               id="loader-img"
               onChange={onChangeImgFile}

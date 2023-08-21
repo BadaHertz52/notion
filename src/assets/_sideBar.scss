@@ -70,7 +70,7 @@
     height: 100%;
     width: 100%;
   }
-  .page__icon__img {
+  .page__icon {
     width: 14px;
     height: 14px;
   }
@@ -533,8 +533,6 @@
           left: 10%;
         }
         .page__icon__img {
-          width: 100%;
-          height: 100%;
           border-radius: 50%;
         }
         .title {
@@ -614,7 +612,6 @@
       }
       .page__icon__img {
         border-radius: 10px;
-        width: 100%;
         display: flex;
         flex-direction: row;
       }

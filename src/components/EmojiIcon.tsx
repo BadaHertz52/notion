@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { Emoji, getEmojiUrl } from "../modules/notion/emojiData";
-import basicImg from "../assets/img/basicImg.jpeg";
+import React from "react";
+import { EMOJI_ARR, EMOJI_DATA, Emoji } from "../modules/notion/emojiData";
+import transparentImg from "../assets/img/transparent.jpeg";
+import { CSSProperties } from "styled-components";
 type EmojiIconProps = {
   otherClassName?: string;
   emojiSrc?: string;
@@ -8,17 +9,21 @@ type EmojiIconProps = {
   handleImgLoad?: () => void;
 };
 const EmojiIcon = ({ otherClassName, icon, handleImgLoad }: EmojiIconProps) => {
-  const [src, setSrc] = useState<string | undefined>(basicImg);
   const className: string = `${otherClassName ? otherClassName : ""} emojiIcon`;
-  useEffect(() => {
-    getEmojiUrl(icon, setSrc);
-  }, [icon]);
+  const x = 100 / (EMOJI_ARR.length - 1);
+  const style: CSSProperties = {
+    width: "100%",
+    height: "100%",
+    backgroundSize: `${100 * EMOJI_ARR.length}% 100%`,
+    backgroundPositionY: 0,
+    backgroundPositionX: `${x * EMOJI_ARR.indexOf(icon)}%`,
+  };
   return (
     <img
       className={className}
-      src={src}
-      alt={`${icon} emoji`}
-      style={{ maxWidth: "124px", maxHeight: "124px" }}
+      src={transparentImg}
+      alt={EMOJI_DATA[icon]}
+      style={style}
       onLoad={handleImgLoad}
     />
   );
