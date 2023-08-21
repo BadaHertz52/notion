@@ -1,16 +1,19 @@
 {
   "files": {
-    "main.css": "/notion/static/css/main.6264360d.css",
-    "main.js": "/notion/static/js/main.b36e0e50.js",
+    "main.css": "/notion/static/css/main.81453f8e.css",
+    "main.js": "/notion/static/js/main.fc107c31.js",
     "static/media/emoji_sprite.png": "/notion/static/media/emoji_sprite.d93f4200cf4280ce3711.png",
-    "static/media/vincent-van-gogh-ge1323790d_640.jpeg": "/notion/static/media/vincent-van-gogh-ge1323790d_640.be8cbd0160c3f98dccb7.jpeg",
-    "static/media/default.jpeg": "/notion/static/media/default.57b9d713e0831a260edb.jpeg",
+    "static/media/emoji_sprite.webp": "/notion/static/media/emoji_sprite.2a6c0d3fe804bb8d1987.webp",
+    "static/media/vincent-van-gogh-ge1323790d_640.webp": "/notion/static/media/vincent-van-gogh-ge1323790d_640.42ee0a376c5f73cef0e3.webp",
+    "static/media/default.webp": "/notion/static/media/default.185fdd0b3a9aa38e0684.webp",
+    "static/media/icons8-페이지-개요-100.webp": "/notion/static/media/icons8-페이지-개요-100.ff5978c9eb213d7ca910.webp",
     "index.html": "/notion/index.html",
-    "main.6264360d.css.map": "/notion/static/css/main.6264360d.css.map",
-    "main.b36e0e50.js.map": "/notion/static/js/main.b36e0e50.js.map"
+    "static/media/transparent.webp": "/notion/static/media/transparent.21f2186739b956eb4395.webp",
+    "main.81453f8e.css.map": "/notion/static/css/main.81453f8e.css.map",
+    "main.fc107c31.js.map": "/notion/static/js/main.fc107c31.js.map"
   },
   "entrypoints": [
-    "static/css/main.6264360d.css",
-    "static/js/main.b36e0e50.js"
+    "static/css/main.81453f8e.css",
+    "static/js/main.fc107c31.js"
   ]
 }
