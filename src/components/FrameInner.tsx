@@ -12,14 +12,6 @@ import React, {
 import PageHeader, { PageHeaderProps } from "./PageHeader";
 import { Block, Page } from "../modules/notion/type";
 import EditableBlock from "./EditableBlock";
-import {
-  AutoSizer,
-  CellMeasurer,
-  CellMeasurerCache,
-  List,
-  ListRowProps,
-  WindowScroller,
-} from "react-virtualized";
 import { blockSample } from "../modules/notion/reducer";
 import { setTemplateItem } from "../fn";
 import { ActionContext, SelectionType } from "../route/NotionRouter";
@@ -68,15 +60,6 @@ const FrameInner = (props: FrameInnerProps) => {
     index: number;
     measure?: () => void;
   };
-  const cache = new CellMeasurerCache({
-    defaultWidth: frameRef.current?.clientWidth,
-    fixedWidth: true,
-  });
-  const frameInnerWidth = props.frameInnerStyle.width as string;
-  const listWidth: number = frameInnerWidth.includes("%")
-    ? (frameRef.current ? frameRef.current.clientWidth : window.innerWidth) *
-      (Number(frameInnerWidth.replace("%", "")) / 100)
-    : Number(frameInnerWidth.replace("px", ""));
   const changeScrollStyle = useCallback(() => {
     const listEl = frameRef?.current?.querySelector(
       ".ReactVirtualized__Grid ReactVirtualized__List"
@@ -129,20 +112,6 @@ const FrameInner = (props: FrameInnerProps) => {
     );
   };
 
-  const rowRenderer = (rowRenderProps: ListRowProps) => {
-    const { parent, key, index } = rowRenderProps;
-    return (
-      <CellMeasurer
-        cache={cache}
-        parent={parent}
-        key={key}
-        columnIndex={0}
-        rowIndex={index}
-      >
-        {({ measure }) => <Row index={index} measure={measure} />}
-      </CellMeasurer>
-    );
-  };
   const onClickBottom = useCallback(() => {
     const randomNumber = Math.floor(Math.random() * (100000 - 1) + 1);
     const newBlock: Block = {
@@ -203,32 +172,6 @@ const FrameInner = (props: FrameInnerProps) => {
         {list.map((e, i) => (
           <Row index={i} key={`block_${i}`} />
         ))}
-        {/* {props.openExport ? (
-          list.map((e, i) => <Row index={i} key={`block_${i}`} />)
-        ) : (
-          <WindowScroller
-            scrollElement={(frameRef.current as Element | null) || undefined}
-            onScroll={}
-          >
-            {({ height }) => (
-              <AutoSizer>
-                {() => (
-                  <List
-                    autoHeight
-                    height={height}
-                    width={listWidth}
-                    overscanRowCount={0}
-                    rowCount={list.length}
-                    rowHeight={cache.rowHeight}
-                    rowRenderer={rowRenderer}
-                    deferredMeasurementCache={cache}
-                    style={{ height: "auto", maxHeight: "initial" }}
-                  />
-                )}
-              </AutoSizer>
-            )}
-          </WindowScroller>
-        )} */}
         {props.newPageFrame && (
           <EmptyPageContent
             page={props.page}

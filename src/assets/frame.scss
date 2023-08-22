@@ -10,16 +10,8 @@
   }
 }
 //frame ----
-.frame {
-  .ReactVirtualized__Grid.ReactVirtualized__List {
-    @include hiddenScrollBar;
-  }
-}
 .frame.stop {
   overflow-y: hidden;
-  .ReactVirtualized__Grid.ReactVirtualized__List {
-    overflow: hidden !important;
-  }
 }
 .frame {
   width: 100%;
