@@ -106,7 +106,6 @@ const FrameInner = (props: FrameInnerProps) => {
     ) : (
       <div
         className="bottom"
-        role="row"
         onClick={onClickBottom}
         style={{ height: bottomHeight }}
       ></div>
