@@ -76,7 +76,7 @@ const FrameInner = (props: FrameInnerProps) => {
 
   const Row = ({ index, measure }: RowProps) => {
     return list[index] ? (
-      <div className="page__firstBlock" role="row">
+      <div className="page__firstBlock">
         <EditableBlock
           key={(list[index] as Block).id}
           pages={props.pages}
