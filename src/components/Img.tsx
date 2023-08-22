@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { changeImgToJpeg } from "../fn/imgLoad";
 import { CSSProperties } from "styled-components";
-import catImg from "../assets/img/cat.webp";
 import imgBlockImg from "../assets/img/roses.webp";
 import basicPageIcon from "../assets/img/basic-page.webp";
 import basicPageCover from "../assets/img/artificial-turf.webp";
@@ -17,10 +16,11 @@ const Img = (props: ImgProps) => {
   const isGif = props.src.includes("gif");
   const item = localStorage.getItem("webP_able");
   const webPAble = item === "true";
-  const [imgSrc, setImgSrc] = useState<string>(props.src);
+  const [jpegSrc, setJpegSrc] = useState<string>();
+
   useEffect(() => {
-    const basicImgName = ["artificial-turf", "basic-page", "cat", "roses"];
-    const basicImgArray = [basicPageCover, basicPageIcon, catImg, imgBlockImg];
+    const basicImgName = ["artificial-turf", "basic-page", "roses"];
+    const basicImgArray = [basicPageCover, basicPageIcon, imgBlockImg];
     const isExport = document.getElementById("export");
     if (isExport && (imgRef.current?.closest(".frame") || !webPAble)) {
       const target = basicImgArray.filter(
@@ -28,21 +28,25 @@ const Img = (props: ImgProps) => {
       )[0];
       const name = basicImgName[basicImgArray.indexOf(target)];
       const url = `https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assets/img/${name}.jpeg`;
-      setImgSrc(url);
+      setJpegSrc(url);
     } else {
       if (!webPAble && !isGif) {
-        changeImgToJpeg(props.src, (url: string) => setImgSrc(url));
+        changeImgToJpeg(props.src, (url: string) => setJpegSrc(url));
       }
     }
-  }, [webPAble, isGif, setImgSrc, props.src]);
+  }, [webPAble, isGif, setJpegSrc, props.src]);
   return (
-    <img
-      className={props.className}
-      style={props.style}
-      src={imgSrc}
-      alt={props.alt}
-      ref={imgRef}
-    />
+    <picture>
+      <source srcSet={props.src} type="image/webp" />
+      <source srcSet={jpegSrc} type="image/jpeg" />
+      <img
+        className={props.className}
+        style={props.style}
+        src={props.src}
+        alt={props.alt}
+        ref={imgRef}
+      />
+    </picture>
   );
 };
 

@@ -17,7 +17,6 @@ import {
   blue,
   defaultColor,
 } from "./colorData";
-import catImg from "../../assets/img/cat.webp";
 import imgBlockImg from "../../assets/img/roses.webp";
 import basicPageIcon from "../../assets/img/basic-page.webp";
 
@@ -444,8 +443,8 @@ export const initialNotionState: Notion = {
       type: "page",
       header: {
         title: "welcome notion 🐱",
-        iconType: "img",
-        icon: catImg,
+        iconType: "emoji",
+        icon: EMOJI_ARR[5],
         cover: null,
         comments: [
           {
