@@ -100,6 +100,7 @@ const FrameInner = (props: FrameInnerProps) => {
           setMobileMenuTargetBlock={props.setMobileMenuTargetBlock}
           mobileMenuTargetBlock={props.mobileMenuTargetBlock}
           measure={measure}
+          openExport={props.openExport}
         />
       </div>
     ) : (
@@ -167,6 +168,7 @@ const FrameInner = (props: FrameInnerProps) => {
         setDiscardEdit={props.setDiscardEdit}
         showAllComments={props.showAllComments}
         newPageFrame={props.newPageFrame}
+        openExport={props.openExport}
       />
       <div className="page__contents">
         {list.map((e, i) => (

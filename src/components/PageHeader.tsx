@@ -38,6 +38,7 @@ export type PageHeaderProps = {
   showAllComments: boolean;
   newPageFrame: boolean;
   handleImgLoad?: () => void;
+  openExport?: boolean;
 };
 function PageHeader({
   userName,
@@ -51,6 +52,7 @@ function PageHeader({
   showAllComments,
   newPageFrame,
   handleImgLoad,
+  openExport,
 }: PageHeaderProps) {
   const { editPage, editBlock } = useContext(ActionContext).actions;
 
@@ -237,6 +239,7 @@ function PageHeader({
             style={pageIconStyle}
             handleImgLoad={handleImgLoad}
             isInPageHeader={true}
+            openExport={openExport}
           />
         </div>
         <div className="deco">

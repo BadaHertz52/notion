@@ -579,7 +579,7 @@ const Frame = ({
         move_MoveTargetBlock(clientX, clientY);
       }
     },
-    [move_MoveTargetBlock, page, moveTargetBlock]
+    [move_MoveTargetBlock, page, frameHtml]
   );
   // edit block using sessionStorage
   const updateBlock = useCallback(() => {
@@ -892,7 +892,7 @@ const Frame = ({
     <div
       className={`frame ${newPageFrame ? "newPageFrame" : ""} ${
         isMobile() ? "mobile" : "web"
-      }`}
+      } ${openExport ? "export__frame" : ""}`}
       style={frameStyle}
       ref={frameRef}
       onMouseMove={(event) =>

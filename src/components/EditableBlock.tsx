@@ -44,6 +44,7 @@ export type EditableBlockProps = {
   mobileMenuTargetBlock: Block | null;
   setMobileMenuTargetBlock: Dispatch<SetStateAction<Block | null>>;
   measure?: () => void;
+  openExport?: boolean;
 };
 export type CommentOpenType = {
   open: boolean;
@@ -96,6 +97,7 @@ const EditableBlock = ({
   setMobileMenuTargetBlock,
   mobileMenuTargetBlock,
   measure,
+  openExport,
 }: EditableBlockProps) => {
   const { editBlock } = useContext(ActionContext).actions;
   const className =
@@ -295,6 +297,7 @@ const EditableBlock = ({
                         icon={block.icon}
                         iconType={block.iconType}
                         style={undefined}
+                        openExport={openExport}
                       />
                     </div>
                   )}
