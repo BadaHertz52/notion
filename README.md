@@ -325,24 +325,23 @@ src="https://user-images.githubusercontent.com/69838872/209688434-5db37fcc-7987-
   - sideBar,allComment 변경,<span style="text-decoration:line-through"> Mobile Menu 추가 </span>, 모바일에서도 ImageContent 사이즈 변경가능하도록 수정
     <br/>
 - 2023.3 업데이트 및 수정
-
   - 모바일 브라우저에서 사용될 block 에 대한 메뉴와 그 사이드 메뉴를 담당하는 MobileBlockMenu, MobileSideMenu 추가
-
   - 모바일 브라우저에서도 block의 contents 중 특정 글자를 선택할 때 해당 글자에 대한 BlockStyler 의 기능을 사용 가능
-
   - block 전체 뿐만 아니라 일부 내용에 대해서도 comment 추가 할 수 있음
-
   - 모바일 브라우저에서 블럭간 이동이 안되는 오류 수정
     <br/>
 
-- 2023.7 업데이트 및 수정
+- 2023.7-8 업데이트 및 수정
   - 이미지 크기 조절 버튼 오류 수정
-  - react, 이미지 최적화 완료
+  - react최적화  완료
+  - 이미지 최적화 완료
+    : css-sprite, gif를 제외한 이미지는  webp로 저장되고 webp이 지원되지 않는 브라우저에서 jpeg형식으로 이미지 생성
   - 찾는 페이지가 없거나, 페이지 자체가 없을때 보이는 화면 오류 수정
   - 모바일 브라우저의 스크롤 오류 수정
   - HashRouter 에서 BrowserRouter 변경
   - react-helmet-async과 robots.txt를 활용한 SEO 개선
-
+  - 배포된 깃헙 페이지에서 해당 프로젝트 내의 다른 페이지로 이동 시 생기는 쿼리 오류 수정
+  - 모바일 브라우저에서 블럭 이동과 selection 오류 수정
 ---
 
 - 🔎 [Notion 프로젝트 후기 보러가기](https://velog.io/@badahertz52/Notion-프로젝트-후기)
