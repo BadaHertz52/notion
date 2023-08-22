@@ -142,7 +142,9 @@ const SideBar = ({
     } else {
       const moreFnEl = document.querySelector("#sideBar__moreFn");
       if (moreFnEl) {
-        moreFnEl.classList.add("on");
+        setMoreFnStyle({
+          transform: "translateY(100vh)",
+        });
         setTimeout(() => {
           setMoreFnStyle({
             transform: "translateY(50vh)",
