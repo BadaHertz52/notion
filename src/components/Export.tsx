@@ -115,7 +115,6 @@ const Export = ({
   }
   const closeExport = useCallback(() => {
     setOpenExport(false);
-    window.location.reload();
   }, [setOpenExport]);
   const onClickExportBtn = useCallback(() => {
     const includeSubPagesSliderEl = document.getElementById(
