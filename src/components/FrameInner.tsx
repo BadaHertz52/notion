@@ -200,29 +200,35 @@ const FrameInner = (props: FrameInnerProps) => {
         newPageFrame={props.newPageFrame}
       />
       <div className="page__contents">
-        {props.openExport ? (
+        {list.map((e, i) => (
+          <Row index={i} key={`block_${i}`} />
+        ))}
+        {/* {props.openExport ? (
           list.map((e, i) => <Row index={i} key={`block_${i}`} />)
         ) : (
           <WindowScroller
             scrollElement={(frameRef.current as Element | null) || undefined}
+            onScroll={}
           >
-            {() => (
+            {({ height }) => (
               <AutoSizer>
                 {() => (
                   <List
-                    height={window.innerHeight}
+                    autoHeight
+                    height={height}
                     width={listWidth}
                     overscanRowCount={0}
                     rowCount={list.length}
                     rowHeight={cache.rowHeight}
                     rowRenderer={rowRenderer}
                     deferredMeasurementCache={cache}
+                    style={{ height: "auto", maxHeight: "initial" }}
                   />
                 )}
               </AutoSizer>
             )}
           </WindowScroller>
-        )}
+        )} */}
         {props.newPageFrame && (
           <EmptyPageContent
             page={props.page}
