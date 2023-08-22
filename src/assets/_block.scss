@@ -241,9 +241,9 @@
   }
 }
 .todo_done.block {
-  text-decoration: line-through grey;
+  text-decoration: line-through $darkgrey;
   path {
-    stroke: grey;
+    stroke: $darkgrey;
   }
 }
 .toggle.block {

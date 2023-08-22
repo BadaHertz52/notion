@@ -115,7 +115,7 @@ const EditableBlock = ({
   );
   const blockContentsStyle = useCallback((block: Block): CSSProperties => {
     return {
-      color: block.type !== "todo_done" ? block.style.color : "grey",
+      color: block.type !== "todo_done" ? block.style.color : "rgb(60, 60, 60)",
       backgroundColor: block.style.bgColor,
       width:
         block.style.width === undefined
