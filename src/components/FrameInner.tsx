@@ -51,13 +51,8 @@ const FrameInner = (props: FrameInnerProps) => {
   const { page, firstBlocks, frameRef, templateHtml } = props;
   const { addBlock } = useContext(ActionContext).actions;
   const bottomHeight = 80;
-
-  const list: (Block | undefined)[] = firstBlocks
-    ? [...firstBlocks, undefined]
-    : [undefined];
-
   type RowProps = {
-    index: number;
+    block: Block;
     measure?: () => void;
   };
   const changeScrollStyle = useCallback(() => {
@@ -74,15 +69,15 @@ const FrameInner = (props: FrameInnerProps) => {
     );
   }, [frameRef]);
 
-  const Row = ({ index, measure }: RowProps) => {
-    return list[index] ? (
+  const Row = ({ block, measure }: RowProps) => {
+    return (
       <div className="page__firstBlock">
         <EditableBlock
-          key={(list[index] as Block).id}
+          key={`page__firstBlocks__${block.id}`}
           pages={props.pages}
           pagesId={props.pagesId}
           page={props.page}
-          block={list[index] as Block}
+          block={block}
           fontSize={props.fontSize}
           isMoved={props.isMoved}
           setMoveTargetBlock={props.setMoveTargetBlock}
@@ -103,12 +98,6 @@ const FrameInner = (props: FrameInnerProps) => {
           openExport={props.openExport}
         />
       </div>
-    ) : (
-      <div
-        className="bottom"
-        onClick={onClickBottom}
-        style={{ height: bottomHeight }}
-      ></div>
     );
   };
 
@@ -170,10 +159,18 @@ const FrameInner = (props: FrameInnerProps) => {
         openExport={props.openExport}
       />
       <div className="page__contents">
-        {list.map((e, i) => (
-          <Row index={i} key={`block_${i}`} />
+        {firstBlocks?.map((e, i) => (
+          <>
+            <Row block={e} key={`block_${i}`} />
+          </>
         ))}
-        {props.newPageFrame && (
+        {!props.newPageFrame ? (
+          <div
+            className="bottom"
+            onClick={onClickBottom}
+            style={{ height: bottomHeight }}
+          ></div>
+        ) : (
           <EmptyPageContent
             page={props.page}
             setOpenTemplates={props.setOpenTemplates}
