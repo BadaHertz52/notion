@@ -88,11 +88,13 @@ const MobileBlockMenu = ({
         blockElement &&
         blockElementDomRect
       ) {
+        const mobileMenuHeight = 36;
         const top =
           blockElementDomRect.top +
           frameHtml.scrollTop -
           frameDomRect.top -
-          blockElementDomRect.height * 1.5;
+          blockElementDomRect.height -
+          mobileMenuHeight;
         const left = pageHeaderElDomRect.left;
         /**
          * 가상 키보드롤 인해 가려지는 부분의 y축 시작점 (기준: window)
@@ -106,6 +108,7 @@ const MobileBlockMenu = ({
           top: top,
           left: left,
           width: pageHeaderElDomRect.width,
+          height: mobileMenuHeight,
         });
       }
     },
