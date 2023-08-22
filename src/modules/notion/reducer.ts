@@ -17,8 +17,10 @@ import {
   blue,
   defaultColor,
 } from "./colorData";
-import imgBlockImg from "../../assets/img/roses.webp";
-import basicPageIcon from "../../assets/img/basic-page.webp";
+const imgBlockImg =
+  "https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assets/img/roses.webp";
+const basicPageIcon =
+  "https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assets/img/basic-page.webp";
 
 export const blockTypes: BlockType[] = [
   "text",

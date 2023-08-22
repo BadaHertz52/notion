@@ -24,23 +24,17 @@ const EmojiIcon = ({
 }: EmojiIconProps) => {
   const className: string = `${otherClassName ? otherClassName : ""} emojiIcon`;
   const x = 100 / (EMOJI_ARR.length - 1);
-  const [backgroundUrl, setBackgroundUrl] = useState<string>(spriteWebP);
+  const webAbleItem = localStorage.getItem("webP_able");
+  const webAble = webAbleItem === "true";
   const fontSize = isInPageHeader ? 55 : 14;
   const style: CSSProperties = {
     width: "100%",
     height: "100%",
-    background: `url(${backgroundUrl}) no-repeat top left`,
+    background: `url(${webAble ? spriteWebP : spritePng}) no-repeat top left`,
     backgroundPositionY: 0,
     backgroundPositionX: `${x * EMOJI_ARR.indexOf(icon)}%`,
     backgroundSize: `${100 * EMOJI_ARR.length}% 100%`,
   };
-  useEffect(() => {
-    const webAbleItem = localStorage.getItem("webP_able");
-    const webAble = webAbleItem === "true";
-    if (!webAble) {
-      setBackgroundUrl(spritePng);
-    }
-  }, []);
   return (
     <>
       {openExport ? (

@@ -24,8 +24,8 @@ import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 import Comments from "./Comments";
 import CommentInput from "./CommentInput";
 import Img from "./Img";
-import basicPageCover from "../assets/img/artificial-turf.webp";
-
+const basicPageCover =
+  "https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assets/img/artificial-turf.webp";
 export type PageHeaderProps = {
   userName: string;
   page: Page;
