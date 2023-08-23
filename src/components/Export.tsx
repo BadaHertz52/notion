@@ -14,6 +14,7 @@ import Frame, { FrameProps } from "./Frame";
 import ReactDOMServer from "react-dom/server";
 import ScreenOnly from "./ScreenOnly";
 import "../assets/export.scss";
+import { frameStyleCode } from "../frameStyle";
 type ExportProps = FrameProps & {
   setOpenExport: Dispatch<SetStateAction<boolean>>;
 };
@@ -122,9 +123,7 @@ const Export = ({
     );
     if (includeSubPagesSliderEl) {
       const frame = document.getElementsByClassName("frame")[0] as HTMLElement;
-      const styleCode = [...document.querySelectorAll("style")]
-        .map((e) => e.outerHTML)
-        .join(" ");
+      const styleCode = frameStyleCode;
       const includeSubPage: boolean =
         includeSubPagesSliderEl.classList.contains("on");
       const convertHtml = (title: string, frameHtml: string) => {
@@ -136,7 +135,7 @@ const Export = ({
             <meta http-equiv="X-UA-Compatible" content="IE=edge" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             <title>${title}</title>
-            ${styleCode}
+            <style>${styleCode}</style>
             <style>
               body{
                 display:flex;
