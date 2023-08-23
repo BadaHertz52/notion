@@ -299,12 +299,6 @@ const Export = ({
     userName,
     closeExport,
   ]);
-  useEffect(() => {
-    const aTags = document.querySelectorAll("a");
-    if (aTags[0]) {
-      aTags.forEach((a: Element) => a.remove());
-    }
-  }, []);
   return (
     <div id="export">
       <div className="inner">
