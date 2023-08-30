@@ -4,8 +4,6 @@ import { Helmet } from "react-helmet-async";
 import { Emoji, getEmojiUrl } from "../modules/notion/emojiData";
 import { pageSample } from "../modules/notion/reducer";
 import BASIC_MEAT_TAG_IMG_URL from "../assets/img/default.jpeg";
-import { changeImgToJpeg } from "../fn/imgLoad";
-import { isFocusable } from "@testing-library/user-event/dist/utils";
 
 type MetaTagProps = {
   pageId?: string;
@@ -19,7 +17,6 @@ const NotionHelmet = ({ pageHeader, pageId }: MetaTagProps) => {
   const BASIC_FAVICON_HREF = "./favicon.ico";
   const BASIC_META_TAG_TITLE =
     "Notion (clone coding project) – The all-in-one workspace for your notes, tasks, wikis, and databases.";
-  const webPAble = localStorage.getItem("webP_able") === "true";
   const [emojiUrl, setEmojiUrl] = useState<string>();
   const getFaviconHref = () => {
     switch (iconType) {
