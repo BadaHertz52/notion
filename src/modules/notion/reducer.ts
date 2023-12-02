@@ -1,83 +1,25 @@
-import { EMOJI_ARR } from "./emojiData";
-import { Notion, TrashPage, Page, Block, BlockStyle, BlockType } from "./type";
+import {
+  EMOJI_ARRAY,
+  BASIC_BLOCK_STYLE,
+  BACKGROUND_COLOR,
+  COLOR,
+  TEMPLATE1,
+  TEMPLATE2,
+} from "../../constants";
+import { Notion, TrashPage, Page, Block, BlockStyle } from "../../types";
 import {
   findBlock,
   findParentBlock,
   getBlockText,
   findPreviousBlockInDoc,
   findPage,
-} from "../../fn";
-import {
-  bg_blue,
-  bg_default,
-  bg_green,
-  bg_grey,
-  bg_pink,
-  bg_yellow,
-  blue,
-  defaultColor,
-} from "./colorData";
-const imgBlockImg =
-  "https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assets/img/roses.webp";
-const basicPageIcon =
-  "https://raw.githubusercontent.com/BadaHertz52/notion/master/src/assets/img/basic-page.webp";
+  getBlockSample,
+  getPageSample,
+} from "../../utils";
+import { IMAGE_BLOCK_IMAGE_URL } from "../../constants/";
 
-export const blockTypes: BlockType[] = [
-  "text",
-  "toggle",
-  "todo",
-  "todo_done",
-  "image",
-  "h1",
-  "h2",
-  "h3",
-  "page",
-  "numberList",
-  "bulletList",
-];
-
-export const basicBlockStyle: BlockStyle = {
-  color: defaultColor,
-  bgColor: bg_default,
-  width: undefined,
-  height: undefined,
-};
-const userName = "user";
+const USER_NAME = "user";
 const editTime = JSON.stringify(Date.now());
-
-export const blockSample: Block = {
-  id: `blockSample_${editTime}`,
-  contents: "",
-  firstBlock: true,
-  subBlocksId: null,
-  parentBlocksId: null,
-  type: "text",
-  iconType: null,
-  icon: null,
-  editTime: editTime,
-  createTime: JSON.stringify(Date.now()),
-  style: basicBlockStyle,
-  comments: null,
-};
-
-export const pageSample: Page = {
-  id: editTime,
-  type: "page",
-  header: {
-    title: "untitle",
-    iconType: "img",
-    icon: basicPageIcon,
-    cover: null,
-    comments: null,
-  },
-  firstBlocksId: null,
-  blocks: null,
-  blocksId: null,
-  subPagesId: null,
-  parentsId: null,
-  editTime: editTime,
-  createTime: editTime,
-};
 
 //  < --- action---------------
 const ADD_BLOCK = "notion/ADD_BLOCK" as const;
@@ -284,159 +226,16 @@ type NotionAction =
   | ReturnType<typeof cancel_edit_template>
   | ReturnType<typeof delete_template>;
 
-const day = [
-  "Mon",
-  "1",
-  "Ths",
-  "2",
-  "Wed",
-  "3",
-  "Thr",
-  "4",
-  "Fri",
-  "5",
-  "Sat",
-  "6",
-  "Sun",
-];
-const blockBgColor = [
-  bg_blue,
-  "",
-  bg_green,
-  "",
-  bg_yellow,
-  "",
-  bg_pink,
-  "",
-  bg_grey,
-  "",
-  bg_yellow,
-  "",
-  bg_blue,
-];
-const todoList = [
-  "6AM :🎽 running",
-  "9AM:🏥physical checkup",
-  "😊 Webtoon re-enactment",
-  "8PM: 🛒Buying food ingredients in mart - sale",
-  "6PM :🍴 dinner appointment with friend",
-  "Dry cleaning at the dry cleaner",
-  "house cleaning",
-];
-
-const returnTemplateSubBlock = (day: string, index: number) => {
-  const num = index / 2;
-  const templateBlock: Block = {
-    id: `templateSub_${day}`,
-    contents: todoList[num],
-
-    firstBlock: false,
-    subBlocksId: null,
-    parentBlocksId: [`templateBlock_${day}`],
-    type: "todo",
-    iconType: null,
-    icon: null,
-    editTime: editTime,
-    createTime: JSON.stringify(Date.now()),
-    style: basicBlockStyle,
-    comments: null,
-  };
-  return templateBlock;
-};
-
-const returnTemplateBlock = (day: string, index: number) => {
-  const templateBlock: Block = {
-    id: `templateBlock_${day}`,
-    contents: `${day}`,
-
-    firstBlock: true,
-    subBlocksId: [`templateSub_${day}`],
-    parentBlocksId: null,
-    type: "h3",
-    iconType: null,
-    icon: null,
-    editTime: editTime,
-    createTime: JSON.stringify(Date.now()),
-    style: {
-      ...basicBlockStyle,
-      bgColor: blockBgColor[index],
-    },
-    comments: null,
-  };
-  return templateBlock;
-};
-const templateBlocks = day.map((d: string) => {
-  let returnBlock: Block;
-  if (day.indexOf(d) % 2 === 0) {
-    returnBlock = returnTemplateBlock(d, day.indexOf(d));
-  } else {
-    returnBlock = {
-      ...blockSample,
-      id: `empty${d}_${JSON.stringify(Date.now())}`,
-    };
-  }
-  return returnBlock;
-});
-
-const templateBlocksId = templateBlocks.map((block: Block) => block.id);
-const templateSubBlocks = day.map((d: string) =>
-  returnTemplateSubBlock(d, day.indexOf(d))
-);
-const templateSubBlocksId = day.map((d: string) => `templateSub_${d}`);
-//reducer
-const template1: Page = {
-  id: "template1",
-  type: "template",
-  header: {
-    title: "To Do List ",
-    iconType: "emoji",
-    icon: EMOJI_ARR[13],
-    cover: null,
-    comments: null,
-  },
-  firstBlocksId: templateBlocksId,
-  blocks: [...templateBlocks, ...templateSubBlocks],
-  blocksId: [...templateBlocksId, ...templateSubBlocksId],
-  subPagesId: null,
-  parentsId: null,
-  editTime: Date.parse("2022-8-23-15:00").toString(),
-  createTime: Date.parse("2022-8-23-12:00").toString(),
-};
-const template2: Page = {
-  id: "template2",
-  type: "template",
-  header: {
-    title: "To Do List2 ",
-    iconType: "emoji",
-    icon: EMOJI_ARR[19],
-    cover: null,
-    comments: null,
-  },
-  firstBlocksId: ["template2_block1"],
-  blocks: [
-    {
-      id: `template2_block1`,
-      contents: "check meeting",
-      firstBlock: true,
-      subBlocksId: null,
-      parentBlocksId: null,
-      type: "todo",
-      iconType: null,
-      icon: null,
-      editTime: editTime,
-      createTime: JSON.stringify(Date.now()),
-      style: basicBlockStyle,
-      comments: null,
-    },
-  ],
-  blocksId: ["template2_block1"],
-  subPagesId: null,
-  parentsId: null,
-  editTime: Date.parse("2022-8-23-15:00").toString(),
-  createTime: Date.parse("2022-8-23-12:00").toString(),
-};
 export const initialNotionState: Notion = {
-  pagesId: ["12345", "page1", "page2", "1234", "123", "template1", "template2"],
+  pagesId: [
+    "12345",
+    "page1",
+    "page2",
+    "1234",
+    "123",
+    TEMPLATE1.id,
+    TEMPLATE2.id,
+  ],
   firstPagesId: ["12345", "1234", "123"],
   templatesId: ["template1", "template2"],
   pages: [
@@ -446,12 +245,12 @@ export const initialNotionState: Notion = {
       header: {
         title: "welcome notion 🐱",
         iconType: "emoji",
-        icon: EMOJI_ARR[5],
+        icon: EMOJI_ARRAY[5],
         cover: null,
         comments: [
           {
             id: "comment_1",
-            userName: userName,
+            userName: USER_NAME,
             type: "open",
             content: "this is page comment",
             editTime: Date.parse("2022-5-20-12:00").toString(),
@@ -489,14 +288,14 @@ export const initialNotionState: Notion = {
           editTime: Date.parse("2022-5-18-15:00").toString(),
           createTime: Date.parse("2022-5-18-1:00").toString(),
           style: {
-            ...basicBlockStyle,
-            color: blue,
-            bgColor: bg_default,
+            ...BASIC_BLOCK_STYLE,
+            color: "blue",
+            bgColor: "default",
           },
           comments: [
             {
               id: "comment_text1",
-              userName: userName,
+              userName: USER_NAME,
               type: "open",
               content: "hi! ☺️",
               editTime: (1654086822451).toString(),
@@ -509,7 +308,7 @@ export const initialNotionState: Notion = {
         },
         {
           id: "img",
-          contents: imgBlockImg,
+          contents: IMAGE_BLOCK_IMAGE_URL,
           firstBlock: true,
           subBlocksId: null,
           parentBlocksId: null,
@@ -519,7 +318,7 @@ export const initialNotionState: Notion = {
           editTime: Date.parse("2022-5-18-16:00").toString(),
           createTime: Date.parse("2022-5-18-2:00").toString(),
           style: {
-            ...basicBlockStyle,
+            ...BASIC_BLOCK_STYLE,
             width: "222px",
             height: "auto",
           },
@@ -536,7 +335,7 @@ export const initialNotionState: Notion = {
           icon: null,
           editTime: Date.parse("2022-5-18-16:00").toString(),
           createTime: Date.parse("2022-5-18-2:00").toString(),
-          style: basicBlockStyle,
+          style: BASIC_BLOCK_STYLE,
           comments: null,
         },
         {
@@ -550,7 +349,7 @@ export const initialNotionState: Notion = {
           icon: null,
           editTime: Date.parse("2022-5-18-16:10").toString(),
           createTime: Date.parse("2022-5-18-2:00").toString(),
-          style: basicBlockStyle,
+          style: BASIC_BLOCK_STYLE,
           comments: null,
         },
         {
@@ -565,7 +364,7 @@ export const initialNotionState: Notion = {
           editTime: Date.parse("2022-5-18-16:01:00").toString(),
           createTime: Date.parse("2022-5-18-3:00").toString(),
           style: {
-            ...basicBlockStyle,
+            ...BASIC_BLOCK_STYLE,
           },
           comments: null,
         },
@@ -580,7 +379,7 @@ export const initialNotionState: Notion = {
           icon: null,
           editTime: Date.parse("2022-5-19-11:30").toString(),
           createTime: Date.parse("2022-5-18-5:00").toString(),
-          style: basicBlockStyle,
+          style: BASIC_BLOCK_STYLE,
           comments: null,
         },
         {
@@ -595,7 +394,7 @@ export const initialNotionState: Notion = {
           icon: null,
           editTime: Date.parse("2022-5-19-12:00").toString(),
           createTime: Date.parse("2022-5-18-15:00").toString(),
-          style: basicBlockStyle,
+          style: BASIC_BLOCK_STYLE,
           comments: null,
         },
         {
@@ -610,11 +409,11 @@ export const initialNotionState: Notion = {
           icon: null,
           editTime: Date.parse("2022-5-18-20:00").toString(),
           createTime: Date.parse("2022-5-18-15:00").toString(),
-          style: basicBlockStyle,
+          style: BASIC_BLOCK_STYLE,
           comments: [
             {
               id: "comment_h2_1",
-              userName: userName,
+              userName: USER_NAME,
               type: "open",
               content: "comments 1",
               editTime: Date.parse("2022-5-18-16:01:30").toString(),
@@ -625,7 +424,7 @@ export const initialNotionState: Notion = {
             },
             {
               id: "comment_h2_2",
-              userName: userName,
+              userName: USER_NAME,
               type: "open",
               content: "comments 1",
               editTime: Date.parse("2022-5-18-16:01:35").toString(),
@@ -647,7 +446,7 @@ export const initialNotionState: Notion = {
           icon: null,
           editTime: Date.parse("2022-5-19-19:20").toString(),
           createTime: Date.parse("2022-5-18-15:00").toString(),
-          style: basicBlockStyle,
+          style: BASIC_BLOCK_STYLE,
           comments: null,
         },
         {
@@ -661,7 +460,7 @@ export const initialNotionState: Notion = {
           icon: null,
           editTime: Date.parse("2022-5-20-21:00").toString(),
           createTime: Date.parse("2022-5-19-15:00").toString(),
-          style: basicBlockStyle,
+          style: BASIC_BLOCK_STYLE,
           comments: null,
         },
         {
@@ -672,10 +471,10 @@ export const initialNotionState: Notion = {
           parentBlocksId: null,
           type: "page",
           iconType: "emoji",
-          icon: EMOJI_ARR[8],
+          icon: EMOJI_ARRAY[8],
           editTime: Date.parse("2022-5-20-9:00").toString(),
           createTime: Date.parse("2022-5-19-20:00").toString(),
-          style: basicBlockStyle,
+          style: BASIC_BLOCK_STYLE,
           comments: null,
         },
         {
@@ -690,7 +489,7 @@ export const initialNotionState: Notion = {
           editTime: Date.parse("2022-6-1-1:00").toString(),
           createTime: Date.parse("2022-5-30-15:00").toString(),
           style: {
-            ...basicBlockStyle,
+            ...BASIC_BLOCK_STYLE,
           },
           comments: null,
         },
@@ -706,12 +505,12 @@ export const initialNotionState: Notion = {
           editTime: Date.parse("2022-5-12-09:00").toString(),
           createTime: Date.parse("2022-5-12-08:50").toString(),
           style: {
-            ...basicBlockStyle,
+            ...BASIC_BLOCK_STYLE,
           },
           comments: [
             {
               id: "comment_sub1_2_1",
-              userName: userName,
+              userName: USER_NAME,
               type: "open",
               content: "subBlock comments",
               editTime: Date.parse("2022-5-18-8:00").toString(),
@@ -734,7 +533,7 @@ export const initialNotionState: Notion = {
           editTime: Date.parse("2022-5-27-7:00").toString(),
           createTime: Date.parse("2022-5-27-7:00").toString(),
           style: {
-            ...basicBlockStyle,
+            ...BASIC_BLOCK_STYLE,
           },
           comments: null,
         },
@@ -750,7 +549,7 @@ export const initialNotionState: Notion = {
           editTime: Date.parse("2022-6-1-18:45").toString(),
           createTime: Date.parse("2022-6-1-18:45").toString(),
           style: {
-            ...basicBlockStyle,
+            ...BASIC_BLOCK_STYLE,
           },
           comments: null,
         },
@@ -766,8 +565,8 @@ export const initialNotionState: Notion = {
           editTime: Date.parse("2022-6-1-19:03").toString(),
           createTime: Date.parse("2022-6-1-19:03").toString(),
           style: {
-            ...basicBlockStyle,
-            bgColor: bg_green,
+            ...BASIC_BLOCK_STYLE,
+            bgColor: "green",
           },
           comments: null,
         },
@@ -783,12 +582,12 @@ export const initialNotionState: Notion = {
           editTime: Date.parse("2022-6-1-19:03:50").toString(),
           createTime: Date.parse("2022-6-1-19:03:50").toString(),
           style: {
-            ...basicBlockStyle,
+            ...BASIC_BLOCK_STYLE,
           },
           comments: [
             {
               id: "comment_n2",
-              userName: userName,
+              userName: USER_NAME,
               type: "open",
               content: "comment n2",
               editTime: (1654086822451).toString(),
@@ -811,7 +610,7 @@ export const initialNotionState: Notion = {
           editTime: Date.parse("2022-6-1-19:12:13").toString(),
           createTime: Date.parse("2022-6-1-19:12:13").toString(),
           style: {
-            ...basicBlockStyle,
+            ...BASIC_BLOCK_STYLE,
           },
           comments: null,
         },
@@ -827,7 +626,7 @@ export const initialNotionState: Notion = {
           editTime: Date.parse("2022-6-1-19:13:45").toString(),
           createTime: Date.parse("2022-6-1-19:13:45").toString(),
           style: {
-            ...basicBlockStyle,
+            ...BASIC_BLOCK_STYLE,
           },
           comments: null,
         },
@@ -843,7 +642,7 @@ export const initialNotionState: Notion = {
           editTime: Date.parse("2022-6-1-19:23").toString(),
           createTime: Date.parse("2022-6-1-19:23").toString(),
           style: {
-            ...basicBlockStyle,
+            ...BASIC_BLOCK_STYLE,
           },
           comments: null,
         },
@@ -859,7 +658,7 @@ export const initialNotionState: Notion = {
           editTime: Date.parse("2022-6-1-20:12").toString(),
           createTime: Date.parse("2022-6-1-20:12").toString(),
           style: {
-            ...basicBlockStyle,
+            ...BASIC_BLOCK_STYLE,
           },
           comments: null,
         },
@@ -893,16 +692,16 @@ export const initialNotionState: Notion = {
       createTime: Date.parse("2022-5-10-15:00").toString(),
     },
     {
-      ...pageSample,
+      ...getPageSample(),
       id: "page1",
       header: {
-        ...pageSample.header,
+        ...getPageSample().header,
         title: "page page page",
       },
       blocks: [
         {
           id: "img",
-          contents: imgBlockImg,
+          contents: IMAGE_BLOCK_IMAGE_URL,
           firstBlock: true,
           subBlocksId: null,
           parentBlocksId: null,
@@ -911,7 +710,7 @@ export const initialNotionState: Notion = {
           icon: null,
           editTime: Date.parse("2022-5-18-16:00").toString(),
           createTime: Date.parse("2022-5-18-2:00").toString(),
-          style: basicBlockStyle,
+          style: BASIC_BLOCK_STYLE,
           comments: null,
         },
       ],
@@ -922,12 +721,12 @@ export const initialNotionState: Notion = {
       parentsId: ["12345"],
     },
     {
-      ...pageSample,
+      ...getPageSample(),
       id: "page2",
       header: {
-        ...pageSample.header,
+        ...getPageSample().header,
         iconType: "emoji",
-        icon: EMOJI_ARR[8],
+        icon: EMOJI_ARRAY[8],
         title: "page2",
       },
       editTime: JSON.stringify(Date.parse("2022-5-20-9:00")),
@@ -940,7 +739,7 @@ export const initialNotionState: Notion = {
       header: {
         title: "notion2",
         iconType: "emoji",
-        icon: EMOJI_ARR[6],
+        icon: EMOJI_ARRAY[6],
         cover: null,
         comments: null,
       },
@@ -958,7 +757,7 @@ export const initialNotionState: Notion = {
       header: {
         title: "notion3",
         iconType: "emoji",
-        icon: EMOJI_ARR[31],
+        icon: EMOJI_ARRAY[31],
         cover: null,
         comments: null,
       },
@@ -970,8 +769,8 @@ export const initialNotionState: Notion = {
       editTime: JSON.stringify(Date.parse("2022-5-22-15:00")),
       createTime: JSON.stringify(Date.parse("2022-5-22-15:00")),
     },
-    template1,
-    template2,
+    TEMPLATE1,
+    TEMPLATE2,
   ],
   trash: {
     pagesId: null,
@@ -1262,7 +1061,7 @@ export default function notion(
         if (action.block.type === "page") {
           // 만들어진 블록의 type 이 page 인 경우
           const newPage: Page = {
-            ...pageSample,
+            ...getPageSample(),
             id: action.block.id,
             parentsId: [targetPage.id],
           };
@@ -1288,8 +1087,8 @@ export default function notion(
                 : [action.block.id],
               subPagesId:
                 parentPage.subPagesId === null
-                  ? [...blockSample.id]
-                  : parentPage.subPagesId.concat([blockSample.id]),
+                  ? [...getBlockSample().id]
+                  : parentPage.subPagesId.concat([getBlockSample().id]),
               editTime: editTime,
             };
             editPage(editedParentPage);
@@ -1321,9 +1120,9 @@ export default function notion(
           editTime: editTime,
         };
         editBlockData(blockIndex, changedTypeBlock);
-        let newBlocksId = [blockSample.id];
-        let newBlocks = [blockSample];
-        let newFirstBlocksId = [blockSample.id];
+        let newBlocksId = [getBlockSample().id];
+        let newBlocks = [getBlockSample()];
+        let newFirstBlocksId = [getBlockSample().id];
         let newSubPagesId: string[] | null = null;
         const allSubBlocks = targetPage.blocks?.filter((block: Block) =>
           block.parentBlocksId?.includes(action.block.id)
@@ -1877,7 +1676,7 @@ export default function notion(
             changeParentsId(subPageId)
           );
         }
-        let pageBlockStyle: BlockStyle = basicBlockStyle;
+        let pageBlockStyle: BlockStyle = BASIC_BLOCK_STYLE;
 
         // 페이지 이동전, targetPage가 들어 있는 page에서 targetPage에 대한 데이터 삭제 :block 삭제, subPages 삭제
         if (moveTargetPage.parentsId) {

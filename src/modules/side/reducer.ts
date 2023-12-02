@@ -1,14 +1,7 @@
-const lock = "lock" as const;
-const float = "float" as const;
-const floatHide = "floatHide" as const;
-const close = "close" as const;
-export type SideAppear =
-  | typeof lock
-  | typeof float
-  | typeof floatHide
-  | typeof close;
+import { SideAppear } from "../../types";
 
 const CHANGE_SIDE = "side/CHANGE_SIDE" as const;
+
 export const change_side = (appear: SideAppear) => ({
   type: CHANGE_SIDE,
   appear: appear,
@@ -19,7 +12,7 @@ export type Side = {
 type SideAction = ReturnType<typeof change_side>;
 
 const initialState: Side = {
-  appear: lock,
+  appear: "lock",
 };
 
 export default function side(

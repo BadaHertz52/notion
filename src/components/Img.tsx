@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import { changeImgToJpeg } from "../fn/imgLoad";
+
 import { CSSProperties } from "styled-components";
+
+import { changeImgToJpeg } from "../utils";
+
 type ImgProps = {
   src: string;
   alt: string;
@@ -8,6 +11,7 @@ type ImgProps = {
   onLoad?: () => void;
   style?: CSSProperties;
 };
+
 const Img = ({ src, alt, className, onLoad, style }: ImgProps) => {
   const imgRef = useRef<HTMLImageElement>(null);
   const isGif = src.includes("gif");

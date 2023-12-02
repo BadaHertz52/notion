@@ -4,20 +4,27 @@ import React, {
   MouseEvent,
   SetStateAction,
   useCallback,
-  useEffect,
   useState,
 } from "react";
-import { MdKeyboardArrowDown } from "react-icons/md";
-import { Page } from "../modules/notion/type";
-import { findPage } from "../fn";
-import Frame, { FrameProps } from "./Frame";
+
 import ReactDOMServer from "react-dom/server";
-import ScreenOnly from "./ScreenOnly";
-import "../assets/export.scss";
+
+import { MdKeyboardArrowDown } from "react-icons/md";
+
+import { ScreenOnly, Frame } from "./index";
+import { FrameProps } from "./frame/Frame";
+
+import { Page } from "../types";
+import { findPage } from "../utils";
+
 import { frameStyleCode } from "../frameStyle";
+
+import "../assets/export.scss";
+
 type ExportProps = FrameProps & {
   setOpenExport: Dispatch<SetStateAction<boolean>>;
 };
+
 const Export = ({
   page,
   pagesId,

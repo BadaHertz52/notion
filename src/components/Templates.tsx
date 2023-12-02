@@ -8,31 +8,34 @@ import React, {
   useMemo,
   useCallback,
 } from "react";
+
+import { useDispatch, useSelector } from "react-redux";
+
 import {
   AiOutlineExpandAlt,
   AiOutlinePlus,
   AiOutlineShrink,
 } from "react-icons/ai";
 import { BsTrash } from "react-icons/bs";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { ActionContext } from "../route/NotionRouter";
+
+import { ActionContext } from "../contexts";
 
 import {
   add_template,
   cancel_edit_template,
   delete_template,
-  pageSample,
 } from "../modules/notion/reducer";
-import { Page } from "../modules/notion/type";
-import { findPage } from "../fn";
+
+import { Frame, PageIcon } from "./index";
+
 import { UserState } from "../modules/user/reducer";
-import Frame, { Template_Frame_SAME_Props } from "./Frame";
-import PageIcon from "./PageIcon";
 import { RootState } from "../modules";
+import { Page, TemplateFrameCommonProps } from "../types";
+import { findPage, getPageSample } from "../utils";
+
 import "../assets/templates.scss";
 
-type TemplatesProps = Template_Frame_SAME_Props & {
+type TemplatesProps = TemplateFrameCommonProps & {
   user: UserState;
   routePageId: string; // 현재 page
   setOpenTemplates: Dispatch<SetStateAction<boolean>>;
@@ -198,10 +201,10 @@ const Templates = ({
         ? `template1_${date}`
         : `template${templatesId.length + 1}_${date}`;
     const newTemplate: Page = {
-      ...pageSample,
+      ...getPageSample(),
       id: id,
       header: {
-        ...pageSample.header,
+        ...getPageSample().header,
         title: "new template",
       },
       type: "template",

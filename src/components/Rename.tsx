@@ -7,13 +7,15 @@ import React, {
   useCallback,
   useEffect,
 } from "react";
+
 import { CSSProperties } from "styled-components";
-import { ActionContext } from "../route/NotionRouter";
-import { Block, Page } from "../modules/notion/type";
-import { setTemplateItem, closeModal } from "../fn";
-import IconModal from "./IconModal";
-import PageIcon from "./PageIcon";
-import ScreenOnly from "./ScreenOnly";
+
+import { IconModal, PageIcon, ScreenOnly } from "./index";
+
+import { ActionContext } from "../contexts";
+import { Block, Page } from "../types";
+import { setTemplateItem, closeModal } from "../utils";
+
 import "../assets/rename.scss";
 
 type RenameProps = {
@@ -23,6 +25,7 @@ type RenameProps = {
   renameStyle: CSSProperties | undefined;
   setOpenRename: Dispatch<SetStateAction<boolean>>;
 };
+
 const Rename = ({
   currentPageId,
   block,

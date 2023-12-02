@@ -1,0 +1,68 @@
+@import "./common";
+#mobileMenu {
+  @include modalStyle;
+  position: absolute;
+  left: 5%;
+  min-width: 250px;
+  max-width: 80%;
+  width: fit-content;
+  overflow-y: hidden;
+  overflow-x: auto;
+  .inner {
+    display: flex;
+    justify-content: space-around;
+  }
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.2rem;
+    min-width: 24px;
+    font-size: 1rem;
+    border-right: 1px solid rgb(212, 212, 212);
+    .text {
+      font-size: 14px;
+      min-width: fit-content;
+    }
+    .mobileBlock__btn__inner {
+      width: 80%;
+      height: calc(100% - 10px);
+      margin: 5px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+  button:last-child {
+    border-right: none;
+    padding-right: 4px;
+  }
+  .btn-add-block,
+  .btn-comment,
+  .btn-delete {
+    flex-grow: 1;
+  }
+  .btn-turn-into {
+    flex-grow: 3;
+  }
+  .btn-color,
+  .btn-open-menu {
+    flex-grow: 2;
+  }
+  .arrow-down {
+    color: grey;
+    display: inline-flex;
+    align-items: end;
+    svg {
+      height: fit-content;
+    }
+  }
+}
+
+@media screen and (min-width: 375px) {
+  #mobileMenu {
+    button {
+      min-width: 32px;
+    }
+  }
+}

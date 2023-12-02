@@ -3,14 +3,16 @@ import React, { useMemo } from "react";
 type TimeProps = {
   editTime: string;
 };
+
+type TimeInform = {
+  year: string;
+  month: string;
+  date: string;
+  hour: string;
+  min: string;
+};
+
 const Time = ({ editTime }: TimeProps) => {
-  type TimeInform = {
-    year: string;
-    month: string;
-    date: string;
-    hour: string;
-    min: string;
-  };
   const today = new Date().getDate();
   const currentHour = new Date().getHours();
   const currentMin = new Date().getMinutes();

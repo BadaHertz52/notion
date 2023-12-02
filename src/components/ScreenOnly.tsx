@@ -4,6 +4,7 @@ import { CSSProperties } from "styled-components";
 type ScreenOnlyProps = {
   text: string;
 };
+
 const ScreenOnly = ({ text }: ScreenOnlyProps) => {
   const style: CSSProperties = {
     position: "absolute",

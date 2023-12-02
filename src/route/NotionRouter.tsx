@@ -1,16 +1,21 @@
-import React, {
-  createContext,
-  useEffect,
-  useState,
-  useCallback,
-  useMemo,
-} from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes, useNavigate } from "react-router-dom";
 
-import AllComments from "../components/AllComments";
-import QuickFindBoard from "../components/QuickFindBoard";
-import Templates from "../components/Templates";
+import { ActionContext } from "../contexts";
+
+import {
+  AllComments,
+  QuickFindBoard,
+  Templates,
+  SideBarContainer,
+  NonePage,
+  Export,
+  DiscardEditForm,
+  EditorContainer,
+  NotionHelmet,
+} from "../components";
+
 import { RootState } from "../modules";
 import {
   add_block,
@@ -28,9 +33,7 @@ import {
   raise_block,
   restore_page,
 } from "../modules/notion/reducer";
-import { Block, Page, IconType, ListItem } from "../modules/notion/type";
-import { findPage, getCurrentPageId, makeRoutePath } from "../fn";
-import { change_side, SideAppear } from "../modules/side/reducer";
+import { change_side } from "../modules/side/reducer";
 import {
   add_favorites,
   add_recent_page,
@@ -39,80 +42,16 @@ import {
   recentPagesSessionKey,
   remove_favorites,
 } from "../modules/user/reducer";
-import EditorContainer, { ModalType } from "../containers/EditorContainer";
-import SideBarContainer from "../containers/SideBarContainer";
-import NonePage from "../components/NonePage";
-import Export from "../components/Export";
-import DiscardEditForm from "../components/DiscardEditForm";
-import NotionHelmet from "../components/NotionHelmet";
-const MOBILE_SIDE_MENU = {
-  ms_turnInto: "ms_turnInto",
-  ms_movePage: "ms_movePage",
-  ms_color: "ms_color",
-  ms_moreMenu: "ms_moreMenu",
-  ms_link: "ms_link",
-} as const;
-
-export type MobileSideMenuWhatType = keyof typeof MOBILE_SIDE_MENU | undefined;
-export type mobileSideMenuType = {
-  block: Block | null;
-  what: MobileSideMenuWhatType;
-};
-export type PathType = {
-  id: string;
-  title: string;
-  icon: string | null;
-  iconType: IconType;
-};
-export type DiscardItemType = {
-  discard: boolean;
-};
-export type SelectionType = {
-  /**
-   * origin block data (수정이전에 block data)
-   */
-  block: Block;
-  /**
-   * blockStyler에 의한 block data의 변화가 있는 지 여부
-   */
-  change: boolean;
-};
-export const defaultFontFamily =
-  'ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"';
-export const serifFontFamily = "Lyon-Text, Georgia, ui-serif, serif";
-export const monoFontFamily = "iawriter-mono, Nitti, Menlo, Courier, monospace";
-export type FontStyleType =
-  | typeof serifFontFamily
-  | typeof monoFontFamily
-  | typeof defaultFontFamily;
-
-const initialNotionActions = {
-  addBlock: (
-    pageId: string,
-    block: Block,
-    newBlockIndex: number,
-    previousBlockId: string | null
-  ) => {},
-  editBlock: (pageId: string, block: Block) => {},
-  deleteBlock: (pageId: string, block: Block, isInMenu: boolean) => {},
-  changeBlockToPage: (currentPageId: string, block: Block) => {},
-  changePageToBlock: (currentPageId: string, block: Block) => {},
-  changeToSub: (pageId: string, block: Block, newParentBlockId: string) => {},
-  raiseBlock: (pageId: string, block: Block) => {},
-  addPage: (newPage: Page) => {},
-  deletePage: (pageId: string) => {},
-  duplicatePage: (targetPageId: string) => {},
-  editPage: (pageId: string, newPage: Page) => {},
-  movePageToPage: (targetPageId: string, destinationPageId: string) => {},
-  restorePage: (pageId: string) => {},
-  cleanTrash: (pageId: string) => {},
-  addRecentPage: (itemId: string) => {},
-  cleanRecentPage: () => {},
-  addFavorites: (itemId: string) => {},
-  removeFavorites: (itemId: string) => {},
-  changeSide: (appear: SideAppear) => {},
-};
-export const ActionContext = createContext({ actions: initialNotionActions });
+import {
+  Block,
+  Page,
+  SideAppear,
+  ListItem,
+  ModalType,
+  FontStyleType,
+  MobileSideMenuType,
+} from "../types";
+import { findPage, getCurrentPageId, makeRoutePath } from "../utils";
 
 const NotionRouter = () => {
   const navigate = useNavigate();
@@ -171,12 +110,12 @@ const NotionRouter = () => {
   const [smallText, setSmallText] = useState<boolean>(false);
   const [fullWidth, setFullWidth] = useState<boolean>(false);
   const [openTemplates, setOpenTemplates] = useState<boolean>(false);
-  const [fontStyle, setFontStyle] = useState<FontStyleType>(defaultFontFamily);
+  const [fontStyle, setFontStyle] = useState<FontStyleType>("default");
   const [modal, setModal] = useState<ModalType>({
     open: false,
     what: null,
   });
-  const [mobileSideMenu, setMobileSideMenu] = useState<mobileSideMenuType>({
+  const [mobileSideMenu, setMobileSideMenu] = useState<MobileSideMenuType>({
     block: null,
     what: undefined,
   });
@@ -391,10 +330,7 @@ const NotionRouter = () => {
                   path={makeRoutePath(p.id)}
                   element={
                     <EditorContainer
-                      sideAppear={sideAppear}
                       firstList={firstList}
-                      userName={user.userName}
-                      recentPagesId={user.recentPagesId}
                       page={p}
                       pages={pages}
                       pagesId={pagesId}

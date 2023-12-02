@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { PageHeader } from "../modules/notion/type";
+
 import { Helmet } from "react-helmet-async";
-import { Emoji, getEmojiUrl } from "../modules/notion/emojiData";
-import { pageSample } from "../modules/notion/reducer";
+
+import { PageHeader, Emoji } from "../types";
+import { getPageSample, getEmojiUrl } from "../utils";
+
 import BASIC_MEAT_TAG_IMG_URL from "../assets/img/default.jpeg";
 
 type MetaTagProps = {
@@ -39,7 +41,7 @@ const NotionHelmet = ({ pageHeader, pageId }: MetaTagProps) => {
   const imgUrl: string = BASIC_MEAT_TAG_IMG_URL;
 
   const metaTagTitle =
-    title === pageSample.header.title
+    title === getPageSample().header.title
       ? BASIC_META_TAG_TITLE
       : `${title}- Notion clone coding project`;
 

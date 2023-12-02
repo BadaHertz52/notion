@@ -3,6 +3,7 @@ import React, { Dispatch, SetStateAction, useRef } from "react";
 type DiscardEditFormProps = {
   setDiscardEdit: Dispatch<SetStateAction<boolean>>;
 };
+
 const DiscardEditForm = ({ setDiscardEdit }: DiscardEditFormProps) => {
   const discardEditFormRef = useRef<HTMLDivElement>(null);
   const onClickDiscardEdit = () => {

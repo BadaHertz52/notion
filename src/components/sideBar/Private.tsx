@@ -1,0 +1,69 @@
+import React, { useContext } from "react";
+
+import { AiOutlinePlus } from "react-icons/ai";
+
+import { ScreenOnly, ListTemplate } from "../index";
+import { ActionContext } from "../../contexts";
+import { ListItem, Notion, Page } from "../../types";
+
+type PrivateProps = {
+  notion: Notion;
+  firstPages: Page[] | null;
+  addNewPage: () => void;
+  addNewSubPage: (item: ListItem) => void;
+  onClickMoreBtn: (item: ListItem, target: HTMLElement) => void;
+};
+
+function Private({
+  notion,
+  firstPages,
+  addNewPage,
+  addNewSubPage,
+  onClickMoreBtn,
+}: PrivateProps) {
+  const { changeSide } = useContext(ActionContext).actions;
+  const targetList: ListItem[] | null = firstPages
+    ? firstPages
+        .filter((page: Page) => page.parentsId === null)
+        .map((page: Page) => ({
+          id: page.id,
+          iconType: page.header.iconType,
+          icon: page.header.icon,
+          title: page.header.title,
+          subPagesId: page.subPagesId,
+          parentsId: page.parentsId,
+          editTime: page.editTime,
+          createTime: page.createTime,
+        }))
+    : null;
+  return (
+    <div className="private">
+      <div className="header">
+        <span>PRIVATE</span>
+        <button
+          className="btn-addPage"
+          title="Quickly add a page inside"
+          onClick={addNewPage}
+        >
+          <ScreenOnly text="Quickly add a page inside" />
+          <AiOutlinePlus />
+        </button>
+      </div>
+      {notion.pages && (
+        <div className="list">
+          {notion.pages[0] && targetList && (
+            <ListTemplate
+              notion={notion}
+              targetList={targetList}
+              onClickMoreBtn={onClickMoreBtn}
+              addNewSubPage={addNewSubPage}
+              changeSide={changeSide}
+            />
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default React.memo(Private);
