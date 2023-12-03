@@ -107,12 +107,15 @@ const Comments = ({
    * frame 에서 block-comments를 열었을때 (openComment === true) block의 위치에 따라 commentsStyle을 설정하는 함수
    */
   const changeCommentsStyle = useCallback(() => {
+    const MAX_HEIGHT_OF_COMMENTS = 160;
+    const EXTRA_SPACE = 30;
     if (block && openComment) {
+      const topBarHeight = document.querySelector(".topBar")?.clientHeight;
       const blockContentsEl = document.getElementById(`${block.id}__contents`);
       const editableBlock = document.getElementsByClassName("editableBlock")[0];
       const editableBlockDomRect = editableBlock.getClientRects()[0];
       const blockDocDomRect = blockContentsEl?.getClientRects()[0];
-      if (blockDocDomRect && frameHtml) {
+      if (blockDocDomRect && frameHtml && topBarHeight) {
         const frameDomRect = frameHtml.getClientRects()[0];
         const pageTitleHtml = frameHtml.querySelector(
           ".page__title"
@@ -121,13 +124,16 @@ const Comments = ({
         const padding = window
           .getComputedStyle(editableBlock, null)
           .getPropertyValue("padding-right");
-        const pxIndex = padding.indexOf("px");
-        const paddingValue = Number(padding.slice(0, pxIndex));
+        const paddingValue = Number(padding.replace("px", ""));
         const innerWidth = window.innerWidth;
-        const innerHeight = window.innerHeight;
-        const top = blockDocDomRect.bottom;
-        const overHeight = top + 200 >= window.innerHeight;
-        const bottom = innerHeight - blockDocDomRect.top + 10;
+        /**
+         * 뷰포트를 기준으로 한 comment의 y좌표
+         */
+        const y = blockDocDomRect.bottom;
+        const top = y - topBarHeight + frameHtml.scrollTop;
+        const overHeight = y + MAX_HEIGHT_OF_COMMENTS >= window.innerHeight;
+
+        const bottom = window.innerHeight - blockDocDomRect.top + 10;
         const left =
           innerWidth > 768
             ? editableBlockDomRect.x - frameDomRect.x
@@ -142,16 +148,17 @@ const Comments = ({
           left: left,
           width: width,
         };
+
         const style: CSSProperties = overHeight
           ? {
               ...basicStyle,
               bottom: bottom,
-              maxHeight: blockDocDomRect.top - pageTitleBottom,
+              maxHeight: y - pageTitleBottom - EXTRA_SPACE,
             }
           : {
               ...basicStyle,
               top: top,
-              maxHeight: frameDomRect.height - top,
+              maxHeight: window.innerHeight - y - EXTRA_SPACE,
             };
         setCommentsStyle(style);
       }
