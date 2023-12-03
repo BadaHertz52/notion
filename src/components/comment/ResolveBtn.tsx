@@ -6,12 +6,12 @@ import { setTemplateItem } from "../../utils";
 type ResolveBtnProps = {
   page: Page;
   pageId: string;
-  block: Block | null;
+  block?: Block;
   comment: MainCommentType;
   templateHtml: HTMLElement | null;
-  editPage: ((pageId: string, newPage: Page) => void) | null;
+  editPage?: (pageId: string, newPage: Page) => void;
   editBlock: (pageId: string, block: Block) => void;
-  setAllComments: Dispatch<SetStateAction<MainCommentType[] | null>> | null;
+  setAllComments: Dispatch<SetStateAction<MainCommentType[] | null>>;
 };
 
 const ResolveBtn = ({
@@ -42,13 +42,14 @@ const ResolveBtn = ({
       ) as string[];
       const index = commentIdes.indexOf(comment.id);
       comments.splice(index, 1, newComment);
+      const openComments = comments.filter((c) => c.type === "open");
       const editedBlock: Block = {
         ...block,
         comments: comments,
         editTime: editTime,
       };
       editBlock(pageId, editedBlock);
-      setAllComments && setAllComments(editedBlock.comments);
+      setAllComments(openComments[0] ? openComments : null);
     } else {
       const pageComment = page.header.comments?.[0];
       if (pageComment) {
@@ -65,7 +66,6 @@ const ResolveBtn = ({
           },
           editTime: editTime,
         };
-        setAllComments && setAllComments(editedPage.header.comments);
         editPage && editPage(pageId, editedPage);
       }
     }

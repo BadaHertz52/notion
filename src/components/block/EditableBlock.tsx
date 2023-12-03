@@ -90,7 +90,7 @@ const EditableBlock = ({
     (id: string) => findBlock(page, id).BLOCK
   );
 
-  const showBlockComment = useMemo(
+  const isOpenComments = useMemo(
     () =>
       block.comments ? block.comments.some((i) => i.type === "open") : false,
     [block.comments]
@@ -204,7 +204,7 @@ const EditableBlock = ({
               mobileMenuTargetBlock={mobileMenuTargetBlock}
               onClickCommentBtn={onClickCommentBtn}
               subBlocks={subBlocks}
-              showBlockComment={showBlockComment}
+              isOpenComments={isOpenComments}
               markPointBlock={markPointBlock}
               cancelPointBlock={cancelPointBlock}
               measure={measure}
@@ -288,7 +288,7 @@ const EditableBlock = ({
                     />
                   </div>
                 </div>
-                {showBlockComment && (
+                {isOpenComments && (
                   <BlockComment
                     block={block}
                     onClickCommentBtn={onClickCommentBtn}

@@ -28,6 +28,7 @@ import { RootState } from "../../modules";
 import {
   Block,
   Command,
+  MainCommentType,
   Page,
   SelectionType,
   TemplateFrameCommonProps,
@@ -80,6 +81,9 @@ const Frame = ({
   setMobileSideMenu,
   openExport,
 }: FrameProps) => {
+  const targetMainComments = commentBlock?.comments?.filter(
+    (c) => c.type === "open"
+  );
   const sideAppear = useSelector((state: RootState) => state.side.appear);
   const { editPage, editBlock, addBlock } = useContext(ActionContext).actions;
   const innerWidth = window.innerWidth;
@@ -176,7 +180,14 @@ const Frame = ({
       isInrMain ? setOpenMenu(true) : setOpenMenu(false);
     }
   }, []);
-  const closeComments = useCallback(
+  /**
+   * block-comments 창을 닫기 위한 상태 변경
+   */
+  const changeStateToCloseBlockComments = useCallback(() => {
+    setCommentBlock(null);
+    setOpenComment(false);
+  }, [setCommentBlock, setOpenComment]);
+  const closeBlockComments = useCallback(
     (event: globalThis.MouseEvent) => {
       if (openComment && commentBlock) {
         const commentElId = "block-comments";
@@ -198,13 +209,12 @@ const Frame = ({
             !isInToolMoreBtn &&
             !isInDiscardEditFrom;
           if (condition) {
-            setCommentBlock(null);
-            setOpenComment(false);
+            changeStateToCloseBlockComments();
           }
         }
       }
     },
-    [commentBlock, openComment, setCommentBlock, setOpenComment]
+    [commentBlock, openComment, changeStateToCloseBlockComments]
   );
 
   /**
@@ -688,7 +698,7 @@ const Frame = ({
       updateBlock();
       document.getElementById("menu__main") && closeMenu(event);
       document.getElementById("modal__menu") && closeModalMenu(event);
-      document.getElementById("block-comments") && closeComments(event);
+      document.getElementById("block-comments") && closeBlockComments(event);
       if (command.open) {
         const target = event.target as HTMLElement | null;
         const commandInputHtml = document.getElementById("commandInput");
@@ -704,7 +714,7 @@ const Frame = ({
         }
       }
     },
-    [closeComments, closeMenu, closeModalMenu, command.open, updateBlock]
+    [closeBlockComments, closeMenu, closeModalMenu, command.open, updateBlock]
   );
   /**
    * 모바일 환경에서 변경된  selection 을 반영하는 기능
@@ -980,28 +990,27 @@ const Frame = ({
               subComment={null}
               commentBlock={commentBlock}
               allComments={commentBlock.comments}
-              setAllComments={null}
               setModal={setModal}
               addOrEdit="add"
-              setEdit={null}
               templateHtml={templateHtml}
               frameHtml={frameHtml}
             />
           )}
         </div>
       )}
-      {commentBlock && openComment && (
+      {commentBlock && openComment && targetMainComments && (
         <Comments
+          targetMainComments={targetMainComments}
           userName={userName}
           block={commentBlock}
           pageId={page.id}
           page={page}
           frameHtml={frameHtml}
           openComment={openComment}
-          select={null}
           discardEdit={discardEdit}
           setDiscardEdit={setDiscardEdit}
           showAllComments={showAllComments}
+          changeStateToCloseBlockComments={changeStateToCloseBlockComments}
         />
       )}
       {moveTargetBlock && (

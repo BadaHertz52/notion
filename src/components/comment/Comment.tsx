@@ -11,14 +11,14 @@ type CommentProps = {
   pageId: string;
   page: Page;
   /**
-   *block===null 이면 page에 대한 comments, block !==null 이면 block에 대한 comments
+   *block=== undefined 이면 page에 대한 comments, block !== undefined 이면 block에 대한 comments
    */
-  block: Block | null;
+  block?: Block;
   editBlock: (pageId: string, block: Block) => void;
-  editPage: ((pageId: string, newPage: Page) => void) | null;
+  editPage?: (pageId: string, newPage: Page) => void;
   frameHtml: HTMLElement | null;
   allComments: MainCommentType[] | null;
-  setAllComments: Dispatch<SetStateAction<MainCommentType[] | null>> | null;
+  setAllComments: Dispatch<SetStateAction<MainCommentType[] | null>>;
   /**
    * ToolMore를 열것인지 에 대한 값
    */
@@ -71,7 +71,6 @@ const Comment = ({
           moreOpen={moreOpen}
           setMoreOpen={setMoreOpen}
           setToolMoreStyle={setToolMoreStyle}
-          setModal={null}
           discardEdit={discardEdit}
           setDiscardEdit={setDiscardEdit}
           templateHtml={templateHtml}
@@ -97,7 +96,6 @@ const Comment = ({
               moreOpen={moreOpen}
               setMoreOpen={setMoreOpen}
               setToolMoreStyle={setToolMoreStyle}
-              setModal={null}
               discardEdit={discardEdit}
               setDiscardEdit={setDiscardEdit}
               templateHtml={templateHtml}
@@ -117,9 +115,7 @@ const Comment = ({
         commentBlock={block}
         allComments={allComments}
         setAllComments={setAllComments}
-        setModal={null}
         addOrEdit="add"
-        setEdit={null}
         templateHtml={templateHtml}
         frameHtml={frameHtml}
       />

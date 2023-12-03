@@ -49,18 +49,14 @@ const AllComments = ({
   );
 
   const pageId = page.id;
-  const commentsBlocks: Block[] | null = page.blocks
-    ? page.blocks.filter((block: Block) => block.comments && block.comments)
-    : null;
-  const targetCommentsBlocks: Block[] | null =
-    commentsBlocks === null ? null : commentsBlocks[0] ? commentsBlocks : null;
-  const allComments = targetCommentsBlocks?.map(
-    (block: Block) => block.comments
-  );
-  const open = "open";
-  const resolve = "resolve";
-  const [select, setSelect] = useState<typeof open | typeof resolve>(open);
-  const [result, setResult] = useState<boolean>(true);
+  const commentsBlocks: Block[] | null =
+    page.blocks?.filter((block: Block) => block.comments) || null;
+  const [select, setSelect] = useState<"open" | "resolve">("open");
+  type ResultItem = {
+    mainComments: MainCommentType[];
+    block: Block;
+  };
+  const [result, setResult] = useState<ResultItem[] | null>(null);
   const openSelect = (event: MouseEvent) => {
     const target = event.currentTarget;
     const typesDoc = target.parentElement;
@@ -91,24 +87,24 @@ const AllComments = ({
   }, [showAllComments, allCommentsRef]);
 
   useEffect(() => {
-    if (allComments) {
-      let resultComments: MainCommentType[] = [];
-      allComments.forEach((comments: MainCommentType[] | null) => {
-        if (comments) {
-          const selectedComments = comments.filter(
-            (c: MainCommentType) => c.type === select
-          );
-          selectedComments[0] &&
-            selectedComments.forEach((c) => resultComments.push(c));
+    if (commentsBlocks) {
+      let array: ResultItem[] | undefined;
+      commentsBlocks.forEach((block) => {
+        const { comments } = block;
+        const selectedComments = comments?.filter(
+          (c: MainCommentType) => c.type === select
+        );
+        if (selectedComments?.[0]) {
+          const item: ResultItem = {
+            mainComments: selectedComments,
+            block: block,
+          };
+          array ? array.push(item) : (array = [item]);
         }
       });
-      if (resultComments[0] === undefined) {
-        setResult(false);
-      } else {
-        setResult(true);
-      }
+      if (array) setResult(array);
     }
-  }, [select, allComments]);
+  }, [select, commentsBlocks]);
   useEffect(() => {
     inner?.addEventListener("click", closeAllComments);
     return () => {
@@ -134,14 +130,14 @@ const AllComments = ({
               title="select open  not resolved comments or resolved comments"
             >
               <ScreenOnly text="select open  not resolved comments or resolved comments" />
-              {select === open ? "Open" : "Resolve"}
+              {select === "open" ? "Open" : "Resolve"}
               <MdKeyboardArrowDown />
             </button>
             <div className="type-btn-group">
               <button
                 title="open  not resolved comments"
                 onClick={(event) => {
-                  setSelect(open);
+                  setSelect("open");
                   closeSelect(event);
                 }}
               >
@@ -150,7 +146,7 @@ const AllComments = ({
               <button
                 title="open resolved comments"
                 onClick={(event) => {
-                  setSelect(resolve);
+                  setSelect("resolve");
                   closeSelect(event);
                 }}
               >
@@ -159,28 +155,28 @@ const AllComments = ({
             </div>
           </div>
         </div>
-        {targetCommentsBlocks === null || !result ? (
+        {!commentsBlocks || !result ? (
           <div className="no-result">
             <div>
-              <p>No {select === open ? "Open" : "Resolved"} comments yet</p>
+              <p>No {select === "open" ? "Open" : "Resolved"} comments yet</p>
               <p>
-                {select === open ? "Open" : "Resolved"} comments on this page
+                {select === "open" ? "Open" : "Resolved"} comments on this page
                 will appear here
               </p>
             </div>
             {/*icon*/}
           </div>
         ) : (
-          targetCommentsBlocks.map((block: Block) => (
+          result.map((item: ResultItem) => (
             <Comments
-              key={`allComments_${block.id}`}
+              key={`allComments_${item.block.id}`}
+              targetMainComments={item.mainComments}
               pageId={pageId}
               page={page}
               userName={userName}
-              block={block}
+              block={item.block}
               frameHtml={null}
               openComment={false}
-              select={select}
               discardEdit={discardEdit}
               setDiscardEdit={setDiscardEdit}
               showAllComments={showAllComments}

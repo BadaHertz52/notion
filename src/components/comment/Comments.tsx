@@ -19,18 +19,18 @@ import { SESSION_KEY } from "../../constants";
 
 type CommentsProps = {
   /**
-   *block===null 이면 page에 대한 comments, block !==null 이면 block에 대한 comments
+   * Comments에서 보여줄 mainComments
    */
-  block: Block | null;
+  targetMainComments: MainCommentType[];
+  /**
+   *block=== undefined 이면 page에 대한 comments, 그렇지 않으면 block에 대한 comments
+   */
+  block?: Block;
   page: Page;
   pageId: string;
   userName: string;
   frameHtml: HTMLElement | null;
   openComment: boolean;
-  /**
-   * 사용자가 보고 싶어하는 comment의 type  유형 , select===null 이면 모든 comments를 보여주고 null 이 기본값
-   */
-  select: null | "open" | "resolve";
   /**
    * comment를 수정하는 중, 사용자가 수정사항을 삭제하려고 하는 지를 판단할 수 있는 property
    */
@@ -43,37 +43,29 @@ type CommentsProps = {
    *showAllComments === true이면 AllComments안의 comments, showAllComments이면 frame안에 있는 page, block에 대한 comments로, ToolMore의 위치를 지정하는데 사용함
    */
   showAllComments: boolean;
+  changeStateToCloseBlockComments?: () => void;
 };
 
 const Comments = ({
+  targetMainComments,
   pageId,
   block,
   page,
   userName,
   frameHtml,
   openComment,
-  select,
   discardEdit,
   setDiscardEdit,
   showAllComments,
+  changeStateToCloseBlockComments,
 }: CommentsProps) => {
   const { editBlock, editPage } = useContext(ActionContext).actions;
   const inner = document.getElementById("inner");
-  const pageComments = page.header.comments;
   const [commentsStyle, setCommentsStyle] = useState<CSSProperties | undefined>(
     undefined
   );
   const [allComments, setAllComments] = useState<MainCommentType[] | null>(
-    null
-  );
-  const [targetComments, setTargetComment] = useState<MainCommentType[] | null>(
-    null
-  );
-  const [resolveComments, setResolveComments] = useState<
-    MainCommentType[] | null
-  >(null);
-  const [openComments, setOpenComments] = useState<MainCommentType[] | null>(
-    null
+    targetMainComments
   );
   const [moreOpen, setMoreOpen] = useState<boolean>(false);
   const [toolMoreStyle, setToolMoreStyle] = useState<CSSProperties | undefined>(
@@ -95,14 +87,6 @@ const Comments = ({
     [moreOpen]
   );
 
-  const updateOpenAndResolveComments = (comments: MainCommentType[]) => {
-    setResolveComments(
-      comments?.filter((comment: MainCommentType) => comment.type === "resolve")
-    );
-    setOpenComments(
-      comments?.filter((comment: MainCommentType) => comment.type === "open")
-    );
-  };
   /**
    * frame 에서 block-comments를 열었을때 (openComment === true) block의 위치에 따라 commentsStyle을 설정하는 함수
    */
@@ -166,52 +150,8 @@ const Comments = ({
   }, [block, frameHtml, openComment]);
 
   useEffect(() => {
-    openComment ? changeCommentsStyle() : setCommentsStyle(undefined);
-  }, [openComment, changeCommentsStyle]);
-
-  useEffect(() => {
-    if (block?.comments) {
-      const item = sessionStorage.getItem(SESSION_KEY.mainCommentId);
-      if (item === null) {
-        setAllComments(block.comments);
-      } else {
-        setAllComments(
-          block.comments.filter((mainComment) => mainComment.id === item)
-        );
-        sessionStorage.removeItem(SESSION_KEY.mainCommentId);
-      }
-    } else {
-      setAllComments(pageComments);
-    }
-  }, [block, page, pageComments]);
-
-  useEffect(() => {
-    if (allComments) {
-      updateOpenAndResolveComments(allComments);
-    } else {
-      setTargetComment(null);
-    }
-  }, [allComments]);
-  useEffect(() => {
-    if (select) {
-      select === "open"
-        ? setTargetComment(openComments)
-        : setTargetComment(resolveComments);
-    } else {
-      setTargetComment(openComments);
-      if (commentsRef.current) {
-        openComments === null || openComments[0] === undefined
-          ? commentsRef.current.parentElement?.setAttribute(
-              "style",
-              "display:none"
-            )
-          : commentsRef.current.parentElement?.setAttribute(
-              "style",
-              "display:block"
-            );
-      }
-    }
-  }, [select, openComments, resolveComments]);
+    changeCommentsStyle();
+  }, [changeCommentsStyle]);
 
   useEffect(() => {
     inner?.addEventListener("click", closeToolMore);
@@ -226,6 +166,11 @@ const Comments = ({
     return () => window.removeEventListener("resize", changeCommentsStyle);
   }, [changeCommentsStyle]);
 
+  useEffect(() => {
+    if (!allComments && changeStateToCloseBlockComments)
+      changeStateToCloseBlockComments();
+  }, [allComments, changeStateToCloseBlockComments]);
+
   return (
     <>
       <div
@@ -234,9 +179,9 @@ const Comments = ({
         ref={commentsRef}
         style={commentsStyle}
       >
-        {targetComments && (
+        {allComments && (
           <section className="comments__comments-group">
-            {targetComments.map((comment: MainCommentType) => (
+            {allComments.map((comment: MainCommentType) => (
               <Comment
                 key={`comment_${comment.id}`}
                 userName={userName}

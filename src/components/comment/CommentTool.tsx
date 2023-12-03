@@ -12,13 +12,13 @@ import { SESSION_KEY } from "../../constants";
 type CommentToolProps = {
   mainComment: boolean;
   comment: SubCommentType | MainCommentType;
-  block: Block | null;
+  block?: Block;
   page: Page;
   pageId: string;
   editBlock: (pageId: string, block: Block) => void;
-  editPage: ((pageId: string, newPage: Page) => void) | null;
+  editPage?: (pageId: string, newPage: Page) => void;
   frameHtml: HTMLElement | null;
-  setAllComments: Dispatch<SetStateAction<MainCommentType[] | null>> | null;
+  setAllComments: Dispatch<SetStateAction<MainCommentType[] | null>>;
   moreOpen: boolean;
   setMoreOpen: Dispatch<SetStateAction<boolean>>;
   setToolMoreStyle: Dispatch<SetStateAction<CSSProperties | undefined>>;

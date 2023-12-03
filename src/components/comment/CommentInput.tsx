@@ -54,16 +54,16 @@ type CommentInputProps = {
    */
   mainComment: MainCommentType | null;
   subComment: SubCommentType | null;
-  editBlock: (pageId: string, block: Block) => void | null;
-  editPage: ((pageId: string, newPage: Page) => void) | null;
-  commentBlock: Block | null;
+  editBlock?: (pageId: string, block: Block) => void;
+  editPage?: (pageId: string, newPage: Page) => void;
+  commentBlock?: Block;
   /**
    * block의 comments 이거나 page.header.comments
    */
   allComments: MainCommentType[] | null;
-  setAllComments: Dispatch<SetStateAction<MainCommentType[] | null>> | null;
-  setModal: Dispatch<SetStateAction<ModalType>> | null;
-  setEdit: Dispatch<SetStateAction<boolean>> | null;
+  setAllComments?: Dispatch<SetStateAction<MainCommentType[] | null>>;
+  setModal?: Dispatch<SetStateAction<ModalType>>;
+  setEdit?: Dispatch<SetStateAction<boolean>>;
   templateHtml: HTMLElement | null;
   frameHtml: HTMLElement | null;
 };
@@ -106,7 +106,7 @@ const CommentInput = ({
 
   const updateBlock = useCallback(
     (blockComments: MainCommentType[]) => {
-      if (commentBlock) {
+      if (commentBlock && editBlock) {
         let editedBlock: Block = {
           ...commentBlock,
           comments: blockComments,

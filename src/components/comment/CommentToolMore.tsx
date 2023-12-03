@@ -21,7 +21,7 @@ type CommentToolMoreProps = {
   blockId: string | null;
   editBlock: (pageId: string, block: Block) => void;
   editPage: ((pageId: string, newPage: Page) => void) | null;
-  setAllComments: Dispatch<SetStateAction<MainCommentType[] | null>> | null;
+  setAllComments: Dispatch<SetStateAction<MainCommentType[] | null>>;
   setMoreOpen: Dispatch<SetStateAction<boolean>>;
   toolMoreStyle: CSSProperties | undefined;
   templateHtml: HTMLElement | null;

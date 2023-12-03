@@ -64,7 +64,7 @@ const BlockComponent = ({
 }: BlockComponentProps) => {
   const { editBlock } = useContext(ActionContext).actions;
   const navigate = useNavigate();
-  const showBlockComment = useMemo(() => {
+  const isOpenComments = useMemo(() => {
     return block.comments
       ? block.comments.some((i) => i.type === "open") &&
           block.comments.some((m: MainCommentType) => !m.selectedText)
@@ -244,7 +244,7 @@ const BlockComponent = ({
         <div
           id={`${block.id}__contents`}
           className={`contents 
-          ${showBlockComment ? "btn-comment" : ""}`}
+          ${isOpenComments ? "btn-comment" : ""}`}
           onClick={onClickContent}
         >
           <BlockContentEditable

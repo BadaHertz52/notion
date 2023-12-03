@@ -13,7 +13,7 @@ import { findBlock, getBlockContentsStyle } from "../../utils";
 type ListSubProps = EditableBlockProps &
   BlockComponentProps & {
     subBlocks?: Block[];
-    showBlockComment: boolean;
+    isOpenComments: boolean;
     markPointBlock: (
       event: MouseEvent<HTMLDivElement> | TouchEvent<HTMLDivElement>,
       targetBlock: Block
@@ -44,7 +44,7 @@ const ListSub = ({
   mobileMenuTargetBlock,
   onClickCommentBtn,
   subBlocks,
-  showBlockComment,
+  isOpenComments,
   markPointBlock,
   cancelPointBlock,
   measure,
@@ -137,7 +137,7 @@ const ListSub = ({
                   />
                 </div>
               </div>
-              {showBlockComment && (
+              {isOpenComments && (
                 <BlockComment
                   block={block}
                   onClickCommentBtn={onClickCommentBtn}

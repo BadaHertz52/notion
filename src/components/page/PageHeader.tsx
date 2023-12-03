@@ -61,6 +61,9 @@ function PageHeader({
   handleImgLoad,
   openExport,
 }: PageHeaderProps) {
+  const pageOpenComments = page.header.comments?.filter(
+    (c) => c.type === "open"
+  );
   const { editPage, editBlock } = useContext(ActionContext).actions;
 
   const [decoOpen, setDecoOpen] = useState<boolean>(false);
@@ -292,18 +295,17 @@ function PageHeader({
           />
         </div>
         <div className="page__comments" style={pageCommentStyle}>
-          {page.header.comments ? (
-            page.header.comments.map((comment: MainCommentType) => (
+          {pageOpenComments ? (
+            pageOpenComments.map((comment: MainCommentType) => (
               <Comments
                 key={`pageComment_${comment.id}`}
-                block={null}
+                targetMainComments={pageOpenComments}
                 page={page}
                 pageId={page.id}
                 userName={userName}
                 frameHtml={frameRef.current}
                 discardEdit={discardEdit}
                 setDiscardEdit={setDiscardEdit}
-                select={null}
                 openComment={false}
                 showAllComments={showAllComments}
               />
@@ -317,10 +319,7 @@ function PageHeader({
               subComment={null}
               editBlock={editBlock}
               editPage={editPage}
-              commentBlock={null}
               allComments={page.header.comments}
-              setAllComments={null}
-              setModal={null}
               addOrEdit={"add"}
               setEdit={setOpenPageCommentInput}
               templateHtml={templateHtml}
