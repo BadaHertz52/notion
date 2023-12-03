@@ -26,15 +26,15 @@ const ResolveBtn = ({
 }: ResolveBtnProps) => {
   const changeCommentType = useCallback(() => {
     const newType: CommentType = comment.type === "open" ? "resolve" : "open";
-    if (page) {
-      setTemplateItem(templateHtml, page);
-    }
     const editTime = JSON.stringify(Date.now());
     const newComment: MainCommentType = {
       ...comment,
       type: newType,
       editTime: editTime,
     };
+    if (templateHtml) {
+      setTemplateItem(templateHtml, page);
+    }
     if (block) {
       const comments = block.comments ? [...block.comments] : [];
       const commentIdes: string[] = comments?.map(
