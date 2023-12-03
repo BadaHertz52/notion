@@ -28,6 +28,7 @@ import {
 } from "../../utils";
 
 import "../../assets/blockStyler.scss";
+import { SESSION_KEY } from "../../constants";
 
 export type BlockStylerProps = StylerCommonProps & {
   selection: SelectionType | null;
@@ -558,7 +559,10 @@ const BlockStyler = ({
           });
       }
     }
-    return () => {};
+    return () => {
+      if (sessionStorage.getItem(SESSION_KEY.blockToBeEdited))
+        sessionStorage.removeItem(SESSION_KEY.blockToBeEdited);
+    };
   }, [
     selection,
     block,
