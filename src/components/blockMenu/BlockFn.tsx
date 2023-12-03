@@ -16,6 +16,7 @@ import { ScreenOnly, Rename, Menu } from "../index";
 import { ActionContext } from "../../contexts";
 import { Block, ListItem, Page, ModalType } from "../../types";
 import { findPage, makeNewBlock, setTemplateItem } from "../../utils";
+import { SESSION_KEY } from "../../constants";
 
 type BlockFnProp = {
   pages: Page[];
@@ -63,7 +64,7 @@ const BlockFn = ({
   const makeBlock = useCallback(() => {
     const templateHtml = document.getElementById("template");
     setTemplateItem(templateHtml, page);
-    const sessionItem = sessionStorage.getItem("blockFnTargetBlock");
+    const sessionItem = sessionStorage.getItem(SESSION_KEY.blockFnTarget);
     if (sessionItem && page.blocksId) {
       const targetBlock = JSON.parse(sessionItem);
       const targetBlockIndex = page.blocksId.indexOf(targetBlock.id);
@@ -74,7 +75,7 @@ const BlockFn = ({
     }
   }, [addBlock, page]);
   const onMouseDownMenu = useCallback(() => {
-    const sessionItem = sessionStorage.getItem("blockFnTargetBlock");
+    const sessionItem = sessionStorage.getItem(SESSION_KEY.blockFnTarget);
     if (sessionItem) {
       const targetBlock = JSON.parse(sessionItem);
       moveTargetBlock === null && setMoveTargetBlock(targetBlock);
@@ -82,7 +83,7 @@ const BlockFn = ({
   }, [setMoveTargetBlock, moveTargetBlock]);
   const onClickMenu = useCallback(() => {
     moveTargetBlock && setMoveTargetBlock(null);
-    const sessionItem = sessionStorage.getItem("blockFnTargetBlock");
+    const sessionItem = sessionStorage.getItem(SESSION_KEY.blockFnTarget);
     menuOpen && setOpenMenu(false);
     modal.open &&
       setModal({
@@ -112,7 +113,7 @@ const BlockFn = ({
   }, [openRename, blockFnTargetBlock, pagesId, pages]);
 
   useEffect(() => {
-    const modalStyleItem = sessionStorage.getItem("modalStyle");
+    const modalStyleItem = sessionStorage.getItem(SESSION_KEY.modalStyle);
     if (modal.open && modalStyleItem) {
       const firstPoint = modalStyleItem.indexOf("px;");
       const secondPoint = modalStyleItem.indexOf("left:");
@@ -124,7 +125,7 @@ const BlockFn = ({
         top: `${top}px`,
         left: `${left}px`,
       });
-      sessionStorage.removeItem("modalStyle");
+      sessionStorage.removeItem(SESSION_KEY.modalStyle);
     }
   }, [modal.open, setModalStyle]);
 

@@ -15,6 +15,7 @@ import { Comment, CommentToolMore } from "../index";
 
 import { Block, MainCommentType, Page } from "../../types";
 import { ActionContext } from "../../contexts";
+import { SESSION_KEY } from "../../constants";
 
 type CommentsProps = {
   /**
@@ -87,7 +88,7 @@ const Comments = ({
         const isInToolMore = target?.closest("#tool-more");
         if (!isInToolMore) {
           setMoreOpen(false);
-          sessionStorage.removeItem("toolMoreItem");
+          sessionStorage.removeItem(SESSION_KEY.toolMoreItem);
         }
       }
     },
@@ -163,14 +164,14 @@ const Comments = ({
 
   useEffect(() => {
     if (block?.comments) {
-      const item = sessionStorage.getItem("mainCommentId");
+      const item = sessionStorage.getItem(SESSION_KEY.mainCommentId);
       if (item === null) {
         setAllComments(block.comments);
       } else {
         setAllComments(
           block.comments.filter((mainComment) => mainComment.id === item)
         );
-        sessionStorage.removeItem("mainCommentId");
+        sessionStorage.removeItem(SESSION_KEY.mainCommentId);
       }
     } else {
       setAllComments(pageComments);

@@ -13,6 +13,7 @@ import { IoTrashOutline } from "react-icons/io5";
 
 import { Block, MainCommentType, Page, SubCommentType } from "../../types";
 import { setTemplateItem, findBlock } from "../../utils";
+import { SESSION_KEY } from "../../constants";
 
 type CommentToolMoreProps = {
   pageId: string;
@@ -37,7 +38,7 @@ const CommentToolMore = ({
   toolMoreStyle,
   templateHtml,
 }: CommentToolMoreProps) => {
-  const toolMoreItem = sessionStorage.getItem("toolMoreItem");
+  const toolMoreItem = sessionStorage.getItem(SESSION_KEY.toolMoreItem);
   const [comment, setComment] = useState<
     MainCommentType | SubCommentType | null
   >(null);
@@ -153,7 +154,7 @@ const CommentToolMore = ({
         }
       }
     }
-    sessionStorage.removeItem("toolMoreItem");
+    sessionStorage.removeItem(SESSION_KEY.toolMoreItem);
   }, [
     blockId,
     comment,
@@ -169,8 +170,8 @@ const CommentToolMore = ({
 
   const onClickEditComment = useCallback(() => {
     setMoreOpen(false);
-    comment && sessionStorage.setItem("editComment", comment.id);
-    sessionStorage.removeItem("toolMoreItem");
+    comment && sessionStorage.setItem(SESSION_KEY.editComment, comment.id);
+    sessionStorage.removeItem(SESSION_KEY.toolMoreItem);
   }, [comment, setMoreOpen]);
   useEffect(() => {
     if (toolMoreItem) {

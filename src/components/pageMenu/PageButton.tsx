@@ -10,6 +10,7 @@ import { ActionContext } from "../../contexts";
 import { delete_block } from "../../modules/notion/reducer";
 import { Block, Page, ListItem } from "../../types";
 import { setTemplateItem } from "../../utils";
+import { SESSION_KEY } from "../../constants";
 
 type PageButtonProps = {
   itemSize: number;
@@ -52,7 +53,7 @@ const PageButton = ({
       //set origin destinationPage
       if (templateHtml) {
         const item = JSON.stringify(destinationPage);
-        sessionStorage.setItem("originMoveTargetPage", item);
+        sessionStorage.setItem(SESSION_KEY.originMoveTargetPage, item);
       }
       if (!destinationPage.blocksId) {
         addBlock(destinationPageId, newBlock, 0, null);

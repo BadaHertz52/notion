@@ -23,6 +23,7 @@ import {
   SelectionType,
 } from "../../types";
 import { makeRoutePath } from "../../utils";
+import { SESSION_KEY } from "../../constants";
 
 export type BlockComponentProps = {
   pages: Page[];
@@ -92,8 +93,11 @@ const BlockComponent = ({
           : templateHtml.querySelector(".blockFn");
         blockFn?.classList.toggle("on");
         blockFn?.classList.contains("on")
-          ? sessionStorage.setItem("blockFnTargetBlock", JSON.stringify(block))
-          : sessionStorage.removeItem("blockFnTargetBlock");
+          ? sessionStorage.setItem(
+              SESSION_KEY.blockFnTarget,
+              JSON.stringify(block)
+            )
+          : sessionStorage.removeItem(SESSION_KEY.blockFnTarget);
         if (mainBlockDomRect) {
           if (!templateHtml) {
             const frameHtml = document.querySelector(".frame");

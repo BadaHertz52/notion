@@ -5,6 +5,7 @@ import {
   COLOR,
   TEMPLATE1,
   TEMPLATE2,
+  SESSION_KEY,
 } from "../../constants";
 import { Notion, TrashPage, Page, Block, BlockStyle } from "../../types";
 import {
@@ -1057,7 +1058,7 @@ export default function notion(
           });
         }
         //새롱 만들어진 block 에 포거스를 두기 위해
-        sessionStorage.setItem("newBlock", action.block.id);
+        sessionStorage.setItem(SESSION_KEY.newBlock, action.block.id);
         if (action.block.type === "page") {
           // 만들어진 블록의 type 이 page 인 경우
           const newPage: Page = {
@@ -1906,7 +1907,7 @@ export default function notion(
           }
         };
         restorePage("originTemplate");
-        restorePage("originMoveTargetPage");
+        restorePage(SESSION_KEY.originMoveTargetPage);
         return {
           pages: pages,
           firstPagesId: firstPagesId,

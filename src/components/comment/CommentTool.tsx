@@ -7,6 +7,7 @@ import { BsThreeDots } from "react-icons/bs";
 import { ScreenOnly, ResolveBtn } from "../index";
 
 import { Block, MainCommentType, Page, SubCommentType } from "../../types";
+import { SESSION_KEY } from "../../constants";
 
 type CommentToolProps = {
   mainComment: boolean;
@@ -96,7 +97,7 @@ const CommentTool = ({
       };
       setToolMoreStyle(style);
     }
-    sessionStorage.setItem("toolMoreItem", JSON.stringify(comment));
+    sessionStorage.setItem(SESSION_KEY.toolMoreItem, JSON.stringify(comment));
   };
 
   return (

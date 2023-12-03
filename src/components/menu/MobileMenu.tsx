@@ -14,6 +14,7 @@ import { Block, MobileSideMenuWhatType, StylerCommonProps } from "../../types";
 import { makeNewBlock, findBlock } from "../../utils";
 
 import "../../assets/mobileMenu.scss";
+import { SESSION_KEY } from "../../constants";
 
 type MobileMenuProps = Omit<StylerCommonProps, "block"> & {
   mobileMenuTargetBlock: Block;
@@ -121,15 +122,18 @@ const MobileMenu = ({
   );
 
   const openMobileSideMenu = (what: MobileSideMenuWhatType) => {
-    const item = sessionStorage.getItem("mobileMenuTargetBlock");
+    const item = sessionStorage.getItem(SESSION_KEY.mobileMenuTargetBlock);
     if (targetBlock === undefined && item) {
       setMobileSideMenu({
         block: JSON.parse(item),
         what: what,
       });
-      sessionStorage.setItem("msm_block", item);
+      sessionStorage.setItem(SESSION_KEY.mobileSideMenuBlock, item);
     } else {
-      sessionStorage.setItem("msm_block", JSON.stringify(targetBlock));
+      sessionStorage.setItem(
+        SESSION_KEY.mobileSideMenuBlock,
+        JSON.stringify(targetBlock)
+      );
       setMobileSideMenu({
         block: targetBlock,
         what: what,
@@ -151,7 +155,7 @@ const MobileMenu = ({
     closeMM();
   };
   const onTouchCommentBtn = useCallback(() => {
-    const item = sessionStorage.getItem("mobileMenuTargetBlock");
+    const item = sessionStorage.getItem(SESSION_KEY.mobileMenuTargetBlock);
     if (targetBlock === undefined && item) {
       setCommentBlock(JSON.parse(item));
     } else {
@@ -255,12 +259,12 @@ const MobileMenu = ({
   useEffect(() => {
     if (mobileMenuTargetBlock) {
       sessionStorage.setItem(
-        "mobileMenuTargetBlock",
+        SESSION_KEY.mobileMenuTargetBlock,
         JSON.stringify(mobileMenuTargetBlock)
       );
       changeMBMstyle(mobileMenuTargetBlock);
     } else {
-      const item = sessionStorage.getItem("mobileMenuTargetBlock");
+      const item = sessionStorage.getItem(SESSION_KEY.mobileMenuTargetBlock);
       if (item) {
         const block = JSON.parse(item);
         setTargetBlock(block);
@@ -360,7 +364,7 @@ const MobileMenu = ({
             </button>
           </div>
         ) : (
-          sessionStorage.getItem("mobileMenuTargetBlock") && (
+          sessionStorage.getItem(SESSION_KEY.mobileMenuTargetBlock) && (
             <BlockStyler
               pages={pages}
               pagesId={pagesId}
@@ -372,7 +376,9 @@ const MobileMenu = ({
                 targetBlock
                   ? targetBlock
                   : JSON.parse(
-                      sessionStorage.getItem("mobileMenuTargetBlock") as string
+                      sessionStorage.getItem(
+                        SESSION_KEY.mobileMenuTargetBlock
+                      ) as string
                     )
               }
               modal={modal}

@@ -39,7 +39,6 @@ import {
   add_recent_page,
   clean_recent_page,
   delete_recent_page,
-  recentPagesSessionKey,
   remove_favorites,
 } from "../modules/user/reducer";
 import {
@@ -52,6 +51,7 @@ import {
   MobileSideMenuType,
 } from "../types";
 import { findPage, getCurrentPageId, makeRoutePath } from "../utils";
+import { SESSION_KEY } from "../constants";
 
 const NotionRouter = () => {
   const navigate = useNavigate();
@@ -270,8 +270,9 @@ const NotionRouter = () => {
       navigate(makeRoutePath(currentPageId));
     }
   }, [currentPageId, navigate]);
+
   useEffect(() => {
-    const sessionItem = sessionStorage.getItem(recentPagesSessionKey);
+    const sessionItem = sessionStorage.getItem(SESSION_KEY.recentPages);
     const recentPagesId = sessionItem
       ? (JSON.parse(sessionItem) as string[])
       : null;

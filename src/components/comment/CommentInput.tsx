@@ -23,6 +23,7 @@ import {
   ModalType,
 } from "../../types";
 import { removeSelected, setTemplateItem } from "../../utils";
+import { SESSION_KEY } from "../../constants";
 
 type CommentInputProps = {
   userName: string;
@@ -328,7 +329,7 @@ const CommentInput = ({
     closeInput();
     page && setTemplateItem(templateHtml, page);
     setEditTargetComment(null);
-    sessionStorage.removeItem("editComment");
+    sessionStorage.removeItem(SESSION_KEY.editComment);
   }, [closeInput, page, templateHtml]);
 
   const makeNewComment = useCallback(

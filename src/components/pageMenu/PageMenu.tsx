@@ -16,6 +16,7 @@ import { ActionContext } from "../../contexts";
 import { Block, ListItem, Page } from "../../types";
 import { isMobile, setTemplateItem } from "../../utils";
 import { ScreenOnly, PageBtnList } from "../index";
+import { SESSION_KEY } from "../../constants";
 
 type PageMenuProps = {
   what: "page" | "block";
@@ -41,7 +42,9 @@ const PageMenu = ({
   const [block, setBlock] = useState<Block | null>(null);
   const listMargin = 16;
   const [listWidth, setListWidth] = useState<number>(320 - listMargin * 2);
-  const sessionItem = sessionStorage.getItem("blockFnTargetBlock") as string;
+  const sessionItem = sessionStorage.getItem(
+    SESSION_KEY.blockFnTarget
+  ) as string;
 
   const templateHtml = document.getElementById("template");
 

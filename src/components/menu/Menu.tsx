@@ -31,6 +31,7 @@ import {
 import { isMobile, setTemplateItem } from "../../utils";
 
 import "../../assets/menu.scss";
+import { SESSION_KEY } from "../../constants";
 
 export type MenuProps = MenuAndBlockStylerCommonProps & {
   setOpenMenu?: Dispatch<SetStateAction<boolean>>;
@@ -179,7 +180,7 @@ const Menu = ({
   };
   const showPageMenuInMobile = () => {
     if (setMobileSideMenu) {
-      sessionStorage.setItem("blockFnTargetBlock", JSON.stringify(block));
+      sessionStorage.setItem(SESSION_KEY.blockFnTarget, JSON.stringify(block));
       setMobileSideMenu({
         block: block,
         what: "ms_movePage",
@@ -197,7 +198,7 @@ const Menu = ({
     setCommentBlock(block);
     closeMenu();
     setSelection && setSelection(null);
-    sessionStorage.setItem("modalStyle", JSON.stringify(modalStyle));
+    sessionStorage.setItem(SESSION_KEY.modalStyle, JSON.stringify(modalStyle));
     setModal({
       open: true,
       what: "modalComment",

@@ -6,6 +6,7 @@ import { HiTemplate } from "react-icons/hi";
 import { makeNewBlock, randomEmojiIcon } from "../../utils";
 import { Page } from "../../types";
 import { ActionContext } from "../../contexts";
+import { SESSION_KEY } from "../../constants";
 
 type EmptyPageContentProps = {
   page: Page;
@@ -59,7 +60,7 @@ const EmptyPageContent = ({
 
   const onClickTemplateBtn = useCallback(() => {
     setOpenTemplates(true);
-    sessionStorage.setItem("targetPageId", page.id);
+    sessionStorage.setItem(SESSION_KEY.targetPageId, page.id);
   }, [page.id, setOpenTemplates]);
   return (
     <div className="empty-page__btn-group">

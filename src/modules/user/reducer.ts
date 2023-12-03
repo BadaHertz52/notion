@@ -1,3 +1,4 @@
+import { SESSION_KEY } from "../../constants";
 import { initialNotionState } from "../notion/reducer";
 
 const ADD_FAVORITES = "user/ADD_FAVORITES" as const;
@@ -5,7 +6,7 @@ const REMOVE_FAVORITES = "user/REMOVE_FAVORITES" as const;
 const ADD_RECENT_PAGE = "user/ADD_RECENT_PAGE" as const;
 const DELETE_RECENT_PAGE = "user/DELETE_RECENT_PAGE" as const;
 const CLEAN_RECENT_PAGE = "user/CLEAN_RECENT_PAGE" as const;
-export const recentPagesSessionKey = "recent_pages";
+
 export const add_favorites = (itemId: string) => ({
   type: ADD_FAVORITES,
   itemId: itemId,
@@ -39,7 +40,7 @@ type UserAction =
   | ReturnType<typeof delete_recent_page>
   | ReturnType<typeof clean_recent_page>;
 
-const recentPagesSessionItem = sessionStorage.getItem(recentPagesSessionKey);
+const recentPagesSessionItem = sessionStorage.getItem(SESSION_KEY.recentPages);
 const item = recentPagesSessionItem
   ? (JSON.parse(recentPagesSessionItem) as string[])
   : null;
@@ -49,7 +50,7 @@ const recentPagesId =
     : null;
 // 새로고침 시, state가 초기화 되기 때문에 최근 페이지에 initialNotionState.pagesId에 없는 페이지는 세션에서 삭제
 if (recentPagesId !== item) {
-  sessionStorage.setItem(recentPagesSessionKey, JSON.stringify(item));
+  sessionStorage.setItem(SESSION_KEY.recentPages, JSON.stringify(item));
 }
 const initialState: UserState = {
   userName: "badahertz52",
@@ -101,7 +102,7 @@ export default function user(
       }
       // session storage 에 추가
       sessionStorage.setItem(
-        recentPagesSessionKey,
+        SESSION_KEY.recentPages,
         JSON.stringify(recentPagesId)
       );
       return {

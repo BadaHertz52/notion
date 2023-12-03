@@ -55,14 +55,9 @@ const BlockStyler = ({
   setMobileMenuTargetBlock,
 }: BlockStylerProps) => {
   const { editBlock } = useContext(ActionContext).actions;
-  const bold = "bold";
-  const initial = "initial";
-  const italic = "italic";
-  const underline = "underline";
-  const lineThrough = "lineThrough";
-  type BlockFontWeightType = typeof bold | typeof initial;
-  type BlockFontStyleType = typeof italic | typeof initial;
-  type TextDecoType = typeof underline | typeof lineThrough;
+  type BlockFontWeightType = "bold" | "initial";
+  type BlockFontStyleType = "italic" | "initial";
+  type TextDecoType = "underline" | "lineThrough";
   const getBlockType = () => {
     const blockType = block.type;
     switch (blockType) {
@@ -277,7 +272,7 @@ const BlockStyler = ({
         if (param === menu) {
           const STYLE: CSSProperties = {
             ...style,
-            overflowY: initial,
+            overflowY: "initial",
           };
           setMenuStyle(STYLE);
         } else {
@@ -546,9 +541,11 @@ const BlockStyler = ({
     },
     [setMobileSideMenu, block]
   );
+
   useEffect(() => {
     if (!isMobile()) {
       changeStylerStyle(frameHtml, block, setBlockStylerStyle);
+
       if (selection?.change) {
         openColor && setOpenColor(false);
         openLink && setOpenLink(false);
@@ -561,6 +558,7 @@ const BlockStyler = ({
           });
       }
     }
+    return () => {};
   }, [
     selection,
     block,
@@ -572,6 +570,7 @@ const BlockStyler = ({
     openMenu,
     setCommand,
   ]);
+
   return (
     <>
       <div id="blockStyler" style={blockStylerStyle} onClick={closeOtherBtn}>
@@ -613,10 +612,10 @@ const BlockStyler = ({
               title="button to change bold  style"
               className="style__btn-bold btn"
               onClick={() => {
-                if (!isMobile()) onClickFontStyleBtn(bold);
+                if (!isMobile()) onClickFontStyleBtn("bold");
               }}
               onTouchStart={prepareForChange}
-              onTouchEnd={() => onClickFontStyleBtn(bold)}
+              onTouchEnd={() => onClickFontStyleBtn("bold")}
             >
               B
             </button>
@@ -624,7 +623,7 @@ const BlockStyler = ({
               title="button to change italic style "
               className="style__btn-italic btn"
               onClick={() => {
-                if (!isMobile()) onClickFontStyleBtn(italic);
+                if (!isMobile()) onClickFontStyleBtn("italic");
               }}
               onTouchStart={prepareForChange}
               onTouchEnd={() => onClickFontStyleBtn("italic")}
@@ -635,10 +634,10 @@ const BlockStyler = ({
               title="button to change underline style "
               className="style__btn-underline btn"
               onClick={() => {
-                if (!isMobile()) onClickFontStyleBtn(underline);
+                if (!isMobile()) onClickFontStyleBtn("underline");
               }}
               onTouchStart={prepareForChange}
-              onTouchEnd={() => onClickFontStyleBtn(underline)}
+              onTouchEnd={() => onClickFontStyleBtn("underline")}
             >
               U
             </button>
@@ -646,10 +645,10 @@ const BlockStyler = ({
               title="button to change lineThrough"
               className="style__btn-lineThrough btn"
               onClick={() => {
-                if (!isMobile()) onClickFontStyleBtn(lineThrough);
+                if (!isMobile()) onClickFontStyleBtn("lineThrough");
               }}
               onTouchStart={prepareForChange}
-              onTouchEnd={() => onClickFontStyleBtn(lineThrough)}
+              onTouchEnd={() => onClickFontStyleBtn("lineThrough")}
             >
               S
             </button>

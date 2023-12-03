@@ -43,6 +43,7 @@ import {
 } from "../../utils";
 
 import "../../assets/frame.scss";
+import { SESSION_KEY } from "../../constants";
 
 export type FrameProps = TemplateFrameCommonProps & {
   page: Page;
@@ -557,7 +558,7 @@ const Frame = ({
   );
   // edit block using sessionStorage
   const updateBlock = useCallback(() => {
-    const item = sessionStorage.getItem("itemsTobeEdited");
+    const item = sessionStorage.getItem(SESSION_KEY.blockToBeEdited);
     if (item) {
       const cursorElement = document.getSelection()?.anchorNode?.parentElement;
       const className = cursorElement?.className;
@@ -571,7 +572,7 @@ const Frame = ({
         cursorElement.parentElement?.id === `${targetBlock.id}__contents`;
       if (!condition) {
         editBlock(pageId, targetBlock);
-        sessionStorage.removeItem("itemsTobeEdited");
+        sessionStorage.removeItem(SESSION_KEY.blockToBeEdited);
       }
     }
   }, [editBlock]);

@@ -34,6 +34,7 @@ import { Page, TemplateFrameCommonProps } from "../types";
 import { findPage, getPageSample } from "../utils";
 
 import "../assets/templates.scss";
+import { SESSION_KEY } from "../constants";
 
 type TemplatesProps = TemplateFrameCommonProps & {
   user: UserState;
@@ -120,7 +121,7 @@ const Templates = ({
         if (!isInInner) {
           if (template) {
             // 수정이전의 버전인 originTemplate이 있으면, 수정된 버전으로 바꿀 것인지 아닌지를 묻는 창이 뜨고, originTemplate이 없다면 templates 창을 닫음
-            const item = sessionStorage.getItem("originTemplate");
+            const item = sessionStorage.getItem(SESSION_KEY.originTemplate);
             item === null ? setOpenTemplates(false) : setOpenEditAlert(true);
           } else {
             setOpenTemplates(false);
@@ -132,7 +133,7 @@ const Templates = ({
   );
 
   const onClickUseBtn = useCallback(() => {
-    const targetPageId = sessionStorage.getItem("targetPageId");
+    const targetPageId = sessionStorage.getItem(SESSION_KEY.targetPageId);
     if (template) {
       const newPage: Page = {
         ...template,
@@ -146,7 +147,7 @@ const Templates = ({
           id: targetPageId,
           editTime: JSON.stringify(Date.now()),
         };
-        sessionStorage.removeItem("targetPageId");
+        sessionStorage.removeItem(SESSION_KEY.targetPageId);
         editPage(targetPageId, editedPage);
       }
       setOpenTemplates(false);
@@ -155,7 +156,7 @@ const Templates = ({
   const showOtherTemplate = useCallback(
     (otherTemplate: Page) => {
       if (template) {
-        const item = sessionStorage.getItem("originTemplate");
+        const item = sessionStorage.getItem(SESSION_KEY.originTemplate);
         openTarget.current = otherTemplate;
         if (item === null) {
           setTemplate(otherTemplate);
@@ -181,12 +182,12 @@ const Templates = ({
    * editAlert에서 수정 사항을 취소하거나 저장한 후에, openTarget.current의 값에 따라 templates창을 닫거나, 다른 template을 연다.
    */
   const afterEditAlert = useCallback(() => {
-    template && sessionStorage.removeItem("originTemplate");
+    template && sessionStorage.removeItem(SESSION_KEY.originTemplate);
     openTarget.current === null ? closeTemplate() : closeAlertOpenOther();
   }, [closeTemplate, closeAlertOpenOther, template]);
   const onClickDiscardBtn = useCallback(() => {
     if (template) {
-      const item = sessionStorage.getItem("originTemplate");
+      const item = sessionStorage.getItem(SESSION_KEY.originTemplate);
       if (item) {
         cancelEditTemplate(template.id);
         afterEditAlert();

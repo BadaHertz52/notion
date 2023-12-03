@@ -30,7 +30,7 @@ import {
   getBlockContentsStyle,
   setTemplateItem,
 } from "../../utils";
-import { BACKGROUND_COLOR, COLOR } from "../../constants";
+import { BACKGROUND_COLOR, COLOR, SESSION_KEY } from "../../constants";
 
 export type EditableBlockProps = {
   pages: Page[];
@@ -154,7 +154,7 @@ const EditableBlock = ({
   }, []);
 
   useEffect(() => {
-    const newBlockItem = sessionStorage.getItem("newBlock");
+    const newBlockItem = sessionStorage.getItem(SESSION_KEY.newBlock);
     if (newBlockItem) {
       const newBlockContentsDoc = document.getElementById(
         `${newBlockItem}__contents`
@@ -164,7 +164,7 @@ const EditableBlock = ({
           newBlockContentsDoc.firstElementChild as HTMLElement;
         newBlockContentEditableDoc.focus();
       }
-      sessionStorage.removeItem("newBlock");
+      sessionStorage.removeItem(SESSION_KEY.newBlock);
     }
     if (block.type.includes("media") && block.contents === "") {
       setOpenLoader(true);

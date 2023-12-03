@@ -11,6 +11,7 @@ import {
 } from "../../types";
 
 import { CommentTool, CommentInput, Time } from "../index";
+import { SESSION_KEY } from "../../constants";
 
 type CommentBlockProps = {
   comment: SubCommentType | MainCommentType;
@@ -57,7 +58,7 @@ const CommentBlock = ({
 }: CommentBlockProps) => {
   const firstLetter = comment.userName.substring(0, 1).toUpperCase();
   const [edit, setEdit] = useState<boolean>(false);
-  const editCommentItem = sessionStorage.getItem("editComment");
+  const editCommentItem = sessionStorage.getItem(SESSION_KEY.editComment);
   const targetMainComment = mainComment ? (comment as MainCommentType) : null;
   const blockContentEl = document.getElementById(
     `${block?.id}__contents`
@@ -67,7 +68,7 @@ const CommentBlock = ({
     if (editCommentItem) {
       if (discardEdit) {
         setEdit(false);
-        sessionStorage.removeItem("editComment");
+        sessionStorage.removeItem(SESSION_KEY.editComment);
         setDiscardEdit(false);
       } else {
         comment.id === editCommentItem && setEdit(true);

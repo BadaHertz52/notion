@@ -1,4 +1,4 @@
-import { BASIC_BLOCK_STYLE } from "../constants";
+import { BASIC_BLOCK_STYLE, SESSION_KEY } from "../constants";
 import { BgColorType, Block, Page } from "../types";
 
 /**
@@ -11,10 +11,10 @@ export const setTemplateItem = (
   page: Page
 ) => {
   if (templateHtml) {
-    const templateItem = sessionStorage.getItem("originTemplate");
+    const templateItem = sessionStorage.getItem(SESSION_KEY.originTemplate);
     if (templateItem === null) {
       const originTemplate = JSON.stringify(page);
-      sessionStorage.setItem("originTemplate", originTemplate);
+      sessionStorage.setItem(SESSION_KEY.originTemplate, originTemplate);
     }
   }
 };

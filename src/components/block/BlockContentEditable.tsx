@@ -14,7 +14,7 @@ import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 
 import { ScreenOnly } from "../index";
 
-import { BLOCK_TYPES } from "../../constants";
+import { BLOCK_TYPES, SESSION_KEY } from "../../constants";
 import { ActionContext } from "../../contexts";
 import { Block, BlockType, Page, Command, SelectionType } from "../../types";
 import {
@@ -142,7 +142,10 @@ const BlockContentEditable = ({
                   pageId: page.id,
                   block: editedBlock,
                 };
-                sessionStorage.setItem("itemsTobeEdited", JSON.stringify(item));
+                sessionStorage.setItem(
+                  SESSION_KEY.blockToBeEdited,
+                  JSON.stringify(item)
+                );
               }
             }
           }
@@ -474,7 +477,7 @@ const BlockContentEditable = ({
       }
       if (target.classList.contains("text_commentBtn")) {
         sessionStorage.setItem(
-          "mainCommentId",
+          SESSION_KEY.mainCommentId,
           target.classList.value
             .split(" ")
             .filter((i) => i.includes("mainId"))[0]
