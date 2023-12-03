@@ -173,12 +173,14 @@ const CommentToolMore = ({
     comment && sessionStorage.setItem(SESSION_KEY.editComment, comment.id);
     sessionStorage.removeItem(SESSION_KEY.toolMoreItem);
   }, [comment, setMoreOpen]);
+
   useEffect(() => {
     if (toolMoreItem) {
       const item = JSON.parse(toolMoreItem);
       setComment(item);
     }
   }, [toolMoreItem]);
+
   return (
     <div id="tool-more" style={toolMoreStyle}>
       <button onClick={onClickEditComment}>
