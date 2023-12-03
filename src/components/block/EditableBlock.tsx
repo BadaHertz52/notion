@@ -27,6 +27,7 @@ import { Block, Command, Page, SelectionType } from "../../types";
 import {
   changeFontSizeBySmallText,
   findBlock,
+  getBlockContentsStyle,
   setTemplateItem,
 } from "../../utils";
 import { BACKGROUND_COLOR, COLOR } from "../../constants";
@@ -94,27 +95,7 @@ const EditableBlock = ({
       block.comments ? block.comments.some((i) => i.type === "open") : false,
     [block.comments]
   );
-  const blockContentsStyle = useCallback((block: Block): CSSProperties => {
-    const { color, bgColor } = block.style;
-    return {
-      color: block.type !== "todo_done" ? COLOR[color] : "rgb(60, 60, 60)",
-      backgroundColor: BACKGROUND_COLOR[bgColor],
-      width:
-        block.style.width === undefined
-          ? block.type === "image"
-            ? block.contents === ""
-              ? "100%"
-              : "auto"
-            : "inherit"
-          : block.style.width,
-      height:
-        block.style.height === undefined
-          ? block.type === "image" && block.contents !== ""
-            ? "150px"
-            : "inherit"
-          : block.style.height,
-    };
-  }, []);
+
   /**
    * [isMoved] 현재 block을 moveTargetBlock (위치를 변경시킬 block)의 변경된 위치의 기준이 되는 pointBlock으로  지정하는 함수
    * @param event
@@ -285,7 +266,7 @@ const EditableBlock = ({
                   )}
                   <div
                     className="block__contents"
-                    style={blockContentsStyle(block)}
+                    style={getBlockContentsStyle(block)}
                   >
                     <BlockComponent
                       pages={pages}
@@ -352,4 +333,4 @@ const EditableBlock = ({
   );
 };
 
-export default React.memo(EditableBlock);
+export default EditableBlock;

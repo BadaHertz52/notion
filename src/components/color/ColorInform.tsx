@@ -43,9 +43,9 @@ const ColorInform = ({
 
   const StyleColorInform = styled.span`
     color: ${(props: StyleColorInformProps) =>
-      props.color ? props.color : "initial"};
+      props.color ? COLOR[props.color] : "initial"};
     background: ${(props: StyleColorInformProps) =>
-      props.background ? props.background : "initial"};
+      props.background ? BACKGROUND_COLOR[props.background] : "initial"};
     font-weight: 500;
     font-size: 16px;
     width: 22px;

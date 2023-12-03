@@ -1,5 +1,7 @@
+import { CSSProperties } from "styled-components";
 import { BASIC_BLOCK_STYLE } from "../constants/block";
 import { Block, Page } from "../types";
+import { BACKGROUND_COLOR, COLOR } from "../constants";
 
 export function getBlockSample(): Block {
   const editTime = JSON.stringify(Date.now());
@@ -187,5 +189,27 @@ export const findPreviousBlockInDoc = (
   return {
     previousBlockInDoc: previousBlockInDoc,
     previousBlockInDocIndex: previousBlockIndex,
+  };
+};
+
+export const getBlockContentsStyle = (block: Block): CSSProperties => {
+  const { color, bgColor } = block.style;
+  return {
+    color: block.type !== "todo_done" ? COLOR[color] : "rgb(60, 60, 60)",
+    backgroundColor: BACKGROUND_COLOR[bgColor],
+    width:
+      block.style.width === undefined
+        ? block.type === "image"
+          ? block.contents === ""
+            ? "100%"
+            : "auto"
+          : "inherit"
+        : block.style.width,
+    height:
+      block.style.height === undefined
+        ? block.type === "image" && block.contents !== ""
+          ? "150px"
+          : "inherit"
+        : block.style.height,
   };
 };

@@ -28,7 +28,7 @@ const ColorMenu = ({
         <div>
           <ColorInform
             colorName="Default"
-            color={"default"}
+            color="default"
             page={page}
             block={block}
             editBlock={editBlock}
@@ -39,7 +39,7 @@ const ColorMenu = ({
           />
           <ColorInform
             colorName="Grey"
-            color={"grey"}
+            color="grey"
             page={page}
             block={block}
             editBlock={editBlock}
@@ -50,7 +50,7 @@ const ColorMenu = ({
           />
           <ColorInform
             colorName="Orange"
-            color={"orange"}
+            color="orange"
             page={page}
             block={block}
             editBlock={editBlock}
@@ -61,7 +61,7 @@ const ColorMenu = ({
           />
           <ColorInform
             colorName="Green"
-            color={"green"}
+            color="green"
             page={page}
             block={block}
             editBlock={editBlock}
@@ -72,7 +72,7 @@ const ColorMenu = ({
           />
           <ColorInform
             colorName="Blue"
-            color={"blue"}
+            color="blue"
             page={page}
             block={block}
             editBlock={editBlock}
@@ -83,7 +83,7 @@ const ColorMenu = ({
           />
           <ColorInform
             colorName="Red"
-            color={"red"}
+            color="red"
             page={page}
             block={block}
             editBlock={editBlock}

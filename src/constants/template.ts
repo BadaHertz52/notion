@@ -1,5 +1,5 @@
 import { Block, Page } from "../types";
-import { getBlockSample } from "../utils";
+import { getBlockSample } from "../utils/block";
 import { returnTemplateBlock, returnTemplateSubBlock } from "../utils/template";
 import { BASIC_BLOCK_STYLE } from "./block";
 import { EMOJI_ARRAY } from "./emoji";

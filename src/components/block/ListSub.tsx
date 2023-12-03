@@ -8,7 +8,7 @@ import { EditableBlockProps } from "./EditableBlock";
 import { BlockComponent, BlockComment, EditableBlock } from "../index";
 
 import { Block } from "../../types";
-import { findBlock } from "../../utils";
+import { findBlock, getBlockContentsStyle } from "../../utils";
 
 type ListSubProps = EditableBlockProps &
   BlockComponentProps & {
@@ -78,15 +78,17 @@ const ListSub = ({
     }
     return listMarker;
   };
-  const listStyle = (block: Block): CSSProperties => {
+
+  const getListStyle = (block: Block): CSSProperties => {
+    const blockContentStyle = getBlockContentsStyle(block);
     return {
+      ...blockContentStyle,
       textDecoration: "none",
       fontStyle: "normal",
       fontWeight: "normal",
-      backgroundColor: block.style.bgColor,
-      color: block.style.color,
     };
   };
+
   return (
     <>
       {subBlocks &&
@@ -104,7 +106,7 @@ const ListSub = ({
                   id={`block-${block.id}`}
                   className="block__contents"
                   ref={blockContentsRef}
-                  style={listStyle(block)}
+                  style={getListStyle(block)}
                 >
                   {block.type.includes("List") && (
                     <div className="listItem-marker">
