@@ -35,12 +35,15 @@
   .allComments__header {
     display: flex;
     justify-content: space-between;
-    padding: 0 5%;
+    padding: 0 5px;
     font-size: 13px;
     box-sizing: border-box;
     span {
       font-weight: 600;
     }
+  }
+  .allComments__contents {
+    height: calc(100% - 13px - 10px);
   }
   .comments {
     @include hiddenScrollBar;
@@ -55,6 +58,7 @@
   .comments__comments-group {
     width: inherit;
   }
+
   .commentBlock__header {
     .information {
       max-width: calc(100% - 90px);

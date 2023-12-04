@@ -13,15 +13,12 @@ import { ScreenOnly, Comments } from "../index";
 import { Block, MainCommentType, Page } from "../../types";
 
 import "../../assets/allComments.scss";
+import AllCommentsContents, {
+  AllCommentsContentsProps,
+} from "./AllCommentsContents";
 
-type AllCommentsProps = {
-  page: Page;
-  userName: string;
-  favorites: string[] | null;
-  showAllComments: boolean;
+type AllCommentsProps = Omit<AllCommentsContentsProps, "select"> & {
   setShowAllComments: Dispatch<SetStateAction<boolean>>;
-  discardEdit: boolean;
-  setDiscardEdit: Dispatch<SetStateAction<boolean>>;
 };
 
 const AllComments = ({
@@ -48,15 +45,8 @@ const AllComments = ({
     [setShowAllComments, showAllComments]
   );
 
-  const pageId = page.id;
-  const commentsBlocks: Block[] | null =
-    page.blocks?.filter((block: Block) => block.comments) || null;
   const [select, setSelect] = useState<"open" | "resolve">("open");
-  type ResultItem = {
-    mainComments: MainCommentType[];
-    block: Block;
-  };
-  const [result, setResult] = useState<ResultItem[] | null>(null);
+
   const openSelect = (event: MouseEvent) => {
     const target = event.currentTarget;
     const typesDoc = target.parentElement;
@@ -87,25 +77,6 @@ const AllComments = ({
   }, [showAllComments, allCommentsRef]);
 
   useEffect(() => {
-    if (commentsBlocks) {
-      let array: ResultItem[] | undefined;
-      commentsBlocks.forEach((block) => {
-        const { comments } = block;
-        const selectedComments = comments?.filter(
-          (c: MainCommentType) => c.type === select
-        );
-        if (selectedComments?.[0]) {
-          const item: ResultItem = {
-            mainComments: selectedComments,
-            block: block,
-          };
-          array ? array.push(item) : (array = [item]);
-        }
-      });
-      if (array) setResult(array);
-    }
-  }, [select, commentsBlocks]);
-  useEffect(() => {
     inner?.addEventListener("click", closeAllComments);
     return () => {
       inner?.removeEventListener("click", closeAllComments);
@@ -117,6 +88,7 @@ const AllComments = ({
     window.addEventListener("resize", changeStyle);
     return () => window.removeEventListener("resize", changeStyle);
   }, [changeStyle]);
+
   return (
     <div id="allComments" className="allComments hide" ref={allCommentsRef}>
       <div className="allComments__inner">
@@ -155,33 +127,15 @@ const AllComments = ({
             </div>
           </div>
         </div>
-        {!commentsBlocks || !result ? (
-          <div className="no-result">
-            <div>
-              <p>No {select === "open" ? "Open" : "Resolved"} comments yet</p>
-              <p>
-                {select === "open" ? "Open" : "Resolved"} comments on this page
-                will appear here
-              </p>
-            </div>
-            {/*icon*/}
-          </div>
-        ) : (
-          result.map((item: ResultItem) => (
-            <Comments
-              key={`allComments_${item.block.id}`}
-              targetMainComments={item.mainComments}
-              pageId={pageId}
-              page={page}
-              userName={userName}
-              block={item.block}
-              frameHtml={null}
-              openComment={false}
-              discardEdit={discardEdit}
-              setDiscardEdit={setDiscardEdit}
-              showAllComments={showAllComments}
-            />
-          ))
+        {showAllComments && (
+          <AllCommentsContents
+            page={page}
+            userName={userName}
+            select={select}
+            discardEdit={discardEdit}
+            setDiscardEdit={setDiscardEdit}
+            showAllComments={showAllComments}
+          />
         )}
       </div>
     </div>

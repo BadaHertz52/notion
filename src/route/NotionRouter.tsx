@@ -424,7 +424,6 @@ const NotionRouter = () => {
                 <AllComments
                   page={currentPage}
                   userName={user.userName}
-                  favorites={user.favorites}
                   showAllComments={showAllComments}
                   setShowAllComments={setShowAllComments}
                   discardEdit={discard_edit}
