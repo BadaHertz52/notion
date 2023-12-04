@@ -246,42 +246,67 @@ const BlockStyler = ({
 
   const changeMenuStyle = useCallback(
     (param: menuType) => {
-      if (blockStyler && frameHtml) {
+      const topBarHeight = document.querySelector(".topBar")?.clientHeight;
+      if (blockStyler && blockStylerStyle && frameHtml && topBarHeight) {
+        const REMAIN_EXTRA_SPACE = 50;
+        const SPACE_BETWEEN_STYLER_AND_MENU = 20;
+        const MAX_REMAIN_HEIGHT = 300;
+        const WIDTH: { [key: string]: number } = {
+          colorMenu: 200,
+          menu: 240,
+        };
+        const topOfStyler = blockStylerStyle.top as number;
         const blockStylerDomRect = blockStyler.getClientRects()[0];
         const frameHtmlDomRect = frameHtml.getClientRects()[0];
-        const top = blockStylerDomRect.bottom + 5;
-        const left =
-          param === menu
-            ? blockStylerDomRect.right - frameHtmlDomRect.left - 240
-            : blockStylerDomRect.right - frameHtmlDomRect.left - 200;
-        const bottom = window.innerHeight - top + blockStylerDomRect.height;
-        const remainHeight = bottom - 50;
-        const style: CSSProperties =
-          remainHeight > 300
-            ? {
-                top: `${top}px`,
-                left: `${left}px`,
-                maxHeight: `${remainHeight}px`,
-                overflowY: "scroll",
-              }
-            : {
-                bottom: `${bottom}px`,
-                left: `${left}px`,
-                maxHeight: `${top - 50}px`,
-                overflowY: "scroll",
-              };
-        if (param === menu) {
-          const STYLE: CSSProperties = {
+
+        /**
+         * blockStyler 아래에 menu창이 열릴 경우 뷰포트를 기준으로 한 menu의 y좌표
+         */
+        const y: number =
+          blockStylerDomRect.bottom + SPACE_BETWEEN_STYLER_AND_MENU;
+        /**
+         * y에 menu가 위치할 경우 남은 공간의 높이 ( 여유 공간을 제외)
+         */
+        const remainHeight = window.innerHeight - y - REMAIN_EXTRA_SPACE;
+        const isOver = remainHeight < MAX_REMAIN_HEIGHT;
+        //menu의 위치 : isOver가 참이면 blockStyler 위에 위치, 그렇지 않으면 blockStyler 하단에 위치
+        /**
+         * menu가 blockStyler 위에 위치할 경우, blockStyler와 topBar 사이의 갭
+         */
+        const gapWhenOver =
+          window.innerHeight - blockStylerDomRect.top - topBarHeight;
+        /**
+         * menu가 blockStyler 위에 위치할 경우, menu의 최대놓이
+         */
+        const maxHeightWhenOver: number =
+          gapWhenOver > MAX_REMAIN_HEIGHT ? MAX_REMAIN_HEIGHT : gapWhenOver;
+        const top = {
+          notOver:
+            topOfStyler +
+            blockStyler.clientHeight +
+            SPACE_BETWEEN_STYLER_AND_MENU,
+          over: topOfStyler - maxHeightWhenOver - SPACE_BETWEEN_STYLER_AND_MENU,
+        };
+        const left: number = blockStylerDomRect.right - frameHtmlDomRect.left;
+
+        const style: CSSProperties = {
+          top: isOver ? top.over : top.notOver,
+          left: left - (param === "color" ? WIDTH.colorMenu : WIDTH.menu),
+          maxHeight: isOver ? maxHeightWhenOver : remainHeight,
+          overflowY: "scroll",
+        };
+
+        if (param === "menu") {
+          setMenuStyle({
             ...style,
             overflowY: "initial",
-          };
-          setMenuStyle(STYLE);
+          });
         } else {
           setMenuStyle(style);
         }
       }
     },
-    [blockStyler, frameHtml]
+    [blockStyler, blockStylerStyle, frameHtml]
   );
 
   const onClickColorBtn = useCallback(() => {
