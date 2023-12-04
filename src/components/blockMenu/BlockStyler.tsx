@@ -204,6 +204,9 @@ const BlockStyler = ({
       const paddingLeftOfPageContent = window
         .getComputedStyle(pageContentEl, null)
         .getPropertyValue("padding-left");
+      /**
+       * targetBlock의 상단에 위치하면 onTop, 하단에 위치하면 onBottom
+       */
       const top = {
         onBottom:
           scrollTop +
@@ -287,15 +290,17 @@ const BlockStyler = ({
         const isOver = remainHeight < MAX_REMAIN_HEIGHT;
         //menu의 위치 : isOver가 참이면 blockStyler 위에 위치, 그렇지 않으면 blockStyler 하단에 위치
         /**
-         * menu가 blockStyler 위에 위치할 경우, blockStyler와 topBar 사이의 갭
+         * menu가 blockStyler 위에 위치할 경우, blockStyler와 topBar 사이의 남는 공간
          */
-        const gapWhenOver =
+        const remainsWhenOnTop =
           window.innerHeight - blockStylerDomRect.top - topBarHeight;
         /**
          * menu가 blockStyler 위에 위치할 경우, menu의 최대놓이
          */
         const maxHeightWhenOver: number =
-          gapWhenOver > MAX_REMAIN_HEIGHT ? MAX_REMAIN_HEIGHT : gapWhenOver;
+          remainsWhenOnTop > MAX_REMAIN_HEIGHT
+            ? MAX_REMAIN_HEIGHT
+            : remainsWhenOnTop;
         const top = {
           notOver:
             topOfStyler +
