@@ -29,7 +29,7 @@ type CommandBlockProp = {
   command: Command | null;
   setCommand: Dispatch<SetStateAction<Command>> | null;
   closeCommand?: () => void;
-  setSelection: Dispatch<SetStateAction<SelectionType | null>> | null;
+  setSelection?: Dispatch<SetStateAction<SelectionType | null>>;
   style: CSSProperties | undefined;
 };
 const CommandBlock = ({

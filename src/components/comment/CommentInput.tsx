@@ -126,7 +126,7 @@ const CommentInput = ({
         editBlock(pageId, editedBlock);
         setAllComments && setAllComments(blockComments);
         if (selectedHtml) {
-          removeSelected(frameHtml, editedBlock, editBlock, page, null);
+          removeSelected(frameHtml, editedBlock, editBlock, page);
         }
       }
     },

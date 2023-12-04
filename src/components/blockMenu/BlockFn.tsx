@@ -175,7 +175,6 @@ const BlockFn = ({
               setModal={setModal}
               setCommentBlock={setCommentBlock}
               setOpenRename={setOpenRename}
-              setSelection={null}
               frameHtml={frameHtml}
               style={undefined}
             />

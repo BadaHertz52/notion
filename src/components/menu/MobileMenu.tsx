@@ -388,7 +388,6 @@ const MobileMenu = ({
               setCommand={setCommand}
               setCommentBlock={setCommentBlock}
               selection={null}
-              setSelection={null}
               frameHtml={frameHtml}
               setMobileSideMenu={setMobileSideMenu}
               setMobileMenuTargetBlock={setMobileMenuTargetBlock}

@@ -20,7 +20,7 @@ type ColorInformProps = {
   editBlock: (pageId: string, block: Block) => void;
   templateHtml: HTMLElement | null;
   selection: SelectionType | null;
-  setSelection: Dispatch<SetStateAction<SelectionType | null>> | null;
+  setSelection?: Dispatch<SetStateAction<SelectionType | null>>;
   closeMenu?: () => void;
 };
 

@@ -85,7 +85,7 @@ const BlockComponent = ({
       const currentTarget = event.currentTarget;
       const mainBlock =
         currentTarget.parentElement?.parentElement?.parentElement;
-      if (mainBlock && mainBlock) {
+      if (mainBlock) {
         const mainBlockDomRect = mainBlock?.getClientRects()[0];
         const editor = document.getElementsByClassName("editor")[0];
         const blockFn = !templateHtml

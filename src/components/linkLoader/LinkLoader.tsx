@@ -31,7 +31,7 @@ type LinkLoaderProps = {
   block: Block;
   closeLink?: () => void;
   blockStylerStyle: CSSProperties | undefined;
-  setSelection: Dispatch<SetStateAction<SelectionType | null>> | null;
+  setSelection?: Dispatch<SetStateAction<SelectionType | null>>;
 };
 
 const LinkLoader = ({

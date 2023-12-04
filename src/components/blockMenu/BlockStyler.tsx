@@ -32,7 +32,7 @@ import { SESSION_KEY } from "../../constants";
 
 export type BlockStylerProps = StylerCommonProps & {
   selection: SelectionType | null;
-  setSelection: Dispatch<SetStateAction<SelectionType | null>> | null;
+  setSelection?: Dispatch<SetStateAction<SelectionType | null>>;
   setOpenMobileBlockStyler: Dispatch<SetStateAction<boolean>> | null;
 };
 const BlockStyler = ({
@@ -492,10 +492,10 @@ const BlockStyler = ({
           const linkLoaderHtml = document.getElementById("linkLoader");
 
           if (
-            colorMenuHtml === null &&
-            commandBlockHtml === null &&
-            mainMenu === null &&
-            linkLoaderHtml === null
+            !colorMenuHtml &&
+            !commandBlockHtml &&
+            !mainMenu &&
+            !linkLoaderHtml
           ) {
             // 조건 : web에서 sideMenu가 닫혀 있을 경우
             removeSelected(frameHtml, block, editBlock, page, setSelection);
@@ -531,13 +531,9 @@ const BlockStyler = ({
   );
   const executeCloseBlockStyler = useCallback(
     (event: globalThis.MouseEvent | TouchEvent) => {
-      const commentInputHtml = document
-        .getElementById("modal__menu")
-        ?.querySelector(".commentInput");
       if (
         document.getElementById("blockStyler") &&
-        (commentInputHtml === null || commentInputHtml === undefined) &&
-        document.getElementById("mobileSideMenu") === null
+        !document.getElementById("mobileSideMenu")
       ) {
         closeBlockStyler(event);
       }
@@ -569,8 +565,7 @@ const BlockStyler = ({
         block,
         contentEditableHtml,
         editBlock,
-        page,
-        null
+        page
       );
     }
   }, [block, editBlock, page]);

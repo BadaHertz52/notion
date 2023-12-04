@@ -9,7 +9,7 @@ type ColorMenuProps = {
   page: Page;
   block: Block;
   selection: SelectionType | null;
-  setSelection: Dispatch<SetStateAction<SelectionType | null>> | null;
+  setSelection?: Dispatch<SetStateAction<SelectionType | null>>;
   closeMenu?: () => void;
 };
 const ColorMenu = ({

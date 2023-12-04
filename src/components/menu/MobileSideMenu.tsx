@@ -95,7 +95,6 @@ const MobileSideMenu = ({
               setModal={setModal}
               setCommentBlock={setCommentBlock}
               setOpenRename={null}
-              setSelection={null}
               frameHtml={frameHtml}
               style={undefined}
               setMobileSideMenu={setMobileSideMenu}
@@ -106,7 +105,6 @@ const MobileSideMenu = ({
               page={page}
               block={block}
               selection={mobileSelection}
-              setSelection={null}
               closeMenu={closeSideMenu}
             />
           )}
@@ -118,7 +116,6 @@ const MobileSideMenu = ({
               command={null}
               setCommand={null}
               closeCommand={closeSideMenu}
-              setSelection={null}
             />
           )}
           {mobileSideMenu.what === "ms_link" && (
@@ -130,7 +127,6 @@ const MobileSideMenu = ({
               block={block}
               closeLink={closeSideMenu}
               blockStylerStyle={undefined}
-              setSelection={null}
             />
           )}
           {mobileSideMenu.what === "ms_movePage" && (

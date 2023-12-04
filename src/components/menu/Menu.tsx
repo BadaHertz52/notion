@@ -36,7 +36,7 @@ import { SESSION_KEY } from "../../constants";
 export type MenuProps = MenuAndBlockStylerCommonProps & {
   setOpenMenu?: Dispatch<SetStateAction<boolean>>;
   setOpenRename: Dispatch<SetStateAction<boolean>> | null;
-  setSelection: Dispatch<SetStateAction<SelectionType | null>> | null;
+  setSelection?: Dispatch<SetStateAction<SelectionType | null>>;
   style: CSSProperties | undefined;
   setMobileSideMenu?: Dispatch<SetStateAction<MobileSideMenuType>>;
 };
@@ -427,12 +427,7 @@ const Menu = ({
           />
         )}
         {sideMenu === COLOR && (
-          <ColorMenu
-            page={page}
-            block={block}
-            selection={null}
-            setSelection={null}
-          />
+          <ColorMenu page={page} block={block} selection={null} />
         )}
         {sideMenu === TURN_INTO_PAGE && (
           <PageMenu

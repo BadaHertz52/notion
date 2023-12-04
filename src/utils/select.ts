@@ -368,7 +368,7 @@ export const selectContent = (
   contentEditableHtml: HTMLElement | null,
   editBlock: ((pageId: string, block: Block) => void) | null,
   page: Page,
-  setSelection: Dispatch<SetStateAction<SelectionType | null>> | null
+  setSelection?: Dispatch<SetStateAction<SelectionType | null>>
 ) => {
   const notSelect =
     SELECTION?.anchorNode === SELECTION?.focusNode &&
@@ -564,7 +564,7 @@ export function removeSelected(
   block: Block,
   editBlock: (pageId: string, block: Block) => void,
   page: Page,
-  setSelection: Dispatch<SetStateAction<SelectionType | null>> | null
+  setSelection?: Dispatch<SetStateAction<SelectionType | null>>
 ) {
   // 변경된 내용이 있고, selected 만 제거하면 되는 경우
   const blockContentHtml = frameHtml?.querySelector(`#${block.id}__contents`);

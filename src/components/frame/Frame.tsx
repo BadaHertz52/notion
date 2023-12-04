@@ -162,10 +162,13 @@ const Frame = ({
             open: false,
             what: null,
           });
+          if (commentBlock && !!document.querySelector(".selected")) {
+            removeSelected(frameHtml, commentBlock, editBlock, page);
+          }
         }
       }
     },
-    [setModal]
+    [setModal, commentBlock, editBlock, frameHtml, page]
   );
 
   const closeMenu = useCallback((event: globalThis.MouseEvent | MouseEvent) => {
@@ -830,7 +833,7 @@ const Frame = ({
       if (contentsHtml && contentsHtml) {
         const blockId = contentsHtml.id.replace("__contents", "");
         const targetBlock = findBlock(page, blockId).BLOCK;
-        removeSelected(frameHtml, targetBlock, editBlock, page, null);
+        removeSelected(frameHtml, targetBlock, editBlock, page);
       }
     }
   }, [
