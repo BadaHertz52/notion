@@ -127,12 +127,20 @@ const BlockComponent = ({
     [block, closeMenu, templateHtml]
   );
 
-  /**
-   * block type이 page인 block에 대한 BlockComponent를 클릭 할 경우, 해당 page로 이동하는 함수
-   */
   const onClickBlockContents = useCallback(() => {
-    block.type === "page" && navigate(makeRoutePath(block.id));
-  }, [block.type, block.id, navigate]);
+    // block type이 page인 block에 대한 BlockComponent를 클릭 할 경우, 해당 page로 이동
+    if (block.type === "page") {
+      navigate(makeRoutePath(block.id));
+    }
+    // block.contents ===""일때, contentEditable이 가능하도록 포커스를 줌
+    if (!block.contents) {
+      const contentEditableEl = document
+        .querySelector(`#${block.id}__contents`)
+        ?.querySelector(".contentEditable") as HTMLElement | null | undefined;
+
+      contentEditableEl?.focus();
+    }
+  }, [block.type, block.id, block.contents, navigate]);
   /**
    * image type의 block에 넣은 이미지 파일을 선택하기 위한 버튼을 클릭한 경우 작동하는 함수로, Loader component를 엶
    */

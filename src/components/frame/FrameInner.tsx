@@ -71,7 +71,7 @@ const FrameInner = (props: FrameInnerProps) => {
     const randomNumber = Math.floor(Math.random() * (100000 - 1) + 1);
     const newBlock: Block = {
       ...getBlockSample(),
-      id: `${page.id}_${JSON.stringify(Date.now)}_${randomNumber}`,
+      id: `block_${page.id}_${JSON.stringify(Date.now())}_${randomNumber}`,
       firstBlock: true,
     };
 

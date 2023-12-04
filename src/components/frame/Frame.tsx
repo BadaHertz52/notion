@@ -576,7 +576,7 @@ const Frame = ({
       const cursorElement = document.getSelection()?.anchorNode?.parentElement;
       const className = cursorElement?.className;
       const itemObjet = JSON.parse(item);
-      const targetBlock = itemObjet.block;
+      const targetBlock: Block = itemObjet.block;
       const pageId = itemObjet.pageId;
       const condition =
         className === "contentEditable" &&

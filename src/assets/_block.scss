@@ -90,7 +90,7 @@
     outline: none;
   }
 }
-.frame.web .contentEditable:empty {
+.frame .contentEditable:empty {
   &:hover,
   &:focus {
     &::after {

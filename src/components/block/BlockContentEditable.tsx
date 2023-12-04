@@ -462,31 +462,43 @@ const BlockContentEditable = ({
     },
     [block, setMobileMenuTargetBlock, setSelection]
   );
-
   /**
    * BlockComponent 중 link 가 있는 element를 클릭 했을 경우 , 해당 링크를 여는 함수
    */
+  const openLink = useCallback((target: HTMLElement) => {
+    const href = target.getAttribute("href");
+    const openType = target.getAttribute("target");
+    href && openType && window.open(href, openType);
+  }, []);
+
+  const openBlockComments = useCallback(
+    (target: HTMLElement) => {
+      sessionStorage.setItem(
+        SESSION_KEY.mainCommentId,
+        target.classList.value
+          .split(" ")
+          .filter((i) => i.includes("mainId"))[0]
+          .replace("mainId_", "")
+      );
+      onClickCommentBtn(block);
+    },
+    [block, onClickCommentBtn]
+  );
+
   const onClickContentEditable = useCallback(
     (event: MouseEvent) => {
       if (event.currentTarget !== event.target) return;
       const target = event.target as HTMLElement;
       if (target.className === "link") {
-        const href = target.getAttribute("href");
-        const openType = target.getAttribute("target");
-        href && openType && window.open(href, openType);
+        openLink(target);
+        return;
       }
       if (target.classList.contains("text_commentBtn")) {
-        sessionStorage.setItem(
-          SESSION_KEY.mainCommentId,
-          target.classList.value
-            .split(" ")
-            .filter((i) => i.includes("mainId"))[0]
-            .replace("mainId_", "")
-        );
-        onClickCommentBtn(block);
+        openBlockComments(target);
+        return;
       }
     },
-    [block, onClickCommentBtn]
+    [openLink, openBlockComments]
   );
 
   /**
