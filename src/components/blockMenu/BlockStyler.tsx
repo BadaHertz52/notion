@@ -87,7 +87,6 @@ const BlockStyler = ({
     }
   };
   const inner = document.getElementById("inner");
-  const pageContentEl = frameHtml?.querySelector(".page__contents__inner");
   const blockStyler = document.getElementById("blockStyler");
   const [blockStylerStyle, setBlockStylerStyle] = useState<
     CSSProperties | undefined
@@ -122,6 +121,7 @@ const BlockStyler = ({
       const mainBlockHtml = block.type.includes("List")
         ? blockHtml?.parentElement?.parentElement
         : blockHtml?.querySelector(".mainBlock");
+
       const mainBlockDomRect = mainBlockHtml?.getClientRects()[0];
       return mainBlockDomRect;
     },
@@ -193,39 +193,55 @@ const BlockStyler = ({
   }, [block, command.open, setCommand]);
 
   const changeCommentStyle = useCallback(() => {
+    const COMMENT_INPUT_HEIGHT = 50;
+    const SPACE_BETWEEN_BLOCK_AND_COMMENT_INPUT = 8;
+    const EXTRA_SPACE = 50;
     const mainBlockDomRect = getMainBlockDomRect(frameHtml, block);
-    if (mainBlockDomRect && frameHtml) {
-      const pageContentDomRect = pageContentEl?.getClientRects()[0];
-      const frameDomRect = frameHtml.getClientRects()[0];
-      const top = mainBlockDomRect.bottom + 8;
-      const innerHeight = window.innerHeight;
-      const remainHeight = innerHeight - (top + 50);
+    const pageContentEl = frameHtml?.querySelector(".page__contents");
+    const topBarHeight = document.querySelector(".topBar")?.clientHeight;
+    if (mainBlockDomRect && pageContentEl && topBarHeight && frameHtml) {
+      const scrollTop = frameHtml.scrollTop;
+      const paddingLeftOfPageContent = window
+        .getComputedStyle(pageContentEl, null)
+        .getPropertyValue("padding-left");
+      const top = {
+        onBottom:
+          scrollTop +
+          mainBlockDomRect.bottom +
+          SPACE_BETWEEN_BLOCK_AND_COMMENT_INPUT -
+          topBarHeight,
+        onTop:
+          scrollTop +
+          mainBlockDomRect.top -
+          SPACE_BETWEEN_BLOCK_AND_COMMENT_INPUT -
+          COMMENT_INPUT_HEIGHT -
+          topBarHeight,
+      };
 
-      if (pageContentDomRect) {
-        const left = pageContentDomRect.left - frameDomRect.left;
-        const bottom = innerHeight - mainBlockDomRect.top + 8;
-        remainHeight > 10 || isMobile()
-          ? setModalStyle({
-              top: `${top}px`,
-              left: `${left}px`,
-            })
-          : setModalStyle({
-              bottom: `${bottom}px`,
-              left: `${left}px`,
-            });
-      }
+      const remainHeight =
+        window.innerHeight - (top.onBottom - scrollTop) - COMMENT_INPUT_HEIGHT;
+
+      const left = paddingLeftOfPageContent;
+      const isOnBottomOfBlock = remainHeight > EXTRA_SPACE || isMobile();
+
+      setModalStyle({
+        top: isOnBottomOfBlock ? top.onBottom : top.onTop,
+        left: left,
+      });
 
       if (isMobile()) {
         const pageHtml = frameHtml?.querySelector(".page");
         if (pageHtml && frameHtml) {
           pageHtml?.setAttribute(
             "style",
-            `translateY(${pageHtml.clientTop - frameHtml.clientTop - 50}px)`
+            `translateY(${
+              pageHtml.clientTop - frameHtml.clientTop - COMMENT_INPUT_HEIGHT
+            }px)`
           );
         }
       }
     }
-  }, [block, frameHtml, getMainBlockDomRect, pageContentEl, setModalStyle]);
+  }, [block, frameHtml, getMainBlockDomRect, setModalStyle]);
   const onClickCommentBtn = useCallback(() => {
     changeCommentStyle();
     setModal({
