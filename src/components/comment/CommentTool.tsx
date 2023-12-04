@@ -65,12 +65,18 @@ const CommentTool = ({
   const setToolMoreStyleInBlockComment = (commentToolDomRect: DOMRect) => {
     const heightOfTopBar =
       document.getElementsByClassName("topBar")[0]?.clientHeight;
-    const style: CSSProperties = {
-      position: "absolute",
-      top: commentToolDomRect.bottom - heightOfTopBar + EXTRA_SPACE,
-      right: window.innerWidth - commentToolDomRect.right,
-    };
-    setToolMoreStyle(style);
+    if (frameHtml) {
+      const style: CSSProperties = {
+        position: "absolute",
+        top:
+          commentToolDomRect.bottom -
+          heightOfTopBar +
+          EXTRA_SPACE +
+          frameHtml.scrollTop,
+        right: window.innerWidth - commentToolDomRect.right,
+      };
+      setToolMoreStyle(style);
+    }
   };
   const setToolMoreStyleInAllComments = (
     target: EventTarget & HTMLButtonElement,
