@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { useSelector } from "react-redux";
 
-import { SideBar } from ".";
+import { SideBar } from "../index";
 
 import { RootState } from "../../modules";
 import { SideAppear } from "../../types";

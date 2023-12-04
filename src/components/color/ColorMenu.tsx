@@ -1,6 +1,5 @@
 import React, { Dispatch, SetStateAction, useContext } from "react";
 
-import { COLOR, BACKGROUND_COLOR } from "../../constants";
 import { Block, Page, SelectionType } from "../../types";
 import { ActionContext } from "../../contexts";
 import { ColorInform } from "../index";

@@ -9,13 +9,12 @@ import React, {
 } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 
-import { ScreenOnly, Comments } from "../index";
-import { Block, MainCommentType, Page } from "../../types";
-
-import "../../assets/allComments.scss";
+import { ScreenOnly } from "../index";
 import AllCommentsContents, {
   AllCommentsContentsProps,
 } from "./AllCommentsContents";
+
+import "../../assets/allComments.scss";
 
 type AllCommentsProps = Omit<AllCommentsContentsProps, "select"> & {
   setShowAllComments: Dispatch<SetStateAction<boolean>>;
