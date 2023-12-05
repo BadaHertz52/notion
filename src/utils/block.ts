@@ -1,7 +1,8 @@
 import { CSSProperties } from "styled-components";
 import { BASIC_BLOCK_STYLE } from "../constants/block";
-import { Block, Page } from "../types";
+import { Block, BlockType, Page } from "../types";
 import { BACKGROUND_COLOR, COLOR } from "../constants";
+import { getEditTime } from "./time";
 
 export function getBlockSample(): Block {
   const editTime = JSON.stringify(Date.now());
@@ -20,27 +21,36 @@ export function getBlockSample(): Block {
     comments: null,
   };
 }
+export const getNewBlockId = (
+  pageId: string,
+  middleNumber: string | number,
+  blockType?: BlockType
+) =>
+  `${
+    blockType === "page" ? "page" : "block"
+  }_${pageId}_${middleNumber}_${getEditTime()}`;
 /**
- * 새로운 블록을 생성해 반환하는 함수
+ * 특정 블록의 동렬로 그 다음 순위인 새로운 블록을 생성해 반환하는 함수
  * @param page  새로운 블록이 입력될 page
  * @param targetBlock  새로운 블록의 기준이 될 블록 (새로운 블록은 targetBlock의 firstBlock, subBlocksId, parentBlocksId의 값을 가짐 )
- * @param newBlockContents 새로운 블록의 contents 값
+ * @param newBlockContents 새로운 블록의 contents 값, 새로운 블록의 입력값이 없으면 undefined
  * @returns 새로운 블록
  */
 export const makeNewBlock = (
   page: Page,
   targetBlock: Block | null,
-  newBlockContents: string
+  newBlockContents?: string
 ): Block => {
   const editTime = JSON.stringify(Date.now());
-  const blockNumber = page.blocks === null ? 0 : page.blocks.length;
+  const blockNumber = !page.blocks ? 0 : page.blocks.length;
+  const blockType = targetBlock ? targetBlock.type : "text";
   const newBlock: Block = {
-    id: `${page.id}_${blockNumber}_${editTime}`,
+    id: getNewBlockId(page.id, blockNumber, blockType),
     editTime: editTime,
     createTime: editTime,
-    type: targetBlock ? targetBlock.type : "text",
-    contents: newBlockContents === "<br>" ? "" : newBlockContents,
-
+    type: blockType,
+    contents:
+      newBlockContents === "<br>" || !newBlockContents ? "" : newBlockContents,
     firstBlock: targetBlock ? targetBlock.firstBlock : true,
     subBlocksId: targetBlock ? targetBlock.subBlocksId : null,
     parentBlocksId: targetBlock ? targetBlock.parentBlocksId : null,

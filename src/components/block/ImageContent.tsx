@@ -10,11 +10,11 @@ import { CSSProperties } from "styled-components";
 import { ScreenOnly, Img } from "../index";
 
 import { Block, Page } from "../../types";
-import { setTemplateItem } from "../../utils";
+import { getEditTime, setTemplateItem } from "../../utils";
 
 import "../../assets/imageContent.scss";
 
-type ImageContentProps = {
+export type ImageContentProps = {
   page: Page;
   block: Block;
   editBlock: (pageId: string, block: Block) => void;
@@ -127,7 +127,7 @@ const ImageContent = ({
           width: `${width}px`,
           height: `${height}px`,
         },
-        editTime: JSON.stringify(Date.now()),
+        editTime: getEditTime(),
       };
       const templateHtml = document.getElementById("template");
       setTemplateItem(templateHtml, page);

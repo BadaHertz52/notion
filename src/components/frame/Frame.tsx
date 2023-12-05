@@ -41,6 +41,7 @@ import {
   isMobile,
   setTemplateItem,
   removeSelected,
+  getEditTime,
 } from "../../utils";
 
 import "../../assets/frame.scss";
@@ -242,14 +243,14 @@ const Frame = ({
       const FIRST_BLOCKS_ID = [...page.firstBlocksId];
       setTemplateItem(templateHtml, page);
       //edit block
-      const editTime = JSON.stringify(Date.now());
+      const editTime = getEditTime();
       const blocksId = [...page.blocksId];
       const blocks = [...page.blocks];
       const pointBlock = pointBlockToMoveBlock.current;
       const targetBlockIsList =
         moveTargetBlock.type === "numberList" ||
         moveTargetBlock.type === "bulletList";
-      const newBlock = makeNewBlock(page, null, "");
+      const newBlock = makeNewBlock(page, null);
       const newParentBlockOfList: Block = {
         ...newBlock,
         firstBlock: pointBlock.firstBlock,
@@ -292,6 +293,8 @@ const Frame = ({
         parentBlockId: string,
         newParentBlockId: string | null
       ) => {
+        const editTime = getEditTime();
+
         if (targetBlock.subBlocksId) {
           targetBlock.subBlocksId.forEach((id: string) => {
             const subBlocksIndex = blocksId.indexOf(id);

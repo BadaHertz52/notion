@@ -9,7 +9,7 @@ import { PageIcon } from "../index";
 import { ActionContext } from "../../contexts";
 import { delete_block } from "../../modules/notion/reducer";
 import { Block, Page, ListItem } from "../../types";
-import { setTemplateItem } from "../../utils";
+import { getEditTime, setTemplateItem } from "../../utils";
 import { SESSION_KEY } from "../../constants";
 
 type PageButtonProps = {
@@ -45,7 +45,7 @@ const PageButton = ({
         ...block,
         firstBlock: true,
         parentBlocksId: null,
-        editTime: JSON.stringify(Date.now()),
+        editTime: getEditTime(),
       };
       const destinationPage = pages.filter(
         (page: Page) => page.id === destinationPageId

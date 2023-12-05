@@ -17,7 +17,12 @@ import { EditableBlock, PageHeader, EmptyPageContent } from "../index";
 
 import { ActionContext } from "../../contexts";
 import { Block, Page, Command, SelectionType } from "../../types";
-import { setTemplateItem, getBlockSample } from "../../utils";
+import {
+  setTemplateItem,
+  getBlockSample,
+  getEditTime,
+  getNewBlockId,
+} from "../../utils";
 
 export type FrameInnerProps = PageHeaderProps & {
   openExport?: boolean;
@@ -68,10 +73,10 @@ const FrameInner = (props: FrameInnerProps) => {
   }, [frameRef]);
 
   const onClickBottom = useCallback(() => {
-    const randomNumber = Math.floor(Math.random() * (100000 - 1) + 1);
+    const middleNumber: number = page.blocksId?.length || 0;
     const newBlock: Block = {
       ...getBlockSample(),
-      id: `block_${page.id}_${JSON.stringify(Date.now())}_${randomNumber}`,
+      id: getNewBlockId(page.id, middleNumber),
       firstBlock: true,
     };
 

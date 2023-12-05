@@ -8,7 +8,7 @@ import {
   Page,
   SelectionType,
 } from "../../types";
-import { setTemplateItem } from "../../utils";
+import { getEditTime, setTemplateItem } from "../../utils";
 import { BACKGROUND_COLOR, COLOR } from "../../constants";
 
 type ColorInformProps = {
@@ -106,7 +106,7 @@ const ColorInform = ({
             const editedBlock: Block = {
               ...targetBlock,
               contents: innerHtml,
-              editTime: JSON.stringify(Date.now()),
+              editTime: getEditTime(),
             };
             editBlock(page.id, editedBlock);
             setSelection &&

@@ -22,7 +22,7 @@ import {
   SubCommentType,
   ModalType,
 } from "../../types";
-import { removeSelected, setTemplateItem } from "../../utils";
+import { getEditTime, removeSelected, setTemplateItem } from "../../utils";
 import { SESSION_KEY } from "../../constants";
 
 type CommentInputProps = {
@@ -85,7 +85,6 @@ const CommentInput = ({
   templateHtml,
   frameHtml,
 }: CommentInputProps) => {
-  const editTime = JSON.stringify(Date.now());
   const userNameFirstLetter = userName.substring(0, 1).toUpperCase();
   const [editTargetComment, setEditTargetComment] = useState<
     MainCommentType | SubCommentType | null
@@ -180,6 +179,7 @@ const CommentInput = ({
     }
   }, []);
   const addMainComment = useCallback(() => {
+    const editTime = getEditTime();
     if (commentBlock) {
       const newId = `main_${editTime}`;
       if (selectedHtml) {
@@ -205,7 +205,6 @@ const CommentInput = ({
   }, [
     allComments,
     commentBlock,
-    editTime,
     selectedHtml,
     selectedHtmlText,
     text,
@@ -214,6 +213,8 @@ const CommentInput = ({
   ]);
 
   const addSubComment = useCallback(() => {
+    const editTime = getEditTime();
+
     if (commentBlock && allComments && mainComment) {
       const comments = [...allComments];
       const mainCommentIndex = findMainCommentIndex(comments, mainComment);
@@ -239,17 +240,10 @@ const CommentInput = ({
       comments.splice(mainCommentIndex, 1, editedMainComment);
       updateBlock(comments);
     }
-  }, [
-    allComments,
-    commentBlock,
-    editTime,
-    mainComment,
-    text,
-    updateBlock,
-    userName,
-  ]);
+  }, [allComments, commentBlock, mainComment, text, updateBlock, userName]);
   const updatePageComment = useCallback(
     (pageComments: MainCommentType[] | null) => {
+      const editTime = getEditTime();
       if (page) {
         const editedPage: Page = {
           ...page,
@@ -265,10 +259,11 @@ const CommentInput = ({
         }
       }
     },
-    [editPage, editTime, page, pageId, setAllComments]
+    [editPage, page, pageId, setAllComments]
   );
 
   const addPageMainComment = useCallback(() => {
+    const editTime = getEditTime();
     const newComment: MainCommentType = {
       id: `pageComment_${editTime}`,
       userName: userName,
@@ -285,9 +280,11 @@ const CommentInput = ({
         ? [newComment]
         : page.header.comments.concat(newComment);
     updatePageComment(newPageComments);
-  }, [editTime, page.header.comments, text, updatePageComment, userName]);
+  }, [page.header.comments, text, updatePageComment, userName]);
 
   const addPageSubComment = useCallback(() => {
+    const editTime = getEditTime();
+
     if (allComments && mainComment) {
       const comments = [...allComments];
       const mainCommentIndex = findMainCommentIndex(comments, mainComment);
@@ -312,7 +309,7 @@ const CommentInput = ({
       comments.splice(mainCommentIndex, 1, editedMainComment);
       updatePageComment(comments);
     }
-  }, [allComments, editTime, mainComment, text, updatePageComment, userName]);
+  }, [allComments, mainComment, text, updatePageComment, userName]);
 
   const closeInput = useCallback(() => {
     setEdit && setEdit(false);
@@ -361,12 +358,12 @@ const CommentInput = ({
       const editedBlockComment: MainCommentType = {
         ...mainComment,
         content: text,
-        editTime: editTime,
+        editTime: getEditTime(),
       };
       comments.splice(mainCommentIndex, 1, editedBlockComment);
       updateBlock(comments);
     }
-  }, [allComments, commentBlock, editTime, mainComment, text, updateBlock]);
+  }, [allComments, commentBlock, mainComment, text, updateBlock]);
 
   const editSubComment = useCallback(() => {
     if (commentBlock && allComments && subComment) {
@@ -378,7 +375,7 @@ const CommentInput = ({
       const editedSubComment: SubCommentType = {
         ...subComment,
         content: text,
-        editTime: editTime,
+        editTime: getEditTime(),
       };
       mainComment.subComments?.splice(subIndex, 1, editedSubComment);
       comments.splice(mainCommentIndex, 1, mainComment);
@@ -387,7 +384,6 @@ const CommentInput = ({
   }, [
     allComments,
     commentBlock,
-    editTime,
     findMainComment,
     subComment,
     text,
@@ -402,12 +398,12 @@ const CommentInput = ({
       const editedMainComment: MainCommentType = {
         ...mainComment,
         content: text,
-        editTime: editTime,
+        editTime: getEditTime(),
       };
       comments.splice(mainCommentIndex, 1, editedMainComment);
       updatePageComment(comments);
     }
-  }, [allComments, editTime, mainComment, text, updatePageComment]);
+  }, [allComments, mainComment, text, updatePageComment]);
 
   const editPageSubComment = useCallback(() => {
     if (allComments && subComment) {
@@ -418,21 +414,14 @@ const CommentInput = ({
         const editedSubComment: SubCommentType = {
           ...subComment,
           content: text,
-          editTime: editTime,
+          editTime: getEditTime(),
         };
         mainComment.subComments?.splice(subIndex, 1, editedSubComment);
         comments.splice(mainCommentIndex, 1, mainComment);
         updatePageComment(comments);
       }
     }
-  }, [
-    allComments,
-    editTime,
-    findMainComment,
-    subComment,
-    text,
-    updatePageComment,
-  ]);
+  }, [allComments, findMainComment, subComment, text, updatePageComment]);
   const editComment = useCallback(
     (event: MouseEvent) => {
       event.preventDefault();

@@ -30,7 +30,7 @@ import { MainCommentType, Page } from "../../types";
 
 import { ActionContext } from "../../contexts";
 
-import { setTemplateItem, randomEmojiIcon } from "../../utils";
+import { setTemplateItem, randomEmojiIcon, getEditTime } from "../../utils";
 import { BASIC_PAGE_COVER_URL } from "../../constants";
 
 export type PageHeaderProps = {
@@ -166,7 +166,7 @@ function PageHeader({
         icon: icon,
         iconType: "emoji",
       },
-      editTime: JSON.stringify(Date.now()),
+      editTime: getEditTime(),
     };
     openTemplates && setTemplateItem(templateHtml, page);
     editPage(page.id, newPageWithIcon);
@@ -179,7 +179,7 @@ function PageHeader({
         ...page.header,
         cover: BASIC_PAGE_COVER_URL,
       },
-      editTime: JSON.stringify(Date.now()),
+      editTime: getEditTime(),
     };
     editPage(page.id, editedPage);
   }, [editPage, page]);
@@ -194,7 +194,7 @@ function PageHeader({
           ...page.header,
           title: value,
         },
-        editTime: JSON.stringify(Date.now()),
+        editTime: getEditTime(),
       });
     },
     [editPage, openTemplates, page, templateHtml]

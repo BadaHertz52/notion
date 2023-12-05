@@ -1,10 +1,17 @@
 import { BASIC_PAGE_ICON_URL } from "../constants";
 import { Page, TrashPage } from "../types";
+import { getEditTime } from "./time";
+
+export const getNewPageId = (middleNumber?: string | number) => {
+  return middleNumber
+    ? `page_${middleNumber}_${getEditTime()}`
+    : `page_${getEditTime()}`;
+};
 
 export const getPageSample = (): Page => {
   const editTime = JSON.stringify(Date.now());
   return {
-    id: editTime,
+    id: getNewPageId(),
     type: "page",
     header: {
       title: "untitle",

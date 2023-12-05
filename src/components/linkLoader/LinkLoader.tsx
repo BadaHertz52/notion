@@ -18,7 +18,7 @@ import { IoTrashOutline } from "react-icons/io5";
 
 import { ActionContext } from "../../contexts";
 import { Block, Page, SelectionType } from "../../types";
-import { findPage } from "../../utils";
+import { findPage, getEditTime } from "../../utils";
 import { ScreenOnly, PageItem } from "../index";
 
 import "../../assets/linkLoader.scss";
@@ -387,7 +387,7 @@ const LinkLoader = ({
       const newBlock: Block = {
         ...block,
         contents: innerHtml,
-        editTime: JSON.stringify(Date.now()),
+        editTime: getEditTime(),
       };
       editBlock(page.id, newBlock);
       setSelection &&

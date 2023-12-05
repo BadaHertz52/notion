@@ -28,6 +28,7 @@ import {
   changeFontSizeBySmallText,
   findBlock,
   getBlockContentsStyle,
+  getEditTime,
   setTemplateItem,
 } from "../../utils";
 import { BACKGROUND_COLOR, COLOR, SESSION_KEY } from "../../constants";
@@ -139,7 +140,7 @@ const EditableBlock = ({
     const editedBlock: Block = {
       ...block,
       type: block.type === "todo" ? "todo_done" : "todo",
-      editTime: JSON.stringify(Date.now()),
+      editTime: getEditTime(),
     };
     setTemplateItem(templateHtml, page);
     editBlock(page.id, editedBlock);

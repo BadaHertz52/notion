@@ -14,7 +14,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 
 import { ActionContext } from "../../contexts";
 import { Block, ListItem, Page } from "../../types";
-import { isMobile, setTemplateItem } from "../../utils";
+import { getEditTime, isMobile, setTemplateItem } from "../../utils";
 import { ScreenOnly, PageBtnList } from "../index";
 import { SESSION_KEY } from "../../constants";
 
@@ -51,6 +51,7 @@ const PageMenu = ({
   const findResult = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       setSearch(true);
+      const editTime = getEditTime();
       const value = event.target.value;
       const filteredPages: Page[] = pages.filter((page: Page) =>
         page.header.title?.includes(value)
@@ -62,8 +63,8 @@ const PageMenu = ({
         icon: page.header.icon,
         subPagesId: page.subPagesId,
         parentsId: page.parentsId,
-        editTime: JSON.stringify(Date.now()),
-        createTime: JSON.stringify(Date.now()),
+        editTime: editTime,
+        createTime: editTime,
       }));
       setResult(RESULT);
     },

@@ -16,7 +16,12 @@ import { ScreenOnly, EmojiIcon } from "../index";
 import { ActionContext } from "../../contexts";
 import { Block, IconType, Page, Emoji } from "../../types";
 import { EMOJI_ARRAY } from "../../constants";
-import { setTemplateItem, randomEmojiIcon, changeImgToWebP } from "../../utils";
+import {
+  setTemplateItem,
+  randomEmojiIcon,
+  changeImgToWebP,
+  getEditTime,
+} from "../../utils";
 
 import "../../assets/iconModal.scss";
 
@@ -41,7 +46,7 @@ const IconModal = ({
   const [category, setCategory] = useState<Category>(EMOJI);
   const changePageIcon = useCallback(
     (icon: string | Emoji | null, iconType: IconType) => {
-      const editTime = JSON.stringify(Date.now());
+      const editTime = getEditTime();
       const templateHtml = document.getElementById("template");
       setTemplateItem(templateHtml, page);
       const editedPage: Page = {

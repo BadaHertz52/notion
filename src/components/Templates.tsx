@@ -31,7 +31,7 @@ import { Frame, PageIcon } from "./index";
 import { UserState } from "../modules/user/reducer";
 import { RootState } from "../modules";
 import { Page, TemplateFrameCommonProps } from "../types";
-import { findPage, getPageSample } from "../utils";
+import { findPage, getEditTime, getNewPageId, getPageSample } from "../utils";
 
 import "../assets/templates.scss";
 import { SESSION_KEY } from "../constants";
@@ -133,11 +133,12 @@ const Templates = ({
   );
 
   const onClickUseBtn = useCallback(() => {
+    const editTime = getEditTime();
     const targetPageId = sessionStorage.getItem(SESSION_KEY.targetPageId);
     if (template) {
       const newPage: Page = {
         ...template,
-        id: JSON.stringify(Date.now()),
+        id: getNewPageId(),
       };
       if (targetPageId === null) {
         addPage(newPage);
@@ -145,7 +146,7 @@ const Templates = ({
         const editedPage: Page = {
           ...template,
           id: targetPageId,
-          editTime: JSON.stringify(Date.now()),
+          editTime: editTime,
         };
         sessionStorage.removeItem(SESSION_KEY.targetPageId);
         editPage(targetPageId, editedPage);
@@ -196,11 +197,11 @@ const Templates = ({
   }, [template, cancelEditTemplate, afterEditAlert]);
 
   const onClickMakeTemplateBtn = useCallback(() => {
-    const date = JSON.stringify(Date.now());
+    const editTime = getEditTime();
     const id =
       templatesId === null
-        ? `template1_${date}`
-        : `template${templatesId.length + 1}_${date}`;
+        ? `template1_${editTime}`
+        : `template${templatesId.length + 1}_${editTime}`;
     const newTemplate: Page = {
       ...getPageSample(),
       id: id,
@@ -209,8 +210,8 @@ const Templates = ({
         title: "new template",
       },
       type: "template",
-      createTime: date,
-      editTime: date,
+      createTime: editTime,
+      editTime: editTime,
     };
 
     addTemplate(newTemplate);

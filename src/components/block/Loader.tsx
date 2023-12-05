@@ -9,7 +9,7 @@ import React, {
 import { CSSProperties } from "styled-components";
 
 import { Block, Page } from "../../types";
-import { setTemplateItem, changeImgToWebP } from "../../utils";
+import { setTemplateItem, changeImgToWebP, getEditTime } from "../../utils";
 
 import "../../assets/loader.scss";
 
@@ -43,12 +43,13 @@ const Loader = ({
   }, [setOpenLoader, setLoaderTargetBlock]);
   const changeImg = useCallback(
     (src: string) => {
+      const editTime = getEditTime();
       if (block) {
         const editedBlock: Block = {
           ...block,
           type: "image",
           contents: src,
-          editTime: JSON.stringify(Date.now()),
+          editTime: editTime,
         };
         const templateHtml = document.getElementById("template");
         setTemplateItem(templateHtml, page);
@@ -62,7 +63,7 @@ const Loader = ({
             ...page.header,
             cover: src,
           },
-          editTime: JSON.stringify(Date.now()),
+          editTime: editTime,
         };
         editPage && editPage(page.id, editedPage);
         closeLoader();
@@ -98,7 +99,7 @@ const Loader = ({
         ...page.header,
         cover: null,
       },
-      editTime: JSON.stringify(Date.now()),
+      editTime: getEditTime(),
     };
     editPage && editPage(page.id, editedPage);
     setOpenLoader(false);

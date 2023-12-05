@@ -68,7 +68,7 @@ const BlockFn = ({
     if (sessionItem && page.blocksId) {
       const targetBlock = JSON.parse(sessionItem);
       const targetBlockIndex = page.blocksId.indexOf(targetBlock.id);
-      const newBlock = makeNewBlock(page, targetBlock, "");
+      const newBlock = makeNewBlock(page, targetBlock);
       addBlock(page.id, newBlock, targetBlockIndex + 1, targetBlock.id);
     } else {
       console.error("BlockFn-makeBlock error: there is no session item");

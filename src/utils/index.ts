@@ -10,3 +10,4 @@ export * from "./position";
 export * from "./result";
 export * from "./select";
 export * from "./template";
+export * from "./time";

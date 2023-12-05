@@ -25,20 +25,21 @@ import {
   isMobile,
   selectContent,
   setTemplateItem,
+  getEditTime,
 } from "../../utils";
 
-type BlockContendEditableProps = {
-  page: Page;
-  pagesId: string[];
-  pages: Page[];
-  templateHtml: HTMLElement | null;
+export type BlockContendEditableProps = {
   block: Block;
   command: Command;
+  onClickCommentBtn: (block: Block) => void;
+  page: Page;
+  pages: Page[];
+  pagesId: string[];
+  templateHtml: HTMLElement | null;
+  setMobileMenuTargetBlock: Dispatch<SetStateAction<Block | null>>;
   setCommand: Dispatch<SetStateAction<Command>>;
   setOpenComment: Dispatch<SetStateAction<boolean>>;
   setSelection: Dispatch<SetStateAction<SelectionType | null>>;
-  setMobileMenuTargetBlock: Dispatch<SetStateAction<Block | null>>;
-  onClickCommentBtn: (block: Block) => void;
 };
 
 const BlockContentEditable = ({
@@ -57,7 +58,6 @@ const BlockContentEditable = ({
   const { editBlock, addBlock, changeToSub, raiseBlock, deleteBlock } =
     useContext(ActionContext).actions;
   const contentEditableRef = useRef<HTMLElement>(null);
-  const editTime = JSON.stringify(Date.now);
   /**
    * 키보드 방향키(위/아래)로 이동 가능한 블럭
    */
@@ -108,7 +108,7 @@ const BlockContentEditable = ({
                     ? editedContents
                     : block.contents,
                 subBlocksId: block.subBlocksId ? null : block.subBlocksId,
-                editTime: editTime,
+                editTime: getEditTime(),
               };
               editBlock(page.id, editedBlock);
             }
@@ -135,7 +135,7 @@ const BlockContentEditable = ({
               const editedBlock: Block = {
                 ...block,
                 contents: value,
-                editTime: editTime,
+                editTime: getEditTime(),
               };
               if (block.contents !== value) {
                 const item = {
@@ -166,16 +166,7 @@ const BlockContentEditable = ({
         }
       }
     },
-    [
-      addBlock,
-      block,
-      editBlock,
-      editTime,
-      page,
-      setCommand,
-      setOpenComment,
-      templateHtml,
-    ]
+    [addBlock, block, editBlock, page, setCommand, setOpenComment, templateHtml]
   );
   /**
    * focus를 화면 상의 다음 블록의 contentEditable 에 옮기는 함수
@@ -542,7 +533,7 @@ const BlockContentEditable = ({
         const newBlock: Block = {
           ...command.targetBlock,
           type: blockType,
-          editTime: editTime,
+          editTime: getEditTime(),
         };
         editBlock(page.id, newBlock);
         setCommand({
@@ -553,7 +544,7 @@ const BlockContentEditable = ({
         setTemplateItem(templateHtml, page);
       }
     },
-    [command.targetBlock, editBlock, editTime, page, setCommand, templateHtml]
+    [command.targetBlock, editBlock, page, setCommand, templateHtml]
   );
   useEffect(() => {
     if (command.open) {

@@ -28,7 +28,7 @@ import {
   MobileSideMenuType,
   SelectionType,
 } from "../../types";
-import { isMobile, setTemplateItem } from "../../utils";
+import { getEditTime, isMobile, setTemplateItem } from "../../utils";
 
 import "../../assets/menu.scss";
 import { SESSION_KEY } from "../../constants";
@@ -217,11 +217,11 @@ const Menu = ({
       setTemplateItem(templateHtml, page);
       const blockIndex = page.blocksId.indexOf(block.id);
       const previousBlockId = page.blocksId[blockIndex - 1];
-      const editTime = JSON.stringify(Date.now());
+      const editTime = getEditTime();
       const number = page.blocksId.length.toString();
       const newBlock: Block = {
         ...block,
-        id: `${page.id}_${number}_${editTime}`,
+        id: `block_${page.id}_${number}_${editTime}`,
         editTime: editTime,
       };
       addBlock(

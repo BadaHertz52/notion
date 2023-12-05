@@ -14,7 +14,7 @@ import { IconModal, PageIcon, ScreenOnly } from "./index";
 
 import { ActionContext } from "../contexts";
 import { Block, Page } from "../types";
-import { setTemplateItem, closeModal } from "../utils";
+import { setTemplateItem, closeModal, getEditTime } from "../utils";
 
 import "../assets/rename.scss";
 
@@ -58,7 +58,7 @@ const Rename = ({
   const changeTitle = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       const value = event.target.value;
-      const editTime = JSON.stringify(Date.now());
+      const editTime = getEditTime();
       if (value !== page.header.title) {
         const templateHtml = document.getElementById("template");
         setTemplateItem(templateHtml, page);

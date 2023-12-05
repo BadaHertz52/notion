@@ -23,7 +23,7 @@ const EmptyPageContent = ({
    * @returns page
    */
   const startNewPage = useCallback((): Page => {
-    const firstBlock = makeNewBlock(page, null, "");
+    const firstBlock = makeNewBlock(page, null);
     const newPage: Page = {
       ...page,
       header: {

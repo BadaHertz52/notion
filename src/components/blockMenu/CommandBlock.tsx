@@ -18,7 +18,12 @@ import { VscListOrdered } from "react-icons/vsc";
 import { Img } from "../index";
 import { ActionContext } from "../../contexts";
 import { Block, BlockType, Page, Command, SelectionType } from "../../types";
-import { makeNewBlock, findParentBlock, setTemplateItem } from "../../utils";
+import {
+  makeNewBlock,
+  findParentBlock,
+  setTemplateItem,
+  getEditTime,
+} from "../../utils";
 
 import imgIcon from "../../assets/img/vincent-van-gogh-ge1323790d_640.webp";
 import "../../assets/commandBlock.scss";
@@ -78,13 +83,15 @@ const CommandBlock = ({
    */
   const changeToListType = useCallback(
     (editedBlock: Block, parentBlockType: BlockType) => {
+      const editTime = getEditTime();
+
       if (page.firstBlocksId && page.blocks && page.blocksId) {
         const firstBlocksId = [...page.firstBlocksId];
         const blocks = [...page.blocks];
         const blocksId = [...page.blocksId];
         const indexOfBlocks = blocksId.indexOf(editedBlock.id);
 
-        const newBlock = makeNewBlock(page, editedBlock, "");
+        const newBlock = makeNewBlock(page, editedBlock);
         const newParentBlock: Block = {
           ...newBlock,
           type: parentBlockType,
@@ -108,8 +115,6 @@ const CommandBlock = ({
           );
           const subBlocksId = [...(parentBlock.subBlocksId as string[])];
           const index = subBlocksId.indexOf(editedBlock.id);
-          const editTime = JSON.stringify(Date.now());
-
           if (parentBlock.type.includes("Arr")) {
             const updatedNewParentBlock: Block = {
               ...newParentBlock,
@@ -161,7 +166,7 @@ const CommandBlock = ({
                   editTime: editTime,
                 };
                 blocks.splice(parentBlockIndex, 1, editedParentBlock);
-                const newBlock = makeNewBlock(page, parentBlock, "");
+                const newBlock = makeNewBlock(page, parentBlock);
                 const newAfterArrBlock: Block = {
                   ...newBlock,
                   id: `${page.id}_${editTime}(1)`,
@@ -185,7 +190,7 @@ const CommandBlock = ({
             const editedParentBlock: Block = {
               ...parentBlock,
               subBlocksId: subBlocksId,
-              editTime: JSON.stringify(Date.now()),
+              editTime: editTime,
             };
             blocks.splice(parentBlockIndex, 1, editedParentBlock);
 
@@ -220,7 +225,7 @@ const CommandBlock = ({
           firstBlocksId: firstBlocksId,
           blocks: blocks,
           blocksId: blocksId,
-          editTime: JSON.stringify(Date.now()),
+          editTime: editTime,
         };
         editPage(page.id, editedPage);
       }
@@ -244,7 +249,7 @@ const CommandBlock = ({
       if (block.type !== blockType) {
         const editedBlock: Block = {
           ...block,
-          editTime: JSON.stringify(Date.now()),
+          editTime: getEditTime(),
           type:
             blockType === "bulletListArr"
               ? "bulletList"

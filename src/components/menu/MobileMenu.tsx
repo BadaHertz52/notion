@@ -145,7 +145,7 @@ const MobileMenu = ({
   const addNewBlock = useCallback(() => {
     if (page.blocksId && targetBlock) {
       const blockIndex = page.blocksId.indexOf(targetBlock.id);
-      const newBlock = makeNewBlock(page, targetBlock, "");
+      const newBlock = makeNewBlock(page, targetBlock);
       addBlock(page.id, newBlock, blockIndex + 1, targetBlock.id);
       closeMM();
     }

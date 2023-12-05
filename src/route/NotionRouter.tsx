@@ -50,7 +50,12 @@ import {
   FontStyleType,
   MobileSideMenuType,
 } from "../types";
-import { findPage, getCurrentPageId, makeRoutePath } from "../utils";
+import {
+  findPage,
+  getCurrentPageId,
+  getEditTime,
+  makeRoutePath,
+} from "../utils";
 import { SESSION_KEY } from "../constants";
 
 const NotionRouter = () => {
@@ -70,6 +75,8 @@ const NotionRouter = () => {
     [pages, pagesId, currentPageId]
   ) as Page | null;
   const firstList: ListItem[] | null = useMemo(() => {
+    const editTime = getEditTime();
+
     if (firstPagesId && pagesId && pages) {
       const FIRST_LIST = firstPagesId.map((id: string) => {
         const PAGE: Page = findPage(pagesId, pages, id);
@@ -78,8 +85,8 @@ const NotionRouter = () => {
           title: PAGE.header.title,
           iconType: PAGE.header.iconType,
           icon: PAGE.header.icon,
-          editTime: JSON.stringify(Date.now()),
-          createTime: JSON.stringify(Date.now()),
+          editTime: editTime,
+          createTime: editTime,
           subPagesId: PAGE.subPagesId,
           parentsId: PAGE.parentsId,
         };
