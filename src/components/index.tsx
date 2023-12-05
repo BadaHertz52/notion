@@ -1,11 +1,15 @@
-import BlockComponent from "./block/BlockComponent";
+//block---
 import BlockContentEditable from "./block/BlockContentEditable";
+import BlockContents from "./block/BlockContents";
+import BlockComponent from "./block/BlockComponent";
 import EditableBlock from "./block/EditableBlock";
+import ImageBlock from "./block/ImageBlock";
 import ImageContent from "./block/ImageContent";
 import ListSub from "./block/ListSub";
 import Loader from "./block/Loader";
 import MoveTargetBlock from "./block/MoveTargetBlock";
-
+import PageBlock from "./block/PageBlock";
+//--block
 import BlockFn from "./blockMenu/BlockFn";
 import BlockStyler from "./blockMenu/BlockStyler";
 import CommandBlock from "./blockMenu/CommandBlock";
@@ -86,6 +90,18 @@ import Templates from "./Templates";
 import Time from "./Time";
 
 export {
+  //block--
+  BlockContentEditable,
+  BlockContents,
+  BlockComponent,
+  EditableBlock,
+  ImageBlock,
+  ImageContent,
+  ListSub,
+  Loader,
+  MoveTargetBlock,
+  PageBlock,
+  //--block
   FontBtn,
   TopBar,
   Favorites,
@@ -131,13 +147,6 @@ export {
   BlockFn,
   BlockStyler,
   CommandBlock,
-  BlockComponent,
-  BlockContentEditable,
-  EditableBlock,
-  ImageContent,
-  ListSub,
-  Loader,
-  MoveTargetBlock,
   DiscardEditForm,
   Export,
   Img,
