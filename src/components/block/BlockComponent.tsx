@@ -43,6 +43,7 @@ const BlockComponent = ({ ...props }: BlockComponentProps) => {
    * 모바일 브라우저에서, element을 터치 할때 사용자가 element을 이동하기 위해 touch 한 것인지 판별하기 위한 조건 중 하나
    */
   const startMarkMoveBlock = useRef<boolean>(false);
+  const blockComponentRef = useRef<HTMLDivElement>(null);
   //show blockFn ---
   /**
    *   blockFn에 대한 sessionStorage 관리
@@ -68,37 +69,24 @@ const BlockComponent = ({ ...props }: BlockComponentProps) => {
   );
 
   const setStyleOfBlockFn = useCallback(
-    (mainBlockEl: HTMLElement, blockFn: Element) => {
-      const mainBlockDomRect = mainBlockEl.getClientRects()[0];
+    (mainBlockEl: HTMLElement, blockFnEl: Element) => {
+      if (blockComponentRef.current) {
+        const mainBlockDomRect = mainBlockEl.getClientRects()[0];
+        const { top, left } = mainBlockDomRect;
+        const heightOfBlock = blockComponentRef.current.clientHeight;
+        const heightOfBlockFn = blockFnEl.clientHeight;
+        const blockFnTop =
+          heightOfBlock > heightOfBlockFn
+            ? (heightOfBlock - heightOfBlockFn) / 2 + top
+            : top;
+        const blockFnStyle = `top:${blockFnTop}px; left:${
+          left - blockFnEl.clientWidth
+        }px`;
 
-      if (!templateHtml) {
-        const frameHtml = document.querySelector(".frame");
-        const frameDomRect = frameHtml?.getClientRects()[0];
-
-        if (frameDomRect) {
-          const top =
-            mainBlockDomRect.top - frameDomRect.top + frameHtml.scrollTop;
-          const left = mainBlockDomRect.x - frameDomRect.x - 45;
-          const blockFnStyle = `top:${top}px; left:${left}px`;
-
-          blockFn.setAttribute("style", blockFnStyle);
-        }
-      } else {
-        const targetFrameEl = templateHtml.querySelector(".frame");
-
-        if (targetFrameEl) {
-          const targetFrameDomRect = targetFrameEl.getBoundingClientRect();
-          const top =
-            mainBlockDomRect.top -
-            targetFrameDomRect.top +
-            targetFrameEl?.scrollTop;
-          const left = mainBlockDomRect.x - targetFrameDomRect.x - 45;
-
-          blockFn.setAttribute("style", `top:${top}px; left:${left}px`);
-        }
+        blockFnEl.setAttribute("style", blockFnStyle);
       }
     },
-    [templateHtml]
+    []
   );
   /**
    * 마우스가 block위를 움직일 경우, 해당 block의 element 옆에 blockFn component를 보여주는 함수
@@ -108,19 +96,17 @@ const BlockComponent = ({ ...props }: BlockComponentProps) => {
       closeMenu(event);
 
       const currentTarget = event.currentTarget;
-      const editor = document.getElementsByClassName("editor")[0];
+
       const mainBlockEl =
         currentTarget.parentElement?.parentElement?.parentElement;
-      const blockFnEl = !templateHtml
-        ? editor.querySelector(".blockFn")
-        : templateHtml.querySelector(".blockFn");
+      const blockFnEl = document.querySelector("#blockFn");
 
       if (mainBlockEl && blockFnEl) {
         toggleBlockFn(blockFnEl);
         setStyleOfBlockFn(mainBlockEl, blockFnEl);
       }
     },
-    [closeMenu, templateHtml, setStyleOfBlockFn, toggleBlockFn]
+    [closeMenu, setStyleOfBlockFn, toggleBlockFn]
   );
   //--show blockFn
   const onClickBlockContents = useCallback(() => {
@@ -181,6 +167,7 @@ const BlockComponent = ({ ...props }: BlockComponentProps) => {
   return (
     <div
       className={`${block.type}-blockComponent blockComponent`}
+      ref={blockComponentRef}
       onClick={onClickBlockContents}
       onMouseOver={showBlockFn}
       onTouchStart={handleTouchStart}

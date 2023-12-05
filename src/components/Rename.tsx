@@ -14,16 +14,17 @@ import { IconModal, PageIcon, ScreenOnly } from "./index";
 
 import { ActionContext } from "../contexts";
 import { Block, Page } from "../types";
-import { setTemplateItem, closeModal, getEditTime } from "../utils";
+import { setTemplateItem, closeModal, getEditTime, isInTarget } from "../utils";
 
 import "../assets/rename.scss";
 
-type RenameProps = {
+export type RenameProps = {
   currentPageId: string | null;
   block: Block | null;
   page: Page;
-  renameStyle: CSSProperties | undefined;
-  setOpenRename: Dispatch<SetStateAction<boolean>>;
+  renameStyle?: CSSProperties;
+  setOpenRename?: Dispatch<SetStateAction<boolean>>;
+  closeRename: () => void;
 };
 
 const Rename = ({
@@ -32,25 +33,24 @@ const Rename = ({
   page,
   renameStyle,
   setOpenRename,
+  closeRename,
 }: RenameProps) => {
   const { editPage, editBlock } = useContext(ActionContext).actions;
   const inner = document.getElementById("inner");
   const [openIconModal, setOpenIconModal] = useState<boolean>(false);
-  const handleInnerClick = useCallback(
+  //TODO -  이모지 모달
+  const handleClick = useCallback(
     (event: globalThis.MouseEvent) => {
       if (document.getElementById("rename")) {
+        const isInEmojiModal = isInTarget(event, undefined, "modal");
+        if (!isInTarget(event, "rename") || !isInEmojiModal) closeRename();
         openIconModal && closeModal("iconModal", setOpenIconModal, event);
-        closeModal("rename", setOpenRename, event);
+        closeRename();
+        //setOpenRename && closeModal("rename", setOpenRename, event);
       }
     },
     [openIconModal, setOpenRename]
   );
-  useEffect(() => {
-    inner?.addEventListener("click", handleInnerClick);
-    return () => {
-      inner?.removeEventListener("click", handleInnerClick);
-    };
-  }, [inner, handleInnerClick]);
 
   const onClickRenameIcon = () => {
     setOpenIconModal(true);
@@ -83,6 +83,14 @@ const Rename = ({
     },
     [block, currentPageId, editBlock, editPage, page]
   );
+
+  useEffect(() => {
+    inner?.addEventListener("click", handleClick);
+    return () => {
+      inner?.removeEventListener("click", handleClick);
+    };
+  }, [inner, handleClick]);
+
   return (
     <div id="rename" style={renameStyle}>
       <div className="inner">

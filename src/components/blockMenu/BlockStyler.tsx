@@ -750,20 +750,16 @@ const BlockStyler = ({
         </div>
       )}
       {openMenu && (
+        //TODO - portal로 인한 수정
         <Menu
           pages={pages}
           firstList={firstList}
           page={page}
           block={selection ? selection.block : block}
           userName={userName}
-          setOpenMenu={setOpenMenu}
-          modal={modal}
-          setModal={setModal}
-          setCommentBlock={setCommentBlock}
-          setOpenRename={null}
           setSelection={setSelection}
           frameHtml={frameHtml}
-          style={menuStyle}
+          //style={menuStyle}
         />
       )}
     </>

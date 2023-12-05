@@ -34,6 +34,7 @@ import EditorContainer from "./editor/EditorContainer";
 
 import Frame from "./frame/Frame";
 import FrameInner from "./frame/FrameInner";
+import FrameModalMenu from "./frame/FrameModalMenu";
 
 import EmojiIcon from "./icon/EmojiIcon";
 import IconModal from "./icon/IconModal";
@@ -82,6 +83,8 @@ import Img from "./Img";
 import Loading from "./Loading";
 
 import NotionHelmet from "./NotionHelmet";
+
+import Modal from "./Modal";
 
 import Rename from "./Rename";
 
@@ -137,6 +140,7 @@ export {
   PageIcon,
   Frame,
   FrameInner,
+  FrameModalMenu,
   Editor,
   EditorContainer,
   AllComments,
@@ -163,4 +167,5 @@ export {
   Time,
   Trash,
   TrashResultItem,
+  Modal,
 };

@@ -421,6 +421,7 @@ const SideBar = ({
           page={targetPage}
           renameStyle={renameStyle}
           setOpenRename={setOpenRename}
+          closeRename={() => setOpenRename(false)}
         />
       )}
       <Trash

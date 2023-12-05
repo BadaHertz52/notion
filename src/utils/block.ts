@@ -223,3 +223,8 @@ export const getBlockContentsStyle = (block: Block): CSSProperties => {
         : block.style.height,
   };
 };
+
+export const getBlockDomRect = (block: Block) => {
+  const blockEl = document.getElementById(`${block.id}__contents`);
+  return blockEl?.getClientRects()[0];
+};

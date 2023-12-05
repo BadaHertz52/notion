@@ -25,7 +25,7 @@ import {
 import { getEditTime, removeSelected, setTemplateItem } from "../../utils";
 import { SESSION_KEY } from "../../constants";
 
-type CommentInputProps = {
+export type CommentInputProps = {
   userName: string;
   pageId: string;
   page: Page;

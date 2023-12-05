@@ -25,6 +25,7 @@ type PageMenuProps = {
   firstList: ListItem[];
   closeMenu?: () => void;
   setPageMenuStyle?: Dispatch<SetStateAction<CSSProperties | undefined>>;
+  style?: CSSProperties;
 };
 
 const PageMenu = ({
@@ -34,6 +35,7 @@ const PageMenu = ({
   firstList,
   closeMenu,
   setPageMenuStyle,
+  style,
 }: PageMenuProps) => {
   const { changeBlockToPage } = useContext(ActionContext).actions;
   const pageMenuRef = useRef<HTMLDivElement>(null);
@@ -111,7 +113,7 @@ const PageMenu = ({
     }
   }, [pageMenuRef]);
   return (
-    <div id="pageMenu" ref={pageMenuRef}>
+    <div id="pageMenu" ref={pageMenuRef} style={style}>
       <div className="inner">
         {isMobile() && (
           <div className="pageMenu__btn-container">

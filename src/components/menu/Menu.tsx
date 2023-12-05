@@ -24,21 +24,30 @@ import { CommandMenu, PageMenu, Time, ColorMenu, ScreenOnly } from "../index";
 import { ActionContext } from "../../contexts";
 import {
   Block,
+  FrameModalTargetType,
+  FrameModalType,
   MenuAndBlockStylerCommonProps,
   MobileSideMenuType,
   SelectionType,
 } from "../../types";
-import { getEditTime, isMobile, setTemplateItem } from "../../utils";
+import {
+  getEditTime,
+  isInTarget,
+  isMobile,
+  setTemplateItem,
+} from "../../utils";
 
 import "../../assets/menu.scss";
 import { SESSION_KEY } from "../../constants";
 
-export type MenuProps = MenuAndBlockStylerCommonProps & {
-  setOpenMenu?: Dispatch<SetStateAction<boolean>>;
-  setOpenRename: Dispatch<SetStateAction<boolean>> | null;
+export type MenuProps = Omit<
+  MenuAndBlockStylerCommonProps,
+  "modal" | "setModal" | "setCommentBlock"
+> & {
   setSelection?: Dispatch<SetStateAction<SelectionType | null>>;
-  style: CSSProperties | undefined;
   setMobileSideMenu?: Dispatch<SetStateAction<MobileSideMenuType>>;
+  setModal?: Dispatch<SetStateAction<FrameModalType>>;
+  closeModal?: () => void;
 };
 
 const Menu = ({
@@ -47,65 +56,29 @@ const Menu = ({
   page,
   block,
   userName,
-  setOpenMenu,
-  setModal,
-  modal,
-  setCommentBlock,
-  setOpenRename,
   frameHtml,
   setSelection,
-  style,
   setMobileSideMenu,
+  setModal,
+  closeModal,
 }: MenuProps) => {
   const { addBlock, deleteBlock, duplicatePage } =
     useContext(ActionContext).actions;
-  const templateHtml = document.getElementById("template");
-  const blockFnElement = templateHtml
-    ? (templateHtml.querySelector(".blockFn") as HTMLElement | null)
-    : (document.querySelector(".blockFn") as HTMLElement | null);
-  const menuRef = useRef<HTMLDivElement>(null);
-  const [editBtnGroup, setEditBtnGroup] = useState<Element[] | null>(null);
+
   const COLOR = "color";
   const TURN_INTO = "turnInto";
   const TURN_INTO_PAGE = "turnIntoPage";
+
+  const templateHtml = document.getElementById("template");
+
+  const menuRef = useRef<HTMLDivElement>(null);
+  const [editBtnGroup, setEditBtnGroup] = useState<Element[] | null>(null);
   type SideMenuType =
     | typeof COLOR
     | typeof TURN_INTO
     | typeof TURN_INTO_PAGE
     | undefined;
   const [sideMenu, setSideMenu] = useState<SideMenuType>();
-  const blockStylerHtml = document.getElementById("blockStyler");
-  const changeMenuStyle = useCallback(() => {
-    const menu = document.querySelector(".menu");
-    const menuHeight = menu ? menu.clientHeight : 400;
-    const innerWidth = window.innerWidth;
-    const frameDomRect = frameHtml?.getClientRects()[0];
-    let style: CSSProperties = {};
-    if (blockFnElement && frameDomRect) {
-      const blockFnDomRect = blockFnElement.getClientRects()[0];
-      const blockFnTop = blockFnDomRect.top as number;
-      const overHeight = blockFnTop + menuHeight >= frameDomRect.height + 100;
-      const bottom = blockFnElement.offsetHeight * 0.5;
-      const top = blockFnElement.offsetHeight;
-      style = overHeight
-        ? {
-            bottom: `${bottom}px`,
-            left: innerWidth > 768 ? "2rem" : "1rem",
-            maxHeight: `${blockFnDomRect.top - frameDomRect.top}px`,
-          }
-        : {
-            top: `${top}px`,
-            left: innerWidth > 768 ? "2rem" : "1rem",
-            maxHeight: `${frameDomRect.bottom - blockFnDomRect.bottom}px`,
-          };
-    }
-
-    return style;
-  }, [blockFnElement, frameHtml]);
-
-  const [menuStyle, setMenuStyle] = useState<CSSProperties | undefined>(
-    style === undefined ? changeMenuStyle() : style
-  );
   const [sideMenuStyle, setSideMenuStyle] = useState<CSSProperties | undefined>(
     isMobile()
       ? {
@@ -140,43 +113,23 @@ const Menu = ({
       });
     }
   }, [frameHtml]);
+
   const handleResize = useCallback(() => {
     if (!isMobile()) {
-      if (blockStylerHtml === null) {
-        const style = changeMenuStyle();
-        setMenuStyle(style);
-      }
       if (sideMenu) {
         changeSideMenuStyle();
       }
     }
-  }, [blockStylerHtml, changeMenuStyle, changeSideMenuStyle, sideMenu]);
+  }, [changeSideMenuStyle, sideMenu]);
 
-  useEffect(() => {
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [handleResize]);
-
-  let modalStyle = blockFnElement?.getAttribute("style");
-
-  const recoveryMenuState = () => {
-    modal.open &&
-      setModal({
-        open: false,
-        what: null,
-      });
-  };
   const showTurnInto = () => {
     setSideMenu(TURN_INTO);
-    recoveryMenuState();
   };
   const showColorMenu = () => {
     setSideMenu(COLOR);
-    recoveryMenuState();
   };
   const showPageMenu = () => {
     setSideMenu(TURN_INTO_PAGE);
-    recoveryMenuState();
   };
   const showPageMenuInMobile = () => {
     if (setMobileSideMenu) {
@@ -187,23 +140,44 @@ const Menu = ({
       });
     }
   };
+  const handleScrollOfFrame = (stop: boolean) => {
+    const frameEl = document.querySelector(".frame");
+    frameEl?.classList.toggle("stop", stop);
+  };
+
+  //close menu
+  const closMobileSideMenu = useCallback(() => {
+    if (isMobile() && setMobileSideMenu) {
+      setMobileSideMenu({ block: null, what: undefined });
+    }
+  }, [setMobileSideMenu]);
+
+  const closeMenuInModal = useCallback(() => {
+    if (closeModal) closeModal();
+  }, [closeModal]);
+
   const closeMenu = useCallback(() => {
-    setOpenMenu
-      ? setOpenMenu(false)
-      : setMobileSideMenu &&
-        setMobileSideMenu({ block: null, what: undefined });
-  }, [setOpenMenu, setMobileSideMenu]);
+    closMobileSideMenu();
+    closeMenuInModal();
+  }, [closMobileSideMenu, closeMenuInModal]);
+
+  const openPopUpMenu = useCallback(
+    (target: FrameModalTargetType) => {
+      if (setModal)
+        setModal({
+          open: true,
+          target: target,
+          block: block,
+        });
+    },
+    [setModal, block]
+  );
 
   const onOpenCommentInput = useCallback(() => {
-    setCommentBlock(block);
-    closeMenu();
     setSelection && setSelection(null);
-    sessionStorage.setItem(SESSION_KEY.modalStyle, JSON.stringify(modalStyle));
-    setModal({
-      open: true,
-      what: "modalComment",
-    });
-  }, [block, closeMenu, modalStyle, setCommentBlock, setModal, setSelection]);
+    openPopUpMenu("commentInput");
+  }, [openPopUpMenu, setSelection]);
+
   const removeBlock = useCallback(() => {
     setSelection && setSelection(null);
     setTemplateItem(templateHtml, page);
@@ -268,9 +242,13 @@ const Menu = ({
 
   const onClickRename = useCallback(() => {
     setSelection && setSelection(null);
-    setOpenRename && setOpenRename(true);
-    closeMenu();
-  }, [closeMenu, setOpenRename, setSelection]);
+    openPopUpMenu("rename");
+  }, [openPopUpMenu, setSelection]);
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [handleResize]);
 
   useEffect(() => {
     if (sideMenu) {
@@ -284,7 +262,7 @@ const Menu = ({
   }, [sideMenu, changeSideMenuStyle]);
 
   return (
-    <div className="menu" ref={menuRef} style={menuStyle}>
+    <div className="menu" ref={menuRef}>
       <div id="menu__main" className="mainMenu">
         <div className="menu__inner">
           <div className="menu__search">
@@ -414,7 +392,12 @@ const Menu = ({
           </div>
         </div>
       </div>
-      <div id="sideMenu" className="menu__sideMenu" style={sideMenuStyle}>
+      <div
+        id="sideMenu"
+        className="menu__sideMenu"
+        style={sideMenuStyle}
+        onClick={closeMenu}
+      >
         {sideMenu === TURN_INTO && (
           <CommandMenu
             style={undefined}
@@ -435,7 +418,6 @@ const Menu = ({
             currentPage={page}
             pages={pages}
             firstList={firstList}
-            closeMenu={setOpenMenu ? () => setOpenMenu(false) : undefined}
           />
         )}
       </div>

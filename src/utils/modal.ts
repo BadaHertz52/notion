@@ -11,3 +11,25 @@ export const closeModal = (
     !isInElement && setState(false);
   }
 };
+
+export const closeModalPortal = () => {
+  const modalEl = document.querySelectorAll("#modal-root .modal");
+  modalEl?.forEach((el) => {
+    if (!el.id.includes("blockFn")) el.classList.remove("on");
+  });
+};
+/**
+ * 클릭한 부분이 특정 타켓 요소 안에 존재하는 지 여부 반환
+ * @param event
+ * @param targetId :타켓 요소의 아이디
+ * @param targetClassName : 타켓 요소의 클래스
+ * @returns
+ */
+export const isInTarget = (
+  event: globalThis.MouseEvent,
+  targetId?: string,
+  targetClassName?: string
+) => {
+  const eventTarget = event.target as Element;
+  return eventTarget.closest(targetId ? `#${targetId}` : `.${targetClassName}`);
+};

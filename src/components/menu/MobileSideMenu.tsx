@@ -85,18 +85,14 @@ const MobileSideMenu = ({
         </div>
         <div className="contents">
           {mobileSideMenu.what === "ms_moreMenu" && (
+            //TODO - portal로 인한 수정
             <Menu
               pages={pages}
               block={block}
               firstList={firstList}
               page={page}
               userName={userName}
-              modal={modal}
-              setModal={setModal}
-              setCommentBlock={setCommentBlock}
-              setOpenRename={null}
               frameHtml={frameHtml}
-              style={undefined}
               setMobileSideMenu={setMobileSideMenu}
             />
           )}

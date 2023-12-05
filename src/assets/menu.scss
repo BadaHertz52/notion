@@ -5,26 +5,23 @@
   z-index: 10;
 }
 .mainMenu,
-.menu__sideMenu,
-#modal__menu {
+.menu__sideMenu {
   @include modalStyle;
   width: fit-content;
 }
-#modal__menu {
-  position: absolute;
-  font-size: 14px;
-  padding: 3px;
-  z-index: 30;
-  display: flex;
+.modal {
   .commentInput {
+    @include modalStyle;
     width: 350px;
-    margin: 10px;
+    height: fit-content;
     box-sizing: border-box;
     flex-direction: row;
+    font-size: 14px;
+    padding: 10px 14px;
   }
 }
 .frame.mobile {
-  #modal__menu {
+  .modal {
     height: 60px;
     display: flex;
     justify-content: center;
@@ -249,11 +246,6 @@
   }
   .menu__sideMenu > div {
     width: 100%;
-  }
-  #modal__menu {
-    .commentInput {
-      width: 100%;
-    }
   }
   .sideBar__pageMenu {
     transition: top ease 1s;
