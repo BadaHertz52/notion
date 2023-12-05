@@ -101,7 +101,7 @@ const BlockStyler = ({
   const menu = "menu";
   type menuType = typeof color | typeof menu;
   const colorMenuHtmlId = "block-styler__color";
-  const commandBlockHtmlId = "block__commandBlock";
+  const commandBlockHtmlId = "block__commandMenu";
   const linkLoaderHtmlId = "linkLoader";
   const mainMenuHtmlId = "menu__main";
 
@@ -449,7 +449,7 @@ const BlockStyler = ({
           case "block-styler__color":
             setOpenColor(false);
             break;
-          case "block__commandBlock":
+          case "block__commandMenu":
             setCommand({
               open: false,
               command: null,
@@ -490,9 +490,8 @@ const BlockStyler = ({
           !isInContents
         ) {
           const colorMenuHtml = document.getElementById("block-styler__color");
-          const commandBlockHtml = document.getElementById(
-            "block__commandBlock"
-          );
+          const commandBlockHtml =
+            document.getElementById("block__commandMenu");
           const mainMenu = document.getElementById("mainMenu");
           const linkLoaderHtml = document.getElementById("linkLoader");
 
@@ -514,7 +513,7 @@ const BlockStyler = ({
               openColor && closeSideMenu(eventTarget, "block-styler__color");
               openLink && closeSideMenu(eventTarget, "linkLoader");
               openMenu && closeSideMenu(eventTarget, "menu__main");
-              command.open && closeSideMenu(eventTarget, "block__commandBlock");
+              command.open && closeSideMenu(eventTarget, "block__commandMenu");
             }
           }
         }

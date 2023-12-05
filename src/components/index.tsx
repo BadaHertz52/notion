@@ -12,7 +12,9 @@ import PageBlock from "./block/PageBlock";
 //--block
 import BlockFn from "./blockMenu/BlockFn";
 import BlockStyler from "./blockMenu/BlockStyler";
-import CommandBlock from "./blockMenu/CommandBlock";
+
+import CommandMenu from "./command/CommandMenu";
+import CommandInput from "./command/CommandInput";
 
 import ColorInform from "./color/ColorInform";
 import ColorMenu from "./color/ColorMenu";
@@ -102,6 +104,10 @@ export {
   MoveTargetBlock,
   PageBlock,
   //--block
+  //command --
+  CommandMenu,
+  CommandInput,
+  // --command
   FontBtn,
   TopBar,
   Favorites,
@@ -146,7 +152,6 @@ export {
   ColorMenu,
   BlockFn,
   BlockStyler,
-  CommandBlock,
   DiscardEditForm,
   Export,
   Img,

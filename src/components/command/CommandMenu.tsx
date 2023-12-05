@@ -28,7 +28,7 @@ import {
 import imgIcon from "../../assets/img/vincent-van-gogh-ge1323790d_640.webp";
 import "../../assets/commandBlock.scss";
 
-type CommandBlockProp = {
+type CommandMenuProp = {
   page: Page;
   block: Block;
   command: Command | null;
@@ -37,7 +37,7 @@ type CommandBlockProp = {
   setSelection?: Dispatch<SetStateAction<SelectionType | null>>;
   style: CSSProperties | undefined;
 };
-const CommandBlock = ({
+const CommandMenu = ({
   page,
   block,
   setCommand,
@@ -45,7 +45,7 @@ const CommandBlock = ({
   setSelection,
   closeCommand,
   style,
-}: CommandBlockProp) => {
+}: CommandMenuProp) => {
   const { editBlock, changeBlockToPage, changePageToBlock, editPage } =
     useContext(ActionContext).actions;
   const imgSrc = imgIcon + "?&width=36$height=36";
@@ -232,7 +232,7 @@ const CommandBlock = ({
     },
     [editPage, page]
   );
-  const closeCommandBlock = useCallback(() => {
+  const closeCommandMenu = useCallback(() => {
     setCommand &&
       setCommand({
         open: false,
@@ -275,7 +275,7 @@ const CommandBlock = ({
             break;
         }
       }
-      closeCommandBlock();
+      closeCommandMenu();
       setSelection && setSelection(null);
     },
     [
@@ -285,20 +285,20 @@ const CommandBlock = ({
       changeBlockToPage,
       changePageToBlock,
       changeToListType,
-      closeCommandBlock,
+      closeCommandMenu,
       page,
     ]
   );
   const onClickImgTypeBtn = useCallback(() => {
     changeType("image");
-    closeCommandBlock();
-  }, [changeType, closeCommandBlock]);
+    closeCommandMenu();
+  }, [changeType, closeCommandMenu]);
 
   useEffect(() => {
     showResult();
   }, [command, showResult]);
   return (
-    <div id="commandBlock" style={style}>
+    <div id="commandMenu" style={style}>
       <div className="inner">
         <div className="command type-basic">
           <header className="command__header">BASIC BLOCKS</header>
@@ -491,4 +491,4 @@ const CommandBlock = ({
   );
 };
 
-export default CommandBlock;
+export default CommandMenu;

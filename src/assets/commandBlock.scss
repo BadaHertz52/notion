@@ -1,13 +1,13 @@
 @import "./common";
-#block__commandBlock {
+#block__commandMenu {
   position: absolute;
   z-index: 20;
-  #commandBlock {
+  #commandMenu {
     margin-top: 0;
     z-index: inherit;
   }
 }
-#commandBlock {
+#commandMenu {
   @include modalStyle;
   @include webkitScroll;
   position: relative;
@@ -110,7 +110,7 @@
     }
   }
 }
-#commandBlock-noResult {
+#commandMenu-noResult {
   display: none;
   color: rgba(55, 53, 47, 0.65);
   padding: 0 10%;

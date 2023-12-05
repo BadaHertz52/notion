@@ -13,7 +13,7 @@ import { useSelector } from "react-redux";
 
 import { ActionContext } from "../../contexts";
 import {
-  CommandBlock,
+  CommandMenu,
   Comments,
   CommentInput,
   BlockFn,
@@ -28,7 +28,6 @@ import { RootState } from "../../modules";
 import {
   Block,
   Command,
-  MainCommentType,
   Page,
   SelectionType,
   TemplateFrameCommonProps,
@@ -110,8 +109,9 @@ const Frame = ({
     null
   );
 
-  const [commandBlockPosition, setCBPosition] = useState<CSSProperties>();
-  const [commandBlockStyle, setCommandBlockStyle] = useState<
+  const [commandMenuPosition, setCommandMenuPosition] =
+    useState<CSSProperties>();
+  const [commandMenuStyle, setCommandMenuStyle] = useState<
     CSSProperties | undefined
   >(undefined);
   const [menuOpen, setOpenMenu] = useState<boolean>(false);
@@ -593,7 +593,7 @@ const Frame = ({
     }
   }, [editBlock]);
   /**
-   * commandBlockPosition (type:CSSProperties)의 값을 변경하는 함수
+   * commandMenuPosition (type:CSSProperties)의 값을 변경하는 함수
    */
   const changeCBSposition = useCallback(() => {
     if (command.open && command.targetBlock) {
@@ -604,6 +604,7 @@ const Frame = ({
         //blockStyler
         const blockStylerDomRect = blockStyler.getClientRects()[0];
         if (frameDomRect) {
+          //TODO -  수정
           const top = blockStylerDomRect.top + blockStylerDomRect.height;
           const left = `${blockStylerDomRect.left - frameDomRect.left}px`;
           const remainHeight = frameDomRect.height - top;
@@ -616,6 +617,7 @@ const Frame = ({
           const maxHeight = toDown
             ? remainHeight
             : blockStylerDomRect.top - frameDomRect.top - 50;
+
           const style: CSSProperties = toDown
             ? {
                 top: `${top}px`,
@@ -625,11 +627,11 @@ const Frame = ({
                 bottom: `${bottom}px`,
                 left: left,
               };
-          setCBPosition(style);
-          const commandBlock_style: CSSProperties = {
+          setCommandMenuPosition(style);
+          const commandMenu_style: CSSProperties = {
             maxHeight: `${maxHeight}px`,
           };
-          setCommandBlockStyle(commandBlock_style);
+          setCommandMenuStyle(commandMenu_style);
         }
       } else {
         //typing 으로 type 변경 시
@@ -655,11 +657,11 @@ const Frame = ({
                 top: top2,
                 left: left,
               };
-          setCBPosition(style);
-          const commandBlock_style: CSSProperties = {
+          setCommandMenuPosition(style);
+          const commandMenu_style: CSSProperties = {
             maxHeight: `${maxHeight}px`,
           };
-          setCommandBlockStyle(commandBlock_style);
+          setCommandMenuStyle(commandMenu_style);
         }
       }
     }
@@ -709,7 +711,7 @@ const Frame = ({
         const target = event.target as HTMLElement | null;
         const commandInputHtml = document.getElementById("commandInput");
         if (target && commandInputHtml) {
-          const isInnerCommand = target.closest("#block__commandBlock");
+          const isInnerCommand = target.closest("#block__commandMenu");
           !isInnerCommand &&
             target !== commandInputHtml &&
             setCommand({
@@ -931,9 +933,9 @@ const Frame = ({
         openExport={openExport}
       />
       {command.open && command.targetBlock && (
-        <div id="block__commandBlock" style={commandBlockPosition}>
-          <CommandBlock
-            style={commandBlockStyle}
+        <div id="block__commandMenu" style={commandMenuPosition}>
+          <CommandMenu
+            style={commandMenuStyle}
             key={`${command.targetBlock.id}_command`}
             page={page}
             block={command.targetBlock}

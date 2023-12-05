@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import { CSSProperties } from "styled-components";
 
-import { ColorMenu, CommandBlock, LinkLoader, Menu, PageMenu } from "../index";
+import { ColorMenu, CommandMenu, LinkLoader, Menu, PageMenu } from "../index";
 import {
   MobileSideMenuType,
   MenuAndBlockStylerCommonProps,
@@ -109,7 +109,7 @@ const MobileSideMenu = ({
             />
           )}
           {mobileSideMenu.what === "ms_turnInto" && (
-            <CommandBlock
+            <CommandMenu
               style={undefined}
               page={page}
               block={block}

@@ -19,7 +19,7 @@ import { TiArrowSortedDown } from "react-icons/ti";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { AiOutlineFormatPainter } from "react-icons/ai";
 
-import { CommandBlock, PageMenu, Time, ColorMenu, ScreenOnly } from "../index";
+import { CommandMenu, PageMenu, Time, ColorMenu, ScreenOnly } from "../index";
 
 import { ActionContext } from "../../contexts";
 import {
@@ -416,7 +416,7 @@ const Menu = ({
       </div>
       <div id="sideMenu" className="menu__sideMenu" style={sideMenuStyle}>
         {sideMenu === TURN_INTO && (
-          <CommandBlock
+          <CommandMenu
             style={undefined}
             page={page}
             block={block}
