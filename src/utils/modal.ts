@@ -25,11 +25,7 @@ export const closeModalPortal = () => {
  * @param targetClassName : 타켓 요소의 클래스
  * @returns
  */
-export const isInTarget = (
-  event: globalThis.MouseEvent,
-  targetId?: string,
-  targetClassName?: string
-) => {
+export const isInTarget = (event: globalThis.MouseEvent, target: string) => {
   const eventTarget = event.target as Element;
-  return eventTarget.closest(targetId ? `#${targetId}` : `.${targetClassName}`);
+  return eventTarget.closest(target);
 };

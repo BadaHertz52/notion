@@ -28,7 +28,14 @@ import {
 } from "../index";
 
 import { ActionContext } from "../../contexts";
-import { Block, ListItem, Notion, Page, SideAppear } from "../../types";
+import {
+  Block,
+  ListItem,
+  ModalType,
+  Notion,
+  Page,
+  SideAppear,
+} from "../../types";
 import {
   closeModal,
   findPage,
@@ -38,6 +45,8 @@ import {
 import { UserState } from "../../modules/user/reducer";
 
 import "../../assets/sideBar.scss";
+import SideBarModal from "../modal/SideBarModal";
+import { INITIAL_MODAL } from "../../constants";
 
 export type SideBarProps = {
   notion: Notion;
@@ -66,6 +75,9 @@ const SideBar = ({
   const trashPagesId = trash.pagesId;
 
   const trashBtnRef = useRef<HTMLButtonElement>(null);
+
+  const [sideModal, setSideModal] = useState<ModalType>(INITIAL_MODAL);
+
   const [target, setTarget] = useState<HTMLElement | null>(null);
   const [targetItem, setTargetItem] = useState<ListItem | null>(null);
   const [targetPage, setTargetPage] = useState<Page | null>(null);
@@ -375,17 +387,24 @@ const SideBar = ({
       <SideBarMoreFn
         user={user}
         moreFnStyle={moreFnStyle}
-        setMoreFnStyle={setMoreFnStyle}
-        targetItem={targetItem}
-        setOpenRename={setOpenRename}
         target={target}
+        targetItem={targetItem}
+        setMoreFnStyle={setMoreFnStyle}
+        setSideModal={setSideModal}
+        setOpenRename={setOpenRename}
         setRenameStyle={setRenameStyle}
-        setOpenPageMenu={setOpenPageMenu}
-        setPageMenuStyle={setPageMenuStyle}
         closeSideMoreFn={closeSideBarMoreFn}
       />
-
-      {targetItem && firstList && pages && pagesId && (
+      {pages && pagesId && firstList && (
+        <SideBarModal
+          pages={pages}
+          pagesId={pagesId}
+          firstList={firstList}
+          sideModal={sideModal}
+          setSideModal={setSideModal}
+        />
+      )}
+      {/* {targetItem && firstList && pages && pagesId && (
         <div
           id="sideBar__pageMenu"
           className={`sideBar__pageMenu ${openPageMenu ? "on" : ""}`}
@@ -402,7 +421,7 @@ const SideBar = ({
             />
           )}
         </div>
-      )}
+      )} */}
       {openRename && targetPage && (
         <Rename
           currentPageId={null}

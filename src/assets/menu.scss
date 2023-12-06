@@ -132,13 +132,7 @@
     height: fit-content;
   }
 }
-.sideBar__pageMenu {
-  position: absolute;
-  left: 0;
-  display: none;
-  &.on {
-    display: block;
-  }
+#sideBarModal__menu {
   #pageMenu {
     background-color: #ffff;
   }
@@ -247,14 +241,31 @@
   .menu__sideMenu > div {
     width: 100%;
   }
-  .sideBar__pageMenu {
+  #sideBarModal__menu {
     transition: top ease 1s;
-    top: 100vh;
+    .topBar {
+      height: 60px;
+      width: 100vw;
+      padding: 10px 20px;
+      box-sizing: border-box;
+      background-color: #ffff;
+      display: flex;
+      justify-content: end;
+      button {
+        opacity: 0.5;
+        &:hover {
+          opacity: 1;
+          font-weight: bold;
+        }
+      }
+    }
   }
   #pageMenu {
     width: 100vw;
-    height: 100vh;
+    height: calc(100vh - 60px);
     overflow: hidden;
+    box-shadow: none;
+    border-radius: 0%;
     .inner {
       padding: 0;
       height: 100%;

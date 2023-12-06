@@ -14,7 +14,6 @@ import {
   Page,
 } from "../../types";
 import { findPage } from "../../utils";
-import { ModalContext } from "../../contexts";
 import { UserState } from "../../modules/user/reducer";
 
 type NotionProps = Omit<SideBarContainerProp, "firstPages" | "firstList"> & {
@@ -53,9 +52,6 @@ const Notion = ({ ...props }: NotionProps) => {
    *
    * @param newModal  변경할 모달이 있을 경우에는 값을 입력하고, 처음 모달 상태로 되돌리려하는 경우네는 값을 비워두면 됨
    */
-  const changeModal = (newModal?: ModalType) => {
-    setMortal(newModal ? newModal : initialMortal);
-  };
 
   const firstPages: Page[] | null = useMemo(
     () =>
@@ -86,36 +82,35 @@ const Notion = ({ ...props }: NotionProps) => {
     <div id="notion">
       <NotionHelmet pageHeader={currentPage?.header} pageId={currentPage?.id} />
       <div id="notion__inner">
-        <ModalContext.Provider value={{ changeModal: changeModal }}>
-          <SideBarContainer
-            {...props}
-            firstList={firstList}
-            firstPages={firstPages}
-          />
-          <NotionRouter
-            {...props}
-            firstList={firstList}
-            openComment={openComment}
-            setOpenComment={setOpenComment}
-            commentBlock={commentBlock}
-            setCommentBlock={setCommentBlock}
-            smallText={smallText}
-            setSmallText={setSmallText}
-            fullWidth={fullWidth}
-            setFullWidth={setFullWidth}
-            showAllComments={showAllComments}
-            setShowAllComments={setShowAllComments}
-            discardEdit={discard_edit}
-            setDiscardEdit={setDiscardEdit}
-            openTemplates={openTemplates}
-            setOpenTemplates={setOpenTemplates}
-            setOpenExport={setOpenExport}
-            fontStyle={fontStyle}
-            setFontStyle={setFontStyle}
-            mobileSideMenu={mobileSideMenu}
-            setMobileSideMenu={setMobileSideMenu}
-          />
-        </ModalContext.Provider>
+        <SideBarContainer
+          {...props}
+          firstList={firstList}
+          firstPages={firstPages}
+        />
+        <NotionRouter
+          {...props}
+          firstList={firstList}
+          openComment={openComment}
+          setOpenComment={setOpenComment}
+          commentBlock={commentBlock}
+          setCommentBlock={setCommentBlock}
+          smallText={smallText}
+          setSmallText={setSmallText}
+          fullWidth={fullWidth}
+          setFullWidth={setFullWidth}
+          showAllComments={showAllComments}
+          setShowAllComments={setShowAllComments}
+          discardEdit={discard_edit}
+          setDiscardEdit={setDiscardEdit}
+          openTemplates={openTemplates}
+          setOpenTemplates={setOpenTemplates}
+          setOpenExport={setOpenExport}
+          fontStyle={fontStyle}
+          setFontStyle={setFontStyle}
+          mobileSideMenu={mobileSideMenu}
+          setMobileSideMenu={setMobileSideMenu}
+        />
+
         {/* {pagesId && pages && firstList && (
             <>
               {openExport && currentPage && (

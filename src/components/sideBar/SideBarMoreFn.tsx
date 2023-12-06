@@ -20,18 +20,17 @@ import { IoArrowRedoOutline } from "react-icons/io5";
 import { ScreenOnly, PageIcon, Time } from "../index";
 
 import { UserState } from "../../modules/user/reducer";
-import { ListItem } from "../../types";
+import { ListItem, ModalType } from "../../types";
 
 type SideBarMoreFnProps = {
   user: UserState;
   moreFnStyle: CSSProperties | undefined;
   setMoreFnStyle: Dispatch<SetStateAction<CSSProperties | undefined>>;
-  targetItem: ListItem | null;
-  setOpenRename: Dispatch<SetStateAction<boolean>>;
   target: HTMLElement | null;
+  targetItem: ListItem | null;
+  setSideModal: Dispatch<SetStateAction<ModalType>>;
+  setOpenRename: Dispatch<SetStateAction<boolean>>;
   setRenameStyle: Dispatch<SetStateAction<CSSProperties | undefined>>;
-  setOpenPageMenu: Dispatch<SetStateAction<boolean>>;
-  setPageMenuStyle: Dispatch<SetStateAction<CSSProperties | undefined>>;
   closeSideMoreFn: () => void;
 };
 
@@ -39,12 +38,11 @@ function SideBarMoreFn({
   user,
   moreFnStyle,
   setMoreFnStyle,
+  setSideModal,
+  target,
   targetItem,
   setOpenRename,
-  target,
   setRenameStyle,
-  setOpenPageMenu,
-  setPageMenuStyle,
   closeSideMoreFn,
 }: SideBarMoreFnProps) {
   const moreFnRef = useRef<HTMLDivElement>(null);
@@ -109,27 +107,25 @@ function SideBarMoreFn({
 
   const onClickMoveToBtn = useCallback(
     (event: MouseEvent) => {
-      const target = event.target as HTMLElement | null;
-      const targetDomRect = target?.getClientRects()[0];
-      console.log("ta", targetDomRect, target);
-      if (window.innerWidth > 768) {
-        setPageMenuStyle({
-          top: moreFnStyle ? moreFnStyle.top : "50%",
-          left: moreFnStyle ? moreFnStyle.left : "50%",
-        });
-      } else {
-        //mobile
-        setTimeout(() => {
-          setPageMenuStyle({
-            top: 0,
-            left: 0,
-          });
-        }, 500);
+      if (targetItem && moreFnRef.current) {
+        const domRect = moreFnRef.current.getClientRects()[0];
+
+        const newModal: ModalType = {
+          open: true,
+          target: "pageMenu",
+          pageId: targetItem.id,
+          targetDomRect: domRect,
+        };
+        if (window.innerWidth > 768) {
+          setSideModal(newModal);
+        } else {
+          //mobile
+          setSideModal({ ...newModal, isMobile: true });
+        }
       }
-      setOpenPageMenu(true);
       closeSideMoreFn();
     },
-    [setOpenPageMenu, setPageMenuStyle, moreFnStyle, closeSideMoreFn]
+    [closeSideMoreFn, setSideModal, targetItem]
   );
   useEffect(() => {
     if (moreFnRef.current) {
@@ -159,6 +155,7 @@ function SideBarMoreFn({
       style={moreFnStyle}
       onTouchMove={onTouchMoveSideBar}
     >
+      {/*mobile ---*/}
       <button
         title="button to resize sideBar__moreFn "
         className="resizeBar"
@@ -177,6 +174,7 @@ function SideBarMoreFn({
           <div className="page__title">{targetItem.title}</div>
         </div>
       )}
+      {/*---mobile*/}
       <button
         title="button to delete"
         className="moreFn__btn btn-delete"

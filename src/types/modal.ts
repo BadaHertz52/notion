@@ -1,3 +1,4 @@
+import { MouseEvent } from "react";
 import { Block } from "./notion";
 
 export type ModalTypeTargetType =
@@ -10,10 +11,14 @@ export type ModalTypeTargetType =
   | "mobileMenu"
   | "command"
   | "loader"
-  | "rename";
+  | "rename"
+  | "trash";
 
 export type ModalType = {
   open: boolean;
-  target: ModalTypeTargetType | undefined;
-  block: Block | undefined;
+  target?: ModalTypeTargetType;
+  block?: Block;
+  pageId?: string;
+  targetDomRect?: DOMRect;
+  isMobile?: boolean;
 };

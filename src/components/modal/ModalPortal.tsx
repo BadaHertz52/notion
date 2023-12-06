@@ -14,7 +14,9 @@ const ModalPortal = ({ id, isOpen, children, style }: ModalPortalProps) => {
   return ReactDOM.createPortal(
     <div id={id} className={`modal ${isOpen ? "on" : ""}`}>
       <div className="inner">
-        <div style={style}>{children}</div>
+        <div id={`${id}__menu`} style={style}>
+          {children}
+        </div>
       </div>
     </div>,
     modalRootEl

@@ -14,7 +14,7 @@ import { CSSProperties } from "styled-components";
 import { findPage, getBlockDomRect, isInTarget } from "../../utils";
 
 type ChildrenProps = MenuProps & RenameProps & CommentInputProps;
-type ModalTypeMenuProps = Omit<
+type FrameModalProps = Omit<
   ChildrenProps,
   | "block"
   | "pageId"
@@ -31,9 +31,9 @@ type ModalTypeMenuProps = Omit<
   modal: ModalType;
   closeModal: () => void;
 };
-function ModalTypeMenu({ ...props }: ModalTypeMenuProps) {
+function FrameModal({ ...props }: FrameModalProps) {
   const { modal } = props;
-  const ID = "ModalTypeMenu";
+  const ID = "FrameModal";
 
   const [modalStyle, setModalStyle] = useState<CSSProperties | undefined>(
     undefined
@@ -95,13 +95,12 @@ function ModalTypeMenu({ ...props }: ModalTypeMenuProps) {
 
   const handleCloseModal = useCallback(
     (event: globalThis.MouseEvent) => {
-      const target = ["modal", "menu"];
+      const target = [".modal", ".menu"];
       const isInModal = target
-        .map((v) => !!isInTarget(event, undefined, v))
+        .map((v) => !!isInTarget(event, v))
         .some((v) => v);
       if (modal.open) {
         if (!isInModal) {
-          console.log("close");
           props.closeModal();
         }
       }
@@ -116,6 +115,9 @@ function ModalTypeMenu({ ...props }: ModalTypeMenuProps) {
   useEffect(() => {
     handleScrollOfFrame();
     window.addEventListener("click", handleCloseModal);
+    return () => {
+      window.removeEventListener("click", handleCloseModal);
+    };
   }, [handleCloseModal, handleScrollOfFrame]);
 
   return (
@@ -262,4 +264,4 @@ function ModalTypeMenu({ ...props }: ModalTypeMenuProps) {
   );
 }
 
-export default React.memo(ModalTypeMenu);
+export default React.memo(FrameModal);

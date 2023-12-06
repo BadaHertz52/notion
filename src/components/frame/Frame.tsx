@@ -34,7 +34,7 @@ import {
 } from "../../utils";
 
 import "../../assets/frame.scss";
-import { SESSION_KEY } from "../../constants";
+import { INITIAL_MODAL, SESSION_KEY } from "../../constants";
 
 export type FrameProps = TemplateFrameCommonProps & {
   page: Page;
@@ -102,12 +102,7 @@ const Frame = ({
   const [menuOpen, setOpenMenu] = useState<boolean>(false);
   const [selection, setSelection] = useState<SelectionType | null>(null);
 
-  const initialPortal: ModalType = {
-    open: false,
-    target: undefined,
-    block: undefined,
-  };
-  const [portal, setPortal] = useState<ModalType>(initialPortal);
+  const [portal, setPortal] = useState<ModalType>(INITIAL_MODAL);
 
   /**
    * page 내의 위치를 변경하는 대상이 되는  block
@@ -143,7 +138,7 @@ const Frame = ({
       : "75%",
   };
   const closePortal = () => {
-    setPortal(initialPortal);
+    setPortal(INITIAL_MODAL);
   };
   // const closeModalMenu = useCallback(
   //   (event: globalThis.MouseEvent) => {

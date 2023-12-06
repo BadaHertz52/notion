@@ -36,14 +36,14 @@ const Rename = ({
   closeRename,
 }: RenameProps) => {
   const { editPage, editBlock } = useContext(ActionContext).actions;
-  const inner = document.getElementById("notion__inner");
+  const inner = document.getElementById("inner");
   const [openIconModal, setOpenIconModal] = useState<boolean>(false);
   //TODO -  이모지 모달
   const handleClick = useCallback(
     (event: globalThis.MouseEvent) => {
       if (document.getElementById("rename")) {
-        const isInEmojiModal = isInTarget(event, undefined, "modal");
-        if (!isInTarget(event, "rename") || !isInEmojiModal) closeRename();
+        const isInEmojiModal = isInTarget(event, ",modal");
+        if (!isInTarget(event, "#rename") || !isInEmojiModal) closeRename();
         openIconModal && closeModal("iconModal", setOpenIconModal, event);
         closeRename();
         //setOpenRename && closeModal("rename", setOpenRename, event);
