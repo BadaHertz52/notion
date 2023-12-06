@@ -93,17 +93,24 @@ function SideBarMoreFn({
   }, [targetItem, duplicatePage, closeSideMoreFn]);
 
   const onClickToRename = useCallback(() => {
-    closeSideMoreFn();
-    setOpenRename(true);
-    if (targetItem && target && target?.parentElement) {
-      const domRect = target.parentElement.getClientRects()[0];
-      setRenameStyle({
-        position: "absolute",
-        top: domRect.bottom,
-        left: domRect.left + 10,
-      });
+    if (targetItem && moreFnRef.current) {
+      const domRect = moreFnRef.current.getClientRects()[0];
+
+      const newModal: ModalType = {
+        open: true,
+        target: "rename",
+        pageId: targetItem.id,
+        targetDomRect: domRect,
+      };
+      if (window.innerWidth > 768) {
+        setSideModal(newModal);
+      } else {
+        //mobile
+        setSideModal({ ...newModal, isMobile: true });
+      }
     }
-  }, [target, targetItem, setRenameStyle, setOpenRename, closeSideMoreFn]);
+    closeSideMoreFn();
+  }, [targetItem, closeSideMoreFn, setSideModal]);
 
   const onClickMoveToBtn = useCallback(
     (event: MouseEvent) => {

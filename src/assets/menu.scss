@@ -260,6 +260,25 @@
       }
     }
   }
+  #sideBarModal__renameOutBox,
+  #pageMenu {
+    width: 100vw;
+    height: calc(100vh - 60px);
+  }
+  #sideBarModal__renameOutBox {
+    background-color: #ffff;
+
+    #rename {
+      width: calc(100% - 20px);
+      margin: auto;
+      .inner {
+        width: 100%;
+        box-shadow: none;
+        border-radius: 0%;
+        border: 1px solid rgb(239, 239, 239);
+      }
+    }
+  }
   #pageMenu {
     width: 100vw;
     height: calc(100vh - 60px);

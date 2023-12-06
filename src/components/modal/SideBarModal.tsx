@@ -12,6 +12,7 @@ import PageMenu from "../pageMenu/PageMenu";
 import { findPage, isInTarget, isMobile } from "../../utils";
 import { INITIAL_MODAL } from "../../constants";
 import { CSSProperties } from "styled-components";
+import Rename from "../Rename";
 
 type SideBarModalProps = {
   sideModal: ModalType;
@@ -33,11 +34,28 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
     const { targetDomRect } = sideModal;
 
     if (targetDomRect) {
-      setStyle({
-        position: "absolute",
-        top: targetDomRect.top,
-        left: targetDomRect.left,
-      });
+      switch (sideModal.target) {
+        case "pageMenu":
+          setStyle({
+            position: "absolute",
+            top: targetDomRect.top,
+            left: targetDomRect.left,
+          });
+          break;
+        case "rename":
+          const el = document.querySelector(".item__inner.page-link");
+          if (el) {
+            setStyle({
+              position: "absolute",
+              top: targetDomRect.top + el.clientHeight,
+              left: el.clientLeft + 16,
+            });
+          }
+
+          break;
+        default:
+          break;
+      }
     }
   }, [sideModal]);
 
@@ -50,10 +68,10 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
     setTimeout(() => {
       setStyle((prev) => ({
         ...prev,
-        top: 0,
+        top: sideModal.target === "pageMenu" ? 0 : "40vh",
       }));
     }, 500);
-  }, [setStyle]);
+  }, [setStyle, sideModal]);
 
   const handleCloseModal = useCallback(
     (event: globalThis.MouseEvent) => {
@@ -97,8 +115,18 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
           currentPage={findPage(pagesId, pages, sideModal.pageId)}
           pages={pages}
           firstList={firstList}
-          closeMenu={closeModal}
+          closeMenu={sideModal.isMobile ? closeModalInMobile : closeModal}
         />
+      )}
+      {sideModal.target === "rename" && sideModal.pageId && (
+        <div id="sideBarModal__renameOutBox">
+          <Rename
+            currentPageId={null}
+            block={null}
+            page={findPage(pagesId, pages, sideModal.pageId)}
+            closeRename={sideModal.isMobile ? closeModalInMobile : closeModal}
+          />
+        </div>
       )}
     </ModalPortal>
   );

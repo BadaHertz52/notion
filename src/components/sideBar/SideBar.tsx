@@ -24,7 +24,6 @@ import {
   SideBarMoreFn,
   Trash,
   Rename,
-  PageMenu,
 } from "../index";
 
 import { ActionContext } from "../../contexts";
@@ -404,25 +403,7 @@ const SideBar = ({
           setSideModal={setSideModal}
         />
       )}
-      {/* {targetItem && firstList && pages && pagesId && (
-        <div
-          id="sideBar__pageMenu"
-          className={`sideBar__pageMenu ${openPageMenu ? "on" : ""}`}
-          style={pageMenuStyle}
-        >
-          {openPageMenu && (
-            <PageMenu
-              what="page"
-              currentPage={findPage(pagesId, pages, targetItem.id)}
-              pages={pages}
-              firstList={firstList}
-              closeMenu={closePageMenu}
-              setPageMenuStyle={setPageMenuStyle}
-            />
-          )}
-        </div>
-      )} */}
-      {openRename && targetPage && (
+      {/* {openRename && targetPage && (
         <Rename
           currentPageId={null}
           block={null}
@@ -431,7 +412,7 @@ const SideBar = ({
           setOpenRename={setOpenRename}
           closeRename={() => setOpenRename(false)}
         />
-      )}
+      )} */}
       <Trash
         style={trashStyle}
         trashPagesId={trashPagesId}
