@@ -17,7 +17,7 @@ import { RootState } from "../../modules";
 import {
   Block,
   Command,
-  FrameModalType,
+  ModalType,
   Page,
   SelectionType,
   TemplateFrameCommonProps,
@@ -57,8 +57,6 @@ const Frame = ({
   openComment,
   setOpenComment,
   setCommentBlock,
-  modal,
-  setModal,
   showAllComments,
   smallText,
   fullWidth,
@@ -104,12 +102,12 @@ const Frame = ({
   const [menuOpen, setOpenMenu] = useState<boolean>(false);
   const [selection, setSelection] = useState<SelectionType | null>(null);
 
-  const initialPortal: FrameModalType = {
+  const initialPortal: ModalType = {
     open: false,
     target: undefined,
     block: undefined,
   };
-  const [portal, setPortal] = useState<FrameModalType>(initialPortal);
+  const [portal, setPortal] = useState<ModalType>(initialPortal);
 
   /**
    * page 내의 위치를 변경하는 대상이 되는  block
@@ -147,25 +145,25 @@ const Frame = ({
   const closePortal = () => {
     setPortal(initialPortal);
   };
-  const closeModalMenu = useCallback(
-    (event: globalThis.MouseEvent) => {
-      const target = event.target as HTMLElement | null;
-      if (target) {
-        const isInModal = target.closest("#modal__menu");
-        const isInMobileMenu = target.closest("#mobileMenu");
-        if (!isInModal && !isInMobileMenu) {
-          setModal({
-            open: false,
-            what: null,
-          });
-          if (commentBlock && !!document.querySelector(".selected")) {
-            removeSelected(frameHtml, commentBlock, editBlock, page);
-          }
-        }
-      }
-    },
-    [setModal, commentBlock, editBlock, frameHtml, page]
-  );
+  // const closeModalMenu = useCallback(
+  //   (event: globalThis.MouseEvent) => {
+  //     const target = event.target as HTMLElement | null;
+  //     if (target) {
+  //       const isInModal = target.closest("#modal__menu");
+  //       const isInMobileMenu = target.closest("#mobileMenu");
+  //       if (!isInModal && !isInMobileMenu) {
+  //         setModal({
+  //           open: false,
+  //           what: null,
+  //         });
+  //         if (commentBlock && !!document.querySelector(".selected")) {
+  //           removeSelected(frameHtml, commentBlock, editBlock, page);
+  //         }
+  //       }
+  //     }
+  //   },
+  //   [setModal, commentBlock, editBlock, frameHtml, page]
+  // );
   //TODO -  삭제
   const closeMenu = useCallback((event: globalThis.MouseEvent | MouseEvent) => {
     const target = event.target as HTMLElement | null;
@@ -701,8 +699,9 @@ const Frame = ({
       updateBlock();
       document.getElementById("menu__main") && //closeMenu(event);
         document.getElementById("modal__menu") &&
-        closeModalMenu(event);
-      document.getElementById("block-comments") && closeBlockComments(event);
+        //closeModalMenu(event);
+        document.getElementById("block-comments") &&
+        closeBlockComments(event);
       if (command.open) {
         const target = event.target as HTMLElement | null;
         const commandInputHtml = document.getElementById("commandInput");
@@ -718,7 +717,7 @@ const Frame = ({
         }
       }
     },
-    [closeBlockComments, closeModalMenu, command.open, updateBlock]
+    [closeBlockComments, command.open, updateBlock]
   );
   /**
    * 모바일 환경에서 변경된  selection 을 반영하는 기능
@@ -785,30 +784,30 @@ const Frame = ({
     changeCBSposition();
   }, [command.open, command.targetBlock, openTemplates, changeCBSposition]);
 
-  useEffect(() => {
-    // stop scroll when something open
-    if (
-      command.open ||
-      modal.open ||
-      openLoader ||
-      openComment ||
-      moveTargetBlock ||
-      selection
-    ) {
-      !frameRef.current?.classList.contains("stop") &&
-        frameRef.current?.classList.add("stop");
-    } else {
-      frameRef.current?.classList.contains("stop") &&
-        frameRef.current?.classList.remove("stop");
-    }
-  }, [
-    modal.open,
-    command.open,
-    openLoader,
-    openComment,
-    moveTargetBlock,
-    selection,
-  ]);
+  // useEffect(() => {
+  //   // stop scroll when something open
+  //   if (
+  //     command.open ||
+  //     modal.open ||
+  //     openLoader ||
+  //     openComment ||
+  //     moveTargetBlock ||
+  //     selection
+  //   ) {
+  //     !frameRef.current?.classList.contains("stop") &&
+  //       frameRef.current?.classList.add("stop");
+  //   } else {
+  //     frameRef.current?.classList.contains("stop") &&
+  //       frameRef.current?.classList.remove("stop");
+  //   }
+  // }, [
+  //   modal.open,
+  //   command.open,
+  //   openLoader,
+  //   openComment,
+  //   moveTargetBlock,
+  //   selection,
+  // ]);
 
   useEffect(() => {
     document.addEventListener("selectionchange", handleSelectionChange);
@@ -816,35 +815,35 @@ const Frame = ({
       document.removeEventListener("selectionchange", handleSelectionChange);
   }, [handleSelectionChange]);
 
-  useEffect(() => {
-    if (modal.what === "modalComment") {
-      const targetCommentInputHtml = document
-        .getElementById("modalMenu")
-        ?.querySelector(".commentInput") as HTMLInputElement | null | undefined;
-      if (targetCommentInputHtml && targetCommentInputHtml) {
-        targetCommentInputHtml.focus();
-      }
-    }
-  }, [modal.what]);
+  // useEffect(() => {
+  //   if (modal.what === "modalComment") {
+  //     const targetCommentInputHtml = document
+  //       .getElementById("modalMenu")
+  //       ?.querySelector(".commentInput") as HTMLInputElement | null | undefined;
+  //     if (targetCommentInputHtml && targetCommentInputHtml) {
+  //       targetCommentInputHtml.focus();
+  //     }
+  //   }
+  // }, [modal.what]);
 
-  useEffect(() => {
-    if (mobileMenuTargetBlock === null && mobileSideMenu.what && !modal.open) {
-      const selectedHtml = document.querySelector(".selected");
-      const contentsHtml = selectedHtml?.closest(".contents");
-      if (contentsHtml && contentsHtml) {
-        const blockId = contentsHtml.id.replace("__contents", "");
-        const targetBlock = findBlock(page, blockId).BLOCK;
-        removeSelected(frameHtml, targetBlock, editBlock, page);
-      }
-    }
-  }, [
-    mobileMenuTargetBlock,
-    mobileSideMenu.what,
-    modal.open,
-    editBlock,
-    frameHtml,
-    page,
-  ]);
+  // useEffect(() => {
+  //   if (mobileMenuTargetBlock === null && mobileSideMenu.what && !modal.open) {
+  //     const selectedHtml = document.querySelector(".selected");
+  //     const contentsHtml = selectedHtml?.closest(".contents");
+  //     if (contentsHtml && contentsHtml) {
+  //       const blockId = contentsHtml.id.replace("__contents", "");
+  //       const targetBlock = findBlock(page, blockId).BLOCK;
+  //       removeSelected(frameHtml, targetBlock, editBlock, page);
+  //     }
+  //   }
+  // }, [
+  //   mobileMenuTargetBlock,
+  //   mobileSideMenu.what,
+  //   modal.open,
+  //   editBlock,
+  //   frameHtml,
+  //   page,
+  // ]);
 
   useEffect(() => {
     if (
@@ -869,13 +868,13 @@ const Frame = ({
     moveTargetBlock,
   ]);
 
-  useEffect(() => {
-    const condition = !!mobileMenuTargetBlock || (isMobile() && modal.open);
-    frameHtml?.classList.toggle("stop", condition);
-    return () => {
-      frameHtml?.classList.remove("stop");
-    };
-  }, [mobileMenuTargetBlock, modal.open, frameHtml]);
+  // useEffect(() => {
+  //   const condition = !!mobileMenuTargetBlock || (isMobile() && modal.open);
+  //   frameHtml?.classList.toggle("stop", condition);
+  //   return () => {
+  //     frameHtml?.classList.remove("stop");
+  //   };
+  // }, [mobileMenuTargetBlock, modal.open, frameHtml]);
 
   useEffect(() => {
     isMoved.current = !!moveTargetBlock;
@@ -955,108 +954,8 @@ const Frame = ({
       {/* 
       <Modal isOpen={portal.open}>
 
-        {portal.target === "command" && command.targetBlock && (
-          <div id="block__commandMenu" style={commandMenuPosition}>
-            <CommandMenu
-              style={commandMenuStyle}
-              key={`${command.targetBlock.id}_command`}
-              page={page}
-              block={command.targetBlock}
-              command={command}
-              setCommand={setCommand}
-              setSelection={setSelection}
-            />
-          </div>
-        )}
+        
 
-        {portal.target === "loader" && loaderTargetBlock && (
-          <Loader
-            block={loaderTargetBlock}
-            page={page}
-            editBlock={editBlock}
-            editPage={null}
-            frameHtml={frameHtml}
-            setOpenLoader={setOpenLoader}
-            setLoaderTargetBlock={setLoaderTargetBlock}
-          />
-        )}
-        {portal.target === "pageMenu" && (
-          <PageMenu
-            style={modalStyle}
-            what="block"
-            currentPage={page}
-            pages={pages}
-            firstList={firstList}
-            closeMenu={() => setModal({ open: false, what: null })}
-          />
-        )}
-
-        {portal.target === "comments" &&
-          commentBlock &&
-          openComment &&
-          targetMainComments && (
-            <Comments
-              targetMainComments={targetMainComments}
-              userName={userName}
-              block={commentBlock}
-              pageId={page.id}
-              page={page}
-              frameHtml={frameHtml}
-              openComment={openComment}
-              discardEdit={discardEdit}
-              setDiscardEdit={setDiscardEdit}
-              showAllComments={showAllComments}
-              changeStateToCloseBlockComments={changeStateToCloseBlockComments}
-            />
-          )}
-        {portal.target === "moveTargetBlock" && moveTargetBlock && (
-          <MoveTargetBlock
-            key={moveTargetBlock.id}
-            pages={pages}
-            pagesId={pagesId}
-            page={page}
-            block={moveTargetBlock}
-            fontSize={fontSize}
-            isMoved={isMoved}
-            setMoveTargetBlock={setMoveTargetBlock}
-            pointBlockToMoveBlock={pointBlockToMoveBlock}
-            command={command}
-            setCommand={setCommand}
-            openComment={openComment}
-            setOpenComment={setOpenComment}
-            setCommentBlock={setCommentBlock}
-            setOpenLoader={setOpenLoader}
-            setLoaderTargetBlock={setLoaderTargetBlock}
-            closeMenu={closeMenu}
-            templateHtml={templateHtml}
-            setSelection={setSelection}
-            setMobileMenuTargetBlock={setMobileMenuTargetBlock}
-            mobileMenuTargetBlock={mobileMenuTargetBlock}
-          />
-        )}
-        {portal.target === "blockStyler" && selection && !isMobile() && (
-          <BlockStyler
-            pages={pages}
-            pagesId={pagesId}
-            firstList={firstList}
-            userName={userName}
-            page={page}
-            recentPagesId={recentPagesId}
-            block={selection.block}
-            modal={modal}
-            setModal={setModal}
-            setModalStyle={setModalStyle}
-            command={command}
-            setCommand={setCommand}
-            setCommentBlock={setCommentBlock}
-            selection={selection}
-            setSelection={setSelection}
-            frameHtml={frameHtml}
-            setMobileSideMenu={setMobileSideMenu}
-            setMobileMenuTargetBlock={setMobileMenuTargetBlock}
-            setOpenMobileBlockStyler={null}
-          />
-        )}
         {portal.target === "mobileMenu" && mobileMenuTargetBlock && (
           <MobileMenu
             pages={pages}
@@ -1080,50 +979,6 @@ const Frame = ({
         )}
       </Modal> 
       */}
-
-      {/* {command.open && command.targetBlock && (
-        <div id="block__commandMenu" style={commandMenuPosition}>
-          <CommandMenu
-            style={commandMenuStyle}
-            key={`${command.targetBlock.id}_command`}
-            page={page}
-            block={command.targetBlock}
-            command={command}
-            setCommand={setCommand}
-            setSelection={setSelection}
-          />
-        </div>
-      )} */}
-      {/* {openLoader && loaderTargetBlock && (
-        <Loader
-          block={loaderTargetBlock}
-          page={page}
-          editBlock={editBlock}
-          editPage={null}
-          frameHtml={frameHtml}
-          setOpenLoader={setOpenLoader}
-          setLoaderTargetBlock={setLoaderTargetBlock}
-        />
-      )} */}
-      {/* {!isMobile() && (
-        <BlockFn
-          page={page}
-          pages={pages}
-          pagesId={pagesId}
-          firstList={firstList}
-          userName={userName}
-          frameHtml={frameHtml}
-          commentBlock={commentBlock}
-          setCommentBlock={setCommentBlock}
-          moveTargetBlock={moveTargetBlock}
-          setMoveTargetBlock={setMoveTargetBlock}
-          modal={modal}
-          setModal={setModal}
-          menuOpen={menuOpen}
-          setOpenMenu={setOpenMenu}
-          setModalStyle={setModalStyle}
-        />
-      )} */}
     </div>
   );
 };

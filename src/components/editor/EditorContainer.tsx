@@ -1,112 +1,51 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 
 import { Editor } from "../index";
+import { EditorProps } from "./Editor";
 
 import { RootState } from "../../modules";
-import {
-  Block,
-  Page,
-  ListItem,
-  FontStyleType,
-  MobileSideMenuType,
-  ModalType,
-} from "../../types";
+import { Page } from "../../types";
 
-type EditorProps = {
-  pages: Page[];
-  pagesId: string[];
-  firstList: ListItem[];
-  page: Page;
-  isInTrash: boolean;
-  modal: ModalType;
-  setModal: Dispatch<SetStateAction<ModalType>>;
-  openComment: boolean;
-  setOpenComment: Dispatch<SetStateAction<boolean>>;
-  commentBlock: Block | null;
-  setCommentBlock: Dispatch<SetStateAction<Block | null>>;
-  smallText: boolean;
-  setSmallText: Dispatch<SetStateAction<boolean>>;
-  fullWidth: boolean;
-  setFullWidth: Dispatch<SetStateAction<boolean>>;
-  showAllComments: boolean;
-  setShowAllComments: Dispatch<SetStateAction<boolean>>;
-  discardEdit: boolean;
-  setDiscardEdit: Dispatch<SetStateAction<boolean>>;
-  setOpenExport: Dispatch<SetStateAction<boolean>>;
-  openTemplates: boolean;
-  setOpenTemplates: Dispatch<SetStateAction<boolean>>;
-  fontStyle: FontStyleType;
-  setFontStyle: Dispatch<SetStateAction<FontStyleType>>;
-  mobileSideMenu: MobileSideMenuType;
-  setMobileSideMenu: Dispatch<SetStateAction<MobileSideMenuType>>;
-  openExport?: boolean;
-};
+export type EditorContainerProps = Omit<
+  EditorProps,
+  "sideAppear" | "userName" | "recentPagesId" | "user" | "pagesId" | "pages"
+>;
 
-const EditorContainer = ({
-  firstList,
-  page,
-  pages,
-  pagesId,
-  isInTrash,
-  openComment,
-  setOpenComment,
-  commentBlock,
-  setCommentBlock,
-  smallText,
-  setSmallText,
-  fullWidth,
-  setFullWidth,
-  showAllComments,
-  setShowAllComments,
-  discardEdit,
-  setDiscardEdit,
-  setOpenExport,
-  openTemplates,
-  setOpenTemplates,
-  fontStyle,
-  setFontStyle,
-  modal,
-  setModal,
-  mobileSideMenu,
-  setMobileSideMenu,
-  openExport,
-}: EditorProps) => {
-  const user = useSelector((state: RootState) => state.user);
-  const sideAppear = useSelector((state: RootState) => state.side.appear);
+const EditorContainer = ({ ...props }: EditorContainerProps) => {
+  const rootState = useSelector((state: RootState) => state);
+  const { user, side, notion } = rootState;
 
   return (
     <Editor
-      sideAppear={sideAppear}
-      firstList={firstList}
+      sideAppear={side.appear}
+      firstList={props.firstList}
       userName={user.userName}
       recentPagesId={user.recentPagesId}
-      page={page}
-      pages={pages}
-      pagesId={pagesId}
-      isInTrash={isInTrash}
-      showAllComments={showAllComments}
-      setShowAllComments={setShowAllComments}
-      discardEdit={discardEdit}
-      setDiscardEdit={setDiscardEdit}
-      setOpenExport={setOpenExport}
-      modal={modal}
-      setModal={setModal}
-      openComment={openComment}
-      setOpenComment={setOpenComment}
-      commentBlock={commentBlock}
-      setCommentBlock={setCommentBlock}
-      smallText={smallText}
-      setSmallText={setSmallText}
-      fullWidth={fullWidth}
-      setFullWidth={setFullWidth}
-      openTemplates={openTemplates}
-      setOpenTemplates={setOpenTemplates}
-      fontStyle={fontStyle}
-      setFontStyle={setFontStyle}
-      mobileSideMenu={mobileSideMenu}
-      setMobileSideMenu={setMobileSideMenu}
-      openExport={openExport}
+      page={props.page}
+      pages={notion.pages as Page[]}
+      pagesId={notion.pagesId as string[]}
+      isInTrash={props.isInTrash}
+      showAllComments={props.showAllComments}
+      setShowAllComments={props.setShowAllComments}
+      discardEdit={props.discardEdit}
+      setDiscardEdit={props.setDiscardEdit}
+      setOpenExport={props.setOpenExport}
+      openComment={props.openComment}
+      setOpenComment={props.setOpenComment}
+      commentBlock={props.commentBlock}
+      setCommentBlock={props.setCommentBlock}
+      smallText={props.smallText}
+      setSmallText={props.setSmallText}
+      fullWidth={props.fullWidth}
+      setFullWidth={props.setFullWidth}
+      openTemplates={props.openTemplates}
+      setOpenTemplates={props.setOpenTemplates}
+      fontStyle={props.fontStyle}
+      setFontStyle={props.setFontStyle}
+      mobileSideMenu={props.mobileSideMenu}
+      setMobileSideMenu={props.setMobileSideMenu}
+      openExport={props.openExport}
     />
   );
 };

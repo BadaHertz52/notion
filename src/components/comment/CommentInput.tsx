@@ -315,9 +315,11 @@ const CommentInput = ({
     setEdit && setEdit(false);
     setText("");
     setModal &&
+      //TODO - 수정
       setModal({
         open: false,
-        what: null,
+        block: undefined,
+        target: undefined,
       });
   }, [setEdit, setModal]);
 

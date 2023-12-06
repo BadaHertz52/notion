@@ -28,8 +28,7 @@ const MobileMenu = ({
   userName,
   page,
   recentPagesId,
-  modal,
-  setModal,
+
   setCommentBlock,
   setModalStyle,
   command,
@@ -161,10 +160,11 @@ const MobileMenu = ({
     } else {
       setCommentBlock(targetBlock);
     }
-    setModal({
-      open: true,
-      what: "modalComment",
-    });
+    //TODO -  수정
+    // setModal({
+    //   open: true,
+    //   what: "modalComment",
+    // });
     setModalStyle({
       ...mbmStyle,
     });
@@ -181,7 +181,6 @@ const MobileMenu = ({
     frameHtml,
     mbmStyle,
     setCommentBlock,
-    setModal,
     setModalStyle,
     targetBlock,
   ]);
@@ -381,8 +380,6 @@ const MobileMenu = ({
                       ) as string
                     )
               }
-              modal={modal}
-              setModal={setModal}
               setModalStyle={setModalStyle}
               command={command}
               setCommand={setCommand}

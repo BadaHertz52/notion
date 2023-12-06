@@ -4,8 +4,9 @@ import React, {
   useRef,
   useState,
   useContext,
-  useMemo,
   useCallback,
+  Dispatch,
+  SetStateAction,
 } from "react";
 
 import { FiCode, FiChevronsLeft } from "react-icons/fi";
@@ -25,10 +26,9 @@ import {
   Rename,
   PageMenu,
 } from "../index";
-import { SideBarContainerProp } from "./SideBarContainer";
 
 import { ActionContext } from "../../contexts";
-import { Block, ListItem, Notion, Page } from "../../types";
+import { Block, ListItem, Notion, Page, SideAppear } from "../../types";
 import {
   closeModal,
   findPage,
@@ -39,51 +39,32 @@ import { UserState } from "../../modules/user/reducer";
 
 import "../../assets/sideBar.scss";
 
-type SideBarProps = SideBarContainerProp & {
+export type SideBarProps = {
   notion: Notion;
   user: UserState;
+  sideAppear: SideAppear;
+  firstPages: Page[] | null;
+  firstList: ListItem[] | null;
+  setOpenQF?: Dispatch<SetStateAction<boolean>>;
+  setOpenTemplates?: Dispatch<SetStateAction<boolean>>;
+  showAllComments?: boolean;
 };
 
 const SideBar = ({
   notion,
   user,
   sideAppear,
-  setOpenQF,
-  setOpenTemplates,
+  firstPages,
+  firstList,
   showAllComments,
 }: SideBarProps) => {
   const { addBlock, addPage, changeSide } = useContext(ActionContext).actions;
   const inner = document.getElementById("inner");
-  const { pages, pagesId, trash, firstPagesId } = notion;
+  const { pages, pagesId, trash } = notion;
 
   const trashPages = trash.pages;
   const trashPagesId = trash.pagesId;
-  const firstPages: Page[] | null = useMemo(
-    () =>
-      pagesId && pages && firstPagesId
-        ? firstPagesId.map((id: string) => findPage(pagesId, pages, id) as Page)
-        : null,
-    [firstPagesId, pagesId, pages]
-  );
 
-  const firstList: ListItem[] | null = useMemo(
-    () =>
-      firstPages
-        ? firstPages.map((page: Page) => {
-            return {
-              id: page.id,
-              title: page.header.title,
-              iconType: page.header.iconType,
-              icon: page.header.icon,
-              subPagesId: page.subPagesId,
-              parentsId: page.parentsId,
-              editTime: page.editTime,
-              createTime: page.createTime,
-            };
-          })
-        : null,
-    [firstPages]
-  );
   const trashBtnRef = useRef<HTMLButtonElement>(null);
   const [target, setTarget] = useState<HTMLElement | null>(null);
   const [targetItem, setTargetItem] = useState<ListItem | null>(null);
@@ -304,7 +285,9 @@ const SideBar = ({
             <div className="fn-group-1">
               <button
                 title="button to open quick find board"
-                onClick={() => setOpenQF(true)}
+                // onClick={
+                //   //() => setOpenQF(true)
+                // }
               >
                 <div className="item__inner">
                   <BiSearchAlt2 />
@@ -345,7 +328,9 @@ const SideBar = ({
             <div className="fn-group-2">
               <button
                 title="button to open templates"
-                onClick={() => setOpenTemplates(true)}
+                // onClick={
+                //   //() => setOpenTemplates(true)
+                // }
               >
                 <div className="item__inner">
                   <HiTemplate />

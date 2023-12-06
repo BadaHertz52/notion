@@ -1,6 +1,6 @@
 import { Block } from "./notion";
 
-export type FrameModalTargetType =
+export type ModalTypeTargetType =
   | "menu"
   | "pageMenu"
   | "commentInput"
@@ -11,8 +11,9 @@ export type FrameModalTargetType =
   | "command"
   | "loader"
   | "rename";
-export type FrameModalType = {
+
+export type ModalType = {
   open: boolean;
-  target: FrameModalTargetType | undefined;
+  target: ModalTypeTargetType | undefined;
   block: Block | undefined;
 };

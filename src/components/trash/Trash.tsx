@@ -76,14 +76,16 @@ const Trash = ({
           break;
         case "current":
           const currentPageId = getCurrentPageId();
-          const filteredTrashPages = trashPages?.filter((page: Page) =>
-            page.parentsId?.includes(currentPageId)
-          );
-          filteringTargetList = filteredTrashPages
-            ? filteredTrashPages[0]
-              ? makeFilteringTargetList(filteredTrashPages)
-              : undefined
-            : undefined;
+          if (currentPageId) {
+            const filteredTrashPages = trashPages?.filter((page: Page) =>
+              page.parentsId?.includes(currentPageId)
+            );
+            filteringTargetList = filteredTrashPages
+              ? filteredTrashPages[0]
+                ? makeFilteringTargetList(filteredTrashPages)
+                : undefined
+              : undefined;
+          }
           break;
         default:
           break;

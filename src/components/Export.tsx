@@ -37,8 +37,6 @@ const Export = ({
   openComment,
   setOpenComment,
   setCommentBlock,
-  modal,
-  setModal,
   showAllComments,
   smallText,
   fullWidth,
@@ -184,8 +182,6 @@ const Export = ({
               recentPagesId={recentPagesId}
               commentBlock={commentBlock}
               openComment={openComment}
-              modal={modal}
-              setModal={setModal}
               setOpenComment={setOpenComment}
               setCommentBlock={setCommentBlock}
               showAllComments={showAllComments}
@@ -287,7 +283,6 @@ const Export = ({
     format,
     fullWidth,
     mobileSideMenu,
-    modal,
     openComment,
     openTemplates,
     page.header.title,
@@ -298,7 +293,7 @@ const Export = ({
     setCommentBlock,
     setDiscardEdit,
     setMobileSideMenu,
-    setModal,
+
     setOpenComment,
     setOpenTemplates,
     showAllComments,

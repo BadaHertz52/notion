@@ -11,7 +11,7 @@ import { CgMenuGridO } from "react-icons/cg";
 import { ScreenOnly } from "../index";
 
 import { ActionContext } from "../../contexts";
-import { Block, Page, FrameModalType } from "../../types";
+import { Block, Page, ModalType } from "../../types";
 import { makeNewBlock, setTemplateItem } from "../../utils";
 import { SESSION_KEY } from "../../constants";
 
@@ -19,8 +19,8 @@ type BlockFnProp = {
   page: Page;
   setMoveTargetBlock: Dispatch<SetStateAction<Block | null>>;
   moveTargetBlock: Block | null;
-  portal: FrameModalType;
-  setPortal: Dispatch<SetStateAction<FrameModalType>>;
+  portal: ModalType;
+  setPortal: Dispatch<SetStateAction<ModalType>>;
 };
 
 const BlockFn = ({

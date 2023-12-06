@@ -24,8 +24,8 @@ import { CommandMenu, PageMenu, Time, ColorMenu, ScreenOnly } from "../index";
 import { ActionContext } from "../../contexts";
 import {
   Block,
-  FrameModalTargetType,
-  FrameModalType,
+  ModalTypeTargetType,
+  ModalType,
   MenuAndBlockStylerCommonProps,
   MobileSideMenuType,
   SelectionType,
@@ -46,7 +46,7 @@ export type MenuProps = Omit<
 > & {
   setSelection?: Dispatch<SetStateAction<SelectionType | null>>;
   setMobileSideMenu?: Dispatch<SetStateAction<MobileSideMenuType>>;
-  setModal?: Dispatch<SetStateAction<FrameModalType>>;
+  setModal?: Dispatch<SetStateAction<ModalType>>;
   closeModal?: () => void;
 };
 
@@ -162,7 +162,7 @@ const Menu = ({
   }, [closMobileSideMenu, closeMenuInModal]);
 
   const openPopUpMenu = useCallback(
-    (target: FrameModalTargetType) => {
+    (target: ModalTypeTargetType) => {
       if (setModal)
         setModal({
           open: true,

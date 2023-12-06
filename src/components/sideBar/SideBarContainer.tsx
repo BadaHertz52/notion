@@ -1,37 +1,22 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 
 import { SideBar } from "../index";
+import { SideBarProps } from "./SideBar";
 
 import { RootState } from "../../modules";
-import { SideAppear } from "../../types";
 
-export type SideBarContainerProp = {
-  sideAppear: SideAppear;
-  setOpenQF: Dispatch<SetStateAction<boolean>>;
-  setOpenTemplates: Dispatch<SetStateAction<boolean>>;
-  showAllComments: boolean;
-};
+export type SideBarContainerProp = Omit<
+  SideBarProps,
+  "sideAppear" | "notion" | "user"
+>;
 
-const SideBarContainer = ({
-  sideAppear,
-  setOpenQF,
-  setOpenTemplates,
-  showAllComments,
-}: SideBarContainerProp) => {
-  const notion = useSelector((state: RootState) => state.notion);
-
-  const user = useSelector((state: RootState) => state.user);
+const SideBarContainer = ({ ...props }: SideBarContainerProp) => {
+  const rootState = useSelector((state: RootState) => state);
+  const { notion, user, side } = rootState;
 
   return (
-    <SideBar
-      notion={notion}
-      user={user}
-      sideAppear={sideAppear}
-      setOpenQF={setOpenQF}
-      setOpenTemplates={setOpenTemplates}
-      showAllComments={showAllComments}
-    />
+    <SideBar {...props} notion={notion} user={user} sideAppear={side.appear} />
   );
 };
 

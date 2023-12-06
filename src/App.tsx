@@ -1,6 +1,9 @@
-import React, { useEffect } from "react";
-import NotionRouter from "./route/NotionRouter";
+import { useEffect } from "react";
+
+import { NotionContainer } from "./components";
+
 import "./assets/main.scss";
+
 const App = () => {
   const setVh = () => {
     document.documentElement.style.setProperty(
@@ -29,7 +32,7 @@ const App = () => {
     return () => window.removeEventListener("resize", setVh);
   }, []);
 
-  return <NotionRouter />;
+  return <NotionContainer />;
 };
 
 export default App;

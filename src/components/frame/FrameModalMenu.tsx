@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import Modal from "../Modal";
-import { FrameModalType, Page } from "../../types";
+import { ModalType, Page } from "../../types";
 import Menu, { MenuProps } from "../menu/Menu";
 import Rename, { RenameProps } from "../Rename";
 import CommentInput, { CommentInputProps } from "../comment/CommentInput";
@@ -14,7 +14,7 @@ import { CSSProperties } from "styled-components";
 import { findPage, getBlockDomRect, isInTarget } from "../../utils";
 
 type ChildrenProps = MenuProps & RenameProps & CommentInputProps;
-type FrameModalMenuProps = Omit<
+type ModalTypeMenuProps = Omit<
   ChildrenProps,
   | "block"
   | "pageId"
@@ -26,14 +26,14 @@ type FrameModalMenuProps = Omit<
   | "allComments"
   | "setModal"
 > & {
-  setModal: Dispatch<SetStateAction<FrameModalType>>;
+  setModal: Dispatch<SetStateAction<ModalType>>;
   pagesId: string[];
-  modal: FrameModalType;
+  modal: ModalType;
   closeModal: () => void;
 };
-function FrameModalMenu({ ...props }: FrameModalMenuProps) {
+function ModalTypeMenu({ ...props }: ModalTypeMenuProps) {
   const { modal } = props;
-  const ID = "frameModalMenu";
+  const ID = "ModalTypeMenu";
 
   const [modalStyle, setModalStyle] = useState<CSSProperties | undefined>(
     undefined
@@ -156,8 +156,110 @@ function FrameModalMenu({ ...props }: FrameModalMenuProps) {
           frameHtml={props.frameHtml}
         />
       )}
+      {/*
+        {portal.target === "pageMenu" && (
+          <PageMenu
+            style={modalStyle}
+            what="block"
+            currentPage={page}
+            pages={pages}
+            firstList={firstList}
+            closeMenu={() => setModal({ open: false, what: null })}
+          />
+        )}
+
+        {portal.target === "comments" &&
+          commentBlock &&
+          openComment &&
+          targetMainComments && (
+            <Comments
+              targetMainComments={targetMainComments}
+              userName={userName}
+              block={commentBlock}
+              pageId={page.id}
+              page={page}
+              frameHtml={frameHtml}
+              openComment={openComment}
+              discardEdit={discardEdit}
+              setDiscardEdit={setDiscardEdit}
+              showAllComments={showAllComments}
+              changeStateToCloseBlockComments={changeStateToCloseBlockComments}
+            />
+          )}
+        {portal.target === "moveTargetBlock" && moveTargetBlock && (
+          <MoveTargetBlock
+            key={moveTargetBlock.id}
+            pages={pages}
+            pagesId={pagesId}
+            page={page}
+            block={moveTargetBlock}
+            fontSize={fontSize}
+            isMoved={isMoved}
+            setMoveTargetBlock={setMoveTargetBlock}
+            pointBlockToMoveBlock={pointBlockToMoveBlock}
+            command={command}
+            setCommand={setCommand}
+            openComment={openComment}
+            setOpenComment={setOpenComment}
+            setCommentBlock={setCommentBlock}
+            setOpenLoader={setOpenLoader}
+            setLoaderTargetBlock={setLoaderTargetBlock}
+            closeMenu={closeMenu}
+            templateHtml={templateHtml}
+            setSelection={setSelection}
+            setMobileMenuTargetBlock={setMobileMenuTargetBlock}
+            mobileMenuTargetBlock={mobileMenuTargetBlock}
+          />
+        )}
+                {portal.target === "blockStyler" && selection && !isMobile() && (
+          <BlockStyler
+            pages={pages}
+            pagesId={pagesId}
+            firstList={firstList}
+            userName={userName}
+            page={page}
+            recentPagesId={recentPagesId}
+            block={selection.block}
+            modal={modal}
+            setModal={setModal}
+            setModalStyle={setModalStyle}
+            command={command}
+            setCommand={setCommand}
+            setCommentBlock={setCommentBlock}
+            selection={selection}
+            setSelection={setSelection}
+            frameHtml={frameHtml}
+            setMobileSideMenu={setMobileSideMenu}
+            setMobileMenuTargetBlock={setMobileMenuTargetBlock}
+            setOpenMobileBlockStyler={null}
+          />
+        )}
+        {/* {command.open && command.targetBlock && (
+        <div id="block__commandMenu" style={commandMenuPosition}>
+          <CommandMenu
+            style={commandMenuStyle}
+            key={`${command.targetBlock.id}_command`}
+            page={page}
+            block={command.targetBlock}
+            command={command}
+            setCommand={setCommand}
+            setSelection={setSelection}
+          />
+        </div>
+      )} {openLoader && loaderTargetBlock && (
+        <Loader
+          block={loaderTargetBlock}
+          page={page}
+          editBlock={editBlock}
+          editPage={null}
+          frameHtml={frameHtml}
+          setOpenLoader={setOpenLoader}
+          setLoaderTargetBlock={setLoaderTargetBlock}
+        />
+      )} 
+      */}
     </Modal>
   );
 }
 
-export default React.memo(FrameModalMenu);
+export default React.memo(ModalTypeMenu);

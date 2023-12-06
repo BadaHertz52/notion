@@ -26,7 +26,7 @@ import { makePagePath } from "../../utils";
 
 import "../../assets/editor.scss";
 
-type EditorProps = {
+export type EditorProps = {
   pages: Page[];
   pagesId: string[];
   userName: string;
@@ -35,15 +35,12 @@ type EditorProps = {
   sideAppear: SideAppear;
   page: Page;
   isInTrash: boolean;
-  modal: ModalType;
-  setModal: Dispatch<SetStateAction<ModalType>>;
   openComment: boolean;
   setOpenComment: Dispatch<SetStateAction<boolean>>;
   commentBlock: Block | null;
   setCommentBlock: Dispatch<SetStateAction<Block | null>>;
   smallText: boolean;
   setSmallText: Dispatch<SetStateAction<boolean>>;
-
   fullWidth: boolean;
   setFullWidth: Dispatch<SetStateAction<boolean>>;
   showAllComments: boolean;
@@ -86,8 +83,6 @@ const Editor = ({
   setOpenTemplates,
   fontStyle,
   setFontStyle,
-  modal,
-  setModal,
   mobileSideMenu,
   setMobileSideMenu,
   openExport,
@@ -166,8 +161,6 @@ const Editor = ({
         openComment={openComment}
         setOpenComment={setOpenComment}
         setCommentBlock={setCommentBlock}
-        modal={modal}
-        setModal={setModal}
         showAllComments={showAllComments}
         smallText={smallText}
         fullWidth={fullWidth}
@@ -189,8 +182,6 @@ const Editor = ({
           userName={userName}
           page={page}
           block={mobileSideMenu.block}
-          setModal={setModal}
-          modal={modal}
           setCommentBlock={setCommentBlock}
           frameHtml={null}
           mobileSideMenu={mobileSideMenu}

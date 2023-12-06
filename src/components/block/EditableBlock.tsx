@@ -31,7 +31,7 @@ import {
   getEditTime,
   setTemplateItem,
 } from "../../utils";
-import { BACKGROUND_COLOR, COLOR, SESSION_KEY } from "../../constants";
+import { SESSION_KEY } from "../../constants";
 
 export type EditableBlockProps = {
   pages: Page[];

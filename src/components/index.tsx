@@ -47,6 +47,9 @@ import Menu from "./menu/Menu";
 import MobileMenu from "./menu/MobileMenu";
 import MobileSideMenu from "./menu/MobileSideMenu";
 
+import NotionContainer from "./notion/NotionContainer";
+import Notion from "./notion/Notion";
+
 import EmptyPageContent from "./page/EmptyPageContent";
 import NonePage from "./page/NonePage";
 import PageHeader from "./page/PageHeader";
@@ -58,6 +61,7 @@ import PageMenu from "./pageMenu/PageMenu";
 import Result from "./result/Result";
 import ResultList from "./result/ResultList";
 
+import SideBarContainer from "./sideBar/SideBarContainer";
 import Favorites from "./sideBar/Favorites";
 import ItemTemplate from "./sideBar/ItemTemplate";
 import ListTemplate from "./sideBar/ListTemplate";
@@ -65,7 +69,6 @@ import Private from "./sideBar/Private";
 import QuickFindBoard from "./sideBar/QuickFindBoard";
 import RecentPages from "./sideBar/RecentPages";
 import SideBar from "./sideBar/SideBar";
-import SideBarContainer from "./sideBar/SideBarContainer";
 import SideBarMoreFn from "./sideBar/SideBarMoreFn";
 
 import FontBtn from "./topBar/FontBtn";
@@ -121,7 +124,6 @@ export {
   RecentPages,
   SideBar,
   SideBarMoreFn,
-  SideBarContainer,
   Result,
   ResultList,
   PageBtnList,
@@ -142,7 +144,6 @@ export {
   FrameInner,
   FrameModalMenu,
   Editor,
-  EditorContainer,
   AllComments,
   BlockComment,
   Comment,
@@ -168,4 +169,8 @@ export {
   Trash,
   TrashResultItem,
   Modal,
+  EditorContainer,
+  SideBarContainer,
+  NotionContainer,
+  Notion,
 };

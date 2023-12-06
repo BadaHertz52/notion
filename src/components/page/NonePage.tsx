@@ -1,13 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 
-import { Page } from "../../types";
 import { getPageSample } from "../../utils";
+import { ActionContext } from "../../contexts";
 
-type NoPageProps = {
-  addPage: (newPage: Page) => void;
-};
-
-const NonePage = ({ addPage }: NoPageProps) => {
+const NonePage = () => {
+  const { addPage } = useContext(ActionContext).actions;
   return (
     <div className="editor nonePage">
       <p>Page doesn't existence</p>

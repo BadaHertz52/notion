@@ -43,8 +43,6 @@ const BlockStyler = ({
   page,
   recentPagesId,
   block,
-  modal,
-  setModal,
   setCommentBlock,
   selection,
   setSelection,
@@ -247,10 +245,12 @@ const BlockStyler = ({
   }, [block, frameHtml, getMainBlockDomRect, setModalStyle]);
   const onClickCommentBtn = useCallback(() => {
     changeCommentStyle();
-    setModal({
-      open: true,
-      what: "modalComment",
-    });
+    //TODO -  수정
+    // setModal({
+    //   open: true,
+    //   block: block,
+    //   target: "comments",
+    // });
     setCommentBlock(block);
     setSelection && setSelection(null);
     isMobile() && setMobileMenuTargetBlock(null);
@@ -259,7 +259,6 @@ const BlockStyler = ({
     changeCommentStyle,
     setCommentBlock,
     setMobileMenuTargetBlock,
-    setModal,
     setSelection,
   ]);
 

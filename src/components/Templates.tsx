@@ -42,7 +42,6 @@ type TemplatesProps = TemplateFrameCommonProps & {
   setOpenTemplates: Dispatch<SetStateAction<boolean>>;
 };
 const Templates = ({
-  routePageId,
   user,
   pagesId,
   pages,
@@ -54,8 +53,7 @@ const Templates = ({
   openTemplates,
   setOpenTemplates,
   setOpenComment,
-  modal,
-  setModal,
+
   setCommentBlock,
   showAllComments,
   smallText,
@@ -295,8 +293,6 @@ const Templates = ({
                   openComment={openComment}
                   setOpenComment={setOpenComment}
                   setCommentBlock={setCommentBlock}
-                  modal={modal}
-                  setModal={setModal}
                   showAllComments={showAllComments}
                   smallText={smallText}
                   fullWidth={fullWidth}

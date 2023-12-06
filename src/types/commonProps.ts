@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import { CSSProperties, Dispatch, SetStateAction } from "react";
 import {
   Block,
   FontStyleType,
@@ -12,10 +12,8 @@ import {
 export type StylerCommonProps = MenuAndBlockStylerCommonProps & {
   pagesId: string[];
   recentPagesId: string[] | null;
-  setModalStyle: Dispatch<
-    React.SetStateAction<React.CSSProperties | undefined>
-  >;
-  setCommand: React.Dispatch<React.SetStateAction<Command>>;
+  setModalStyle: Dispatch<SetStateAction<CSSProperties | undefined>>;
+  setCommand: Dispatch<SetStateAction<Command>>;
   command: Command;
   setMobileSideMenu: Dispatch<SetStateAction<MobileSideMenuType>>;
   setMobileMenuTargetBlock: Dispatch<SetStateAction<Block | null>>;
@@ -32,8 +30,6 @@ export type TemplateFrameCommonProps = {
   setOpenComment: Dispatch<SetStateAction<boolean>>;
   openTemplates: boolean;
   setOpenTemplates: Dispatch<SetStateAction<boolean>>;
-  modal: ModalType;
-  setModal: Dispatch<SetStateAction<ModalType>>;
   setCommentBlock: Dispatch<SetStateAction<Block | null>>;
   showAllComments: boolean;
   smallText: boolean;
@@ -51,8 +47,6 @@ export type MenuAndBlockStylerCommonProps = {
   page: Page;
   block: Block;
   userName: string;
-  setModal: Dispatch<SetStateAction<ModalType>>;
-  modal: ModalType;
   setCommentBlock: Dispatch<SetStateAction<Block | null>>;
   frameHtml: HTMLDivElement | null;
 };

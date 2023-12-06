@@ -1,11 +1,11 @@
 import { Page, PathType } from "../types";
 import { findPage } from ".";
 
-export const getCurrentPageId = (): string => {
+export const getCurrentPageId = (): string | undefined => {
   const href = window.location.href;
   const lastSlashIndex = href.lastIndexOf("/");
   const currentPageId = href.slice(lastSlashIndex + 1);
-  return currentPageId === "notion" ? "" : currentPageId;
+  return currentPageId === "notion" ? undefined : currentPageId;
 };
 
 export const makePagePath = (

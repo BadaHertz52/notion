@@ -41,10 +41,10 @@ export type Command = {
   targetBlock: Block | null;
 };
 
-export type ModalType = {
-  open: boolean;
-  what: "modalMoveToPage" | "modalComment" | "modalCommand" | null;
-};
+// export type ModalType = {
+//   open: boolean;
+//   what: "modalMoveToPage" | "modalComment" | "modalCommand" | null;
+// };
 
 export type ResultType = {
   id: string;
