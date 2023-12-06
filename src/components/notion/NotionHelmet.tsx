@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 
 import { Helmet } from "react-helmet-async";
 
-import { PageHeader, Emoji } from "../types";
-import { getPageSample, getEmojiUrl } from "../utils";
+import { PageHeader, Emoji } from "../../types";
+import { getPageSample, getEmojiUrl } from "../../utils";
 
-import BASIC_MEAT_TAG_IMG_URL from "../assets/img/default.jpeg";
+import BASIC_MEAT_TAG_IMG_URL from "../../assets/img/default.jpeg";
 
 type MetaTagProps = {
   pageId?: string;

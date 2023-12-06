@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import Modal from "../Modal";
+import ModalPortal from "./ModalPortal";
 import { ModalType, Page } from "../../types";
 import Menu, { MenuProps } from "../menu/Menu";
 import Rename, { RenameProps } from "../Rename";
@@ -119,7 +119,7 @@ function ModalTypeMenu({ ...props }: ModalTypeMenuProps) {
   }, [handleCloseModal, handleScrollOfFrame]);
 
   return (
-    <Modal id={ID} isOpen={modal.open} style={modalStyle}>
+    <ModalPortal id={ID} isOpen={modal.open} style={modalStyle}>
       {modal.target === "menu" && modal.block && (
         <Menu
           pages={props.pages}
@@ -258,7 +258,7 @@ function ModalTypeMenu({ ...props }: ModalTypeMenuProps) {
         />
       )} 
       */}
-    </Modal>
+    </ModalPortal>
   );
 }
 

@@ -12,7 +12,7 @@ import React, {
 import { useSelector } from "react-redux";
 
 import { ActionContext } from "../../contexts";
-import { BlockFn, FrameInner, Modal, FrameModalMenu } from "../index";
+import { BlockFn, FrameInner, ModalPortal, FameModal } from "../index";
 import { RootState } from "../../modules";
 import {
   Block,
@@ -927,7 +927,7 @@ const Frame = ({
         openExport={openExport}
       />
       {/* modal - blockFn */}
-      <Modal id="modal-blockFn" isOpen={!isMobile()}>
+      <ModalPortal id="modal-blockFn" isOpen={!isMobile()}>
         <BlockFn
           page={page}
           moveTargetBlock={moveTargetBlock}
@@ -935,8 +935,8 @@ const Frame = ({
           portal={portal}
           setPortal={setPortal}
         />
-      </Modal>
-      <FrameModalMenu
+      </ModalPortal>
+      <FameModal
         page={page}
         pages={pages}
         pagesId={pagesId}
@@ -952,7 +952,7 @@ const Frame = ({
       />
       {/* modal - others */}
       {/* 
-      <Modal isOpen={portal.open}>
+      <ModalPortal isOpen={portal.open}>
 
         
 
@@ -977,7 +977,7 @@ const Frame = ({
             initialInnerHeight={innerHeight}
           />
         )}
-      </Modal> 
+      </ModalPortal> 
       */}
     </div>
   );

@@ -34,7 +34,6 @@ import EditorContainer from "./editor/EditorContainer";
 
 import Frame from "./frame/Frame";
 import FrameInner from "./frame/FrameInner";
-import FrameModalMenu from "./frame/FrameModalMenu";
 
 import EmojiIcon from "./icon/EmojiIcon";
 import IconModal from "./icon/IconModal";
@@ -47,8 +46,12 @@ import Menu from "./menu/Menu";
 import MobileMenu from "./menu/MobileMenu";
 import MobileSideMenu from "./menu/MobileSideMenu";
 
+import FameModal from "./modal/FrameModal";
+import ModalPortal from "./modal/ModalPortal";
+
 import NotionContainer from "./notion/NotionContainer";
 import Notion from "./notion/Notion";
+import NotionHelmet from "./notion/NotionHelmet";
 
 import EmptyPageContent from "./page/EmptyPageContent";
 import NonePage from "./page/NonePage";
@@ -84,10 +87,6 @@ import Export from "./Export";
 import Img from "./Img";
 
 import Loading from "./Loading";
-
-import NotionHelmet from "./NotionHelmet";
-
-import Modal from "./Modal";
 
 import Rename from "./Rename";
 
@@ -142,7 +141,7 @@ export {
   PageIcon,
   Frame,
   FrameInner,
-  FrameModalMenu,
+  FameModal,
   Editor,
   AllComments,
   BlockComment,
@@ -168,7 +167,7 @@ export {
   Time,
   Trash,
   TrashResultItem,
-  Modal,
+  ModalPortal,
   EditorContainer,
   SideBarContainer,
   NotionContainer,

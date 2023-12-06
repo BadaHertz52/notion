@@ -1,15 +1,15 @@
 import React, { ReactNode, CSSProperties } from "react";
 import * as ReactDOM from "react-dom";
 
-import "../assets/modal.scss";
+import "../../assets/modal.scss";
 
-type ModalProps = {
+type ModalPortalProps = {
   id?: string;
   isOpen: boolean;
   children: ReactNode;
   style?: CSSProperties;
 };
-const Modal = ({ id, isOpen, children, style }: ModalProps) => {
+const ModalPortal = ({ id, isOpen, children, style }: ModalPortalProps) => {
   const modalRootEl = document.getElementById("modal-root") as HTMLElement;
   return ReactDOM.createPortal(
     <div id={id} className={`modal ${isOpen ? "on" : ""}`}>
@@ -21,4 +21,4 @@ const Modal = ({ id, isOpen, children, style }: ModalProps) => {
   );
 };
 
-export default React.memo(Modal);
+export default React.memo(ModalPortal);
