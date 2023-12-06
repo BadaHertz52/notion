@@ -21,11 +21,10 @@ export default function side(
 ): Side {
   switch (action.type) {
     case CHANGE_SIDE:
-      const sideBar = document.getElementById("inner");
-      if (sideBar) {
-        const classList = sideBar.classList;
+      const sideBarOutBoxEl = document.getElementById("sideBar-outBox");
+      if (sideBarOutBoxEl) {
         const newClassName = `sideBar-${action.appear}`;
-        sideBar.classList.replace(classList[0], newClassName);
+        sideBarOutBoxEl.className = newClassName;
       }
       return { appear: action.appear };
     default:

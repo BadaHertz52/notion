@@ -32,7 +32,7 @@ const Loader = ({
   setOpenLoader,
   setLoaderTargetBlock,
 }: LoaderProps) => {
-  const inner = document.getElementById("inner");
+  const inner = document.getElementById("notion__inner");
   const loaderHtml = document.getElementById("loader");
   const [loaderStyle, setLoaderStyle] = useState<CSSProperties | undefined>(
     undefined

@@ -59,7 +59,7 @@ const SideBar = ({
   showAllComments,
 }: SideBarProps) => {
   const { addBlock, addPage, changeSide } = useContext(ActionContext).actions;
-  const inner = document.getElementById("inner");
+  const inner = document.getElementById("notion__inner");
   const { pages, pagesId, trash } = notion;
 
   const trashPages = trash.pages;
@@ -242,7 +242,11 @@ const SideBar = ({
     }
   }, [sideAppear]);
   return (
-    <div className="sideBar-outbox" onMouseLeave={onMouseOutSideBar}>
+    <div
+      id="sideBar-outBox"
+      className="sideBar-lock"
+      onMouseLeave={onMouseOutSideBar}
+    >
       <div className="sideBar">
         <div className="sideBar__inner">
           <div className="sideBar__inner_top">

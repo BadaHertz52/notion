@@ -28,7 +28,7 @@ const AllComments = ({
   discardEdit,
   setDiscardEdit,
 }: AllCommentsProps) => {
-  const inner = document.getElementById("inner");
+  const inner = document.getElementById("notion__inner");
   const allCommentsRef = useRef<HTMLDivElement>(null);
   const closeAllComments = useCallback(
     (event: globalThis.MouseEvent) => {

@@ -85,7 +85,7 @@ const Notion = ({ ...props }: NotionProps) => {
   return (
     <div id="notion">
       <NotionHelmet pageHeader={currentPage?.header} pageId={currentPage?.id} />
-      <div id="inner" className="notion__inner sideBar-lock">
+      <div id="notion__inner">
         <ModalContext.Provider value={{ changeModal: changeModal }}>
           <SideBarContainer
             {...props}

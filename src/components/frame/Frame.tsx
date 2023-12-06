@@ -73,7 +73,7 @@ const Frame = ({
   const { editPage, editBlock, addBlock } = useContext(ActionContext).actions;
   const innerWidth = window.innerWidth;
 
-  const inner = document.getElementById("inner");
+  const inner = document.getElementById("notion__inner");
   const frameRef = useRef<HTMLDivElement>(null);
   const frameHtml = frameRef.current;
   const [templateHtml, setTemplateHtml] = useState<HTMLElement | null>(null);

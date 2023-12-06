@@ -60,7 +60,7 @@ const Comments = ({
   changeStateToCloseBlockComments,
 }: CommentsProps) => {
   const { editBlock, editPage } = useContext(ActionContext).actions;
-  const inner = document.getElementById("inner");
+  const inner = document.getElementById("notion__inner");
   const [commentsStyle, setCommentsStyle] = useState<CSSProperties | undefined>(
     undefined
   );

@@ -104,7 +104,7 @@ const IconModal = ({
     [changePageIcon, changeImg]
   );
 
-  const inner = document.getElementById("inner");
+  const inner = document.getElementById("notion__inner");
   const closeIconModal = useCallback(
     (event: MouseEvent) => {
       const target = event.target as HTMLElement | null;

@@ -33,7 +33,7 @@ const QuickFindBoard = ({
   cleanRecentPage,
   setOpenQF,
 }: QuickFindBoardProps) => {
-  const inner = document.getElementById("inner");
+  const inner = document.getElementById("notion__inner");
   const bestMatches = "Best matches";
   const lastEditedNewest = "Last edited:Newest first";
   const lastEditedOldest = "Last edited:Oldest first";

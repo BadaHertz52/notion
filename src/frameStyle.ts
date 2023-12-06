@@ -38,7 +38,7 @@ export const frameStyleCode = `label {
   transform: translateX(10px);
 }
 
-.notion__inner .edit__inform {
+#notion__inner .edit__inform {
   color: rgb(60, 60, 60);
 }
 
@@ -1010,9 +1010,9 @@ table {
   border-spacing: 0;
 }
 
-.notion__inner .blockComponent,
-.notion__inner .contents,
-.notion__inner .contentEditable {
+#notion__inner .blockComponent,
+#notion__inner .contents,
+#notion__inner .contentEditable {
   color: inherit;
 }
 

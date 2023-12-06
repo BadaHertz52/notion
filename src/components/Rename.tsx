@@ -36,7 +36,7 @@ const Rename = ({
   closeRename,
 }: RenameProps) => {
   const { editPage, editBlock } = useContext(ActionContext).actions;
-  const inner = document.getElementById("inner");
+  const inner = document.getElementById("notion__inner");
   const [openIconModal, setOpenIconModal] = useState<boolean>(false);
   //TODO -  이모지 모달
   const handleClick = useCallback(

@@ -47,7 +47,7 @@ const MobileMenu = ({
   );
   const [openMobileBlockStyler, setOpenMobileBlockStyler] =
     useState<boolean>(false);
-  const inner = document.getElementById("inner");
+  const inner = document.getElementById("notion__inner");
 
   /**
    * MobileMenu 창을 닫는 함수

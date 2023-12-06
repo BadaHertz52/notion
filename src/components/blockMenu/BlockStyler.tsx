@@ -84,7 +84,7 @@ const BlockStyler = ({
         break;
     }
   };
-  const inner = document.getElementById("inner");
+  const inner = document.getElementById("notion__inner");
   const blockStyler = document.getElementById("blockStyler");
   const [blockStylerStyle, setBlockStylerStyle] = useState<
     CSSProperties | undefined
