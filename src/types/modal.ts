@@ -1,4 +1,4 @@
-import { Block } from "./notion";
+import { Block } from "./module";
 
 export type ModalTypeTargetType =
   | "menu"

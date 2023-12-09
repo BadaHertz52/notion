@@ -28,9 +28,8 @@ import {
 
 import { Frame, PageIcon } from "./index";
 
-import { UserState } from "../modules/user/reducer";
 import { RootState } from "../modules";
-import { Page, TemplateFrameCommonProps } from "../types";
+import { Page, TemplateFrameCommonProps, UserState } from "../types";
 import { findPage, getEditTime, getNewPageId, getPageSample } from "../utils";
 
 import "../assets/templates.scss";

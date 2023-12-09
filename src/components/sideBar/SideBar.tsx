@@ -21,11 +21,11 @@ import {
   RecentPages,
   Favorites,
   Private,
-  SideBarMoreFn,
+  SideBarModal,
   Trash,
-  Rename,
 } from "../index";
 
+import { INITIAL_MODAL } from "../../constants";
 import { ActionContext } from "../../contexts";
 import {
   Block,
@@ -34,18 +34,11 @@ import {
   Notion,
   Page,
   SideAppear,
+  UserState,
 } from "../../types";
-import {
-  closeModal,
-  findPage,
-  getBlockSample,
-  getPageSample,
-} from "../../utils";
-import { UserState } from "../../modules/user/reducer";
+import { findPage, getBlockSample, getPageSample } from "../../utils";
 
 import "../../assets/sideBar.scss";
-import SideBarModal from "../modal/SideBarModal";
-import { INITIAL_MODAL } from "../../constants";
 
 export type SideBarProps = {
   notion: Notion;

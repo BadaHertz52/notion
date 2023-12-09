@@ -1,4 +1,4 @@
-import { COLOR, BACKGROUND_COLOR, EMOJI_DATA } from "../constants/";
+import { COLOR, BACKGROUND_COLOR, EMOJI_DATA } from "../constants";
 
 export type Emoji = keyof typeof EMOJI_DATA;
 
@@ -112,4 +112,13 @@ export type Notion = {
     pagesId: string[] | null;
     pages: TrashPage[] | null;
   };
+};
+//side
+export type SideAppear = "lock" | "float" | "floatHide" | "close";
+//user
+export type UserState = {
+  userName: string;
+  userEmail: string;
+  favorites: string[] | null;
+  recentPagesId: string[] | null;
 };

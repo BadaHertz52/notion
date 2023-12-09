@@ -1,4 +1,5 @@
 import { SESSION_KEY } from "../../constants";
+import { UserState } from "../../types";
 import { initialNotionState } from "../notion/reducer";
 
 const ADD_FAVORITES = "user/ADD_FAVORITES" as const;
@@ -27,12 +28,6 @@ export const clean_recent_page = () => ({
   type: CLEAN_RECENT_PAGE,
 });
 
-export type UserState = {
-  userName: string;
-  userEmail: string;
-  favorites: string[] | null;
-  recentPagesId: string[] | null;
-};
 type UserAction =
   | ReturnType<typeof add_favorites>
   | ReturnType<typeof remove_favorites>

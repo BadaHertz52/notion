@@ -6,10 +6,9 @@ import { NonePage, EditorContainer } from "../components";
 import { EditorContainerProps } from "../components/containers/EditorContainer";
 
 import { SESSION_KEY } from "../constants";
-import { ListItem, Page } from "../types";
 import { ActionContext } from "../contexts";
+import { ListItem, Page, UserState } from "../types";
 import { findPage, makeRoutePath } from "../utils";
-import { UserState } from "../modules/user/reducer";
 
 export type NotionRouterProps = Omit<
   EditorContainerProps,

@@ -16,8 +16,12 @@ import { IoArrowRedoOutline } from "react-icons/io5";
 
 import { PageIcon, Time } from "../index";
 
-import { UserState } from "../../modules/user/reducer";
-import { ListItem, ModalType, ModalTypeTargetType } from "../../types";
+import {
+  ListItem,
+  ModalType,
+  ModalTypeTargetType,
+  UserState,
+} from "../../types";
 
 type SideBarMoreFnProps = {
   user: UserState;

@@ -12,9 +12,9 @@ import {
   MobileSideMenuType,
   ModalType,
   Page,
+  UserState,
 } from "../../types";
 import { findPage } from "../../utils";
-import { UserState } from "../../modules/user/reducer";
 
 type NotionProps = Omit<SideBarContainerProp, "firstPages" | "firstList"> & {
   user: UserState;
