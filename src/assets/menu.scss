@@ -132,11 +132,6 @@
     height: fit-content;
   }
 }
-#sideBarModal__menu {
-  #pageMenu {
-    background-color: #ffff;
-  }
-}
 #pageMenu {
   @include modalStyle;
   background-color: initial;
@@ -240,44 +235,6 @@
   }
   .menu__sideMenu > div {
     width: 100%;
-  }
-  #sideBarModal__menu {
-    transition: top ease 1s;
-    .topBar {
-      height: 60px;
-      width: 100vw;
-      padding: 10px 20px;
-      box-sizing: border-box;
-      background-color: #ffff;
-      display: flex;
-      justify-content: end;
-      button {
-        opacity: 0.5;
-        &:hover {
-          opacity: 1;
-          font-weight: bold;
-        }
-      }
-    }
-  }
-  #sideBarModal__renameOutBox,
-  #pageMenu {
-    width: 100vw;
-    height: calc(100vh - 60px);
-  }
-  #sideBarModal__renameOutBox {
-    background-color: #ffff;
-
-    #rename {
-      width: calc(100% - 20px);
-      margin: auto;
-      .inner {
-        width: 100%;
-        box-shadow: none;
-        border-radius: 0%;
-        border: 1px solid rgb(239, 239, 239);
-      }
-    }
   }
   #pageMenu {
     width: 100vw;

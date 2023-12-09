@@ -115,17 +115,6 @@ const PageMenu = ({
   return (
     <div id="pageMenu" ref={pageMenuRef} style={style}>
       <div className="inner">
-        {isMobile() && (
-          <div className="pageMenu__btn-container">
-            <button
-              className="pageMenu__btn-close"
-              onClick={handleClose}
-              onTouchMove={handleTouchMove}
-            >
-              close
-            </button>
-          </div>
-        )}
         <div
           className="search"
           style={{ width: listWidth, marginLeft: "auto", marginRight: "auto" }}

@@ -67,32 +67,18 @@ const SideBar = ({
   showAllComments,
 }: SideBarProps) => {
   const { addBlock, addPage, changeSide } = useContext(ActionContext).actions;
-  const inner = document.getElementById("notion__inner");
   const { pages, pagesId, trash } = notion;
-
   const trashPages = trash.pages;
   const trashPagesId = trash.pagesId;
 
   const trashBtnRef = useRef<HTMLButtonElement>(null);
 
   const [sideModal, setSideModal] = useState<ModalType>(INITIAL_MODAL);
-
-  const [target, setTarget] = useState<HTMLElement | null>(null);
   const [targetItem, setTargetItem] = useState<ListItem | null>(null);
-  const [targetPage, setTargetPage] = useState<Page | null>(null);
   const [openTrash, setOpenTrash] = useState<boolean>(false);
-  const [openSideMoreMenu, setOpenSideMoreMenu] = useState<boolean>(false);
-  const [openPageMenu, setOpenPageMenu] = useState<boolean>(false);
-  const [openRename, setOpenRename] = useState<boolean>(false);
   const [trashStyle, setTrashStyle] = useState<CSSProperties | undefined>(
     undefined
   );
-  const [moreFnStyle, setMoreFnStyle] = useState<CSSProperties | undefined>(
-    undefined
-  );
-  const [renameStyle, setRenameStyle] = useState<CSSProperties>();
-  const [pageMenuStyle, setPageMenuStyle] = useState<CSSProperties>();
-
   const recordIcon = user.userName.substring(0, 1);
   const size = window.innerWidth * 0.25;
   const itemSize = size >= 130 ? size : 130;
@@ -112,6 +98,7 @@ const SideBar = ({
           type: "page",
           parentBlocksId: null,
         };
+
         if (targetPage.blocksId === null) {
           addBlock(targetPage.id, newPageBlock, 0, null);
         } else {
@@ -130,71 +117,27 @@ const SideBar = ({
   );
 
   const onClickMoreBtn = useCallback((item: ListItem, target: HTMLElement) => {
-    setOpenSideMoreMenu(true);
     setTargetItem(item);
-    setTarget(target);
+
+    const newModal: ModalType = {
+      open: true,
+      target: "sideBarMoreFn",
+      pageId: item.id,
+    };
+
     if (window.innerWidth > 768) {
-      const position = target.getClientRects()[0];
-      setMoreFnStyle({
-        top: position.top,
-        left: position.right,
+      const domRect = target.getClientRects()[0];
+      setSideModal({
+        ...newModal,
+        targetDomRect: domRect,
       });
     } else {
-      const moreFnEl = document.querySelector("#sideBar__moreFn");
-      if (moreFnEl) {
-        setMoreFnStyle({
-          transform: "translateY(100vh)",
-        });
-        setTimeout(() => {
-          setMoreFnStyle({
-            transform: "translateY(50vh)",
-          });
-        }, 500);
-      }
-    }
-  }, []);
-  const changeMoreFnStyleToClose = useCallback(() => {
-    if (window.innerWidth > 768) {
-      setMoreFnStyle(undefined);
-    } else {
-      setMoreFnStyle({
-        display: "block",
-        transform: "translateY(100vh)",
+      setSideModal({
+        ...newModal,
+        isMobile: true,
       });
-      setTimeout(() => {
-        setMoreFnStyle(undefined);
-      }, 500);
     }
   }, []);
-  const closePageMenu = () => {
-    setOpenPageMenu(false);
-  };
-  const closeSideBarMoreFn = () => {
-    setOpenSideMoreMenu(false);
-    changeMoreFnStyleToClose();
-  };
-  const handleClickToCloseModal = useCallback(
-    (event: globalThis.MouseEvent) => {
-      if (openSideMoreMenu) {
-        const target = event.target as HTMLElement | null;
-        if (!target?.closest(".sideBar__moreFn")) {
-          changeMoreFnStyleToClose();
-        }
-      }
-      openSideMoreMenu &&
-        closeModal("sideBar__moreFn", setOpenSideMoreMenu, event);
-      openPageMenu && closeModal("pageMenu", setOpenPageMenu, event);
-      openRename && closeModal("rename", setOpenRename, event);
-      openTrash && closeModal("trash", setOpenTrash, event);
-    },
-    [
-      openPageMenu,
-      openRename,
-      openSideMoreMenu,
-      openTrash,
-      changeMoreFnStyleToClose,
-    ]
-  );
 
   const changeTrashStyle = useCallback(() => {
     const innerWidth = window.innerWidth;
@@ -218,40 +161,27 @@ const SideBar = ({
     openTrash && changeTrashStyle();
   }, [changeSide, changeTrashStyle, openTrash, showAllComments, sideAppear]);
 
-  useEffect(() => {
-    window.addEventListener("resize", handleResize);
-    return () => window.addEventListener("resize", handleResize);
-  }, [handleResize]);
-
   const onClickTrashBtn = useCallback(() => {
     setOpenTrash(true);
     changeTrashStyle();
   }, [changeTrashStyle]);
+
   const onMouseOutSideBar = useCallback(() => {
     sideAppear === "float" && changeSide("floatHide");
   }, [changeSide, sideAppear]);
 
   useEffect(() => {
-    inner?.addEventListener("click", handleClickToCloseModal);
-
-    return () => {
-      inner?.removeEventListener("click", handleClickToCloseModal);
-    };
-  }, [inner, handleClickToCloseModal]);
-
-  useEffect(() => {
-    if (targetItem && pagesId && pages) {
-      const page = findPage(pagesId, pages, targetItem.id);
-      setTargetPage(page);
-    }
-  }, [targetItem, pages, pagesId]);
+    window.addEventListener("resize", handleResize);
+    return () => window.addEventListener("resize", handleResize);
+  }, [handleResize]);
 
   useEffect(() => {
     if (sideAppear === "close") {
       setOpenTrash(false);
-      setMoreFnStyle(undefined);
+      setSideModal(INITIAL_MODAL);
     }
   }, [sideAppear]);
+
   return (
     <div
       id="sideBar-outBox"
@@ -383,19 +313,10 @@ const SideBar = ({
           </div>
         </div>
       </div>
-      <SideBarMoreFn
-        user={user}
-        moreFnStyle={moreFnStyle}
-        target={target}
-        targetItem={targetItem}
-        setMoreFnStyle={setMoreFnStyle}
-        setSideModal={setSideModal}
-        setOpenRename={setOpenRename}
-        setRenameStyle={setRenameStyle}
-        closeSideMoreFn={closeSideBarMoreFn}
-      />
       {pages && pagesId && firstList && (
         <SideBarModal
+          user={user}
+          targetItem={targetItem}
           pages={pages}
           pagesId={pagesId}
           firstList={firstList}
@@ -403,16 +324,6 @@ const SideBar = ({
           setSideModal={setSideModal}
         />
       )}
-      {/* {openRename && targetPage && (
-        <Rename
-          currentPageId={null}
-          block={null}
-          page={targetPage}
-          renameStyle={renameStyle}
-          setOpenRename={setOpenRename}
-          closeRename={() => setOpenRename(false)}
-        />
-      )} */}
       <Trash
         style={trashStyle}
         trashPagesId={trashPagesId}

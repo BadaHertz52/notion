@@ -1,4 +1,3 @@
-import { MouseEvent } from "react";
 import { Block } from "./notion";
 
 export type ModalTypeTargetType =
@@ -12,7 +11,8 @@ export type ModalTypeTargetType =
   | "command"
   | "loader"
   | "rename"
-  | "trash";
+  | "trash"
+  | "sideBarMoreFn";
 
 export type ModalType = {
   open: boolean;

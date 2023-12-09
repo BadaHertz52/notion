@@ -4,13 +4,13 @@
   display: flex;
   flex-direction: column;
   & > .inner {
-    @include modalStyle;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-content: center;
     box-sizing: border-box;
     padding: 10px;
+    border: 10px;
     label,
     button,
     input {
@@ -24,16 +24,14 @@
       font-size: 15px;
       text-align: center;
       padding: 2px;
-      height: 2rem;
       box-sizing: inherit;
     }
 
     .rename__btn {
       width: 2rem;
-      height: 2rem;
       .page__icon {
-        width: 1.6rem;
-        height: 1.6rem;
+        width: 90%;
+        height: 90%;
         margin: auto auto;
       }
       border-right: none;
