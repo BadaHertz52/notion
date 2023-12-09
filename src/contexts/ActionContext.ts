@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { Block, ModalType, Page, SideAppear } from "../types";
+import { Block, Page, SideAppear } from "../types";
 
 const initialNotionActions = {
   addBlock: (
@@ -28,6 +28,8 @@ const initialNotionActions = {
   changeSide: (appear: SideAppear) => {},
 };
 
-export const ActionContext = createContext({
+const ActionContext = createContext({
   actions: initialNotionActions,
 });
+
+export default ActionContext;

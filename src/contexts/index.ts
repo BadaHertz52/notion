@@ -1,1 +1,1 @@
-export * from "./ActionContext";
+export { default as ActionContext } from "./ActionContext";
