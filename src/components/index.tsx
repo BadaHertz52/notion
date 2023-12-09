@@ -13,11 +13,11 @@ import PageBlock from "./block/PageBlock";
 import BlockFn from "./blockMenu/BlockFn";
 import BlockStyler from "./blockMenu/BlockStyler";
 
-import CommandMenu from "./command/CommandMenu";
-import CommandInput from "./command/CommandInput";
-
 import ColorInform from "./color/ColorInform";
 import ColorMenu from "./color/ColorMenu";
+
+import CommandMenu from "./command/CommandMenu";
+import CommandInput from "./command/CommandInput";
 
 import AllComments from "./comment/AllComments";
 import BlockComment from "./comment/BlockComment";
@@ -29,8 +29,11 @@ import CommentToolMore from "./comment/CommentToolMore";
 import Comments from "./comment/Comments";
 import ResolveBtn from "./comment/ResolveBtn";
 
+import EditorContainer from "./containers/EditorContainer";
+import NotionContainer from "./containers/NotionContainer";
+import SideBarContainer from "./containers/SideBarContainer";
+
 import Editor from "./editor/Editor";
-import EditorContainer from "./editor/EditorContainer";
 
 import Frame from "./frame/Frame";
 import FrameInner from "./frame/FrameInner";
@@ -48,8 +51,8 @@ import MobileSideMenu from "./menu/MobileSideMenu";
 
 import FameModal from "./modal/FrameModal";
 import ModalPortal from "./modal/ModalPortal";
+import SideBarModal from "./modal/SideBarModal";
 
-import NotionContainer from "./notion/NotionContainer";
 import Notion from "./notion/Notion";
 import NotionHelmet from "./notion/NotionHelmet";
 
@@ -64,7 +67,6 @@ import PageMenu from "./pageMenu/PageMenu";
 import Result from "./result/Result";
 import ResultList from "./result/ResultList";
 
-import SideBarContainer from "./sideBar/SideBarContainer";
 import Favorites from "./sideBar/Favorites";
 import ItemTemplate from "./sideBar/ItemTemplate";
 import ListTemplate from "./sideBar/ListTemplate";
@@ -141,7 +143,10 @@ export {
   PageIcon,
   Frame,
   FrameInner,
+  //modal
   FameModal,
+  SideBarModal,
+  ModalPortal,
   Editor,
   AllComments,
   BlockComment,
@@ -167,7 +172,7 @@ export {
   Time,
   Trash,
   TrashResultItem,
-  ModalPortal,
+  //container
   EditorContainer,
   SideBarContainer,
   NotionContainer,

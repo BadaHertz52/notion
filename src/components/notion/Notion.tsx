@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 
 import { NotionHelmet } from "..";
 import { SideBarContainer } from "../index";
-import { SideBarContainerProp } from "../sideBar/SideBarContainer";
+import { SideBarContainerProp } from "../containers/SideBarContainer";
 import NotionRouter from "../../route/NotionRouter";
 
 import {

@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 import { SideBar } from "../index";
-import { SideBarProps } from "./SideBar";
+import { SideBarProps } from "../sideBar/SideBar";
 
 import { RootState } from "../../modules";
 

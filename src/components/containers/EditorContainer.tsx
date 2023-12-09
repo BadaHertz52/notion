@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 import { Editor } from "../index";
-import { EditorProps } from "./Editor";
+import { EditorProps } from "../editor/Editor";
 
 import { RootState } from "../../modules";
 import { Page } from "../../types";

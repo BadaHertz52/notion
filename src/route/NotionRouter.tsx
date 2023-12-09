@@ -3,7 +3,7 @@ import React, { useCallback, useContext, useEffect, useMemo } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 
 import { NonePage, EditorContainer } from "../components";
-import { EditorContainerProps } from "../components/editor/EditorContainer";
+import { EditorContainerProps } from "../components/containers/EditorContainer";
 
 import { SESSION_KEY } from "../constants";
 import { ListItem, Page } from "../types";
