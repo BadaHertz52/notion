@@ -8,6 +8,7 @@ type ModalPortalProps = {
   isOpen: boolean;
   children: ReactNode;
   style?: CSSProperties;
+  isCenter?: boolean;
   onTouchMove?: (event: TouchEvent<HTMLDivElement>) => void;
 };
 const ModalPortal = ({
@@ -15,17 +16,18 @@ const ModalPortal = ({
   isOpen,
   children,
   style,
+  isCenter,
   onTouchMove,
 }: ModalPortalProps) => {
   const modalRootEl = document.getElementById("modal-root") as HTMLElement;
   return ReactDOM.createPortal(
     <div
       id={id}
-      className={`modal ${isOpen ? "on" : ""}`}
+      className={`modal ${isOpen ? "on" : ""} ${isCenter ? "center" : ""}`}
       onTouchMove={onTouchMove}
     >
       <div className="inner">
-        <div id={`${id}__menu`} style={style}>
+        <div id={`${id}__menu`} className="modal__menu" style={style}>
           {children}
         </div>
       </div>

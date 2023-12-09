@@ -3,6 +3,7 @@ import React, {
   SetStateAction,
   TouchEvent,
   useCallback,
+  useContext,
   useEffect,
   useRef,
   useState,
@@ -16,11 +17,19 @@ import {
   SideBarMoreFn,
   ScreenOnly,
   PageMenu,
+  QuickFindBoard,
 } from "../index";
 
 import { INITIAL_MODAL } from "../../constants";
-import { ListItem, ModalType, Page, UserState } from "../../types";
+import {
+  ListItem,
+  ModalType,
+  ModalTypeTargetType,
+  Page,
+  UserState,
+} from "../../types";
 import { findPage, isInTarget } from "../../utils";
+import { ActionContext } from "../../contexts";
 
 type SideBarModalProps = {
   user: UserState;
@@ -32,8 +41,13 @@ type SideBarModalProps = {
   firstList: ListItem[];
 };
 const SideBarModal = ({ ...props }: SideBarModalProps) => {
-  const { sideModal, setSideModal, pages, pagesId } = props;
+  const { cleanRecentPage } = useContext(ActionContext).actions;
 
+  const { sideModal, setSideModal, pages, pagesId } = props;
+  const CENTER_TARGET_ARRAY: ModalTypeTargetType[] = ["quickFind"];
+  const isCenter: boolean = sideModal.target
+    ? CENTER_TARGET_ARRAY.includes(sideModal.target)
+    : false;
   const touchResizeBar = useRef<boolean>(false);
   const [modalStyle, setModalStyle] = useState<CSSProperties | undefined>(
     undefined
@@ -79,7 +93,6 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
 
   const changeStyleInWeb = useCallback(() => {
     const { targetDomRect } = sideModal;
-
     if (targetDomRect) {
       const { top, left, right } = targetDomRect;
       switch (sideModal.target) {
@@ -106,7 +119,16 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
               left: el.clientLeft + 16,
             });
           }
-
+          break;
+        case "quickFind":
+          setModalStyle({
+            top: 0,
+            left: 0,
+          });
+          setInnerStyle({
+            width: "100%",
+            position: "absolute",
+          });
           break;
         default:
           break;
@@ -151,7 +173,8 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
       if (
         !isInTarget(event, "#sideBarModal__menu") &&
         !isInTarget(event, ".sideBarPageFn") &&
-        !isInTarget(event, "#sideBar__moreFn")
+        !isInTarget(event, "#sideBar__moreFn") &&
+        !isInTarget(event, "#btn-open-quickFindBoard")
       ) {
         closeModal();
       }
@@ -169,12 +192,16 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
       : window.removeEventListener("click", handleCloseModal);
   }, [handleCloseModal, sideModal.open]);
 
+  useEffect(() => {
+    console.log(sideModal);
+  }, [sideModal]);
   return (
     <ModalPortal
       id="sideBarModal"
       isOpen={sideModal.open}
       onTouchMove={onTouchMoveSideBar}
       style={modalStyle}
+      isCenter={isCenter}
     >
       <div className="inner" style={innerStyle}>
         {/*mobile ---*/}
@@ -211,6 +238,14 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
             block={null}
             page={findPage(pagesId, pages, sideModal.pageId)}
             closeRename={closeModal}
+          />
+        )}
+        {sideModal.target === "quickFind" && (
+          <QuickFindBoard
+            {...props}
+            userName={props.user.userName}
+            recentPagesId={props.user.recentPagesId}
+            cleanRecentPage={cleanRecentPage}
           />
         )}
       </div>

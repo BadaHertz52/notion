@@ -1,13 +1,86 @@
-.modal {
-  display: none;
-  &.on {
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 10;
-    .inner {
+@import "./common";
+#modal-root {
+  .modal {
+    display: none;
+    &.on {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 10;
+      .inner {
+        position: relative;
+      }
+    }
+    &.center {
+      background-color: $modalBackGroundColor;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .modal__menu,
+      .modal__menu > .inner,
+      & > .inner {
+        width: fit-content;
+      }
+      & > .inner {
+        max-height: 60vh;
+      }
+    }
+  }
+}
+//sideBarModal
+#sideBarModal__menu {
+  & > .inner {
+    @include modalStyle;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  #sideBarModal__menu {
+    transition: top ease 800ms;
+    background-color: transparent;
+    & > .inner {
+      background-color: rgb(240, 240, 240);
+      width: 100vw;
+      height: 100vh;
+      min-height: 10vh;
+    }
+    .topBar {
+      height: 60px;
+      width: 100vw;
+      padding: 10px 20px;
+      box-sizing: border-box;
       position: relative;
+      .btn-close {
+        position: absolute;
+        top: calc(50% - 8px);
+        right: 16px;
+        opacity: 0.5;
+        font-size: 16px;
+        &:hover {
+          opacity: 1;
+          font-weight: bold;
+        }
+      }
+    }
+    .resizeBar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      background-color: none;
+      div {
+        width: 30%;
+        height: 10px;
+        border-radius: 20px;
+        background-color: rgb(217, 215, 215);
+        &:hover {
+          background-color: rgb(194, 194, 194);
+        }
+      }
     }
   }
 }

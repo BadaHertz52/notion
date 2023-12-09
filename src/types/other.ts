@@ -1,4 +1,5 @@
 import { Block, IconType } from ".";
+import { OPTION } from "../constants";
 import { FONT_FAMILY } from "../constants/font";
 
 export type FontStyleType = keyof typeof FONT_FAMILY;
@@ -55,3 +56,5 @@ export type ResultType = {
   editTime: string;
   path: string | null;
 };
+
+export type QuickFindBoardOption = keyof typeof OPTION;

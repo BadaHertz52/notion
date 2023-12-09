@@ -305,7 +305,7 @@
 }
 .discardEditForm.on {
   display: block;
-  @include modal;
+  // @include modal;
   z-index: 300;
   .inner {
     width: 336px;

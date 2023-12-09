@@ -11,6 +11,10 @@ $comment_text: rgba(255, 196, 0, 0.183);
 $darkgrey: rgb(60, 60, 60);
 $turkeyBlue: rgb(46, 170, 220);
 $black: rgb(40, 40, 40);
+$modalBackGroundColor: rgba(0, 0, 0, 0.212);
+
+@mixin modal {
+}
 @mixin initialBtn {
   border: none;
   background-color: transparent;
@@ -56,31 +60,6 @@ $black: rgb(40, 40, 40);
   }
 }
 
-@mixin modal {
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.53);
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-  & > .inner {
-    background-color: #ffff;
-    border-radius: 3px;
-    position: relative;
-    top: 90px;
-    left: 12.5%;
-    width: 75%;
-    max-height: 80vh;
-    max-width: 600px;
-    z-index: 15;
-    overflow: hidden;
-    box-shadow: rgba(15, 15, 15, 0.039) 0px 0px 0px 1px;
-  }
-}
 @mixin modalStyle {
   width: 320px;
   display: flex;

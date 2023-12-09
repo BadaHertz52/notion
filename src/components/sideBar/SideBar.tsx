@@ -132,6 +132,13 @@ const SideBar = ({
     }
   }, []);
 
+  const openQuickFindBoard = useCallback(() => {
+    setSideModal({
+      open: true,
+      target: "quickFind",
+    });
+  }, [setSideModal]);
+
   const changeTrashStyle = useCallback(() => {
     const innerWidth = window.innerWidth;
     if (innerWidth > 768 && trashBtnRef.current) {
@@ -222,10 +229,9 @@ const SideBar = ({
             />
             <div className="fn-group-1">
               <button
+                id="btn-open-quickFindBoard"
                 title="button to open quick find board"
-                // onClick={
-                //   //() => setOpenQF(true)
-                // }
+                onClick={openQuickFindBoard}
               >
                 <div className="item__inner">
                   <BiSearchAlt2 />

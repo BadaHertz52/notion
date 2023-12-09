@@ -72,6 +72,7 @@ import ItemTemplate from "./sideBar/ItemTemplate";
 import ListTemplate from "./sideBar/ListTemplate";
 import Private from "./sideBar/Private";
 import QuickFindBoard from "./sideBar/QuickFindBoard";
+import QuickFindBoardOptionBtn from "./sideBar/QuickFindBoardOptionBtn";
 import RecentPages from "./sideBar/RecentPages";
 import SideBar from "./sideBar/SideBar";
 import SideBarMoreFn from "./sideBar/SideBarMoreFn";
@@ -117,11 +118,13 @@ export {
   // --command
   FontBtn,
   TopBar,
+  //sideBar
   Favorites,
   ItemTemplate,
   ListTemplate,
   Private,
   QuickFindBoard,
+  QuickFindBoardOptionBtn,
   RecentPages,
   SideBar,
   SideBarMoreFn,

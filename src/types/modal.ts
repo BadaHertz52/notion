@@ -12,7 +12,8 @@ export type ModalTypeTargetType =
   | "loader"
   | "rename"
   | "trash"
-  | "sideBarMoreFn";
+  | "sideBarMoreFn"
+  | "quickFind";
 
 export type ModalType = {
   open: boolean;
