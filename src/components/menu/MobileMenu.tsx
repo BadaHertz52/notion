@@ -10,7 +10,7 @@ import { TiArrowSortedDown } from "react-icons/ti";
 import { ScreenOnly, BlockStyler } from "../index";
 
 import { ActionContext } from "../../contexts";
-import { Block, MobileSideMenuWhatType, StylerCommonProps } from "../../types";
+import { Block, MobileSideMenuWhat, StylerCommonProps } from "../../types";
 import { makeNewBlock, findBlock } from "../../utils";
 
 import "../../assets/mobileMenu.scss";
@@ -120,7 +120,7 @@ const MobileMenu = ({
     [frameHtml, initialInnerHeight]
   );
 
-  const openMobileSideMenu = (what: MobileSideMenuWhatType) => {
+  const openMobileSideMenu = (what: MobileSideMenuWhat) => {
     const item = sessionStorage.getItem(SESSION_KEY.mobileMenuTargetBlock);
     if (targetBlock === undefined && item) {
       setMobileSideMenu({

@@ -24,13 +24,7 @@ import { GrDocumentUpload } from "react-icons/gr";
 import { PageMenu, PageIcon, FontBtn, ScreenOnly } from "../index";
 
 import { ActionContext } from "../../contexts";
-import {
-  ListItem,
-  Page,
-  FontStyleType,
-  SideAppear,
-  PathType,
-} from "../../types";
+import { ListItem, Page, FontStyle, SideAppear, Path } from "../../types";
 import { isMobile, makeRoutePath } from "../../utils";
 
 type TopBarProps = {
@@ -39,7 +33,7 @@ type TopBarProps = {
   sideAppear: SideAppear;
   page: Page;
   pages: Page[];
-  pagePath: PathType[] | null;
+  pagePath: Path[] | null;
   showAllComments: boolean;
   setShowAllComments: Dispatch<SetStateAction<boolean>>;
   smallText: boolean;
@@ -47,7 +41,7 @@ type TopBarProps = {
   fullWidth: boolean;
   setFullWidth: Dispatch<SetStateAction<boolean>>;
   setOpenExport: Dispatch<SetStateAction<boolean>>;
-  setFontStyle: Dispatch<SetStateAction<FontStyleType>>;
+  setFontStyle: Dispatch<SetStateAction<FontStyle>>;
 };
 
 const TopBar = ({
@@ -72,9 +66,9 @@ const TopBar = ({
   const [openPageMoreFun, setOpenPageMoreFun] = useState<boolean>(false);
   const [openPageMenu, setOpenPageMenu] = useState<boolean>(false);
   const pageInFavorites = favorites?.includes(page.id);
-  const FONT_BTN_ARRAY: FontStyleType[] = ["default", "mono", "serif"];
+  const FONT_BTN_ARRAY: FontStyle[] = ["default", "mono", "serif"];
   const [selectedFontStyle, setSelectedFontStyle] =
-    useState<FontStyleType>("default");
+    useState<FontStyle>("default");
   const onClickSideBarBtn = useCallback(
     (event: React.MouseEvent) => {
       const target = event.target as HTMLElement;
@@ -155,14 +149,14 @@ const TopBar = ({
     setShowAllComments(false);
   }, [setShowAllComments, setOpenPageMoreFun]);
 
-  const returnFontFamily = (font: FontStyleType) => {
+  const returnFontFamily = (font: FontStyle) => {
     const style: CSSProperties = {
       fontFamily: font,
     };
     return style;
   };
   const changeFontStyle = useCallback(
-    (event: MouseEvent, font: FontStyleType) => {
+    (event: MouseEvent, font: FontStyle) => {
       const currentTarget = event.currentTarget;
       const targetFontSample = currentTarget.firstElementChild;
       const fontSample = [...document.getElementsByClassName("font-sample")];
@@ -271,7 +265,7 @@ const TopBar = ({
               <div>{page.header.title}</div>
             </Link>
           ) : (
-            pagePath.map((path: PathType) => (
+            pagePath.map((path: Path) => (
               <div className="pagePath" key={pagePath.indexOf(path)}>
                 {pagePath.indexOf(path) !== 0 && (
                   <div className="pathSlash">/</div>

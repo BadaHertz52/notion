@@ -1,6 +1,6 @@
 import { Block } from "./module";
 
-export type ModalTypeTargetType =
+export type ModalTypeTarget =
   | "menu"
   | "pageMenu"
   | "commentInput"
@@ -17,7 +17,7 @@ export type ModalTypeTargetType =
 
 export type ModalType = {
   open: boolean;
-  target?: ModalTypeTargetType;
+  target?: ModalTypeTarget;
   block?: Block;
   pageId?: string;
   targetDomRect?: DOMRect;

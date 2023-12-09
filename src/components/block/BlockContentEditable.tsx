@@ -15,7 +15,7 @@ import { CommandInput } from "../index";
 
 import { SESSION_KEY } from "../../constants";
 import { ActionContext } from "../../contexts";
-import { Block, Page, Command, SelectionType } from "../../types";
+import { Block, Page, CommandType, SelectionType } from "../../types";
 import {
   findPage,
   findParentBlock,
@@ -29,14 +29,14 @@ import {
 
 export type BlockContendEditableProps = {
   block: Block;
-  command: Command;
+  command: CommandType;
   onClickCommentBtn: (block: Block) => void;
   page: Page;
   pages: Page[];
   pagesId: string[];
   templateHtml: HTMLElement | null;
   setMobileMenuTargetBlock: Dispatch<SetStateAction<Block | null>>;
-  setCommand: Dispatch<SetStateAction<Command>>;
+  setCommand: Dispatch<SetStateAction<CommandType>>;
   setOpenComment: Dispatch<SetStateAction<boolean>>;
   setSelection: Dispatch<SetStateAction<SelectionType | null>>;
 };

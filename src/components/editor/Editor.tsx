@@ -17,9 +17,9 @@ import {
   Page,
   ListItem,
   SideAppear,
-  FontStyleType,
+  FontStyle,
   MobileSideMenuType,
-  PathType,
+  Path,
   ModalType,
 } from "../../types/";
 import { makePagePath } from "../../utils";
@@ -50,8 +50,8 @@ export type EditorProps = {
   setOpenExport: Dispatch<SetStateAction<boolean>>;
   openTemplates: boolean;
   setOpenTemplates: Dispatch<SetStateAction<boolean>>;
-  fontStyle: FontStyleType;
-  setFontStyle: Dispatch<SetStateAction<FontStyleType>>;
+  fontStyle: FontStyle;
+  setFontStyle: Dispatch<SetStateAction<FontStyle>>;
   mobileSideMenu: MobileSideMenuType;
   setMobileSideMenu: Dispatch<SetStateAction<MobileSideMenuType>>;
   openExport?: boolean;
@@ -92,7 +92,7 @@ const Editor = ({
   const [editorStyle, setEditorStyle] = useState<CSSProperties | undefined>(
     undefined
   );
-  const [pagePath, setPagePath] = useState<PathType[] | null>(null);
+  const [pagePath, setPagePath] = useState<Path[] | null>(null);
 
   useEffect(() => {
     if (sideAppear === "lock") {

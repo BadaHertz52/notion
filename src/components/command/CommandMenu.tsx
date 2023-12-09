@@ -17,7 +17,13 @@ import { VscListOrdered } from "react-icons/vsc";
 
 import { Img } from "../index";
 import { ActionContext } from "../../contexts";
-import { Block, BlockType, Page, Command, SelectionType } from "../../types";
+import {
+  Block,
+  BlockType,
+  Page,
+  CommandType,
+  SelectionType,
+} from "../../types";
 import {
   makeNewBlock,
   findParentBlock,
@@ -31,8 +37,8 @@ import "../../assets/commandBlock.scss";
 type CommandMenuProp = {
   page: Page;
   block: Block;
-  command: Command | null;
-  setCommand: Dispatch<SetStateAction<Command>> | null;
+  command: CommandType | null;
+  setCommand: Dispatch<SetStateAction<CommandType>> | null;
   closeCommand?: () => void;
   setSelection?: Dispatch<SetStateAction<SelectionType | null>>;
   style: CSSProperties | undefined;

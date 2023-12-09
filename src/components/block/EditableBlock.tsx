@@ -23,7 +23,7 @@ import {
 } from "../index";
 
 import { ActionContext } from "../../contexts";
-import { Block, Command, Page, SelectionType } from "../../types";
+import { Block, CommandType, Page, SelectionType } from "../../types";
 import {
   changeFontSizeBySmallText,
   findBlock,
@@ -42,8 +42,8 @@ export type EditableBlockProps = {
   isMoved: MutableRefObject<boolean>;
   setMoveTargetBlock: Dispatch<SetStateAction<Block | null>>;
   pointBlockToMoveBlock: MutableRefObject<Block | null>;
-  command: Command;
-  setCommand: Dispatch<SetStateAction<Command>>;
+  command: CommandType;
+  setCommand: Dispatch<SetStateAction<CommandType>>;
   openComment: boolean;
   setOpenComment: Dispatch<SetStateAction<boolean>>;
   setCommentBlock: Dispatch<SetStateAction<Block | null>>;

@@ -1,4 +1,4 @@
-import { Page, PathType } from "../types";
+import { Page, Path } from "../types";
 import { findPage } from ".";
 
 export const getCurrentPageId = (): string | undefined => {
@@ -12,12 +12,12 @@ export const makePagePath = (
   page: Page,
   pagesId: string[],
   pages: Page[]
-): PathType[] | null => {
+): Path[] | null => {
   if (page.parentsId) {
     const parentPages: Page[] = page.parentsId.map((id: string) =>
       findPage(pagesId, pages, id)
     );
-    const pagePath: PathType[] = parentPages.concat(page).map((p: Page) => ({
+    const pagePath: Path[] = parentPages.concat(page).map((p: Page) => ({
       id: p.id,
       title: p.header.title,
       icon: p.header.icon,

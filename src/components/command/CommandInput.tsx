@@ -7,7 +7,7 @@ import React, {
   Dispatch,
 } from "react";
 import ScreenOnly from "../ScreenOnly";
-import { Block, BlockType, Command, Page } from "../../types";
+import { Block, BlockType, CommandType, Page } from "../../types";
 import { BLOCK_TYPES } from "../../constants";
 import { getEditTime } from "../../utils";
 import { ActionContext } from "../../contexts";
@@ -15,9 +15,9 @@ import { ActionContext } from "../../contexts";
 type CommandInputProps = {
   templateHtml: HTMLElement | null;
   page: Page;
-  command: Command;
+  command: CommandType;
   setTemplateItem(templateHtml: HTMLElement | null, page: Page): void;
-  setCommand: Dispatch<SetStateAction<Command>>;
+  setCommand: Dispatch<SetStateAction<CommandType>>;
 };
 
 const CommandInput = ({ ...props }: CommandInputProps) => {

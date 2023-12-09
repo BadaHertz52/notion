@@ -16,7 +16,7 @@ import { ScreenOnly, Menu, ColorMenu, LinkLoader } from "../index";
 import { ActionContext } from "../../contexts";
 import {
   Block,
-  MobileSideMenuWhatType,
+  MobileSideMenuWhat,
   SelectionType,
   StylerCommonProps,
 } from "../../types";
@@ -573,7 +573,7 @@ const BlockStyler = ({
     }
   }, [block, editBlock, page]);
   const openMobileSideMenu = useCallback(
-    (what: MobileSideMenuWhatType) => {
+    (what: MobileSideMenuWhat) => {
       setMobileSideMenu({
         block: block,
         what: what,

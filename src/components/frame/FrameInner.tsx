@@ -16,7 +16,7 @@ import { PageHeaderProps } from "../page/PageHeader";
 import { EditableBlock, PageHeader, EmptyPageContent } from "../index";
 
 import { ActionContext } from "../../contexts";
-import { Block, Page, Command, SelectionType } from "../../types";
+import { Block, Page, CommandType, SelectionType } from "../../types";
 import {
   setTemplateItem,
   getBlockSample,
@@ -39,8 +39,8 @@ export type FrameInnerProps = PageHeaderProps & {
   isMoved: MutableRefObject<boolean>;
   pointBlockToMoveBlock: MutableRefObject<Block | null>;
   setMoveTargetBlock: Dispatch<SetStateAction<Block | null>>;
-  command: Command;
-  setCommand: Dispatch<SetStateAction<Command>>;
+  command: CommandType;
+  setCommand: Dispatch<SetStateAction<CommandType>>;
   openComment: boolean;
   setOpenComment: Dispatch<SetStateAction<boolean>>;
   setCommentBlock: Dispatch<SetStateAction<Block | null>>;

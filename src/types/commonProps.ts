@@ -1,20 +1,19 @@
 import { CSSProperties, Dispatch, SetStateAction } from "react";
 import {
   Block,
-  FontStyleType,
+  FontStyle,
   ListItem,
-  ModalType,
   Page,
   MobileSideMenuType,
-  Command,
+  CommandType,
 } from ".";
 
 export type StylerCommonProps = MenuAndBlockStylerCommonProps & {
   pagesId: string[];
   recentPagesId: string[] | null;
   setModalStyle: Dispatch<SetStateAction<CSSProperties | undefined>>;
-  setCommand: Dispatch<SetStateAction<Command>>;
-  command: Command;
+  setCommand: Dispatch<SetStateAction<CommandType>>;
+  command: CommandType;
   setMobileSideMenu: Dispatch<SetStateAction<MobileSideMenuType>>;
   setMobileMenuTargetBlock: Dispatch<SetStateAction<Block | null>>;
 };
@@ -36,7 +35,7 @@ export type TemplateFrameCommonProps = {
   fullWidth: boolean;
   discardEdit: boolean;
   setDiscardEdit: Dispatch<SetStateAction<boolean>>;
-  fontStyle: FontStyleType;
+  fontStyle: FontStyle;
   mobileSideMenu: MobileSideMenuType;
   setMobileSideMenu: Dispatch<SetStateAction<MobileSideMenuType>>;
 };

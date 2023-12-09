@@ -7,7 +7,7 @@ import NotionRouter from "../../route/NotionRouter";
 
 import {
   Block,
-  FontStyleType,
+  FontStyle,
   ListItem,
   MobileSideMenuType,
   ModalType,
@@ -43,7 +43,7 @@ const Notion = ({ ...props }: NotionProps) => {
   const [smallText, setSmallText] = useState<boolean>(false);
   const [fullWidth, setFullWidth] = useState<boolean>(false);
   const [openTemplates, setOpenTemplates] = useState<boolean>(false);
-  const [fontStyle, setFontStyle] = useState<FontStyleType>("default");
+  const [fontStyle, setFontStyle] = useState<FontStyle>("default");
   const [mobileSideMenu, setMobileSideMenu] = useState<MobileSideMenuType>({
     block: null,
     what: undefined,

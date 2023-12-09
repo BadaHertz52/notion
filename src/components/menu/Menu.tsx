@@ -24,7 +24,7 @@ import { CommandMenu, PageMenu, Time, ColorMenu, ScreenOnly } from "../index";
 import { ActionContext } from "../../contexts";
 import {
   Block,
-  ModalTypeTargetType,
+  ModalTypeTarget,
   ModalType,
   MenuAndBlockStylerCommonProps,
   MobileSideMenuType,
@@ -162,7 +162,7 @@ const Menu = ({
   }, [closMobileSideMenu, closeMenuInModal]);
 
   const openPopUpMenu = useCallback(
-    (target: ModalTypeTargetType) => {
+    (target: ModalTypeTarget) => {
       if (setModal)
         setModal({
           open: true,

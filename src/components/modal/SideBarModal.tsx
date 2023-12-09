@@ -24,7 +24,7 @@ import { INITIAL_MODAL } from "../../constants";
 import {
   ListItem,
   ModalType,
-  ModalTypeTargetType,
+  ModalTypeTarget,
   Page,
   UserState,
 } from "../../types";
@@ -44,7 +44,7 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
   const { cleanRecentPage } = useContext(ActionContext).actions;
 
   const { sideModal, setSideModal, pages, pagesId } = props;
-  const CENTER_TARGET_ARRAY: ModalTypeTargetType[] = ["quickFind"];
+  const CENTER_TARGET_ARRAY: ModalTypeTarget[] = ["quickFind"];
   const isCenter: boolean = sideModal.target
     ? CENTER_TARGET_ARRAY.includes(sideModal.target)
     : false;

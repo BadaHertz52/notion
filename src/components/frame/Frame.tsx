@@ -16,7 +16,7 @@ import { BlockFn, FrameInner, ModalPortal, FameModal } from "../index";
 import { RootState } from "../../modules";
 import {
   Block,
-  Command,
+  CommandType,
   ModalType,
   Page,
   SelectionType,
@@ -83,7 +83,7 @@ const Frame = ({
     : null;
   const newPageFrame: boolean = page.firstBlocksId === null;
 
-  const [command, setCommand] = useState<Command>({
+  const [command, setCommand] = useState<CommandType>({
     open: false,
     command: null,
     targetBlock: null,

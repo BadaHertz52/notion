@@ -2,9 +2,9 @@ import { Block, IconType } from ".";
 import { OPTION } from "../constants";
 import { FONT_FAMILY } from "../constants/font";
 
-export type FontStyleType = keyof typeof FONT_FAMILY;
+export type FontStyle = keyof typeof FONT_FAMILY;
 
-export type MobileSideMenuWhatType =
+export type MobileSideMenuWhat =
   | "ms_turnInto"
   | "ms_movePage"
   | "ms_color"
@@ -14,9 +14,9 @@ export type MobileSideMenuWhatType =
 
 export type MobileSideMenuType = {
   block: Block | null;
-  what: MobileSideMenuWhatType;
+  what: MobileSideMenuWhat;
 };
-export type PathType = {
+export type Path = {
   id: string;
   title: string;
   icon: string | null;
@@ -36,16 +36,11 @@ export type SelectionType = {
   change: boolean;
 };
 
-export type Command = {
+export type CommandType = {
   open: boolean;
   command: string | null;
   targetBlock: Block | null;
 };
-
-// export type ModalType = {
-//   open: boolean;
-//   what: "modalMoveToPage" | "modalComment" | "modalCommand" | null;
-// };
 
 export type ResultType = {
   id: string;

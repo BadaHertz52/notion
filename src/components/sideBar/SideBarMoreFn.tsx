@@ -16,12 +16,7 @@ import { IoArrowRedoOutline } from "react-icons/io5";
 
 import { PageIcon, Time } from "../index";
 
-import {
-  ListItem,
-  ModalType,
-  ModalTypeTargetType,
-  UserState,
-} from "../../types";
+import { ListItem, ModalType, ModalTypeTarget, UserState } from "../../types";
 
 type SideBarMoreFnProps = {
   user: UserState;
@@ -83,7 +78,7 @@ function SideBarMoreFn({
 
         const newModal: ModalType = {
           open: true,
-          target: name as ModalTypeTargetType,
+          target: name as ModalTypeTarget,
           pageId: targetItem.id,
           targetDomRect: domRect,
         };

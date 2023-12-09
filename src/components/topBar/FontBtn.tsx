@@ -1,13 +1,13 @@
 import React, { MouseEvent } from "react";
 import { CSSProperties } from "styled-components";
 
-import { FontStyleType } from "../../types";
+import { FontStyle } from "../../types";
 
 type FontBtnProps = {
-  selectedFonStyle: FontStyleType;
-  fontStyle: FontStyleType;
-  changeFontStyle: (event: MouseEvent, font: FontStyleType) => void;
-  returnFontFamily: (font: FontStyleType) => CSSProperties;
+  selectedFonStyle: FontStyle;
+  fontStyle: FontStyle;
+  changeFontStyle: (event: MouseEvent, font: FontStyle) => void;
+  returnFontFamily: (font: FontStyle) => CSSProperties;
 };
 
 const FontBtn = ({
