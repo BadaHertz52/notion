@@ -104,8 +104,21 @@
   }
   .list .pageList__item {
     justify-content: space-between;
+    padding-right: 0;
     .pageList__item__page {
       display: flex;
+      width: calc(100% - 32px);
+      .pageName {
+        width: calc(100% - 22px);
+        height: 18px;
+        & > div:last-child {
+          height: inherit;
+          width: calc(100% - 14px - 5px);
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
     }
   }
   .pageList__item__btn-group {
