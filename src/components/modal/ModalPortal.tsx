@@ -1,31 +1,47 @@
-import React, { ReactNode, CSSProperties, TouchEvent } from "react";
+import React, {
+  ReactNode,
+  CSSProperties,
+  TouchEvent,
+  useRef,
+  useEffect,
+} from "react";
 import * as ReactDOM from "react-dom";
 
 import "../../assets/modal.scss";
+import { ModalTypeTarget } from "../../types";
 
 type ModalPortalProps = {
+  target?: ModalTypeTarget;
   id?: string;
   isOpen: boolean;
   children: ReactNode;
   style?: CSSProperties;
-  isCenter?: boolean;
   onTouchMove?: (event: TouchEvent<HTMLDivElement>) => void;
 };
 const ModalPortal = ({
+  target,
   id,
   isOpen,
   children,
   style,
-  isCenter,
   onTouchMove,
 }: ModalPortalProps) => {
   const modalRootEl = document.getElementById("modal-root") as HTMLElement;
+  const portalRef = useRef<HTMLDivElement>(null);
+  const CENTER_TARGET_ARRAY: ModalTypeTarget[] = ["quickFind", "trash"];
+  const isCenter: boolean = target
+    ? CENTER_TARGET_ARRAY.includes(target)
+    : false;
+
+  useEffect(() => {
+    if (portalRef.current) {
+      portalRef.current.classList.toggle("on", isOpen);
+      portalRef.current.classList.toggle("center", isCenter);
+    }
+  }, [isOpen, isCenter]);
+
   return ReactDOM.createPortal(
-    <div
-      id={id}
-      className={`modal ${isOpen ? "on" : ""} ${isCenter ? "center" : ""}`}
-      onTouchMove={onTouchMove}
-    >
+    <div id={id} ref={portalRef} className="modal" onTouchMove={onTouchMove}>
       <div className="inner">
         <div id={`${id}__menu`} className="modal__menu" style={style}>
           {children}

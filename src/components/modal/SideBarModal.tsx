@@ -18,6 +18,8 @@ import {
   ScreenOnly,
   PageMenu,
   QuickFindBoard,
+  Templates,
+  Trash,
 } from "../index";
 
 import { INITIAL_MODAL } from "../../constants";
@@ -26,6 +28,7 @@ import {
   ModalType,
   ModalTypeTarget,
   Page,
+  TrashPage,
   UserState,
 } from "../../types";
 import { findPage, isInTarget } from "../../utils";
@@ -39,15 +42,16 @@ type SideBarModalProps = {
   pages: Page[];
   pagesId: string[];
   firstList: ListItem[];
+  trash: {
+    pagesId: string[] | null;
+    pages: TrashPage[] | null;
+  };
 };
 const SideBarModal = ({ ...props }: SideBarModalProps) => {
   const { cleanRecentPage } = useContext(ActionContext).actions;
 
   const { sideModal, setSideModal, pages, pagesId } = props;
-  const CENTER_TARGET_ARRAY: ModalTypeTarget[] = ["quickFind"];
-  const isCenter: boolean = sideModal.target
-    ? CENTER_TARGET_ARRAY.includes(sideModal.target)
-    : false;
+
   const touchResizeBar = useRef<boolean>(false);
   const [modalStyle, setModalStyle] = useState<CSSProperties | undefined>(
     undefined
@@ -120,7 +124,7 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
             });
           }
           break;
-        case "quickFind":
+        case "quickFind" || "trash":
           setModalStyle({
             top: 0,
             left: 0,
@@ -170,14 +174,19 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
 
   const handleCloseModal = useCallback(
     (event: globalThis.MouseEvent) => {
-      if (
-        !isInTarget(event, "#sideBarModal__menu") &&
-        !isInTarget(event, ".sideBarPageFn") &&
-        !isInTarget(event, "#sideBar__moreFn") &&
-        !isInTarget(event, "#btn-open-quickFindBoard")
-      ) {
-        closeModal();
-      }
+      const NOT_TARGET_ARRAY = [
+        "#modal-sideBar__menu",
+        ".pageList__item__btn-group",
+        "#sideBar__moreFn",
+        "#btn-open-quickFindBoard",
+        ".btn-trash",
+      ];
+
+      const isClose = NOT_TARGET_ARRAY.map((v) => isInTarget(event, v)).every(
+        (v) => !v
+      );
+
+      if (isClose) closeModal();
     },
     [closeModal]
   );
@@ -201,7 +210,6 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
       isOpen={sideModal.open}
       onTouchMove={onTouchMoveSideBar}
       style={modalStyle}
-      isCenter={isCenter}
     >
       <div className="inner" style={innerStyle}>
         {/*mobile ---*/}
@@ -246,6 +254,15 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
             userName={props.user.userName}
             recentPagesId={props.user.recentPagesId}
             cleanRecentPage={cleanRecentPage}
+          />
+        )}
+        {sideModal.target === "trash" && (
+          <Trash
+            trashPagesId={props.trash.pagesId}
+            trashPages={props.trash.pages}
+            pagesId={pagesId}
+            pages={pages}
+            closeTrash={closeModal}
           />
         )}
       </div>

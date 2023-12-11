@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useContext } from "react";
+import React, { Dispatch, MouseEvent, SetStateAction, useContext } from "react";
 
 import { RiArrowGoBackLine } from "react-icons/ri";
 import { IoTrashOutline } from "react-icons/io5";
@@ -9,24 +9,27 @@ import { ScreenOnly, Result } from "../index";
 
 type TrashResultItemProps = {
   item: ResultType;
-  setOpenTrash: Dispatch<SetStateAction<boolean>>;
+  closeTrash: () => void;
   width: number;
 };
 
-const TrashResultItem = ({
-  item,
-  setOpenTrash,
-  width,
-}: TrashResultItemProps) => {
+const TrashResultItem = ({ item, closeTrash, width }: TrashResultItemProps) => {
   const { cleanTrash, restorePage } = useContext(ActionContext).actions;
+
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
+    const { className } = event.currentTarget;
+    className.includes("restore") ? restorePage(item.id) : cleanTrash(item.id);
+    closeTrash();
+  };
+
   return (
-    <div className="page" onClick={() => setOpenTrash(false)}>
+    <div className="page">
       <Result item={item} width={width} />
       <div className="btn-group">
         <button
           title="button to restore page"
           className="btn-restore"
-          onClick={() => restorePage(item.id)}
+          onClick={handleClick}
         >
           <ScreenOnly text="button to restore page" />
           <RiArrowGoBackLine />
@@ -34,7 +37,7 @@ const TrashResultItem = ({
         <button
           title="button to  permanently delete page"
           className="btn-clean"
-          onClick={() => cleanTrash(item.id)}
+          onClick={handleClick}
         >
           <ScreenOnly text="button to permanently delete page" />
           <IoTrashOutline />

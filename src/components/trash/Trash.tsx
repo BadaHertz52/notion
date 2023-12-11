@@ -1,13 +1,4 @@
-import React, {
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useState,
-  useCallback,
-  useRef,
-} from "react";
-
-import { CSSProperties } from "styled-components";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 
 import { ScreenOnly, ResultList } from "../index";
 
@@ -17,23 +8,19 @@ import { getCurrentPageId, makeResultType } from "../../utils";
 import "../../assets/trash.scss";
 
 type TrashProps = {
-  style: CSSProperties | undefined;
   trashPagesId: string[] | null;
   trashPages: Page[] | null;
   pagesId: string[] | null;
   pages: Page[] | null;
-  openTrash: boolean;
-  setOpenTrash: Dispatch<SetStateAction<boolean>>;
+  closeTrash: () => void;
 };
 
 const Trash = ({
-  style,
   trashPages,
   trashPagesId,
   pagesId,
   pages,
-  openTrash,
-  setOpenTrash,
+  closeTrash,
 }: TrashProps) => {
   const trashRef = useRef<HTMLDivElement>(null);
   const trashPadding = 12;
@@ -97,35 +84,8 @@ const Trash = ({
     }
   }, [sort, pagesId, pages, trashPages, trashPagesId]);
 
-  useEffect(() => {
-    const classList = trashRef.current?.classList;
-    const isMobile = window.innerWidth <= 768;
-    if (openTrash) {
-      trashRef.current?.classList.remove("hide");
-      if (isMobile) {
-        setTimeout(() => {
-          trashRef.current?.classList.add("on");
-        }, 100);
-      } else {
-        trashRef.current?.classList.add("on");
-      }
-    } else {
-      // add hide  from classList
-      if (!classList?.contains("hide")) {
-        if (isMobile) {
-          setTimeout(() => {
-            trashRef.current?.classList.add("hide");
-          }, 800);
-        } else {
-          trashRef.current?.classList.add("hide");
-        }
-      }
-      //remove on to classList
-      classList?.contains("on") && trashRef.current?.classList.remove("on");
-    }
-  }, [openTrash]);
   return (
-    <div id="trash" className="trash hide" style={style} ref={trashRef}>
+    <div id="trash" ref={trashRef}>
       <div className="inner">
         <div className="header">
           <div className="range">
@@ -145,7 +105,7 @@ const Trash = ({
           <button
             title="close button"
             className="closeTrashBtn"
-            onClick={() => setOpenTrash(false)}
+            onClick={closeTrash}
           >
             close
           </button>
@@ -171,13 +131,13 @@ const Trash = ({
                 layout="vertical"
                 itemSize={40}
                 isTrash={true}
-                setOpenTrash={setOpenTrash}
+                closeTrash={closeTrash}
               />
             ) : (
               <div className="no-result">No matches found.</div>
             )
           ) : (
-            <div className="noTrash">Empty</div>
+            <div className="no-trash">Empty</div>
           )}
         </div>
       </div>

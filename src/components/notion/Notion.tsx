@@ -177,16 +177,7 @@ const Notion = ({ ...props }: NotionProps) => {
                   setDiscardEdit={setDiscardEdit}
                 />
               )}
-              {openQF && (
-                <QuickFindBoard
-                  userName={user.userName}
-                  recentPagesId={user.recentPagesId}
-                  pages={pages}
-                  pagesId={pagesId}
-                  cleanRecentPage={cleanRecentPage}
-                  setOpenQF={setOpenQF}
-                />
-              )}
+
             </>
           )}
           <DiscardEditForm setDiscardEdit={setDiscardEdit} /> */}
