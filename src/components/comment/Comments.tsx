@@ -30,15 +30,15 @@ type CommentsProps = {
   pageId: string;
   userName: string;
   frameHtml: HTMLElement | null;
-  openComment: boolean;
+
   /**
    * comment를 수정하는 중, 사용자가 수정사항을 삭제하려고 하는 지를 판단할 수 있는 property
    */
-  discardEdit: boolean;
+  discardEdit?: boolean;
   /**
    * comment의 수정사항을 삭제한 후, discardEdit을 원래의 기본값으로 돌리는 데 사용
    */
-  setDiscardEdit: Dispatch<SetStateAction<boolean>>;
+  setDiscardEdit?: Dispatch<SetStateAction<boolean>>;
   /**
    *showAllComments === true이면 AllComments안의 comments, showAllComments이면 frame안에 있는 page, block에 대한 comments로, ToolMore의 위치를 지정하는데 사용함
    */
@@ -53,7 +53,7 @@ const Comments = ({
   page,
   userName,
   frameHtml,
-  openComment,
+
   discardEdit,
   setDiscardEdit,
   showAllComments,
@@ -88,12 +88,12 @@ const Comments = ({
   );
 
   /**
-   * frame 에서 block-comments를 열었을때 (openComment === true) block의 위치에 따라 commentsStyle을 설정하는 함수
+   * frame 에서 block-comments를 열었을때 block의 위치에 따라 commentsStyle을 설정하는 함수
    */
   const changeCommentsStyle = useCallback(() => {
     const MAX_HEIGHT_OF_COMMENTS = 160;
     const EXTRA_SPACE = 30;
-    if (block && openComment) {
+    if (block) {
       const topBarHeight = document.querySelector(".topBar")?.clientHeight;
       const blockContentsEl = document.getElementById(`${block.id}__contents`);
       const editableBlock = document.getElementsByClassName("editableBlock")[0];
@@ -150,7 +150,7 @@ const Comments = ({
         setCommentsStyle(style);
       }
     }
-  }, [block, frameHtml, openComment]);
+  }, [block, frameHtml]);
 
   useEffect(() => {
     changeCommentsStyle();
@@ -176,12 +176,7 @@ const Comments = ({
 
   return (
     <>
-      <div
-        id={openComment ? "block-comments" : undefined}
-        className="comments"
-        ref={commentsRef}
-        style={commentsStyle}
-      >
+      <div className="comments" ref={commentsRef} style={commentsStyle}>
         {allComments && (
           <section className="comments__comments-group">
             {allComments.map((comment: MainCommentType) => (

@@ -306,7 +306,6 @@ function PageHeader({
                 frameHtml={frameRef.current}
                 discardEdit={discardEdit}
                 setDiscardEdit={setDiscardEdit}
-                openComment={false}
                 showAllComments={showAllComments}
               />
             ))

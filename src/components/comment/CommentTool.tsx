@@ -9,8 +9,8 @@ import { ScreenOnly, ResolveBtn } from "../index";
 import { Block, MainCommentType, Page, SubCommentType } from "../../types";
 import { SESSION_KEY } from "../../constants";
 
-type CommentToolProps = {
-  mainComment: boolean;
+export type CommentToolProps = {
+  isMainComment: boolean;
   comment: SubCommentType | MainCommentType;
   block?: Block;
   page: Page;
@@ -27,7 +27,7 @@ type CommentToolProps = {
 };
 
 const CommentTool = ({
-  mainComment,
+  isMainComment,
   comment,
   block,
   page,
@@ -113,7 +113,7 @@ const CommentTool = ({
 
   return (
     <div className="comment__tool" ref={commentToolRef}>
-      {mainComment && (
+      {isMainComment && (
         <ResolveBtn
           page={page}
           pageId={pageId}

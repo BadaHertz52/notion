@@ -2,29 +2,8 @@ import React from "react";
 import EditableBlock, { EditableBlockProps } from "./EditableBlock";
 import { changeFontSizeBySmallText } from "../../utils";
 
-const MoveTargetBlock = ({
-  pages,
-  pagesId,
-  page,
-  block,
-  fontSize,
-  isMoved,
-  setMoveTargetBlock,
-  pointBlockToMoveBlock,
-  command,
-  setCommand,
-  openComment,
-  setOpenComment,
-  setCommentBlock,
-  setOpenLoader,
-  setLoaderTargetBlock,
-  closeMenu,
-  templateHtml,
-  setSelection,
-  setMobileMenuTargetBlock,
-  mobileMenuTargetBlock,
-  measure,
-}: EditableBlockProps) => {
+const MoveTargetBlock = ({ ...props }: EditableBlockProps) => {
+  const { block, fontSize } = props;
   return (
     <div id="moveTargetBlock">
       {block.type.includes("List") && !block.firstBlock ? (
@@ -37,9 +16,9 @@ const MoveTargetBlock = ({
             >
               <div className="mainBlock">
                 <div className="mainBlock__block">
-                  <div id={block.id} className="blockComponent">
+                  <div id={block.id} className="blockContents">
                     <div
-                      className={`${block.type}-blockComponent blockComponent`}
+                      className={`${block.type}-blockContents blockContents`}
                     >
                       <div className="contentEditable">
                         {block.contents !== ""
@@ -54,30 +33,7 @@ const MoveTargetBlock = ({
           </div>
         </div>
       ) : (
-        <EditableBlock
-          key={block.id}
-          pages={pages}
-          pagesId={pagesId}
-          page={page}
-          block={block}
-          fontSize={fontSize}
-          isMoved={isMoved}
-          setMoveTargetBlock={setMoveTargetBlock}
-          pointBlockToMoveBlock={pointBlockToMoveBlock}
-          command={command}
-          setCommand={setCommand}
-          openComment={openComment}
-          setOpenComment={setOpenComment}
-          setCommentBlock={setCommentBlock}
-          setOpenLoader={setOpenLoader}
-          setLoaderTargetBlock={setLoaderTargetBlock}
-          closeMenu={closeMenu}
-          templateHtml={templateHtml}
-          setSelection={setSelection}
-          setMobileMenuTargetBlock={setMobileMenuTargetBlock}
-          mobileMenuTargetBlock={mobileMenuTargetBlock}
-          measure={measure}
-        />
+        <EditableBlock {...props} key={block.id} />
       )}
     </div>
   );

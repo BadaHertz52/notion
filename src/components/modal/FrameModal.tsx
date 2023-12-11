@@ -11,7 +11,8 @@ import Menu, { MenuProps } from "../menu/Menu";
 import Rename, { RenameProps } from "../Rename";
 import CommentInput, { CommentInputProps } from "../comment/CommentInput";
 import { CSSProperties } from "styled-components";
-import { findPage, getBlockDomRect, isInTarget } from "../../utils";
+import { closeModal, findPage, getBlockDomRect, isInTarget } from "../../utils";
+import Comments from "../comment/Comments";
 
 type ChildrenProps = MenuProps & RenameProps & CommentInputProps;
 type FrameModalProps = Omit<
@@ -80,6 +81,9 @@ function FrameModal({ ...props }: FrameModalProps) {
       case "commentInput":
         changeStyleOfModalOnBottomBlock();
         break;
+      case "comments":
+        changeStyleOfModalOnBottomBlock();
+        break;
       case "menu":
         changeMenuModalStyle();
         break;
@@ -95,7 +99,7 @@ function FrameModal({ ...props }: FrameModalProps) {
 
   const handleCloseModal = useCallback(
     (event: globalThis.MouseEvent) => {
-      const target = [".modal", ".menu"];
+      const target = [".modal", ".menu", ".comments-bubble", ".btn-comment"];
       const isInModal = target
         .map((v) => !!isInTarget(event, v))
         .some((v) => v);
@@ -123,16 +127,7 @@ function FrameModal({ ...props }: FrameModalProps) {
   return (
     <ModalPortal id={ID} isOpen={modal.open} style={modalStyle}>
       {modal.target === "menu" && modal.block && (
-        <Menu
-          pages={props.pages}
-          block={modal.block}
-          firstList={props.firstList}
-          page={props.page}
-          userName={props.userName}
-          frameHtml={props.frameHtml}
-          setModal={props.setModal}
-          closeModal={props.closeModal}
-        />
+        <Menu {...props} block={modal.block} />
       )}
       {modal.target === "rename" && modal.block && (
         <Rename
@@ -144,19 +139,26 @@ function FrameModal({ ...props }: FrameModalProps) {
       )}
       {modal.target === "commentInput" && modal.block && (
         <CommentInput
+          {...props}
           pageId={props.page.id}
-          page={props.page}
-          userName={props.userName}
-          editBlock={props.editBlock}
-          editPage={props.editPage}
           mainComment={null}
           subComment={null}
           commentBlock={modal.block}
           allComments={modal.block.comments}
           addOrEdit="add"
-          templateHtml={props.templateHtml}
-          frameHtml={props.frameHtml}
         />
+      )}
+      {modal.target === "comments" && modal.block?.comments && (
+        <div id="block-comments">
+          <Comments
+            {...props}
+            targetMainComments={modal.block.comments}
+            block={modal.block}
+            pageId={props.page.id}
+            showAllComments={false}
+            changeStateToCloseBlockComments={props.closeModal}
+          />
+        </div>
       )}
       {/*
         {modal.target === "pageMenu" && (

@@ -1,5 +1,4 @@
 import React, {
-  CSSProperties,
   Dispatch,
   MouseEvent,
   MutableRefObject,
@@ -44,9 +43,8 @@ export type EditableBlockProps = {
   pointBlockToMoveBlock: MutableRefObject<Block | null>;
   command: CommandType;
   setCommand: Dispatch<SetStateAction<CommandType>>;
-  openComment: boolean;
-  setOpenComment: Dispatch<SetStateAction<boolean>>;
-  setCommentBlock: Dispatch<SetStateAction<Block | null>>;
+  onClickCommentBtn: (block: Block) => void;
+  closeModal: () => void;
   setOpenLoader: Dispatch<SetStateAction<boolean>>;
   setLoaderTargetBlock: Dispatch<SetStateAction<Block | null>>;
   closeMenu: (event: globalThis.MouseEvent | MouseEvent) => void;
@@ -58,30 +56,8 @@ export type EditableBlockProps = {
   openExport?: boolean;
 };
 
-const EditableBlock = ({
-  pages,
-  pagesId,
-  page,
-  block,
-  fontSize,
-  isMoved,
-  setMoveTargetBlock,
-  pointBlockToMoveBlock,
-  command,
-  setCommand,
-  openComment,
-  setOpenComment,
-  setCommentBlock,
-  setOpenLoader,
-  setLoaderTargetBlock,
-  closeMenu,
-  templateHtml,
-  setSelection,
-  setMobileMenuTargetBlock,
-  mobileMenuTargetBlock,
-  measure,
-  openExport,
-}: EditableBlockProps) => {
+const EditableBlock = ({ ...props }: EditableBlockProps) => {
+  const { block, page, isMoved, pointBlockToMoveBlock, templateHtml } = props;
   const { editBlock } = useContext(ActionContext).actions;
   const className =
     block.type !== "toggle"
@@ -93,7 +69,9 @@ const EditableBlock = ({
 
   const isOpenComments = useMemo(
     () =>
-      block.comments ? block.comments.some((i) => i.type === "open") : false,
+      block.comments
+        ? block.comments.some((comment) => comment.type === "open")
+        : false,
     [block.comments]
   );
 
@@ -126,15 +104,6 @@ const EditableBlock = ({
     },
     [block.id, isMoved, pointBlockToMoveBlock]
   );
-  const onClickCommentBtn = useCallback(
-    (block: Block) => {
-      if (!openComment) {
-        setCommentBlock(block);
-        setOpenComment(true);
-      }
-    },
-    [openComment, setCommentBlock, setOpenComment]
-  );
 
   const onClickTodoBtn = useCallback(() => {
     const editedBlock: Block = {
@@ -157,21 +126,21 @@ const EditableBlock = ({
   useEffect(() => {
     const newBlockItem = sessionStorage.getItem(SESSION_KEY.newBlock);
     if (newBlockItem) {
-      const newBlockContentsDoc = document.getElementById(
+      const newContentsDoc = document.getElementById(
         `${newBlockItem}__contents`
       );
-      if (newBlockContentsDoc) {
+      if (newContentsDoc) {
         const newBlockContentEditableDoc =
-          newBlockContentsDoc.firstElementChild as HTMLElement;
+          newContentsDoc.firstElementChild as HTMLElement;
         newBlockContentEditableDoc.focus();
       }
       sessionStorage.removeItem(SESSION_KEY.newBlock);
     }
     if (block.type.includes("media") && block.contents === "") {
-      setOpenLoader(true);
-      setLoaderTargetBlock(block);
+      props.setOpenLoader(true);
+      props.setLoaderTargetBlock(block);
     }
-  }, [block, setLoaderTargetBlock, setOpenLoader]);
+  }, [block, props.setLoaderTargetBlock, props.setOpenLoader]);
 
   return (
     <div className="editableBlock">
@@ -179,36 +148,17 @@ const EditableBlock = ({
         <div
           id={`block-${block.id}`}
           className={className}
-          style={changeFontSizeBySmallText(block, fontSize)}
+          style={changeFontSizeBySmallText(block, props.fontSize)}
         >
           {block.type.includes("ListArr") ? (
             <ListSub
-              pages={pages}
-              pagesId={pagesId}
-              page={page}
-              block={block}
-              fontSize={fontSize}
+              {...props}
               isMoved={isMoved}
-              setMoveTargetBlock={setMoveTargetBlock}
               pointBlockToMoveBlock={pointBlockToMoveBlock}
-              command={command}
-              setCommand={setCommand}
-              openComment={openComment}
-              setOpenComment={setOpenComment}
-              setCommentBlock={setCommentBlock}
-              setOpenLoader={setOpenLoader}
-              setLoaderTargetBlock={setLoaderTargetBlock}
-              closeMenu={closeMenu}
-              templateHtml={templateHtml}
-              setSelection={setSelection}
-              setMobileMenuTargetBlock={setMobileMenuTargetBlock}
-              mobileMenuTargetBlock={mobileMenuTargetBlock}
-              onClickCommentBtn={onClickCommentBtn}
               subBlocks={subBlocks}
               isOpenComments={isOpenComments}
               markPointBlock={markPointBlock}
               cancelPointBlock={cancelPointBlock}
-              measure={measure}
             />
           ) : (
             <>
@@ -261,7 +211,7 @@ const EditableBlock = ({
                         icon={block.icon}
                         iconType={block.iconType}
                         style={undefined}
-                        openExport={openExport}
+                        openExport={props.openExport}
                       />
                     </div>
                   )}
@@ -275,7 +225,7 @@ const EditableBlock = ({
                 {isOpenComments && (
                   <BlockComment
                     block={block}
-                    onClickCommentBtn={onClickCommentBtn}
+                    onClickCommentBtn={props.onClickCommentBtn}
                   />
                 )}
               </div>
@@ -283,28 +233,9 @@ const EditableBlock = ({
                 <div className="subBlock-group">
                   {subBlocks.map((subBlock: Block) => (
                     <EditableBlock
+                      {...props}
                       key={subBlocks.indexOf(subBlock)}
-                      pages={pages}
-                      pagesId={pagesId}
-                      page={page}
                       block={subBlock}
-                      fontSize={fontSize}
-                      isMoved={isMoved}
-                      setMoveTargetBlock={setMoveTargetBlock}
-                      pointBlockToMoveBlock={pointBlockToMoveBlock}
-                      command={command}
-                      setCommand={setCommand}
-                      openComment={openComment}
-                      setOpenComment={setOpenComment}
-                      setCommentBlock={setCommentBlock}
-                      setOpenLoader={setOpenLoader}
-                      setLoaderTargetBlock={setLoaderTargetBlock}
-                      closeMenu={closeMenu}
-                      templateHtml={templateHtml}
-                      setSelection={setSelection}
-                      setMobileMenuTargetBlock={setMobileMenuTargetBlock}
-                      mobileMenuTargetBlock={mobileMenuTargetBlock}
-                      measure={measure}
                     />
                   ))}
                 </div>

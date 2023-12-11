@@ -2,64 +2,36 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import { CSSProperties } from "styled-components";
 
-import {
-  Block,
-  MainCommentType,
-  Page,
-  SubCommentType,
-  ModalType,
-} from "../../types";
+import { Block, MainCommentType, Page, SubCommentType } from "../../types";
 
 import { CommentTool, CommentInput, Time } from "../index";
 import { SESSION_KEY } from "../../constants";
+import { CommentInputProps } from "./CommentInput";
+import { CommentToolProps } from "./CommentTool";
 
-type CommentBlockProps = {
-  comment: SubCommentType | MainCommentType;
-  mainComment: boolean;
-  block?: Block;
-  page: Page;
-  pageId: string;
-  userName: string;
-  editBlock: (pageId: string, block: Block) => void;
-  editPage?: (pageId: string, newPage: Page) => void;
-  frameHtml: HTMLElement | null;
-  allComments: MainCommentType[] | null;
-  setAllComments: Dispatch<SetStateAction<MainCommentType[] | null>>;
-  moreOpen: boolean;
-  setMoreOpen: Dispatch<SetStateAction<boolean>>;
-  setToolMoreStyle: Dispatch<SetStateAction<CSSProperties | undefined>>;
-  setModal?: Dispatch<SetStateAction<ModalType>>;
-  discardEdit: boolean;
-  setDiscardEdit: Dispatch<SetStateAction<boolean>>;
-  templateHtml: HTMLElement | null;
-  showAllComments: boolean;
-};
+export type CommentBlockProps = Omit<
+  CommentInputProps,
+  "mainComment" | "setEdit" | "addOrEdit" | "subComment" | "mainComment"
+> &
+  CommentToolProps & {
+    comment: SubCommentType | MainCommentType;
+    isMainComment: boolean;
+    block?: Block;
+    page: Page;
+    moreOpen: boolean;
+    setMoreOpen: Dispatch<SetStateAction<boolean>>;
+    setToolMoreStyle: Dispatch<SetStateAction<CSSProperties | undefined>>;
+    discardEdit?: boolean;
+    setDiscardEdit?: Dispatch<SetStateAction<boolean>>;
+    showAllComments: boolean;
+  };
 
-const CommentBlock = ({
-  comment,
-  mainComment,
-  block,
-  page,
-  pageId,
-  userName,
-  editBlock,
-  editPage,
-  setModal,
-  frameHtml,
-  allComments,
-  setAllComments,
-  moreOpen,
-  setMoreOpen,
-  setToolMoreStyle,
-  discardEdit,
-  setDiscardEdit,
-  templateHtml,
-  showAllComments,
-}: CommentBlockProps) => {
+const CommentBlock = ({ ...props }: CommentBlockProps) => {
+  const { comment, isMainComment, block, discardEdit, setDiscardEdit } = props;
   const firstLetter = comment.userName.substring(0, 1).toUpperCase();
   const [edit, setEdit] = useState<boolean>(false);
   const editCommentItem = sessionStorage.getItem(SESSION_KEY.editComment);
-  const targetMainComment = mainComment ? (comment as MainCommentType) : null;
+  const targetMainComment = isMainComment ? (comment as MainCommentType) : null;
   const blockContentEl = document.getElementById(
     `${block?.id}__contents`
   )?.textContent;
@@ -69,7 +41,7 @@ const CommentBlock = ({
       if (discardEdit) {
         setEdit(false);
         sessionStorage.removeItem(SESSION_KEY.editComment);
-        setDiscardEdit(false);
+        setDiscardEdit && setDiscardEdit(false);
       } else {
         comment.id === editCommentItem && setEdit(true);
       }
@@ -85,24 +57,9 @@ const CommentBlock = ({
           <div className="userName">{comment.userName}</div>
           <Time editTime={comment.editTime} />
         </div>
-        <CommentTool
-          mainComment={mainComment}
-          comment={comment}
-          block={block}
-          page={page}
-          pageId={pageId}
-          editBlock={editBlock}
-          editPage={editPage}
-          frameHtml={frameHtml}
-          setAllComments={setAllComments}
-          moreOpen={moreOpen}
-          setMoreOpen={setMoreOpen}
-          setToolMoreStyle={setToolMoreStyle}
-          templateHtml={templateHtml}
-          showAllComments={showAllComments}
-        />
+        <CommentTool {...props} />
       </section>
-      {mainComment && (
+      {isMainComment && (
         <section className="commentBlock__mainComment">
           <div className="commentBlock__mainComment_line"></div>
           {block && (
@@ -117,21 +74,11 @@ const CommentBlock = ({
       <section className="comment__contents">
         {edit ? (
           <CommentInput
-            userName={userName}
-            pageId={pageId}
-            page={page}
-            mainComment={!mainComment ? null : (comment as MainCommentType)}
-            subComment={!mainComment ? (comment as SubCommentType) : null}
-            editBlock={editBlock}
-            editPage={editPage}
-            commentBlock={block}
-            allComments={allComments}
-            setAllComments={setAllComments}
-            setModal={setModal}
+            {...props}
+            mainComment={!isMainComment ? null : (comment as MainCommentType)}
+            subComment={!isMainComment ? (comment as SubCommentType) : null}
             addOrEdit="edit"
             setEdit={setEdit}
-            templateHtml={templateHtml}
-            frameHtml={frameHtml}
           />
         ) : (
           comment.content

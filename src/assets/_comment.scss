@@ -2,6 +2,10 @@
 .comments {
   display: flex;
   margin: 8px 0;
+  &:first-child {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
   padding-bottom: 1rem;
   border-bottom: 1px solid $lightMud;
   width: 100%;
@@ -101,15 +105,20 @@
 }
 #block-comments {
   @include hiddenScrollBar;
+  @include modalStyle;
+  width: inherit;
   position: absolute;
   z-index: 20;
   padding-bottom: 0;
-  @include modalStyle;
   overflow-y: scroll;
   .comments__comments-group {
     width: 100%;
     margin: 0;
     padding-bottom: 0;
+  }
+  .commentInput {
+    @include resetModalStyle;
+    display: flex;
   }
 }
 .page__comments {

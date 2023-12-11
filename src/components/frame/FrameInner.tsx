@@ -16,13 +16,14 @@ import { PageHeaderProps } from "../page/PageHeader";
 import { EditableBlock, PageHeader, EmptyPageContent } from "../index";
 
 import { ActionContext } from "../../contexts";
-import { Block, Page, CommandType, SelectionType } from "../../types";
 import {
-  setTemplateItem,
-  getBlockSample,
-  getEditTime,
-  getNewBlockId,
-} from "../../utils";
+  Block,
+  Page,
+  CommandType,
+  SelectionType,
+  ModalType,
+} from "../../types";
+import { setTemplateItem, getBlockSample, getNewBlockId } from "../../utils";
 
 export type FrameInnerProps = PageHeaderProps & {
   openExport?: boolean;
@@ -51,10 +52,12 @@ export type FrameInnerProps = PageHeaderProps & {
   setMobileMenuTargetBlock: Dispatch<SetStateAction<Block | null>>;
   mobileMenuTargetBlock: Block | null;
   frameInnerStyle: CSSProperties;
+  setModal: Dispatch<SetStateAction<ModalType>>;
+  closeModal: () => void;
 };
 
 const FrameInner = (props: FrameInnerProps) => {
-  const { page, firstBlocks, frameRef, templateHtml } = props;
+  const { page, firstBlocks, frameRef, templateHtml, setModal } = props;
   const { addBlock } = useContext(ActionContext).actions;
   const bottomHeight = 80;
 
@@ -71,6 +74,18 @@ const FrameInner = (props: FrameInnerProps) => {
       "width:100%; height:auto; max-height:initial; max-width:initial; position:relative;"
     );
   }, [frameRef]);
+
+  const onClickCommentBtn = useCallback(
+    (block: Block) => {
+      console.log("click");
+      setModal({
+        open: true,
+        target: "comments",
+        block: block,
+      });
+    },
+    [setModal]
+  );
 
   const onClickBottom = useCallback(() => {
     const middleNumber: number = page.blocksId?.length || 0;
@@ -147,9 +162,8 @@ const FrameInner = (props: FrameInnerProps) => {
               pointBlockToMoveBlock={props.pointBlockToMoveBlock}
               command={props.command}
               setCommand={props.setCommand}
-              openComment={props.openComment}
-              setOpenComment={props.setOpenComment}
-              setCommentBlock={props.setCommentBlock}
+              onClickCommentBtn={onClickCommentBtn}
+              closeModal={props.closeModal}
               setOpenLoader={props.setOpenLoader}
               setLoaderTargetBlock={props.setLoaderTargetBlock}
               closeMenu={props.closeMenu}

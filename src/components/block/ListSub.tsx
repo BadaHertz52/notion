@@ -21,34 +21,9 @@ type ListSubProps = EditableBlockProps &
     cancelPointBlock: (event: MouseEvent<HTMLDivElement>) => void;
   };
 
-const ListSub = ({
-  pages,
-  pagesId,
-  page,
-  block,
-  fontSize,
-  isMoved,
-  setMoveTargetBlock,
-  pointBlockToMoveBlock,
-  command,
-  setCommand,
-  openComment,
-  setOpenComment,
-  setCommentBlock,
-  setOpenLoader,
-  setLoaderTargetBlock,
-  closeMenu,
-  templateHtml,
-  setSelection,
-  setMobileMenuTargetBlock,
-  mobileMenuTargetBlock,
-  onClickCommentBtn,
-  subBlocks,
-  isOpenComments,
-  markPointBlock,
-  cancelPointBlock,
-  measure,
-}: ListSubProps) => {
+const ListSub = ({ ...props }: ListSubProps) => {
+  const { block, page, subBlocks } = props;
+
   const blockContentsRef = useRef<HTMLDivElement>(null);
   const getListMarker = (subBlock: Block) => {
     let listMarker: string = "";
@@ -98,8 +73,8 @@ const ListSub = ({
             <div
               className="mainBlock"
               key={`listItem_${subBlocks.indexOf(block)}`}
-              onMouseOver={(event) => markPointBlock(event, block)}
-              onMouseLeave={(event) => cancelPointBlock(event)}
+              onMouseOver={(event) => props.markPointBlock(event, block)}
+              onMouseLeave={(event) => props.cancelPointBlock(event)}
             >
               <div className="mainBlock__block">
                 <div
@@ -120,10 +95,10 @@ const ListSub = ({
                   <BlockContents {...props} />
                 </div>
               </div>
-              {isOpenComments && (
+              {props.isOpenComments && (
                 <BlockComment
                   block={block}
-                  onClickCommentBtn={onClickCommentBtn}
+                  onClickCommentBtn={props.onClickCommentBtn}
                 />
               )}
             </div>
@@ -133,28 +108,8 @@ const ListSub = ({
                   .map((id: string) => findBlock(page, id).BLOCK)
                   .map((sub: Block) => (
                     <EditableBlock
+                      {...props}
                       key={block.subBlocksId?.indexOf(sub.id)}
-                      pages={pages}
-                      pagesId={pagesId}
-                      page={page}
-                      block={sub}
-                      fontSize={fontSize}
-                      isMoved={isMoved}
-                      setMoveTargetBlock={setMoveTargetBlock}
-                      pointBlockToMoveBlock={pointBlockToMoveBlock}
-                      command={command}
-                      setCommand={setCommand}
-                      openComment={openComment}
-                      setOpenComment={setOpenComment}
-                      setCommentBlock={setCommentBlock}
-                      setOpenLoader={setOpenLoader}
-                      setLoaderTargetBlock={setLoaderTargetBlock}
-                      closeMenu={closeMenu}
-                      templateHtml={templateHtml}
-                      setSelection={setSelection}
-                      setMobileMenuTargetBlock={setMobileMenuTargetBlock}
-                      mobileMenuTargetBlock={mobileMenuTargetBlock}
-                      measure={measure}
                     />
                   ))}
               </div>

@@ -28,96 +28,36 @@ type CommentProps = {
    * ToolMore의 위치를 지정함
    */
   setToolMoreStyle: Dispatch<SetStateAction<CSSProperties | undefined>>;
-  discardEdit: boolean;
-  setDiscardEdit: Dispatch<SetStateAction<boolean>>;
+  discardEdit?: boolean;
+  setDiscardEdit?: Dispatch<SetStateAction<boolean>>;
   templateHtml: HTMLElement | null;
   showAllComments: boolean;
 };
 
-const Comment = ({
-  userName,
-  comment,
-  block,
-  page,
-  pageId,
-  editBlock,
-  editPage,
-  frameHtml,
-  allComments,
-  setAllComments,
-  moreOpen,
-  setMoreOpen,
-  setToolMoreStyle,
-  discardEdit,
-  setDiscardEdit,
-  templateHtml,
-  showAllComments,
-}: CommentProps) => {
+const Comment = ({ ...props }: CommentProps) => {
+  const { comment } = props;
   return (
     <div className="comment">
       <div className="comment__mainComment">
-        <CommentBlock
-          userName={userName}
-          comment={comment}
-          mainComment={true}
-          block={block}
-          page={page}
-          pageId={pageId}
-          editBlock={editBlock}
-          editPage={editPage}
-          frameHtml={frameHtml}
-          allComments={allComments}
-          setAllComments={setAllComments}
-          moreOpen={moreOpen}
-          setMoreOpen={setMoreOpen}
-          setToolMoreStyle={setToolMoreStyle}
-          discardEdit={discardEdit}
-          setDiscardEdit={setDiscardEdit}
-          templateHtml={templateHtml}
-          showAllComments={showAllComments}
-        />
+        <CommentBlock {...props} isMainComment={true} />
       </div>
       {comment.subComments && (
         <div className="comment__subComments">
           {comment.subComments.map((comment: SubCommentType) => (
             <CommentBlock
+              {...props}
               key={`commentBlock_${comment.id}`}
-              userName={userName}
-              comment={comment}
-              mainComment={false}
-              page={page}
-              pageId={pageId}
-              block={block}
-              editBlock={editBlock}
-              editPage={editPage}
-              frameHtml={frameHtml}
-              allComments={allComments}
-              setAllComments={setAllComments}
-              moreOpen={moreOpen}
-              setMoreOpen={setMoreOpen}
-              setToolMoreStyle={setToolMoreStyle}
-              discardEdit={discardEdit}
-              setDiscardEdit={setDiscardEdit}
-              templateHtml={templateHtml}
-              showAllComments={showAllComments}
+              isMainComment={true}
             />
           ))}
         </div>
       )}
       <CommentInput
-        userName={userName}
-        page={page}
-        pageId={pageId}
-        editBlock={editBlock}
-        editPage={editPage}
+        {...props}
+        commentBlock={props.block}
         mainComment={comment}
         subComment={null}
-        commentBlock={block}
-        allComments={allComments}
-        setAllComments={setAllComments}
         addOrEdit="add"
-        templateHtml={templateHtml}
-        frameHtml={frameHtml}
       />
     </div>
   );

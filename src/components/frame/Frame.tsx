@@ -889,6 +889,9 @@ const Frame = ({
     };
   }, [changeOpenBlockFnModal]);
 
+  useEffect(() => {
+    console.log("modal", modal);
+  }, [modal]);
   return (
     <div
       className={`frame ${newPageFrame ? "newPageFrame" : ""} ${
@@ -936,6 +939,7 @@ const Frame = ({
         frameInnerStyle={frameInnerStyle}
         openExport={openExport}
         setModal={setModal}
+        closeModal={closeModal}
       />
       {/* modal - blockFn */}
       <ModalPortal id="modal-blockFn" isOpen={openBlockFnModal}>

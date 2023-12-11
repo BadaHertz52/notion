@@ -11,19 +11,7 @@ const PageBlock = ({ ...props }: BlockContendEditableProps) => {
       id={`${props.block.id}__contents`}
     >
       <ScreenOnly text="open contents of which type page" />
-      <BlockContentEditable
-        pagesId={props.pagesId}
-        pages={props.pages}
-        page={props.page}
-        block={props.block}
-        templateHtml={props.templateHtml}
-        command={props.command}
-        setCommand={props.setCommand}
-        setOpenComment={props.setOpenComment}
-        setSelection={props.setSelection}
-        setMobileMenuTargetBlock={props.setMobileMenuTargetBlock}
-        onClickCommentBtn={props.onClickCommentBtn}
-      />
+      <BlockContentEditable {...props} />
     </button>
   );
 };
