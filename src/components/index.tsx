@@ -28,7 +28,7 @@ import CommentTool from "./comment/CommentTool";
 import CommentToolMore from "./comment/CommentToolMore";
 import Comments from "./comment/Comments";
 import ResolveBtn from "./comment/ResolveBtn";
-
+//container
 import EditorContainer from "./containers/EditorContainer";
 import NotionContainer from "./containers/NotionContainer";
 import SideBarContainer from "./containers/SideBarContainer";
@@ -68,8 +68,8 @@ import Result from "./result/Result";
 import ResultList from "./result/ResultList";
 
 import Favorites from "./sideBar/Favorites";
-import ItemTemplate from "./sideBar/ItemTemplate";
-import ListTemplate from "./sideBar/ListTemplate";
+import PageListItem from "./sideBar/PageListItem";
+import PageList from "./sideBar/PageList";
 import Private from "./sideBar/Private";
 import QuickFindBoard from "./sideBar/QuickFindBoard";
 import QuickFindBoardOptionBtn from "./sideBar/QuickFindBoardOptionBtn";
@@ -120,8 +120,8 @@ export {
   TopBar,
   //sideBar
   Favorites,
-  ItemTemplate,
-  ListTemplate,
+  PageListItem,
+  PageList,
   Private,
   QuickFindBoard,
   QuickFindBoardOptionBtn,

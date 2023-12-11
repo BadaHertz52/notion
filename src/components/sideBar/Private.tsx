@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 
 import { AiOutlinePlus } from "react-icons/ai";
 
-import { ScreenOnly, ListTemplate } from "../index";
+import { ScreenOnly, PageList } from "../index";
 import { ActionContext } from "../../contexts";
 import { ListItem, Notion, Page } from "../../types";
 
@@ -52,7 +52,7 @@ function Private({
       {notion.pages && (
         <div className="list">
           {notion.pages[0] && targetList && (
-            <ListTemplate
+            <PageList
               notion={notion}
               targetList={targetList}
               onClickMoreBtn={onClickMoreBtn}

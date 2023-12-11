@@ -7,7 +7,6 @@
       position: absolute;
       top: 0;
       left: 0;
-      z-index: 10;
       .inner {
         position: relative;
       }
@@ -30,23 +29,39 @@
     }
   }
 }
-//sideBarModal
-#sideBarModal__menu {
+#modal-blockFn {
+  z-index: 10;
+}
+#modal-sideBar,
+#modal-frame {
+  z-index: 20;
+}
+//modal-sideBar
+#modal-sideBar__menu {
   & > .inner {
     @include modalStyle;
   }
 }
 
 @media screen and (max-width: 768px) {
-  #sideBarModal__menu {
+  .modal__menu {
     transition: top ease 800ms;
     background-color: transparent;
+
     & > .inner {
       background-color: rgb(240, 240, 240);
       width: 100vw;
       height: 100vh;
       min-height: 10vh;
     }
+  }
+  .center .modal__menu {
+    & > .inner {
+      height: fit-content;
+      width: fit-content;
+    }
+  }
+  #modal-sideBar {
     .topBar {
       height: 60px;
       width: 100vw;
@@ -65,7 +80,7 @@
         }
       }
     }
-    .resizeBar {
+    .btn-resize {
       display: flex;
       justify-content: center;
       align-items: center;

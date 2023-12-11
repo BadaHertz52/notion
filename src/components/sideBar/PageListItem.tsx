@@ -12,7 +12,7 @@ import { ScreenOnly, PageIcon } from "../index";
 import { SideAppear, ListItem } from "../../types";
 import { makeRoutePath } from "../../utils";
 
-type ItemTemplateProp = {
+type PageListItemProp = {
   item: ListItem;
   onClickMoreBtn: (item: ListItem, target: HTMLElement) => void;
   addNewSubPage: (item: ListItem) => void;
@@ -20,13 +20,13 @@ type ItemTemplateProp = {
   handleImgLoad?: () => void;
 };
 
-const ItemTemplate = ({
+const PageListItem = ({
   item,
   onClickMoreBtn,
   addNewSubPage,
   changeSide,
   handleImgLoad,
-}: ItemTemplateProp) => {
+}: PageListItemProp) => {
   const [toggleStyle, setToggleStyle] = useState<CSSProperties>({
     transform: "rotate(0deg)",
   });
@@ -88,14 +88,14 @@ const ItemTemplate = ({
   }, [changeSide]);
   return (
     <div
-      className="item__inner page-link"
+      className="pageList__item link-page"
       onMouseOver={showPageFn}
       onMouseOut={removeOn}
     >
-      <div className="pageItem">
+      <div className="pageList__item__page">
         <button
           title="button to toggle page"
-          className="toggleBtn"
+          className="btn-toggle"
           onClick={onToggleSubPage}
           style={toggleStyle}
         >
@@ -116,9 +116,9 @@ const ItemTemplate = ({
           <div>{item.title}</div>
         </Link>
       </div>
-      <div className="sideBarPageFn" ref={sideBarPageFnRef}>
+      <div className="pageList__item__btn-group" ref={sideBarPageFnRef}>
         <button
-          className="moreBtn"
+          className="btn-menu"
           title="button to open menu to delete, duplicate or for more"
           onClick={() => {
             sideBarPageFnRef.current &&
@@ -143,4 +143,4 @@ const ItemTemplate = ({
   );
 };
 
-export default React.memo(ItemTemplate);
+export default React.memo(PageListItem);

@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, memo } from "react";
+import { memo } from "react";
 import { FixedSizeList, Layout } from "react-window";
 
 import { Result, TrashResultItem } from "../index";
@@ -12,7 +12,7 @@ type ResultListProps = {
   layout: Layout;
   itemSize: number;
   isTrash?: boolean;
-  setOpenTrash?: Dispatch<SetStateAction<boolean>>;
+  closeTrash?: () => void;
 };
 
 const ResultList = (props: ResultListProps) => {
@@ -27,11 +27,11 @@ const ResultList = (props: ResultListProps) => {
       itemSize={props.itemSize}
     >
       {({ index }) =>
-        props.isTrash && props.setOpenTrash ? (
+        props.isTrash && props.closeTrash ? (
           <TrashResultItem
             item={props.list[index]}
             width={props.listWidth}
-            setOpenTrash={props.setOpenTrash}
+            closeTrash={props.closeTrash}
           />
         ) : (
           <Result item={props.list[index]} width={props.listWidth} />

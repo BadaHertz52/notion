@@ -20,7 +20,7 @@
     position: absolute;
     z-index: 10;
   }
-  .sideBarPageFn {
+  .btn-group {
     button {
       color: $darkgrey;
     }
@@ -82,10 +82,11 @@
       font-weight: 500;
     }
   }
-  .item__inner {
+  .item__inner,
+  .pageList__item {
     display: flex;
     padding: 5px 14px;
-    font-size: 14px;
+    font-size: 16px;
     text-align: center;
     min-height: 27px;
     .record-icon,
@@ -101,30 +102,26 @@
       fill: $itemSvg;
     }
   }
-  .list .item__inner {
+  .list .pageList__item {
     justify-content: space-between;
-  }
-  .switcher,
-  .fn-group-1 {
-    .item__inner {
-      font-size: 13px;
+    .pageList__item__page {
+      display: flex;
     }
   }
-  .sideBarPageFn {
+  .pageList__item__btn-group {
     display: none;
-  }
-  .sideBarPageFn.on {
-    display: flex;
-    align-content: center;
-    padding-top: 5px;
-    button {
-      width: fit-content;
-      font-size: 12px;
-      color: $itemSvg;
-      fill: $itemSvg;
-      svg {
+    &.on {
+      display: flex;
+      align-content: center;
+      button {
         width: fit-content;
-        margin-right: 0;
+        font-size: 12px;
+        color: $itemSvg;
+        fill: $itemSvg;
+        svg {
+          width: fit-content;
+          margin-right: 0;
+        }
       }
     }
   }
@@ -209,7 +206,7 @@
     border-top: none;
     padding-bottom: 20px;
     .item__inner span {
-      font-size: 12px;
+      font-size: 14px;
       color: $darkgrey;
       font-weight: initial;
     }
@@ -264,7 +261,7 @@
       display: flex;
       justify-content: flex-start;
     }
-    .toggleBtn {
+    .btn-toggle {
       margin-right: 0.5rem;
       svg {
         margin-right: 0;
@@ -289,7 +286,9 @@
     .subPage.no {
       margin-left: 36px;
       span {
-        font-size: 13px;
+        font-size: 14px;
+        color: $darkgrey;
+        font-weight: initial;
       }
     }
     .btn-addPage {
@@ -372,9 +371,13 @@
   }
   //--addNewPage
 }
-
+.sideBar-float {
+  .addNewPageBtn {
+    margin-top: 16px;
+  }
+}
 .sideBar__moreFn {
-  .resizeBar {
+  .btn-resize {
     display: none;
   }
   button {
@@ -443,7 +446,7 @@
       background-color: black;
       color: #ffff;
     }
-    .item__inner svg {
+    .pageList__item svg {
       font-size: 1rem;
       color: $darkgrey;
     }
@@ -471,7 +474,7 @@
     .private .header svg {
       color: $darkgrey;
     }
-    .page-link:hover {
+    .link-page:hover {
       background-color: rgba(222, 222, 222, 0.833);
     }
     .fn-group-1,

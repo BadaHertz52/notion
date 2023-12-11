@@ -115,7 +115,7 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
           });
           break;
         case "rename":
-          const el = document.querySelector(".item__inner.page-link");
+          const el = document.querySelector(".item__inner.link-page");
           if (el) {
             setModalStyle({
               position: "absolute",
@@ -206,7 +206,8 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
   }, [sideModal]);
   return (
     <ModalPortal
-      id="sideBarModal"
+      target={sideModal.target}
+      id="modal-sideBar"
       isOpen={sideModal.open}
       onTouchMove={onTouchMoveSideBar}
       style={modalStyle}
@@ -217,7 +218,7 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
           <div className="topBar">
             <button
               title="button to resize sideBar__moreFn "
-              className="resizeBar"
+              className="btn-resize"
               onTouchStart={onTouchStartResizeBar}
             >
               <ScreenOnly text="button to resize sideBar__moreFn" />
@@ -256,6 +257,32 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
             cleanRecentPage={cleanRecentPage}
           />
         )}
+        {/* //TODO - frame 모달 수정 이후에 수정 */}
+        {/* {sideModal.target === "templates" && (
+          <Templates
+            routePageId={currentPage.id}
+            user={user}
+            userName={user.userName}
+            pagesId={pagesId}
+            pages={pages}
+            firstList={firstList}
+            recentPagesId={user.recentPagesId}
+            commentBlock={null}
+            openComment={openComment}
+            setOpenComment={setOpenComment}
+            openTemplates={openTemplates}
+            setOpenTemplates={setOpenTemplates}
+            setCommentBlock={setCommentBlock}
+            showAllComments={showAllComments}
+            smallText={smallText}
+            fullWidth={fullWidth}
+            discardEdit={discard_edit}
+            setDiscardEdit={setDiscardEdit}
+            fontStyle={fontStyle}
+            mobileSideMenu={mobileSideMenu}
+            setMobileSideMenu={setMobileSideMenu}
+          />
+        )} */}
         {sideModal.target === "trash" && (
           <Trash
             trashPagesId={props.trash.pagesId}

@@ -1,6 +1,6 @@
 import React, { useCallback, useContext } from "react";
 
-import { ListTemplate } from "../index";
+import { PageList } from "../index";
 
 import { ActionContext } from "../../contexts";
 import { ListItem, Notion, Page } from "../../types";
@@ -61,7 +61,7 @@ function Favorites({
       </div>
       {targetList && (
         <div className="list">
-          <ListTemplate
+          <PageList
             notion={notion}
             targetList={targetList}
             onClickMoreBtn={onClickMoreBtn}

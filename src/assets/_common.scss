@@ -195,7 +195,7 @@ div {
   pointer-events: auto;
   @include webkitScroll;
 }
-.page-link {
+.link-page {
   &:hover {
     background-color: $itemHover;
   }

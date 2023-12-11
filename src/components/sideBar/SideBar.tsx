@@ -61,8 +61,6 @@ const SideBar = ({
 }: SideBarProps) => {
   const { addBlock, addPage, changeSide } = useContext(ActionContext).actions;
   const { pages, pagesId, trash } = notion;
-  const trashPages = trash.pages;
-  const trashPagesId = trash.pagesId;
 
   const trashBtnRef = useRef<HTMLButtonElement>(null);
 
@@ -158,13 +156,14 @@ const SideBar = ({
     if (window.innerWidth < 800 && sideAppear === "lock" && showAllComments) {
       changeSide("close");
     }
-    openTrash && changeTrashStyle();
-  }, [changeSide, changeTrashStyle, openTrash, showAllComments, sideAppear]);
+  }, [changeSide, showAllComments, sideAppear]);
 
   const onClickTrashBtn = useCallback(() => {
-    setOpenTrash(true);
-    changeTrashStyle();
-  }, [changeTrashStyle]);
+    setSideModal({
+      open: true,
+      target: "trash",
+    });
+  }, []);
 
   const onMouseOutSideBar = useCallback(() => {
     sideAppear === "float" && changeSide("floatHide");
@@ -211,7 +210,7 @@ const SideBar = ({
                 </div>
                 <button
                   title="button to close side menu"
-                  className="closeSideBarBtn topBar__btn-sideBar"
+                  className="btn-close-sideBar topBar__btn-sideBar"
                   onClick={() => changeSide("close")}
                 >
                   <ScreenOnly text="button to close side menu" />
@@ -284,6 +283,7 @@ const SideBar = ({
               <button
                 title="button to open form that has deleted pages"
                 onClick={onClickTrashBtn}
+                className="btn-trash"
                 ref={trashBtnRef}
               >
                 <div className="item__inner">
@@ -296,7 +296,7 @@ const SideBar = ({
           <div className="mobile-trash-btn-container">
             <button
               title="open form that has deleted page"
-              className="trashBtn"
+              className="btn-trash"
               onClick={onClickTrashBtn}
             >
               <div className="header">TRASH</div>
@@ -319,19 +319,11 @@ const SideBar = ({
           pages={pages}
           pagesId={pagesId}
           firstList={firstList}
+          trash={trash}
           sideModal={sideModal}
           setSideModal={setSideModal}
         />
       )}
-      <Trash
-        style={trashStyle}
-        trashPagesId={trashPagesId}
-        trashPages={trashPages}
-        pagesId={pagesId}
-        pages={pages}
-        openTrash={openTrash}
-        setOpenTrash={setOpenTrash}
-      />
     </div>
   );
 };

@@ -271,7 +271,7 @@ const TopBar = ({
                   <div className="pathSlash">/</div>
                 )}
 
-                <Link className="page-link" to={makeRoutePath(path.id)}>
+                <Link className="link-page" to={makeRoutePath(path.id)}>
                   <div className="icon-path">
                     <PageIcon
                       icon={path.icon}

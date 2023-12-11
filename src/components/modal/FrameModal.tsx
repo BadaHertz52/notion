@@ -33,7 +33,7 @@ type FrameModalProps = Omit<
 };
 function FrameModal({ ...props }: FrameModalProps) {
   const { modal } = props;
-  const ID = "FrameModal";
+  const ID = "modal-frame";
 
   const [modalStyle, setModalStyle] = useState<CSSProperties | undefined>(
     undefined

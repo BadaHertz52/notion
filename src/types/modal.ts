@@ -1,18 +1,19 @@
 import { Block } from "./module";
 
 export type ModalTypeTarget =
-  | "menu"
-  | "pageMenu"
+  | "blockStyler"
+  | "command"
   | "commentInput"
   | "comments"
-  | "moveTargetBlock"
-  | "blockStyler"
-  | "mobileMenu"
-  | "command"
   | "loader"
-  | "rename"
-  | "trash"
+  | "menu"
+  | "mobileMenu"
+  | "moveTargetBlock"
+  | "pageMenu"
   | "sideBarMoreFn"
+  | "templates"
+  | "trash"
+  | "rename"
   | "quickFind";
 
 export type ModalType = {

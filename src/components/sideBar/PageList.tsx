@@ -1,11 +1,11 @@
 import React, { useContext, useCallback, useRef } from "react";
 
-import { ItemTemplate } from "../index";
+import { PageListItem } from "../index";
 
 import { ListItem, Notion, Page, SideAppear } from "../../types";
 import { ActionContext } from "../../contexts";
 
-type ListTemplateProp = {
+type PageListProp = {
   notion: Notion;
   targetList: ListItem[];
   onClickMoreBtn: (item: ListItem, target: HTMLElement) => void;
@@ -13,12 +13,12 @@ type ListTemplateProp = {
   changeSide: (appear: SideAppear) => void;
 };
 
-const ListTemplate = ({
+const PageList = ({
   notion,
   targetList,
   addNewSubPage,
   onClickMoreBtn,
-}: ListTemplateProp) => {
+}: PageListProp) => {
   const { changeSide } = useContext(ActionContext).actions;
   const ulRef = useRef<HTMLUListElement>(null);
   const findSubPage = (
@@ -49,11 +49,11 @@ const ListTemplate = ({
     []
   );
   return (
-    <ul ref={ulRef}>
+    <ul ref={ulRef} className="pageList">
       {targetList.map((item) => (
         <li key={item.id}>
           <div className="mainPage">
-            <ItemTemplate
+            <PageListItem
               item={item}
               onClickMoreBtn={onClickMoreBtn}
               addNewSubPage={addNewSubPage}
@@ -64,7 +64,7 @@ const ListTemplate = ({
             notion.pagesId &&
             (item.subPagesId ? (
               <div className="subPage">
-                <ListTemplate
+                <PageList
                   notion={notion}
                   targetList={makeTargetList(
                     item.subPagesId,
@@ -87,4 +87,4 @@ const ListTemplate = ({
   );
 };
 
-export default React.memo(ListTemplate);
+export default React.memo(PageList);
