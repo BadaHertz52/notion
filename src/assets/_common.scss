@@ -82,7 +82,7 @@ $modalBackGroundColor: rgba(0, 0, 0, 0.212);
     background: #edece9;
   }
 }
-@mixin resetModal {
+@mixin resetModalStyle {
   width: initial;
   display: block;
   flex-direction: initial;

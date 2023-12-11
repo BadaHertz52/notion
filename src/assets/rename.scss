@@ -1,6 +1,7 @@
 @import "./common";
 
 #rename {
+  @include modalStyle;
   display: flex;
   flex-direction: column;
   & > .inner {

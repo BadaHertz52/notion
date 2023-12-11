@@ -183,12 +183,6 @@ const SideBar = ({
     changeInnerStyle();
   }, [user.recentPagesId]);
 
-  useEffect(() => {
-    window.addEventListener("resize", changeInnerStyle);
-    return () => {
-      window.removeEventListener("resize", changeInnerStyle);
-    };
-  }, []);
   return (
     <div
       id="sideBar-outBox"

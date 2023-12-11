@@ -13,14 +13,19 @@
     }
     &.center {
       background-color: $modalBackGroundColor;
-      width: 100vw;
-      height: 100vh;
+
       display: flex;
       justify-content: center;
       align-items: center;
-      .modal__menu,
-      .modal__menu > .inner,
       & > .inner {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .modal__menu,
+      .modal__menu > .inner {
         width: fit-content;
       }
     }
@@ -34,11 +39,6 @@
   z-index: 20;
 }
 //modal-sideBar
-#modal-sideBar__menu {
-  & > .inner {
-    @include modalStyle;
-  }
-}
 
 @media screen and (max-width: 768px) {
   .center .modal__menu {
@@ -50,6 +50,7 @@
   #modal-sideBar {
     &.center {
       .modal__menu > .inner {
+        @include resetModalStyle;
         height: fit-content;
       }
     }
@@ -57,6 +58,7 @@
       transition: top ease 800ms;
       background-color: transparent;
       & > .inner {
+        @include modalStyle;
         background-color: rgb(240, 240, 240);
         width: 100vw;
         height: 100vh;
@@ -97,6 +99,30 @@
           background-color: rgb(194, 194, 194);
         }
       }
+    }
+    #rename,
+    .sideBar__moreFn,
+    #pageMenu {
+      @include resetModalStyle;
+    }
+    #pageMenu {
+      height: 100%;
+      .inner {
+        position: relative;
+      }
+      .new_sub_page {
+        position: absolute;
+        bottom: 60%;
+      }
+      input {
+        background-color: #ffff;
+      }
+    }
+    #rename {
+      background-color: #fff;
+      width: 90%;
+      margin: 0 5%;
+      border-radius: 10px;
     }
   }
 }

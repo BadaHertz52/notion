@@ -391,6 +391,8 @@
   }
 }
 .sideBar__moreFn {
+  @include modalStyle;
+
   .btn-resize {
     display: none;
   }
@@ -585,7 +587,6 @@
       }
     }
   }
-
   .sideBar__moreFn {
     width: inherit;
     .edit__inform {

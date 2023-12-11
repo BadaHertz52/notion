@@ -124,6 +124,7 @@ const PageMenu = ({
             <input
               id="pageMenu__search__input"
               title="input in pageMenu to search page"
+              placeholder="search page"
               type="search"
               onChange={findResult}
             />

@@ -43,7 +43,7 @@
   .menu .mainMenu,
   .menu .menu__sideMenu,
   #linkLoader {
-    @include resetModal;
+    @include resetModalStyle;
     position: relative;
     width: 100vw;
     height: inherit;

@@ -62,15 +62,24 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
 
   const closeModalInMobile = useCallback(() => {
     setModalStyle((prev) => ({ ...prev, top: "100vh" }));
-
+    setTimeout(() => {
+      setModalStyle(undefined);
+      setInnerStyle(undefined);
+    }, 1000);
     setTimeout(() => {
       setSideModal(INITIAL_MODAL);
     }, 1000);
   }, [setModalStyle, setSideModal]);
 
+  const closeModalInWeb = useCallback(() => {
+    setSideModal(INITIAL_MODAL);
+    setModalStyle(undefined);
+    setInnerStyle(undefined);
+  }, [setSideModal, setModalStyle, setInnerStyle]);
+
   const closeModal = useCallback(() => {
-    sideModal.isMobile ? closeModalInMobile() : setSideModal(INITIAL_MODAL);
-  }, [sideModal.isMobile, setSideModal, closeModalInMobile]);
+    sideModal.isMobile ? closeModalInMobile() : closeModalInWeb();
+  }, [sideModal.isMobile, closeModalInWeb, closeModalInMobile]);
 
   const onTouchStartResizeBar = useCallback(() => {
     touchResizeBar.current = true;
@@ -94,6 +103,13 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
     },
     [setInnerStyle, closeModal]
   );
+  const changeCenterModalStyle = useCallback(() => {
+    setModalStyle({
+      width: "fit-content",
+      height: "fit-content",
+    });
+  }, []);
+
   const changeStyleInWeb = useCallback(() => {
     const { targetDomRect } = sideModal;
     if (targetDomRect) {
@@ -124,19 +140,11 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
           }
           break;
         default:
-          //quickFind, trash, template
-          setModalStyle({
-            top: 0,
-            left: 0,
-          });
-          setInnerStyle({
-            width: "100%",
-            position: "absolute",
-          });
           break;
       }
     }
   }, [sideModal]);
+
   const changeStyleForMobileMenu = useCallback(() => {
     setModalStyle((prev) => ({
       ...prev,
@@ -170,6 +178,21 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
     changeStyleForMobileMenu,
   ]);
 
+  const changeStyle = useCallback(() => {
+    const CENTER_MODAL: ModalTypeTarget[] = ["quickFind", "templates", "trash"];
+
+    if (sideModal.target && CENTER_MODAL.includes(sideModal.target)) {
+      changeCenterModalStyle();
+    } else {
+      sideModal.isMobile ? changeStyleInMobile() : changeStyleInWeb();
+    }
+  }, [
+    sideModal,
+    changeStyleInMobile,
+    changeStyleInWeb,
+    changeCenterModalStyle,
+  ]);
+
   const handleCloseModal = useCallback(
     (event: globalThis.MouseEvent) => {
       const NOT_TARGET_ARRAY = [
@@ -190,8 +213,8 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
   );
 
   useEffect(() => {
-    sideModal.isMobile ? changeStyleInMobile() : changeStyleInWeb();
-  }, [sideModal, changeStyleInMobile, changeStyleInWeb]);
+    changeStyle();
+  }, [changeStyle]);
 
   useEffect(() => {
     sideModal.open

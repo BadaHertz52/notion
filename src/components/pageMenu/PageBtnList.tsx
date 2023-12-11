@@ -28,11 +28,12 @@ const PageBtnList = (props: PageBtnListProps) => {
   const maxHeightInMobile =
     window.innerHeight - searchHeight - newBtnHeight - closeBtnHeight;
   const totalListHeight = props.list.length * totalItemSize;
-  const listHeight = isMobile()
-    ? maxHeightInMobile > totalListHeight
-      ? totalListHeight
-      : maxHeightInMobile
-    : totalItemSize * (props.list.length > 2 ? 2.5 : props.list.length);
+  const listHeight =
+    window.innerWidth < 768
+      ? maxHeightInMobile > totalListHeight
+        ? totalListHeight
+        : maxHeightInMobile
+      : totalItemSize * (props.list.length > 2 ? 2.5 : props.list.length);
   const btnStyle: CSSProperties = {
     padding: btnPadding,
     height: itemSize,

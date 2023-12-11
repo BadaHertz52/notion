@@ -1,6 +1,7 @@
 @import "./common";
 
 #quickFindBoard {
+  @include modalStyle;
   height: fit-content;
   min-height: 180px;
   max-height: 60vh;
