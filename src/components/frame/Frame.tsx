@@ -104,7 +104,7 @@ const Frame = ({
   const [menuOpen, setOpenMenu] = useState<boolean>(false);
   const [selection, setSelection] = useState<SelectionType | null>(null);
 
-  const [portal, setPortal] = useState<ModalType>(INITIAL_MODAL);
+  const [modal, setModal] = useState<ModalType>(INITIAL_MODAL);
 
   /**
    * page 내의 위치를 변경하는 대상이 되는  block
@@ -139,8 +139,8 @@ const Frame = ({
       ? "890px"
       : "75%",
   };
-  const closePortal = () => {
-    setPortal(INITIAL_MODAL);
+  const closeModal = () => {
+    setModal(INITIAL_MODAL);
   };
   // const closeModalMenu = useCallback(
   //   (event: globalThis.MouseEvent) => {
@@ -935,6 +935,7 @@ const Frame = ({
         setOpenTemplates={setOpenTemplates}
         frameInnerStyle={frameInnerStyle}
         openExport={openExport}
+        setModal={setModal}
       />
       {/* modal - blockFn */}
       <ModalPortal id="modal-blockFn" isOpen={openBlockFnModal}>
@@ -942,8 +943,8 @@ const Frame = ({
           page={page}
           moveTargetBlock={moveTargetBlock}
           setMoveTargetBlock={setMoveTargetBlock}
-          portal={portal}
-          setPortal={setPortal}
+          modal={modal}
+          setModal={setModal}
         />
       </ModalPortal>
       <FameModal
@@ -954,19 +955,19 @@ const Frame = ({
         userName={userName}
         frameHtml={frameHtml}
         templateHtml={templateHtml}
-        modal={portal}
-        setModal={setPortal}
-        closeModal={closePortal}
+        modal={modal}
+        setModal={setModal}
+        closeModal={closeModal}
         editBlock={editBlock}
         editPage={editPage}
       />
       {/* modal - others */}
       {/* 
-      <ModalPortal isOpen={portal.open}>
+      <ModalPortal isOpen={modal.open}>
 
         
 
-        {portal.target === "mobileMenu" && mobileMenuTargetBlock && (
+        {modal.target === "mobileMenu" && mobileMenuTargetBlock && (
           <MobileMenu
             pages={pages}
             pagesId={pagesId}

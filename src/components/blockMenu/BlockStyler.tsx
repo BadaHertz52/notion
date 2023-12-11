@@ -749,7 +749,7 @@ const BlockStyler = ({
         </div>
       )}
       {openMenu && (
-        //TODO - portal로 인한 수정
+        //TODO - modal로 인한 수정
         <Menu
           pages={pages}
           firstList={firstList}

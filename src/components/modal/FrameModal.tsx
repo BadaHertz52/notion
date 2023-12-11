@@ -159,7 +159,7 @@ function FrameModal({ ...props }: FrameModalProps) {
         />
       )}
       {/*
-        {portal.target === "pageMenu" && (
+        {modal.target === "pageMenu" && (
           <PageMenu
             style={modalStyle}
             what="block"
@@ -170,7 +170,7 @@ function FrameModal({ ...props }: FrameModalProps) {
           />
         )}
 
-        {portal.target === "comments" &&
+        {modal.target === "comments" &&
           commentBlock &&
           openComment &&
           targetMainComments && (
@@ -188,7 +188,7 @@ function FrameModal({ ...props }: FrameModalProps) {
               changeStateToCloseBlockComments={changeStateToCloseBlockComments}
             />
           )}
-        {portal.target === "moveTargetBlock" && moveTargetBlock && (
+        {modal.target === "moveTargetBlock" && moveTargetBlock && (
           <MoveTargetBlock
             key={moveTargetBlock.id}
             pages={pages}
@@ -213,7 +213,7 @@ function FrameModal({ ...props }: FrameModalProps) {
             mobileMenuTargetBlock={mobileMenuTargetBlock}
           />
         )}
-                {portal.target === "blockStyler" && selection && !isMobile() && (
+                {modal.target === "blockStyler" && selection && !isMobile() && (
           <BlockStyler
             pages={pages}
             pagesId={pagesId}

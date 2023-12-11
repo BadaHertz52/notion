@@ -27,21 +27,21 @@ const ModalPortal = ({
   onTouchMove,
 }: ModalPortalProps) => {
   const modalRootEl = document.getElementById("modal-root") as HTMLElement;
-  const portalRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
   const CENTER_TARGET_ARRAY: ModalTypeTarget[] = ["quickFind", "trash"];
   const isCenter: boolean = target
     ? CENTER_TARGET_ARRAY.includes(target)
     : false;
 
   useEffect(() => {
-    if (portalRef.current) {
-      portalRef.current.classList.toggle("on", isOpen);
-      portalRef.current.classList.toggle("center", isCenter);
+    if (modalRef.current) {
+      modalRef.current.classList.toggle("on", isOpen);
+      modalRef.current.classList.toggle("center", isCenter);
     }
   }, [isOpen, isCenter]);
 
   return ReactDOM.createPortal(
-    <div id={id} ref={portalRef} className="modal" onTouchMove={onTouchMove}>
+    <div id={id} ref={modalRef} className="modal" onTouchMove={onTouchMove}>
       <div className="inner">
         <div id={`${id}__menu`} className="modal__menu" style={style}>
           {children}

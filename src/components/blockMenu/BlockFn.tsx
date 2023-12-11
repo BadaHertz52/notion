@@ -19,16 +19,16 @@ type BlockFnProp = {
   page: Page;
   setMoveTargetBlock: Dispatch<SetStateAction<Block | null>>;
   moveTargetBlock: Block | null;
-  portal: ModalType;
-  setPortal: Dispatch<SetStateAction<ModalType>>;
+  modal: ModalType;
+  setModal: Dispatch<SetStateAction<ModalType>>;
 };
 
 const BlockFn = ({
   page,
   setMoveTargetBlock,
   moveTargetBlock,
-  portal,
-  setPortal,
+  modal,
+  setModal,
 }: BlockFnProp) => {
   const { addBlock } = useContext(ActionContext).actions;
 
@@ -57,9 +57,9 @@ const BlockFn = ({
   const onClickMenu = useCallback(() => {
     moveTargetBlock && setMoveTargetBlock(null);
     const sessionItem = sessionStorage.getItem(SESSION_KEY.blockFnTarget);
-    if (sessionItem && !portal.open && setPortal) {
+    if (sessionItem && !modal.open && setModal) {
       const targetBlock = JSON.parse(sessionItem);
-      setPortal({
+      setModal({
         open: true,
         target: "menu",
         block: targetBlock,
@@ -67,7 +67,7 @@ const BlockFn = ({
     } else {
       console.error("BlockFn-openMenu error: there is no session item");
     }
-  }, [moveTargetBlock, portal.open, setMoveTargetBlock, setPortal]);
+  }, [moveTargetBlock, modal.open, setMoveTargetBlock, setModal]);
 
   return (
     <>
