@@ -89,6 +89,8 @@ const Frame = ({
     targetBlock: null,
   });
 
+  const [openBlockFnModal, setOpenBlockFnModal] = useState<boolean>(true);
+
   const [openLoader, setOpenLoader] = useState<boolean>(false);
   const [loaderTargetBlock, setLoaderTargetBlock] = useState<Block | null>(
     null
@@ -874,6 +876,19 @@ const Frame = ({
   useEffect(() => {
     isMoved.current = !!moveTargetBlock;
   }, [moveTargetBlock]);
+
+  const changeOpenBlockFnModal = useCallback(() => {
+    setOpenBlockFnModal(!(sideAppear === "lock" && window.innerWidth <= 768));
+  }, [setOpenBlockFnModal, sideAppear]);
+
+  useEffect(() => {
+    changeOpenBlockFnModal();
+    window.addEventListener("resize", changeOpenBlockFnModal);
+    return () => {
+      window.removeEventListener("resize", changeOpenBlockFnModal);
+    };
+  }, [changeOpenBlockFnModal]);
+
   return (
     <div
       className={`frame ${newPageFrame ? "newPageFrame" : ""} ${
@@ -922,7 +937,7 @@ const Frame = ({
         openExport={openExport}
       />
       {/* modal - blockFn */}
-      <ModalPortal id="modal-blockFn" isOpen={!isMobile()}>
+      <ModalPortal id="modal-blockFn" isOpen={openBlockFnModal}>
         <BlockFn
           page={page}
           moveTargetBlock={moveTargetBlock}
