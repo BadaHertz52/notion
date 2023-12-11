@@ -1,7 +1,7 @@
 //block---
 import BlockContentEditable from "./block/BlockContentEditable";
+import Contents from "./block/Contents";
 import BlockContents from "./block/BlockContents";
-import BlockComponent from "./block/BlockComponent";
 import EditableBlock from "./block/EditableBlock";
 import ImageBlock from "./block/ImageBlock";
 import ImageContent from "./block/ImageContent";
@@ -104,8 +104,8 @@ import Time from "./Time";
 export {
   //block--
   BlockContentEditable,
+  Contents,
   BlockContents,
-  BlockComponent,
   EditableBlock,
   ImageBlock,
   ImageContent,

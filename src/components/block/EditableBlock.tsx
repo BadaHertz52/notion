@@ -15,7 +15,7 @@ import { GrCheckbox, GrCheckboxSelected } from "react-icons/gr";
 import { MdPlayArrow } from "react-icons/md";
 
 import {
-  BlockComponent,
+  BlockContents,
   PageIcon,
   BlockComment,
   ScreenOnly,
@@ -269,24 +269,7 @@ const EditableBlock = ({
                     className="block__contents"
                     style={getBlockContentsStyle(block)}
                   >
-                    <BlockComponent
-                      pages={pages}
-                      pagesId={pagesId}
-                      block={block}
-                      page={page}
-                      command={command}
-                      setCommand={setCommand}
-                      setOpenComment={setOpenComment}
-                      setOpenLoader={setOpenLoader}
-                      setLoaderTargetBlock={setLoaderTargetBlock}
-                      closeMenu={closeMenu}
-                      templateHtml={templateHtml}
-                      setSelection={setSelection}
-                      setMobileMenuTargetBlock={setMobileMenuTargetBlock}
-                      onClickCommentBtn={onClickCommentBtn}
-                      setMoveTargetBlock={setMoveTargetBlock}
-                      measure={measure}
-                    />
+                    <BlockContents {...props} />
                   </div>
                 </div>
                 {isOpenComments && (

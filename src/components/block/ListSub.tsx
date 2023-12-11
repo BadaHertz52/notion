@@ -3,9 +3,9 @@ import React, { MouseEvent, TouchEvent, useRef } from "react";
 import { CSSProperties } from "styled-components";
 import { GoPrimitiveDot } from "react-icons/go";
 
-import { BlockComponentProps } from "./BlockComponent";
+import { BlockComponentProps } from "./BlockContents";
 import { EditableBlockProps } from "./EditableBlock";
-import { BlockComponent, BlockComment, EditableBlock } from "../index";
+import { BlockContents, BlockComment, EditableBlock } from "../index";
 
 import { Block } from "../../types";
 import { findBlock, getBlockContentsStyle } from "../../utils";
@@ -117,24 +117,7 @@ const ListSub = ({
                       )}
                     </div>
                   )}
-                  <BlockComponent
-                    block={block}
-                    page={page}
-                    pages={pages}
-                    pagesId={pagesId}
-                    command={command}
-                    setCommand={setCommand}
-                    setOpenComment={setOpenComment}
-                    setOpenLoader={setOpenLoader}
-                    setLoaderTargetBlock={setLoaderTargetBlock}
-                    closeMenu={closeMenu}
-                    templateHtml={templateHtml}
-                    setSelection={setSelection}
-                    setMobileMenuTargetBlock={setMobileMenuTargetBlock}
-                    onClickCommentBtn={onClickCommentBtn}
-                    setMoveTargetBlock={setMoveTargetBlock}
-                    measure={measure}
-                  />
+                  <BlockContents {...props} />
                 </div>
               </div>
               {isOpenComments && (

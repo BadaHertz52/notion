@@ -37,7 +37,6 @@ export type BlockContendEditableProps = {
   templateHtml: HTMLElement | null;
   setMobileMenuTargetBlock: Dispatch<SetStateAction<Block | null>>;
   setCommand: Dispatch<SetStateAction<CommandType>>;
-  setOpenComment: Dispatch<SetStateAction<boolean>>;
   setSelection: Dispatch<SetStateAction<SelectionType | null>>;
 };
 
@@ -49,7 +48,6 @@ const BlockContentEditable = ({
   templateHtml,
   command,
   setCommand,
-  setOpenComment,
   setSelection,
   setMobileMenuTargetBlock,
   onClickCommentBtn,
@@ -88,9 +86,9 @@ const BlockContentEditable = ({
             const start = value.indexOf("<div>");
             const end = value.indexOf("</div>");
             const editedContents = value.slice(0, start);
-            const newBlockContents = value.slice(start + 5, end);
+            const newContents = value.slice(start + 5, end);
             const newBlock: Block = {
-              ...makeNewBlock(page, block, newBlockContents),
+              ...makeNewBlock(page, block, newContents),
               firstBlock: block.firstBlock,
               subBlocksId: block.subBlocksId,
               parentBlocksId: block.parentBlocksId,
@@ -155,7 +153,7 @@ const BlockContentEditable = ({
           // 타입 변경 명령어로 commandBlock 을 엶
           if (!isMobile()) {
             // web browser 에서
-            setOpenComment(false);
+            // setOpenComment(false);
             setCommand({
               open: true,
               command: "/",
@@ -165,7 +163,7 @@ const BlockContentEditable = ({
         }
       }
     },
-    [addBlock, block, editBlock, page, setCommand, setOpenComment, templateHtml]
+    [addBlock, block, editBlock, page, setCommand, templateHtml]
   );
   /**
    * focus를 화면 상의 다음 블록의 contentEditable 에 옮기는 함수
@@ -453,7 +451,7 @@ const BlockContentEditable = ({
     [block, setMobileMenuTargetBlock, setSelection]
   );
   /**
-   * BlockComponent 중 link 가 있는 element를 클릭 했을 경우 , 해당 링크를 여는 함수
+   * BlockContents 중 link 가 있는 element를 클릭 했을 경우 , 해당 링크를 여는 함수
    */
   const openLink = useCallback((target: HTMLElement) => {
     const href = target.getAttribute("href");
