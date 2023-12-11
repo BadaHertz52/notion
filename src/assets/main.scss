@@ -20,7 +20,9 @@ body,
 .editor {
   overflow-y: hidden;
 }
-
+input {
+  background-color: inherit;
+}
 @media screen and (max-width: 768px) {
   #notion__inner {
     overflow-y: hidden;

@@ -1,7 +1,6 @@
 import React, {
   CSSProperties,
   useEffect,
-  useRef,
   useState,
   useContext,
   useCallback,
@@ -10,11 +9,6 @@ import React, {
 } from "react";
 
 import { FiCode, FiChevronsLeft } from "react-icons/fi";
-import { AiOutlineClockCircle, AiOutlinePlus } from "react-icons/ai";
-import { BiSearchAlt2 } from "react-icons/bi";
-import { BsFillTrash2Fill, BsTrash } from "react-icons/bs";
-import { IoIosSettings } from "react-icons/io";
-import { HiTemplate } from "react-icons/hi";
 
 import {
   ScreenOnly,
@@ -22,7 +16,8 @@ import {
   Favorites,
   Private,
   SideBarModal,
-  Trash,
+  FnGroup,
+  NewPageBtn,
 } from "../index";
 
 import { INITIAL_MODAL } from "../../constants";
@@ -62,14 +57,12 @@ const SideBar = ({
   const { addBlock, addPage, changeSide } = useContext(ActionContext).actions;
   const { pages, pagesId, trash } = notion;
 
-  const trashBtnRef = useRef<HTMLButtonElement>(null);
-
   const [sideModal, setSideModal] = useState<ModalType>(INITIAL_MODAL);
   const [targetItem, setTargetItem] = useState<ListItem | null>(null);
-  const [openTrash, setOpenTrash] = useState<boolean>(false);
-  const [trashStyle, setTrashStyle] = useState<CSSProperties | undefined>(
-    undefined
-  );
+  const [innerListStyle, setInnerListStyle] = useState<
+    CSSProperties | undefined
+  >(undefined);
+
   const recordIcon = user.userName.substring(0, 1);
   const size = window.innerWidth * 0.25;
   const itemSize = size >= 130 ? size : 130;
@@ -137,21 +130,6 @@ const SideBar = ({
     });
   }, [setSideModal]);
 
-  const changeTrashStyle = useCallback(() => {
-    const innerWidth = window.innerWidth;
-    if (innerWidth > 768 && trashBtnRef.current) {
-      const domRect = trashBtnRef.current.getClientRects()[0];
-      if (domRect) {
-        setTrashStyle({
-          top: domRect.top - 100,
-          left:
-            window.innerWidth > 768
-              ? domRect.right + 50
-              : window.innerWidth * 0.2,
-        });
-      }
-    }
-  }, [trashBtnRef]);
   const handleResize = useCallback(() => {
     if (window.innerWidth < 800 && sideAppear === "lock" && showAllComments) {
       changeSide("close");
@@ -176,11 +154,41 @@ const SideBar = ({
 
   useEffect(() => {
     if (sideAppear === "close") {
-      setOpenTrash(false);
       setSideModal(INITIAL_MODAL);
     }
   }, [sideAppear]);
 
+  const changeInnerStyle = () => {
+    if (window.innerWidth <= 768) {
+      const switcherEl = document.querySelector(".switcher");
+      const recentPagesEl = document.querySelector(".recentPages");
+      const mobileBtnGroupEl = document.querySelector(".mobile-btn-group");
+      if (switcherEl && recentPagesEl && mobileBtnGroupEl) {
+        const height =
+          window.innerHeight -
+          switcherEl.clientHeight -
+          recentPagesEl.clientHeight -
+          mobileBtnGroupEl.clientHeight;
+        setInnerListStyle({
+          maxHeight: height - 35,
+        });
+      }
+    } else {
+      setInnerListStyle({
+        maxHeight: window.innerHeight * 0.5,
+      });
+    }
+  };
+  useEffect(() => {
+    changeInnerStyle();
+  }, [user.recentPagesId]);
+
+  useEffect(() => {
+    window.addEventListener("resize", changeInnerStyle);
+    return () => {
+      window.removeEventListener("resize", changeInnerStyle);
+    };
+  }, []);
   return (
     <div
       id="sideBar-outBox"
@@ -226,31 +234,7 @@ const SideBar = ({
               listHeight={listHeight}
               itemSize={itemSize}
             />
-            <div className="fn-group-1">
-              <button
-                id="btn-open-quickFindBoard"
-                title="button to open quick find board"
-                onClick={openQuickFindBoard}
-              >
-                <div className="item__inner">
-                  <BiSearchAlt2 />
-                  <span>Quick Find</span>
-                </div>
-              </button>
-              <div>
-                <div className="item__inner">
-                  <AiOutlineClockCircle />
-                  <span>All Updates</span>
-                </div>
-              </div>
-              <div>
-                <div className="item__inner">
-                  <IoIosSettings />
-                  <span>Setting &amp; Members</span>
-                </div>
-              </div>
-            </div>
-            <div className="sideBar__inner__list">
+            <div className="sideBar__inner__list" style={innerListStyle}>
               <Favorites
                 favorites={user.favorites}
                 notion={notion}
@@ -268,47 +252,18 @@ const SideBar = ({
                 onClickMoreBtn={onClickMoreBtn}
               />
             </div>
-            <div className="fn-group-2">
-              <button
-                title="button to open templates"
-                // onClick={
-                //   //() => setOpenTemplates(true)
-                // }
-              >
-                <div className="item__inner">
-                  <HiTemplate />
-                  <span>Templates</span>
-                </div>
-              </button>
-              <button
-                title="button to open form that has deleted pages"
-                onClick={onClickTrashBtn}
-                className="btn-trash"
-                ref={trashBtnRef}
-              >
-                <div className="item__inner">
-                  <BsFillTrash2Fill />
-                  <span>Trash</span>
-                </div>
-              </button>
-            </div>
+            <FnGroup
+              openQuickFindBoard={openQuickFindBoard}
+              onClickTrashBtn={onClickTrashBtn}
+            />
           </div>
-          <div className="mobile-trash-btn-container">
-            <button
-              title="open form that has deleted page"
-              className="btn-trash"
-              onClick={onClickTrashBtn}
-            >
-              <div className="header">TRASH</div>
-              <BsTrash />
-            </button>
-          </div>
-          {/* <a href="https://icons8.com/icon/11732/페이지-개요">페이지 개요 icon by Icons8</a> */}
-          <div className="addNewPageBtn">
-            <button title="make new page" onClick={addNewPage}>
-              <AiOutlinePlus />
-              <span>New page</span>
-            </button>
+          <NewPageBtn addNewPage={addNewPage} />
+          <div className="mobile-btn-group">
+            <FnGroup
+              openQuickFindBoard={openQuickFindBoard}
+              onClickTrashBtn={onClickTrashBtn}
+            />
+            <NewPageBtn addNewPage={addNewPage} />
           </div>
         </div>
       </div>

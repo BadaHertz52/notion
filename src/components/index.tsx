@@ -68,8 +68,10 @@ import Result from "./result/Result";
 import ResultList from "./result/ResultList";
 
 import Favorites from "./sideBar/Favorites";
-import PageListItem from "./sideBar/PageListItem";
+import FnGroup from "./sideBar/FnGroup";
+import NewPageBtn from "./sideBar/NewPageBtn";
 import PageList from "./sideBar/PageList";
+import PageListItem from "./sideBar/PageListItem";
 import Private from "./sideBar/Private";
 import QuickFindBoard from "./sideBar/QuickFindBoard";
 import QuickFindBoardOptionBtn from "./sideBar/QuickFindBoardOptionBtn";
@@ -128,6 +130,10 @@ export {
   RecentPages,
   SideBar,
   SideBarMoreFn,
+  FnGroup,
+  NewPageBtn,
+
+  //--sideBar
   Result,
   ResultList,
   PageBtnList,

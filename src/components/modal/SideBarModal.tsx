@@ -94,7 +94,6 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
     },
     [setInnerStyle, closeModal]
   );
-
   const changeStyleInWeb = useCallback(() => {
     const { targetDomRect } = sideModal;
     if (targetDomRect) {
@@ -115,7 +114,7 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
           });
           break;
         case "rename":
-          const el = document.querySelector(".item__inner.link-page");
+          const el = document.querySelector(".pageList__item.link-page");
           if (el) {
             setModalStyle({
               position: "absolute",
@@ -124,7 +123,8 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
             });
           }
           break;
-        case "quickFind" || "trash":
+        default:
+          //quickFind, trash, template
           setModalStyle({
             top: 0,
             left: 0,
@@ -133,8 +133,6 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
             width: "100%",
             position: "absolute",
           });
-          break;
-        default:
           break;
       }
     }

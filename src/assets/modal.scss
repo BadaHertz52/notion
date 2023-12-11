@@ -23,9 +23,6 @@
       & > .inner {
         width: fit-content;
       }
-      & > .inner {
-        max-height: 60vh;
-      }
     }
   }
 }
@@ -44,17 +41,6 @@
 }
 
 @media screen and (max-width: 768px) {
-  .modal__menu {
-    transition: top ease 800ms;
-    background-color: transparent;
-
-    & > .inner {
-      background-color: rgb(240, 240, 240);
-      width: 100vw;
-      height: 100vh;
-      min-height: 10vh;
-    }
-  }
   .center .modal__menu {
     & > .inner {
       height: fit-content;
@@ -62,6 +48,21 @@
     }
   }
   #modal-sideBar {
+    &.center {
+      .modal__menu > .inner {
+        height: fit-content;
+      }
+    }
+    .modal__menu {
+      transition: top ease 800ms;
+      background-color: transparent;
+      & > .inner {
+        background-color: rgb(240, 240, 240);
+        width: 100vw;
+        height: 100vh;
+        min-height: 10vh;
+      }
+    }
     .topBar {
       height: 60px;
       width: 100vw;

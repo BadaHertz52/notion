@@ -2,6 +2,8 @@
 
 #quickFindBoard {
   height: fit-content;
+  min-height: 180px;
+  max-height: 60vh;
   width: 40vw;
   .inner {
     & > div {
@@ -138,6 +140,7 @@
     }
     .no-result,
     .noRecentPages {
+      margin-top: 16px;
       color: $darkgrey;
       font-size: 14px;
       text-align: center;
@@ -154,5 +157,11 @@
         color: $turkeyBlue;
       }
     }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  #quickFindBoard {
+    width: 60vw;
   }
 }

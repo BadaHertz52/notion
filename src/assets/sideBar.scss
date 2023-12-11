@@ -117,6 +117,7 @@
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
+          text-align: left;
         }
       }
     }
@@ -214,6 +215,9 @@
   .recentPages {
     display: none;
   }
+  .mobile-btn-group {
+    display: none;
+  }
   // fn-group-1--
   .fn-group-1 {
     border-top: none;
@@ -236,8 +240,8 @@
   //sideBar__inner__list--
   .sideBar__inner__list {
     padding: 1rem 0;
-    height: 50%;
     overflow: hidden auto;
+    box-sizing: border-box;
     //scroll//
     @include webkitScroll;
     .favorites,
@@ -332,7 +336,8 @@
       }
     }
   }
-  .fn-group-2 {
+  //--scroll
+  .fn-group {
     display: flex;
     flex-direction: column;
     font-weight: 500;
@@ -345,10 +350,6 @@
         color: $darkgrey;
       }
     }
-  }
-  //--scroll
-  .mobile-trash-btn-container {
-    display: none;
   }
   // addNewPageBtn --
   .addNewPageBtn {
@@ -426,12 +427,13 @@
     width: 100vw;
     .item__inner {
       padding: 0.5rem 1rem;
+      height: inherit;
     }
     .sideBar__inner {
       justify-content: initial;
+      position: relative;
     }
     .sideBar__inner__list {
-      max-height: calc(90vh - 40px - 26px - 2rem - 25vw);
       box-sizing: border-box;
       .favorites,
       .private {
@@ -445,7 +447,6 @@
     .recentPages .header {
       font-size: 1rem;
     }
-
     .switcher {
       .item__inner {
         padding-top: 1rem;
@@ -490,11 +491,7 @@
     .link-page:hover {
       background-color: rgba(222, 222, 222, 0.833);
     }
-    .fn-group-1,
-    .fn-group-2,
-    .addNewPageBtn {
-      display: none;
-    }
+
     .recentPages {
       display: block;
       margin: 10px 0;
@@ -555,24 +552,36 @@
         }
       }
     }
-    .mobile-trash-btn-container {
-      display: block;
+    .fn-group,
+    .addNewPageBtn {
+      display: none;
+    }
+
+    .mobile-btn-group {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      bottom: 10px;
       width: 100%;
-      button {
-        width: 100%;
+      .fn-group,
+      .addNewPageBtn {
         display: flex;
-        svg {
-          color: $darkgrey;
-        }
-        &:hover {
-          svg {
-            color: $black;
+        padding-bottom: 0;
+        margin: 0;
+        button {
+          opacity: 0.8;
+          &:hover {
+            opacity: 1;
           }
         }
       }
-      .header {
-        @include headerStyle;
-        margin-right: 10px;
+      .fn-group {
+        .item__inner {
+          font-size: 15px;
+        }
+      }
+      .addNewPageBtn {
+        margin-top: 14px;
       }
     }
   }
