@@ -16,6 +16,7 @@ import { Comment, CommentToolMore } from "../index";
 import { Block, MainCommentType, Page } from "../../types";
 import { ActionContext } from "../../contexts";
 import { SESSION_KEY } from "../../constants";
+import DiscardEditModal from "../modal/DiscardEditModal";
 
 type CommentsProps = {
   /**
@@ -30,37 +31,19 @@ type CommentsProps = {
   pageId: string;
   userName: string;
   frameHtml: HTMLElement | null;
-
-  /**
-   * comment를 수정하는 중, 사용자가 수정사항을 삭제하려고 하는 지를 판단할 수 있는 property
-   */
-  discardEdit?: boolean;
-  /**
-   * comment의 수정사항을 삭제한 후, discardEdit을 원래의 기본값으로 돌리는 데 사용
-   */
-  setDiscardEdit?: Dispatch<SetStateAction<boolean>>;
   /**
    *showAllComments === true이면 AllComments안의 comments, showAllComments이면 frame안에 있는 page, block에 대한 comments로, ToolMore의 위치를 지정하는데 사용함
    */
   showAllComments: boolean;
-  changeStateToCloseBlockComments?: () => void;
 };
 
-const Comments = ({
-  targetMainComments,
-  pageId,
-  block,
-  page,
-  userName,
-  frameHtml,
+const Comments = ({ ...props }: CommentsProps) => {
+  const { targetMainComments, block, frameHtml } = props;
 
-  discardEdit,
-  setDiscardEdit,
-  showAllComments,
-  changeStateToCloseBlockComments,
-}: CommentsProps) => {
   const { editBlock, editPage } = useContext(ActionContext).actions;
   const inner = document.getElementById("notion__inner");
+
+  const [openDiscardEdit, setOpenDiscardEdit] = useState<boolean>(false);
   const [commentsStyle, setCommentsStyle] = useState<CSSProperties | undefined>(
     undefined
   );
@@ -73,6 +56,11 @@ const Comments = ({
   );
   const templateHtml = document.getElementById("template");
   const commentsRef = useRef<HTMLDivElement>(null);
+
+  const discardEdit = useCallback(() => {
+    sessionStorage.removeItem(SESSION_KEY.editComment);
+  }, []);
+
   const closeToolMore = useCallback(
     (event: MouseEvent | globalThis.MouseEvent) => {
       if (moreOpen) {
@@ -170,9 +158,12 @@ const Comments = ({
   }, [changeCommentsStyle]);
 
   useEffect(() => {
-    if (!allComments && changeStateToCloseBlockComments)
-      changeStateToCloseBlockComments();
-  }, [allComments, changeStateToCloseBlockComments]);
+    return () => {
+      sessionStorage.removeItem(SESSION_KEY.editComment);
+      sessionStorage.removeItem(SESSION_KEY.toolMoreItem);
+      sessionStorage.removeItem(SESSION_KEY.mainCommentId);
+    };
+  }, []);
 
   return (
     <div className="comments" ref={commentsRef} style={commentsStyle}>
@@ -180,24 +171,18 @@ const Comments = ({
         <section className="comments__comments-group">
           {allComments.map((comment: MainCommentType) => (
             <Comment
+              {...props}
               key={`comment_${comment.id}`}
-              userName={userName}
               comment={comment}
-              block={block}
-              page={page}
-              pageId={pageId}
               editBlock={editBlock}
-              editPage={editPage}
-              frameHtml={frameHtml}
               allComments={allComments}
               setAllComments={setAllComments}
               moreOpen={moreOpen}
               setMoreOpen={setMoreOpen}
-              setToolMoreStyle={setToolMoreStyle}
-              discardEdit={discardEdit}
-              setDiscardEdit={setDiscardEdit}
               templateHtml={templateHtml}
-              showAllComments={showAllComments}
+              setToolMoreStyle={setToolMoreStyle}
+              openDiscardEdit={openDiscardEdit}
+              setOpenDiscardEdit={setOpenDiscardEdit}
             />
           ))}
         </section>
@@ -205,8 +190,8 @@ const Comments = ({
       {moreOpen && (
         <CommentToolMore
           toolMoreStyle={toolMoreStyle}
-          page={page}
-          pageId={pageId}
+          page={props.page}
+          pageId={props.pageId}
           blockId={block ? block.id : null}
           editBlock={editBlock}
           editPage={editPage}
@@ -215,6 +200,11 @@ const Comments = ({
           templateHtml={templateHtml}
         />
       )}
+      <DiscardEditModal
+        openDiscardEdit={openDiscardEdit}
+        setOpenDiscardEdit={setOpenDiscardEdit}
+        discardEdit={discardEdit}
+      />
     </div>
   );
 };

@@ -10,7 +10,6 @@ import {
   FontStyle,
   ListItem,
   MobileSideMenuType,
-  ModalType,
   Page,
   UserState,
 } from "../../types";
@@ -26,15 +25,8 @@ type NotionProps = Omit<SideBarContainerProp, "firstPages" | "firstList"> & {
 };
 const Notion = ({ ...props }: NotionProps) => {
   const { currentPage, pagesId, pages, firstPagesId } = props;
-
-  const initialMortal: ModalType = {
-    open: false,
-    target: undefined,
-    block: undefined,
-  };
-  const [modal, setMortal] = useState<ModalType>(initialMortal);
   //TODO -  수정
-  const [openQF, setOpenQF] = useState<boolean>(false);
+
   const [showAllComments, setShowAllComments] = useState<boolean>(false);
   const [discard_edit, setDiscardEdit] = useState<boolean>(false);
   const [openExport, setOpenExport] = useState<boolean>(false);
@@ -110,7 +102,6 @@ const Notion = ({ ...props }: NotionProps) => {
           mobileSideMenu={mobileSideMenu}
           setMobileSideMenu={setMobileSideMenu}
         />
-
         {/* {pagesId && pages && firstList && (
             <>
               {openExport && currentPage && (

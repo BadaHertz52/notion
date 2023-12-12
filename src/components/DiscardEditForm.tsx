@@ -1,35 +1,47 @@
-import React, { Dispatch, SetStateAction, useRef } from "react";
+import React, {
+  Dispatch,
+  MouseEvent,
+  SetStateAction,
+  useCallback,
+} from "react";
+
+import "../assets/discardEditForm.scss";
 
 type DiscardEditFormProps = {
-  setDiscardEdit: Dispatch<SetStateAction<boolean>>;
+  setOpenDiscardEdit: Dispatch<SetStateAction<boolean>>;
+  discardEdit: () => void;
 };
 
-const DiscardEditForm = ({ setDiscardEdit }: DiscardEditFormProps) => {
-  const discardEditFormRef = useRef<HTMLDivElement>(null);
-  const onClickDiscardEdit = () => {
-    discardEditFormRef.current?.classList.remove("on");
-    setDiscardEdit(true);
-  };
+const DiscardEditForm = ({
+  setOpenDiscardEdit,
+  discardEdit,
+}: DiscardEditFormProps) => {
+  const handleClick = useCallback(
+    (event: MouseEvent<HTMLButtonElement>) => {
+      const { name } = event.currentTarget;
+      if (name === "discard") {
+        discardEdit();
+      }
+      setOpenDiscardEdit(false);
+    },
+    [setOpenDiscardEdit, discardEdit]
+  );
 
-  const onClickCloseEdit = () => {
-    discardEditFormRef.current?.classList.remove("on");
-    setDiscardEdit(false);
-  };
   return (
-    <div
-      id="discardEditForm"
-      className="discardEditForm"
-      ref={discardEditFormRef}
-    >
+    <div id="discardEditForm" className="discardEditForm">
       <div className="inner">
         <div className="question">
           <div>Do you want to discard this edit?</div>
         </div>
         <div className="btn-group">
-          <button title="button to discard" onClick={onClickDiscardEdit}>
+          <button
+            title="button to discard"
+            name="discard"
+            onClick={handleClick}
+          >
             Discard
           </button>
-          <button title="close button" onClick={onClickCloseEdit}>
+          <button title="close button" name="close" onClick={handleClick}>
             Close
           </button>
         </div>

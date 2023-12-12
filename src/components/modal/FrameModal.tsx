@@ -105,6 +105,7 @@ function FrameModal({ ...props }: FrameModalProps) {
         ".comments-bubble",
         ".btn-comment",
         ".comment__tool-more",
+        ".comment__btn-submit",
       ];
       const isInModal = target
         .map((v) => !!isInTarget(event, v))
@@ -162,7 +163,6 @@ function FrameModal({ ...props }: FrameModalProps) {
             block={modal.block}
             pageId={props.page.id}
             showAllComments={false}
-            changeStateToCloseBlockComments={props.closeModal}
           />
         </div>
       )}
@@ -193,7 +193,7 @@ function FrameModal({ ...props }: FrameModalProps) {
               discardEdit={discardEdit}
               setDiscardEdit={setDiscardEdit}
               showAllComments={showAllComments}
-              changeStateToCloseBlockComments={changeStateToCloseBlockComments}
+              changeStateToCloseBlockComments={closeComments}
             />
           )}
         {modal.target === "moveTargetBlock" && moveTargetBlock && (

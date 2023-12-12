@@ -1,52 +1,32 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React from "react";
 
-import { CSSProperties } from "styled-components";
-
-import { Block, MainCommentType, Page, SubCommentType } from "../../types";
+import { MainCommentType, SubCommentType } from "../../types";
 import { CommentBlock, CommentInput } from "../index";
+import { CommentBlockProps } from "./CommentBlock";
+import { CommentInputProps } from "./CommentInput";
 
-type CommentProps = {
-  userName: string;
-  comment: MainCommentType;
-  pageId: string;
-  page: Page;
-  /**
-   *block=== undefined 이면 page에 대한 comments, block !== undefined 이면 block에 대한 comments
-   */
-  block?: Block;
-  editBlock: (pageId: string, block: Block) => void;
-  editPage?: (pageId: string, newPage: Page) => void;
-  frameHtml: HTMLElement | null;
-  allComments: MainCommentType[] | null;
-  setAllComments: Dispatch<SetStateAction<MainCommentType[] | null>>;
-  /**
-   * ToolMore를 열것인지 에 대한 값
-   */
-  moreOpen: boolean;
-  setMoreOpen: Dispatch<SetStateAction<boolean>>;
-  /**
-   * ToolMore의 위치를 지정함
-   */
-  setToolMoreStyle: Dispatch<SetStateAction<CSSProperties | undefined>>;
-  discardEdit?: boolean;
-  setDiscardEdit?: Dispatch<SetStateAction<boolean>>;
-  templateHtml: HTMLElement | null;
-  showAllComments: boolean;
-};
+type CommentProps = Omit<CommentBlockProps, "isMainComment" | "comment"> &
+  Omit<
+    CommentInputProps,
+    "        commentBlock" | "mainComment" | "subComment" | "addOrEdit"
+  > & {
+    comment: MainCommentType;
+  };
 
 const Comment = ({ ...props }: CommentProps) => {
   const { comment } = props;
   return (
     <div className="comment">
       <div className="comment__mainComment">
-        <CommentBlock {...props} isMainComment={true} />
+        <CommentBlock {...props} comment={comment} isMainComment={true} />
       </div>
       {comment.subComments && (
         <div className="comment__subComments">
-          {comment.subComments.map((comment: SubCommentType) => (
+          {comment.subComments.map((subComment: SubCommentType) => (
             <CommentBlock
               {...props}
-              key={`commentBlock_${comment.id}`}
+              key={`commentBlock_${subComment.id}`}
+              comment={subComment}
               isMainComment={true}
             />
           ))}

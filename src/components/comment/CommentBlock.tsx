@@ -21,32 +21,42 @@ export type CommentBlockProps = Omit<
     moreOpen: boolean;
     setMoreOpen: Dispatch<SetStateAction<boolean>>;
     setToolMoreStyle: Dispatch<SetStateAction<CSSProperties | undefined>>;
-    discardEdit?: boolean;
     setDiscardEdit?: Dispatch<SetStateAction<boolean>>;
     showAllComments: boolean;
+    openDiscardEdit: boolean;
+    setOpenDiscardEdit: Dispatch<SetStateAction<boolean>>;
   };
 
 const CommentBlock = ({ ...props }: CommentBlockProps) => {
-  const { comment, isMainComment, block, discardEdit, setDiscardEdit } = props;
+  const {
+    comment,
+    isMainComment,
+    block,
+    setDiscardEdit,
+    openDiscardEdit,
+    moreOpen,
+  } = props;
   const firstLetter = comment.userName.substring(0, 1).toUpperCase();
   const [edit, setEdit] = useState<boolean>(false);
-  const editCommentItem = sessionStorage.getItem(SESSION_KEY.editComment);
+
   const targetMainComment = isMainComment ? (comment as MainCommentType) : null;
   const blockContentEl = document.getElementById(
     `${block?.id}__contents`
   )?.textContent;
+
+  useEffect(() => {
+    const editCommentItem = sessionStorage.getItem(SESSION_KEY.editComment);
+    setEdit(editCommentItem === comment.id);
+  }, [moreOpen, comment]);
+
   useEffect(() => {
     // discard edit
-    if (editCommentItem) {
-      if (discardEdit) {
-        setEdit(false);
-        sessionStorage.removeItem(SESSION_KEY.editComment);
-        setDiscardEdit && setDiscardEdit(false);
-      } else {
-        comment.id === editCommentItem && setEdit(true);
-      }
+    if (!openDiscardEdit) {
+      const editCommentItem = sessionStorage.getItem(SESSION_KEY.editComment);
+      setEdit(comment.id === editCommentItem);
     }
-  }, [editCommentItem, comment.id, discardEdit, setDiscardEdit]);
+  }, [openDiscardEdit, comment.id, setDiscardEdit]);
+
   return (
     <div className="commentBlock">
       <section className="commentBlock__header">
@@ -75,6 +85,7 @@ const CommentBlock = ({ ...props }: CommentBlockProps) => {
         {edit ? (
           <CommentInput
             {...props}
+            commentBlock={props.block}
             mainComment={!isMainComment ? null : (comment as MainCommentType)}
             subComment={!isMainComment ? (comment as SubCommentType) : null}
             addOrEdit="edit"

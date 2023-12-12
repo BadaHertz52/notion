@@ -28,7 +28,11 @@ const ModalPortal = ({
 }: ModalPortalProps) => {
   const modalRootEl = document.getElementById("modal-root") as HTMLElement;
   const modalRef = useRef<HTMLDivElement>(null);
-  const CENTER_TARGET_ARRAY: ModalTypeTarget[] = ["quickFind", "trash"];
+  const CENTER_TARGET_ARRAY: ModalTypeTarget[] = [
+    "quickFind",
+    "trash",
+    "discardEdit",
+  ];
   const isCenter: boolean = target
     ? CENTER_TARGET_ARRAY.includes(target)
     : false;

@@ -79,8 +79,6 @@ function AllCommentsContents({
             userName={userName}
             block={item.block}
             frameHtml={null}
-            discardEdit={discardEdit}
-            setDiscardEdit={setDiscardEdit}
             showAllComments={showAllComments}
           />
         ))

@@ -14,7 +14,8 @@ export type ModalTypeTarget =
   | "templates"
   | "trash"
   | "rename"
-  | "quickFind";
+  | "quickFind"
+  | "discardEdit";
 
 export type ModalType = {
   open: boolean;

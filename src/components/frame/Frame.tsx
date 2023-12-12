@@ -29,7 +29,6 @@ import {
   findParentBlock,
   isMobile,
   setTemplateItem,
-  removeSelected,
   getEditTime,
 } from "../../utils";
 
@@ -52,7 +51,6 @@ const Frame = ({
   pagesId,
   pages,
   firstList,
-  recentPagesId,
   commentBlock,
   openComment,
   setOpenComment,
@@ -865,14 +863,6 @@ const Frame = ({
     setMobileSideMenu,
     moveTargetBlock,
   ]);
-
-  // useEffect(() => {
-  //   const condition = !!mobileMenuTargetBlock || (isMobile() && modal.open);
-  //   frameHtml?.classList.toggle("stop", condition);
-  //   return () => {
-  //     frameHtml?.classList.remove("stop");
-  //   };
-  // }, [mobileMenuTargetBlock, modal.open, frameHtml]);
 
   useEffect(() => {
     isMoved.current = !!moveTargetBlock;

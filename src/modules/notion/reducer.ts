@@ -302,8 +302,16 @@ export const initialNotionState: Notion = {
               editTime: (1654086822451).toString(),
               createTime: Date.parse("2022-5-20-15:00").toString(),
               selectedText: null,
-              subComments: null,
-              subCommentsId: null,
+              subComments: [
+                {
+                  id: "sub_1702363847283",
+                  userName: USER_NAME,
+                  createTime: "1702363847283",
+                  editTime: "1702363847283",
+                  content: "sub",
+                },
+              ],
+              subCommentsId: ["sub_1702363847283"],
             },
           ],
         },

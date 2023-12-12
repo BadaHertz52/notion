@@ -304,8 +304,6 @@ function PageHeader({
                 pageId={page.id}
                 userName={userName}
                 frameHtml={frameRef.current}
-                discardEdit={discardEdit}
-                setDiscardEdit={setDiscardEdit}
                 showAllComments={showAllComments}
               />
             ))

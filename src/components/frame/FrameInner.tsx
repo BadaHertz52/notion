@@ -77,7 +77,6 @@ const FrameInner = (props: FrameInnerProps) => {
 
   const onClickCommentBtn = useCallback(
     (block: Block) => {
-      console.log("click");
       setModal({
         open: true,
         target: "comments",

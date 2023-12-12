@@ -1,0 +1,46 @@
+@import "./common";
+
+.discardEditForm {
+  @include modal;
+  width: 336px;
+  height: 204px;
+  padding: 24px 32px;
+  box-sizing: border-box;
+  background-color: #fff;
+  .question {
+    min-height: 64px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+  .btn-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    button {
+      height: 32px;
+      width: 100%;
+      border-radius: 3px;
+      padding: 0 12px;
+      font-size: 14px;
+      line-height: 1.2;
+      margin-top: 8px;
+      white-space: nowrap;
+    }
+    button:first-child {
+      color: rgb(235, 87, 87);
+      border: 1px solid rgba(235, 87, 87, 0.5);
+      &:hover {
+        background-color: rgba(235, 87, 87, 0.1);
+      }
+    }
+    button:nth-child(2) {
+      border: 1px solid rgba(55, 53, 47, 0.16);
+      &:hover {
+        background-color: $itemHover;
+      }
+    }
+  }
+}

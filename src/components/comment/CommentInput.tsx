@@ -6,6 +6,7 @@ import React, {
   MouseEvent,
   useEffect,
   useCallback,
+  useRef,
 } from "react";
 
 import { CSSProperties } from "styled-components";
@@ -63,6 +64,7 @@ export type CommentInputProps = {
   allComments: MainCommentType[] | null;
   setAllComments?: Dispatch<SetStateAction<MainCommentType[] | null>>;
   setModal?: Dispatch<SetStateAction<ModalType>>;
+  setOpenDiscardEdit?: Dispatch<SetStateAction<boolean>>;
   setEdit?: Dispatch<SetStateAction<boolean>>;
   templateHtml: HTMLElement | null;
   frameHtml: HTMLElement | null;
@@ -81,11 +83,13 @@ const CommentInput = ({
   setAllComments,
   setModal,
   addOrEdit,
+  setOpenDiscardEdit,
   setEdit,
   templateHtml,
   frameHtml,
 }: CommentInputProps) => {
   const userNameFirstLetter = userName.substring(0, 1).toUpperCase();
+
   const [editTargetComment, setEditTargetComment] = useState<
     MainCommentType | SubCommentType | null
   >(null);
@@ -99,8 +103,9 @@ const CommentInput = ({
     border: "none",
   });
   const [text, setText] = useState<string>("");
-  const selectedHtml = document.querySelector(".selected");
+  const commentInputRef = useRef<HTMLDivElement>(null);
 
+  const selectedHtml = document.querySelector(".selected");
   const selectedHtmlText = selectedHtml?.innerHTML;
 
   const updateBlock = useCallback(
@@ -227,23 +232,23 @@ const CommentInput = ({
       };
       const editedMainComment: MainCommentType = {
         ...mainComment,
-        subComments:
-          mainComment.subComments === null
-            ? [newSubComment]
-            : mainComment.subComments.concat(newSubComment),
-        subCommentsId:
-          mainComment.subCommentsId === null
-            ? [newSubComment.id]
-            : mainComment.subCommentsId.concat(newSubComment.id),
+        subComments: !mainComment.subComments
+          ? [newSubComment]
+          : mainComment.subComments.concat(newSubComment),
+        subCommentsId: !mainComment.subCommentsId
+          ? [newSubComment.id]
+          : mainComment.subCommentsId.concat(newSubComment.id),
         editTime: editTime,
       };
       comments.splice(mainCommentIndex, 1, editedMainComment);
       updateBlock(comments);
     }
   }, [allComments, commentBlock, mainComment, text, updateBlock, userName]);
+
   const updatePageComment = useCallback(
     (pageComments: MainCommentType[] | null) => {
       const editTime = getEditTime();
+
       if (page) {
         const editedPage: Page = {
           ...page,
@@ -314,14 +319,15 @@ const CommentInput = ({
   const closeInput = useCallback(() => {
     setEdit && setEdit(false);
     setText("");
-    setModal &&
-      //TODO - 수정
+
+    if (!commentInputRef.current?.closest(".comments") && setModal) {
       setModal({
         open: false,
         block: undefined,
         target: undefined,
       });
-  }, [setEdit, setModal]);
+    }
+  }, [setEdit, setModal, commentInputRef]);
 
   const recoveryInputAfterSubmit = useCallback(() => {
     setText("");
@@ -335,9 +341,9 @@ const CommentInput = ({
     (event: MouseEvent) => {
       event.preventDefault();
       if (commentBlock) {
-        mainComment === null ? addMainComment() : addSubComment();
+        !mainComment ? addMainComment() : addSubComment();
       } else {
-        mainComment === null ? addPageMainComment() : addPageSubComment();
+        !mainComment ? addPageMainComment() : addPageSubComment();
       }
       recoveryInputAfterSubmit();
     },
@@ -424,9 +430,11 @@ const CommentInput = ({
       }
     }
   }, [allComments, findMainComment, subComment, text, updatePageComment]);
+
   const editComment = useCallback(
     (event: MouseEvent) => {
       event.preventDefault();
+
       if (commentBlock) {
         mainComment ? editMainComment() : editSubComment();
       } else {
@@ -444,11 +452,14 @@ const CommentInput = ({
       recoveryInputAfterSubmit,
     ]
   );
-  const openDiscardEdit = useCallback((event: MouseEvent) => {
-    event.preventDefault();
-    const discardEditFormEl = document.getElementById("discardEditForm");
-    discardEditFormEl?.classList.add("on");
-  }, []);
+
+  const openDiscardEdit = useCallback(
+    (event: MouseEvent) => {
+      event.preventDefault();
+      if (setOpenDiscardEdit) setOpenDiscardEdit(true);
+    },
+    [setOpenDiscardEdit]
+  );
 
   useEffect(() => {
     switch (addOrEdit) {
@@ -479,6 +490,7 @@ const CommentInput = ({
       className={
         addOrEdit === "edit" ? "commentInput editComment" : "commentInput"
       }
+      ref={commentInputRef}
     >
       {addOrEdit === "add" && (
         <div className="firstLetter">
@@ -509,7 +521,7 @@ const CommentInput = ({
           onClick={addOrEdit === "add" ? makeNewComment : editComment}
           className="comment__btn-submit"
           name="comment__btn-submit"
-          disabled={text === null || text === ""}
+          disabled={!text}
         >
           {addOrEdit === "edit" ? (
             <>
