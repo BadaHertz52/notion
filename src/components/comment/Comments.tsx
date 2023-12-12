@@ -77,7 +77,7 @@ const Comments = ({
     (event: MouseEvent | globalThis.MouseEvent) => {
       if (moreOpen) {
         const target = event.target as HTMLElement | null;
-        const isInToolMore = target?.closest("#tool-more");
+        const isInToolMore = target?.closest(".comment__tool-more");
         if (!isInToolMore) {
           setMoreOpen(false);
           sessionStorage.removeItem(SESSION_KEY.toolMoreItem);
@@ -175,35 +175,33 @@ const Comments = ({
   }, [allComments, changeStateToCloseBlockComments]);
 
   return (
-    <>
-      <div className="comments" ref={commentsRef} style={commentsStyle}>
-        {allComments && (
-          <section className="comments__comments-group">
-            {allComments.map((comment: MainCommentType) => (
-              <Comment
-                key={`comment_${comment.id}`}
-                userName={userName}
-                comment={comment}
-                block={block}
-                page={page}
-                pageId={pageId}
-                editBlock={editBlock}
-                editPage={editPage}
-                frameHtml={frameHtml}
-                allComments={allComments}
-                setAllComments={setAllComments}
-                moreOpen={moreOpen}
-                setMoreOpen={setMoreOpen}
-                setToolMoreStyle={setToolMoreStyle}
-                discardEdit={discardEdit}
-                setDiscardEdit={setDiscardEdit}
-                templateHtml={templateHtml}
-                showAllComments={showAllComments}
-              />
-            ))}
-          </section>
-        )}
-      </div>
+    <div className="comments" ref={commentsRef} style={commentsStyle}>
+      {allComments && (
+        <section className="comments__comments-group">
+          {allComments.map((comment: MainCommentType) => (
+            <Comment
+              key={`comment_${comment.id}`}
+              userName={userName}
+              comment={comment}
+              block={block}
+              page={page}
+              pageId={pageId}
+              editBlock={editBlock}
+              editPage={editPage}
+              frameHtml={frameHtml}
+              allComments={allComments}
+              setAllComments={setAllComments}
+              moreOpen={moreOpen}
+              setMoreOpen={setMoreOpen}
+              setToolMoreStyle={setToolMoreStyle}
+              discardEdit={discardEdit}
+              setDiscardEdit={setDiscardEdit}
+              templateHtml={templateHtml}
+              showAllComments={showAllComments}
+            />
+          ))}
+        </section>
+      )}
       {moreOpen && (
         <CommentToolMore
           toolMoreStyle={toolMoreStyle}
@@ -217,7 +215,7 @@ const Comments = ({
           templateHtml={templateHtml}
         />
       )}
-    </>
+    </div>
   );
 };
 

@@ -99,7 +99,13 @@ function FrameModal({ ...props }: FrameModalProps) {
 
   const handleCloseModal = useCallback(
     (event: globalThis.MouseEvent) => {
-      const target = [".modal", ".menu", ".comments-bubble", ".btn-comment"];
+      const target = [
+        ".modal",
+        ".menu",
+        ".comments-bubble",
+        ".btn-comment",
+        ".comment__tool-more",
+      ];
       const isInModal = target
         .map((v) => !!isInTarget(event, v))
         .some((v) => v);

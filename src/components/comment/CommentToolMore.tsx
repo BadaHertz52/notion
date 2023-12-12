@@ -182,7 +182,7 @@ const CommentToolMore = ({
   }, [toolMoreItem]);
 
   return (
-    <div id="tool-more" style={toolMoreStyle}>
+    <div className="comment__tool-more" style={toolMoreStyle}>
       <button onClick={onClickEditComment}>
         <HiOutlinePencil />
         <span>Edit comment</span>

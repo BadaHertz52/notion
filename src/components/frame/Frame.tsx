@@ -181,6 +181,7 @@ const Frame = ({
     setCommentBlock(null);
     setOpenComment(false);
   }, [setCommentBlock, setOpenComment]);
+
   const closeBlockComments = useCallback(
     (event: globalThis.MouseEvent) => {
       if (openComment && commentBlock) {
@@ -192,7 +193,7 @@ const Frame = ({
           const target = event.target as HTMLElement | null;
           const isInComments = target?.closest(`#${commentElId}`);
           const isInCommentsBtn = target?.closest(`#${commentBtnElId}`);
-          const isInToolMoreBtn = target?.closest("#tool-more");
+          const isInToolMoreBtn = target?.closest(".comment__tool-more");
           /**
            * block comments 창을 닫는 조건
            */

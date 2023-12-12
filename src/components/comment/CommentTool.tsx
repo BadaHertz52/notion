@@ -43,71 +43,36 @@ const CommentTool = ({
   showAllComments,
 }: CommentToolProps) => {
   const commentToolRef = useRef<HTMLDivElement>(null);
-  const EXTRA_SPACE: number = 5;
 
-  const setToolMoreStyleInPageComments = (commentToolDomRect: DOMRect) => {
-    const templateHtml = document.getElementById("template");
-    const pageComment = !templateHtml
-      ? (document.querySelector(".page__comments") as HTMLElement | null)
-      : (templateHtml.querySelector(".page__comments") as HTMLElement | null);
-    if (pageComment) {
-      const pageCommentsDomRect = pageComment?.getClientRects()[0];
-      const style: CSSProperties = {
-        position: "absolute",
-        top: commentToolDomRect.bottom - pageCommentsDomRect.top + EXTRA_SPACE,
-        right: pageCommentsDomRect.right - commentToolDomRect.right,
-      };
-      setToolMoreStyle(style);
-    } else {
-      console.error("Error:Can't find pageComment element");
-    }
-  };
-  const setToolMoreStyleInBlockComment = (commentToolDomRect: DOMRect) => {
-    const heightOfTopBar =
-      document.getElementsByClassName("topBar")[0]?.clientHeight;
-    if (frameHtml) {
-      const style: CSSProperties = {
-        position: "absolute",
-        top:
-          commentToolDomRect.bottom -
-          heightOfTopBar +
-          EXTRA_SPACE +
-          frameHtml.scrollTop,
-        right: window.innerWidth - commentToolDomRect.right,
-      };
-      setToolMoreStyle(style);
-    }
-  };
-  const setToolMoreStyleInAllComments = (
-    target: EventTarget & HTMLButtonElement,
-    commentToolDomRect: DOMRect
-  ) => {
-    const targetDomRect = target.getClientRects()[0] as DOMRect;
-    const top = targetDomRect.bottom + EXTRA_SPACE;
-    const right = window.innerWidth - commentToolDomRect.right;
-    const style: CSSProperties = {
-      position: "absolute",
-      top: top,
-      right: right,
-    };
-    setToolMoreStyle(style);
-  };
   const openToolMore = (event: React.MouseEvent<HTMLButtonElement>) => {
     setMoreOpen(true);
 
     const target = event.currentTarget;
     const commentToolDomRect = commentToolRef.current?.getClientRects()[0];
-    const blockCommentsHtml = document.getElementById("block-comments");
+    const commentEl = target.closest(".comment");
+    const commentsEl = target.closest(".comments");
+    const commentDomRect = commentEl?.getClientRects()[0];
+    if (commentToolDomRect && commentDomRect && commentsEl) {
+      const commentsStyle = window.getComputedStyle(commentsEl);
+      const marginTop = Number(
+        commentsStyle.getPropertyValue("margin-top").replace("px", "")
+      );
+      const paddingRight = Number(
+        commentsStyle.getPropertyValue("padding-right").replace("px", "")
+      );
+      const EXTRA_SPACE = 5;
 
-    if (commentToolDomRect) {
-      if (showAllComments) {
-        setToolMoreStyleInAllComments(target, commentToolDomRect);
-      } else {
-        !blockCommentsHtml
-          ? setToolMoreStyleInPageComments(commentToolDomRect)
-          : setToolMoreStyleInBlockComment(commentToolDomRect);
-      }
+      setToolMoreStyle({
+        position: "absolute",
+        top:
+          commentToolDomRect.bottom -
+          commentDomRect.top +
+          marginTop +
+          EXTRA_SPACE,
+        right: commentDomRect.right - commentToolDomRect.right + paddingRight,
+      });
     }
+
     sessionStorage.setItem(SESSION_KEY.toolMoreItem, JSON.stringify(comment));
   };
 
@@ -126,7 +91,7 @@ const CommentTool = ({
         />
       )}
       <button
-        className="comment__tool-more"
+        className="btn-comment__tool-more"
         onClick={
           !moreOpen ? (event) => openToolMore(event) : () => setMoreOpen(false)
         }
