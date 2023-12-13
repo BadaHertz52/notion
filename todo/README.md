@@ -13,6 +13,7 @@
 [x] comments more menu -위치
 [] loader
 [] mobileMenu
+[x] command
 
 ## topBar
 
@@ -22,6 +23,6 @@
 
 # notion
 
-[] discard
+[x] discard
 
 # notion 리팩토링에 따른 수정
