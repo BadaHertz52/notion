@@ -1,18 +1,12 @@
 @import "./common";
-#block__commandMenu {
-  position: absolute;
-  z-index: 20;
-  #commandMenu {
-    margin-top: 0;
-    z-index: inherit;
-  }
-}
+
 #commandMenu {
   @include modalStyle;
   @include webkitScroll;
   position: relative;
   overflow-y: scroll;
   margin-top: 1rem;
+  max-height: inherit;
   &_inner {
     position: relative;
   }

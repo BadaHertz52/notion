@@ -103,11 +103,8 @@ const MobileSideMenu = ({
           )}
           {mobileSideMenu.what === "ms_turnInto" && (
             <CommandMenu
-              style={undefined}
               page={page}
               block={block}
-              command={null}
-              setCommand={null}
               closeCommand={closeSideMenu}
             />
           )}

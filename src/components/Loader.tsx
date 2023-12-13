@@ -8,10 +8,10 @@ import React, {
 } from "react";
 import { CSSProperties } from "styled-components";
 
-import { Block, Page } from "../../types";
-import { setTemplateItem, changeImgToWebP, getEditTime } from "../../utils";
+import { Block, Page } from "../types";
+import { setTemplateItem, changeImgToWebP, getEditTime } from "../utils";
 
-import "../../assets/loader.scss";
+import "../assets/loader.scss";
 
 type LoaderProps = {
   block: Block | null;

@@ -1,13 +1,10 @@
 import React, {
   Dispatch,
   SetStateAction,
-  useEffect,
   useContext,
   useCallback,
   useRef,
 } from "react";
-
-import { CSSProperties } from "styled-components";
 
 import { FcTodoList } from "react-icons/fc";
 import { IoIosList } from "react-icons/io";
@@ -17,13 +14,7 @@ import { VscListOrdered } from "react-icons/vsc";
 
 import { Img } from "../index";
 import { ActionContext } from "../../contexts";
-import {
-  Block,
-  BlockType,
-  Page,
-  CommandType,
-  SelectionType,
-} from "../../types";
+import { Block, BlockType, Page, SelectionType } from "../../types";
 import {
   makeNewBlock,
   findParentBlock,
@@ -32,57 +23,56 @@ import {
 } from "../../utils";
 
 import imgIcon from "../../assets/img/vincent-van-gogh-ge1323790d_640.webp";
-import "../../assets/commandBlock.scss";
+import "../../assets/commandMenu.scss";
 
-type CommandMenuProp = {
+export type CommandMenuProp = {
   page: Page;
   block: Block;
-  command: CommandType | null;
-  setCommand: Dispatch<SetStateAction<CommandType>> | null;
-  closeCommand?: () => void;
+  // CommandInput을 통해 타입 변경을 하는 경우에 command 값 있음
+  command?: string;
+  closeCommand: () => void;
   setSelection?: Dispatch<SetStateAction<SelectionType | null>>;
-  style: CSSProperties | undefined;
 };
 const CommandMenu = ({
   page,
   block,
-  setCommand,
   command,
   setSelection,
   closeCommand,
-  style,
 }: CommandMenuProp) => {
   const { editBlock, changeBlockToPage, changePageToBlock, editPage } =
     useContext(ActionContext).actions;
   const imgSrc = imgIcon + "?&width=36$height=36";
   const noResultRef = useRef<HTMLDivElement>(null);
   const btnGroupRef = useRef<HTMLDivElement>(null);
+
+  const getBtnClass = useCallback(
+    (name: string) => {
+      const BASE_NAME = ".btn-command";
+      const ON = ".on";
+      const classList = [BASE_NAME];
+      if (!command || name.includes(command)) classList.push(ON);
+
+      return classList.join("");
+    },
+    [command]
+  );
+
   const showResult = useCallback(() => {
     const btnArr = [...document.getElementsByClassName("btn-command")];
     if (command) {
-      const typeCommand = command.command?.slice(1);
-      typeCommand &&
-        btnArr.forEach((btn: Element) => {
-          const name = btn.getAttribute("name");
-          if (name?.includes(typeCommand)) {
-            btn.setAttribute("class", "btn-command on");
-          } else {
-            btn.setAttribute("class", "btn-command");
-          }
-        });
-      const onBlocks = document.querySelectorAll(".btn-command.on");
-      if (onBlocks[0] === undefined) {
-        noResultRef.current?.setAttribute("style", "display:block");
-        btnGroupRef.current?.setAttribute("style", "display:none");
-      } else {
-        onBlocks[0].classList.add("first");
-        btnGroupRef.current?.setAttribute("style", "display:block");
-        noResultRef.current?.setAttribute("style", "display:none");
-      }
+      btnArr.forEach((btn: Element) => {
+        const name = btn.getAttribute("name");
+        if (name?.includes(command)) {
+          btn.setAttribute("class", "btn-command on");
+        } else {
+          btn.setAttribute("class", "btn-command");
+        }
+      });
     } else {
       btnArr.forEach((btn) => btn.setAttribute("class", "btn-command on"));
     }
-  }, [command, btnGroupRef, noResultRef]);
+  }, [command, noResultRef]);
   /**
    * block의 type 을 numberList 나 bulletList로 바꾸는 함수
    * @param editedBlock
@@ -239,15 +229,9 @@ const CommandMenu = ({
     [editPage, page]
   );
   const closeCommandMenu = useCallback(() => {
-    setCommand &&
-      setCommand({
-        open: false,
-        command: null,
-        targetBlock: null,
-      });
-
     closeCommand && closeCommand();
-  }, [setCommand, closeCommand]);
+  }, [closeCommand]);
+
   const changeType = useCallback(
     (blockType: BlockType) => {
       const templateHtml = document.getElementById("template");
@@ -300,18 +284,15 @@ const CommandMenu = ({
     closeCommandMenu();
   }, [changeType, closeCommandMenu]);
 
-  useEffect(() => {
-    showResult();
-  }, [command, showResult]);
   return (
-    <div id="commandMenu" style={style}>
+    <div id="commandMenu">
       <div className="inner">
         <div className="command type-basic">
           <header className="command__header">BASIC BLOCKS</header>
           <div className="command__btn-group type" ref={btnGroupRef}>
             <button
               onClick={() => changeType("text")}
-              className="btn-command on"
+              className={getBtnClass("text")}
               name="text"
             >
               <div className="btn-command__inner">
@@ -328,7 +309,7 @@ const CommandMenu = ({
             </button>
             <button
               onClick={() => changeType("page")}
-              className="btn-command on "
+              className={getBtnClass("page")}
               name="page"
             >
               <div className="btn-command__inner">
@@ -345,7 +326,7 @@ const CommandMenu = ({
             </button>
             <button
               onClick={() => changeType("todo")}
-              className="btn-command on"
+              className={getBtnClass("todo")}
               name="todo list"
             >
               <div className="btn-command__inner">
@@ -361,7 +342,7 @@ const CommandMenu = ({
               </div>
             </button>
             <button
-              className="btn-command on"
+              className={getBtnClass("h1")}
               onClick={() => changeType("h1")}
               name="h1 heading 1"
             >
@@ -379,7 +360,7 @@ const CommandMenu = ({
               </div>
             </button>
             <button
-              className="btn-command on"
+              className={getBtnClass("h2")}
               onClick={() => changeType("h2")}
               name="h2 heading 2"
             >
@@ -397,7 +378,7 @@ const CommandMenu = ({
               </div>
             </button>
             <button
-              className="btn-command on"
+              className={getBtnClass("h3")}
               onClick={() => changeType("h3")}
               name="h3 heading 3"
             >
@@ -415,7 +396,7 @@ const CommandMenu = ({
               </div>
             </button>
             <button
-              className="btn-command on"
+              className={getBtnClass("bullet list")}
               onClick={() => changeType("bulletListArr")}
               name="bullet list"
             >
@@ -432,7 +413,7 @@ const CommandMenu = ({
               </div>
             </button>
             <button
-              className="btn-command on"
+              className={getBtnClass("number list")}
               onClick={() => changeType("numberListArr")}
               name="number list"
             >
@@ -449,7 +430,7 @@ const CommandMenu = ({
               </div>
             </button>
             <button
-              className="btn-command on"
+              className={getBtnClass("toggle list")}
               onClick={() => changeType("toggle")}
               name="toggle list"
             >
@@ -471,7 +452,7 @@ const CommandMenu = ({
           <header className="command__header">MEDIA</header>
           <div className="command__btn-group type">
             <button
-              className="btn-command on"
+              className={getBtnClass("image photo")}
               onClick={onClickImgTypeBtn}
               name="image"
             >
@@ -490,11 +471,13 @@ const CommandMenu = ({
           </div>
         </div>
       </div>
-      <div className="no-result" id="commandBlock-noResult" ref={noResultRef}>
-        No results
-      </div>
+      {command && (
+        <div className="no-result" id="commandBlock-noResult" ref={noResultRef}>
+          No results
+        </div>
+      )}
     </div>
   );
 };
 
-export default CommandMenu;
+export default React.memo(CommandMenu);

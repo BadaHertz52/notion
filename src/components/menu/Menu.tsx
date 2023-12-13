@@ -30,12 +30,7 @@ import {
   MobileSideMenuType,
   SelectionType,
 } from "../../types";
-import {
-  getEditTime,
-  isInTarget,
-  isMobile,
-  setTemplateItem,
-} from "../../utils";
+import { getEditTime, isMobile, setTemplateItem } from "../../utils";
 
 import "../../assets/menu.scss";
 import { SESSION_KEY } from "../../constants";
@@ -140,11 +135,6 @@ const Menu = ({
       });
     }
   };
-  const handleScrollOfFrame = (stop: boolean) => {
-    const frameEl = document.querySelector(".frame");
-    frameEl?.classList.toggle("stop", stop);
-  };
-
   //close menu
   const closMobileSideMenu = useCallback(() => {
     if (isMobile() && setMobileSideMenu) {
@@ -400,11 +390,8 @@ const Menu = ({
       >
         {sideMenu === TURN_INTO && (
           <CommandMenu
-            style={undefined}
             page={page}
             block={block}
-            command={null}
-            setCommand={null}
             closeCommand={() => setSideMenu(undefined)}
             setSelection={setSelection}
           />

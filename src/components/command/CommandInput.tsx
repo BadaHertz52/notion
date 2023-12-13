@@ -5,9 +5,12 @@ import React, {
   useCallback,
   useContext,
   Dispatch,
+  useState,
+  useRef,
+  useEffect,
 } from "react";
 import ScreenOnly from "../ScreenOnly";
-import { Block, BlockType, CommandType, Page } from "../../types";
+import { Block, BlockType, Page } from "../../types";
 import { BLOCK_TYPES } from "../../constants";
 import { getEditTime } from "../../utils";
 import { ActionContext } from "../../contexts";
@@ -15,15 +18,27 @@ import { ActionContext } from "../../contexts";
 type CommandInputProps = {
   templateHtml: HTMLElement | null;
   page: Page;
-  command: CommandType;
+  block: Block;
   setTemplateItem(templateHtml: HTMLElement | null, page: Page): void;
-  setCommand: Dispatch<SetStateAction<CommandType>>;
+  closeCommand: () => void;
+  setCommand: Dispatch<SetStateAction<string | undefined>>;
 };
 
 const CommandInput = ({ ...props }: CommandInputProps) => {
   const { editBlock } = useContext(ActionContext).actions;
 
-  const { command, templateHtml, page, setCommand, setTemplateItem } = props;
+  const {
+    templateHtml,
+    page,
+    block,
+    setCommand,
+    closeCommand,
+    setTemplateItem,
+  } = props;
+
+  const commentInputRef = useRef<HTMLInputElement>(null);
+  const [value, setValue] = useState<string>("/");
+
   /**
    * input 창을 통해 command의 값을 변경 시키는 함수
    * @param event ChangeEvent<HTMLInputElement>
@@ -31,23 +46,17 @@ const CommandInput = ({ ...props }: CommandInputProps) => {
   const commandChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       setTemplateItem(templateHtml, page);
-      const value = event.target.value;
-      const trueOrFalse = value.startsWith("/");
-      if (trueOrFalse) {
-        setCommand({
-          open: true,
-          command: value.toLowerCase(),
-          targetBlock: command.targetBlock,
-        });
+      const targetValue = event.target.value;
+      setValue(targetValue);
+      const SLASH = "/";
+      const isStartWidthSlash = targetValue.startsWith(SLASH);
+      if (isStartWidthSlash) {
+        setCommand(targetValue.replace(SLASH, ""));
       } else {
-        setCommand({
-          open: false,
-          command: null,
-          targetBlock: null,
-        });
+        closeCommand();
       }
     },
-    [command.targetBlock, page, setCommand, setTemplateItem, templateHtml]
+    [closeCommand, page, setCommand, setValue, setTemplateItem, templateHtml]
   );
 
   /**
@@ -58,35 +67,33 @@ const CommandInput = ({ ...props }: CommandInputProps) => {
     (event: KeyboardEvent<HTMLInputElement>) => {
       const code = event.code;
       const firstOn = document.querySelector(".btn-command.on.first");
-      if (code === "Enter" && command.targetBlock) {
+      if (code === "Enter") {
         const name = firstOn?.getAttribute("name") as string;
         const blockType: BlockType = BLOCK_TYPES.filter((type) =>
           name.includes(type)
         )[0];
         const newBlock: Block = {
-          ...command.targetBlock,
+          ...block,
           type: blockType,
           editTime: getEditTime(),
         };
         editBlock(page.id, newBlock);
-        setCommand({
-          open: false,
-          command: null,
-          targetBlock: null,
-        });
         setTemplateItem(templateHtml, page);
+        closeCommand();
       }
     },
-    [
-      command.targetBlock,
-      editBlock,
-      page,
-      setCommand,
-      setTemplateItem,
-      templateHtml,
-    ]
+    [block, closeCommand, editBlock, page, setTemplateItem, templateHtml]
   );
 
+  useEffect(() => {
+    commentInputRef.current?.focus();
+    const frameEl = commentInputRef.current?.closest(".frame");
+    frameEl?.classList.add("stop");
+
+    return () => {
+      frameEl?.classList.remove("stop");
+    };
+  }, []);
   return (
     <div className="commandInput">
       <label htmlFor="commandInput">
@@ -96,9 +103,10 @@ const CommandInput = ({ ...props }: CommandInputProps) => {
         type="text"
         title="content input"
         tabIndex={-1}
-        value={command.command as string}
+        value={value}
         id="commandInput"
         className="contentEditable"
+        ref={commentInputRef}
         onChange={commandChange}
         onKeyUp={commandKeyUp}
       />

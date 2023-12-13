@@ -1,5 +1,4 @@
 import React, {
-  useEffect,
   KeyboardEvent,
   useCallback,
   useContext,
@@ -8,14 +7,17 @@ import React, {
   MouseEvent,
   useRef,
   TouchEvent,
+  useState,
+  CSSProperties,
+  useEffect,
 } from "react";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 
-import { CommandInput } from "../index";
+import { CommandInput, CommandMenu, CommandModal, ModalPortal } from "../index";
 
 import { SESSION_KEY } from "../../constants";
 import { ActionContext } from "../../contexts";
-import { Block, Page, CommandType, SelectionType } from "../../types";
+import { Block, Page, SelectionType } from "../../types";
 import {
   findPage,
   findParentBlock,
@@ -29,14 +31,12 @@ import {
 
 export type BlockContendEditableProps = {
   block: Block;
-  command: CommandType;
   onClickCommentBtn: (block: Block) => void;
   page: Page;
   pages: Page[];
   pagesId: string[];
   templateHtml: HTMLElement | null;
   setMobileMenuTargetBlock: Dispatch<SetStateAction<Block | null>>;
-  setCommand: Dispatch<SetStateAction<CommandType>>;
   setSelection: Dispatch<SetStateAction<SelectionType | null>>;
 };
 
@@ -46,15 +46,18 @@ const BlockContentEditable = ({
   page,
   block,
   templateHtml,
-  command,
-  setCommand,
   setSelection,
   setMobileMenuTargetBlock,
   onClickCommentBtn,
 }: BlockContendEditableProps) => {
   const { editBlock, addBlock, changeToSub, raiseBlock, deleteBlock } =
     useContext(ActionContext).actions;
+
   const contentEditableRef = useRef<HTMLElement>(null);
+  const [command, setCommand] = useState<string>();
+  const [openCommandMenu, setOpenCommandMenu] = useState<boolean>(false);
+  const [modalStyle, setModalStyle] = useState<CSSProperties | undefined>();
+
   /**
    * 키보드 방향키(위/아래)로 이동 가능한 블럭
    */
@@ -67,6 +70,107 @@ const BlockContentEditable = ({
     ? possibleBlocks.map((block: Block) => block.id)
     : null;
   /**
+   * value값에 따라 새로운 블록을 생성하거나 기존 block의 content를 수정하는 함수
+   */
+  const changeBlockContent = useCallback(
+    (value: string, targetBlockIndex: number) => {
+      if (value.includes("<div>")) {
+        //enter 시에 새로운 블록 생성
+        const start = value.indexOf("<div>");
+        const end = value.indexOf("</div>");
+        const editedContents = value.slice(0, start);
+        const newContents = value.slice(start + 5, end);
+        const newBlock: Block = {
+          ...makeNewBlock(page, block, newContents),
+          firstBlock: block.firstBlock,
+          subBlocksId: block.subBlocksId,
+          parentBlocksId: block.parentBlocksId,
+        };
+        if (
+          block.contents !== editedContents ||
+          block.contents === "" ||
+          block.subBlocksId
+        ) {
+          const editedBlock: Block = {
+            ...block,
+            contents:
+              block.contents !== editedContents
+                ? editedContents
+                : block.contents,
+            subBlocksId: block.subBlocksId ? null : block.subBlocksId,
+            editTime: getEditTime(),
+          };
+          editBlock(page.id, editedBlock);
+        }
+        if (block.type === "toggle") {
+          const newSubToggleBlock: Block = {
+            ...newBlock,
+            parentBlocksId: [block.id],
+            firstBlock: false,
+          };
+          addBlock(page.id, newSubToggleBlock, targetBlockIndex + 1, block.id);
+        } else {
+          addBlock(page.id, newBlock, targetBlockIndex + 1, block.id);
+        }
+      } else {
+        // edit block
+        const cursor = document.getSelection();
+        const offset = cursor?.anchorOffset;
+        if (!(block.contents === "" && offset === 0 && value === "")) {
+          const editedBlock: Block = {
+            ...block,
+            contents: value,
+            editTime: getEditTime(),
+          };
+          if (block.contents !== value) {
+            const item = {
+              pageId: page.id,
+              block: editedBlock,
+            };
+            sessionStorage.setItem(
+              SESSION_KEY.blockToBeEdited,
+              JSON.stringify(item)
+            );
+          }
+        }
+      }
+    },
+    [addBlock, editBlock, block, page]
+  );
+  const changeModalStyle = useCallback(() => {
+    const contentEditableDomRect =
+      contentEditableRef.current?.getClientRects()[0];
+    const frameDomRect = contentEditableRef.current
+      ?.closest(".frame")
+      ?.getClientRects()[0];
+    if (contentEditableDomRect && frameDomRect) {
+      const { bottom, top, left } = contentEditableDomRect;
+      const GAP = 10;
+      const EXTRA_SPACE = 50;
+      const isOver = window.innerHeight - bottom < 100;
+      const styleBottom = window.innerHeight - top + GAP;
+      const styleTop = bottom + GAP;
+
+      const maxHeight = isOver
+        ? frameDomRect.top - styleBottom
+        : window.innerHeight - styleTop;
+      const style: CSSProperties = {
+        position: "absolute",
+        left: left,
+        maxHeight: maxHeight - EXTRA_SPACE,
+      };
+      isOver
+        ? setModalStyle({
+            ...style,
+            bottom: -window.innerHeight + styleBottom,
+          })
+        : setModalStyle({
+            ...style,
+            top: styleTop,
+          });
+    }
+  }, []);
+  /**
    * ContentEditable에서 block 의 content을 수정하는 함수 ,
    *  웹 브라우저에서 "/"로 시작하면 block 의 type을 변경할 수 있음
    * @param event ContentEditableEvent
@@ -77,93 +181,23 @@ const BlockContentEditable = ({
         setTemplateItem(templateHtml, page);
         const value = event.target.value;
         const targetBlockIndex = page.blocksId.indexOf(block.id);
-        /**
-         * value값에 따라 새로운 블록을 생성하거나 기존 block의 content를 수정하는 함수
-         */
-        const changeBlockContent = () => {
-          if (value.includes("<div>")) {
-            //enter 시에 새로운 블록 생성
-            const start = value.indexOf("<div>");
-            const end = value.indexOf("</div>");
-            const editedContents = value.slice(0, start);
-            const newContents = value.slice(start + 5, end);
-            const newBlock: Block = {
-              ...makeNewBlock(page, block, newContents),
-              firstBlock: block.firstBlock,
-              subBlocksId: block.subBlocksId,
-              parentBlocksId: block.parentBlocksId,
-            };
-            if (
-              block.contents !== editedContents ||
-              block.contents === "" ||
-              block.subBlocksId
-            ) {
-              const editedBlock: Block = {
-                ...block,
-                contents:
-                  block.contents !== editedContents
-                    ? editedContents
-                    : block.contents,
-                subBlocksId: block.subBlocksId ? null : block.subBlocksId,
-                editTime: getEditTime(),
-              };
-              editBlock(page.id, editedBlock);
-            }
-            if (block.type === "toggle") {
-              const newSubToggleBlock: Block = {
-                ...newBlock,
-                parentBlocksId: [block.id],
-                firstBlock: false,
-              };
-              addBlock(
-                page.id,
-                newSubToggleBlock,
-                targetBlockIndex + 1,
-                block.id
-              );
-            } else {
-              addBlock(page.id, newBlock, targetBlockIndex + 1, block.id);
-            }
-          } else {
-            // edit block
-            const cursor = document.getSelection();
-            const offset = cursor?.anchorOffset;
-            if (!(block.contents === "" && offset === 0 && value === "")) {
-              const editedBlock: Block = {
-                ...block,
-                contents: value,
-                editTime: getEditTime(),
-              };
-              if (block.contents !== value) {
-                const item = {
-                  pageId: page.id,
-                  block: editedBlock,
-                };
-                sessionStorage.setItem(
-                  SESSION_KEY.blockToBeEdited,
-                  JSON.stringify(item)
-                );
-              }
-            }
-          }
-        };
+
         if (!value.startsWith("/")) {
-          changeBlockContent();
+          changeBlockContent(value, targetBlockIndex);
         } else {
-          // 타입 변경 명령어로 commandBlock 을 엶
-          if (!isMobile()) {
-            // web browser 에서
-            // setOpenComment(false);
-            setCommand({
-              open: true,
-              command: "/",
-              targetBlock: block,
-            });
-          }
+          setOpenCommandMenu(true);
+          changeModalStyle();
         }
       }
     },
-    [addBlock, block, editBlock, page, setCommand, templateHtml]
+    [
+      block,
+      page,
+      changeBlockContent,
+      changeModalStyle,
+      setOpenCommandMenu,
+      templateHtml,
+    ]
   );
   /**
    * focus를 화면 상의 다음 블록의 contentEditable 에 옮기는 함수
@@ -489,19 +523,14 @@ const BlockContentEditable = ({
     [openLink, openBlockComments]
   );
 
-  useEffect(() => {
-    if (command.open) {
-      const commentInputHtml = document.getElementById("commandInput");
-      if (commentInputHtml) {
-        commentInputHtml.focus();
-      }
-    }
-  }, [command.open]);
+  const closeCommand = useCallback(() => {
+    setOpenCommandMenu(false);
+    setCommand(undefined);
+  }, [setOpenCommandMenu, setCommand]);
 
   return (
     <>
-      {!command.command ||
-      (command.targetBlock && command.targetBlock.id !== block.id) ? (
+      {!openCommandMenu ? (
         <ContentEditable
           className="contentEditable"
           placeholder="Type '/' for commands"
@@ -514,13 +543,24 @@ const BlockContentEditable = ({
           onClick={onClickContentEditable}
         />
       ) : (
-        <CommandInput
-          templateHtml={templateHtml}
-          page={page}
-          command={command}
-          setTemplateItem={setTemplateItem}
-          setCommand={setCommand}
-        />
+        <>
+          <CommandInput
+            templateHtml={templateHtml}
+            page={page}
+            block={block}
+            setTemplateItem={setTemplateItem}
+            setCommand={setCommand}
+            closeCommand={closeCommand}
+          />
+          <CommandModal
+            page={page}
+            block={block}
+            command={command}
+            openCommandMenu={openCommandMenu}
+            style={modalStyle}
+            closeCommand={closeCommand}
+          />
+        </>
       )}
     </>
   );
