@@ -11,7 +11,7 @@ import React, {
 
 import { useSelector } from "react-redux";
 
-import { ActionContext } from "../../contexts";
+import { ActionContext, ModalContext } from "../../contexts";
 import { BlockFn, FrameInner, ModalPortal, FameModal } from "../index";
 import { RootState } from "../../modules";
 import {
@@ -897,65 +897,67 @@ const Frame = ({
       onTouchMove={move_MoveTargetBlockInMobile}
       onTouchEnd={stopMovingBlock}
     >
-      <FrameInner
-        userName={userName}
-        pages={pages}
-        pagesId={pagesId}
-        firstBlocks={firstBlocks}
-        page={page}
-        frameRef={frameRef}
-        fontSize={fontSize}
-        openTemplates={openTemplates}
-        templateHtml={templateHtml}
-        discardEdit={discardEdit}
-        setDiscardEdit={setDiscardEdit}
-        showAllComments={showAllComments}
-        newPageFrame={newPageFrame}
-        pointBlockToMoveBlock={pointBlockToMoveBlock}
-        makeMoveBlockTrue={makeMoveBlockTrue}
-        isMoved={isMoved}
-        setMoveTargetBlock={setMoveTargetBlock}
-        command={command}
-        setCommand={setCommand}
-        openComment={openComment}
-        setOpenComment={setOpenComment}
-        setCommentBlock={setCommentBlock}
-        setOpenLoader={setOpenLoader}
-        setLoaderTargetBlock={setLoaderTargetBlock}
-        closeMenu={closeMenu}
-        setSelection={setSelection}
-        setMobileMenuTargetBlock={setMobileMenuTargetBlock}
-        mobileMenuTargetBlock={mobileMenuTargetBlock}
-        setOpenTemplates={setOpenTemplates}
-        frameInnerStyle={frameInnerStyle}
-        openExport={openExport}
-        setModal={setModal}
-        closeModal={closeModal}
-      />
-      {/* modal - blockFn */}
-      <ModalPortal id="modal-blockFn" isOpen={openBlockFnModal}>
-        <BlockFn
+      <ModalContext.Provider
+        value={{ changeModalState: (modal: ModalType) => setModal(modal) }}
+      >
+        <FrameInner
+          userName={userName}
+          pages={pages}
+          pagesId={pagesId}
+          firstBlocks={firstBlocks}
           page={page}
-          moveTargetBlock={moveTargetBlock}
+          frameRef={frameRef}
+          fontSize={fontSize}
+          openTemplates={openTemplates}
+          templateHtml={templateHtml}
+          discardEdit={discardEdit}
+          setDiscardEdit={setDiscardEdit}
+          showAllComments={showAllComments}
+          newPageFrame={newPageFrame}
+          pointBlockToMoveBlock={pointBlockToMoveBlock}
+          makeMoveBlockTrue={makeMoveBlockTrue}
+          isMoved={isMoved}
           setMoveTargetBlock={setMoveTargetBlock}
+          command={command}
+          setCommand={setCommand}
+          openComment={openComment}
+          setOpenComment={setOpenComment}
+          setCommentBlock={setCommentBlock}
+          setOpenLoader={setOpenLoader}
+          setLoaderTargetBlock={setLoaderTargetBlock}
+          closeMenu={closeMenu}
+          setSelection={setSelection}
+          setMobileMenuTargetBlock={setMobileMenuTargetBlock}
+          mobileMenuTargetBlock={mobileMenuTargetBlock}
+          setOpenTemplates={setOpenTemplates}
+          frameInnerStyle={frameInnerStyle}
+          openExport={openExport}
+          closeModal={closeModal}
+        />
+        {/* modal - blockFn */}
+        <ModalPortal id="modal-blockFn" isOpen={openBlockFnModal}>
+          <BlockFn
+            page={page}
+            moveTargetBlock={moveTargetBlock}
+            setMoveTargetBlock={setMoveTargetBlock}
+            modal={modal}
+          />
+        </ModalPortal>
+        <FameModal
+          page={page}
+          pages={pages}
+          pagesId={pagesId}
+          firstList={firstList}
+          userName={userName}
+          frameHtml={frameHtml}
+          templateHtml={templateHtml}
           modal={modal}
           setModal={setModal}
+          closeModal={closeModal}
+          editBlock={editBlock}
+          editPage={editPage}
         />
-      </ModalPortal>
-      <FameModal
-        page={page}
-        pages={pages}
-        pagesId={pagesId}
-        firstList={firstList}
-        userName={userName}
-        frameHtml={frameHtml}
-        templateHtml={templateHtml}
-        modal={modal}
-        setModal={setModal}
-        closeModal={closeModal}
-        editBlock={editBlock}
-        editPage={editPage}
-      />
+      </ModalContext.Provider>
       {/* modal - others */}
       {/* 
       <ModalPortal isOpen={modal.open}>

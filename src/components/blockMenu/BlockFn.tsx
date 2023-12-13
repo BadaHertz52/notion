@@ -10,7 +10,7 @@ import { CgMenuGridO } from "react-icons/cg";
 
 import { ScreenOnly } from "../index";
 
-import { ActionContext } from "../../contexts";
+import { ActionContext, ModalContext } from "../../contexts";
 import { Block, Page, ModalType } from "../../types";
 import { makeNewBlock, setTemplateItem } from "../../utils";
 import { SESSION_KEY } from "../../constants";
@@ -20,7 +20,6 @@ type BlockFnProp = {
   setMoveTargetBlock: Dispatch<SetStateAction<Block | null>>;
   moveTargetBlock: Block | null;
   modal: ModalType;
-  setModal: Dispatch<SetStateAction<ModalType>>;
 };
 
 const BlockFn = ({
@@ -28,9 +27,9 @@ const BlockFn = ({
   setMoveTargetBlock,
   moveTargetBlock,
   modal,
-  setModal,
 }: BlockFnProp) => {
   const { addBlock } = useContext(ActionContext).actions;
+  const { changeModalState } = useContext(ModalContext);
 
   const makeBlock = useCallback(() => {
     const templateHtml = document.getElementById("template");
@@ -57,9 +56,9 @@ const BlockFn = ({
   const onClickMenu = useCallback(() => {
     moveTargetBlock && setMoveTargetBlock(null);
     const sessionItem = sessionStorage.getItem(SESSION_KEY.blockFnTarget);
-    if (sessionItem && !modal.open && setModal) {
+    if (sessionItem && !modal.open) {
       const targetBlock = JSON.parse(sessionItem);
-      setModal({
+      changeModalState({
         open: true,
         target: "menu",
         block: targetBlock,
@@ -67,7 +66,7 @@ const BlockFn = ({
     } else {
       console.error("BlockFn-openMenu error: there is no session item");
     }
-  }, [moveTargetBlock, modal.open, setMoveTargetBlock, setModal]);
+  }, [moveTargetBlock, modal.open, setMoveTargetBlock, changeModalState]);
 
   return (
     <>

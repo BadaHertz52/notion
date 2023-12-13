@@ -15,14 +15,8 @@ import { CSSProperties } from "styled-components";
 import { PageHeaderProps } from "../page/PageHeader";
 import { EditableBlock, PageHeader, EmptyPageContent } from "../index";
 
-import { ActionContext } from "../../contexts";
-import {
-  Block,
-  Page,
-  CommandType,
-  SelectionType,
-  ModalType,
-} from "../../types";
+import { ActionContext, ModalContext } from "../../contexts";
+import { Block, Page, CommandType, SelectionType } from "../../types";
 import { setTemplateItem, getBlockSample, getNewBlockId } from "../../utils";
 
 export type FrameInnerProps = PageHeaderProps & {
@@ -52,13 +46,14 @@ export type FrameInnerProps = PageHeaderProps & {
   setMobileMenuTargetBlock: Dispatch<SetStateAction<Block | null>>;
   mobileMenuTargetBlock: Block | null;
   frameInnerStyle: CSSProperties;
-  setModal: Dispatch<SetStateAction<ModalType>>;
   closeModal: () => void;
 };
 
 const FrameInner = (props: FrameInnerProps) => {
-  const { page, firstBlocks, frameRef, templateHtml, setModal } = props;
+  const { page, firstBlocks, frameRef, templateHtml } = props;
   const { addBlock } = useContext(ActionContext).actions;
+  const { changeModalState } = useContext(ModalContext);
+
   const bottomHeight = 80;
 
   const changeScrollStyle = useCallback(() => {
@@ -77,13 +72,13 @@ const FrameInner = (props: FrameInnerProps) => {
 
   const onClickCommentBtn = useCallback(
     (block: Block) => {
-      setModal({
+      changeModalState({
         open: true,
         target: "comments",
         block: block,
       });
     },
-    [setModal]
+    [changeModalState]
   );
 
   const onClickBottom = useCallback(() => {
@@ -130,19 +125,7 @@ const FrameInner = (props: FrameInnerProps) => {
         overflowY: props.openExport ? "scroll" : "initial",
       }}
     >
-      <PageHeader
-        userName={props.userName}
-        page={props.page}
-        frameRef={props.frameRef}
-        fontSize={props.fontSize}
-        openTemplates={props.openTemplates}
-        templateHtml={props.templateHtml}
-        discardEdit={props.discardEdit}
-        setDiscardEdit={props.setDiscardEdit}
-        showAllComments={props.showAllComments}
-        newPageFrame={props.newPageFrame}
-        openExport={props.openExport}
-      />
+      <PageHeader {...props} />
       <div className="page__contents">
         {firstBlocks?.map((block, i) => (
           <div
@@ -150,27 +133,10 @@ const FrameInner = (props: FrameInnerProps) => {
             key={`${page.id}_firstBlock_${block.id}`}
           >
             <EditableBlock
+              {...props}
               key={`page__firstBlocks__${block.id}`}
-              pages={props.pages}
-              pagesId={props.pagesId}
-              page={props.page}
               block={block}
-              fontSize={props.fontSize}
-              isMoved={props.isMoved}
-              setMoveTargetBlock={props.setMoveTargetBlock}
-              pointBlockToMoveBlock={props.pointBlockToMoveBlock}
-              command={props.command}
-              setCommand={props.setCommand}
               onClickCommentBtn={onClickCommentBtn}
-              closeModal={props.closeModal}
-              setOpenLoader={props.setOpenLoader}
-              setLoaderTargetBlock={props.setLoaderTargetBlock}
-              closeMenu={props.closeMenu}
-              templateHtml={props.templateHtml}
-              setSelection={props.setSelection}
-              setMobileMenuTargetBlock={props.setMobileMenuTargetBlock}
-              mobileMenuTargetBlock={props.mobileMenuTargetBlock}
-              openExport={props.openExport}
             />
           </div>
         ))}
