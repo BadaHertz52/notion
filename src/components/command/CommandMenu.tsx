@@ -4,6 +4,7 @@ import React, {
   useContext,
   useCallback,
   useRef,
+  useEffect,
 } from "react";
 
 import { FcTodoList } from "react-icons/fc";
@@ -47,15 +48,15 @@ const CommandMenu = ({
   const btnGroupRef = useRef<HTMLDivElement>(null);
 
   const getBtnClass = useCallback(
-    (name: string) => {
-      const BASE_NAME = ".btn-command";
-      const ON = ".on";
+    (name: string, command: string | undefined) => {
+      const BASE_NAME = "btn-command";
+      const ON = "on";
       const classList = [BASE_NAME];
       if (!command || name.includes(command)) classList.push(ON);
 
-      return classList.join("");
+      return classList.join(" ");
     },
-    [command]
+    []
   );
 
   const showResult = useCallback(() => {
@@ -292,7 +293,7 @@ const CommandMenu = ({
           <div className="command__btn-group type" ref={btnGroupRef}>
             <button
               onClick={() => changeType("text")}
-              className={getBtnClass("text")}
+              className={getBtnClass("text", command)}
               name="text"
             >
               <div className="btn-command__inner">
@@ -309,7 +310,7 @@ const CommandMenu = ({
             </button>
             <button
               onClick={() => changeType("page")}
-              className={getBtnClass("page")}
+              className={getBtnClass("page", command)}
               name="page"
             >
               <div className="btn-command__inner">
@@ -326,7 +327,7 @@ const CommandMenu = ({
             </button>
             <button
               onClick={() => changeType("todo")}
-              className={getBtnClass("todo")}
+              className={getBtnClass("todo", command)}
               name="todo list"
             >
               <div className="btn-command__inner">
@@ -342,7 +343,7 @@ const CommandMenu = ({
               </div>
             </button>
             <button
-              className={getBtnClass("h1")}
+              className={getBtnClass("h1", command)}
               onClick={() => changeType("h1")}
               name="h1 heading 1"
             >
@@ -360,7 +361,7 @@ const CommandMenu = ({
               </div>
             </button>
             <button
-              className={getBtnClass("h2")}
+              className={getBtnClass("h2", command)}
               onClick={() => changeType("h2")}
               name="h2 heading 2"
             >
@@ -378,7 +379,7 @@ const CommandMenu = ({
               </div>
             </button>
             <button
-              className={getBtnClass("h3")}
+              className={getBtnClass("h3", command)}
               onClick={() => changeType("h3")}
               name="h3 heading 3"
             >
@@ -396,7 +397,7 @@ const CommandMenu = ({
               </div>
             </button>
             <button
-              className={getBtnClass("bullet list")}
+              className={getBtnClass("bullet list", command)}
               onClick={() => changeType("bulletListArr")}
               name="bullet list"
             >
@@ -413,7 +414,7 @@ const CommandMenu = ({
               </div>
             </button>
             <button
-              className={getBtnClass("number list")}
+              className={getBtnClass("number list", command)}
               onClick={() => changeType("numberListArr")}
               name="number list"
             >
@@ -430,7 +431,7 @@ const CommandMenu = ({
               </div>
             </button>
             <button
-              className={getBtnClass("toggle list")}
+              className={getBtnClass("toggle list", command)}
               onClick={() => changeType("toggle")}
               name="toggle list"
             >
@@ -452,7 +453,7 @@ const CommandMenu = ({
           <header className="command__header">MEDIA</header>
           <div className="command__btn-group type">
             <button
-              className={getBtnClass("image photo")}
+              className={getBtnClass("image photo", command)}
               onClick={onClickImgTypeBtn}
               name="image"
             >
@@ -472,7 +473,7 @@ const CommandMenu = ({
         </div>
       </div>
       {command && (
-        <div className="no-result" id="commandBlock-noResult" ref={noResultRef}>
+        <div className="no-result" id="commandMenu__noResult" ref={noResultRef}>
           No results
         </div>
       )}

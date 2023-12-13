@@ -66,7 +66,7 @@ const CommandInput = ({ ...props }: CommandInputProps) => {
   const commandKeyUp = useCallback(
     (event: KeyboardEvent<HTMLInputElement>) => {
       const code = event.code;
-      const firstOn = document.querySelector(".btn-command.on.first");
+      const firstOn = document.querySelector(".btn-command.on");
       if (code === "Enter") {
         const name = firstOn?.getAttribute("name") as string;
         const blockType: BlockType = BLOCK_TYPES.filter((type) =>
