@@ -22,36 +22,13 @@ type ListSubProps = EditableBlockProps &
   };
 
 const ListSub = ({ ...props }: ListSubProps) => {
-  const { block, page, subBlocks } = props;
+  const { page, subBlocks } = props;
 
   const blockContentsRef = useRef<HTMLDivElement>(null);
-  const getListMarker = (subBlock: Block) => {
-    let listMarker: string = "";
-    const listSubBlocksId = block.subBlocksId;
+  const subBlocksId = subBlocks?.map((v) => v.id);
 
-    if (listSubBlocksId) {
-      const listSubBlocks = listSubBlocksId.map(
-        (id: string) => findBlock(page, id).BLOCK
-      );
-      // const alphabetArr = Array.from({ length: 26 }, (v, i) => String.fromCharCode(i + 65));
-      const numberArr = Array.from({ length: 9 }, (v, i) => i + 1);
-      const subBlockIndex = listSubBlocksId.indexOf(subBlock.id) as number;
-      if (subBlockIndex === 0) {
-        listMarker = "1";
-      } else {
-        const previousSubBlock = listSubBlocks[subBlockIndex - 1];
-        if (previousSubBlock.type === "numberList") {
-          const slicedSubBlocks = listSubBlocks.slice(0, subBlockIndex); // 0~ previous block 까지
-          const filteredSubBlocks = slicedSubBlocks.filter(
-            (block: Block) => (block.type = "numberList")
-          );
-          listMarker = numberArr[filteredSubBlocks.length].toString();
-        } else {
-          listMarker = "1";
-        }
-      }
-    }
-    return listMarker;
+  const getListMarker = (subBlock: Block) => {
+    return subBlocksId ? subBlocksId.indexOf(subBlock.id) + 1 : 0;
   };
 
   const getListStyle = (block: Block): CSSProperties => {
@@ -68,48 +45,49 @@ const ListSub = ({ ...props }: ListSubProps) => {
     <>
       {subBlocks &&
         subBlocks[0] &&
-        subBlocks.map((block: Block, i) => (
+        subBlocks.map((subBlock: Block, i) => (
           <div className="listItem" key={`listItem_${i}`}>
             <div
               className="mainBlock"
-              key={`listItem_${subBlocks.indexOf(block)}`}
-              onMouseOver={(event) => props.markPointBlock(event, block)}
+              key={`listItem_${i}`}
+              onMouseOver={(event) => props.markPointBlock(event, subBlock)}
               onMouseLeave={(event) => props.cancelPointBlock(event)}
             >
               <div className="mainBlock__block">
                 <div
-                  id={`block-${block.id}`}
+                  id={`block-${subBlock.id}`}
                   className="block__contents"
                   ref={blockContentsRef}
-                  style={getListStyle(block)}
+                  style={getListStyle(subBlock)}
                 >
-                  {block.type.includes("List") && (
+                  {subBlock.type.includes("List") && (
                     <div className="listItem-marker">
-                      {block.type.includes("number") ? (
-                        `${getListMarker(block)}.`
+                      {subBlock.type.includes("number") ? (
+                        `${getListMarker(subBlock)}.`
                       ) : (
                         <GoPrimitiveDot />
                       )}
                     </div>
                   )}
-                  <BlockContents {...props} />
+                  <BlockContents {...props} block={subBlock} />
                 </div>
               </div>
               {props.isOpenComments && (
                 <BlockComment
-                  block={block}
+                  block={subBlock}
                   onClickCommentBtn={props.onClickCommentBtn}
                 />
               )}
             </div>
-            {block.subBlocksId && (
+            {subBlock.subBlocksId && (
               <div className="subBlock-group">
-                {block.subBlocksId
+                {subBlock.subBlocksId
                   .map((id: string) => findBlock(page, id).BLOCK)
-                  .map((sub: Block) => (
+                  .map((subSubBlock: Block, i) => (
                     <EditableBlock
                       {...props}
-                      key={block.subBlocksId?.indexOf(sub.id)}
+                      block={subSubBlock}
+                      key={`${subBlock}_subBlock_${i}`}
                     />
                   ))}
               </div>
