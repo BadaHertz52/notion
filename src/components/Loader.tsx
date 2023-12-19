@@ -1,60 +1,57 @@
 import React, {
   ChangeEvent,
-  Dispatch,
-  SetStateAction,
   useEffect,
   useState,
   useCallback,
+  RefObject,
+  useContext,
 } from "react";
 import { CSSProperties } from "styled-components";
 
+import { SESSION_KEY } from "../constants";
 import { Block, Page } from "../types";
-import { setTemplateItem, changeImgToWebP, getEditTime } from "../utils";
+import {
+  setTemplateItem,
+  changeImgToWebP,
+  getEditTime,
+  isInTarget,
+} from "../utils";
 
 import "../assets/loader.scss";
+import ActionContext from "./../contexts/ActionContext";
 
-type LoaderProps = {
-  block: Block | null;
+export type LoaderProps = {
+  //page cover -> block=undefined , image block loader -> block:Block
+  block?: Block;
   page: Page;
-  editBlock: ((pageId: string, block: Block) => void) | null;
-  editPage: ((pageId: string, newPage: Page) => void) | null;
-  frameHtml: HTMLDivElement | null;
-  setOpenLoader: Dispatch<SetStateAction<boolean>>;
-  setLoaderTargetBlock: Dispatch<SetStateAction<Block | null>> | null;
+  style?: CSSProperties;
+  editBlock?: (pageId: string, block: Block) => void;
+  editPage?: (pageId: string, newPage: Page) => void;
+  closeModal: () => void;
 };
 
-const Loader = ({
-  block,
-  page,
-  editBlock,
-  editPage,
-  frameHtml,
-  setOpenLoader,
-  setLoaderTargetBlock,
-}: LoaderProps) => {
-  const inner = document.getElementById("notion__inner");
-  const loaderHtml = document.getElementById("loader");
-  const [loaderStyle, setLoaderStyle] = useState<CSSProperties | undefined>(
-    undefined
-  );
-  const closeLoader = useCallback(() => {
-    setOpenLoader(false);
-    setLoaderTargetBlock && setLoaderTargetBlock(null);
-  }, [setOpenLoader, setLoaderTargetBlock]);
+const Loader = ({ block, page, style, closeModal }: LoaderProps) => {
+  const { editBlock, editPage } = useContext(ActionContext).actions;
+
   const changeImg = useCallback(
     (src: string) => {
       const editTime = getEditTime();
-      if (block) {
+      //파일 창을 열 경우, props로 받은 block을 인식하지 못해서 세션에 저장해 사용하기로 함
+      const targetBlockItem = sessionStorage.getItem(
+        SESSION_KEY.loaderTargetBlock
+      );
+      if (targetBlockItem) {
+        const targetBlock = JSON.parse(targetBlockItem) as Block;
+
         const editedBlock: Block = {
-          ...block,
+          ...targetBlock,
           type: "image",
           contents: src,
           editTime: editTime,
         };
         const templateHtml = document.getElementById("template");
         setTemplateItem(templateHtml, page);
-        editBlock && editBlock(page.id, editedBlock);
-        closeLoader();
+        editBlock(page.id, editedBlock);
       } else {
         //change page cover
         const editedPage: Page = {
@@ -65,33 +62,30 @@ const Loader = ({
           },
           editTime: editTime,
         };
-        editPage && editPage(page.id, editedPage);
-        closeLoader();
+        editPage(page.id, editedPage);
+        closeModal();
       }
+      closeModal();
     },
-    [block, closeLoader, editBlock, editPage, page]
+    [closeModal, editBlock, editPage, page]
   );
-  const onChangeImgFile = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files?.[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function () {
-          const result = reader.result as string;
-          if (file.type.includes("gif") || file.type.includes("webP")) {
-            changeImg(result);
-          } else {
-            changeImgToWebP(reader, changeImg);
-          }
-        };
-        reader.readAsDataURL(file);
-      } else {
-        console.error("can't find image file");
-      }
-    },
-    [changeImg]
-  );
-
+  const onChangeImgFile = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function () {
+        const result = reader.result as string;
+        if (file.type.includes("gif") || file.type.includes("webP")) {
+          changeImgToWebP(reader, changeImg);
+        } else {
+          changeImg(result);
+        }
+      };
+      reader.readAsDataURL(file);
+    } else {
+      console.error("can't find image file");
+    }
+  };
   const removePageCover = useCallback(() => {
     const editedPage: Page = {
       ...page,
@@ -102,76 +96,41 @@ const Loader = ({
       editTime: getEditTime(),
     };
     editPage && editPage(page.id, editedPage);
-    setOpenLoader(false);
-  }, [editPage, page, setOpenLoader]);
+    closeModal();
+  }, [editPage, page, closeModal]);
 
-  const handleClick = useCallback(
+  const handleClose = useCallback(
     (event: globalThis.MouseEvent) => {
-      if (loaderHtml) {
-        const target = event.target as HTMLElement | null;
-        const isInLoader = target?.closest("#loader");
-        !isInLoader && closeLoader();
-      }
+      const correctTarget = [
+        ".btn-change-cover",
+        "#loader",
+        ".btn-addBlockFile",
+      ];
+      const isNotClose = correctTarget
+        .map((v) => isInTarget(event, v))
+        .some((v) => v);
+
+      if (!isNotClose) closeModal();
     },
-    [closeLoader, loaderHtml]
+    [closeModal]
   );
 
-  const changeLoaderStyle = useCallback(() => {
+  useEffect(() => {
+    window.addEventListener("click", handleClose);
     if (block) {
-      const blockHtml = document.querySelector(
-        `#block-${block.id} .btn-addBlockFile`
+      sessionStorage.setItem(
+        SESSION_KEY.loaderTargetBlock,
+        JSON.stringify(block)
       );
-      const topBarEl = document.querySelector(".topBar");
-      const blockDomRect = blockHtml?.getClientRects()[0];
-      if (blockDomRect && frameHtml && topBarEl) {
-        const frameDomRect = frameHtml.getClientRects()[0];
-        const top =
-          blockDomRect.bottom - frameDomRect.top + frameHtml.scrollTop;
-        const possibleHeight = window.innerHeight - topBarEl.clientHeight;
-        const remainingHeight = possibleHeight - top;
-        const loaderHeight = 126;
-        const top2 = top - loaderHeight - blockDomRect.height - 10;
-        const left = blockDomRect.left - frameDomRect.left;
-        const basicStyle: CSSProperties = {
-          position: "absolute",
-          left: left,
-          width: blockDomRect.width,
-        };
-        const style: CSSProperties = {
-          ...basicStyle,
-          top: remainingHeight > loaderHeight + 20 ? top + 10 : top2,
-        };
-        setLoaderStyle(style);
-      }
-    } else {
-      const pageCover = frameHtml?.querySelector(".page__header__cover");
-      if (pageCover) {
-        const style: CSSProperties = {
-          position: "absolute",
-          top: pageCover.clientHeight,
-          left: pageCover.clientWidth * 0.3,
-          width: pageCover.clientWidth * 0.5,
-        };
-        setLoaderStyle(style);
-      }
     }
-  }, [block, frameHtml]);
-  useEffect(() => {
-    inner?.addEventListener("click", handleClick);
-    return () => inner?.removeEventListener("click", handleClick);
-  }, [inner, handleClick]);
-
-  useEffect(() => {
-    !loaderStyle && changeLoaderStyle();
-  }, [loaderStyle, changeLoaderStyle]);
-
-  useEffect(() => {
-    window.addEventListener("resize", changeLoaderStyle);
-    return () => window.removeEventListener("resize", changeLoaderStyle);
-  }, [changeLoaderStyle]);
+    return () => {
+      window.removeEventListener("click", handleClose);
+      if (block) sessionStorage.removeItem(SESSION_KEY.loaderTargetBlock);
+    };
+  }, [handleClose, block]);
 
   return (
-    <div id="loader" style={loaderStyle}>
+    <div id="loader" style={style}>
       <div className="inner">
         <div className="loader-img">
           <div className="menu">
@@ -179,7 +138,7 @@ const Loader = ({
               <button title="button to upload file" name="btn-upload">
                 Upload
               </button>
-              {block === null && (
+              {!block && (
                 <button
                   title="button to remove file"
                   className="btn-remove"
@@ -201,7 +160,7 @@ const Loader = ({
             />
           </div>
           <div className="explain loader__inner-padding">
-            {block === null
+            {!block
               ? "Images wider that 1500 pixels work best"
               : "The maximum size per file is 5MB"}
           </div>

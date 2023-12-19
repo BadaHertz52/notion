@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MouseEvent } from "react";
 
 import { CSSProperties } from "styled-components";
 
@@ -14,6 +14,7 @@ type PageIconProps = {
   handleImgLoad?: () => void;
   isInPageHeader?: boolean;
   openExport?: boolean;
+  onClick?: (event: MouseEvent) => void;
 };
 
 const PageIcon = ({
@@ -23,6 +24,7 @@ const PageIcon = ({
   handleImgLoad,
   isInPageHeader = false,
   openExport,
+  onClick,
 }: PageIconProps) => {
   const pageIconClassName: string =
     icon === null ? "page__icon iconNull" : "page__icon";
@@ -32,7 +34,7 @@ const PageIcon = ({
       ? img + "?&height=72&width=72"
       : img;
   return (
-    <div className={pageIconClassName} style={style}>
+    <div className={pageIconClassName} style={style} onClick={onClick}>
       {iconType === "emoji" ? (
         icon && (
           <EmojiIcon

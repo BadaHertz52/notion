@@ -21,9 +21,7 @@ export const closeModalPortal = () => {
 /**
  * 클릭한 부분이 특정 타켓 요소 안에 존재하는 지 여부 반환
  * @param event
- * @param targetId :타켓 요소의 아이디
- * @param targetClassName : 타켓 요소의 클래스
- * @returns
+ * @param target : 타켓 요소의 아이디나 클래스(아이디:"#id",클래스:".클래스")
  */
 export const isInTarget = (event: globalThis.MouseEvent, target: string) => {
   const eventTarget = event.target as Element;

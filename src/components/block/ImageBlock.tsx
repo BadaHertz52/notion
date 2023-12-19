@@ -1,30 +1,35 @@
-import React, { Dispatch, SetStateAction, useCallback } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useRef,
+  useState,
+} from "react";
 
 import { MdOutlinePhotoSizeSelectActual } from "react-icons/md";
 
-import { ImageContent, ScreenOnly } from "../index";
-import { Block } from "../../types";
+import { ImageContent, LoaderModal, ScreenOnly } from "../index";
 import { ImageContentProps } from "./ImageContent";
 
-type ImageBlockProps = ImageContentProps & {
-  setOpenLoader: Dispatch<SetStateAction<boolean>>;
-  setLoaderTargetBlock: (value: SetStateAction<Block | null>) => void;
-};
+type ImageBlockProps = ImageContentProps;
 
 const ImageBlock = ({ ...props }: ImageBlockProps) => {
-  const { block, setOpenLoader, setLoaderTargetBlock } = props;
-  /**
-   * image type의 block에 넣은 이미지 파일을 선택하기 위한 버튼을 클릭한 경우 작동하는 함수로, Loader component를 엶
-   */
+  const { block } = props;
+
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const btnRef = useRef<HTMLButtonElement>(null);
+
+  const closeModal = () => setOpenModal(false);
+
   const onClickAddFileBtn = useCallback(() => {
-    setOpenLoader(true);
-    setLoaderTargetBlock(block);
-  }, [setOpenLoader, setLoaderTargetBlock, block]);
+    setOpenModal(true);
+  }, [setOpenModal]);
 
   return (
     <>
       {!block.contents ? (
         <button
+          ref={btnRef}
           className="btn-addBlockFile"
           title="btn to add image"
           onClick={onClickAddFileBtn}
@@ -38,15 +43,20 @@ const ImageBlock = ({ ...props }: ImageBlockProps) => {
           </span>
         </button>
       ) : (
-        <>
-          <ImageContent
-            page={props.page}
-            block={props.block}
-            editBlock={props.editBlock}
-            measure={props.measure}
-          />
-        </>
+        <ImageContent
+          page={props.page}
+          block={props.block}
+          editBlock={props.editBlock}
+          measure={props.measure}
+        />
       )}
+      <LoaderModal
+        {...props}
+        block={block}
+        isOpen={openModal}
+        targetRef={btnRef}
+        closeModal={closeModal}
+      />
     </>
   );
 };

@@ -12,4 +12,5 @@ export const SESSION_KEY = {
   targetPageId: "targetPageId",
   originMoveTargetPage: "originMoveTargetPage",
   recentPages: "recentPages",
+  loaderTargetBlock: "loaderTargetBlock",
 };

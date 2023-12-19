@@ -24,6 +24,7 @@ import {
   CommentInput,
   Img,
   Comments,
+  LoaderModal,
 } from "../index";
 
 import { MainCommentType, Page } from "../../types";
@@ -66,16 +67,17 @@ function PageHeader({
   );
   const { editPage, editBlock } = useContext(ActionContext).actions;
 
-  const [decoOpen, setDecoOpen] = useState<boolean>(false);
+  const [decoOpen, setDecoOpen] = useState<boolean>(true);
   const [openLoaderForCover, setOpenLoaderForCover] = useState<boolean>(false);
   const [openIconModal, setOpenIconModal] = useState<boolean>(false);
-
   const [openPageCommentInput, setOpenPageCommentInput] =
     useState<boolean>(false);
-
   const [iconStyle, setIconStyle] = useState<CSSProperties | undefined>(
     undefined
   );
+
+  const coverBtnRef = useRef<HTMLButtonElement>(null);
+
   const headerStyle: CSSProperties = {
     marginTop: page.header.cover ? "10px" : "30px",
   };
@@ -92,23 +94,11 @@ function PageHeader({
   const pageIconStyle: CSSProperties = {
     width: size,
     height: size,
-    marginTop:
-      page.header.cover === null
-        ? 0
-        : page.header.iconType === null
-        ? window.innerWidth > 768
-          ? -39
-          : -16
-        : window.innerWidth > 768
-        ? -62
-        : -16,
   };
   const notCoverRef = useRef<HTMLDivElement>(null);
   const openDeco = useCallback(() => {
     if (
-      (page.header.icon === null ||
-        page.header.cover === null ||
-        page.header.comments === null) &&
+      (!page.header.icon || !page.header.cover || !page.header.comments) &&
       !decoOpen
     ) {
       setDecoOpen(true);
@@ -136,7 +126,7 @@ function PageHeader({
   }, [frameRef]);
 
   const onClickPageIcon = useCallback(
-    (event: React.MouseEvent) => {
+    (event: MouseEvent) => {
       if (openIconModal !== true) {
         const currentTarget = event.currentTarget;
         if (currentTarget.firstElementChild && notCoverRef.current) {
@@ -216,22 +206,12 @@ function PageHeader({
           <button
             title="button to change page cover"
             className="btn-change-cover"
+            ref={coverBtnRef}
             onClick={onClickChangeCoverBtn}
           >
             change cover
           </button>
         </div>
-      )}
-      {openLoaderForCover && (
-        <Loader
-          block={null}
-          page={page}
-          editBlock={null}
-          editPage={editPage}
-          frameHtml={frameRef.current}
-          setOpenLoader={setOpenLoaderForCover}
-          setLoaderTargetBlock={null}
-        />
       )}
       <div className="page__header_notCover" ref={notCoverRef}>
         <div
@@ -239,10 +219,45 @@ function PageHeader({
             !page.header.cover && !page.header.icon ? "none" : ""
           }`}
           style={pageTitleStyle}
-          onClick={onClickPageIcon}
           onMouseMove={openDeco}
           onMouseLeave={closeDeco}
         >
+          <div className="deco">
+            {decoOpen && (
+              <div>
+                {!page.header.icon && (
+                  <button
+                    title="button to  open menu to add page icon"
+                    className="deco__btn-icon"
+                    onClick={addRandomIcon}
+                  >
+                    <BsFillEmojiSmileFill />
+                    <span>Add Icon</span>
+                  </button>
+                )}
+                {!page.header.cover && (
+                  <button
+                    title="button to  open menu to add page cover"
+                    className="deco__btn-cover"
+                    onClick={onClickAddCover}
+                  >
+                    <MdInsertPhoto />
+                    <span>Add Cover</span>
+                  </button>
+                )}
+                {page.header.comments === null && (
+                  <button
+                    title="button to  open menu to add comment about page"
+                    className="deco__btn-comment"
+                    onClick={() => setOpenPageCommentInput(true)}
+                  >
+                    <BiMessageDetail />
+                    <span>Add Comment</span>
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
           <PageIcon
             icon={page.header.icon}
             iconType={page.header.iconType}
@@ -250,44 +265,10 @@ function PageHeader({
             handleImgLoad={handleImgLoad}
             isInPageHeader={true}
             openExport={openExport}
+            onClick={onClickPageIcon}
           />
         </div>
-        <div className="deco">
-          {decoOpen && (
-            <div>
-              {page.header.icon === null && (
-                <button
-                  title="button to  open menu to add page icon"
-                  className="deco__btn-icon"
-                  onClick={addRandomIcon}
-                >
-                  <BsFillEmojiSmileFill />
-                  <span>Add Icon</span>
-                </button>
-              )}
-              {page.header.cover === null && (
-                <button
-                  title="button to  open menu to add page cover"
-                  className="deco__btn-cover"
-                  onClick={onClickAddCover}
-                >
-                  <MdInsertPhoto />
-                  <span>Add Cover</span>
-                </button>
-              )}
-              {page.header.comments === null && (
-                <button
-                  title="button to  open menu to add comment about page"
-                  className="deco__btn-comment"
-                  onClick={() => setOpenPageCommentInput(true)}
-                >
-                  <BiMessageDetail />
-                  <span>Add Comment</span>
-                </button>
-              )}
-            </div>
-          )}
-        </div>
+
         <div className="page__title" style={pageTitleStyle}>
           <ContentEditable
             html={page.header.title}
@@ -340,6 +321,12 @@ function PageHeader({
           setOpenIconModal={setOpenIconModal}
         />
       )}
+      <LoaderModal
+        isOpen={openLoaderForCover}
+        targetRef={coverBtnRef}
+        page={page}
+        closeModal={() => setOpenLoaderForCover(false)}
+      />
     </div>
   );
 }

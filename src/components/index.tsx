@@ -50,6 +50,7 @@ import MobileSideMenu from "./menu/MobileSideMenu";
 //modal
 import CommandModal from "./modal/CommandModal";
 import FameModal from "./modal/FrameModal";
+import LoaderModal from "./modal/LoaderModal";
 import ModalPortal from "./modal/ModalPortal";
 import SideBarModal from "./modal/SideBarModal";
 //notion
@@ -149,8 +150,9 @@ export {
   //modal
   CommandModal,
   FameModal,
-  SideBarModal,
+  LoaderModal,
   ModalPortal,
+  SideBarModal,
   Editor,
   AllComments,
   BlockComment,
