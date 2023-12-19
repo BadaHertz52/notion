@@ -8,12 +8,17 @@
 
 ## frame
 
-[] blockStyler
+[] blockStyler - 내일
 [x] comments
-[x] comments more menu -위치
-[] loader
-[] mobileMenu
+[x] comments more menu
+[x] loader
+[ ] mobileMenu - 내일
 [x] command
+[x] moveTargetBlock
+
+## IconModal
+
+-기존 IconModal을 ModalPortal을 사용하는 것으로 수정
 
 ## topBar
 

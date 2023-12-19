@@ -48,12 +48,12 @@ import Menu from "./menu/Menu";
 import MobileMenu from "./menu/MobileMenu";
 import MobileSideMenu from "./menu/MobileSideMenu";
 //modal
-import CommandModal from "./modal/CommandModal";
-import FameModal from "./modal/FrameModal";
-import LoaderModal from "./modal/LoaderModal";
-import ModalPortal from "./modal/ModalPortal";
-import MovingBlockModal from "./modal/MovingBlockModal";
-import SideBarModal from "./modal/SideBarModal";
+import CommandModal from "./modals/CommandModal";
+import FameModal from "./modals/FrameModal";
+import LoaderModal from "./modals/LoaderModal";
+import ModalPortal from "./modals/ModalPortal";
+import MovingBlockModal from "./modals/MovingBlockModal";
+import SideBarModal from "./modals/SideBarModal";
 //notion
 import Notion from "./notion/Notion";
 import NotionHelmet from "./notion/NotionHelmet";

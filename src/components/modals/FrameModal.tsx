@@ -173,41 +173,7 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
         </div>
       )}
       {/*
-        {modal.target === "pageMenu" && (
-          <PageMenu
-            style={modalStyle}
-            what="block"
-            currentPage={page}
-            pages={pages}
-            firstList={firstList}
-            closeMenu={() => setModal({ open: false, what: null })}
-          />
-        )}
-        {modal.target === "movingTargetBlock" && movingTargetBlock && (
-          <MovingTargetBlock
-            key={movingTargetBlock.id}
-            pages={pages}
-            pagesId={pagesId}
-            page={page}
-            block={movingTargetBlock}
-            fontSize={fontSize}
-            isMoved={isMoved}
-            setMovingTargetBlock={setMovingTargetBlock}
-            pointBlockToMoveBlock={pointBlockToMoveBlock}
-            command={command}
-            setCommand={setCommand}
-            openComment={openComment}
-            setOpenComment={setOpenComment}
-            setCommentBlock={setCommentBlock}
-            setOpenLoader={setOpenLoader}
-            setLoaderTargetBlock={setLoaderTargetBlock}
-            closeMenu={closeMenu}
-            templateHtml={templateHtml}
-            setSelection={setSelection}
-            setMobileMenuTargetBlock={setMobileMenuTargetBlock}
-            mobileMenuTargetBlock={mobileMenuTargetBlock}
-          />
-        )}
+
                 {modal.target === "blockStyler" && selection && !isMobile() && (
           <BlockStyler
             pages={pages}
