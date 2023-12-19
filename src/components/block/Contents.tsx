@@ -1,4 +1,4 @@
-import React, { MouseEvent, useCallback } from "react";
+import React from "react";
 
 import BlockContentEditable, {
   BlockContendEditableProps,
@@ -9,25 +9,19 @@ type ContentsProps = BlockContendEditableProps & {
 };
 const Contents = ({ ...props }: ContentsProps) => {
   const { block, onClickCommentBtn } = props;
-
-  const onClickContent = useCallback(
-    (event: MouseEvent<HTMLElement>) => {
-      if (event.currentTarget.classList.contains("btn-comment")) {
-        onClickCommentBtn(block);
-      }
-    },
-    [block, onClickCommentBtn]
-  );
-
+  const handleClick = () => {
+    if (onClickCommentBtn) onClickCommentBtn(block);
+  };
   return (
-    <div
-      id={`${block.id}__contents`}
-      className={`contents 
-    ${props.isOpenComments ? "btn-comment" : ""}`}
-      onClick={onClickContent}
-    >
-      <BlockContentEditable {...props} />
-    </div>
+    <>
+      {props.isOpenComments ? (
+        <button className="btn-comment" onClick={handleClick}>
+          <BlockContentEditable {...props} />
+        </button>
+      ) : (
+        <BlockContentEditable {...props} />
+      )}
+    </>
   );
 };
 

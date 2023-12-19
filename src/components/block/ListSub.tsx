@@ -3,7 +3,7 @@ import React, { MouseEvent, TouchEvent, useRef } from "react";
 import { CSSProperties } from "styled-components";
 import { GoPrimitiveDot } from "react-icons/go";
 
-import { BlockComponentProps } from "./BlockContents";
+import { BlockContentsProps } from "./BlockContents";
 import { EditableBlockProps } from "./EditableBlock";
 import { BlockContents, BlockComment, EditableBlock } from "../index";
 
@@ -11,7 +11,7 @@ import { Block } from "../../types";
 import { findBlock, getBlockContentsStyle } from "../../utils";
 
 type ListSubProps = EditableBlockProps &
-  BlockComponentProps & {
+  BlockContentsProps & {
     subBlocks?: Block[];
     isOpenComments: boolean;
     markPointBlock: (

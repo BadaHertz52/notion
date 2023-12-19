@@ -12,21 +12,16 @@ import { ScreenOnly, Img } from "../index";
 import { Block, Page } from "../../types";
 import { getEditTime, setTemplateItem } from "../../utils";
 
-import "../../assets/imageContent.scss";
+import "../../assets/imageBox.scss";
 
-export type ImageContentProps = {
+export type ImageBoxProps = {
   page: Page;
   block: Block;
   editBlock: (pageId: string, block: Block) => void;
   measure?: () => void;
 };
 
-const ImageContent = ({
-  page,
-  block,
-  editBlock,
-  measure,
-}: ImageContentProps) => {
+const ImageBox = ({ page, block, editBlock, measure }: ImageBoxProps) => {
   const previousClientX = useRef(0);
   const previousClientY = useRef(0);
   const drag = useRef<boolean>(false);
@@ -137,8 +132,7 @@ const ImageContent = ({
 
   return (
     <div
-      className="img-contents"
-      id={`${block.id}__contents`}
+      className="img-box"
       style={imageStyle}
       onMouseMove={onMouseMove}
       onTouchMove={onTouchMove}
@@ -180,4 +174,4 @@ const ImageContent = ({
   );
 };
 
-export default React.memo(ImageContent);
+export default React.memo(ImageBox);

@@ -8,12 +8,12 @@ import React, {
 
 import { MdOutlinePhotoSizeSelectActual } from "react-icons/md";
 
-import { ImageContent, LoaderModal, ScreenOnly } from "../index";
-import { ImageContentProps } from "./ImageContent";
+import { ImageBox, LoaderModal, ScreenOnly } from "../index";
+import { ImageBoxProps } from "./ImageBox";
 
-type ImageBlockProps = ImageContentProps;
+type ImageBlockContentsProps = ImageBoxProps;
 
-const ImageBlock = ({ ...props }: ImageBlockProps) => {
+const ImageBlockContents = ({ ...props }: ImageBlockContentsProps) => {
   const { block } = props;
 
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -43,7 +43,7 @@ const ImageBlock = ({ ...props }: ImageBlockProps) => {
           </span>
         </button>
       ) : (
-        <ImageContent
+        <ImageBox
           page={props.page}
           block={props.block}
           editBlock={props.editBlock}
@@ -61,4 +61,4 @@ const ImageBlock = ({ ...props }: ImageBlockProps) => {
   );
 };
 
-export default React.memo(ImageBlock);
+export default React.memo(ImageBlockContents);

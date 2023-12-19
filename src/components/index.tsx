@@ -3,11 +3,11 @@ import BlockContentEditable from "./block/BlockContentEditable";
 import Contents from "./block/Contents";
 import BlockContents from "./block/BlockContents";
 import EditableBlock from "./block/EditableBlock";
-import ImageBlock from "./block/ImageBlock";
-import ImageContent from "./block/ImageContent";
+import ImageBlockContents from "./block/ImageBlockContents";
+import ImageBox from "./block/ImageBox";
 import ListSub from "./block/ListSub";
-import MoveTargetBlock from "./block/MoveTargetBlock";
-import PageBlock from "./block/PageBlock";
+import MovingTargetBlock from "./block/MovingTargetBlock";
+import PageBlockContents from "./block/PageBlockContents";
 //--block
 import BlockFn from "./blockMenu/BlockFn";
 import BlockStyler from "./blockMenu/BlockStyler";
@@ -102,12 +102,12 @@ export {
   Contents,
   BlockContents,
   EditableBlock,
-  ImageBlock,
-  ImageContent,
+  ImageBlockContents,
+  ImageBox,
   ListSub,
   Loader,
-  MoveTargetBlock,
-  PageBlock,
+  MovingTargetBlock,
+  PageBlockContents,
   //--block
   //command --
   CommandMenu,

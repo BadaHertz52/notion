@@ -10,16 +10,16 @@ import React, {
 } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { Contents, PageBlock } from "../index";
+import { Contents, PageBlockContents } from "../index";
 
 import { ActionContext } from "../../contexts";
 import { Block } from "../../types";
-import { makeRoutePath } from "../../utils";
+import { getBlockContentsStyle, makeRoutePath } from "../../utils";
 import { SESSION_KEY } from "../../constants";
 import { BlockContendEditableProps } from "./BlockContentEditable";
-import ImageBlock from "./ImageBlock";
+import ImageBlockContents from "./ImageBlockContents";
 
-export type BlockComponentProps = BlockContendEditableProps & {
+export type BlockContentsProps = BlockContendEditableProps & {
   setOpenLoader: Dispatch<SetStateAction<boolean>>;
   setLoaderTargetBlock: Dispatch<SetStateAction<Block | null>>;
   closeMenu: (event: globalThis.MouseEvent | MouseEvent) => void;
@@ -27,7 +27,7 @@ export type BlockComponentProps = BlockContendEditableProps & {
   measure?: () => void;
 };
 
-const BlockContents = ({ ...props }: BlockComponentProps) => {
+const BlockContents = ({ ...props }: BlockContentsProps) => {
   const { editBlock } = useContext(ActionContext).actions;
 
   const { block, closeMenu, setMoveTargetBlock } = props;
@@ -170,17 +170,19 @@ const BlockContents = ({ ...props }: BlockComponentProps) => {
 
   return (
     <div
-      className={`${block.type}-blockContents blockContents`}
+      id={`${props.block.id}__contents`}
+      className={`${block.type}-block__contents block__contents`}
       ref={blockContentsRef}
+      style={getBlockContentsStyle(block)}
       onClick={onClickContents}
       onMouseOver={showBlockFn}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
       {block.type === "page" ? (
-        <PageBlock {...props} />
+        <PageBlockContents {...props} />
       ) : block.type === "image" ? (
-        <ImageBlock {...props} editBlock={editBlock} />
+        <ImageBlockContents {...props} editBlock={editBlock} />
       ) : (
         <Contents {...props} isOpenComments={isOpenComments} />
       )}

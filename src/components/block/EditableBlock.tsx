@@ -215,12 +215,8 @@ const EditableBlock = ({ ...props }: EditableBlockProps) => {
                       />
                     </div>
                   )}
-                  <div
-                    className="block__contents"
-                    style={getBlockContentsStyle(block)}
-                  >
-                    <BlockContents {...props} />
-                  </div>
+
+                  <BlockContents {...props} />
                 </div>
                 {isOpenComments && (
                   <BlockComment

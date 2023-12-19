@@ -3,8 +3,7 @@
 @import "./common";
 @import "./reset";
 #notion__inner {
-  .blockContents,
-  .contents,
+  .block__contents,
   .contentEditable {
     color: inherit;
   }
