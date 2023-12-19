@@ -31,13 +31,13 @@ import {
 
 export type BlockContendEditableProps = {
   block: Block;
-  onClickCommentBtn: (block: Block) => void;
+  onClickCommentBtn?: (block: Block) => void;
   page: Page;
   pages: Page[];
   pagesId: string[];
   templateHtml: HTMLElement | null;
-  setMobileMenuTargetBlock: Dispatch<SetStateAction<Block | null>>;
-  setSelection: Dispatch<SetStateAction<SelectionType | null>>;
+  setMobileMenuTargetBlock?: Dispatch<SetStateAction<Block | null>>;
+  setSelection?: Dispatch<SetStateAction<SelectionType | null>>;
 };
 
 const BlockContentEditable = ({
@@ -477,7 +477,7 @@ const BlockContentEditable = ({
   const openMobileMenu = useCallback(
     (event: TouchEvent) => {
       if (event.currentTarget !== event.target) return;
-      if (!block.comments) {
+      if (!block.comments && setMobileMenuTargetBlock && setSelection) {
         setMobileMenuTargetBlock(block);
         setSelection(null);
       }
@@ -502,7 +502,7 @@ const BlockContentEditable = ({
           .filter((i) => i.includes("mainId"))[0]
           .replace("mainId_", "")
       );
-      onClickCommentBtn(block);
+      if (onClickCommentBtn) onClickCommentBtn(block);
     },
     [block, onClickCommentBtn]
   );

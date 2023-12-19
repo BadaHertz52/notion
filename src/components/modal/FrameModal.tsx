@@ -4,17 +4,30 @@ import React, {
   useCallback,
   useEffect,
   useState,
+  CSSProperties,
 } from "react";
-import ModalPortal from "./ModalPortal";
-import { ModalType, Page } from "../../types";
-import Menu, { MenuProps } from "../menu/Menu";
-import Rename, { RenameProps } from "../Rename";
-import CommentInput, { CommentInputProps } from "../comment/CommentInput";
-import { CSSProperties } from "styled-components";
-import { closeModal, findPage, getBlockDomRect, isInTarget } from "../../utils";
-import Comments from "../comment/Comments";
 
-type ChildrenProps = MenuProps & RenameProps & CommentInputProps;
+import {
+  ModalPortal,
+  Menu,
+  CommentInput,
+  Comments,
+  Rename,
+  CommandMenu,
+  MovingTargetBlock,
+} from "../index";
+import { CommentInputProps } from "../comment/CommentInput";
+import { MenuProps } from "../menu/Menu";
+import { RenameProps } from "../Rename";
+
+import { ModalType, Page } from "../../types";
+import { closeModal, findPage, getBlockDomRect, isInTarget } from "../../utils";
+import { EditableBlockProps } from "../block/EditableBlock";
+
+type ChildrenProps = MenuProps &
+  RenameProps &
+  CommentInputProps &
+  EditableBlockProps;
 type FrameModalProps = Omit<
   ChildrenProps,
   | "block"
@@ -177,35 +190,16 @@ function FrameModal({ ...props }: FrameModalProps) {
             closeMenu={() => setModal({ open: false, what: null })}
           />
         )}
-
-        {modal.target === "comments" &&
-          commentBlock &&
-          openComment &&
-          targetMainComments && (
-            <Comments
-              targetMainComments={targetMainComments}
-              userName={userName}
-              block={commentBlock}
-              pageId={page.id}
-              page={page}
-              frameHtml={frameHtml}
-              openComment={openComment}
-              discardEdit={discardEdit}
-              setDiscardEdit={setDiscardEdit}
-              showAllComments={showAllComments}
-              changeStateToCloseBlockComments={closeComments}
-            />
-          )}
-        {modal.target === "moveTargetBlock" && moveTargetBlock && (
-          <MoveTargetBlock
-            key={moveTargetBlock.id}
+        {modal.target === "movingTargetBlock" && movingTargetBlock && (
+          <MovingTargetBlock
+            key={movingTargetBlock.id}
             pages={pages}
             pagesId={pagesId}
             page={page}
-            block={moveTargetBlock}
+            block={movingTargetBlock}
             fontSize={fontSize}
             isMoved={isMoved}
-            setMoveTargetBlock={setMoveTargetBlock}
+            setMovingTargetBlock={setMovingTargetBlock}
             pointBlockToMoveBlock={pointBlockToMoveBlock}
             command={command}
             setCommand={setCommand}
@@ -244,29 +238,6 @@ function FrameModal({ ...props }: FrameModalProps) {
             setOpenMobileBlockStyler={null}
           />
         )}
-        {/* {command.open && command.targetBlock && (
-        <div id="block__commandMenu" style={commandMenuPosition}>
-          <CommandMenu
-            style={commandMenuStyle}
-            key={`${command.targetBlock.id}_command`}
-            page={page}
-            block={command.targetBlock}
-            command={command}
-            setCommand={setCommand}
-            setSelection={setSelection}
-          />
-        </div>
-      )} {openLoader && loaderTargetBlock && (
-        <Loader
-          block={loaderTargetBlock}
-          page={page}
-          editBlock={editBlock}
-          editPage={null}
-          frameHtml={frameHtml}
-          setOpenLoader={setOpenLoader}
-          setLoaderTargetBlock={setLoaderTargetBlock}
-        />
-      )} 
       */}
     </ModalPortal>
   );

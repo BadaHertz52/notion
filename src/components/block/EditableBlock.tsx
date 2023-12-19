@@ -26,7 +26,6 @@ import { Block, CommandType, Page, SelectionType } from "../../types";
 import {
   changeFontSizeBySmallText,
   findBlock,
-  getBlockContentsStyle,
   getEditTime,
   setTemplateItem,
 } from "../../utils";
@@ -38,26 +37,18 @@ export type EditableBlockProps = {
   page: Page;
   block: Block;
   fontSize: number;
-  isMoved: MutableRefObject<boolean>;
-  setMoveTargetBlock: Dispatch<SetStateAction<Block | null>>;
-  pointBlockToMoveBlock: MutableRefObject<Block | null>;
-  command: CommandType;
-  setCommand: Dispatch<SetStateAction<CommandType>>;
-  onClickCommentBtn: (block: Block) => void;
-  closeModal: () => void;
-  setOpenLoader: Dispatch<SetStateAction<boolean>>;
-  setLoaderTargetBlock: Dispatch<SetStateAction<Block | null>>;
-  closeMenu: (event: globalThis.MouseEvent | MouseEvent) => void;
+  setMovingTargetBlock?: Dispatch<SetStateAction<Block | null>>;
+  onClickCommentBtn?: (block: Block) => void;
   templateHtml: HTMLElement | null;
-  setSelection: Dispatch<SetStateAction<SelectionType | null>>;
-  mobileMenuTargetBlock: Block | null;
-  setMobileMenuTargetBlock: Dispatch<SetStateAction<Block | null>>;
+  setSelection?: Dispatch<SetStateAction<SelectionType | null>>;
+  mobileMenuTargetBlock?: Block | null;
+  setMobileMenuTargetBlock?: Dispatch<SetStateAction<Block | null>>;
   measure?: () => void;
   openExport?: boolean;
 };
 
 const EditableBlock = ({ ...props }: EditableBlockProps) => {
-  const { block, page, isMoved, pointBlockToMoveBlock, templateHtml } = props;
+  const { block, page, templateHtml } = props;
   const { editBlock } = useContext(ActionContext).actions;
   const className =
     block.type !== "toggle"
@@ -74,35 +65,34 @@ const EditableBlock = ({ ...props }: EditableBlockProps) => {
         : false,
     [block.comments]
   );
-
+  const isMovingBlock = useCallback(
+    () => !!document.querySelector("#movingTargetBlock"),
+    []
+  );
   /**
-   * [isMoved] 현재 block을 moveTargetBlock (위치를 변경시킬 block)의 변경된 위치의 기준이 되는 pointBlock으로  지정하는 함수
+   * [isMoved] 현재 block을 movingTargetBlock (위치를 변경시킬 block)의 변경된 위치의 기준이 되는 pointBlock으로  지정하는 함수
    * @param event
    * @param targetBlock
    */
   const markPointBlock = useCallback(
-    (
-      event: MouseEvent<HTMLDivElement> | TouchEvent<HTMLDivElement>,
-      targetBlock: Block
-    ) => {
-      if (isMoved.current) {
-        pointBlockToMoveBlock.current = targetBlock;
+    (event: MouseEvent<HTMLDivElement> | TouchEvent<HTMLDivElement>) => {
+      if (isMovingBlock()) {
         event.currentTarget.classList.add("on");
       }
     },
-    [isMoved, pointBlockToMoveBlock]
+    [isMovingBlock]
   );
   /**
-   * [isMoved] 현재 block을  moveTargetBlock (위치를 변경시킬 block)의 위치변경의 기준이 되는 pointBlock 지정을 취소시키는 함수
+   * [isMoved] 현재 block을  movingTargetBlock (위치를 변경시킬 block)의 위치변경의 기준이 되는 pointBlock 지정을 취소시키는 함수
    * @param event
    */
   const cancelPointBlock = useCallback(
     (event: MouseEvent<HTMLDivElement>) => {
-      if (isMoved.current && pointBlockToMoveBlock.current?.id === block.id) {
+      if (isMovingBlock()) {
         event.currentTarget.classList.remove("on");
       }
     },
-    [block.id, isMoved, pointBlockToMoveBlock]
+    [isMovingBlock]
   );
 
   const onClickTodoBtn = useCallback(() => {
@@ -136,11 +126,7 @@ const EditableBlock = ({ ...props }: EditableBlockProps) => {
       }
       sessionStorage.removeItem(SESSION_KEY.newBlock);
     }
-    if (block.type.includes("media") && block.contents === "") {
-      props.setOpenLoader(true);
-      props.setLoaderTargetBlock(block);
-    }
-  }, [block, props.setLoaderTargetBlock, props.setOpenLoader]);
+  }, [block]);
 
   return (
     <div className="editableBlock">
@@ -153,8 +139,6 @@ const EditableBlock = ({ ...props }: EditableBlockProps) => {
           {block.type.includes("ListArr") ? (
             <ListSub
               {...props}
-              isMoved={isMoved}
-              pointBlockToMoveBlock={pointBlockToMoveBlock}
               subBlocks={subBlocks}
               isOpenComments={isOpenComments}
               markPointBlock={markPointBlock}
@@ -164,8 +148,8 @@ const EditableBlock = ({ ...props }: EditableBlockProps) => {
             <>
               <div
                 className="mainBlock"
-                onMouseOver={(event) => markPointBlock(event, block)}
-                onMouseLeave={(event) => cancelPointBlock(event)}
+                onMouseEnter={markPointBlock}
+                onMouseLeave={cancelPointBlock}
               >
                 <div className="mainBlock__block">
                   {block.type === "todo" && (
@@ -218,7 +202,7 @@ const EditableBlock = ({ ...props }: EditableBlockProps) => {
 
                   <BlockContents {...props} />
                 </div>
-                {isOpenComments && (
+                {isOpenComments && props.onClickCommentBtn && (
                   <BlockComment
                     block={block}
                     onClickCommentBtn={props.onClickCommentBtn}

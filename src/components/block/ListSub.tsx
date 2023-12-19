@@ -15,8 +15,7 @@ type ListSubProps = EditableBlockProps &
     subBlocks?: Block[];
     isOpenComments: boolean;
     markPointBlock: (
-      event: MouseEvent<HTMLDivElement> | TouchEvent<HTMLDivElement>,
-      targetBlock: Block
+      event: MouseEvent<HTMLDivElement> | TouchEvent<HTMLDivElement>
     ) => void;
     cancelPointBlock: (event: MouseEvent<HTMLDivElement>) => void;
   };
@@ -50,8 +49,8 @@ const ListSub = ({ ...props }: ListSubProps) => {
             <div
               className="mainBlock"
               key={`listItem_${i}`}
-              onMouseOver={(event) => props.markPointBlock(event, subBlock)}
-              onMouseLeave={(event) => props.cancelPointBlock(event)}
+              onMouseOver={props.markPointBlock}
+              onMouseLeave={props.cancelPointBlock}
             >
               <div className="mainBlock__block">
                 <div
@@ -72,7 +71,7 @@ const ListSub = ({ ...props }: ListSubProps) => {
                   <BlockContents {...props} block={subBlock} />
                 </div>
               </div>
-              {props.isOpenComments && (
+              {props.isOpenComments && props.onClickCommentBtn && (
                 <BlockComment
                   block={subBlock}
                   onClickCommentBtn={props.onClickCommentBtn}

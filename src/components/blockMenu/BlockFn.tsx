@@ -17,15 +17,15 @@ import { SESSION_KEY } from "../../constants";
 
 type BlockFnProp = {
   page: Page;
-  setMoveTargetBlock: Dispatch<SetStateAction<Block | null>>;
-  moveTargetBlock: Block | null;
+  setMovingTargetBlock: Dispatch<SetStateAction<Block | null>>;
+  movingTargetBlock: Block | null;
   modal: ModalType;
 };
 
 const BlockFn = ({
   page,
-  setMoveTargetBlock,
-  moveTargetBlock,
+  setMovingTargetBlock,
+  movingTargetBlock,
   modal,
 }: BlockFnProp) => {
   const { addBlock } = useContext(ActionContext).actions;
@@ -49,12 +49,12 @@ const BlockFn = ({
     const sessionItem = sessionStorage.getItem(SESSION_KEY.blockFnTarget);
     if (sessionItem) {
       const targetBlock = JSON.parse(sessionItem);
-      moveTargetBlock === null && setMoveTargetBlock(targetBlock);
+      movingTargetBlock === null && setMovingTargetBlock(targetBlock);
     }
-  }, [setMoveTargetBlock, moveTargetBlock]);
+  }, [setMovingTargetBlock, movingTargetBlock]);
 
   const onClickMenu = useCallback(() => {
-    moveTargetBlock && setMoveTargetBlock(null);
+    movingTargetBlock && setMovingTargetBlock(null);
     const sessionItem = sessionStorage.getItem(SESSION_KEY.blockFnTarget);
     if (sessionItem && !modal.open) {
       const targetBlock = JSON.parse(sessionItem);
@@ -66,28 +66,26 @@ const BlockFn = ({
     } else {
       console.error("BlockFn-openMenu error: there is no session item");
     }
-  }, [moveTargetBlock, modal.open, setMoveTargetBlock, changeModalState]);
+  }, [movingTargetBlock, modal.open, setMovingTargetBlock, changeModalState]);
 
   return (
-    <>
-      <div id="blockFn" className="blockFn">
-        <div className="icon-blockFn">
-          <button onClick={makeBlock} title="Click  to add a block below">
-            <ScreenOnly text="button  to add a block below" />
-            <AiOutlinePlus />
-          </button>
-        </div>
-        <div className="icon-blockFn">
-          <button
-            onClick={onClickMenu}
-            onMouseDown={onMouseDownMenu}
-            title="Click to open menu"
-          >
-            <CgMenuGridO />
-          </button>
-        </div>
+    <div id="blockFn" className="blockFn">
+      <div className="icon-blockFn">
+        <button onClick={makeBlock} title="Click  to add a block below">
+          <ScreenOnly text="button  to add a block below" />
+          <AiOutlinePlus />
+        </button>
       </div>
-    </>
+      <div className="icon-blockFn">
+        <button
+          onClick={onClickMenu}
+          onMouseDown={onMouseDownMenu}
+          title="Click to open menu"
+        >
+          <CgMenuGridO />
+        </button>
+      </div>
+    </div>
   );
 };
 

@@ -547,7 +547,7 @@ export const initialNotionState: Notion = {
           comments: null,
         },
         {
-          id: "numberListArr",
+          id: "numberList",
           contents: "",
           firstBlock: true,
           subBlocksId: ["num1", "num2", "num3"],
@@ -624,7 +624,7 @@ export const initialNotionState: Notion = {
           comments: null,
         },
         {
-          id: "bulletListArr",
+          id: "bulletList",
           contents: "",
           firstBlock: true,
           subBlocksId: ["b1", "b2"],

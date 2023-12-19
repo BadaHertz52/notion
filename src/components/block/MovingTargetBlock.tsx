@@ -2,11 +2,10 @@ import React, { CSSProperties } from "react";
 import EditableBlock, { EditableBlockProps } from "./EditableBlock";
 import { changeFontSizeBySmallText } from "../../utils";
 
-const MovingTargetBlock = ({
-  ...props
-}: EditableBlockProps & {
+type MovingTargetBlockProps = EditableBlockProps & {
   style: CSSProperties | undefined;
-}) => {
+};
+const MovingTargetBlock = ({ ...props }: MovingTargetBlockProps) => {
   const { block, fontSize } = props;
   return (
     <div id="movingTargetBlock" style={props.style}>

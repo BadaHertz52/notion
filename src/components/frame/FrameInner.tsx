@@ -23,7 +23,6 @@ export type FrameInnerProps = PageHeaderProps & {
   openExport?: boolean;
   firstBlocks: Block[] | null;
   newPageFrame: boolean;
-  makeMoveBlockTrue: () => void;
   setOpenTemplates: Dispatch<SetStateAction<boolean>>;
   pages: Page[];
   pagesId: string[];
@@ -33,7 +32,7 @@ export type FrameInnerProps = PageHeaderProps & {
   templateHtml: HTMLElement | null;
   isMoved: MutableRefObject<boolean>;
   pointBlockToMoveBlock: MutableRefObject<Block | null>;
-  setMoveTargetBlock: Dispatch<SetStateAction<Block | null>>;
+  setMovingTargetBlock: Dispatch<SetStateAction<Block | null>>;
   command: CommandType;
   setCommand: Dispatch<SetStateAction<CommandType>>;
   openComment: boolean;

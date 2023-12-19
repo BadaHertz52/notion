@@ -20,17 +20,14 @@ import { BlockContendEditableProps } from "./BlockContentEditable";
 import ImageBlockContents from "./ImageBlockContents";
 
 export type BlockContentsProps = BlockContendEditableProps & {
-  setOpenLoader: Dispatch<SetStateAction<boolean>>;
-  setLoaderTargetBlock: Dispatch<SetStateAction<Block | null>>;
-  closeMenu: (event: globalThis.MouseEvent | MouseEvent) => void;
-  setMoveTargetBlock: Dispatch<SetStateAction<Block | null>>;
+  setMovingTargetBlock?: Dispatch<SetStateAction<Block | null>>;
   measure?: () => void;
 };
 
 const BlockContents = ({ ...props }: BlockContentsProps) => {
   const { editBlock } = useContext(ActionContext).actions;
 
-  const { block, closeMenu, setMoveTargetBlock } = props;
+  const { block, setMovingTargetBlock } = props;
 
   const navigate = useNavigate();
 
@@ -46,7 +43,7 @@ const BlockContents = ({ ...props }: BlockContentsProps) => {
   /**
    * 모바일 브라우저에서, element을 터치 할때 사용자가 element을 이동하기 위해 touch 한 것인지 판별하기 위한 조건 중 하나
    */
-  const startMarkMoveBlock = useRef<boolean>(false);
+  const startMarkMovingBlock = useRef<boolean>(false);
   const blockContentsRef = useRef<HTMLDivElement>(null);
   //show blockFn ---
   /**
@@ -92,13 +89,12 @@ const BlockContents = ({ ...props }: BlockContentsProps) => {
     },
     []
   );
+
   /**
    * 마우스가 block위를 움직일 경우, 해당 block의 element 옆에 blockFn component를 보여주는 함수
    */
   const showBlockFn = useCallback(
     (event: MouseEvent) => {
-      closeMenu(event);
-
       const currentTarget = event.currentTarget;
 
       const mainBlockEl =
@@ -110,7 +106,7 @@ const BlockContents = ({ ...props }: BlockContentsProps) => {
         setStyleOfBlockFn(mainBlockEl, blockFnEl);
       }
     },
-    [closeMenu, setStyleOfBlockFn, toggleBlockFn]
+    [setStyleOfBlockFn, toggleBlockFn]
   );
   //--show blockFn
   const onClickContents = useCallback(() => {
@@ -132,14 +128,14 @@ const BlockContents = ({ ...props }: BlockContentsProps) => {
    * [isMoved - mobile] handleTouchStart 을 통해 위치를 변경시킬 블럭으로 해당 요소에 touch move 이벤트가 감지 되었을때,  일정 시간이 경과하면 모바일 환경에서 터치를 통한 블럭 이동을 위한 환경을 준비하는 함수
    *
    */
-  const markMoveTargetBlock = useCallback(
+  const markMovingTargetBlock = useCallback(
     (target: HTMLDivElement | null) =>
       setTimeout(() => {
-        startMarkMoveBlock.current = true;
+        startMarkMovingBlock.current = true;
         target?.classList.add("on");
-        setMoveTargetBlock(block);
+        if (setMovingTargetBlock) setMovingTargetBlock(block);
       }, 1000),
-    [block, setMoveTargetBlock]
+    [block, setMovingTargetBlock]
   );
 
   const handleTouchStart = useCallback(
@@ -150,21 +146,21 @@ const BlockContents = ({ ...props }: BlockContentsProps) => {
         selection?.anchorNode?.nodeName !== "#text" &&
         selection?.focusNode?.nodeName !== "#text"
       ) {
-        if (!startMarkMoveBlock.current) {
-          markMoveTargetBlock(event.currentTarget);
+        if (!startMarkMovingBlock.current) {
+          markMovingTargetBlock(event.currentTarget);
         }
       }
     },
-    [markMoveTargetBlock]
+    [markMovingTargetBlock]
   );
 
   const handleTouchEnd = (event: TouchEvent<HTMLDivElement>) => {
     if (event.currentTarget !== event.target) return;
-    if (startMarkMoveBlock.current) {
-      clearTimeout(markMoveTargetBlock(event.currentTarget));
-      startMarkMoveBlock.current = false;
+    if (startMarkMovingBlock.current) {
+      clearTimeout(markMovingTargetBlock(event.currentTarget));
+      startMarkMovingBlock.current = false;
       event.currentTarget?.classList.remove("on");
-      setMoveTargetBlock(null);
+      if (setMovingTargetBlock) setMovingTargetBlock(null);
     }
   };
 

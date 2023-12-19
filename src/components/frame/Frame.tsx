@@ -12,7 +12,13 @@ import React, {
 import { useSelector } from "react-redux";
 
 import { ActionContext, ModalContext } from "../../contexts";
-import { BlockFn, FrameInner, ModalPortal, FameModal } from "../index";
+import {
+  BlockFn,
+  FrameInner,
+  ModalPortal,
+  FameModal,
+  MovingBlockModal,
+} from "../index";
 import { RootState } from "../../modules";
 import {
   Block,
@@ -88,7 +94,6 @@ const Frame = ({
   });
 
   const [openBlockFnModal, setOpenBlockFnModal] = useState<boolean>(true);
-
   const [openLoader, setOpenLoader] = useState<boolean>(false);
   const [loaderTargetBlock, setLoaderTargetBlock] = useState<Block | null>(
     null
@@ -107,11 +112,13 @@ const Frame = ({
   /**
    * page 내의 위치를 변경하는 대상이 되는  block
    */
-  const [moveTargetBlock, setMoveTargetBlock] = useState<Block | null>(null);
+  const [movingTargetBlock, setMovingTargetBlock] = useState<Block | null>(
+    null
+  );
   /**
    * page내의 블록의 위치 변경이 있는 지 여부를 나타냄
    */
-  const isMoved = useRef<boolean>(!!moveTargetBlock);
+  const isMoved = useRef<boolean>(!!movingTargetBlock);
   /** block 이동 시, 이동 할 위치의 기준이 되는 block(block 은 pointBlockToMoveBlock.current의 앞에 위치하게됨) */
   const pointBlockToMoveBlock = useRef<Block | null>(null);
   const [mobileMenuTargetBlock, setMobileMenuTargetBlock] =
@@ -210,357 +217,358 @@ const Frame = ({
     [commentBlock, openComment, changeStateToCloseBlockComments]
   );
 
-  /**
-   * [isMoved]
-   */
-  const makeMoveBlockTrue = useCallback(() => {
-    if (moveTargetBlock) {
-      isMoved.current = true;
-    }
-  }, [moveTargetBlock]);
-  /**
-   * [isMoved]  블록의 위치를 변경하고, 변경된 위치에 따라 page의 data도 변경하는 함수
-   */
-  const changeBlockPosition = useCallback(() => {
-    if (
-      pointBlockToMoveBlock.current &&
-      moveTargetBlock &&
-      page.blocksId &&
-      page.blocks &&
-      page.firstBlocksId
-    ) {
-      const FIRST_BLOCKS_ID = [...page.firstBlocksId];
-      setTemplateItem(templateHtml, page);
-      //edit block
-      const editTime = getEditTime();
-      const blocksId = [...page.blocksId];
-      const blocks = [...page.blocks];
-      const pointBlock = pointBlockToMoveBlock.current;
-      const targetBlockIsList =
-        moveTargetBlock.type === "numberList" ||
-        moveTargetBlock.type === "bulletList";
-      const newBlock = makeNewBlock(page, null);
-      const newParentBlockOfList: Block = {
-        ...newBlock,
-        firstBlock: pointBlock.firstBlock,
-        type:
-          moveTargetBlock.type === "numberList"
-            ? "numberListArr"
-            : "bulletListArr",
-        subBlocksId: [moveTargetBlock.id],
-        parentBlocksId: pointBlock.parentBlocksId,
-      };
-      /**
-       * 이동의 타켓이 되는 block으로 이동으로 인해 변경한 data를 가짐
-       */
-      const targetBlock: Block = targetBlockIsList
-        ? {
-            ...moveTargetBlock,
-            firstBlock: false,
-            parentBlocksId: newParentBlockOfList.parentBlocksId
-              ? newParentBlockOfList.parentBlocksId.concat(
-                  newParentBlockOfList.id
-                )
-              : [newParentBlockOfList.id],
-            editTime: editTime,
-          }
-        : {
-            ...moveTargetBlock,
-            firstBlock: pointBlock.firstBlock,
-            parentBlocksId: pointBlock.parentBlocksId,
-            editTime: editTime,
-          };
+  // /**
+  //  * [isMoved] 블록 이동 시작
+  //  */
+  // const startMovingBlock = useCallback(() => {
+  //   if (movingTargetBlock) {
+  //     isMoved.current = true;
+  //   }
+  // }, [movingTargetBlock]);
+  // /**
+  //  * [isMoved]  블록의 위치를 변경하고, 변경된 위치에 따라 page의 data도 변경하는 함수
+  //  */
+  // const changeBlockPosition = useCallback(() => {
+  //   if (
+  //     pointBlockToMoveBlock.current &&
+  //     movingTargetBlock &&
+  //     page.blocksId &&
+  //     page.blocks &&
+  //     page.firstBlocksId
+  //   ) {
+  //     const FIRST_BLOCKS_ID = [...page.firstBlocksId];
+  //     setTemplateItem(templateHtml, page);
+  //     //edit block
+  //     const editTime = getEditTime();
+  //     const blocksId = [...page.blocksId];
+  //     const blocks = [...page.blocks];
+  //     const pointBlock = pointBlockToMoveBlock.current;
+  //     const targetBlockIsList =
+  //       movingTargetBlock.type === "numberList" ||
+  //       movingTargetBlock.type === "bulletList";
+  //     const newBlock = makeNewBlock(page, null);
+  //     const newParentBlockOfList: Block = {
+  //       ...newBlock,
+  //       firstBlock: pointBlock.firstBlock,
+  //       type:
+  //         movingTargetBlock.type === "numberList"
+  //           ? "numberListArr"
+  //           : "bulletListArr",
+  //       subBlocksId: [movingTargetBlock.id],
+  //       parentBlocksId: pointBlock.parentBlocksId,
+  //     };
+  //     /**
+  //      * 이동의 타켓이 되는 block으로 이동으로 인해 변경한 data를 가짐
+  //      */
+  //     const targetBlock: Block = targetBlockIsList
+  //       ? {
+  //           ...movingTargetBlock,
+  //           firstBlock: false,
+  //           parentBlocksId: newParentBlockOfList.parentBlocksId
+  //             ? newParentBlockOfList.parentBlocksId.concat(
+  //                 newParentBlockOfList.id
+  //               )
+  //             : [newParentBlockOfList.id],
+  //           editTime: editTime,
+  //         }
+  //       : {
+  //           ...movingTargetBlock,
+  //           firstBlock: pointBlock.firstBlock,
+  //           parentBlocksId: pointBlock.parentBlocksId,
+  //           editTime: editTime,
+  //         };
 
-      /**
-       * targetBlock의 subBlock가 존재할 경우, subBlock들의 parentBlocksId에서 특정 id를 제거하거나 다른 id로 변경하는 함수
-       * @param targetBlock parentBlocksId를 변경할 subBlock 들의 parentBlock
-       * @param parentBlockId subBlocks 들의 parentBlocksId에서 제거해야할 id
-       * @param newParentBlockId  subBlocks 들의 parentBlocksId에서 parentBlockId(parameter)와 변경되어야할 새로운 parentBlockId
-       */
-      const deleteParentBlocksIdFromSubBlock = (
-        targetBlock: Block,
-        parentBlockId: string,
-        newParentBlockId: string | null
-      ) => {
-        const editTime = getEditTime();
+  //     /**
+  //      * targetBlock의 subBlock가 존재할 경우, subBlock들의 parentBlocksId에서 특정 id를 제거하거나 다른 id로 변경하는 함수
+  //      * @param targetBlock parentBlocksId를 변경할 subBlock 들의 parentBlock
+  //      * @param parentBlockId subBlocks 들의 parentBlocksId에서 제거해야할 id
+  //      * @param newParentBlockId  subBlocks 들의 parentBlocksId에서 parentBlockId(parameter)와 변경되어야할 새로운 parentBlockId
+  //      */
+  //     const deleteParentBlocksIdFromSubBlock = (
+  //       targetBlock: Block,
+  //       parentBlockId: string,
+  //       newParentBlockId: string | null
+  //     ) => {
+  //       const editTime = getEditTime();
 
-        if (targetBlock.subBlocksId) {
-          targetBlock.subBlocksId.forEach((id: string) => {
-            const subBlocksIndex = blocksId.indexOf(id);
-            const subBlock = blocks[subBlocksIndex];
-            const parentBlocksId = [...(subBlock.parentBlocksId as string[])];
-            const parentBlockIndex = parentBlocksId.indexOf(parentBlockId);
-            if (targetBlockIsList && newParentBlockId) {
-              parentBlocksId.splice(parentBlockIndex, 1, newParentBlockId);
-            } else {
-              parentBlocksId.splice(parentBlockIndex, 1);
-            }
-            const editedSubBlock: Block = {
-              ...subBlock,
-              parentBlocksId: parentBlockId[0] ? parentBlocksId : null,
-              editTime: editTime,
-            };
-            editBlock(page.id, editedSubBlock);
-            subBlock.subBlocksId &&
-              deleteParentBlocksIdFromSubBlock(
-                subBlock,
-                parentBlockId,
-                newParentBlockId
-              );
-          });
-        }
-      };
+  //       if (targetBlock.subBlocksId) {
+  //         targetBlock.subBlocksId.forEach((id: string) => {
+  //           const subBlocksIndex = blocksId.indexOf(id);
+  //           const subBlock = blocks[subBlocksIndex];
+  //           const parentBlocksId = [...(subBlock.parentBlocksId as string[])];
+  //           const parentBlockIndex = parentBlocksId.indexOf(parentBlockId);
+  //           if (targetBlockIsList && newParentBlockId) {
+  //             parentBlocksId.splice(parentBlockIndex, 1, newParentBlockId);
+  //           } else {
+  //             parentBlocksId.splice(parentBlockIndex, 1);
+  //           }
+  //           const editedSubBlock: Block = {
+  //             ...subBlock,
+  //             parentBlocksId: parentBlockId[0] ? parentBlocksId : null,
+  //             editTime: editTime,
+  //           };
+  //           editBlock(page.id, editedSubBlock);
+  //           subBlock.subBlocksId &&
+  //             deleteParentBlocksIdFromSubBlock(
+  //               subBlock,
+  //               parentBlockId,
+  //               newParentBlockId
+  //             );
+  //         });
+  //       }
+  //     };
 
-      if (pointBlock.firstBlock) {
-        const pointBlock_firstBlockIndex = FIRST_BLOCKS_ID?.indexOf(
-          pointBlock.id
-        ) as number;
-        if (targetBlock.firstBlock) {
-          const firstBlockIndex = FIRST_BLOCKS_ID.indexOf(targetBlock.id);
-          FIRST_BLOCKS_ID.splice(firstBlockIndex, 1);
-          FIRST_BLOCKS_ID.splice(pointBlock_firstBlockIndex, 0, targetBlock.id);
-        } else {
-          //edit targetBlock's  origin parentBlock
-          const { parentBlock } = findParentBlock(page, moveTargetBlock);
-          if (parentBlock.subBlocksId) {
-            const editedParentBlock: Block = {
-              ...parentBlock,
-              subBlocksId: parentBlock.subBlocksId.filter(
-                (id: string) => id !== targetBlock.id
-              ),
-              editTime: editTime,
-            };
-            editBlock(page.id, editedParentBlock);
-          }
-          // edit targetBlock.subBlocksId
-          if (targetBlock.subBlocksId) {
-            deleteParentBlocksIdFromSubBlock(
-              targetBlock,
-              parentBlock.id,
-              targetBlockIsList ? newParentBlockOfList.id : null
-            );
-          }
-          //add first Blocks
-          if (targetBlockIsList) {
-            const preBlockId = FIRST_BLOCKS_ID[pointBlock_firstBlockIndex - 1];
-            const preBlockIndexInBlocksId = page.blocksId.indexOf(preBlockId);
-            addBlock(
-              page.id,
-              newParentBlockOfList,
-              preBlockIndexInBlocksId + 1,
-              preBlockId
-            );
-            FIRST_BLOCKS_ID.splice(
-              pointBlock_firstBlockIndex,
-              0,
-              newParentBlockOfList.id
-            );
-          } else {
-            FIRST_BLOCKS_ID.splice(
-              pointBlock_firstBlockIndex,
-              0,
-              targetBlock.id
-            );
-          }
+  //     if (pointBlock.firstBlock) {
+  //       const pointBlock_firstBlockIndex = FIRST_BLOCKS_ID?.indexOf(
+  //         pointBlock.id
+  //       ) as number;
+  //       if (targetBlock.firstBlock) {
+  //         const firstBlockIndex = FIRST_BLOCKS_ID.indexOf(targetBlock.id);
+  //         FIRST_BLOCKS_ID.splice(firstBlockIndex, 1);
+  //         FIRST_BLOCKS_ID.splice(pointBlock_firstBlockIndex, 0, targetBlock.id);
+  //       } else {
+  //         //edit targetBlock's  origin parentBlock
+  //         const { parentBlock } = findParentBlock(page, movingTargetBlock);
+  //         if (parentBlock.subBlocksId) {
+  //           const editedParentBlock: Block = {
+  //             ...parentBlock,
+  //             subBlocksId: parentBlock.subBlocksId.filter(
+  //               (id: string) => id !== targetBlock.id
+  //             ),
+  //             editTime: editTime,
+  //           };
+  //           editBlock(page.id, editedParentBlock);
+  //         }
+  //         // edit targetBlock.subBlocksId
+  //         if (targetBlock.subBlocksId) {
+  //           deleteParentBlocksIdFromSubBlock(
+  //             targetBlock,
+  //             parentBlock.id,
+  //             targetBlockIsList ? newParentBlockOfList.id : null
+  //           );
+  //         }
+  //         //add first Blocks
+  //         if (targetBlockIsList) {
+  //           const preBlockId = FIRST_BLOCKS_ID[pointBlock_firstBlockIndex - 1];
+  //           const preBlockIndexInBlocksId = page.blocksId.indexOf(preBlockId);
+  //           addBlock(
+  //             page.id,
+  //             newParentBlockOfList,
+  //             preBlockIndexInBlocksId + 1,
+  //             preBlockId
+  //           );
+  //           FIRST_BLOCKS_ID.splice(
+  //             pointBlock_firstBlockIndex,
+  //             0,
+  //             newParentBlockOfList.id
+  //           );
+  //         } else {
+  //           FIRST_BLOCKS_ID.splice(
+  //             pointBlock_firstBlockIndex,
+  //             0,
+  //             targetBlock.id
+  //           );
+  //         }
 
-          editBlock(page.id, targetBlock);
-        }
-      }
-      //case2. pointBlock is subBlock : pointBlock의 parentBlock의 subBlock 으로 이동
-      if (!pointBlock.firstBlock) {
-        const parentBlockOfPointBlock = findParentBlock(
-          page,
-          pointBlock
-        ).parentBlock;
-        //STEP1. targetBlock이 firstBlock일 경우 page의 firstBlocksId에서 삭제, 아닐 경우 targetBlock의 parentBlock을 수정
-        if (targetBlock.firstBlock) {
-          const firstBlocksIdIndex = FIRST_BLOCKS_ID.indexOf(targetBlock.id);
-          FIRST_BLOCKS_ID.splice(firstBlocksIdIndex, 1);
-        } else {
-          /**
-           * moveTargetBlock의 parentBlock 으로 , targetBlock은 블록의 이동에 따라  moveTargetBlock에서 data를 변경한 것이기 때문에 targetBlock의 parent가 아닌 moveTargetBlock의 parent여야함
-           */
-          const moveTargetBlockParent: Block = findParentBlock(
-            page,
-            moveTargetBlock
-          ).parentBlock;
-          if (moveTargetBlockParent.id !== parentBlockOfPointBlock.id) {
-            const subBlocksId = moveTargetBlockParent.subBlocksId;
-            if (subBlocksId) {
-              const subBlockIndex = subBlocksId.indexOf(targetBlock.id);
-              subBlocksId.splice(subBlockIndex, 1);
-              const newTargetBlockParent: Block = {
-                ...moveTargetBlockParent,
-                subBlocksId: subBlocksId,
-                editTime: editTime,
-              };
-              editBlock(page.id, newTargetBlockParent);
-            }
-          } else {
-            // step2-2에서 실행
-          }
-        }
+  //         editBlock(page.id, targetBlock);
+  //       }
+  //     }
+  //     //case2. pointBlock is subBlock : pointBlock의 parentBlock의 subBlock 으로 이동
+  //     if (!pointBlock.firstBlock) {
+  //       const parentBlockOfPointBlock = findParentBlock(
+  //         page,
+  //         pointBlock
+  //       ).parentBlock;
+  //       //STEP1. targetBlock이 firstBlock일 경우 page의 firstBlocksId에서 삭제, 아닐 경우 targetBlock의 parentBlock을 수정
+  //       if (targetBlock.firstBlock) {
+  //         const firstBlocksIdIndex = FIRST_BLOCKS_ID.indexOf(targetBlock.id);
+  //         FIRST_BLOCKS_ID.splice(firstBlocksIdIndex, 1);
+  //       } else {
+  //         /**
+  //          * movingTargetBlock의 parentBlock 으로 , targetBlock은 블록의 이동에 따라  movingTargetBlock에서 data를 변경한 것이기 때문에 targetBlock의 parent가 아닌 movingTargetBlock의 parent여야함
+  //          */
+  //         const movingTargetBlockParent: Block = findParentBlock(
+  //           page,
+  //           movingTargetBlock
+  //         ).parentBlock;
+  //         if (movingTargetBlockParent.id !== parentBlockOfPointBlock.id) {
+  //           const subBlocksId = movingTargetBlockParent.subBlocksId;
+  //           if (subBlocksId) {
+  //             const subBlockIndex = subBlocksId.indexOf(targetBlock.id);
+  //             subBlocksId.splice(subBlockIndex, 1);
+  //             const newTargetBlockParent: Block = {
+  //               ...movingTargetBlockParent,
+  //               subBlocksId: subBlocksId,
+  //               editTime: editTime,
+  //             };
+  //             editBlock(page.id, newTargetBlockParent);
+  //           }
+  //         } else {
+  //           // step2-2에서 실행
+  //         }
+  //       }
 
-        //STEP2. edit parentBlock of pointBlock : 위치 변경에 따라 targetBlock or newParentBlockOfTargetBlock을 parentBlockOfPoint 의 subBlocksId 에 추가 , targetBlockIsList 일 경우 , newParentBlockOfTargetBlock을 페이지에 생성
+  //       //STEP2. edit parentBlock of pointBlock : 위치 변경에 따라 targetBlock or newParentBlockOfTargetBlock을 parentBlockOfPoint 의 subBlocksId 에 추가 , targetBlockIsList 일 경우 , newParentBlockOfTargetBlock을 페이지에 생성
 
-        // step2-1 : targetBlockIsList 일때, newParentBlockOfTargetBlock을 페이지에 추가
-        if (targetBlockIsList && parentBlockOfPointBlock.subBlocksId) {
-          const pointBlockIndex = blocksId.indexOf(pointBlock.id);
-          const pointBlockIndexAsSub =
-            parentBlockOfPointBlock.subBlocksId.indexOf(pointBlock.id);
-          if (pointBlockIndexAsSub === 0) {
-            addBlock(page.id, newParentBlockOfList, pointBlockIndex - 1, null);
-          } else {
-            const previousBlockId =
-              parentBlockOfPointBlock.subBlocksId[pointBlockIndexAsSub - 1];
-            addBlock(
-              page.id,
-              newParentBlockOfList,
-              pointBlockIndex - 1,
-              previousBlockId
-            );
-          }
-        }
-        //step2-2 : targetBlock을 subBlocksId에 추가
-        if (!targetBlockIsList && parentBlockOfPointBlock.subBlocksId) {
-          const parentBlockSubBlocksId = [
-            ...parentBlockOfPointBlock.subBlocksId,
-          ];
-          if (parentBlockSubBlocksId.includes(targetBlock.id)) {
-            // 이미 targetBlock 이 parentBlockOfPointBlock 에 있는 경우, parentBlock에서 targetBlock을 삭제
-            const targetBlockSubIndex = parentBlockSubBlocksId.indexOf(
-              targetBlock.id
-            );
-            parentBlockSubBlocksId.splice(targetBlockSubIndex, 1);
-          }
-          const subBlockIndex = parentBlockSubBlocksId.indexOf(pointBlock.id);
-          parentBlockSubBlocksId.splice(subBlockIndex, 0, targetBlock.id);
-          const newParentBlock: Block = {
-            ...parentBlockOfPointBlock,
-            subBlocksId: parentBlockSubBlocksId,
-            editTime: editTime,
-          };
-          editBlock(page.id, newParentBlock);
-        }
-        //STEP3.targetBlock의 subBlocks의 parentBlocksId 수정
-        const addParentBlockToSubBlock = (targetBlock: Block) => {
-          if (targetBlock.subBlocksId) {
-            targetBlock.subBlocksId.forEach((id: string) => {
-              const subBlockIndex = blocksId.indexOf(id);
-              const subBlock = blocks[subBlockIndex];
-              if (targetBlock.parentBlocksId) {
-                const newSubBlock: Block = {
-                  ...subBlock,
-                  parentBlocksId: subBlock.parentBlocksId
-                    ? targetBlock.parentBlocksId.concat(targetBlock.id)
-                    : null,
-                };
-                editBlock(page.id, newSubBlock);
-              }
-              subBlock.subBlocksId && addParentBlockToSubBlock(subBlock);
-            });
-          }
-        };
+  //       // step2-1 : targetBlockIsList 일때, newParentBlockOfTargetBlock을 페이지에 추가
+  //       if (targetBlockIsList && parentBlockOfPointBlock.subBlocksId) {
+  //         const pointBlockIndex = blocksId.indexOf(pointBlock.id);
+  //         const pointBlockIndexAsSub =
+  //           parentBlockOfPointBlock.subBlocksId.indexOf(pointBlock.id);
+  //         if (pointBlockIndexAsSub === 0) {
+  //           addBlock(page.id, newParentBlockOfList, pointBlockIndex - 1, null);
+  //         } else {
+  //           const previousBlockId =
+  //             parentBlockOfPointBlock.subBlocksId[pointBlockIndexAsSub - 1];
+  //           addBlock(
+  //             page.id,
+  //             newParentBlockOfList,
+  //             pointBlockIndex - 1,
+  //             previousBlockId
+  //           );
+  //         }
+  //       }
+  //       //step2-2 : targetBlock을 subBlocksId에 추가
+  //       if (!targetBlockIsList && parentBlockOfPointBlock.subBlocksId) {
+  //         const parentBlockSubBlocksId = [
+  //           ...parentBlockOfPointBlock.subBlocksId,
+  //         ];
+  //         if (parentBlockSubBlocksId.includes(targetBlock.id)) {
+  //           // 이미 targetBlock 이 parentBlockOfPointBlock 에 있는 경우, parentBlock에서 targetBlock을 삭제
+  //           const targetBlockSubIndex = parentBlockSubBlocksId.indexOf(
+  //             targetBlock.id
+  //           );
+  //           parentBlockSubBlocksId.splice(targetBlockSubIndex, 1);
+  //         }
+  //         const subBlockIndex = parentBlockSubBlocksId.indexOf(pointBlock.id);
+  //         parentBlockSubBlocksId.splice(subBlockIndex, 0, targetBlock.id);
+  //         const newParentBlock: Block = {
+  //           ...parentBlockOfPointBlock,
+  //           subBlocksId: parentBlockSubBlocksId,
+  //           editTime: editTime,
+  //         };
+  //         editBlock(page.id, newParentBlock);
+  //       }
+  //       //STEP3.targetBlock의 subBlocks의 parentBlocksId 수정
+  //       const addParentBlockToSubBlock = (targetBlock: Block) => {
+  //         if (targetBlock.subBlocksId) {
+  //           targetBlock.subBlocksId.forEach((id: string) => {
+  //             const subBlockIndex = blocksId.indexOf(id);
+  //             const subBlock = blocks[subBlockIndex];
+  //             if (targetBlock.parentBlocksId) {
+  //               const newSubBlock: Block = {
+  //                 ...subBlock,
+  //                 parentBlocksId: subBlock.parentBlocksId
+  //                   ? targetBlock.parentBlocksId.concat(targetBlock.id)
+  //                   : null,
+  //               };
+  //               editBlock(page.id, newSubBlock);
+  //             }
+  //             subBlock.subBlocksId && addParentBlockToSubBlock(subBlock);
+  //           });
+  //         }
+  //       };
 
-        if (targetBlock.subBlocksId && targetBlock.parentBlocksId) {
-          if (moveTargetBlock.parentBlocksId) {
-            moveTargetBlock.parentBlocksId[
-              moveTargetBlock.parentBlocksId.length - 1
-            ] !==
-              targetBlock.parentBlocksId[
-                targetBlock.parentBlocksId.length - 1
-              ] && addParentBlockToSubBlock(targetBlock);
-          } else {
-            addParentBlockToSubBlock(targetBlock);
-          }
-        }
-        //STEP4. targetBlock 수정
-        editBlock(page.id, targetBlock);
-      }
-      const editedPage = findPage(pagesId, pages, page.id);
-      const newPage: Page = {
-        ...editedPage,
-        firstBlocksId: FIRST_BLOCKS_ID,
-      };
-      setTemplateItem(templateHtml, page);
-      editPage(page.id, newPage);
-    }
-  }, [
-    addBlock,
-    editBlock,
-    editPage,
-    moveTargetBlock,
-    page,
-    pages,
-    pagesId,
-    templateHtml,
-  ]);
-  /**
-   * [isMoved] block의 위치를 변경 시키는 것이 끝났을 때 (mouseUp | touchEnd) , 사용자가 지정한 위치대로 state를 변경하고 블록의 위치 변동을 위해 설정한 모든 것을 원래대로 되돌리는 함수
-   */
-  const stopMovingBlock = useCallback(() => {
-    if (isMoved.current) {
-      changeBlockPosition();
-      isMoved.current = false;
-      setMoveTargetBlock(null);
-      pointBlockToMoveBlock.current = null;
-      const mainBlockOn = document.querySelector(".mainBlock.on");
-      mainBlockOn?.classList.remove("on");
-      const editableBlockOn = document.querySelector(".editableBlock.on");
-      editableBlockOn?.classList.remove("on");
-    }
-  }, [changeBlockPosition]);
-  /**
-   * [isMoved] 마우스, 터치의 이동에 따라 moveTargetBlock을 이동시키는 함수
-   * @param clientX mouseEvent.clientX | touchEvent.touches[0].clientX
-   * @param clientY mouseEvent.clientY | touchEvent.touches[0].clientY
-   */
-  const move_MoveTargetBlock = useCallback(
-    (clientX: number, clientY: number) => {
-      if (moveTargetBlock && isMoved.current) {
-        const editor = document.querySelector(".editor");
-        const moveTargetBlockHtml = document.getElementById("moveTargetBlock");
-        if (moveTargetBlockHtml && editor) {
-          moveTargetBlockHtml.setAttribute(
-            "style",
-            `position:absolute; top:${clientY + editor.scrollTop + 5}px; left:${
-              clientX + 5
-            }px`
-          );
-        }
-      }
-    },
-    [moveTargetBlock]
-  );
-  /**
-   * [isMoved - mobile] 모바일 브라우저에서, moveTargetBlock의 위치를 변경시키고 moveTargetBlock의 위치에 있는 element인지 여부에 따라 클래스를 변경하고, pointBlockToMoveBlock.current 의 value를 바꾸는 함수
-   * @param event
-   */
-  const move_MoveTargetBlockInMobile = useCallback(
-    (event: TouchEvent<HTMLDivElement>) => {
-      if (isMoved.current) {
-        const clientX = event.touches[0].clientX;
-        const clientY = event.touches[0].clientY;
-        frameHtml?.scrollTo(0, clientY);
-        document.querySelectorAll(".mainBlock").forEach((element) => {
-          const domRect = element.getClientRects()[0];
-          const isPointBlock =
-            domRect.top <= clientY && domRect.bottom >= clientY;
-          if (isPointBlock) {
-            element.classList.add("on");
-            const blockId = element.closest(".block")?.id.replace("block-", "");
-            if (blockId) {
-              pointBlockToMoveBlock.current = findBlock(page, blockId).BLOCK;
-            }
-          } else {
-            element.classList.contains("on") && element.classList.remove("on");
-          }
-        });
-        move_MoveTargetBlock(clientX, clientY);
-      }
-    },
-    [move_MoveTargetBlock, page, frameHtml]
-  );
+  //       if (targetBlock.subBlocksId && targetBlock.parentBlocksId) {
+  //         if (movingTargetBlock.parentBlocksId) {
+  //           movingTargetBlock.parentBlocksId[
+  //             movingTargetBlock.parentBlocksId.length - 1
+  //           ] !==
+  //             targetBlock.parentBlocksId[
+  //               targetBlock.parentBlocksId.length - 1
+  //             ] && addParentBlockToSubBlock(targetBlock);
+  //         } else {
+  //           addParentBlockToSubBlock(targetBlock);
+  //         }
+  //       }
+  //       //STEP4. targetBlock 수정
+  //       editBlock(page.id, targetBlock);
+  //     }
+  //     const editedPage = findPage(pagesId, pages, page.id);
+  //     const newPage: Page = {
+  //       ...editedPage,
+  //       firstBlocksId: FIRST_BLOCKS_ID,
+  //     };
+  //     setTemplateItem(templateHtml, page);
+  //     editPage(page.id, newPage);
+  //   }
+  // }, [
+  //   addBlock,
+  //   editBlock,
+  //   editPage,
+  //   movingTargetBlock,
+  //   page,
+  //   pages,
+  //   pagesId,
+  //   templateHtml,
+  // ]);
+  // /**
+  //  * [isMoved] block의 위치를 변경 시키는 것이 끝났을 때 (mouseUp | touchEnd) , 사용자가 지정한 위치대로 state를 변경하고 블록의 위치 변동을 위해 설정한 모든 것을 원래대로 되돌리는 함수
+  //  */
+  // const stopMovingBlock = useCallback(() => {
+  //   if (isMoved.current) {
+  //     changeBlockPosition();
+  //     isMoved.current = false;
+  //     setMovingTargetBlock(null);
+  //     pointBlockToMoveBlock.current = null;
+  //     const mainBlockOn = document.querySelector(".mainBlock.on");
+  //     mainBlockOn?.classList.remove("on");
+  //     const editableBlockOn = document.querySelector(".editableBlock.on");
+  //     editableBlockOn?.classList.remove("on");
+  //   }
+  // }, [changeBlockPosition]);
+  // /**
+  //  * [isMoved] 마우스, 터치의 이동에 따라 movingTargetBlock을 이동시키는 함수
+  //  * @param clientX mouseEvent.clientX | touchEvent.touches[0].clientX
+  //  * @param clientY mouseEvent.clientY | touchEvent.touches[0].clientY
+  //  */
+  // const move_MovingTargetBlock = useCallback(
+  //   (clientX: number, clientY: number) => {
+  //     if (movingTargetBlock && isMoved.current) {
+  //       const editor = document.querySelector(".editor");
+  //       const movingTargetBlockHtml =
+  //         document.getElementById("movingTargetBlock");
+  //       if (movingTargetBlockHtml && editor) {
+  //         movingTargetBlockHtml.setAttribute(
+  //           "style",
+  //           `position:absolute; top:${clientY + editor.scrollTop + 5}px; left:${
+  //             clientX + 5
+  //           }px`
+  //         );
+  //       }
+  //     }
+  //   },
+  //   [movingTargetBlock]
+  // );
+  // /**
+  //  * [isMoved - mobile] 모바일 브라우저에서, movingTargetBlock의 위치를 변경시키고 movingTargetBlock의 위치에 있는 element인지 여부에 따라 클래스를 변경하고, pointBlockToMoveBlock.current 의 value를 바꾸는 함수
+  //  * @param event
+  //  */
+  // const move_MovingTargetBlockInMobile = useCallback(
+  //   (event: TouchEvent<HTMLDivElement>) => {
+  //     if (isMoved.current) {
+  //       const clientX = event.touches[0].clientX;
+  //       const clientY = event.touches[0].clientY;
+  //       frameHtml?.scrollTo(0, clientY);
+  //       document.querySelectorAll(".mainBlock").forEach((element) => {
+  //         const domRect = element.getClientRects()[0];
+  //         const isPointBlock =
+  //           domRect.top <= clientY && domRect.bottom >= clientY;
+  //         if (isPointBlock) {
+  //           element.classList.add("on");
+  //           const blockId = element.closest(".block")?.id.replace("block-", "");
+  //           if (blockId) {
+  //             pointBlockToMoveBlock.current = findBlock(page, blockId).BLOCK;
+  //           }
+  //         } else {
+  //           element.classList.contains("on") && element.classList.remove("on");
+  //         }
+  //       });
+  //       move_MovingTargetBlock(clientX, clientY);
+  //     }
+  //   },
+  //   [move_MovingTargetBlock, page, frameHtml]
+  // );
   // edit block using sessionStorage
   const updateBlock = useCallback(() => {
     const item = sessionStorage.getItem(SESSION_KEY.blockToBeEdited);
@@ -735,6 +743,7 @@ const Frame = ({
       }
     }
   }, [openComment, setCommentBlock, setItemForMobileMenu, setOpenComment]);
+
   useEffect(() => {
     window.addEventListener("resize", changeCBSposition);
     return () => window.removeEventListener("resize", changeCBSposition);
@@ -787,7 +796,7 @@ const Frame = ({
   //     modal.open ||
   //     openLoader ||
   //     openComment ||
-  //     moveTargetBlock ||
+  //     movingTargetBlock ||
   //     selection
   //   ) {
   //     !frameRef.current?.classList.contains("stop") &&
@@ -801,7 +810,7 @@ const Frame = ({
   //   command.open,
   //   openLoader,
   //   openComment,
-  //   moveTargetBlock,
+  //   movingTargetBlock,
   //   selection,
   // ]);
 
@@ -844,7 +853,7 @@ const Frame = ({
   useEffect(() => {
     if (
       (openComment && (mobileMenuTargetBlock || mobileSideMenu.what)) ||
-      moveTargetBlock
+      movingTargetBlock
     ) {
       if (mobileMenuTargetBlock) {
         setMobileMenuTargetBlock(null);
@@ -861,12 +870,12 @@ const Frame = ({
     mobileMenuTargetBlock,
     mobileSideMenu.what,
     setMobileSideMenu,
-    moveTargetBlock,
+    movingTargetBlock,
   ]);
 
   useEffect(() => {
-    isMoved.current = !!moveTargetBlock;
-  }, [moveTargetBlock]);
+    isMoved.current = !!movingTargetBlock;
+  }, [movingTargetBlock]);
 
   const changeOpenBlockFnModal = useCallback(() => {
     setOpenBlockFnModal(!(sideAppear === "lock" && window.innerWidth <= 768));
@@ -890,12 +899,6 @@ const Frame = ({
       } ${openExport ? "export__frame" : ""}`}
       style={frameStyle}
       ref={frameRef}
-      onMouseMove={(event) =>
-        move_MoveTargetBlock(event.clientX, event.clientY)
-      }
-      onMouseUp={stopMovingBlock}
-      onTouchMove={move_MoveTargetBlockInMobile}
-      onTouchEnd={stopMovingBlock}
     >
       <ModalContext.Provider
         value={{ changeModalState: (modal: ModalType) => setModal(modal) }}
@@ -915,9 +918,8 @@ const Frame = ({
           showAllComments={showAllComments}
           newPageFrame={newPageFrame}
           pointBlockToMoveBlock={pointBlockToMoveBlock}
-          makeMoveBlockTrue={makeMoveBlockTrue}
           isMoved={isMoved}
-          setMoveTargetBlock={setMoveTargetBlock}
+          setMovingTargetBlock={setMovingTargetBlock}
           command={command}
           setCommand={setCommand}
           openComment={openComment}
@@ -938,8 +940,8 @@ const Frame = ({
         <ModalPortal id="modal-blockFn" isOpen={openBlockFnModal}>
           <BlockFn
             page={page}
-            moveTargetBlock={moveTargetBlock}
-            setMoveTargetBlock={setMoveTargetBlock}
+            movingTargetBlock={movingTargetBlock}
+            setMovingTargetBlock={setMovingTargetBlock}
             modal={modal}
           />
         </ModalPortal>
@@ -951,6 +953,7 @@ const Frame = ({
           userName={userName}
           frameHtml={frameHtml}
           templateHtml={templateHtml}
+          fontSize={fontSize}
           modal={modal}
           setModal={setModal}
           closeModal={closeModal}
@@ -958,6 +961,16 @@ const Frame = ({
           editPage={editPage}
         />
       </ModalContext.Provider>
+      <MovingBlockModal
+        isOpen={!!movingTargetBlock}
+        pages={pages}
+        pagesId={pagesId}
+        page={page}
+        templateHtml={templateHtml}
+        block={movingTargetBlock}
+        fontSize={fontSize}
+        closeModal={() => setMovingTargetBlock(null)}
+      />
       {/* modal - others */}
       {/* 
       <ModalPortal isOpen={modal.open}>

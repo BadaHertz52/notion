@@ -52,6 +52,7 @@ import CommandModal from "./modal/CommandModal";
 import FameModal from "./modal/FrameModal";
 import LoaderModal from "./modal/LoaderModal";
 import ModalPortal from "./modal/ModalPortal";
+import MovingBlockModal from "./modal/MovingBlockModal";
 import SideBarModal from "./modal/SideBarModal";
 //notion
 import Notion from "./notion/Notion";
@@ -152,6 +153,7 @@ export {
   FameModal,
   LoaderModal,
   ModalPortal,
+  MovingBlockModal,
   SideBarModal,
   Editor,
   AllComments,

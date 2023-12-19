@@ -120,10 +120,10 @@ export function findBlock(
  * @param subBlock  parentBlock을 찾는데 기준이 되는 subBlock
  * @returns parentBlockIndex: parentBlock의 page.blocks에서의 index, parentBloc: 찾고자 한 parentBlock
  */
-export function findParentBlock(
+export const findParentBlock = (
   page: Page,
   subBlock: Block
-): { parentBlockIndex: number; parentBlock: Block } {
+): { parentBlockIndex: number; parentBlock: Block } => {
   const parentBlocksId = subBlock.parentBlocksId as string[];
   const last: number = parentBlocksId.length - 1;
   const parentBlockId = parentBlocksId[last];
@@ -132,7 +132,7 @@ export function findParentBlock(
     parentBlockIndex: index,
     parentBlock: BLOCK,
   };
-}
+};
 
 /**
  * 페이지 상의 block(=@param block)의 앞에 있는 block(=previousBlockInDoc)를 찾는 함수
