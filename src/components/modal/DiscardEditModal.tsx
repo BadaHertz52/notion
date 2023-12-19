@@ -8,7 +8,7 @@ type DiscardEditModalProps = {
   discardEdit: () => void;
 };
 
-function DiscardEditModal({ ...props }: DiscardEditModalProps) {
+const DiscardEditModal = ({ ...props }: DiscardEditModalProps) => {
   return (
     <ModalPortal
       target="discardEdit"
@@ -22,6 +22,6 @@ function DiscardEditModal({ ...props }: DiscardEditModalProps) {
       />
     </ModalPortal>
   );
-}
+};
 
 export default React.memo(DiscardEditModal);

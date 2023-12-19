@@ -7,21 +7,13 @@ import React, {
   CSSProperties,
 } from "react";
 
-import {
-  ModalPortal,
-  Menu,
-  CommentInput,
-  Comments,
-  Rename,
-  CommandMenu,
-  MovingTargetBlock,
-} from "../index";
+import { ModalPortal, Menu, CommentInput, Comments, Rename } from "../index";
 import { CommentInputProps } from "../comment/CommentInput";
 import { MenuProps } from "../menu/Menu";
 import { RenameProps } from "../Rename";
 
 import { ModalType, Page } from "../../types";
-import { closeModal, findPage, getBlockDomRect, isInTarget } from "../../utils";
+import { findPage, getBlockDomRect, isInTarget } from "../../utils";
 import { EditableBlockProps } from "../block/EditableBlock";
 
 type ChildrenProps = MenuProps &
@@ -45,7 +37,8 @@ type FrameModalProps = Omit<
   modal: ModalType;
   closeModal: () => void;
 };
-function FrameModal({ ...props }: FrameModalProps) {
+
+const FrameModal = ({ ...props }: FrameModalProps) => {
   const { modal } = props;
   const ID = "modal-frame";
 
@@ -241,6 +234,6 @@ function FrameModal({ ...props }: FrameModalProps) {
       */}
     </ModalPortal>
   );
-}
+};
 
 export default React.memo(FrameModal);

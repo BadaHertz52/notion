@@ -47,6 +47,7 @@ type SideBarModalProps = {
     pages: TrashPage[] | null;
   };
 };
+
 const SideBarModal = ({ ...props }: SideBarModalProps) => {
   const { cleanRecentPage } = useContext(ActionContext).actions;
 

@@ -11,10 +11,8 @@ import MovingTargetBlock from "../block/MovingTargetBlock";
 import { ActionContext } from "../../contexts";
 import {
   findBlock,
-  findPage,
   findParentBlock,
   getBlockDomRect,
-  getBlockSample,
   getEditTime,
   makeNewBlock,
   setTemplateItem,
@@ -26,9 +24,9 @@ type MovingBlockModalProps = Omit<EditableBlockProps, "block"> & {
   isOpen: boolean;
   closeModal: () => void;
 };
-function MovingBlockModal({ ...props }: MovingBlockModalProps) {
-  const { addBlock, editBlock, editPage } = useContext(ActionContext).actions;
-  const { pages, pagesId, page, block } = props;
+const MovingBlockModal = ({ ...props }: MovingBlockModalProps) => {
+  const { editBlock, editPage } = useContext(ActionContext).actions;
+  const { page, block } = props;
   const [movingBlockStyle, setMovingBlockStyle] = useState<
     CSSProperties | undefined
   >(undefined);
@@ -131,9 +129,149 @@ function MovingBlockModal({ ...props }: MovingBlockModalProps) {
         });
       }
     },
-    [editBlock, page.id]
+    []
   );
 
+  const changeParentOfTargetBlock = useCallback(
+    (
+      blocksId: string[],
+      blocks: Block[],
+      targetBlock: Block,
+      editTime: string,
+      isListType: boolean,
+      firstBlocksId: string[]
+    ) => {
+      // block의 parentBlock 수정 과 그에 따른 subBlocks의 parentIds 수정
+      if (block?.parentBlocksId) {
+        //edit targetBlock's  origin parentBlock
+        const { parentBlock } = findParentBlock(page, block);
+        const indexOfParentBlock = blocksId.indexOf(parentBlock.id);
+
+        if (parentBlock.subBlocksId) {
+          const newSubBlocksId = parentBlock.subBlocksId.filter(
+            (id: string) => id !== targetBlock.id
+          );
+          const editedParentBlock: Block = {
+            ...parentBlock,
+            subBlocksId: newSubBlocksId[0] ? newSubBlocksId : null,
+            editTime: editTime,
+          };
+
+          if (!editedParentBlock.subBlocksId && isListType) {
+            blocks.splice(indexOfParentBlock, 1);
+            blocksId.splice(indexOfParentBlock, 1);
+
+            const firstIndex = firstBlocksId.indexOf(parentBlock.id);
+            if (firstIndex) firstBlocksId.splice(firstIndex, 1);
+          } else {
+            blocks.splice(indexOfParentBlock, 1, editedParentBlock);
+          }
+        }
+
+        if (block.subBlocksId) {
+          deleteParentBlocksIdFromSubBlock(
+            blocksId,
+            blocks,
+            isListType,
+            targetBlock,
+            parentBlock.id
+          );
+        }
+      }
+    },
+    [deleteParentBlocksIdFromSubBlock, block, page]
+  );
+
+  const changeParentOfPointBlock = useCallback(
+    (
+      pointBlock: Block,
+      blocks: Block[],
+      blocksId: string[],
+      targetBlock: Block
+    ) => {
+      const parentBlockOfPointBlock = findParentBlock(
+        page,
+        pointBlock
+      ).parentBlock;
+      const indexOfParentBlockOfPointBlock = blocksId.indexOf(
+        parentBlockOfPointBlock.id
+      );
+      const newSubBlocksId = parentBlockOfPointBlock.subBlocksId as string[];
+      const indexOfParentBlock = newSubBlocksId.indexOf(pointBlock.id);
+      newSubBlocksId.splice(indexOfParentBlock, 0, targetBlock.id);
+      const newParentBlockOfPointBlock: Block = {
+        ...parentBlockOfPointBlock,
+        subBlocksId: newSubBlocksId,
+      };
+      blocks.splice(
+        indexOfParentBlockOfPointBlock,
+        1,
+        newParentBlockOfPointBlock
+      );
+    },
+    [page]
+  );
+
+  const changeFirstBlocks = useCallback(
+    (
+      firstBlocksId: string[],
+      blocks: Block[],
+      blocksId: string[],
+      targetBlock: Block,
+      pointBlock: Block,
+      isListType: boolean,
+      newParentBlockOfList: Block
+    ) => {
+      if (block?.firstBlock) {
+        const firstBlockIndex = firstBlocksId.indexOf(targetBlock.id);
+        firstBlocksId.splice(firstBlockIndex, 1);
+      }
+
+      if (pointBlock.firstBlock) {
+        if (targetBlock.firstBlock) {
+          const pointBlock_firstBlockIndex = firstBlocksId?.indexOf(
+            pointBlock.id
+          ) as number;
+          firstBlocksId.splice(pointBlock_firstBlockIndex, 0, targetBlock.id);
+        }
+
+        if (isListType) {
+          const pointBlock_firstBlockIndex = firstBlocksId?.indexOf(
+            pointBlock.id
+          ) as number;
+
+          firstBlocksId.splice(
+            pointBlock_firstBlockIndex,
+            0,
+            newParentBlockOfList.id
+          );
+          blocks.push(newParentBlockOfList);
+          blocksId.push(newParentBlockOfList.id);
+        }
+      }
+    },
+    [block?.firstBlock]
+  );
+
+  const changePage = useCallback(
+    (
+      blocks: Block[],
+      blocksId: string[],
+      editTime: string,
+      firstBlocksId: string[]
+    ) => {
+      const newPage: Page = {
+        ...page,
+        blocks: blocks,
+        blocksId: blocksId,
+        editTime: editTime,
+        firstBlocksId: firstBlocksId,
+      };
+      setTemplateItem(props.templateHtml, page);
+      editPage(page.id, newPage);
+    },
+    [editPage, page, props.templateHtml]
+  );
   /**
    * [isMoved]  블록의 위치를 변경하고, 변경된 위치에 따라 page의 data도 변경하는 함수
    */
@@ -146,8 +284,7 @@ function MovingBlockModal({ ...props }: MovingBlockModalProps) {
       page.blocks &&
       page.firstBlocksId
     ) {
-      const FIRST_BLOCKS_ID = [...page.firstBlocksId];
-      setTemplateItem(props.templateHtml, page);
+      const firstBlocksId = [...page.firstBlocksId];
       //edit block
       const editTime = getEditTime();
       const blocksId = [...page.blocksId];
@@ -182,116 +319,39 @@ function MovingBlockModal({ ...props }: MovingBlockModalProps) {
       blocks.splice(indexOfTargetBlocks, 1, targetBlock);
 
       // block의 parentBlock 수정 과 그에 따른 subBlocks의 parentIds 수정
-      if (block.parentBlocksId) {
-        //edit targetBlock's  origin parentBlock
-        const { parentBlock } = findParentBlock(page, block);
-        const indexOfParentBlock = blocksId.indexOf(parentBlock.id);
+      changeParentOfTargetBlock(
+        blocksId,
+        blocks,
+        targetBlock,
+        editTime,
+        isListType,
+        firstBlocksId
+      );
+      //firstBlocks 수정 (새로운 리스트 블록이 필요한 경우 해당 블록 추가)
+      changeFirstBlocks(
+        firstBlocksId,
+        blocks,
+        blocksId,
+        targetBlock,
+        pointBlock,
+        isListType,
+        newParentBlockOfList
+      );
 
-        if (parentBlock.subBlocksId) {
-          const newSubBlocksId = parentBlock.subBlocksId.filter(
-            (id: string) => id !== targetBlock.id
-          );
-          const editedParentBlock: Block = {
-            ...parentBlock,
-            subBlocksId: newSubBlocksId[0] ? newSubBlocksId : null,
-            editTime: editTime,
-          };
-
-          if (!editedParentBlock.subBlocksId && isListType) {
-            blocks.splice(indexOfParentBlock, 1);
-            blocksId.splice(indexOfParentBlock, 1);
-
-            const firstIndex = FIRST_BLOCKS_ID.indexOf(parentBlock.id);
-            if (firstIndex) FIRST_BLOCKS_ID.splice(firstIndex, 1);
-          } else {
-            blocks.splice(indexOfParentBlock, 1, editedParentBlock);
-          }
-        }
-
-        if (block.subBlocksId) {
-          deleteParentBlocksIdFromSubBlock(
-            blocksId,
-            blocks,
-            isListType,
-            targetBlock,
-            parentBlock.id
-          );
-        }
-      }
-
-      //
-      if (pointBlock.firstBlock) {
-        if (targetBlock.firstBlock) {
-          const firstBlockIndex = FIRST_BLOCKS_ID.indexOf(targetBlock.id);
-          FIRST_BLOCKS_ID.splice(firstBlockIndex, 1);
-
-          const pointBlock_firstBlockIndex = FIRST_BLOCKS_ID?.indexOf(
-            pointBlock.id
-          ) as number;
-
-          FIRST_BLOCKS_ID.splice(pointBlock_firstBlockIndex, 0, targetBlock.id);
-        } else {
-          //add first Blocks
-          if (isListType) {
-            const pointBlock_firstBlockIndex = FIRST_BLOCKS_ID?.indexOf(
-              pointBlock.id
-            ) as number;
-
-            FIRST_BLOCKS_ID.splice(
-              pointBlock_firstBlockIndex,
-              0,
-              newParentBlockOfList.id
-            );
-            blocks.push(newParentBlockOfList);
-            blocksId.push(newParentBlockOfList.id);
-          }
-        }
-      }
-
-      //case2. pointBlock is subBlock : pointBlock의 parentBlock의 subBlock 으로 이동
+      //pointBlock의 parentBlock의 subBlock 으로 이동 하는 경우
       if (!pointBlock.firstBlock) {
-        const parentBlockOfPointBlock = findParentBlock(
-          page,
-          pointBlock
-        ).parentBlock;
-        const indexOfParentBlockOfPointBlock = blocksId.indexOf(
-          parentBlockOfPointBlock.id
-        );
-        const newSubBlocksId = parentBlockOfPointBlock.subBlocksId as string[];
-        const indexOfParentBlock = newSubBlocksId.indexOf(pointBlock.id);
-        newSubBlocksId.splice(indexOfParentBlock, 0, targetBlock.id);
-        const newParentBlockOfPointBlock: Block = {
-          ...parentBlockOfPointBlock,
-          subBlocksId: newSubBlocksId,
-        };
-        blocks.splice(
-          indexOfParentBlockOfPointBlock,
-          1,
-          newParentBlockOfPointBlock
-        );
-        //STEP1. targetBlock이 firstBlock일 경우 page의 firstBlocksId에서 삭제, 아닐 경우 targetBlock의 parentBlock을 수정
-        if (block.firstBlock) {
-          const firstBlocksIdIndex = FIRST_BLOCKS_ID.indexOf(block.id);
-          FIRST_BLOCKS_ID.splice(firstBlocksIdIndex, 1);
-        }
+        changeParentOfPointBlock(pointBlock, blocks, blocksId, targetBlock);
       }
-      const newPage: Page = {
-        ...page,
-        blocks: blocks,
-        blocksId: blocksId,
-        editTime: editTime,
-        firstBlocksId: FIRST_BLOCKS_ID,
-      };
-      setTemplateItem(props.templateHtml, page);
-      editPage(page.id, newPage);
+      changePage(blocks, blocksId, editTime, firstBlocksId);
     }
   }, [
-    editPage,
+    changeFirstBlocks,
+    changeParentOfPointBlock,
+    changePage,
+    changeParentOfTargetBlock,
     block,
-    page,
-    props.templateHtml,
-    deleteParentBlocksIdFromSubBlock,
     findPointBlock,
+    page,
   ]);
 
   /**
@@ -338,6 +398,6 @@ function MovingBlockModal({ ...props }: MovingBlockModalProps) {
       )}
     </ModalPortal>
   );
-}
+};
 
 export default MovingBlockModal;
