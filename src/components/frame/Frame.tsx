@@ -381,13 +381,19 @@ const Frame = ({
           SELECTION?.anchorOffset === SELECTION?.focusOffset) ||
         SELECTION?.anchorNode?.nodeName !== "#text" ||
         SELECTION?.focusNode?.nodeName !== "#text";
-      if (!notSelect && SELECTION) {
-        if (openComment) {
-          setOpenComment(false);
-          setCommentBlock(null);
-        }
-        setItemForMobileMenu(SELECTION);
-      }
+      if (!notSelect)
+        setModal({
+          open: true,
+          target: "blockStyler",
+        });
+      //TODO -  모바일에서 메뉴 열리는 방식은 블럭 내 포커스가 가면 열리도록 수정
+      // if (!notSelect && SELECTION) {
+      //   if (openComment) {
+      //     setOpenComment(false);
+      //     setCommentBlock(null);
+      //   }
+      //   setItemForMobileMenu(SELECTION);
+      // }
     }
   }, [openComment, setCommentBlock, setItemForMobileMenu, setOpenComment]);
 
@@ -535,7 +541,7 @@ const Frame = ({
       window.removeEventListener("resize", changeOpenBlockFnModal);
     };
   }, [changeOpenBlockFnModal]);
-
+  //TODO - 삭제
   useEffect(() => {
     console.log("modal", modal);
   }, [modal]);
@@ -560,8 +566,6 @@ const Frame = ({
           fontSize={fontSize}
           openTemplates={openTemplates}
           templateHtml={templateHtml}
-          discardEdit={discardEdit}
-          setDiscardEdit={setDiscardEdit}
           showAllComments={showAllComments}
           newPageFrame={newPageFrame}
           pointBlockToMoveBlock={pointBlockToMoveBlock}

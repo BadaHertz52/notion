@@ -49,6 +49,7 @@ import MobileMenu from "./menu/MobileMenu";
 import MobileSideMenu from "./menu/MobileSideMenu";
 //modal
 import CommandModal from "./modals/CommandModal";
+import DiscardEditModal from "./modals/DiscardEditModal";
 import FameModal from "./modals/FrameModal";
 import LoaderModal from "./modals/LoaderModal";
 import ModalPortal from "./modals/ModalPortal";
@@ -150,6 +151,7 @@ export {
   FrameInner,
   //modal
   CommandModal,
+  DiscardEditModal,
   FameModal,
   LoaderModal,
   ModalPortal,

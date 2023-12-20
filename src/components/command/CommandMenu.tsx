@@ -3,8 +3,8 @@ import React, {
   SetStateAction,
   useContext,
   useCallback,
-  useRef,
   useEffect,
+  useState,
 } from "react";
 
 import { FcTodoList } from "react-icons/fc";
@@ -44,9 +44,8 @@ const CommandMenu = ({
   const { editBlock, changeBlockToPage, changePageToBlock, editPage } =
     useContext(ActionContext).actions;
   const imgSrc = imgIcon + "?&width=36$height=36";
-  const noResultRef = useRef<HTMLDivElement>(null);
-  const btnGroupRef = useRef<HTMLDivElement>(null);
 
+  const [noResult, setNoResult] = useState<boolean>(true);
   const getBtnClass = useCallback(
     (name: string, command: string | undefined) => {
       const BASE_NAME = "btn-command";
@@ -58,22 +57,6 @@ const CommandMenu = ({
     },
     []
   );
-
-  const showResult = useCallback(() => {
-    const btnArr = [...document.getElementsByClassName("btn-command")];
-    if (command) {
-      btnArr.forEach((btn: Element) => {
-        const name = btn.getAttribute("name");
-        if (name?.includes(command)) {
-          btn.setAttribute("class", "btn-command on");
-        } else {
-          btn.setAttribute("class", "btn-command");
-        }
-      });
-    } else {
-      btnArr.forEach((btn) => btn.setAttribute("class", "btn-command on"));
-    }
-  }, [command, noResultRef]);
   /**
    * block의 type 을 numberList 나 bulletList로 바꾸는 함수
    * @param editedBlock
@@ -285,12 +268,16 @@ const CommandMenu = ({
     closeCommandMenu();
   }, [changeType, closeCommandMenu]);
 
+  useEffect(() => {
+    setNoResult(!document.querySelectorAll(".btn-command.on")[0]);
+  }, [command]);
+
   return (
     <div id="commandMenu">
       <div className="inner">
         <div className="command type-basic">
           <header className="command__header">BASIC BLOCKS</header>
-          <div className="command__btn-group type" ref={btnGroupRef}>
+          <div className="command__btn-group type">
             <button
               onClick={() => changeType("text")}
               className={getBtnClass("text", command)}
@@ -447,11 +434,6 @@ const CommandMenu = ({
                 </div>
               </div>
             </button>
-          </div>
-        </div>
-        <div className="command type-media">
-          <header className="command__header">MEDIA</header>
-          <div className="command__btn-group type">
             <button
               className={getBtnClass("image photo", command)}
               onClick={onClickImgTypeBtn}
@@ -472,8 +454,8 @@ const CommandMenu = ({
           </div>
         </div>
       </div>
-      {command && (
-        <div className="no-result" id="commandMenu__noResult" ref={noResultRef}>
+      {noResult && (
+        <div className="no-result" id="commandMenu__noResult">
           No results
         </div>
       )}

@@ -1,6 +1,4 @@
 import React, {
-  Dispatch,
-  SetStateAction,
   useEffect,
   useRef,
   useState,
@@ -11,12 +9,11 @@ import React, {
 
 import { CSSProperties } from "styled-components";
 
-import { Comment, CommentToolMore } from "../index";
+import { Comment, CommentToolMore, DiscardEditModal } from "../index";
 
 import { Block, MainCommentType, Page } from "../../types";
 import { ActionContext } from "../../contexts";
 import { SESSION_KEY } from "../../constants";
-import DiscardEditModal from "../modal/DiscardEditModal";
 
 type CommentsProps = {
   /**

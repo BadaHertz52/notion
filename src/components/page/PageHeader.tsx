@@ -41,8 +41,6 @@ export type PageHeaderProps = {
   fontSize: number;
   openTemplates: boolean;
   templateHtml: HTMLElement | null;
-  discardEdit: boolean;
-  setDiscardEdit: Dispatch<SetStateAction<boolean>>;
   showAllComments: boolean;
   newPageFrame: boolean;
   handleImgLoad?: () => void;
@@ -55,8 +53,6 @@ function PageHeader({
   fontSize,
   openTemplates,
   templateHtml,
-  discardEdit,
-  setDiscardEdit,
   showAllComments,
   newPageFrame,
   handleImgLoad,
@@ -67,7 +63,7 @@ function PageHeader({
   );
   const { editPage, editBlock } = useContext(ActionContext).actions;
 
-  const [decoOpen, setDecoOpen] = useState<boolean>(true);
+  const [decoOpen, setDecoOpen] = useState<boolean>(false);
   const [openLoaderForCover, setOpenLoaderForCover] = useState<boolean>(false);
   const [openIconModal, setOpenIconModal] = useState<boolean>(false);
   const [openPageCommentInput, setOpenPageCommentInput] =

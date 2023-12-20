@@ -23,7 +23,6 @@ type ListSubProps = EditableBlockProps &
 const ListSub = ({ ...props }: ListSubProps) => {
   const { page, subBlocks } = props;
 
-  const blockContentsRef = useRef<HTMLDivElement>(null);
   const subBlocksId = subBlocks?.map((v) => v.id);
 
   const getListMarker = (subBlock: Block) => {
@@ -56,7 +55,6 @@ const ListSub = ({ ...props }: ListSubProps) => {
                 <div
                   id={`block-${subBlock.id}`}
                   className="block__contents"
-                  ref={blockContentsRef}
                   style={getListStyle(subBlock)}
                 >
                   {subBlock.type.includes("List") && (
