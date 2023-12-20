@@ -2,13 +2,13 @@
   "name": "notion",
   "version": "0.1.0",
   "private": true,
+  "description": "notion 클론 코딩",
+  "author": "badahertz52",
   "dependencies": {
-    "@testing-library/jest-dom": "^5.16.2",
-    "@testing-library/react": "^12.1.4",
-    "@testing-library/user-event": "^13.5.0",
     "@types/react-redux": "^7.1.23",
     "@types/react-virtualized": "^9.21.22",
     "@types/react-window": "^1.8.5",
+    "@types/styled-components": "^5.1.25",
     "node-html-markdown": "^1.2.0",
     "react": "^18.2.0",
     "react-contenteditable": "^3.3.6",
@@ -51,7 +51,9 @@
     ]
   },
   "devDependencies": {
-    "@types/styled-components": "^5.1.25",
+    "@testing-library/jest-dom": "^5.16.2",
+    "@testing-library/react": "^12.1.4",
+    "@testing-library/user-event": "^13.5.0",
     "gh-pages": "^4.0.0"
   },
   "homepage": "http://badaHertz52.github.io/notion"
