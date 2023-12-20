@@ -78,6 +78,16 @@
   z-index: 30;
 }
 
+#blockStyler__sideMenu {
+  position: relative;
+  #commandMenu {
+    margin: 0;
+  }
+  .menu {
+    position: relative;
+  }
+}
+
 #mobileMenu {
   #blockStyler {
     position: relative;

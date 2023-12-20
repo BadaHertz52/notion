@@ -16,32 +16,19 @@ import { PageHeaderProps } from "../page/PageHeader";
 import { EditableBlock, PageHeader, EmptyPageContent } from "../index";
 
 import { ActionContext, ModalContext } from "../../contexts";
-import { Block, Page, CommandType, SelectionType } from "../../types";
+import { Block, Page } from "../../types";
 import { setTemplateItem, getBlockSample, getNewBlockId } from "../../utils";
 
 export type FrameInnerProps = PageHeaderProps & {
-  openExport?: boolean;
   firstBlocks: Block[] | null;
   newPageFrame: boolean;
-  setOpenTemplates: Dispatch<SetStateAction<boolean>>;
   pages: Page[];
   pagesId: string[];
   page: Page;
   fontSize: number;
   frameRef: RefObject<HTMLDivElement>;
   templateHtml: HTMLElement | null;
-  isMoved: MutableRefObject<boolean>;
-  pointBlockToMoveBlock: MutableRefObject<Block | null>;
   setMovingTargetBlock: Dispatch<SetStateAction<Block | null>>;
-  command: CommandType;
-  setCommand: Dispatch<SetStateAction<CommandType>>;
-  openComment: boolean;
-  setOpenComment: Dispatch<SetStateAction<boolean>>;
-  setCommentBlock: Dispatch<SetStateAction<Block | null>>;
-  setOpenLoader: Dispatch<SetStateAction<boolean>>;
-  setLoaderTargetBlock: Dispatch<SetStateAction<Block | null>>;
-  closeMenu: (event: globalThis.MouseEvent | MouseEvent) => void;
-  setSelection: Dispatch<SetStateAction<SelectionType | null>>;
   setMobileMenuTargetBlock: Dispatch<SetStateAction<Block | null>>;
   mobileMenuTargetBlock: Block | null;
   frameInnerStyle: CSSProperties;
@@ -146,10 +133,7 @@ const FrameInner = (props: FrameInnerProps) => {
             style={{ height: bottomHeight }}
           ></div>
         ) : (
-          <EmptyPageContent
-            page={props.page}
-            setOpenTemplates={props.setOpenTemplates}
-          />
+          <EmptyPageContent page={props.page} />
         )}
       </div>
     </div>

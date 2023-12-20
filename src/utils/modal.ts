@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-
+//TODO -  삭제
 export const closeModal = (
   elementId: string,
   setState: Dispatch<SetStateAction<boolean>>,

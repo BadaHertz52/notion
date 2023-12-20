@@ -363,33 +363,35 @@ const MobileMenu = ({
             </button>
           </div>
         ) : (
+          //TODO -   수정
           sessionStorage.getItem(SESSION_KEY.mobileMenuTargetBlock) && (
-            <BlockStyler
-              pages={pages}
-              pagesId={pagesId}
-              firstList={firstList}
-              userName={userName}
-              page={page}
-              recentPagesId={recentPagesId}
-              block={
-                targetBlock
-                  ? targetBlock
-                  : JSON.parse(
-                      sessionStorage.getItem(
-                        SESSION_KEY.mobileMenuTargetBlock
-                      ) as string
-                    )
-              }
-              setModalStyle={setModalStyle}
-              command={command}
-              setCommand={setCommand}
-              setCommentBlock={setCommentBlock}
-              selection={null}
-              frameHtml={frameHtml}
-              setMobileSideMenu={setMobileSideMenu}
-              setMobileMenuTargetBlock={setMobileMenuTargetBlock}
-              setOpenMobileBlockStyler={setOpenMobileBlockStyler}
-            />
+            <div></div>
+            // <BlockStyler
+            //   pages={pages}
+            //   pagesId={pagesId}
+            //   firstList={firstList}
+            //   userName={userName}
+            //   page={page}
+            //   recentPagesId={recentPagesId}
+            //   block={
+            //     targetBlock
+            //       ? targetBlock
+            //       : JSON.parse(
+            //           sessionStorage.getItem(
+            //             SESSION_KEY.mobileMenuTargetBlock
+            //           ) as string
+            //         )
+            //   }
+            //   setModalStyle={setModalStyle}
+            //   command={command}
+            //   setCommand={setCommand}
+            //   setCommentBlock={setCommentBlock}
+            //   selection={null}
+            //   frameHtml={frameHtml}
+            //   setMobileSideMenu={setMobileSideMenu}
+            //   setMobileMenuTargetBlock={setMobileMenuTargetBlock}
+            //   setOpenMobileBlockStyler={setOpenMobileBlockStyler}
+            // />
           )
         )}
       </div>

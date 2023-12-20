@@ -17,7 +17,7 @@ import { IoMdCopy } from "react-icons/io";
 import { IoTrashOutline } from "react-icons/io5";
 
 import { ActionContext } from "../../contexts";
-import { Block, Page, SelectionType } from "../../types";
+import { Block, ModalType, Page, SelectionType } from "../../types";
 import { findPage, getEditTime } from "../../utils";
 import { ScreenOnly, PageItem } from "../index";
 
@@ -30,8 +30,6 @@ type LinkLoaderProps = {
   page: Page;
   block: Block;
   closeLink?: () => void;
-  blockStylerStyle: CSSProperties | undefined;
-  setSelection?: Dispatch<SetStateAction<SelectionType | null>>;
 };
 
 const LinkLoader = ({
@@ -41,8 +39,6 @@ const LinkLoader = ({
   pagesId,
   block,
   closeLink,
-  blockStylerStyle,
-  setSelection,
 }: LinkLoaderProps) => {
   const { editBlock } = useContext(ActionContext).actions;
   const selectedHtml = document.querySelector(".selected");
@@ -378,25 +374,25 @@ const LinkLoader = ({
   /**
    * dom에 변경이 읽을 때,  block의 내용을 담고 있는 element의 innerHTML을 읽어와서, 변경된 내용을 state에 업데이트하는 함수
    */
-  const getBlockContents = useCallback(() => {
-    const targetBlockContentHtml = document
-      .getElementById(`${block.id}__contents`)
-      ?.querySelector(".contentEditable");
-    if (targetBlockContentHtml && targetBlockContentHtml) {
-      const innerHtml = targetBlockContentHtml.innerHTML;
-      const newBlock: Block = {
-        ...block,
-        contents: innerHtml,
-        editTime: getEditTime(),
-      };
-      editBlock(page.id, newBlock);
-      setSelection &&
-        setSelection({
-          block: newBlock,
-          change: true,
-        });
-    }
-  }, [block, editBlock, page.id, setSelection]);
+  // const getBlockContents = useCallback(() => {
+  //   const targetBlockContentHtml = document
+  //     .getElementById(`${block.id}__contents`)
+  //     ?.querySelector(".contentEditable");
+  //   if (targetBlockContentHtml && targetBlockContentHtml) {
+  //     const innerHtml = targetBlockContentHtml.innerHTML;
+  //     const newBlock: Block = {
+  //       ...block,
+  //       contents: innerHtml,
+  //       editTime: getEditTime(),
+  //     };
+  //     editBlock(page.id, newBlock);
+  //     setModal((prev) => ({
+  //       ...prev,
+  //       block: newBlock,
+  //     }));
+  //   }
+  // }, [block, editBlock, page.id, setModal]);
+
   const resetLinked = useCallback(() => {
     if (linked && linkElements) {
       setLinked(false);
@@ -439,9 +435,9 @@ const LinkLoader = ({
       newSelectedHtml.innerHTML = innerHTML;
       changeHref(newSelectedHtml, link);
       selectedHtml?.parentNode?.replaceChild(newSelectedHtml, selectedHtml);
-      getBlockContents();
+      ////getBlockContents();
     },
-    [changeHref, getBlockContents, selectedHtml]
+    [changeHref, selectedHtml]
   );
 
   const addLink = useCallback(
@@ -451,13 +447,13 @@ const LinkLoader = ({
           if (linkElements[0] === selectedHtml) {
             //href 만 변경
             changeHref(selectedHtml as HTMLAnchorElement, link);
-            getBlockContents();
+            //getBlockContents();
           } else {
             //기존 link 삭제 후 새로운 link
             const selectedHtmlParent = selectedHtml.parentElement;
             if (linkElements[0] === selectedHtmlParent) {
               changeHref(selectedHtmlParent as HTMLAnchorElement, link);
-              getBlockContents();
+              //getBlockContents();
             } else {
               // 배열
               linkElements.forEach((e: HTMLAnchorElement) => {
@@ -478,7 +474,7 @@ const LinkLoader = ({
     [
       changeHref,
       closeLink,
-      getBlockContents,
+
       linkElements,
       linked,
       makeNewAnchorElement,
@@ -502,27 +498,27 @@ const LinkLoader = ({
       linkElements.forEach((e: HTMLAnchorElement) => {
         e.outerHTML = e.innerHTML;
       });
-      getBlockContents();
+      //getBlockContents();
       resetLinked();
       closeLink && closeLink();
     }
-  }, [closeLink, getBlockContents, linkElements, resetLinked]);
+  }, [closeLink, linkElements, resetLinked]);
 
-  useEffect(() => {
-    if (blockStyler && blockStylerStyle?.top && blockStylerStyle?.left) {
-      const blockStylerTop = blockStylerStyle.top;
-      const blockStylerTopValue: number =
-        typeof blockStylerTop === "string"
-          ? +blockStylerTop.replace("px", "")
-          : blockStylerTop;
-      const top = blockStylerTopValue + blockStyler.clientHeight;
-      const left = blockStylerStyle.left as string;
-      setLinkLoaderStyle({
-        top: `${top + 10}px`,
-        left: left,
-      });
-    }
-  }, [blockStylerStyle, blockStyler]);
+  // useEffect(() => {
+  //   if (blockStyler && blockStylerStyle?.top && blockStylerStyle?.left) {
+  //     const blockStylerTop = blockStylerStyle.top;
+  //     const blockStylerTopValue: number =
+  //       typeof blockStylerTop === "string"
+  //         ? +blockStylerTop.replace("px", "")
+  //         : blockStylerTop;
+  //     const top = blockStylerTopValue + blockStyler.clientHeight;
+  //     const left = blockStylerStyle.left as string;
+  //     setLinkLoaderStyle({
+  //       top: `${top + 10}px`,
+  //       left: left,
+  //     });
+  //   }
+  // }, [blockStylerStyle, blockStyler]);
   useEffect(() => {
     if (selectedHtml) {
       const selectedHtmlParent = selectedHtml.parentElement;

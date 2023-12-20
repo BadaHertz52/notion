@@ -93,14 +93,14 @@ const MobileSideMenu = ({
               setMobileSideMenu={setMobileSideMenu}
             />
           )}
-          {mobileSideMenu.what === "ms_color" && (
+          {/* {mobileSideMenu.what === "ms_color" && (
             <ColorMenu
               page={page}
               block={block}
               selection={mobileSelection}
               closeMenu={closeSideMenu}
             />
-          )}
+          )} */}
           {mobileSideMenu.what === "ms_turnInto" && (
             <CommandMenu
               page={page}
@@ -108,7 +108,7 @@ const MobileSideMenu = ({
               closeCommand={closeSideMenu}
             />
           )}
-          {mobileSideMenu.what === "ms_link" && (
+          {/* {mobileSideMenu.what === "ms_link" && (
             <LinkLoader
               recentPagesId={recentPagesId}
               pages={pages}
@@ -118,7 +118,7 @@ const MobileSideMenu = ({
               closeLink={closeSideMenu}
               blockStylerStyle={undefined}
             />
-          )}
+          )} */}
           {mobileSideMenu.what === "ms_movePage" && (
             <PageMenu
               what="block"

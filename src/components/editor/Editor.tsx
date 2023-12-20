@@ -188,6 +188,7 @@ const Editor = ({
           setMobileSideMenu={setMobileSideMenu}
         />
       )}
+     
     </div>
   );
 };

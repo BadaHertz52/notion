@@ -451,25 +451,25 @@ const BlockContentEditable = ({
   /**
    *block의 content 를 마우스로 선택 시, block의 content를 선택된 부분(class 가 selected인 span element)과 아닌 부분으로 수정하는 함수
    */
-  const onSelectInPC = useCallback(
-    (event: React.SyntheticEvent<HTMLDivElement, Event>) => {
-      if (event.currentTarget !== event.target) return;
-      if (!isMobile()) {
-        const SELECTION = window.getSelection();
-        if (block) {
-          selectContent(
-            SELECTION,
-            block,
-            contentEditableRef.current,
-            editBlock,
-            page,
-            setSelection
-          );
-        }
-      }
-    },
-    [block, editBlock, page, setSelection, contentEditableRef]
-  );
+  // const onSelectInPC = useCallback(
+  //   (event: React.SyntheticEvent<HTMLDivElement, Event>) => {
+  //     if (event.currentTarget !== event.target) return;
+  //     if (!isMobile()) {
+  //       const SELECTION = window.getSelection();
+  //       if (block) {
+  //         selectContent(
+  //           SELECTION,
+  //           block,
+  //           contentEditableRef.current,
+  //           editBlock,
+  //           page,
+  //           setSelection
+  //         );
+  //       }
+  //     }
+  //   },
+  //   [block, editBlock, page, setSelection, contentEditableRef]
+  // );
 
   /**
    * 모바일 브라우저에서 특정 이벤트가 발생 했을 때 mobileMenu 를 열어 주는 함수
@@ -538,7 +538,7 @@ const BlockContentEditable = ({
           innerRef={contentEditableRef}
           onChange={onChangeContents}
           onKeyDown={onKeyDownContents}
-          onSelect={onSelectInPC}
+          //onSelect={onSelectInPC}
           onTouchEnd={openMobileMenu}
           onClick={onClickContentEditable}
         />

@@ -32,14 +32,14 @@ export type CommandMenuProp = {
   // CommandInput을 통해 타입 변경을 하는 경우에 command 값 있음
   command?: string;
   closeCommand: () => void;
-  setSelection?: Dispatch<SetStateAction<SelectionType | null>>;
+  closeModal?: () => void;
 };
 const CommandMenu = ({
   page,
   block,
   command,
-  setSelection,
   closeCommand,
+  closeModal,
 }: CommandMenuProp) => {
   const { editBlock, changeBlockToPage, changePageToBlock, editPage } =
     useContext(ActionContext).actions;
@@ -250,12 +250,12 @@ const CommandMenu = ({
         }
       }
       closeCommandMenu();
-      setSelection && setSelection(null);
+      if (closeModal) closeModal();
     },
     [
       block,
       editBlock,
-      setSelection,
+      closeModal,
       changeBlockToPage,
       changePageToBlock,
       changeToListType,

@@ -7,7 +7,7 @@
       position: absolute;
       top: 0;
       left: 0;
-      .inner {
+      & > .inner {
         position: relative;
       }
     }
@@ -38,6 +38,7 @@
 #modal-frame {
   z-index: 20;
 }
+
 #modal-discardEdit {
   z-index: 100;
 }

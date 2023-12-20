@@ -37,9 +37,8 @@ import { SESSION_KEY } from "../../constants";
 
 export type MenuProps = Omit<
   MenuAndBlockStylerCommonProps,
-  "modal" | "setModal" | "setCommentBlock"
+  "setCommentBlock"
 > & {
-  setSelection?: Dispatch<SetStateAction<SelectionType | null>>;
   setMobileSideMenu?: Dispatch<SetStateAction<MobileSideMenuType>>;
   setModal?: Dispatch<SetStateAction<ModalType>>;
   closeModal?: () => void;
@@ -52,7 +51,6 @@ const Menu = ({
   block,
   userName,
   frameHtml,
-  setSelection,
   setMobileSideMenu,
   setModal,
   closeModal,
@@ -162,21 +160,23 @@ const Menu = ({
     },
     [setModal, block]
   );
-
+  const handleCloseModal = () => {
+    if (closeModal) closeModal();
+  };
   const onOpenCommentInput = useCallback(() => {
-    setSelection && setSelection(null);
+    handleCloseModal();
     openPopUpMenu("commentInput");
-  }, [openPopUpMenu, setSelection]);
+  }, [openPopUpMenu]);
 
   const removeBlock = useCallback(() => {
-    setSelection && setSelection(null);
+    handleCloseModal();
     setTemplateItem(templateHtml, page);
     deleteBlock(page.id, block, true);
     closeMenu();
-  }, [block, closeMenu, deleteBlock, page, setSelection, templateHtml]);
+  }, [block, closeMenu, deleteBlock, page, templateHtml]);
 
   const duplicateBlock = useCallback(() => {
-    setSelection && setSelection(null);
+    handleCloseModal();
     if (page.blocks && page.blocksId) {
       setTemplateItem(templateHtml, page);
       const blockIndex = page.blocksId.indexOf(block.id);
@@ -201,15 +201,7 @@ const Menu = ({
       }
       closeMenu();
     }
-  }, [
-    addBlock,
-    block,
-    closeMenu,
-    duplicatePage,
-    page,
-    setSelection,
-    templateHtml,
-  ]);
+  }, [addBlock, block, closeMenu, duplicatePage, page, templateHtml]);
 
   const onSetEditBtnGroup = useCallback(() => {
     setEditBtnGroup([...document.getElementsByClassName("menu__editBtn")]);
@@ -231,9 +223,9 @@ const Menu = ({
   );
 
   const onClickRename = useCallback(() => {
-    setSelection && setSelection(null);
+    handleCloseModal();
     openPopUpMenu("rename");
-  }, [openPopUpMenu, setSelection]);
+  }, [openPopUpMenu]);
 
   useEffect(() => {
     window.addEventListener("resize", handleResize);
@@ -393,12 +385,10 @@ const Menu = ({
             page={page}
             block={block}
             closeCommand={() => setSideMenu(undefined)}
-            setSelection={setSelection}
+            closeModal={closeModal}
           />
         )}
-        {sideMenu === COLOR && (
-          <ColorMenu page={page} block={block} selection={null} />
-        )}
+        {sideMenu === COLOR && <ColorMenu page={page} block={block} />}
         {sideMenu === TURN_INTO_PAGE && (
           <PageMenu
             what="block"

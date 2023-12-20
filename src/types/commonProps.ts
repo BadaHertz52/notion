@@ -39,7 +39,7 @@ export type TemplateFrameCommonProps = {
   mobileSideMenu: MobileSideMenuType;
   setMobileSideMenu: Dispatch<SetStateAction<MobileSideMenuType>>;
 };
-
+//TODO -  setCommendBlock 삭제
 export type MenuAndBlockStylerCommonProps = {
   pages: Page[];
   firstList: ListItem[];

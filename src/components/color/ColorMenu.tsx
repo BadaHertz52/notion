@@ -1,23 +1,16 @@
 import React, { Dispatch, SetStateAction, useContext } from "react";
 
-import { Block, Page, SelectionType } from "../../types";
+import { Block, ModalType, Page } from "../../types";
 import { ActionContext } from "../../contexts";
 import { ColorInform } from "../index";
 
 type ColorMenuProps = {
   page: Page;
   block: Block;
-  selection: SelectionType | null;
-  setSelection?: Dispatch<SetStateAction<SelectionType | null>>;
+  setModal?: Dispatch<SetStateAction<ModalType>>;
   closeMenu?: () => void;
 };
-const ColorMenu = ({
-  page,
-  block,
-  selection,
-  setSelection,
-  closeMenu,
-}: ColorMenuProps) => {
+const ColorMenu = ({ page, block, setModal, closeMenu }: ColorMenuProps) => {
   const { editBlock } = useContext(ActionContext).actions;
   const templateHtml = document.getElementById("template");
   return (
@@ -32,8 +25,7 @@ const ColorMenu = ({
             block={block}
             editBlock={editBlock}
             templateHtml={templateHtml}
-            selection={selection}
-            setSelection={setSelection}
+            setModal={setModal}
             closeMenu={closeMenu}
           />
           <ColorInform
@@ -43,8 +35,7 @@ const ColorMenu = ({
             block={block}
             editBlock={editBlock}
             templateHtml={templateHtml}
-            selection={selection}
-            setSelection={setSelection}
+            setModal={setModal}
             closeMenu={closeMenu}
           />
           <ColorInform
@@ -54,8 +45,7 @@ const ColorMenu = ({
             block={block}
             editBlock={editBlock}
             templateHtml={templateHtml}
-            selection={selection}
-            setSelection={setSelection}
+            setModal={setModal}
             closeMenu={closeMenu}
           />
           <ColorInform
@@ -65,8 +55,7 @@ const ColorMenu = ({
             block={block}
             editBlock={editBlock}
             templateHtml={templateHtml}
-            selection={selection}
-            setSelection={setSelection}
+            setModal={setModal}
             closeMenu={closeMenu}
           />
           <ColorInform
@@ -76,8 +65,7 @@ const ColorMenu = ({
             block={block}
             editBlock={editBlock}
             templateHtml={templateHtml}
-            selection={selection}
-            setSelection={setSelection}
+            setModal={setModal}
             closeMenu={closeMenu}
           />
           <ColorInform
@@ -87,8 +75,7 @@ const ColorMenu = ({
             block={block}
             editBlock={editBlock}
             templateHtml={templateHtml}
-            selection={selection}
-            setSelection={setSelection}
+            setModal={setModal}
             closeMenu={closeMenu}
           />
         </div>
@@ -103,8 +90,7 @@ const ColorMenu = ({
             block={block}
             editBlock={editBlock}
             templateHtml={templateHtml}
-            selection={selection}
-            setSelection={setSelection}
+            setModal={setModal}
             closeMenu={closeMenu}
           />
           <ColorInform
@@ -114,8 +100,7 @@ const ColorMenu = ({
             block={block}
             editBlock={editBlock}
             templateHtml={templateHtml}
-            selection={selection}
-            setSelection={setSelection}
+            setModal={setModal}
             closeMenu={closeMenu}
           />
           <ColorInform
@@ -125,8 +110,7 @@ const ColorMenu = ({
             block={block}
             editBlock={editBlock}
             templateHtml={templateHtml}
-            selection={selection}
-            setSelection={setSelection}
+            setModal={setModal}
             closeMenu={closeMenu}
           />
           <ColorInform
@@ -136,8 +120,7 @@ const ColorMenu = ({
             block={block}
             editBlock={editBlock}
             templateHtml={templateHtml}
-            selection={selection}
-            setSelection={setSelection}
+            setModal={setModal}
             closeMenu={closeMenu}
           />
           <ColorInform
@@ -147,8 +130,7 @@ const ColorMenu = ({
             block={block}
             editBlock={editBlock}
             templateHtml={templateHtml}
-            selection={selection}
-            setSelection={setSelection}
+            setModal={setModal}
             closeMenu={closeMenu}
           />
           <ColorInform
@@ -158,8 +140,7 @@ const ColorMenu = ({
             block={block}
             editBlock={editBlock}
             templateHtml={templateHtml}
-            selection={selection}
-            setSelection={setSelection}
+            setModal={setModal}
             closeMenu={closeMenu}
           />
         </div>

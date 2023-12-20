@@ -1,4 +1,11 @@
-import { Dispatch, SetStateAction, memo, useCallback, useContext } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  memo,
+  useCallback,
+  useContext,
+  useState,
+} from "react";
 
 import { GrDocument, GrDocumentText } from "react-icons/gr";
 import { HiTemplate } from "react-icons/hi";
@@ -10,14 +17,12 @@ import { SESSION_KEY } from "../../constants";
 
 type EmptyPageContentProps = {
   page: Page;
-  setOpenTemplates: Dispatch<SetStateAction<boolean>>;
 };
 
-const EmptyPageContent = ({
-  page,
-  setOpenTemplates,
-}: EmptyPageContentProps) => {
+const EmptyPageContent = ({ page }: EmptyPageContentProps) => {
   const { editPage } = useContext(ActionContext).actions;
+
+  const [openTemplates, setOpenTemplates] = useState<boolean>(false);
   /**
    * 새로 만든 페이지에 firstBlock을 생성하면서 페이지에 내용을 작성할 수 있도록 하는 함수
    * @returns page
@@ -84,6 +89,7 @@ const EmptyPageContent = ({
           <span>Templates</span>
         </button>
       )}
+      //TODO - tempalte modal
     </div>
   );
 };

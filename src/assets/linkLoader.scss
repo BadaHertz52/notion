@@ -1,6 +1,5 @@
 @import "./common";
 #linkLoader {
-  position: absolute;
   @include modalStyle;
   width: 300px;
   .inner {

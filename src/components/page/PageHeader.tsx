@@ -1,8 +1,6 @@
 import React, {
-  Dispatch,
   MouseEvent,
   RefObject,
-  SetStateAction,
   memo,
   useCallback,
   useContext,
@@ -18,7 +16,6 @@ import { MdInsertPhoto } from "react-icons/md";
 import { BiMessageDetail } from "react-icons/bi";
 
 import {
-  Loader,
   IconModal,
   PageIcon,
   CommentInput,
@@ -39,7 +36,6 @@ export type PageHeaderProps = {
   page: Page;
   frameRef: RefObject<HTMLDivElement>;
   fontSize: number;
-  openTemplates: boolean;
   templateHtml: HTMLElement | null;
   showAllComments: boolean;
   newPageFrame: boolean;
@@ -51,7 +47,6 @@ function PageHeader({
   page,
   frameRef,
   fontSize,
-  openTemplates,
   templateHtml,
   showAllComments,
   newPageFrame,
@@ -142,7 +137,7 @@ function PageHeader({
     },
     [openIconModal, pageIconStyle.width]
   );
-
+  const isTemplate = () => !!document.querySelector("#templates");
   const addRandomIcon = useCallback(() => {
     const icon = randomEmojiIcon();
     const newPageWithIcon: Page = {
@@ -154,9 +149,11 @@ function PageHeader({
       },
       editTime: getEditTime(),
     };
-    openTemplates && setTemplateItem(templateHtml, page);
+    if (isTemplate()) {
+      setTemplateItem(templateHtml, page);
+    }
     editPage(page.id, newPageWithIcon);
-  }, [editPage, openTemplates, page, templateHtml]);
+  }, [editPage, page, templateHtml]);
 
   const onClickAddCover = useCallback(() => {
     const editedPage: Page = {
@@ -173,7 +170,9 @@ function PageHeader({
   const onChangePageTitle = useCallback(
     (event: ContentEditableEvent) => {
       const value = event.target.value;
-      openTemplates && setTemplateItem(templateHtml, page);
+      if (isTemplate()) {
+        setTemplateItem(templateHtml, page);
+      }
       editPage(page.id, {
         ...page,
         header: {
@@ -183,7 +182,7 @@ function PageHeader({
         editTime: getEditTime(),
       });
     },
-    [editPage, openTemplates, page, templateHtml]
+    [editPage, page, templateHtml]
   );
 
   return (

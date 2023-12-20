@@ -5,21 +5,37 @@ import React, {
   useEffect,
   useState,
   CSSProperties,
+  useContext,
 } from "react";
 
-import { ModalPortal, Menu, CommentInput, Comments, Rename } from "../index";
+import {
+  ModalPortal,
+  Menu,
+  CommentInput,
+  Comments,
+  Rename,
+  BlockStyler,
+} from "../index";
 import { CommentInputProps } from "../comment/CommentInput";
 import { MenuProps } from "../menu/Menu";
 import { RenameProps } from "../Rename";
 
 import { ModalType, Page } from "../../types";
-import { findPage, getBlockDomRect, isInTarget } from "../../utils";
+import {
+  findPage,
+  getBlockDomRect,
+  isInTarget,
+  removeSelected,
+} from "../../utils";
 import { EditableBlockProps } from "../block/EditableBlock";
+import { BlockStylerProps } from "../blockMenu/BlockStyler";
+import ActionContext from "./../../contexts/ActionContext";
 
 type ChildrenProps = MenuProps &
   RenameProps &
   CommentInputProps &
-  EditableBlockProps;
+  EditableBlockProps &
+  BlockStylerProps;
 type FrameModalProps = Omit<
   ChildrenProps,
   | "block"
@@ -36,10 +52,13 @@ type FrameModalProps = Omit<
   pagesId: string[];
   modal: ModalType;
   closeModal: () => void;
+  templateHtml: HTMLElement | null;
 };
 
 const FrameModal = ({ ...props }: FrameModalProps) => {
   const { modal } = props;
+  const { editBlock } = useContext(ActionContext).actions;
+
   const ID = "modal-frame";
 
   const [modalStyle, setModalStyle] = useState<CSSProperties | undefined>(
@@ -78,6 +97,31 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
       });
     }
   }, []);
+  const changeBlockStylerModalStyle = useCallback(() => {
+    const pageContentsEl = document.querySelector(".page__contents");
+    const pageContentsElDomRect = pageContentsEl?.getClientRects()[0];
+    if (modal.block && pageContentsElDomRect) {
+      const domeRect = getBlockDomRect(modal.block);
+      const GAP = 10;
+      const stylerHeight = 45;
+
+      if (domeRect) {
+        const top = domeRect.top - GAP - stylerHeight;
+        const isOver = pageContentsElDomRect.top <= top;
+        !isOver
+          ? setModalStyle({
+              position: "absolute",
+              top: top,
+              left: pageContentsElDomRect.left,
+            })
+          : setModalStyle({
+              position: "absolute",
+              bottom: -domeRect.bottom - GAP,
+              left: pageContentsElDomRect.left,
+            });
+      }
+    }
+  }, [modal.block]);
 
   const changeModalStyle = useCallback(() => {
     switch (modal.target) {
@@ -93,6 +137,9 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
       case "menu":
         changeMenuModalStyle();
         break;
+      case "blockStyler":
+        changeBlockStylerModalStyle();
+        break;
       default:
         break;
     }
@@ -102,6 +149,32 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
     const frameEl = document.querySelector(".frame");
     frameEl?.classList.toggle("stop", modal.open);
   }, [modal.open]);
+
+  const isInBlockStyler = useCallback(
+    (event: globalThis.MouseEvent) => {
+      const isBlockStylerSideMenu = document.querySelector(
+        "#blockStyler__sideMenu"
+      );
+      if (
+        modal.target === "blockStyler" &&
+        modal.block &&
+        !isBlockStylerSideMenu
+      ) {
+        const target = [`#${modal.block.id}__contents`, "#blockStyler"];
+
+        return target.map((v) => isInTarget(event, v)).some((v) => v);
+      } else {
+        return true;
+      }
+    },
+    [modal]
+  );
+
+  const handleCloseBlockStyler = useCallback(() => {
+    if (modal.block) {
+      removeSelected(modal.block, editBlock, props.page);
+    }
+  }, [modal.block, props.page, editBlock]);
 
   const handleCloseModal = useCallback(
     (event: globalThis.MouseEvent) => {
@@ -117,12 +190,13 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
         .map((v) => !!isInTarget(event, v))
         .some((v) => v);
       if (modal.open) {
-        if (!isInModal) {
+        if (!isInModal && !isInBlockStyler(event)) {
+          handleCloseBlockStyler();
           props.closeModal();
         }
       }
     },
-    [props, modal]
+    [props, modal, isInBlockStyler]
   );
 
   useEffect(() => {
@@ -172,32 +246,10 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
           />
         </div>
       )}
-      {/*
 
-                {modal.target === "blockStyler" && selection && !isMobile() && (
-          <BlockStyler
-            pages={pages}
-            pagesId={pagesId}
-            firstList={firstList}
-            userName={userName}
-            page={page}
-            recentPagesId={recentPagesId}
-            block={selection.block}
-            modal={modal}
-            setModal={setModal}
-            setModalStyle={setModalStyle}
-            command={command}
-            setCommand={setCommand}
-            setCommentBlock={setCommentBlock}
-            selection={selection}
-            setSelection={setSelection}
-            frameHtml={frameHtml}
-            setMobileSideMenu={setMobileSideMenu}
-            setMobileMenuTargetBlock={setMobileMenuTargetBlock}
-            setOpenMobileBlockStyler={null}
-          />
-        )}
-      */}
+      {modal.target === "blockStyler" && modal.block && (
+        <BlockStyler {...props} block={modal.block} setModal={props.setModal} />
+      )}
     </ModalPortal>
   );
 };
