@@ -1,47 +1,9 @@
 export const frameStyleCode = `label {
   width: 100%;
 }
-.btn-switch {
-  position: relative;
-  width: 30px;
-  height: 15px;
-}
-.btn-switch .slider {
-  position: absolute;
-  cursor: pointer;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 34px;
-  background-color: #ccc;
-  transition: 0.4s;
-}
-.btn-switch .slider::before {
-  position: absolute;
-  content: "";
-  height: 12px;
-  width: 12px;
-  bottom: 1.5px;
-  left: 4px;
-  border-radius: 50%;
-  background-color: white;
-  transition: 0.4s;
-}
-.btn-switch .slider.on {
-  background-color: rgb(46, 170, 220);
-  box-shadow: 0 0 1px rgb(46, 170, 220);
-}
-.btn-switch .slider.on:before {
-  transform: translateX(10px);
-}
-
 #notion__inner .edit__inform {
   color: rgb(60, 60, 60);
 }
-
 .edit__inform {
   border-top: 1px solid #929292;
   font-size: 12px;
@@ -65,10 +27,6 @@ div::-webkit-scrollbar-thumb {
   background-color: #d3d1cb;
 }
 div::-webkit-scrollbar-track {
-  background-color: #edece9;
-}
-
-.page-link:hover {
   background-color: #edece9;
 }
 
@@ -151,103 +109,18 @@ a:visited {
   font-size: inherit;
   line-height: inherit;
 }
-
-.blockFn {
-  display: none;
-}
-
-.blockFn.on {
-  display: flex;
-  position: absolute;
-  padding-right: 5px;
-  z-index: 5;
-}
-.blockFn.on .icon-blockFn {
-  font-size: 1.2rem;
-  font-weight: bolder;
-}
-.blockFn.on .icon-blockFn svg {
-  color: #5a5a5a;
-  fill: #5a5a5a;
-}
-
-.blockFn button:hover,
-.toggle.block .left:hover {
-  background-color: #edece9;
-}
-
-.editableBlock .contentEditable {
+.editableBlock .editable {
   width: -moz-fit-content;
   width: fit-content;
 }
 
-.contentEditable {
+.editable {
   white-space: normal;
   word-break: break-all;
   overflow: hidden;
   -webkit-user-select: text;
           user-select: text;
   font-size: inherit;
-}
-.contentEditable:focus-visible {
-  outline: none;
-}
-
-.frame.web .contentEditable:empty:hover::after, .frame.web .contentEditable:empty:focus::after {
-  content: attr(placeholder);
-  color: #929292;
-}
-
-.frame.web .selected,
-.frame.web .editableBlock .selected a:link,
-.frame.web .editableBlock a:link .selected {
-  background-color: #bde6f1;
-}
-.frame.web .selected .bg_default,
-.frame.web .selected .bg_yellow,
-.frame.web .selected .bg_blue,
-.frame.web .selected .bg_green,
-.frame.web .selected .bg_grey,
-.frame.web .selected .bg_pink,
-.frame.web .editableBlock .selected a:link .bg_default,
-.frame.web .editableBlock .selected a:link .bg_yellow,
-.frame.web .editableBlock .selected a:link .bg_blue,
-.frame.web .editableBlock .selected a:link .bg_green,
-.frame.web .editableBlock .selected a:link .bg_grey,
-.frame.web .editableBlock .selected a:link .bg_pink,
-.frame.web .editableBlock a:link .selected .bg_default,
-.frame.web .editableBlock a:link .selected .bg_yellow,
-.frame.web .editableBlock a:link .selected .bg_blue,
-.frame.web .editableBlock a:link .selected .bg_green,
-.frame.web .editableBlock a:link .selected .bg_grey,
-.frame.web .editableBlock a:link .selected .bg_pink {
-  background-color: #bde6f1;
-}
-
-.frame.mobile .selected,
-.frame.mobile .editableBlock .selected a:link,
-.frame.mobile .editableBlock a:link .selected {
-  background-color: rgba(125, 188, 252, 0.5411764706);
-}
-.frame.mobile .selected .bg_default,
-.frame.mobile .selected .bg_yellow,
-.frame.mobile .selected .bg_blue,
-.frame.mobile .selected .bg_green,
-.frame.mobile .selected .bg_grey,
-.frame.mobile .selected .bg_pink,
-.frame.mobile .editableBlock .selected a:link .bg_default,
-.frame.mobile .editableBlock .selected a:link .bg_yellow,
-.frame.mobile .editableBlock .selected a:link .bg_blue,
-.frame.mobile .editableBlock .selected a:link .bg_green,
-.frame.mobile .editableBlock .selected a:link .bg_grey,
-.frame.mobile .editableBlock .selected a:link .bg_pink,
-.frame.mobile .editableBlock a:link .selected .bg_default,
-.frame.mobile .editableBlock a:link .selected .bg_yellow,
-.frame.mobile .editableBlock a:link .selected .bg_blue,
-.frame.mobile .editableBlock a:link .selected .bg_green,
-.frame.mobile .editableBlock a:link .selected .bg_grey,
-.frame.mobile .editableBlock a:link .selected .bg_pink {
-  background-color: rgba(125, 188, 252, 0.5411764706);
 }
 
 .bg_default {
@@ -314,18 +187,18 @@ a:visited {
   text-decoration: line-through;
 }
 
-.contentEditable a:link,
-.contentEditable a:visited,
-.contentEditable a:active {
+.editable a:link,
+.editable a:visited,
+.editable a:active {
   color: grey;
   text-decoration: underline;
   z-index: 5;
   cursor: pointer;
 }
 
-.h1 .mainBlock .contentEditable,
-.h2 .mainBlock .contentEditable,
-.h3 .mainBlock .contentEditable {
+.h1 .mainBlock .editable,
+.h2 .mainBlock .editable,
+.h3 .mainBlock .editable {
   font-weight: 500;
 }
 
@@ -372,7 +245,7 @@ a:visited {
   display: flex;
   align-items: center;
 }
-.page.block .contentEditable {
+.page.block .editable {
   border-bottom: 1px solid #929292;
 }
 .page.block:hover {
@@ -547,35 +420,6 @@ a:visited {
   background-color: #edece9;
 }
 
-button {
-  border: none;
-  background-color: transparent;
-  padding: 0;
-  -webkit-user-select: none;
-          user-select: none;
-  cursor: pointer;
-  transition: background-color 20ms ease-in 0s;
-  font-size: inherit;
-}
-
-ul,
-ol {
-  margin: 0;
-  padding: 0;
-  padding-left: 1rem;
-}
-ul li,
-ol li {
-  padding-left: 10px;
-}
-
-a:link,
-a:active,
-a:visited {
-  text-decoration: none;
-  color: inherit;
-}
-
 .comments {
   display: flex;
   margin: 8px 0;
@@ -611,12 +455,12 @@ a:visited {
 }
 
 .commentBlock__header,
-.commentInput {
+.comment-input {
   height: 20px;
 }
 
-.commentBlock .firstLetter,
-.commentInput .firstLetter .inner {
+.commentBlock .first-letter,
+.comment-input .first-letter .inner {
   display: flex;
   width: 20px;
   height: 20px;
@@ -631,26 +475,26 @@ a:visited {
   flex-shrink: 0;
   margin-right: 5px;
 }
-.commentBlock .firstLetter div,
-.commentInput .firstLetter .inner div {
+.commentBlock .first-letter div,
+.comment-input .first-letter .inner div {
   font-size: 14px;
   font-weight: initial;
 }
 
-.commentInput label {
+.comment-input label {
   width: 100%;
 }
 
-.commentInput .firstLetter {
+.comment-input .first-letter {
   display: flex;
   justify-content: center;
   align-items: center;
   height: inherit;
 }
-.commentInput .firstLetter .inner {
+.comment-input .first-letter .inner {
   margin: 0;
 }
-.commentInput .firstLetter span {
+.comment-input .first-letter span {
   display: inline-block;
 }
 
@@ -721,7 +565,7 @@ a:visited {
 .page__comments .commentBlock .comment__contents {
   font-size: inherit;
 }
-.page__comments .commentInput form input {
+.page__comments .comment-input form input {
   font-size: inherit;
 }
 .page__comments .comments {
@@ -767,7 +611,7 @@ a:visited {
   font-size: 14px;
   height: inherit;
 }
-.commentBlock .commentBlock__header .firstLetter {
+.commentBlock .commentBlock__header .first-letter {
   flex-shrink: 0;
   flex-grow: 0;
 }
@@ -841,11 +685,11 @@ a:visited {
   padding-bottom: 2px;
   background: rgba(255, 212, 0, 0.8);
 }
-.commentBlock .commentInput {
+.commentBlock .comment-input {
   width: calc(100% - 34px);
   box-sizing: border-box;
 }
-.commentBlock .commentInput input[type=text] {
+.commentBlock .comment-input input[type=text] {
   margin: 0;
 }
 .commentBlock .tool button:hover {
@@ -856,13 +700,13 @@ a:visited {
   position: relative;
 }
 
-.commentInput {
+.comment-input {
   display: flex;
   flex-direction: row;
   width: 100%;
   padding: 0;
 }
-.commentInput form {
+.comment-input form {
   display: flex;
   flex-grow: 1;
   flex-shrink: 1;
@@ -871,7 +715,7 @@ a:visited {
   width: calc(100% - 24px);
   box-sizing: border-box;
 }
-.commentInput input[type=text] {
+.comment-input input[type=text] {
   width: 90%;
   height: 1.5rem;
   font-size: 15px;
@@ -890,15 +734,15 @@ a:visited {
   margin: 0 2.5%;
   font-size: 14px;
 }
-.commentInput input[type=text]::placeholder {
+.comment-input input[type=text]::placeholder {
   color: #929292;
 }
-.commentInput input[type=text]:focus {
+.comment-input input[type=text]:focus {
   box-sizing: border-box;
   outline: 3.5px solid rgb(169, 226, 245);
   border: none;
 }
-.commentInput .commentInput:focus {
+.comment-input .comment-input:focus {
   outline: none;
 }
 
@@ -1012,7 +856,7 @@ table {
 
 #notion__inner .blockComponent,
 #notion__inner .contents,
-#notion__inner .contentEditable {
+#notion__inner .editable {
   color: inherit;
 }
 

@@ -28,7 +28,6 @@ import {
   ModalType,
   MenuAndBlockStylerCommonProps,
   MobileSideMenuType,
-  SelectionType,
 } from "../../types";
 import { getEditTime, isMobile, setTemplateItem } from "../../utils";
 
@@ -204,7 +203,7 @@ const Menu = ({
   }, [addBlock, block, closeMenu, duplicatePage, page, templateHtml]);
 
   const onSetEditBtnGroup = useCallback(() => {
-    setEditBtnGroup([...document.getElementsByClassName("menu__editBtn")]);
+    setEditBtnGroup([...document.getElementsByClassName("menu__btn-edit")]);
   }, []);
 
   const onSearch = useCallback(
@@ -244,8 +243,8 @@ const Menu = ({
   }, [sideMenu, changeSideMenuStyle]);
 
   return (
-    <div className="menu" ref={menuRef}>
-      <div id="menu__main" className="mainMenu">
+    <div id="menu" ref={menuRef}>
+      <div id="menu__main-menu" className="menu__main-menu">
         <div className="menu__inner">
           <div className="menu__search">
             <label>
@@ -262,10 +261,10 @@ const Menu = ({
             </label>
           </div>
           <div className="menu__edit">
-            <div className="menu__editBtnGroup">
+            <div className="menu__btn-group">
               <button
                 title="button to remove"
-                className="menu__editBtn"
+                className="menu__btn-edit"
                 onClick={removeBlock}
                 name="delete"
               >
@@ -276,7 +275,7 @@ const Menu = ({
               </button>
               <button
                 title="button to duplicate"
-                className="menu__editBtn"
+                className="menu__btn-edit"
                 onClick={duplicateBlock}
                 name="duplicate"
               >
@@ -287,12 +286,12 @@ const Menu = ({
               </button>
               <button
                 title="button to turn into type"
-                className="menu__editBtn"
+                className="menu__btn-edit"
                 onMouseOver={showTurnInto}
                 name="turn into"
                 style={{
                   display:
-                    document.querySelector("#blockStyler") || isMobile()
+                    document.querySelector("#styler-block") || isMobile()
                       ? "none"
                       : "flex",
                 }}
@@ -307,7 +306,7 @@ const Menu = ({
               </button>
               <button
                 title="button to turn in to page "
-                className="menu__editBtn"
+                className="menu__btn-edit"
                 name="turn into page in"
                 onMouseOver={showPageMenu}
                 onTouchEnd={showPageMenuInMobile}
@@ -323,7 +322,7 @@ const Menu = ({
               {block.type === "page" && (
                 <button
                   title="button to rename"
-                  className="menu__editBtn"
+                  className="menu__btn-edit"
                   onClick={onClickRename}
                 >
                   <div>
@@ -335,7 +334,7 @@ const Menu = ({
               {block.type !== "page" && (
                 <button
                   title="button to comment"
-                  className="underline menu__editBtn"
+                  className="underline menu__btn-edit"
                   name="comment"
                   onClick={onOpenCommentInput}
                   style={{ display: isMobile() ? "none" : "flex" }}
@@ -349,11 +348,11 @@ const Menu = ({
               <button
                 title="button to change color"
                 name="color"
-                className="underline menu__editBtn"
+                className="underline menu__btn-edit"
                 onMouseOver={showColorMenu}
                 style={{
                   display:
-                    document.querySelector("#blockStyler") || isMobile()
+                    document.querySelector("#styler-block") || isMobile()
                       ? "none"
                       : "flex",
                 }}
@@ -375,8 +374,8 @@ const Menu = ({
         </div>
       </div>
       <div
-        id="sideMenu"
-        className="menu__sideMenu"
+        id="menu__side-menu"
+        className="menu__side-menu"
         style={sideMenuStyle}
         onClick={closeMenu}
       >

@@ -75,10 +75,10 @@
     background-color: $itemHover;
   }
 }
-.editableBlock .contentEditable {
+.editableBlock .editable {
   width: fit-content;
 }
-.contentEditable {
+.editable {
   white-space: normal;
   word-break: break-all;
   overflow: hidden;
@@ -90,7 +90,7 @@
     outline: none;
   }
 }
-.frame .contentEditable:empty {
+.frame .editable:empty {
   &:hover,
   &:focus {
     &::after {
@@ -178,20 +178,23 @@
 .lineThrough {
   text-decoration: line-through;
 }
-
-.contentEditable {
+document {
+  z-index: 0;
+}
+.editable {
   a:link,
   a:visited,
   a:active {
     color: grey;
     text-decoration: underline;
-    z-index: 5;
+    z-index: 10;
+    position: relative;
     cursor: pointer;
   }
 }
-.h1 .mainBlock .contentEditable,
-.h2 .mainBlock .contentEditable,
-.h3 .mainBlock .contentEditable {
+.h1 .mainBlock .editable,
+.h2 .mainBlock .editable,
+.h3 .mainBlock .editable {
   font-weight: 500;
 }
 
@@ -233,7 +236,7 @@
     display: flex;
     align-items: center;
   }
-  .contentEditable {
+  .editable {
     border-bottom: 1px solid $mud;
   }
   &:hover {

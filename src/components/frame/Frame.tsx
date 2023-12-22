@@ -144,7 +144,7 @@ const Frame = ({ ...props }: FrameProps) => {
   // const closeMenu = useCallback((event: globalThis.MouseEvent | MouseEvent) => {
   //   const target = event.target as HTMLElement | null;
   //   const isSideMenu = document.getElementById("sideMenu")?.firstElementChild;
-  //   const isInrMain = target?.closest("#menu__main");
+  //   const isInrMain = target?.closest("#menu__main-menu");
   //   const isInSide = target?.closest("#sideMenu");
 
   //   if (isSideMenu) {
@@ -200,7 +200,7 @@ const Frame = ({ ...props }: FrameProps) => {
       const targetBlock: Block = itemObjet.block;
       const pageId = itemObjet.pageId;
       const condition =
-        className === "contentEditable" &&
+        className === "editable" &&
         cursorElement &&
         cursorElement &&
         cursorElement.parentElement?.id === `${targetBlock.id}__contents`;
@@ -217,7 +217,7 @@ const Frame = ({ ...props }: FrameProps) => {
   //   if (command.open && command.targetBlock) {
   //     const frameDomRect = frameHtml?.getClientRects()[0];
   //     const topBarEl = document.querySelector(".topBar");
-  //     const blockStyler = document.getElementById("blockStyler");
+  //     const blockStyler = document.getElementById("styler-block");
   //     if (blockStyler) {
   //       //blockStyler
   //       const blockStylerDomRect = blockStyler.getClientRects()[0];
@@ -253,18 +253,18 @@ const Frame = ({ ...props }: FrameProps) => {
   //       }
   //     } else {
   //       //typing 으로 type 변경 시
-  //       const commandInput = document.getElementById("commandInput");
-  //       const commandInputDomRect = commandInput?.getClientRects()[0];
-  //       if (frameDomRect && commandInputDomRect && topBarEl) {
-  //         const top = commandInputDomRect.bottom + frameHtml.scrollTop - 32;
-  //         const left = `${commandInputDomRect.left - frameDomRect.left}px`;
+  //       const input-command = document.getElementById("input-command");
+  //       const input-commandDomRect = input-command?.getClientRects()[0];
+  //       if (frameDomRect && input-commandDomRect && topBarEl) {
+  //         const top = input-commandDomRect.bottom + frameHtml.scrollTop - 32;
+  //         const left = `${input-commandDomRect.left - frameDomRect.left}px`;
   //         const possibleHeight = window.innerHeight - topBarEl.clientHeight;
-  //         const remainingHeight = possibleHeight - commandInputDomRect.top - 50;
+  //         const remainingHeight = possibleHeight - input-commandDomRect.top - 50;
   //         const toDown = remainingHeight > 150;
   //         const maxHeight = toDown
   //           ? remainingHeight
-  //           : commandInputDomRect.top - 50;
-  //         const top2 = top - maxHeight - commandInputDomRect.height - 14;
+  //           : input-commandDomRect.top - 50;
+  //         const top2 = top - maxHeight - input-commandDomRect.height - 14;
 
   //         const style: CSSProperties = toDown
   //           ? {
@@ -296,7 +296,7 @@ const Frame = ({ ...props }: FrameProps) => {
         case 3:
           //text node
           const parentElement = anchorNode.parentElement;
-          contentEditableElement = parentElement?.closest(".contentEditable");
+          contentEditableElement = parentElement?.closest(".editable");
 
           break;
         case 1:
@@ -322,18 +322,18 @@ const Frame = ({ ...props }: FrameProps) => {
   // const closePopupMenu = useCallback(
   //   (event: globalThis.MouseEvent) => {
   //     updateBlock();
-  //     document.getElementById("menu__main") && //closeMenu(event);
+  //     document.getElementById("menu__main-menu") && //closeMenu(event);
   //       document.getElementById("modal__menu") &&
   //       //closeModalMenu(event);
   //       document.getElementById("block-comments") &&
   //       closeBlockComments(event);
   //     if (command.open) {
   //       const target = event.target as HTMLElement | null;
-  //       const commandInputHtml = document.getElementById("commandInput");
-  //       if (target && commandInputHtml) {
+  //       const input-commandHtml = document.getElementById("input-command");
+  //       if (target && input-commandHtml) {
   //         const isInnerCommand = target.closest("#block__commandMenu");
   //         !isInnerCommand &&
-  //           target !== commandInputHtml &&
+  //           target !== input-commandHtml &&
   //           setCommand({
   //             open: false,
   //             command: null,
@@ -345,7 +345,7 @@ const Frame = ({ ...props }: FrameProps) => {
   //   [closeBlockComments, command.open, updateBlock]
   // );
   //selection
-  const isValidatedSelection = (selection: Selection | null) => {
+  const isValidatedSelection = useCallback((selection: Selection | null) => {
     if (selection) {
       const { anchorNode, focusNode, anchorOffset, focusOffset } = selection;
 
@@ -355,46 +355,51 @@ const Frame = ({ ...props }: FrameProps) => {
         focusNode?.nodeName === "#text";
       return validateSelection;
     }
-  };
-  const getBlockFromSelection = (selection: Selection | null) => {
-    let block;
-    if (selection) {
-      const { anchorNode } = selection;
-      const blockId = anchorNode?.parentElement
-        ?.closest(".block__contents")
-        ?.id.replace("__contents", "");
-      if (blockId) block = findBlock(page, blockId).BLOCK;
-    }
+  }, []);
+  const getBlockFromSelection = useCallback(
+    (selection: Selection | null) => {
+      let block;
+      if (selection) {
+        const { anchorNode } = selection;
+        const blockId = anchorNode?.parentElement
+          ?.closest(".block__contents")
+          ?.id.replace("__contents", "");
+        if (blockId) block = findBlock(page, blockId).BLOCK;
+      }
 
-    return block;
-  };
+      return block;
+    },
+    [page]
+  );
   /**
    * 모바일 환경에서 변경된  selection 을 반영하는 기능
    */
-  const handleSelectionChange = useCallback(() => {
-    const selection = document.getSelection();
-    const block = getBlockFromSelection(selection);
-    if (block !== modal.block) {
-      //클릭이 아닌 마우스 드래그로 다른 블록을 선택할 시 오류  피하기 위해
-      closeModal();
-    }
-    if (isValidatedSelection(selection) && block !== modal.block) {
-      setModal({
-        open: true,
-        target: "blockStyler",
-        block: block,
-      });
-    }
+  const handleSelectionChange = useCallback(
+    (event: globalThis.Event) => {
+      event.preventDefault();
 
-    //TODO -  모바일에서 메뉴 열리는 방식은 블럭 내 포커스가 가면 열리도록 수정
-    // if (!notSelect && SELECTION) {
-    //   if (openComment) {
-    //     setOpenComment(false);
-    //     setCommentBlock(null);
-    //   }
-    //   setItemForMobileMenu(SELECTION);
-    // }
-  }, [isValidatedSelection, setModal, getBlockFromSelection, modal]);
+      const selection = document.getSelection();
+      const block = getBlockFromSelection(selection);
+
+      if (isValidatedSelection(selection) && block !== modal.block) {
+        setModal({
+          open: true,
+          target: "blockStyler",
+          block: block,
+        });
+      }
+
+      //TODO -  모바일에서 메뉴 열리는 방식은 블럭 내 포커스가 가면 열리도록 수정
+      // if (!notSelect && SELECTION) {
+      //   if (openComment) {
+      //     setOpenComment(false);
+      //     setCommentBlock(null);
+      //   }
+      //   setItemForMobileMenu(SELECTION);
+      // }
+    },
+    [isValidatedSelection, setModal, getBlockFromSelection, modal]
+  );
 
   // useEffect(() => {
   //   window.addEventListener("resize", changeCBSposition);
@@ -477,7 +482,7 @@ const Frame = ({ ...props }: FrameProps) => {
   //   if (modal.what === "modalComment") {
   //     const targetCommentInputHtml = document
   //       .getElementById("modalMenu")
-  //       ?.querySelector(".commentInput") as HTMLInputElement | null | undefined;
+  //       ?.querySelector(".comment-input") as HTMLInputElement | null | undefined;
   //     if (targetCommentInputHtml && targetCommentInputHtml) {
   //       targetCommentInputHtml.focus();
   //     }

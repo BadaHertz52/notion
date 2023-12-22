@@ -1,16 +1,16 @@
 @import "./common";
-.menu {
+#menu {
   font-weight: initial;
   position: absolute;
   z-index: 10;
 }
-.mainMenu,
+.menu__main-menu,
 .menu__sideMenu {
   @include modalStyle;
   width: fit-content;
 }
 .modal {
-  .commentInput {
+  .comment-input {
     @include modalStyle;
     width: 350px;
     height: fit-content;
@@ -26,13 +26,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    .commentInput {
+    .comment-input {
       height: 100%;
       margin: 5px;
     }
   }
 }
-.mainMenu {
+.menu__main-menu {
   @include modalStyle;
   width: 240px;
   max-height: inherit;
@@ -46,13 +46,13 @@
       @include searchInput;
     }
   }
-  .menu__editBtnGroup > button > div,
+  .menu__btn-group > button > div,
   .menu__edit__inform {
     width: 90%;
     margin: 3% 5%;
   }
 
-  .menu__editBtnGroup .menu__editBtn {
+  .menu__btn-group .menu__btn-edit {
     @include editMenuBtnGroup;
     &.off {
       display: none;
@@ -77,11 +77,11 @@
   .no-result {
     display: none;
   }
-  .menu__color,
-  #commandMenu {
+  #menu-color,
+  #menu-command {
     background-color: initial;
   }
-  #commandMenu {
+  #menu-command {
     margin-top: 0;
     overflow: initial;
     .btn-command {
@@ -89,7 +89,7 @@
     }
   }
 }
-.menu__color {
+#menu-color {
   @include modalStyle;
   width: 200px;
   color: initial;
@@ -229,7 +229,7 @@
 }
 
 @media screen and (max-width: 768px) {
-  .mainMenu,
+  .menu__main-menu,
   .menu__sideMenu {
     width: 200px;
   }

@@ -23,7 +23,7 @@ const MovingTargetBlock = ({ ...props }: MovingTargetBlockProps) => {
                     <div
                       className={`${block.type}-block__contents block__contents`}
                     >
-                      <div className="contentEditable">
+                      <div className="editable">
                         {block.contents !== ""
                           ? block.contents
                           : "type '/' for commands"}

@@ -273,7 +273,7 @@ const CommandMenu = ({
   }, [command]);
 
   return (
-    <div id="commandMenu">
+    <div id="menu-command">
       <div className="inner">
         <div className="command type-basic">
           <header className="command__header">BASIC BLOCKS</header>

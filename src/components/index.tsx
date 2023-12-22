@@ -11,6 +11,7 @@ import PageBlockContents from "./block/PageBlockContents";
 //--block
 import BlockFn from "./blockMenu/BlockFn";
 import BlockStyler from "./blockMenu/BlockStyler";
+
 //color
 import ColorInform from "./color/ColorInform";
 import ColorMenu from "./color/ColorMenu";
@@ -97,6 +98,7 @@ import Rename from "./Rename";
 import ScreenOnly from "./ScreenOnly";
 import Templates from "./Templates";
 import Time from "./Time";
+import BlockStylerSideMenu from "./blockMenu/BlockStylerSideMenu";
 
 export {
   //block--
@@ -111,6 +113,15 @@ export {
   MovingTargetBlock,
   PageBlockContents,
   //--block
+  //blockMenu --
+  BlockFn,
+  BlockStyler,
+  BlockStylerSideMenu,
+  //--blockMenu
+  //color--
+  ColorInform,
+  ColorMenu,
+  //--color
   //command --
   CommandMenu,
   CommandInput,
@@ -129,10 +140,11 @@ export {
   SideBarMoreFn,
   FnGroup,
   NewPageBtn,
-
   //--sideBar
+  //result--
   Result,
   ResultList,
+  //--result
   PageBtnList,
   PageButton,
   PageMenu,
@@ -167,10 +179,6 @@ export {
   CommentTool,
   CommentToolMore,
   ResolveBtn,
-  ColorInform,
-  ColorMenu,
-  BlockFn,
-  BlockStyler,
   DiscardEditForm,
   Export,
   Img,

@@ -13,7 +13,7 @@ import { isMobile } from ".";
 const findNodeInChildNodes = (node: Node, childNodes: Node[]) => {
   const parentNode = node.parentNode as Node;
   let childNode: any | Node;
-  if (parentNode.parentElement?.className === "contentEditable") {
+  if (parentNode.parentElement?.className === "editable") {
     childNode = parentNode;
   } else {
     childNode = findNodeInChildNodes(parentNode, childNodes);
@@ -28,7 +28,6 @@ const findNodeInChildNodes = (node: Node, childNodes: Node[]) => {
  */
 const getAccurateIndex = (
   node: Node,
-  block: Block,
   contentEditableHtml: HTMLElement | null
 ): { textIndex: number } => {
   let totalSentence = "";
@@ -113,8 +112,8 @@ const getFromStartNode = (
         //동일한 내용이 반복되는 경우로 보다 정확한 특정이 필요함
         const parentNode = spanHtml === null ? null : startNode.parentNode;
         anchorStartIndex = parentNode
-          ? getAccurateIndex(parentNode, block, contentEditableHtml).textIndex
-          : getAccurateIndex(startNode, block, contentEditableHtml).textIndex;
+          ? getAccurateIndex(parentNode, contentEditableHtml).textIndex
+          : getAccurateIndex(startNode, contentEditableHtml).textIndex;
 
         preAnchor = contents.slice(0, anchorStartIndex);
       }
@@ -227,8 +226,8 @@ const getFromEndNode = (
       //중복0
       const parentNode = spanHtml === null ? null : endNode.parentNode;
       const textIndex = parentNode
-        ? getAccurateIndex(parentNode, block, contentEditableHtml).textIndex
-        : getAccurateIndex(endNode, block, contentEditableHtml).textIndex;
+        ? getAccurateIndex(parentNode, contentEditableHtml).textIndex
+        : getAccurateIndex(endNode, contentEditableHtml).textIndex;
       focusStartIndex = textIndex;
       const focusEndIndex = textIndex + text.length - 1;
       afterFocusNode = contents.slice(focusEndIndex + 1);
@@ -552,21 +551,17 @@ export const removeSelected = (
 
   if (listOfSelected?.[0]) {
     listOfSelected.forEach((selectedHtml: Element) => {
-      if (selectedHtml.classList.length > 1) {
-        selectedHtml?.classList.remove("selected");
-      } else {
-        selectedHtml.outerHTML = selectedHtml.innerHTML;
-      }
+      selectedHtml.classList.length > 1
+        ? selectedHtml?.classList.remove("selected")
+        : (selectedHtml.outerHTML = selectedHtml.innerHTML);
     });
   } else {
     const spanElements = blockContentHtml?.querySelectorAll("span");
-    if (spanElements) {
-      spanElements.forEach((element: HTMLSpanElement) => {
-        if (!element.className) {
-          element.outerHTML = element.innerHTML;
-        }
-      });
-    }
+    spanElements?.forEach((element: HTMLSpanElement) => {
+      if (!element.className) {
+        element.outerHTML = element.innerHTML;
+      }
+    });
   }
   const editedBlock = getContent(block);
   editBlock(page.id, editedBlock);

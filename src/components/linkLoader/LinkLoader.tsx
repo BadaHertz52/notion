@@ -331,7 +331,7 @@ const LinkLoader = ({
   const [linkLoaderStyle, setLinkLoaderStyle] = useState<
     CSSProperties | undefined
   >(undefined);
-  const blockStyler = document.getElementById("blockStyler");
+  const blockStyler = document.getElementById("styler-block");
   const [searchValue, setSearchValue] = useState<string | null>(null);
   const [candidates, setCandidates] = useState<Page[] | null>(null);
   const [webLink, setWebLink] = useState<boolean>(false);
@@ -377,7 +377,7 @@ const LinkLoader = ({
   // const getBlockContents = useCallback(() => {
   //   const targetBlockContentHtml = document
   //     .getElementById(`${block.id}__contents`)
-  //     ?.querySelector(".contentEditable");
+  //     ?.querySelector(".editable");
   //   if (targetBlockContentHtml && targetBlockContentHtml) {
   //     const innerHtml = targetBlockContentHtml.innerHTML;
   //     const newBlock: Block = {
@@ -415,8 +415,8 @@ const LinkLoader = ({
       } else {
         //page link
         const originLocation = window.location.origin;
-        const location = `${originLocation}/notion`;
-        const path = `${location}/#/${link}`;
+        const location = `${originLocation}`;
+        const path = `${location}/${link}`;
         element.setAttribute("href", `${path}`);
       }
     },
@@ -435,7 +435,6 @@ const LinkLoader = ({
       newSelectedHtml.innerHTML = innerHTML;
       changeHref(newSelectedHtml, link);
       selectedHtml?.parentNode?.replaceChild(newSelectedHtml, selectedHtml);
-      ////getBlockContents();
     },
     [changeHref, selectedHtml]
   );
@@ -504,21 +503,6 @@ const LinkLoader = ({
     }
   }, [closeLink, linkElements, resetLinked]);
 
-  // useEffect(() => {
-  //   if (blockStyler && blockStylerStyle?.top && blockStylerStyle?.left) {
-  //     const blockStylerTop = blockStylerStyle.top;
-  //     const blockStylerTopValue: number =
-  //       typeof blockStylerTop === "string"
-  //         ? +blockStylerTop.replace("px", "")
-  //         : blockStylerTop;
-  //     const top = blockStylerTopValue + blockStyler.clientHeight;
-  //     const left = blockStylerStyle.left as string;
-  //     setLinkLoaderStyle({
-  //       top: `${top + 10}px`,
-  //       left: left,
-  //     });
-  //   }
-  // }, [blockStylerStyle, blockStyler]);
   useEffect(() => {
     if (selectedHtml) {
       const selectedHtmlParent = selectedHtml.parentElement;
@@ -544,13 +528,13 @@ const LinkLoader = ({
   }, [selectedHtml]);
 
   return (
-    <div id="linkLoader" style={linkLoaderStyle}>
+    <div id="loader-link" style={linkLoaderStyle}>
       <div className="inner">
         <div className="search">
           <label>
             <ScreenOnly text="input loader file" />
             <input
-              id="input-loader"
+              id="input-loader-link"
               title="input loader file"
               placeholder={
                 linked

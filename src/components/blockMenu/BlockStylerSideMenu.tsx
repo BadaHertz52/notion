@@ -1,11 +1,7 @@
-import { CSSProperties, useCallback, useEffect, useState } from "react";
+import { memo, CSSProperties, useCallback, useEffect, useState } from "react";
+
+import { ColorMenu, LinkLoader, CommandMenu, CommentInput } from "../index";
 import { BlockStylerProps, BlockStylerSideMenuType } from "./BlockStyler";
-import LinkLoader from "../linkLoader/LinkLoader";
-import ColorMenu from "../color/ColorMenu";
-import Menu from "../menu/Menu";
-import CommandMenu from "../command/CommandMenu";
-import { isInTarget } from "../../utils";
-import CommentInput from "../comment/CommentInput";
 
 type BlockStylerSideMenuProps = BlockStylerProps & {
   sideMenu: BlockStylerSideMenuType;
@@ -16,20 +12,12 @@ const BlockStylerSideMenu = ({ ...props }: BlockStylerSideMenuProps) => {
 
   const [style, setStyle] = useState<CSSProperties | undefined>(undefined);
 
-  const handleCloseSideMenu = useCallback(
-    (event: globalThis.MouseEvent) => {
-      const target = ["#blockStyler__sideMenu", "#blockStyler"];
-      if (!target.map((v) => isInTarget(event, v)).some((v) => v))
-        closeSideMenu();
-    },
-    [closeSideMenu]
-  );
   const changeStyle = useCallback(() => {
     if (sideMenu === "commentInput") {
       setStyle({ position: "absolute", left: 0, top: 0 });
       return;
     }
-    const blockStylerEl = document.querySelector("#blockStyler");
+    const blockStylerEl = document.querySelector("#styler-block");
     const domRect = blockStylerEl?.getClientRects()[0];
     const topBarBottom = document.querySelector(".topBar")?.clientHeight;
     if (domRect && topBarBottom) {
@@ -54,35 +42,30 @@ const BlockStylerSideMenu = ({ ...props }: BlockStylerSideMenuProps) => {
           });
     }
   }, [sideMenu]);
+
   useEffect(() => {
     changeStyle();
-    document.addEventListener("click", handleCloseSideMenu);
-    return () => {
-      document.removeEventListener("click", handleCloseSideMenu);
-    };
-  }, [handleCloseSideMenu]);
+  }, [changeStyle]);
 
   return (
-    <div id="blockStyler__sideMenu">
+    <div id="styler-block__side-menu">
       <div className="inner" style={style}>
         {sideMenu === "command" && (
-          <CommandMenu {...props} closeCommand={closeSideMenu} />
+          <CommandMenu
+            {...props}
+            closeCommand={closeSideMenu}
+            closeModal={undefined}
+          />
         )}
         {sideMenu === "link" && (
           <LinkLoader {...props} closeLink={closeSideMenu} />
         )}
         {sideMenu === "color" && <ColorMenu {...props} />}
-        {sideMenu === "menu" && (
-          //TODO - modal로 인한 수정
-          <Menu
-            {...props}
-            //style={menuStyle}
-          />
-        )}
         {sideMenu === "commentInput" && (
           <CommentInput
             {...props}
             pageId={props.page.id}
+            commentBlock={props.block}
             addOrEdit="add"
             mainComment={null}
             subComment={null}
@@ -94,4 +77,4 @@ const BlockStylerSideMenu = ({ ...props }: BlockStylerSideMenuProps) => {
   );
 };
 
-export default BlockStylerSideMenu;
+export default memo(BlockStylerSideMenu);

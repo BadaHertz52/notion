@@ -36,19 +36,19 @@
     width: inherit;
     height: calc(100vh - 1.5rem);
   }
-  #commandMenu,
+  #menu-command,
   #pageMenu,
-  .menu__color,
-  .menu,
-  .menu .mainMenu,
-  .menu .menu__sideMenu,
-  #linkLoader {
+  #menu-color,
+  #menu,
+  #menu .menu__main-menu,
+  #menu .menu__sideMenu,
+  #loader-link {
     @include resetModalStyle;
     position: relative;
     width: 100vw;
     height: inherit;
   }
-  .menu {
+  #menu {
     .menu__inner,
     .menu__edit {
       width: 100vw;
@@ -57,7 +57,7 @@
     .menu__search {
       display: none;
     }
-    .mainMenu {
+    .menu__main-menu {
       .menu__inner {
         padding: 0;
       }
@@ -65,7 +65,7 @@
     .menu__edit {
       position: relative;
     }
-    .menu__editBtns {
+    .menu__btn-edits {
       padding-top: 14px;
     }
     .edit__inform {
@@ -76,7 +76,7 @@
       font-size: 14px;
     }
   }
-  .menu .menu___sideMenu {
+  #menu .menu___sideMenu {
     position: absolute;
     background-color: rgb(240, 240, 240);
     top: 0;

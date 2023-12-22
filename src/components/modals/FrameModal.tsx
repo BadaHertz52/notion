@@ -150,53 +150,25 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
     frameEl?.classList.toggle("stop", modal.open);
   }, [modal.open]);
 
-  const isInBlockStyler = useCallback(
-    (event: globalThis.MouseEvent) => {
-      const isBlockStylerSideMenu = document.querySelector(
-        "#blockStyler__sideMenu"
-      );
-      if (
-        modal.target === "blockStyler" &&
-        modal.block &&
-        !isBlockStylerSideMenu
-      ) {
-        const target = [`#${modal.block.id}__contents`, "#blockStyler"];
-
-        return target.map((v) => isInTarget(event, v)).some((v) => v);
-      } else {
-        return true;
-      }
-    },
-    [modal]
-  );
-
-  const handleCloseBlockStyler = useCallback(() => {
-    if (modal.block) {
-      removeSelected(modal.block, editBlock, props.page);
-    }
-  }, [modal.block, props.page, editBlock]);
-
+  const isInModal = useCallback((event: globalThis.MouseEvent) => {
+    const target = [
+      ".modal",
+      "#menu",
+      ".comments-bubble",
+      ".btn-comment",
+      ".comment__tool-more",
+      ".comment__btn-submit",
+    ];
+    return target.map((v) => !!isInTarget(event, v)).some((v) => v);
+  }, []);
   const handleCloseModal = useCallback(
     (event: globalThis.MouseEvent) => {
-      const target = [
-        ".modal",
-        ".menu",
-        ".comments-bubble",
-        ".btn-comment",
-        ".comment__tool-more",
-        ".comment__btn-submit",
-      ];
-      const isInModal = target
-        .map((v) => !!isInTarget(event, v))
-        .some((v) => v);
-      if (modal.open) {
-        if (!isInModal && !isInBlockStyler(event)) {
-          handleCloseBlockStyler();
-          props.closeModal();
-        }
+      //blockStyler는 sideMenu 문제로 blockStyler에서 다룸
+      if (modal.open && modal.target !== "blockStyler" && !isInModal(event)) {
+        props.closeModal();
       }
     },
-    [props, modal, isInBlockStyler]
+    [props, modal, isInModal]
   );
 
   useEffect(() => {

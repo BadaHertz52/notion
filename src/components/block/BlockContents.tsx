@@ -108,21 +108,38 @@ const BlockContents = ({ ...props }: BlockContentsProps) => {
     },
     [setStyleOfBlockFn, toggleBlockFn]
   );
-  //--show blockFn
-  const onClickContents = useCallback(() => {
-    // block type이 page인 block에 대한 BlockComponent를 클릭 할 경우, 해당 page로 이동
-    if (block.type === "page") {
-      navigate(makeRoutePath(block.id));
-    }
-    // block.contents ===""일때, contentEditable이 가능하도록 포커스를 줌
-    if (!block.contents) {
-      const contentEditableEl = document
-        .querySelector(`#${block.id}__contents`)
-        ?.querySelector(".contentEditable") as HTMLElement | null | undefined;
 
-      contentEditableEl?.focus();
+  const openLink = useCallback((event: MouseEvent) => {
+    const target = event.target as Element;
+    if (target.tagName.toLowerCase() === "a") {
+      const { href } = target as HTMLLinkElement;
+      const newWindow = window.open("", "_blank");
+      if (newWindow) {
+        newWindow.location.href = href;
+      }
     }
-  }, [block.type, block.id, block.contents, navigate]);
+  }, []);
+
+  //--show blockFn
+  const onClickContents = useCallback(
+    (event: MouseEvent) => {
+      // block type이 page인 block에 대한 BlockComponent를 클릭 할 경우, 해당 page로 이동
+      if (block.type === "page") {
+        navigate(makeRoutePath(block.id));
+      }
+      if (block.contents.includes('class="link"')) {
+        openLink(event);
+      }
+      // block.contents ===""일때, contentEditable이 가능하도록 포커스를 줌
+      if (!block.contents) {
+        const contentEditableEl = document
+          .querySelector(`#${block.id}__contents`)
+          ?.querySelector(".editable") as HTMLElement | null | undefined;
+        contentEditableEl?.focus();
+      }
+    },
+    [block.type, block.id, block.contents, navigate, openLink]
+  );
 
   /**
    * [isMoved - mobile] handleTouchStart 을 통해 위치를 변경시킬 블럭으로 해당 요소에 touch move 이벤트가 감지 되었을때,  일정 시간이 경과하면 모바일 환경에서 터치를 통한 블럭 이동을 위한 환경을 준비하는 함수

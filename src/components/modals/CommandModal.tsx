@@ -13,7 +13,7 @@ function CommandModal({ ...props }: CommandModalProps) {
 
   const handleClose = useCallback(
     (event: globalThis.MouseEvent) => {
-      const array = ["#commandMenu", "#commendInput"];
+      const array = ["#menu-command", "#commendInput"];
       const isNotTarget = array
         .map((v) => !isInTarget(event, v))
         .every((v) => v);

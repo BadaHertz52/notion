@@ -1,35 +1,26 @@
 import React, {
   Dispatch,
-  MouseEvent,
   SetStateAction,
   useEffect,
   useState,
   useContext,
   useCallback,
 } from "react";
-import { CSSProperties } from "styled-components";
-import { BsChatLeftText, BsThreeDots } from "react-icons/bs";
+
+import { BsChatLeftText } from "react-icons/bs";
 import { IoIosArrowDown } from "react-icons/io";
 import { ImArrowUpRight2 } from "react-icons/im";
 
-import { ScreenOnly, Menu, ColorMenu, LinkLoader } from "../index";
+import { ScreenOnly, BlockStylerSideMenu } from "../index";
 import { ActionContext } from "../../contexts";
+import { MenuAndBlockStylerCommonProps, ModalType } from "../../types";
 import {
-  Block,
-  MenuAndBlockStylerCommonProps,
-  MobileSideMenuWhat,
-  ModalType,
-  SelectionType,
-  StylerCommonProps,
-} from "../../types";
-import {
+  findBlock,
   getContent,
-  isMobile,
+  isInTarget,
   removeSelected,
   selectContent,
 } from "../../utils";
-import { SESSION_KEY } from "../../constants";
-import BlockStylerSideMenu from "./BlockStylerSideMenu";
 
 import "../../assets/blockStyler.scss";
 
@@ -52,19 +43,8 @@ export type BlockStylerProps = Omit<
 };
 const BlockStyler = ({ ...props }: BlockStylerProps) => {
   const { editBlock } = useContext(ActionContext).actions;
-  const {
-    pages,
-    pagesId,
-    firstList,
-    userName,
-    page,
-    recentPagesId,
-    block,
-    frameHtml,
-    setModal,
-  } = props;
-  //selected 표시, 선택된 부분 수정 시 editBlock, setModal로 block을 업데이트하면 maxMim 렌더링 오류가 나는 것을 피하기 위해 따로 targetBlock을 사용
-  const [targetBlock, setTargetBlock] = useState<Block>(block);
+  const { page, block } = props;
+
   const [sideMenu, setSideMenu] = useState<BlockStylerSideMenuType>(undefined);
 
   type BlockFontWeightType = "bold" | "initial";
@@ -73,9 +53,30 @@ const BlockStyler = ({ ...props }: BlockStylerProps) => {
 
   const closeSideMenu = () => setSideMenu(undefined);
 
+  const prepareForChange = useCallback(() => {
+    const selectedEl = document.querySelector(".selected");
+    if (!selectedEl) {
+      const selection = document.getSelection();
+      const contentEditableHtml = document.getElementById(
+        `${block.id}__contents`
+      )?.firstElementChild as HTMLElement | null | undefined;
+
+      if (selection && contentEditableHtml) {
+        const editedBlock = selectContent(
+          selection,
+          block,
+          contentEditableHtml
+        );
+        if (editedBlock) {
+          editBlock(page.id, editedBlock);
+        }
+      }
+    }
+  }, [block, editBlock, page.id]);
+
   const getBlockType = () => {
-    const blockType = block.type;
-    switch (blockType) {
+    const { type } = findBlock(page, block.id).BLOCK;
+    switch (type) {
       case "bulletList":
         return "Bullet list";
       case "h1":
@@ -162,159 +163,55 @@ const BlockStyler = ({ ...props }: BlockStylerProps) => {
           }
         });
 
-        const editedBlock = getContent(targetBlock);
-        setTargetBlock(editedBlock);
+        const editedBlock = getContent(block);
+        editBlock(page.id, editedBlock);
+        //setTargetBlock(editedBlock);
       }
     },
     [block, editBlock, page.id, removeOtherTextDeco]
   );
 
-  // /**
-  //  * 유저가 blockStyler를 통해 여는 sideMenu의 영역 밖을을 클릭 할 경우 열려있는 sideMenu 창을 닫는 함수
-  //  * @param target event.target <HTMLElement>
-  //  * @param htmlId
-  //  */
-  // const closeSideMenu = useCallback(
-  //   (target: HTMLElement, htmlId: sideMenuIdType) => {
-  //     const isIn = target.id === htmlId ? true : target.closest(`#${htmlId}`);
-  //     if (!isIn) {
-  //       switch (htmlId) {
-  //         case "block-styler__color":
-  //           setOpenColor(false);
-  //           break;
-  //         case "block__commandMenu":
-  //           // setCommand({
-  //           //   open: false,
-  //           //   command: null,
-  //           //   targetBlock: null,
-  //           // });
-  //           break;
-  //         case "linkLoader":
-  //           setOpenLink(false);
-  //           break;
-  //         case "menu__main":
-  //           const isInSideMenu =
-  //             target.id === "sideMenu" ? true : target.closest("#sideMenu");
-  //           !isInSideMenu && setOpenMenu(false);
-  //           break;
-  //         default:
-  //           break;
-  //       }
-  //     }
-  //   },
-  //   []
-  // );
-  // /**
-  //  * 화면상에서 클릭한 곳이 blockStyler외의 곳일 경우, blockStyler 에 의한 변경사항의 여부에 따라 변경 사항이 있으면 블록의 contents 중 선택된 영역을 가리키는 selected 클래스를 제거하고, 변경이 없는 경우 원래의 블록으로 되돌린 후, selection 값은 null로 변경하여 BlockStyler component의 실행을 종료하는 함수
-  //  * @param event globalThis.MouseEvent
-  //  */
-  // const closeBlockStyler = useCallback(
-  //   (event: globalThis.MouseEvent | TouchEvent) => {
-  //     const target = event.target as HTMLElement | null;
-  //     if (target) {
-  //       const isInBlockStyler = target.closest("#blockStyler");
-  //       const isInMenuComponent = target.closest(".menu");
-  //       const isInMobileMenu = target.closest("#mobileMenu");
-  //       const isInContents = target.closest(".contents");
-  //       if (
-  //         !isInBlockStyler &&
-  //         !isInMenuComponent &&
-  //         !isInMobileMenu &&
-  //         !isInContents
-  //       ) {
-  //         const colorMenuHtml = document.getElementById("block-styler__color");
-  //         const commandBlockHtml =
-  //           document.getElementById("block__commandMenu");
-  //         const mainMenu = document.getElementById("mainMenu");
-  //         const linkLoaderHtml = document.getElementById("linkLoader");
+  const isInBlockStyler = useCallback(
+    (event: globalThis.MouseEvent) => {
+      const target = [
+        "#styler-block",
+        `#${block.id}__contents`,
+        "#menu",
+        "#menu-command",
+        "#menu-color",
+        ".comment-input",
+        "#loader-link",
+      ];
+      return target.map((v) => isInTarget(event, v)).some((v) => v);
+    },
+    [block.id]
+  );
+  const closeBlockStyler = useCallback(() => {
+    const editedBlock = findBlock(page, block.id).BLOCK;
+    removeSelected(editedBlock, editBlock, page);
+    props.closeModal();
+  }, [block, editBlock, page, props]);
 
-  //         if (
-  //           !colorMenuHtml &&
-  //           !commandBlockHtml &&
-  //           !mainMenu &&
-  //           !linkLoaderHtml
-  //         ) {
-  //           // 조건 : web에서 sideMenu가 닫혀 있을 경우
-  //           //TODO -  수정
-  //           //removeSelected(frameHtml, block, editBlock, page, setSelection);
-  //           //setSelection && setSelection(null);
-  //           if (openMenu) {
-  //             //setMobileMenuTargetBlock(null);
-  //           }
-  //         } else {
-  //           const eventTarget = event.target as HTMLElement | null;
-  //           if (eventTarget) {
-  //             openColor && closeSideMenu(eventTarget, "block-styler__color");
-  //             openLink && closeSideMenu(eventTarget, "linkLoader");
-  //             openMenu && closeSideMenu(eventTarget, "menu__main");
-  //             //command.open && closeSideMenu(eventTarget, "block__commandMenu");
-  //           }
-  //         }
-  //       }
-  //     }
-  //   },
-  //   [
-  //     block,
-  //     closeSideMenu,
-
-  //     editBlock,
-  //     frameHtml,
-  //     openColor,
-  //     openLink,
-  //     openMenu,
-  //     page,
-  //   ]
-  // );
-
-  // const executeCloseBlockStyler = useCallback(
-  //   (event: globalThis.MouseEvent | TouchEvent) => {
-  //     if (
-  //       document.getElementById("blockStyler") &&
-  //       !document.getElementById("mobileSideMenu")
-  //     ) {
-  //       closeBlockStyler(event);
-  //     }
-  //   },
-  //   [closeBlockStyler]
-  // );
-
-  const prepareForChange = useCallback(() => {
-    const selectedEl = document.querySelector(".selected");
-    if (!selectedEl) {
-      const selection = document.getSelection();
-      const contentEditableHtml = document.getElementById(
-        `${block.id}__contents`
-      )?.firstElementChild as HTMLElement | null | undefined;
-
-      if (selection && contentEditableHtml) {
-        const editedBlock = selectContent(
-          selection,
-          block,
-          contentEditableHtml
-        );
-        if (editedBlock) {
-          setTargetBlock(editedBlock);
-        }
+  const handleCloseBlockStyler = useCallback(
+    (event: globalThis.MouseEvent) => {
+      if (!isInBlockStyler(event)) {
+        sideMenu ? closeSideMenu() : closeBlockStyler();
       }
-    }
-  }, [block]);
+    },
+    [isInBlockStyler, sideMenu, closeBlockStyler]
+  );
 
-  // useEffect(() => {
-  //   // document.addEventListener("click", executeCloseBlockStyler);
-  //   // document.addEventListener("touchend", executeCloseBlockStyler, {
-  //   //   passive: true,
-  //   // });
-
-  //   return () => {
-  //     // document.removeEventListener("click", executeCloseBlockStyler);
-  //     // document.removeEventListener("touchend", executeCloseBlockStyler);
-  //   };
-  // }, [executeCloseBlockStyler, targetBlock, page, editBlock]);
+  useEffect(() => {
+    document.addEventListener("click", handleCloseBlockStyler);
+    return () => {
+      document.removeEventListener("click", handleCloseBlockStyler);
+    };
+  }, [handleCloseBlockStyler]);
 
   return (
     <>
       <div
-        id="blockStyler"
+        id="styler-block"
         style={{ display: sideMenu === "commentInput" ? "none" : "block" }}
       >
         <div className="inner">
@@ -397,24 +294,16 @@ const BlockStyler = ({ ...props }: BlockStylerProps) => {
             <span>A</span>
             <IoIosArrowDown className="arrow-down" />
           </button>
-          <button
-            title="button to open menu "
-            className="blockStyler__btn-menu btn"
-            onClick={() => openSideMenu("menu")}
-            onMouseDown={prepareForChange}
-            onTouchStart={prepareForChange}
-          >
-            <ScreenOnly text="button to open menu" />
-            <BsThreeDots />
-          </button>
         </div>
       </div>
-      <BlockStylerSideMenu
-        {...props}
-        block={targetBlock}
-        sideMenu={sideMenu}
-        closeSideMenu={closeSideMenu}
-      />
+      {sideMenu && (
+        <BlockStylerSideMenu
+          {...props}
+          block={findBlock(page, block.id).BLOCK}
+          sideMenu={sideMenu}
+          closeSideMenu={closeSideMenu}
+        />
+      )}
     </>
   );
 };

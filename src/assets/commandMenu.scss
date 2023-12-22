@@ -1,6 +1,6 @@
 @import "./common";
 
-#commandMenu {
+#menu-command {
   @include modalStyle;
   @include webkitScroll;
   position: relative;

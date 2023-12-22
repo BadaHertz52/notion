@@ -1,5 +1,5 @@
 @import "./common";
-#blockStyler {
+#styler-block {
   position: absolute;
   @include modalStyle;
   border-radius: 5px;
@@ -13,6 +13,7 @@
     flex-direction: row;
   }
   .btn {
+    width: max-content;
     height: 100%;
     padding: 0 8px;
     transition: backgroundColor 20ms ease-in 0s;
@@ -30,7 +31,7 @@
       min-width: fit-content;
     }
   }
-  #commandMenu {
+  #menu-command {
     display: flex;
     position: absolute;
     top: 100%;
@@ -78,18 +79,18 @@
   z-index: 30;
 }
 
-#blockStyler__sideMenu {
+#styler-block__side-menu {
   position: relative;
-  #commandMenu {
+  #menu-command {
     margin: 0;
   }
-  .menu {
+  #menu {
     position: relative;
   }
 }
 
 #mobileMenu {
-  #blockStyler {
+  #styler-block {
     position: relative;
     width: 100%;
     overflow: hidden;

@@ -95,8 +95,8 @@ const CommandInput = ({ ...props }: CommandInputProps) => {
     };
   }, []);
   return (
-    <div className="commandInput">
-      <label htmlFor="commandInput">
+    <div className="command-input">
+      <label htmlFor="input-command">
         <ScreenOnly text="content input" />
       </label>
       <input
@@ -104,8 +104,8 @@ const CommandInput = ({ ...props }: CommandInputProps) => {
         title="content input"
         tabIndex={-1}
         value={value}
-        id="commandInput"
-        className="contentEditable"
+        id="input-command"
+        className="editable"
         ref={commentInputRef}
         onChange={commandChange}
         onKeyUp={commandKeyUp}

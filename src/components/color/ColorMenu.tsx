@@ -14,7 +14,7 @@ const ColorMenu = ({ page, block, setModal, closeMenu }: ColorMenuProps) => {
   const { editBlock } = useContext(ActionContext).actions;
   const templateHtml = document.getElementById("template");
   return (
-    <div className="menu__color">
+    <div id="menu-color">
       <section className="color-group">
         <header>COLOR</header>
         <div>

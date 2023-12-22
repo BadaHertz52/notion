@@ -93,11 +93,11 @@ const CommentInput = ({
   const [editTargetComment, setEditTargetComment] = useState<
     MainCommentType | SubCommentType | null
   >(null);
-  const reply = "Reply...";
+  const REPLY = "Reply...";
   const changing = editTargetComment?.content;
-  const makingMain = "Add a comment";
-  type situationType = typeof reply | typeof changing | typeof makingMain;
-  const [placeHolder, setPlaceHolder] = useState<situationType>(makingMain);
+  const MAKING_MAIN = "Add a comment";
+  type situationType = typeof REPLY | typeof changing | typeof MAKING_MAIN;
+  const [placeHolder, setPlaceHolder] = useState<situationType>(MAKING_MAIN);
   const [submitStyle, setSubmitStyle] = useState<CSSProperties>({
     fill: "#a3a3a2",
     border: "none",
@@ -127,6 +127,7 @@ const CommentInput = ({
             };
           }
         }
+        console.log("blockcomments", blockComments, "edited", editedBlock);
         editBlock(pageId, editedBlock);
         setAllComments && setAllComments(blockComments);
       }
@@ -193,7 +194,7 @@ const CommentInput = ({
         editTime: editTime,
         createTime: editTime,
         content: text,
-        selectedText: selectedHtmlText === undefined ? null : selectedHtmlText,
+        selectedText: !selectedHtmlText ? null : selectedHtmlText,
         subComments: null,
         subCommentsId: null,
         type: "open",
@@ -463,10 +464,10 @@ const CommentInput = ({
       case "add":
         if (mainComment) {
           //add new subComment to mainComment
-          setPlaceHolder(reply);
+          setPlaceHolder(REPLY);
         } else {
           //make new mainComment
-          setPlaceHolder(makingMain);
+          setPlaceHolder(MAKING_MAIN);
         }
         break;
       case "edit":
@@ -484,13 +485,11 @@ const CommentInput = ({
   }, [mainComment, subComment, addOrEdit]);
   return (
     <div
-      className={
-        addOrEdit === "edit" ? "commentInput editComment" : "commentInput"
-      }
+      className={addOrEdit === "edit" ? "comment-input edit" : "comment-input"}
       ref={commentInputRef}
     >
       {addOrEdit === "add" && (
-        <div className="firstLetter">
+        <div className="first-letter">
           <div className="inner">
             <span>{userNameFirstLetter}</span>
           </div>

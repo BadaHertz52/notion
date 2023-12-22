@@ -55,7 +55,7 @@ const MobileMenu = ({
   const closeMM = useCallback(() => {
     setMobileMenuTargetBlock(null);
   }, [setMobileMenuTargetBlock]);
-  // mobileMenu 창이 열려있을 때, mobileMenu 나 contentEditable 이외의 영역을 클릭 시, mobileMenu 창을 닫는  동작 (+ Selection 이 있는 경우, 이를 해제 )
+  // mobileMenu 창이 열려있을 때, mobileMenu 나 editable 이외의 영역을 클릭 시, mobileMenu 창을 닫는  동작 (+ Selection 이 있는 경우, 이를 해제 )
   const closeMobileMenu = useCallback(
     (event: TouchEvent) => {
       const target = event.target as HTMLElement | null;
@@ -63,7 +63,7 @@ const MobileMenu = ({
       const blockEl = target?.closest(`#block-${targetBlock.id}`);
       const conditionForClosing_notMobileBlock = !mobileMenuElement;
       const conditionForClosing_notContentEditable =
-        !blockEl && target?.className !== "contentEditable";
+        !blockEl && target?.className !== "editable";
       if (
         conditionForClosing_notMobileBlock &&
         conditionForClosing_notContentEditable
@@ -193,7 +193,7 @@ const MobileMenu = ({
         case 3:
           //text node
           const parentElement = anchorNode.parentElement;
-          contentEditableElement = parentElement?.closest(".contentEditable");
+          contentEditableElement = parentElement?.closest(".editable");
 
           break;
         case 1:
@@ -343,7 +343,7 @@ const MobileMenu = ({
             <button
               title="button to change color"
               name="color"
-              className="underline menu__editBtn btn-color "
+              className="underline menu__btn-edit btn-color "
               onTouchEnd={() => openMobileSideMenu("ms_color")}
             >
               <div className="mobileBlock__btn__inner">

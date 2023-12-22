@@ -532,7 +532,7 @@ const BlockContentEditable = ({
     <>
       {!openCommandMenu ? (
         <ContentEditable
-          className="contentEditable"
+          className="editable"
           placeholder="Type '/' for commands"
           html={blockContents}
           innerRef={contentEditableRef}

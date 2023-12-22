@@ -61,7 +61,7 @@ const CommentBlock = ({ ...props }: CommentBlockProps) => {
     <div className="commentBlock">
       <section className="commentBlock__header">
         <div className="information">
-          <div className="firstLetter">
+          <div className="first-letter">
             <div>{firstLetter}</div>
           </div>
           <div className="userName">{comment.userName}</div>

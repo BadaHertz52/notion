@@ -24,6 +24,6 @@ export const closeModalPortal = () => {
  * @param target : 타켓 요소의 아이디나 클래스(아이디:"#id",클래스:".클래스")
  */
 export const isInTarget = (event: globalThis.MouseEvent, target: string) => {
-  const eventTarget = event.target as Element;
+  const eventTarget = event.target as HTMLElement;
   return eventTarget.closest(target);
 };
