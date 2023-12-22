@@ -163,12 +163,11 @@ const BlockStyler = ({ ...props }: BlockStylerProps) => {
           }
         });
 
-        const editedBlock = getContent(block);
+        const editedBlock = getContent(findBlock(page, block.id).BLOCK);
         editBlock(page.id, editedBlock);
-        //setTargetBlock(editedBlock);
       }
     },
-    [block, editBlock, page.id, removeOtherTextDeco]
+    [block, page, editBlock, removeOtherTextDeco]
   );
 
   const isInBlockStyler = useCallback(

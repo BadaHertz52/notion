@@ -57,7 +57,6 @@ type FrameModalProps = Omit<
 
 const FrameModal = ({ ...props }: FrameModalProps) => {
   const { modal } = props;
-  const { editBlock } = useContext(ActionContext).actions;
 
   const ID = "modal-frame";
 
