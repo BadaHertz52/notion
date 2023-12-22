@@ -17,14 +17,21 @@ const BlockStylerSideMenu = ({ ...props }: BlockStylerSideMenuProps) => {
       setStyle({ position: "absolute", left: 0, top: 0 });
       return;
     }
-    const blockStylerEl = document.querySelector("#styler-block");
-    const domRect = blockStylerEl?.getClientRects()[0];
+    const frameModalEl = document.querySelector(
+      "#modal-frame__menu"
+    ) as HTMLElement | null;
+    const style = frameModalEl?.style;
     const topBarBottom = document.querySelector(".topBar")?.clientHeight;
-    if (domRect && topBarBottom) {
-      const GAP = 20;
-      const { bottom, top } = domRect;
-      const gapFromBottom = window.innerHeight - topBarBottom - bottom - GAP;
-      const gapFromTopBar = top - topBarBottom - GAP;
+
+    if (style && topBarBottom) {
+      const GAP = 60;
+      const { bottom, top } = style;
+      const y = bottom
+        ? -Number(bottom.replace("px", ""))
+        : Number(top.replace("px", ""));
+
+      const gapFromBottom = window.innerHeight - y - GAP;
+      const gapFromTopBar = y - topBarBottom - GAP;
       const isDropDown = gapFromBottom >= gapFromTopBar;
 
       isDropDown

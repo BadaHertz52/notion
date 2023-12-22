@@ -97,18 +97,24 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
       });
     }
   }, []);
+
   const changeBlockStylerModalStyle = useCallback(() => {
     const pageContentsEl = document.querySelector(".page__contents");
     const pageContentsElDomRect = pageContentsEl?.getClientRects()[0];
+
     if (modal.block && pageContentsElDomRect) {
       const domeRect = getBlockDomRect(modal.block);
+      const topBarBottom = document.querySelector(".topBar")?.clientHeight;
       const GAP = 10;
-      const stylerHeight = 45;
+      const STYLER_HEIGHT = 45;
 
-      if (domeRect) {
-        const top = domeRect.top - GAP - stylerHeight;
+      if (domeRect && topBarBottom) {
+        const top = domeRect.top - GAP - STYLER_HEIGHT;
         const isOver = pageContentsElDomRect.top <= top;
-        !isOver
+
+        const isOverlap = top <= topBarBottom;
+
+        !isOver && isOverlap
           ? setModalStyle({
               position: "absolute",
               top: top,
@@ -143,7 +149,12 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
       default:
         break;
     }
-  }, [modal, changeStyleOfModalOnBottomBlock, changeMenuModalStyle]);
+  }, [
+    modal,
+    changeStyleOfModalOnBottomBlock,
+    changeMenuModalStyle,
+    changeBlockStylerModalStyle,
+  ]);
 
   const handleScrollOfFrame = useCallback(() => {
     const frameEl = document.querySelector(".frame");
@@ -161,6 +172,7 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
     ];
     return target.map((v) => !!isInTarget(event, v)).some((v) => v);
   }, []);
+
   const handleCloseModal = useCallback(
     (event: globalThis.MouseEvent) => {
       //blockStyler는 sideMenu 문제로 blockStyler에서 다룸
