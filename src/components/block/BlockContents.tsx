@@ -7,6 +7,7 @@ import React, {
   useContext,
   useCallback,
   useMemo,
+  useEffect,
 } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -193,7 +194,15 @@ const BlockContents = ({ ...props }: BlockContentsProps) => {
       clearTimeout(markMovingTargetBlock());
     }
   };
-  //---moving block
+  //---moving
+  useEffect(() => {
+    document.addEventListener("touchend", () => {
+      if (blockContentsRef.current?.classList.contains("on")) {
+        blockContentsRef.current.classList.remove("on");
+      }
+    });
+  });
+
   return (
     <div
       id={`${props.block.id}__contents`}
