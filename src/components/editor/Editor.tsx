@@ -8,7 +8,7 @@ import React, {
 import { useSelector } from "react-redux";
 import { CSSProperties } from "styled-components";
 
-import { Frame, TopBar, MobileSideMenu } from "../index";
+import { Frame, TopBar } from "../index";
 
 import { ActionContext } from "../../contexts";
 import { RootState } from "../../modules";
@@ -18,9 +18,7 @@ import {
   ListItem,
   SideAppear,
   FontStyle,
-  MobileSideMenuType,
   Path,
-  ModalType,
 } from "../../types/";
 import { makePagePath } from "../../utils";
 
@@ -52,8 +50,6 @@ export type EditorProps = {
   setOpenTemplates: Dispatch<SetStateAction<boolean>>;
   fontStyle: FontStyle;
   setFontStyle: Dispatch<SetStateAction<FontStyle>>;
-  mobileSideMenu: MobileSideMenuType;
-  setMobileSideMenu: Dispatch<SetStateAction<MobileSideMenuType>>;
   openExport?: boolean;
 };
 
@@ -83,8 +79,6 @@ const Editor = ({
   setOpenTemplates,
   fontStyle,
   setFontStyle,
-  mobileSideMenu,
-  setMobileSideMenu,
   openExport,
 }: EditorProps) => {
   const { restorePage, cleanTrash } = useContext(ActionContext).actions;
@@ -169,26 +163,8 @@ const Editor = ({
         openTemplates={openTemplates}
         setOpenTemplates={setOpenTemplates}
         fontStyle={fontStyle}
-        mobileSideMenu={mobileSideMenu}
-        setMobileSideMenu={setMobileSideMenu}
         openExport={openExport}
       />
-      {mobileSideMenu.block && (
-        <MobileSideMenu
-          pages={pages}
-          pagesId={pagesId}
-          recentPagesId={recentPagesId}
-          firstList={firstList}
-          userName={userName}
-          page={page}
-          block={mobileSideMenu.block}
-          setCommentBlock={setCommentBlock}
-          frameHtml={null}
-          mobileSideMenu={mobileSideMenu}
-          setMobileSideMenu={setMobileSideMenu}
-        />
-      )}
-     
     </div>
   );
 };

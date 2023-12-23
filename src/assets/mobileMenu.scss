@@ -1,23 +1,19 @@
 @import "./common";
-#mobileMenu {
+$width_320: calc(320px * 0.9);
+#mobile-menu {
   @include modalStyle;
-  position: absolute;
-  left: 5%;
-  min-width: 250px;
-  max-width: 80%;
-  width: fit-content;
-  overflow-y: hidden;
+  position: relative;
   overflow-x: auto;
+  width: fit-content;
   .inner {
     display: flex;
-    justify-content: space-around;
   }
   button {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 2.2rem;
-    min-width: 24px;
+
     font-size: 1rem;
     border-right: 1px solid rgb(212, 212, 212);
     .text {
@@ -25,9 +21,10 @@
       min-width: fit-content;
     }
     .mobileBlock__btn__inner {
-      width: 80%;
+      width: max-content;
       height: calc(100% - 10px);
       margin: 5px 0;
+      padding: 0 5px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -37,18 +34,7 @@
     border-right: none;
     padding-right: 4px;
   }
-  .btn-add-block,
-  .btn-comment,
-  .btn-delete {
-    flex-grow: 1;
-  }
-  .btn-turn-into {
-    flex-grow: 3;
-  }
-  .btn-color,
-  .btn-open-menu {
-    flex-grow: 2;
-  }
+
   .arrow-down {
     color: grey;
     display: inline-flex;
@@ -59,10 +45,8 @@
   }
 }
 
-@media screen and (min-width: 375px) {
-  #mobileMenu {
-    button {
-      min-width: 32px;
-    }
+@media screen and (max-width: 320px) {
+  #mobile-menu {
+    max-width: $width_320;
   }
 }

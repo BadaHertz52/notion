@@ -126,7 +126,7 @@ const Frame = ({ ...props }: FrameProps) => {
   //     const target = event.target as HTMLElement | null;
   //     if (target) {
   //       const isInModal = target.closest("#modal__menu");
-  //       const isInMobileMenu = target.closest("#mobileMenu");
+  //       const isInMobileMenu = target.closest("#mobile-menu");
   //       if (!isInModal && !isInMobileMenu) {
   //         setModal({
   //           open: false,
@@ -516,7 +516,7 @@ const Frame = ({ ...props }: FrameProps) => {
   //     if (mobileMenuTargetBlock) {
   //       setMobileMenuTargetBlock(null);
   //     }
-  //     if (document.querySelector("#mobileSideMenu")) {
+  //     if (document.querySelector("#mobile--side-menu")) {
   //       setMobileSideMenu({
   //         block: null,
   //         what: undefined,

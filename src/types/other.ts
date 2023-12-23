@@ -4,18 +4,6 @@ import { FONT_FAMILY } from "../constants/font";
 
 export type FontStyle = keyof typeof FONT_FAMILY;
 
-export type MobileSideMenuWhat =
-  | "ms_turnInto"
-  | "ms_movePage"
-  | "ms_color"
-  | "ms_moreMenu"
-  | "ms_link"
-  | undefined;
-
-export type MobileSideMenuType = {
-  block: Block | null;
-  what: MobileSideMenuWhat;
-};
 export type Path = {
   id: string;
   title: string;

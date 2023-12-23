@@ -15,6 +15,7 @@ import {
   Comments,
   Rename,
   BlockStyler,
+  MobileMenu,
 } from "../index";
 import { CommentInputProps } from "../comment/CommentInput";
 import { MenuProps } from "../menu/Menu";
@@ -25,6 +26,7 @@ import {
   findPage,
   getBlockDomRect,
   isInTarget,
+  isMobile,
   removeSelected,
 } from "../../utils";
 import { EditableBlockProps } from "../block/EditableBlock";
@@ -113,7 +115,7 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
 
         const isOverlap = top <= topBarBottom;
 
-        !isOver && isOverlap
+        (!isOver && isOverlap) || isMobile()
           ? setModalStyle({
               position: "absolute",
               top: top,
@@ -145,6 +147,9 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
       case "blockStyler":
         changeBlockStylerModalStyle();
         break;
+      case "mobileMenu":
+        changeBlockStylerModalStyle();
+        break;
       default:
         break;
     }
@@ -169,18 +174,37 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
       ".comment__tool-more",
       ".comment__btn-submit",
       ".text_commentBtn",
+      "#mobile-menu",
+      "#mobile-side-menu",
     ];
     return target.map((v) => !!isInTarget(event, v)).some((v) => v);
   }, []);
 
+  const isOpenMobileMenu = useCallback(
+    (event: globalThis.MouseEvent) => {
+      if (modal.block) {
+        return (
+          isInTarget(event, `#block-${modal.block.id}`) &&
+          modal.target === "mobileMenu"
+        );
+      }
+    },
+    [modal.block, modal.target]
+  );
+
   const handleCloseModal = useCallback(
     (event: globalThis.MouseEvent) => {
       //blockStyler는 sideMenu 문제로 blockStyler에서 다룸
-      if (modal.open && modal.target !== "blockStyler" && !isInModal(event)) {
+      if (
+        modal.open &&
+        modal.target !== "blockStyler" &&
+        !isInModal(event) &&
+        !isOpenMobileMenu(event)
+      ) {
         props.closeModal();
       }
     },
-    [props, modal, isInModal]
+    [props, modal, isInModal, isOpenMobileMenu]
   );
 
   useEffect(() => {
@@ -233,6 +257,9 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
 
       {modal.target === "blockStyler" && modal.block && (
         <BlockStyler {...props} block={modal.block} setModal={props.setModal} />
+      )}
+      {modal.target === "mobileMenu" && modal.block && (
+        <MobileMenu {...props} block={modal.block} />
       )}
     </ModalPortal>
   );

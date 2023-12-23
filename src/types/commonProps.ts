@@ -1,12 +1,5 @@
 import { CSSProperties, Dispatch, SetStateAction } from "react";
-import {
-  Block,
-  FontStyle,
-  ListItem,
-  Page,
-  MobileSideMenuType,
-  CommandType,
-} from ".";
+import { Block, FontStyle, ListItem, Page, CommandType } from ".";
 
 export type StylerCommonProps = MenuAndBlockStylerCommonProps & {
   pagesId: string[];
@@ -14,8 +7,6 @@ export type StylerCommonProps = MenuAndBlockStylerCommonProps & {
   setModalStyle: Dispatch<SetStateAction<CSSProperties | undefined>>;
   setCommand: Dispatch<SetStateAction<CommandType>>;
   command: CommandType;
-  setMobileSideMenu: Dispatch<SetStateAction<MobileSideMenuType>>;
-  setMobileMenuTargetBlock: Dispatch<SetStateAction<Block | null>>;
 };
 
 export type TemplateFrameCommonProps = {
@@ -36,8 +27,6 @@ export type TemplateFrameCommonProps = {
   discardEdit: boolean;
   setDiscardEdit: Dispatch<SetStateAction<boolean>>;
   fontStyle: FontStyle;
-  mobileSideMenu: MobileSideMenuType;
-  setMobileSideMenu: Dispatch<SetStateAction<MobileSideMenuType>>;
 };
 //TODO -  setCommendBlock 삭제
 export type MenuAndBlockStylerCommonProps = {
@@ -46,6 +35,5 @@ export type MenuAndBlockStylerCommonProps = {
   page: Page;
   block: Block;
   userName: string;
-  setCommentBlock: Dispatch<SetStateAction<Block | null>>;
   frameHtml: HTMLDivElement | null;
 };

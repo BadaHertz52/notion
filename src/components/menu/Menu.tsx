@@ -27,7 +27,6 @@ import {
   ModalTypeTarget,
   ModalType,
   MenuAndBlockStylerCommonProps,
-  MobileSideMenuType,
 } from "../../types";
 import { getEditTime, isMobile, setTemplateItem } from "../../utils";
 
@@ -38,7 +37,6 @@ export type MenuProps = Omit<
   MenuAndBlockStylerCommonProps,
   "setCommentBlock"
 > & {
-  setMobileSideMenu?: Dispatch<SetStateAction<MobileSideMenuType>>;
   setModal?: Dispatch<SetStateAction<ModalType>>;
   closeModal?: () => void;
 };
@@ -50,7 +48,6 @@ const Menu = ({
   block,
   userName,
   frameHtml,
-  setMobileSideMenu,
   setModal,
   closeModal,
 }: MenuProps) => {
@@ -60,7 +57,11 @@ const Menu = ({
   const COLOR = "color";
   const TURN_INTO = "turnInto";
   const TURN_INTO_PAGE = "turnIntoPage";
-
+  //mobile side menu와 중복되어서 숨김
+  const HIDDEN_STYLE: CSSProperties = {
+    display:
+      document.querySelector("#styler-block") || isMobile() ? "none" : "flex",
+  };
   const templateHtml = document.getElementById("template");
 
   const menuRef = useRef<HTMLDivElement>(null);
@@ -123,30 +124,10 @@ const Menu = ({
   const showPageMenu = () => {
     setSideMenu(TURN_INTO_PAGE);
   };
-  const showPageMenuInMobile = () => {
-    if (setMobileSideMenu) {
-      sessionStorage.setItem(SESSION_KEY.blockFnTarget, JSON.stringify(block));
-      setMobileSideMenu({
-        block: block,
-        what: "ms_movePage",
-      });
-    }
-  };
-  //close menu
-  const closMobileSideMenu = useCallback(() => {
-    if (isMobile() && setMobileSideMenu) {
-      setMobileSideMenu({ block: null, what: undefined });
-    }
-  }, [setMobileSideMenu]);
-
-  const closeMenuInModal = useCallback(() => {
-    if (closeModal) closeModal();
-  }, [closeModal]);
 
   const closeMenu = useCallback(() => {
-    closMobileSideMenu();
-    closeMenuInModal();
-  }, [closMobileSideMenu, closeMenuInModal]);
+    if (closeModal) closeModal();
+  }, [closeModal]);
 
   const openPopUpMenu = useCallback(
     (target: ModalTypeTarget) => {
@@ -159,9 +140,11 @@ const Menu = ({
     },
     [setModal, block]
   );
+
   const handleCloseModal = () => {
     if (closeModal) closeModal();
   };
+
   const onOpenCommentInput = useCallback(() => {
     handleCloseModal();
     openPopUpMenu("commentInput");
@@ -289,12 +272,7 @@ const Menu = ({
                 className="menu__btn-edit"
                 onMouseOver={showTurnInto}
                 name="turn into"
-                style={{
-                  display:
-                    document.querySelector("#styler-block") || isMobile()
-                      ? "none"
-                      : "flex",
-                }}
+                style={HIDDEN_STYLE}
               >
                 <div>
                   <BsArrowClockwise />
@@ -308,8 +286,8 @@ const Menu = ({
                 title="button to turn in to page "
                 className="menu__btn-edit"
                 name="turn into page in"
+                style={HIDDEN_STYLE}
                 onMouseOver={showPageMenu}
-                onTouchEnd={showPageMenuInMobile}
               >
                 <div>
                   <MdOutlineRestorePage />
@@ -337,7 +315,7 @@ const Menu = ({
                   className="underline menu__btn-edit"
                   name="comment"
                   onClick={onOpenCommentInput}
-                  style={{ display: isMobile() ? "none" : "flex" }}
+                  style={HIDDEN_STYLE}
                 >
                   <div>
                     <BiCommentDetail />
@@ -350,12 +328,7 @@ const Menu = ({
                 name="color"
                 className="underline menu__btn-edit"
                 onMouseOver={showColorMenu}
-                style={{
-                  display:
-                    document.querySelector("#styler-block") || isMobile()
-                      ? "none"
-                      : "flex",
-                }}
+                style={HIDDEN_STYLE}
               >
                 <div>
                   <AiOutlineFormatPainter />

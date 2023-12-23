@@ -43,8 +43,6 @@ const EditorContainer = ({ ...props }: EditorContainerProps) => {
       setOpenTemplates={props.setOpenTemplates}
       fontStyle={props.fontStyle}
       setFontStyle={props.setFontStyle}
-      mobileSideMenu={props.mobileSideMenu}
-      setMobileSideMenu={props.setMobileSideMenu}
       openExport={props.openExport}
     />
   );

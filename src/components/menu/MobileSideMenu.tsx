@@ -2,20 +2,27 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import { CSSProperties } from "styled-components";
 
-import { ColorMenu, CommandMenu, LinkLoader, Menu, PageMenu } from "../index";
 import {
-  MobileSideMenuType,
-  MenuAndBlockStylerCommonProps,
-  SelectionType,
-} from "../../types";
+  ColorMenu,
+  CommandMenu,
+  LinkLoader,
+  Menu,
+  ModalPortal,
+  PageMenu,
+} from "../index";
+import { MenuAndBlockStylerCommonProps, ModalType } from "../../types";
 
 import "../../assets/mobileSideMenu.scss";
+import { INITIAL_MODAL } from "../../constants";
 
-type MobileSideMenuProps = MenuAndBlockStylerCommonProps & {
+export type MobileSideMenuProps = Omit<
+  MenuAndBlockStylerCommonProps,
+  "userName" | "frameHtml"
+> & {
   recentPagesId: string[] | null;
   pagesId: string[];
-  mobileSideMenu: MobileSideMenuType;
-  setMobileSideMenu: Dispatch<SetStateAction<MobileSideMenuType>>;
+  sideMenuModal: ModalType;
+  setSideMenuModal: Dispatch<SetStateAction<ModalType>>;
 };
 const MobileSideMenu = ({
   pages,
@@ -23,114 +30,95 @@ const MobileSideMenu = ({
   recentPagesId,
   firstList,
   block,
-  userName,
   page,
-  frameHtml,
-  mobileSideMenu,
-  setMobileSideMenu,
+  sideMenuModal,
+  setSideMenuModal,
 }: MobileSideMenuProps) => {
-  const mobileSelection: SelectionType | null =
-    document.querySelector(".selected") === null
-      ? null
-      : {
-          block: block,
-          change: false,
-        };
-  const [mobileSideMenuStyle, setMobileSideMenuStyle] = useState<CSSProperties>(
-    { transform: "translateY(110vh" }
-  );
+  const INITIAL_STYLE: CSSProperties = {
+    transform: "translateY(110vh)",
+  };
+  const [style, setStyle] = useState<CSSProperties>(INITIAL_STYLE);
   const getTitle = () => {
-    switch (mobileSideMenu.what) {
-      case "ms_color":
+    switch (sideMenuModal.target) {
+      case "color":
         return "Color";
-      case "ms_moreMenu":
+      case "menu":
         return "Menu";
-      case "ms_turnInto":
+      case "command":
         return "Turn into";
+      case "linkLoader":
+        return "Link";
       default:
         return "Menu";
     }
   };
   const closeSideMenu = () => {
-    setMobileSideMenuStyle({
-      transform: "translateY(110%)",
-    });
+    setStyle(INITIAL_STYLE);
     setTimeout(() => {
-      setMobileSideMenu({
-        what: undefined,
-        block: null,
-      });
+      setSideMenuModal(INITIAL_MODAL);
     }, 1000);
   };
+
   useEffect(() => {
-    if (!mobileSideMenu.what) {
-      setMobileSideMenuStyle({
-        transform: "translateY(110%)",
-      });
-    } else {
-      setMobileSideMenuStyle({ transform: "translateY(0)" });
-    }
-  }, [mobileSideMenu]);
+    setStyle({
+      transform: "translateY(20vh)",
+    });
+  }, [sideMenuModal]);
+
   return (
-    <div id="mobileSideMenu" style={mobileSideMenuStyle}>
-      <div className="inner">
-        <div className="top">
-          <div>{getTitle()}</div>
-          <button title="button to close" onClick={closeSideMenu}>
-            close
-          </button>
-        </div>
-        <div className="contents">
-          {mobileSideMenu.what === "ms_moreMenu" && (
-            //TODO - portal로 인한 수정
-            <Menu
-              pages={pages}
-              block={block}
-              firstList={firstList}
-              page={page}
-              userName={userName}
-              frameHtml={frameHtml}
-              setMobileSideMenu={setMobileSideMenu}
-            />
-          )}
-          {/* {mobileSideMenu.what === "ms_color" && (
-            <ColorMenu
-              page={page}
-              block={block}
-              selection={mobileSelection}
-              closeMenu={closeSideMenu}
-            />
-          )} */}
-          {mobileSideMenu.what === "ms_turnInto" && (
-            <CommandMenu
-              page={page}
-              block={block}
-              closeCommand={closeSideMenu}
-            />
-          )}
-          {/* {mobileSideMenu.what === "ms_link" && (
-            <LinkLoader
-              recentPagesId={recentPagesId}
-              pages={pages}
-              pagesId={pagesId}
-              page={page}
-              block={block}
-              closeLink={closeSideMenu}
-              blockStylerStyle={undefined}
-            />
-          )} */}
-          {mobileSideMenu.what === "ms_movePage" && (
-            <PageMenu
-              what="block"
-              currentPage={page}
-              pages={pages}
-              firstList={firstList}
-              closeMenu={closeSideMenu}
-            />
-          )}
+    <ModalPortal
+      id="modal-mobile-side-menu"
+      isOpen={sideMenuModal.open}
+      style={style}
+    >
+      <div id="mobile-side-menu">
+        <div className="inner">
+          <div className="top">
+            <div>{getTitle()}</div>
+            <button title="button to close" onClick={closeSideMenu}>
+              close
+            </button>
+          </div>
+          <div className="contents">
+            <div className="contents__inner">
+              {sideMenuModal.target === "color" && (
+                <ColorMenu
+                  page={page}
+                  block={block}
+                  closeMenu={closeSideMenu}
+                />
+              )}
+              {sideMenuModal.target === "command" && (
+                <CommandMenu
+                  page={page}
+                  block={block}
+                  closeCommand={closeSideMenu}
+                />
+              )}
+              {sideMenuModal.target === "linkLoader" && (
+                <LinkLoader
+                  recentPagesId={recentPagesId}
+                  pages={pages}
+                  pagesId={pagesId}
+                  page={page}
+                  block={block}
+                  closeLink={closeSideMenu}
+                />
+              )}
+              {sideMenuModal.target === "pageMenu" && (
+                <PageMenu
+                  what="block"
+                  currentPage={page}
+                  pages={pages}
+                  firstList={firstList}
+                  closeMenu={closeSideMenu}
+                />
+              )}
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </ModalPortal>
   );
 };
 

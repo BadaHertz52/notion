@@ -1,89 +1,59 @@
 @import "./common";
+$topHeight: 48px;
 
-#mobileSideMenu {
-  position: absolute;
-  transition: transform 1000ms cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 50;
-  width: 100%;
-  height: 100%;
+#mobile-side-menu {
+  @include modalStyle;
+  width: 100vw;
+  position: relative;
   background-color: rgb(240, 240, 240);
+  overflow: hidden;
   .inner {
     position: relative;
   }
   .top {
-    height: 2rem;
+    height: $topHeight;
     background-color: #ffff;
     text-align: center;
     position: relative;
-    div {
-      line-height: 2rem;
+    & > div {
+      height: 100%;
+      line-height: $topHeight;
       text-align: center;
       font-weight: bold;
       font-size: 1.2rem;
     }
-    div,
-    button {
-      height: 100%;
-    }
     button {
       position: absolute;
+      height: 100%;
       top: 0;
       right: 1rem;
       font-size: 1rem;
     }
   }
-  .block__contents {
+  .contents {
     width: inherit;
-    height: calc(100vh - 1.5rem);
+    height: calc(80vh - $topHeight);
+  }
+  .contents__inner {
+    height: calc(100% - 15px);
+    max-height: calc(100% - 15px);
   }
   #menu-command,
   #pageMenu,
   #menu-color,
-  #menu,
-  #menu .menu__main-menu,
-  #menu .menu__sideMenu,
   #loader-link {
     @include resetModalStyle;
+    @include webkitScroll;
+    overflow-y: auto;
     position: relative;
-    width: 100vw;
-    height: inherit;
-  }
-  #menu {
-    .menu__inner,
-    .menu__edit {
-      width: 100vw;
-      height: inherit;
-    }
-    .menu__search {
-      display: none;
-    }
-    .menu__main-menu {
-      .menu__inner {
-        padding: 0;
-      }
-    }
-    .menu__edit {
-      position: relative;
-    }
-    .menu__btn-edits {
-      padding-top: 14px;
-    }
-    .edit__inform {
-      position: absolute;
-      bottom: 3rem;
-      left: 0;
-      width: 100vw;
-      font-size: 14px;
-    }
-  }
-  #menu .menu___sideMenu {
-    position: absolute;
-    background-color: rgb(240, 240, 240);
-    top: 0;
-    left: 0;
-    z-index: 60;
     width: inherit;
     height: inherit;
-    overflow-y: scroll;
+    box-sizing: border-box;
+  }
+  #menu-color section > header {
+    margin-bottom: 10px;
+  }
+  #menu-color .btn-color-inform {
+    padding-top: 8px;
   }
 }

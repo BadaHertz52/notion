@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 
 import { Contents, PageBlockContents } from "../index";
 
-import { ActionContext } from "../../contexts";
+import { ActionContext, ModalContext } from "../../contexts";
 import { Block } from "../../types";
 import { getBlockContentsStyle, isMobile, makeRoutePath } from "../../utils";
 import { SESSION_KEY } from "../../constants";
@@ -26,6 +26,7 @@ export type BlockContentsProps = BlockContendEditableProps & {
 
 const BlockContents = ({ ...props }: BlockContentsProps) => {
   const { editBlock } = useContext(ActionContext).actions;
+  const { changeModalState } = useContext(ModalContext);
 
   const { block, setMovingTargetBlock } = props;
 
@@ -129,7 +130,18 @@ const BlockContents = ({ ...props }: BlockContentsProps) => {
     },
     [block.type, block.id, block.contents, navigate]
   );
-
+  //mobile menu
+  const onFocusContents = useCallback(() => {
+    if (window.innerWidth <= 768) {
+      changeModalState({
+        open: true,
+        target: "mobileMenu",
+        block: block,
+      });
+    }
+  }, [block, changeModalState]);
+  //
+  //moving block ---
   /**
    * [isMoved - mobile] handleTouchStart 을 통해 위치를 변경시킬 블럭으로 해당 요소에 touch move 이벤트가 감지 되었을때,  일정 시간이 경과하면 모바일 환경에서 터치를 통한 블럭 이동을 위한 환경을 준비하는 함수
    *
@@ -149,6 +161,7 @@ const BlockContents = ({ ...props }: BlockContentsProps) => {
       !document.querySelector("#moving-target-block")
     );
   };
+
   const handleTouchStart = useCallback(
     (event: TouchEvent<HTMLDivElement>) => {
       const selection = document.getSelection();
@@ -173,13 +186,14 @@ const BlockContents = ({ ...props }: BlockContentsProps) => {
       setMovingTargetBlock(block);
     }
   };
+
   const handleTouchEnd = (event: TouchEvent<HTMLDivElement>) => {
     if (readyForMoving(event) && !startMarkMovingBlock.current) {
       // 블럭 이동으로 인식하는 시간 보다 먼저 터치가 끝나면, moveTargetBlock으로 지정하는 setTimeOut 함수를 지움
       clearTimeout(markMovingTargetBlock());
     }
   };
-
+  //---moving block
   return (
     <div
       id={`${props.block.id}__contents`}
@@ -187,6 +201,7 @@ const BlockContents = ({ ...props }: BlockContentsProps) => {
       ref={blockContentsRef}
       style={getBlockContentsStyle(block)}
       onClick={onClickContents}
+      onFocus={onFocusContents}
       onMouseOver={showBlockFn}
     >
       <div

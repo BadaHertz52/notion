@@ -6,6 +6,7 @@ export type ModalTypeTarget =
   | "commentInput"
   | "comments"
   | "loader"
+  | "linkLoader"
   | "menu"
   | "mobileMenu"
   | "moveTargetBlock"
@@ -16,7 +17,8 @@ export type ModalTypeTarget =
   | "rename"
   | "quickFind"
   | "discardEdit"
-  | "export";
+  | "export"
+  | "color";
 
 export type ModalType = {
   open: boolean;

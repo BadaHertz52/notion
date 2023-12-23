@@ -45,8 +45,6 @@ const Export = ({
   openTemplates,
   setOpenTemplates,
   fontStyle,
-  mobileSideMenu,
-  setMobileSideMenu,
 }: ExportProps) => {
   const html = "HTML";
   const pdf = "PDF";
@@ -192,8 +190,6 @@ const Export = ({
               openTemplates={openTemplates}
               setOpenTemplates={setOpenTemplates}
               fontStyle={fontStyle}
-              mobileSideMenu={mobileSideMenu}
-              setMobileSideMenu={setMobileSideMenu}
             />
           );
           return { jsx: frameComponent, title: subPage.header.title };
@@ -282,7 +278,7 @@ const Export = ({
     fontStyle,
     format,
     fullWidth,
-    mobileSideMenu,
+
     openComment,
     openTemplates,
     page.header.title,
@@ -292,8 +288,6 @@ const Export = ({
     recentPagesId,
     setCommentBlock,
     setDiscardEdit,
-    setMobileSideMenu,
-
     setOpenComment,
     setOpenTemplates,
     showAllComments,

@@ -5,14 +5,7 @@ import { SideBarContainer } from "../index";
 import { SideBarContainerProp } from "../containers/SideBarContainer";
 import NotionRouter from "../../route/NotionRouter";
 
-import {
-  Block,
-  FontStyle,
-  ListItem,
-  MobileSideMenuType,
-  Page,
-  UserState,
-} from "../../types";
+import { Block, FontStyle, ListItem, Page, UserState } from "../../types";
 import { findPage } from "../../utils";
 
 type NotionProps = Omit<SideBarContainerProp, "firstPages" | "firstList"> & {
@@ -36,10 +29,7 @@ const Notion = ({ ...props }: NotionProps) => {
   const [fullWidth, setFullWidth] = useState<boolean>(false);
   const [openTemplates, setOpenTemplates] = useState<boolean>(false);
   const [fontStyle, setFontStyle] = useState<FontStyle>("default");
-  const [mobileSideMenu, setMobileSideMenu] = useState<MobileSideMenuType>({
-    block: null,
-    what: undefined,
-  });
+
   /**
    *
    * @param newModal  변경할 모달이 있을 경우에는 값을 입력하고, 처음 모달 상태로 되돌리려하는 경우네는 값을 비워두면 됨
@@ -99,8 +89,6 @@ const Notion = ({ ...props }: NotionProps) => {
           setOpenExport={setOpenExport}
           fontStyle={fontStyle}
           setFontStyle={setFontStyle}
-          mobileSideMenu={mobileSideMenu}
-          setMobileSideMenu={setMobileSideMenu}
         />
         {/* {pagesId && pages && firstList && (
             <>
@@ -171,7 +159,7 @@ const Notion = ({ ...props }: NotionProps) => {
 
             </>
           )}
-          <DiscardEditForm setDiscardEdit={setDiscardEdit} /> */}
+           */}
       </div>
     </div>
   );

@@ -31,10 +31,7 @@ export type BlockStylerSideMenuType =
   | "menu"
   | "commentInput"
   | undefined;
-export type BlockStylerProps = Omit<
-  MenuAndBlockStylerCommonProps,
-  "setCommentBlock"
-> & {
+export type BlockStylerProps = MenuAndBlockStylerCommonProps & {
   pagesId: string[];
   recentPagesId: string[] | null;
   setModal: Dispatch<SetStateAction<ModalType>>;
