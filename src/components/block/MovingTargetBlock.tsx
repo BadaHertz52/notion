@@ -8,12 +8,12 @@ type MovingTargetBlockProps = EditableBlockProps & {
 const MovingTargetBlock = ({ ...props }: MovingTargetBlockProps) => {
   const { block, fontSize } = props;
   return (
-    <div id="movingTargetBlock" style={props.style}>
+    <div id="moving-target-block" style={props.style}>
       {block.type.includes("List") && !block.firstBlock ? (
         <div className="editableBlock">
           <div className="inner">
             <div
-              id={`movingTargetBlock-${block.id}`}
+              id={`moving-target-block-${block.id}`}
               className={`${block.type} block`}
               style={changeFontSizeBySmallText(block, fontSize)}
             >

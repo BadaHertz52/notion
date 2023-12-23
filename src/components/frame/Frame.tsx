@@ -599,16 +599,19 @@ const Frame = ({ ...props }: FrameProps) => {
           editPage={editPage}
         />
       </ModalContext.Provider>
-      <MovingBlockModal
-        isOpen={!!movingTargetBlock}
-        pages={props.pages}
-        pagesId={props.pagesId}
-        page={page}
-        templateHtml={templateHtml}
-        block={movingTargetBlock}
-        fontSize={fontSize}
-        closeModal={() => setMovingTargetBlock(null)}
-      />
+      {movingTargetBlock && (
+        <MovingBlockModal
+          isOpen={!!movingTargetBlock}
+          pages={props.pages}
+          pagesId={props.pagesId}
+          page={page}
+          templateHtml={templateHtml}
+          block={movingTargetBlock}
+          fontSize={fontSize}
+          closeModal={() => setMovingTargetBlock(null)}
+        />
+      )}
+
       {/* modal - others */}
       {/* 
       <ModalPortal isOpen={modal.open}>

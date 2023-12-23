@@ -70,6 +70,7 @@ const MovingBlockModal = ({ ...props }: MovingBlockModalProps) => {
             domRect.top <= clientY && domRect.bottom >= clientY;
           element.classList.toggle("on", isPointBlock);
         });
+
         moveBlock(clientX, clientY);
       }
     },
@@ -360,36 +361,37 @@ const MovingBlockModal = ({ ...props }: MovingBlockModalProps) => {
   const stopMoving = useCallback(() => {
     if (props.isOpen) {
       changeBlockPosition();
+
+      const blockContentsOn = document.querySelector(".block__contents.on");
+      blockContentsOn?.classList.remove("on");
       const mainBlockOn = document.querySelector(".mainBlock.on");
       mainBlockOn?.classList.remove("on");
-      const editableBlockOn = document.querySelector(".editableBlock.on");
-      editableBlockOn?.classList.remove("on");
+
       props.closeModal();
     }
   }, [changeBlockPosition, props]);
 
   useEffect(() => {
-    if (props.isOpen) {
-      window.addEventListener("mouseup", stopMoving);
-      window.addEventListener("touchend", stopMoving);
-      window.addEventListener("mousemove", (event) =>
-        moveBlock(event.clientX, event.clientY)
-      );
-      window.addEventListener("touchmove", moveBlockInMobile);
-    }
+    document.addEventListener("mouseup", stopMoving);
+    document.addEventListener("touchend", stopMoving);
+    document.addEventListener("mousemove", (event) =>
+      moveBlock(event.clientX, event.clientY)
+    );
+    document.addEventListener("touchmove", moveBlockInMobile);
+
     return () => {
-      window.removeEventListener("mouseup", stopMoving);
-      window.removeEventListener("touchend", stopMoving);
-      window.removeEventListener("mousemove", (event) =>
+      document.removeEventListener("mouseup", stopMoving);
+      document.removeEventListener("touchend", stopMoving);
+      document.removeEventListener("mousemove", (event) =>
         moveBlock(event.clientX, event.clientY)
       );
-      window.removeEventListener("touchmove", moveBlockInMobile);
+      document.removeEventListener("touchmove", moveBlockInMobile);
     };
   }, [props.isOpen, moveBlock, moveBlockInMobile, stopMoving]);
 
   return (
     <ModalPortal id="modal-movingBlock" isOpen={props.isOpen}>
-      {props.isOpen && props.block && (
+      {props.isOpen && props.block && movingBlockStyle && (
         <MovingTargetBlock
           {...props}
           block={props.block}

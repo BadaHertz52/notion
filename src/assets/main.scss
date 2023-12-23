@@ -1,10 +1,10 @@
 @import "./reset";
 @import "./common";
+html,
 body,
 #root,
 #notion__inner {
-  overflow-x: hidden;
-  overflow-y: hidden;
+  overflow: hidden;
   width: 100vw;
   height: 100vh;
   -webkit-box-sizing: border-box;

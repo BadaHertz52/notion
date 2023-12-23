@@ -14,7 +14,7 @@ import { Contents, PageBlockContents } from "../index";
 
 import { ActionContext } from "../../contexts";
 import { Block } from "../../types";
-import { getBlockContentsStyle, makeRoutePath } from "../../utils";
+import { getBlockContentsStyle, isMobile, makeRoutePath } from "../../utils";
 import { SESSION_KEY } from "../../constants";
 import { BlockContendEditableProps } from "./BlockContentEditable";
 import ImageBlockContents from "./ImageBlockContents";
@@ -45,6 +45,7 @@ const BlockContents = ({ ...props }: BlockContentsProps) => {
    */
   const startMarkMovingBlock = useRef<boolean>(false);
   const blockContentsRef = useRef<HTMLDivElement>(null);
+
   //show blockFn ---
   /**
    *   blockFn에 대한 sessionStorage 관리
@@ -95,19 +96,22 @@ const BlockContents = ({ ...props }: BlockContentsProps) => {
    */
   const showBlockFn = useCallback(
     (event: MouseEvent) => {
-      const currentTarget = event.currentTarget;
+      if (!isMobile()) {
+        const currentTarget = event.currentTarget;
 
-      const mainBlockEl =
-        currentTarget.parentElement?.parentElement?.parentElement;
-      const blockFnEl = document.querySelector("#blockFn");
+        const mainBlockEl =
+          currentTarget.parentElement?.parentElement?.parentElement;
+        const blockFnEl = document.querySelector("#blockFn");
 
-      if (mainBlockEl && blockFnEl) {
-        toggleBlockFn(blockFnEl);
-        setStyleOfBlockFn(mainBlockEl, blockFnEl);
+        if (mainBlockEl && blockFnEl) {
+          toggleBlockFn(blockFnEl);
+          setStyleOfBlockFn(mainBlockEl, blockFnEl);
+        }
       }
     },
     [setStyleOfBlockFn, toggleBlockFn]
   );
+  //--show blockFn
 
   const openLink = useCallback((event: MouseEvent) => {
     const target = event.target as Element;
@@ -120,7 +124,6 @@ const BlockContents = ({ ...props }: BlockContentsProps) => {
     }
   }, []);
 
-  //--show blockFn
   const onClickContents = useCallback(
     (event: MouseEvent) => {
       // block type이 page인 block에 대한 BlockComponent를 클릭 할 경우, 해당 page로 이동
@@ -146,38 +149,48 @@ const BlockContents = ({ ...props }: BlockContentsProps) => {
    *
    */
   const markMovingTargetBlock = useCallback(
-    (target: HTMLDivElement | null) =>
+    () =>
       setTimeout(() => {
         startMarkMovingBlock.current = true;
-        target?.classList.add("on");
-        if (setMovingTargetBlock) setMovingTargetBlock(block);
+        blockContentsRef.current?.classList.add("on");
       }, 1000),
-    [block, setMovingTargetBlock]
+    []
   );
 
+  const readyForMoving = (event: TouchEvent<HTMLDivElement>) => {
+    return (
+      event.currentTarget === event.target &&
+      !document.querySelector("#moving-target-block")
+    );
+  };
   const handleTouchStart = useCallback(
     (event: TouchEvent<HTMLDivElement>) => {
-      if (event.currentTarget !== event.target) return;
       const selection = document.getSelection();
       if (
+        readyForMoving(event) &&
         selection?.anchorNode?.nodeName !== "#text" &&
         selection?.focusNode?.nodeName !== "#text"
       ) {
         if (!startMarkMovingBlock.current) {
-          markMovingTargetBlock(event.currentTarget);
+          markMovingTargetBlock();
         }
       }
     },
     [markMovingTargetBlock]
   );
-
+  const handleTouchMove = () => {
+    if (
+      startMarkMovingBlock.current &&
+      blockContentsRef.current?.classList.contains("on") &&
+      setMovingTargetBlock
+    ) {
+      setMovingTargetBlock(block);
+    }
+  };
   const handleTouchEnd = (event: TouchEvent<HTMLDivElement>) => {
-    if (event.currentTarget !== event.target) return;
-    if (startMarkMovingBlock.current) {
-      clearTimeout(markMovingTargetBlock(event.currentTarget));
-      startMarkMovingBlock.current = false;
-      event.currentTarget?.classList.remove("on");
-      if (setMovingTargetBlock) setMovingTargetBlock(null);
+    if (readyForMoving(event) && !startMarkMovingBlock.current) {
+      // 블럭 이동으로 인식하는 시간 보다 먼저 터치가 끝나면, moveTargetBlock으로 지정하는 setTimeOut 함수를 지움
+      clearTimeout(markMovingTargetBlock());
     }
   };
 
@@ -189,16 +202,21 @@ const BlockContents = ({ ...props }: BlockContentsProps) => {
       style={getBlockContentsStyle(block)}
       onClick={onClickContents}
       onMouseOver={showBlockFn}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
     >
-      {block.type === "page" ? (
-        <PageBlockContents {...props} />
-      ) : block.type === "image" ? (
-        <ImageBlockContents {...props} editBlock={editBlock} />
-      ) : (
-        <Contents {...props} isOpenComments={isOpenComments} />
-      )}
+      <div
+        className="moving-area"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        {block.type === "page" ? (
+          <PageBlockContents {...props} />
+        ) : block.type === "image" ? (
+          <ImageBlockContents {...props} editBlock={editBlock} />
+        ) : (
+          <Contents {...props} isOpenComments={isOpenComments} />
+        )}
+      </div>
     </div>
   );
 };

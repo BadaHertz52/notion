@@ -65,10 +65,8 @@ const EditableBlock = ({ ...props }: EditableBlockProps) => {
         : false,
     [block.comments]
   );
-  const isMovingBlock = useCallback(
-    () => !!document.querySelector("#movingTargetBlock"),
-    []
-  );
+  const isMovingBlock = () => !!document.querySelector("#moving-target-block");
+
   /**
    * [isMoved] 현재 block을 movingTargetBlock (위치를 변경시킬 block)의 변경된 위치의 기준이 되는 pointBlock으로  지정하는 함수
    * @param event
@@ -80,19 +78,19 @@ const EditableBlock = ({ ...props }: EditableBlockProps) => {
         event.currentTarget.classList.add("on");
       }
     },
-    [isMovingBlock]
+    []
   );
   /**
    * [isMoved] 현재 block을  movingTargetBlock (위치를 변경시킬 block)의 위치변경의 기준이 되는 pointBlock 지정을 취소시키는 함수
    * @param event
    */
   const cancelPointBlock = useCallback(
-    (event: MouseEvent<HTMLDivElement>) => {
+    (event: MouseEvent<HTMLDivElement> | TouchEvent<HTMLDivElement>) => {
       if (isMovingBlock()) {
         event.currentTarget.classList.remove("on");
       }
     },
-    [isMovingBlock]
+    []
   );
 
   const onClickTodoBtn = useCallback(() => {
