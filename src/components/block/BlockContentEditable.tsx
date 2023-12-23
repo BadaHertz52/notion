@@ -471,8 +471,7 @@ const BlockContentEditable = ({
     (target: HTMLElement) => {
       sessionStorage.setItem(
         SESSION_KEY.mainCommentId,
-        target.classList.value
-          .split(" ")
+        [...target.classList]
           .filter((i) => i.includes("mainId"))[0]
           .replace("mainId_", "")
       );
@@ -483,7 +482,6 @@ const BlockContentEditable = ({
 
   const onClickContentEditable = useCallback(
     (event: MouseEvent) => {
-      if (event.currentTarget !== event.target) return;
       const target = event.target as HTMLElement;
       if (target.className === "link") {
         openLink(target);

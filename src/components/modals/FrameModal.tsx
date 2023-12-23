@@ -168,6 +168,7 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
       ".btn-comment",
       ".comment__tool-more",
       ".comment__btn-submit",
+      ".text_commentBtn",
     ];
     return target.map((v) => !!isInTarget(event, v)).some((v) => v);
   }, []);

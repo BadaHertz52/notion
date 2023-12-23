@@ -113,25 +113,11 @@ const BlockContents = ({ ...props }: BlockContentsProps) => {
   );
   //--show blockFn
 
-  const openLink = useCallback((event: MouseEvent) => {
-    const target = event.target as Element;
-    if (target.tagName.toLowerCase() === "a") {
-      const { href } = target as HTMLLinkElement;
-      const newWindow = window.open("", "_blank");
-      if (newWindow) {
-        newWindow.location.href = href;
-      }
-    }
-  }, []);
-
   const onClickContents = useCallback(
     (event: MouseEvent) => {
       // block type이 page인 block에 대한 BlockComponent를 클릭 할 경우, 해당 page로 이동
       if (block.type === "page") {
         navigate(makeRoutePath(block.id));
-      }
-      if (block.contents.includes('class="link"')) {
-        openLink(event);
       }
       // block.contents ===""일때, contentEditable이 가능하도록 포커스를 줌
       if (!block.contents) {
@@ -141,7 +127,7 @@ const BlockContents = ({ ...props }: BlockContentsProps) => {
         contentEditableEl?.focus();
       }
     },
-    [block.type, block.id, block.contents, navigate, openLink]
+    [block.type, block.id, block.contents, navigate]
   );
 
   /**
