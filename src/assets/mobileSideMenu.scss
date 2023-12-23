@@ -1,6 +1,6 @@
 @import "./common";
 $topHeight: 48px;
-
+$contentHeight: calc(80vh - $topHeight);
 #mobile-side-menu {
   @include modalStyle;
   width: 100vw;
@@ -32,11 +32,12 @@ $topHeight: 48px;
   }
   .contents {
     width: inherit;
-    height: calc(80vh - $topHeight);
+    height: $contentHeight;
   }
-  .contents__inner {
-    height: calc(100% - 15px);
-    max-height: calc(100% - 15px);
+  .contents__inner,
+  #styler-block__side-menu > .inner {
+    height: calc($contentHeight - 3px);
+    max-height: calc($contentHeight - 3px);
   }
   #menu-command,
   #pageMenu,
@@ -47,7 +48,7 @@ $topHeight: 48px;
     overflow-y: auto;
     position: relative;
     width: inherit;
-    height: inherit;
+
     box-sizing: border-box;
   }
   #menu-color section > header {

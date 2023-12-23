@@ -381,30 +381,21 @@ const Frame = ({ ...props }: FrameProps) => {
       const selection = document.getSelection();
       const block = getBlockFromSelection(selection);
 
-      if (isValidatedSelection(selection) && block !== modal.block) {
+      const conditionAboutBlock =
+        modal.target === "mobileMenu"
+          ? block?.id === modal.block?.id
+          : block?.id !== modal.block?.id;
+
+      if (isValidatedSelection(selection) && conditionAboutBlock) {
         setModal({
           open: true,
           target: "blockStyler",
           block: block,
         });
       }
-
-      //TODO -  모바일에서 메뉴 열리는 방식은 블럭 내 포커스가 가면 열리도록 수정
-      // if (!notSelect && SELECTION) {
-      //   if (openComment) {
-      //     setOpenComment(false);
-      //     setCommentBlock(null);
-      //   }
-      //   setItemForMobileMenu(SELECTION);
-      // }
     },
     [isValidatedSelection, setModal, getBlockFromSelection, modal]
   );
-
-  // useEffect(() => {
-  //   window.addEventListener("resize", changeCBSposition);
-  //   return () => window.removeEventListener("resize", changeCBSposition);
-  // }, [changeCBSposition]);
 
   useEffect(() => {
     inner?.addEventListener("keyup", updateBlock);
@@ -414,13 +405,6 @@ const Frame = ({ ...props }: FrameProps) => {
       inner?.removeEventListener("touchstart", updateBlock);
     };
   }, [inner, updateBlock]);
-
-  // useEffect(() => {
-  //   inner?.addEventListener("click", closePopupMenu);
-  //   return () => {
-  //     inner?.removeEventListener("click", closePopupMenu);
-  //   };
-  // }, [inner, closePopupMenu]);
 
   useEffect(() => {
     openTemplates
@@ -443,93 +427,12 @@ const Frame = ({ ...props }: FrameProps) => {
     }
   }, [newPageFrame, firstBlocksId]);
 
-  // useEffect(() => {
-  //   changeCBSposition();
-  // }, [command.open, command.targetBlock, openTemplates, changeCBSposition]);
-
-  // useEffect(() => {
-  //   // stop scroll when something open
-  //   if (
-  //     command.open ||
-  //     modal.open ||
-  //     openLoader ||
-  //     openComment ||
-  //     movingTargetBlock ||
-  //     selection
-  //   ) {
-  //     !frameRef.current?.classList.contains("stop") &&
-  //       frameRef.current?.classList.add("stop");
-  //   } else {
-  //     frameRef.current?.classList.contains("stop") &&
-  //       frameRef.current?.classList.remove("stop");
-  //   }
-  // }, [
-  //   modal.open,
-  //   command.open,
-  //   openLoader,
-  //   openComment,
-  //   movingTargetBlock,
-  //   selection,
-  // ]);
-
   useEffect(() => {
     document.addEventListener("selectionchange", handleSelectionChange);
     return () =>
       document.removeEventListener("selectionchange", handleSelectionChange);
   }, [handleSelectionChange]);
 
-  // useEffect(() => {
-  //   if (modal.what === "modalComment") {
-  //     const targetCommentInputHtml = document
-  //       .getElementById("modalMenu")
-  //       ?.querySelector(".comment-input") as HTMLInputElement | null | undefined;
-  //     if (targetCommentInputHtml && targetCommentInputHtml) {
-  //       targetCommentInputHtml.focus();
-  //     }
-  //   }
-  // }, [modal.what]);
-
-  // useEffect(() => {
-  //   if (mobileMenuTargetBlock === null && mobileSideMenu.what && !modal.open) {
-  //     const selectedHtml = document.querySelector(".selected");
-  //     const contentsHtml = selectedHtml?.closest(".contents");
-  //     if (contentsHtml && contentsHtml) {
-  //       const blockId = contentsHtml.id.replace("__contents", "");
-  //       const targetBlock = findBlock(page, blockId).BLOCK;
-  //       removeSelected(frameHtml, targetBlock, editBlock, page);
-  //     }
-  //   }
-  // }, [
-  //   mobileMenuTargetBlock,
-  //   mobileSideMenu.what,
-  //   modal.open,
-  //   editBlock,
-  //   frameHtml,
-  //   page,
-  // ]);
-
-  // useEffect(() => {
-  //   if (
-  //     (openComment && (mobileMenuTargetBlock || mobileSideMenu.what)) ||
-  //     movingTargetBlock
-  //   ) {
-  //     if (mobileMenuTargetBlock) {
-  //       setMobileMenuTargetBlock(null);
-  //     }
-  //     if (document.querySelector("#mobile--side-menu")) {
-  //       setMobileSideMenu({
-  //         block: null,
-  //         what: undefined,
-  //       });
-  //     }
-  //   }
-  // }, [
-  //   openComment,
-  //   mobileMenuTargetBlock,
-  //   mobileSideMenu.what,
-  //   setMobileSideMenu,
-  //   movingTargetBlock,
-  // ]);
   const changeOpenBlockFnModal = useCallback(() => {
     setOpenBlockFnModal(!(sideAppear === "lock" && window.innerWidth <= 768));
   }, [setOpenBlockFnModal, sideAppear]);

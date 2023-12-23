@@ -53,6 +53,7 @@ import CommandModal from "./modals/CommandModal";
 import DiscardEditModal from "./modals/DiscardEditModal";
 import FameModal from "./modals/FrameModal";
 import LoaderModal from "./modals/LoaderModal";
+import MobileSideMenuModal from "./modals/MobileSideMenuModal";
 import ModalPortal from "./modals/ModalPortal";
 import MovingBlockModal from "./modals/MovingBlockModal";
 import SideBarModal from "./modals/SideBarModal";
@@ -166,6 +167,7 @@ export {
   DiscardEditModal,
   FameModal,
   LoaderModal,
+  MobileSideMenuModal,
   ModalPortal,
   MovingBlockModal,
   SideBarModal,

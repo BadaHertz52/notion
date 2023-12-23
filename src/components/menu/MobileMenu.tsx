@@ -213,7 +213,7 @@ const MobileMenu = ({ ...props }: MobileMenuProps) => {
           />
         )
       )}
-      {sideMeuModal.open && sideMeuModal.target !== "commentInput" && (
+      {sideMeuModal.target && sideMeuModal.target !== "commentInput" && (
         <MobileSideMenu
           {...props}
           sideMenuModal={sideMeuModal}

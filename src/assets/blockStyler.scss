@@ -81,33 +81,13 @@
 
 #styler-block__side-menu {
   position: relative;
+  & > .inner {
+    max-height: inherit;
+  }
   #menu-command {
     margin: 0;
   }
   #menu {
     position: relative;
-  }
-}
-
-#mobile-menu {
-  #styler-block {
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-    svg {
-      font-size: 14px;
-      margin: 0;
-    }
-    .blockStyler__btn-type {
-      display: none;
-    }
-    .btn-comment span {
-      display: none;
-    }
-    .btn-comment,
-    .blockStyler__btn-menu {
-      padding: 0;
-      text-align: center;
-    }
   }
 }

@@ -11,26 +11,30 @@ import { BsChatLeftText } from "react-icons/bs";
 import { IoIosArrowDown } from "react-icons/io";
 import { ImArrowUpRight2 } from "react-icons/im";
 
-import { ScreenOnly, BlockStylerSideMenu } from "../index";
+import {
+  ScreenOnly,
+  BlockStylerSideMenu,
+  CommentInput,
+  MobileSideMenuModal,
+} from "../index";
 import { ActionContext } from "../../contexts";
-import { MenuAndBlockStylerCommonProps, ModalType } from "../../types";
+import {
+  MenuAndBlockStylerCommonProps,
+  ModalType,
+  ModalTypeTarget,
+} from "../../types";
 import {
   findBlock,
   getContent,
   isInTarget,
+  isMobile,
   removeSelected,
   selectContent,
 } from "../../utils";
 
 import "../../assets/blockStyler.scss";
+import { INITIAL_MODAL } from "../../constants";
 
-export type BlockStylerSideMenuType =
-  | "command"
-  | "link"
-  | "color"
-  | "menu"
-  | "commentInput"
-  | undefined;
 export type BlockStylerProps = MenuAndBlockStylerCommonProps & {
   pagesId: string[];
   recentPagesId: string[] | null;
@@ -42,16 +46,17 @@ const BlockStyler = ({ ...props }: BlockStylerProps) => {
   const { editBlock } = useContext(ActionContext).actions;
   const { page, block } = props;
 
-  const [sideMenu, setSideMenu] = useState<BlockStylerSideMenuType>(undefined);
+  const [sideMenuModal, setSideMenuModal] = useState<ModalType>(INITIAL_MODAL);
 
   type BlockFontWeightType = "bold" | "initial";
   type BlockFontStyleType = "italic" | "initial";
   type TextDecoType = "underline" | "lineThrough";
 
-  const closeSideMenu = () => setSideMenu(undefined);
+  const closeSideMenu = () => setSideMenuModal(INITIAL_MODAL);
 
   const prepareForChange = useCallback(() => {
     const selectedEl = document.querySelector(".selected");
+
     if (!selectedEl) {
       const selection = document.getSelection();
       const contentEditableHtml = document.getElementById(
@@ -99,8 +104,8 @@ const BlockStyler = ({ ...props }: BlockStylerProps) => {
     }
   };
 
-  const openSideMenu = (sideMenu: BlockStylerSideMenuType) =>
-    setSideMenu(sideMenu);
+  const openSideMenu = (sideMenu: ModalTypeTarget) =>
+    setSideMenuModal({ open: true, target: sideMenu, block: block });
 
   /**
    *  textDeco 스타일을 지정할 경우, 기존에 textDeco가 지정된 element의 클래스를 변경하거나, outerHtml의 값을 변경하는 함수
@@ -177,7 +182,9 @@ const BlockStyler = ({ ...props }: BlockStylerProps) => {
         "#menu-color",
         ".comment-input",
         "#loader-link",
+        "#mobile-side-menu",
       ];
+
       return target.map((v) => isInTarget(event, v)).some((v) => v);
     },
     [block.id]
@@ -191,10 +198,10 @@ const BlockStyler = ({ ...props }: BlockStylerProps) => {
   const handleCloseBlockStyler = useCallback(
     (event: globalThis.MouseEvent) => {
       if (!isInBlockStyler(event)) {
-        sideMenu ? closeSideMenu() : closeBlockStyler();
+        sideMenuModal.open ? closeSideMenu() : closeBlockStyler();
       }
     },
-    [isInBlockStyler, sideMenu, closeBlockStyler]
+    [isInBlockStyler, sideMenuModal.open, closeBlockStyler]
   );
 
   useEffect(() => {
@@ -208,13 +215,16 @@ const BlockStyler = ({ ...props }: BlockStylerProps) => {
     <>
       <div
         id="styler-block"
-        style={{ display: sideMenu === "commentInput" ? "none" : "block" }}
+        style={{
+          display: sideMenuModal.target === "commentInput" ? "none" : "block",
+        }}
       >
         <div className="inner">
           <button
             title="button to change type"
             className="blockStyler__btn-type btn"
             onMouseDown={prepareForChange}
+            onTouchStart={prepareForChange}
             onClick={() => openSideMenu("command")}
           >
             <ScreenOnly text="button to change type and value is current type" />
@@ -224,7 +234,7 @@ const BlockStyler = ({ ...props }: BlockStylerProps) => {
           <button
             title="button to add link "
             className="blockStyler__btn-link btn"
-            onClick={() => openSideMenu("link")}
+            onClick={() => openSideMenu("linkLoader")}
             onMouseDown={prepareForChange}
             onTouchStart={prepareForChange}
           >
@@ -292,12 +302,39 @@ const BlockStyler = ({ ...props }: BlockStylerProps) => {
           </button>
         </div>
       </div>
-      {sideMenu && (
-        <BlockStylerSideMenu
+      {sideMenuModal.target &&
+        sideMenuModal.target !== "commentInput" &&
+        (isMobile() ? (
+          <MobileSideMenuModal
+            sideMenuModal={sideMenuModal}
+            setSideMenuModal={setSideMenuModal}
+          >
+            <BlockStylerSideMenu
+              {...props}
+              block={findBlock(page, block.id).BLOCK}
+              sideMenuModal={sideMenuModal}
+              closeSideMenu={() => {
+                setSideMenuModal((prev) => ({ ...prev, open: false }));
+              }}
+            />
+          </MobileSideMenuModal>
+        ) : (
+          <BlockStylerSideMenu
+            {...props}
+            block={findBlock(page, block.id).BLOCK}
+            sideMenuModal={sideMenuModal}
+            closeSideMenu={closeSideMenu}
+          />
+        ))}
+      {sideMenuModal.target === "commentInput" && (
+        <CommentInput
           {...props}
-          block={findBlock(page, block.id).BLOCK}
-          sideMenu={sideMenu}
-          closeSideMenu={closeSideMenu}
+          pageId={props.page.id}
+          commentBlock={props.block}
+          addOrEdit="add"
+          mainComment={null}
+          subComment={null}
+          allComments={props.block.comments}
         />
       )}
     </>

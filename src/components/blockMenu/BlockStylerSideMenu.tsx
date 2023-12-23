@@ -1,19 +1,21 @@
 import { memo, CSSProperties, useCallback, useEffect, useState } from "react";
 
 import { ColorMenu, LinkLoader, CommandMenu, CommentInput } from "../index";
-import { BlockStylerProps, BlockStylerSideMenuType } from "./BlockStyler";
+import { BlockStylerProps } from "./BlockStyler";
+import { ModalType } from "../../types";
+import { isMobile } from "../../utils";
 
 type BlockStylerSideMenuProps = BlockStylerProps & {
-  sideMenu: BlockStylerSideMenuType;
+  sideMenuModal: ModalType;
   closeSideMenu: () => void;
 };
 const BlockStylerSideMenu = ({ ...props }: BlockStylerSideMenuProps) => {
-  const { sideMenu, closeSideMenu } = props;
+  const { sideMenuModal, closeSideMenu } = props;
 
   const [style, setStyle] = useState<CSSProperties | undefined>(undefined);
 
   const changeStyle = useCallback(() => {
-    if (sideMenu === "commentInput") {
+    if (sideMenuModal.target === "commentInput") {
       setStyle({ position: "absolute", left: 0, top: 0 });
       return;
     }
@@ -48,7 +50,7 @@ const BlockStylerSideMenu = ({ ...props }: BlockStylerSideMenuProps) => {
             maxHeight: gapFromTopBar,
           });
     }
-  }, [sideMenu]);
+  }, [sideMenuModal.target]);
 
   useEffect(() => {
     changeStyle();
@@ -56,29 +58,14 @@ const BlockStylerSideMenu = ({ ...props }: BlockStylerSideMenuProps) => {
 
   return (
     <div id="styler-block__side-menu">
-      <div className="inner" style={style}>
-        {sideMenu === "command" && (
-          <CommandMenu
-            {...props}
-            closeCommand={closeSideMenu}
-            closeModal={undefined}
-          />
+      <div className="inner" style={isMobile() ? undefined : style}>
+        {sideMenuModal.target === "command" && (
+          <CommandMenu {...props} closeCommand={closeSideMenu} />
         )}
-        {sideMenu === "link" && (
+        {sideMenuModal.target === "linkLoader" && (
           <LinkLoader {...props} closeLink={closeSideMenu} />
         )}
-        {sideMenu === "color" && <ColorMenu {...props} />}
-        {sideMenu === "commentInput" && (
-          <CommentInput
-            {...props}
-            pageId={props.page.id}
-            commentBlock={props.block}
-            addOrEdit="add"
-            mainComment={null}
-            subComment={null}
-            allComments={props.block.comments}
-          />
-        )}
+        {sideMenuModal.target === "color" && <ColorMenu {...props} />}
       </div>
     </div>
   );
