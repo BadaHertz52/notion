@@ -60,6 +60,8 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
     undefined
   );
 
+  const showCloseBtnTarget: ModalTargetType[] = ["quickFind", "trash"];
+
   const closeModalInMobile = useCallback(() => {
     setModalStyle((prev) => ({ ...prev, top: "100vh" }));
     setTimeout(() => {
@@ -85,24 +87,23 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
     touchResizeBar.current = true;
   }, []);
 
-  const onTouchMoveSideBar = useCallback(
-    (event: TouchEvent<HTMLDivElement>) => {
-      if (touchResizeBar.current) {
-        const clientY = event.changedTouches[0].clientY;
-        const innerHeight = window.innerHeight;
-        if (innerHeight * 0.9 <= clientY) {
-          closeModal();
-          touchResizeBar.current = false;
-        } else {
-          clientY >= 120 &&
-            setInnerStyle({
-              top: clientY,
-            });
-        }
+  const onTouchMoveSideBar = (event: TouchEvent<HTMLDivElement>) => {
+    if (touchResizeBar.current) {
+      const clientY = event.changedTouches[0].clientY;
+      const innerHeight = window.innerHeight;
+      if (innerHeight * 0.9 <= clientY) {
+        closeModal();
+        touchResizeBar.current = false;
+      } else {
+        clientY >= 120 &&
+          setInnerStyle((prev) => ({
+            ...prev,
+            top: clientY,
+          }));
       }
-    },
-    [setInnerStyle, closeModal]
-  );
+    }
+  };
+
   const changeCenterModalStyle = useCallback(() => {
     setModalStyle({
       width: "fit-content",
@@ -130,7 +131,7 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
           });
           break;
         case "rename":
-          const el = document.querySelector(".pageList__item.link-page");
+          const el = document.querySelector(".page-list__item.link-page");
           if (el) {
             setModalStyle({
               position: "absolute",
@@ -197,7 +198,7 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
     (event: globalThis.MouseEvent) => {
       const NOT_TARGET_ARRAY = [
         "#modal-sideBar__menu",
-        ".pageList__item__btn-group",
+        ".page-list__item__btn-group",
         "#sideBar__moreFn",
         "#btn-open-quickFindBoard",
         ".btn-trash",
@@ -218,13 +219,10 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
 
   useEffect(() => {
     sideModal.open
-      ? window.addEventListener("click", handleCloseModal)
-      : window.removeEventListener("click", handleCloseModal);
+      ? document.addEventListener("click", handleCloseModal)
+      : document.removeEventListener("click", handleCloseModal);
   }, [handleCloseModal, sideModal.open]);
 
-  useEffect(() => {
-    console.log(sideModal);
-  }, [sideModal]);
   return (
     <ModalPortal
       target={sideModal.target}
@@ -245,9 +243,12 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
               <ScreenOnly text="button to resize sideBar__moreFn" />
               <div></div>
             </button>
-            <button className="btn-close" onClick={closeModalInMobile}>
-              close
-            </button>
+            {sideModal.target &&
+              showCloseBtnTarget.includes(sideModal.target) && (
+                <button className="btn-close" onClick={closeModalInMobile}>
+                  close
+                </button>
+              )}
           </div>
         )}
         {/*---mobile*/}

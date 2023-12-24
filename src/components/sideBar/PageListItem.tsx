@@ -10,7 +10,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { ScreenOnly, PageIcon } from "../index";
 
 import { SideAppear, ListItem } from "../../types";
-import { makeRoutePath } from "../../utils";
+import { isMobile, makeRoutePath } from "../../utils";
 
 type PageListItemProp = {
   item: ListItem;
@@ -71,14 +71,17 @@ const PageListItem = ({
     toggleSubPage(subPageElement);
   }, []);
   const showPageFn = useCallback(() => {
-    if (sideBarPageFnRef.current) {
+    if (sideBarPageFnRef.current && !isMobile()) {
       sideBarPageFnRef.current.classList.toggle("on");
     }
   }, []);
   const removeOn = useCallback(() => {
-    if (sideBarPageFnRef.current) {
-      sideBarPageFnRef.current.classList.contains("on") &&
-        sideBarPageFnRef.current.classList.remove("on");
+    if (
+      sideBarPageFnRef.current &&
+      !isMobile() &&
+      sideBarPageFnRef.current.classList.contains("on")
+    ) {
+      sideBarPageFnRef.current.classList.remove("on");
     }
   }, []);
   const onClickPageName = useCallback(() => {
@@ -86,13 +89,19 @@ const PageListItem = ({
       changeSide("close");
     }
   }, [changeSide]);
+
+  const handleTouchStart = () => {
+    if (sideBarPageFnRef.current)
+      onClickMoreBtn(item, sideBarPageFnRef.current);
+  };
   return (
     <div
-      className="pageList__item link-page"
+      className="page-list__item link-page"
       onMouseOver={showPageFn}
       onMouseOut={removeOn}
+      onTouchMove={handleTouchStart}
     >
-      <div className="pageList__item__page">
+      <div className="page-list__item__page">
         <button
           title="button to toggle page"
           className="btn-toggle"
@@ -115,7 +124,7 @@ const PageListItem = ({
           <div>{item.title}</div>
         </Link>
       </div>
-      <div className="pageList__item__btn-group" ref={sideBarPageFnRef}>
+      <div className="page-list__item__btn-group" ref={sideBarPageFnRef}>
         <button
           className="btn-menu"
           title="button to open menu to delete, duplicate or for more"

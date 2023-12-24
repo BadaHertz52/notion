@@ -99,8 +99,6 @@ const SideBar = ({
   );
 
   const onClickMoreBtn = useCallback((item: ListItem, target: HTMLElement) => {
-    setTargetItem(item);
-
     const newModal: ModalType = {
       open: true,
       target: "sideBarMoreFn",
@@ -113,11 +111,15 @@ const SideBar = ({
         ...newModal,
         targetDomRect: domRect,
       });
+      setTargetItem(item);
     } else {
-      setSideModal({
-        ...newModal,
-        isMobile: true,
-      });
+      if (sideModal.pageId !== item.id) {
+        setSideModal({
+          ...newModal,
+          isMobile: true,
+        });
+        setTargetItem(item);
+      }
     }
   }, []);
 

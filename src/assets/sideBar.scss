@@ -76,14 +76,14 @@
     height: 14px;
   }
   .item__inner,
-  .subPage.no {
+  .sub-page.no {
     span {
       color: $itemText;
       font-weight: 500;
     }
   }
   .item__inner,
-  .pageList__item {
+  .page-list__item {
     display: flex;
     padding: 5px 14px;
     font-size: 16px;
@@ -102,10 +102,10 @@
       fill: $itemSvg;
     }
   }
-  .list .pageList__item {
+  .list .page-list__item {
     justify-content: space-between;
     padding-right: 0;
-    .pageList__item__page {
+    .page-list__item__page {
       display: flex;
       width: calc(100% - 32px);
       .pageName {
@@ -122,7 +122,7 @@
       }
     }
   }
-  .pageList__item__btn-group {
+  .page-list__item__btn-group {
     display: none;
     &.on {
       display: flex;
@@ -246,10 +246,10 @@
     .list .page {
       width: 100%;
     }
-    .subPage {
+    .sub-page {
       display: none;
     }
-    .subPage.on {
+    .sub-page.on {
       display: block;
       margin: 5px 0;
       margin-left: 18px;
@@ -284,7 +284,7 @@
         margin-right: 5px;
       }
     }
-    .subPage.no {
+    .sub-page.no {
       margin-left: 36px;
       span {
         font-size: 14px;
@@ -446,7 +446,7 @@
       background-color: black;
       color: #ffff;
     }
-    .pageList__item svg {
+    .page-list__item svg {
       font-size: 1rem;
       color: $darkgrey;
     }

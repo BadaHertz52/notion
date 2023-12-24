@@ -49,10 +49,10 @@ const PageList = ({
     []
   );
   return (
-    <ul ref={ulRef} className="pageList">
+    <ul ref={ulRef} className="page-list">
       {targetList.map((item) => (
         <li key={item.id}>
-          <div className="mainPage">
+          <div className="main-page">
             <PageListItem
               item={item}
               onClickMoreBtn={onClickMoreBtn}
@@ -63,7 +63,7 @@ const PageList = ({
           {notion.pages &&
             notion.pagesId &&
             (item.subPagesId ? (
-              <div className="subPage">
+              <div className="sub-page">
                 <PageList
                   notion={notion}
                   targetList={makeTargetList(
@@ -77,7 +77,7 @@ const PageList = ({
                 />
               </div>
             ) : (
-              <div className="subPage no">
+              <div className="sub-page no">
                 <span>No page inside</span>
               </div>
             ))}

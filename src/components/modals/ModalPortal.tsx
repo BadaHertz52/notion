@@ -45,9 +45,14 @@ const ModalPortal = ({
   }, [isOpen, isCenter]);
 
   return ReactDOM.createPortal(
-    <div id={id} ref={modalRef} className="modal" onTouchMove={onTouchMove}>
+    <div id={id} ref={modalRef} className="modal">
       <div className="inner">
-        <div id={`${id}__menu`} className="modal__menu" style={style}>
+        <div
+          id={`${id}__menu`}
+          className="modal__menu"
+          onTouchMove={onTouchMove}
+          style={style}
+        >
           {children}
         </div>
       </div>
