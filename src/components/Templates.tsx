@@ -40,27 +40,8 @@ type TemplatesProps = TemplateFrameCommonProps & {
   routePageId: string; // 현재 page
   setOpenTemplates: Dispatch<SetStateAction<boolean>>;
 };
-const Templates = ({
-  user,
-  pagesId,
-  pages,
-  firstList,
-  recentPagesId,
-
-  commentBlock,
-  openComment,
-  openTemplates,
-  setOpenTemplates,
-  setOpenComment,
-
-  setCommentBlock,
-  showAllComments,
-  smallText,
-  fullWidth,
-  discardEdit,
-  setDiscardEdit,
-  fontStyle,
-}: TemplatesProps) => {
+const Templates = ({ ...props }: TemplatesProps) => {
+  const { pagesId, pages, setOpenTemplates } = props;
   const { addPage, editPage } = useContext(ActionContext).actions;
   const templatesId = useSelector(
     (state: RootState) => state.notion
@@ -278,26 +259,7 @@ const Templates = ({
                     </button>
                   </div>
                 </div>
-                <Frame
-                  page={template}
-                  userName={user.userName}
-                  pagesId={pagesId}
-                  pages={pages}
-                  firstList={firstList}
-                  recentPagesId={recentPagesId}
-                  commentBlock={commentBlock}
-                  openComment={openComment}
-                  setOpenComment={setOpenComment}
-                  setCommentBlock={setCommentBlock}
-                  showAllComments={showAllComments}
-                  smallText={smallText}
-                  fullWidth={fullWidth}
-                  discardEdit={discardEdit}
-                  setDiscardEdit={setDiscardEdit}
-                  openTemplates={openTemplates}
-                  setOpenTemplates={setOpenTemplates}
-                  fontStyle={fontStyle}
-                />
+                <Frame {...props} page={template} />
               </>
             ) : (
               <div className="noTemplate">

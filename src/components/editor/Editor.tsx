@@ -33,18 +33,10 @@ export type EditorProps = {
   sideAppear: SideAppear;
   page: Page;
   isInTrash: boolean;
-  openComment: boolean;
-  setOpenComment: Dispatch<SetStateAction<boolean>>;
-  commentBlock: Block | null;
-  setCommentBlock: Dispatch<SetStateAction<Block | null>>;
   smallText: boolean;
   setSmallText: Dispatch<SetStateAction<boolean>>;
   fullWidth: boolean;
   setFullWidth: Dispatch<SetStateAction<boolean>>;
-  showAllComments: boolean;
-  setShowAllComments: Dispatch<SetStateAction<boolean>>;
-  discardEdit: boolean;
-  setDiscardEdit: Dispatch<SetStateAction<boolean>>;
   setOpenExport: Dispatch<SetStateAction<boolean>>;
   openTemplates: boolean;
   setOpenTemplates: Dispatch<SetStateAction<boolean>>;
@@ -62,18 +54,10 @@ const Editor = ({
   pagesId,
   recentPagesId,
   isInTrash,
-  openComment,
-  setOpenComment,
-  commentBlock,
-  setCommentBlock,
   smallText,
   setSmallText,
   fullWidth,
   setFullWidth,
-  showAllComments,
-  setShowAllComments,
-  discardEdit,
-  setDiscardEdit,
   setOpenExport,
   openTemplates,
   setOpenTemplates,
@@ -129,14 +113,13 @@ const Editor = ({
         </div>
       )}
       <TopBar
+        userName={userName}
         firstList={firstList}
         favorites={user.favorites}
         sideAppear={sideAppear}
         page={page}
         pages={pages}
         pagePath={pagePath}
-        showAllComments={showAllComments}
-        setShowAllComments={setShowAllComments}
         smallText={smallText}
         setSmallText={setSmallText}
         fullWidth={fullWidth}
@@ -151,15 +134,8 @@ const Editor = ({
         pages={pages}
         firstList={firstList}
         recentPagesId={recentPagesId}
-        commentBlock={commentBlock}
-        openComment={openComment}
-        setOpenComment={setOpenComment}
-        setCommentBlock={setCommentBlock}
-        showAllComments={showAllComments}
         smallText={smallText}
         fullWidth={fullWidth}
-        discardEdit={discardEdit}
-        setDiscardEdit={setDiscardEdit}
         openTemplates={openTemplates}
         setOpenTemplates={setOpenTemplates}
         fontStyle={fontStyle}

@@ -1,7 +1,5 @@
 import React, {
   CSSProperties,
-  MouseEvent,
-  TouchEvent,
   useEffect,
   useRef,
   useState,
@@ -220,10 +218,6 @@ const Frame = ({ ...props }: FrameProps) => {
     };
   }, [closeBlockQuickMenuModal]);
 
-  //TODO - 삭제
-  useEffect(() => {
-    console.log("modal", modal);
-  }, [modal]);
   return (
     <div
       className={`frame ${newPageFrame ? "newPageFrame" : ""} ${
@@ -247,11 +241,8 @@ const Frame = ({ ...props }: FrameProps) => {
           frameRef={frameRef}
           fontSize={fontSize}
           templateHtml={templateHtml}
-          showAllComments={props.showAllComments}
           newPageFrame={newPageFrame}
           setMovingTargetBlock={setMovingTargetBlock}
-          setMobileMenuTargetBlock={setMobileMenuTargetBlock}
-          mobileMenuTargetBlock={mobileMenuTargetBlock}
           frameInnerStyle={frameInnerStyle}
           closeModal={closeModal}
         />

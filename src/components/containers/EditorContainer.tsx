@@ -18,32 +18,12 @@ const EditorContainer = ({ ...props }: EditorContainerProps) => {
 
   return (
     <Editor
+      {...props}
       sideAppear={side.appear}
-      firstList={props.firstList}
       userName={user.userName}
       recentPagesId={user.recentPagesId}
-      page={props.page}
       pages={notion.pages as Page[]}
       pagesId={notion.pagesId as string[]}
-      isInTrash={props.isInTrash}
-      showAllComments={props.showAllComments}
-      setShowAllComments={props.setShowAllComments}
-      discardEdit={props.discardEdit}
-      setDiscardEdit={props.setDiscardEdit}
-      setOpenExport={props.setOpenExport}
-      openComment={props.openComment}
-      setOpenComment={props.setOpenComment}
-      commentBlock={props.commentBlock}
-      setCommentBlock={props.setCommentBlock}
-      smallText={props.smallText}
-      setSmallText={props.setSmallText}
-      fullWidth={props.fullWidth}
-      setFullWidth={props.setFullWidth}
-      openTemplates={props.openTemplates}
-      setOpenTemplates={props.setOpenTemplates}
-      fontStyle={props.fontStyle}
-      setFontStyle={props.setFontStyle}
-      openExport={props.openExport}
     />
   );
 };

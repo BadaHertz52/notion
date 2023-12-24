@@ -16,33 +16,24 @@ import AllCommentsContents, {
 
 import "../../assets/allComments.scss";
 
-type AllCommentsProps = Omit<AllCommentsContentsProps, "select"> & {
-  setShowAllComments: Dispatch<SetStateAction<boolean>>;
-};
+type AllCommentsProps = Omit<AllCommentsContentsProps, "select">;
 
-const AllComments = ({
-  page,
-  userName,
-  showAllComments,
-  setShowAllComments,
-  discardEdit,
-  setDiscardEdit,
-}: AllCommentsProps) => {
+const AllComments = ({ page, userName }: AllCommentsProps) => {
   const inner = document.getElementById("notion__inner");
   const allCommentsRef = useRef<HTMLDivElement>(null);
-  const closeAllComments = useCallback(
-    (event: globalThis.MouseEvent) => {
-      if (showAllComments) {
-        const target = event.target as HTMLElement | null;
-        const isInAllComments = target?.closest("#allComments");
-        const isInAllCommentsBtn = target?.closest("#allCommentsBtn");
-        if (!isInAllComments && !isInAllCommentsBtn) {
-          setShowAllComments(false);
-        }
-      }
-    },
-    [setShowAllComments, showAllComments]
-  );
+  // const closeAllComments = useCallback(
+  //   (event: globalThis.MouseEvent) => {
+  //     if (showAllComments) {
+  //       const target = event.target as HTMLElement | null;
+  //       const isInAllComments = target?.closest("#allComments");
+  //       const isInAllCommentsBtn = target?.closest("#allCommentsBtn");
+  //       if (!isInAllComments && !isInAllCommentsBtn) {
+  //         setShowAllComments(false);
+  //       }
+  //     }
+  //   },
+  //   [setShowAllComments, showAllComments]
+  // );
 
   const [select, setSelect] = useState<"open" | "resolve">("open");
 
@@ -58,35 +49,35 @@ const AllComments = ({
     }
   };
 
-  const changeStyle = useCallback(() => {
-    if (showAllComments) {
-      allCommentsRef.current?.classList.remove("hide");
-      setTimeout(() => {
-        allCommentsRef.current?.classList.add("on");
-      }, 50);
-    } else {
-      const classList = allCommentsRef.current?.classList;
-      classList?.contains("on") &&
-        allCommentsRef.current?.classList.remove("on");
-      !classList?.contains("hide") &&
-        setTimeout(() => {
-          allCommentsRef.current?.classList.add("hide");
-        }, 2500);
-    }
-  }, [showAllComments, allCommentsRef]);
+  // const changeStyle = useCallback(() => {
+  //   if (showAllComments) {
+  //     allCommentsRef.current?.classList.remove("hide");
+  //     setTimeout(() => {
+  //       allCommentsRef.current?.classList.add("on");
+  //     }, 50);
+  //   } else {
+  //     const classList = allCommentsRef.current?.classList;
+  //     classList?.contains("on") &&
+  //       allCommentsRef.current?.classList.remove("on");
+  //     !classList?.contains("hide") &&
+  //       setTimeout(() => {
+  //         allCommentsRef.current?.classList.add("hide");
+  //       }, 2500);
+  //   }
+  // }, [showAllComments, allCommentsRef]);
 
-  useEffect(() => {
-    inner?.addEventListener("click", closeAllComments);
-    return () => {
-      inner?.removeEventListener("click", closeAllComments);
-    };
-  }, [inner, closeAllComments]);
+  // useEffect(() => {
+  //   inner?.addEventListener("click", closeAllComments);
+  //   return () => {
+  //     inner?.removeEventListener("click", closeAllComments);
+  //   };
+  // }, [inner, closeAllComments]);
 
-  useEffect(() => {
-    changeStyle();
-    window.addEventListener("resize", changeStyle);
-    return () => window.removeEventListener("resize", changeStyle);
-  }, [changeStyle]);
+  // useEffect(() => {
+  //   changeStyle();
+  //   window.addEventListener("resize", changeStyle);
+  //   return () => window.removeEventListener("resize", changeStyle);
+  // }, [changeStyle]);
 
   return (
     <div id="allComments" className="allComments hide" ref={allCommentsRef}>
@@ -126,16 +117,7 @@ const AllComments = ({
             </div>
           </div>
         </div>
-        {showAllComments && (
-          <AllCommentsContents
-            page={page}
-            userName={userName}
-            select={select}
-            discardEdit={discardEdit}
-            setDiscardEdit={setDiscardEdit}
-            showAllComments={showAllComments}
-          />
-        )}
+        <AllCommentsContents page={page} userName={userName} select={select} />
       </div>
     </div>
   );

@@ -25,27 +25,9 @@ type ExportProps = FrameProps & {
   setOpenExport: Dispatch<SetStateAction<boolean>>;
 };
 
-const Export = ({
-  page,
-  pagesId,
-  pages,
-  firstList,
-  recentPagesId,
-  setOpenExport,
-  userName,
-  commentBlock,
-  openComment,
-  setOpenComment,
-  setCommentBlock,
-  showAllComments,
-  smallText,
-  fullWidth,
-  discardEdit,
-  setDiscardEdit,
-  openTemplates,
-  setOpenTemplates,
-  fontStyle,
-}: ExportProps) => {
+const Export = ({ ...props }: ExportProps) => {
+  const { page, pagesId, pages, setOpenExport } = props;
+  //TODO - 상수
   const html = "HTML";
   const pdf = "PDF";
   const markdown = "Markdown";
@@ -170,28 +152,7 @@ const Export = ({
           findPage(pagesId, pages, id)
         );
         const subPageFrames = subPages.map((subPage: Page) => {
-          const frameComponent = (
-            <Frame
-              page={subPage}
-              userName={userName}
-              pages={pages}
-              pagesId={pagesId}
-              firstList={firstList}
-              recentPagesId={recentPagesId}
-              commentBlock={commentBlock}
-              openComment={openComment}
-              setOpenComment={setOpenComment}
-              setCommentBlock={setCommentBlock}
-              showAllComments={showAllComments}
-              smallText={smallText}
-              fullWidth={fullWidth}
-              discardEdit={discardEdit}
-              setDiscardEdit={setDiscardEdit}
-              openTemplates={openTemplates}
-              setOpenTemplates={setOpenTemplates}
-              fontStyle={fontStyle}
-            />
-          );
+          const frameComponent = <Frame {...props} page={subPage} />;
           return { jsx: frameComponent, title: subPage.header.title };
         });
         return subPageFrames;
@@ -270,30 +231,15 @@ const Export = ({
     }
     closeExport();
   }, [
-    commentBlock,
     content,
-    discardEdit,
     exportDocument,
-    firstList,
-    fontStyle,
     format,
-    fullWidth,
-
-    openComment,
-    openTemplates,
     page.header.title,
     page.subPagesId,
     pages,
     pagesId,
-    recentPagesId,
-    setCommentBlock,
-    setDiscardEdit,
-    setOpenComment,
-    setOpenTemplates,
-    showAllComments,
-    smallText,
-    userName,
     closeExport,
+    props,
   ]);
   return (
     <div id="export">

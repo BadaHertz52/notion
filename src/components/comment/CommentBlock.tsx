@@ -22,7 +22,6 @@ export type CommentBlockProps = Omit<
     setMoreOpen: Dispatch<SetStateAction<boolean>>;
     setToolMoreStyle: Dispatch<SetStateAction<CSSProperties | undefined>>;
     setDiscardEdit?: Dispatch<SetStateAction<boolean>>;
-    showAllComments: boolean;
     openDiscardEdit: boolean;
     setOpenDiscardEdit: Dispatch<SetStateAction<boolean>>;
   };

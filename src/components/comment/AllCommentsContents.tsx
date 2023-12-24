@@ -12,17 +12,11 @@ export type AllCommentsContentsProps = {
   page: Page;
   userName: string;
   select: "open" | "resolve";
-  discardEdit: boolean;
-  setDiscardEdit: Dispatch<SetStateAction<boolean>>;
-  showAllComments: boolean;
 };
 function AllCommentsContents({
   page,
   userName,
   select,
-  discardEdit,
-  setDiscardEdit,
-  showAllComments,
 }: AllCommentsContentsProps) {
   type ResultItem = {
     mainComments: MainCommentType[];
@@ -53,10 +47,10 @@ function AllCommentsContents({
   }, [page.blocks, select]);
 
   useEffect(() => {
-    console.log("select", select);
     const newResult = getResult();
     setResult(newResult);
   }, [select, getResult]);
+
   return (
     <div className="allComments__contents">
       {!result ? (
@@ -79,7 +73,6 @@ function AllCommentsContents({
             userName={userName}
             block={item.block}
             frameHtml={null}
-            showAllComments={showAllComments}
           />
         ))
       )}

@@ -23,7 +23,6 @@ export type CommentToolProps = {
   setMoreOpen: Dispatch<SetStateAction<boolean>>;
   setToolMoreStyle: Dispatch<SetStateAction<CSSProperties | undefined>>;
   templateHtml: HTMLElement | null;
-  showAllComments: boolean;
 };
 
 const CommentTool = ({
@@ -40,7 +39,6 @@ const CommentTool = ({
   setMoreOpen,
   setToolMoreStyle,
   templateHtml,
-  showAllComments,
 }: CommentToolProps) => {
   const commentToolRef = useRef<HTMLDivElement>(null);
 

@@ -13,17 +13,10 @@ export type TemplateFrameCommonProps = {
   pagesId: string[];
   firstList: ListItem[];
   recentPagesId: string[] | null;
-  commentBlock: Block | null;
-  openComment: boolean;
-  setOpenComment: Dispatch<SetStateAction<boolean>>;
   openTemplates: boolean;
   setOpenTemplates: Dispatch<SetStateAction<boolean>>;
-  setCommentBlock: Dispatch<SetStateAction<Block | null>>;
-  showAllComments: boolean;
   smallText: boolean;
   fullWidth: boolean;
-  discardEdit: boolean;
-  setDiscardEdit: Dispatch<SetStateAction<boolean>>;
   fontStyle: FontStyle;
 };
 //TODO -  setCommendBlock 삭제

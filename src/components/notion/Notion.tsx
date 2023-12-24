@@ -20,11 +20,7 @@ const Notion = ({ ...props }: NotionProps) => {
   const { currentPage, pagesId, pages, firstPagesId } = props;
   //TODO -  수정
 
-  const [showAllComments, setShowAllComments] = useState<boolean>(false);
-  const [discard_edit, setDiscardEdit] = useState<boolean>(false);
   const [openExport, setOpenExport] = useState<boolean>(false);
-  const [openComment, setOpenComment] = useState<boolean>(false);
-  const [commentBlock, setCommentBlock] = useState<Block | null>(null);
   const [smallText, setSmallText] = useState<boolean>(false);
   const [fullWidth, setFullWidth] = useState<boolean>(false);
   const [openTemplates, setOpenTemplates] = useState<boolean>(false);
@@ -72,18 +68,10 @@ const Notion = ({ ...props }: NotionProps) => {
         <NotionRouter
           {...props}
           firstList={firstList}
-          openComment={openComment}
-          setOpenComment={setOpenComment}
-          commentBlock={commentBlock}
-          setCommentBlock={setCommentBlock}
           smallText={smallText}
           setSmallText={setSmallText}
           fullWidth={fullWidth}
           setFullWidth={setFullWidth}
-          showAllComments={showAllComments}
-          setShowAllComments={setShowAllComments}
-          discardEdit={discard_edit}
-          setDiscardEdit={setDiscardEdit}
           openTemplates={openTemplates}
           setOpenTemplates={setOpenTemplates}
           setOpenExport={setOpenExport}

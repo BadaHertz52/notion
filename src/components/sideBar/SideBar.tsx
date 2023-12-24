@@ -43,7 +43,6 @@ export type SideBarProps = {
   firstList: ListItem[] | null;
   setOpenQF?: Dispatch<SetStateAction<boolean>>;
   setOpenTemplates?: Dispatch<SetStateAction<boolean>>;
-  showAllComments?: boolean;
 };
 
 const SideBar = ({
@@ -52,7 +51,6 @@ const SideBar = ({
   sideAppear,
   firstPages,
   firstList,
-  showAllComments,
 }: SideBarProps) => {
   const { addBlock, addPage, changeSide } = useContext(ActionContext).actions;
   const { pages, pagesId, trash } = notion;
@@ -130,11 +128,16 @@ const SideBar = ({
     });
   }, [setSideModal]);
 
+  const isAllComments = useCallback(
+    () => !!document.querySelector("#allComments"),
+    []
+  );
+
   const handleResize = useCallback(() => {
-    if (window.innerWidth < 800 && sideAppear === "lock" && showAllComments) {
+    if (window.innerWidth < 800 && sideAppear === "lock" && isAllComments()) {
       changeSide("close");
     }
-  }, [changeSide, showAllComments, sideAppear]);
+  }, [changeSide, isAllComments, sideAppear]);
 
   const onClickTrashBtn = useCallback(() => {
     setSideModal({

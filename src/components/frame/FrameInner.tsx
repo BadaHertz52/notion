@@ -1,7 +1,5 @@
 import React, {
   Dispatch,
-  MouseEvent,
-  MutableRefObject,
   RefObject,
   SetStateAction,
   memo,
@@ -29,8 +27,6 @@ export type FrameInnerProps = PageHeaderProps & {
   frameRef: RefObject<HTMLDivElement>;
   templateHtml: HTMLElement | null;
   setMovingTargetBlock: Dispatch<SetStateAction<Block | null>>;
-  setMobileMenuTargetBlock: Dispatch<SetStateAction<Block | null>>;
-  mobileMenuTargetBlock: Block | null;
   frameInnerStyle: CSSProperties;
   closeModal: () => void;
 };

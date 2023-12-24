@@ -28,10 +28,6 @@ type CommentsProps = {
   pageId: string;
   userName: string;
   frameHtml: HTMLElement | null;
-  /**
-   *showAllComments === true이면 AllComments안의 comments, showAllComments이면 frame안에 있는 page, block에 대한 comments로, ToolMore의 위치를 지정하는데 사용함
-   */
-  showAllComments: boolean;
 };
 
 const Comments = ({ ...props }: CommentsProps) => {

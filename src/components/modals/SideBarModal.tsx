@@ -293,11 +293,10 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
             openTemplates={openTemplates}
             setOpenTemplates={setOpenTemplates}
             setCommentBlock={setCommentBlock}
-            showAllComments={showAllComments}
+
             smallText={smallText}
             fullWidth={fullWidth}
-            discardEdit={discard_edit}
-            setDiscardEdit={setDiscardEdit}
+
             fontStyle={fontStyle}
             mobileSideMenu={mobileSideMenu}
             setMobileSideMenu={setMobileSideMenu}

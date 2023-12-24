@@ -255,7 +255,6 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
             targetMainComments={modal.block.comments}
             block={modal.block}
             pageId={props.page.id}
-            showAllComments={false}
           />
         </div>
       )}

@@ -42,7 +42,6 @@ export type PageHeaderProps = {
   frameRef: RefObject<HTMLDivElement>;
   fontSize: number;
   templateHtml: HTMLElement | null;
-  showAllComments: boolean;
   newPageFrame: boolean;
   handleImgLoad?: () => void;
   openExport?: boolean;
@@ -53,7 +52,6 @@ function PageHeader({
   frameRef,
   fontSize,
   templateHtml,
-  showAllComments,
   newPageFrame,
   handleImgLoad,
   openExport,
@@ -273,7 +271,6 @@ function PageHeader({
                 pageId={page.id}
                 userName={userName}
                 frameHtml={frameRef.current}
-                showAllComments={showAllComments}
               />
             ))
           ) : openPageCommentInput ? (

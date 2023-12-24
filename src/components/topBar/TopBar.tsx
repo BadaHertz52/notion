@@ -28,14 +28,13 @@ import { ListItem, Page, FontStyle, SideAppear, Path } from "../../types";
 import { isMobile, makeRoutePath } from "../../utils";
 
 type TopBarProps = {
+  userName: string;
   firstList: ListItem[];
   favorites: string[] | null;
   sideAppear: SideAppear;
   page: Page;
   pages: Page[];
   pagePath: Path[] | null;
-  showAllComments: boolean;
-  setShowAllComments: Dispatch<SetStateAction<boolean>>;
   smallText: boolean;
   setSmallText: Dispatch<SetStateAction<boolean>>;
   fullWidth: boolean;
@@ -51,8 +50,6 @@ const TopBar = ({
   page,
   pages,
   pagePath,
-  showAllComments,
-  setShowAllComments,
   smallText,
   setSmallText,
   fullWidth,
@@ -62,6 +59,9 @@ const TopBar = ({
 }: TopBarProps) => {
   const { deletePage, changeSide, addFavorites, removeFavorites } =
     useContext(ActionContext).actions;
+
+  const [openAllComments, setOpenAllComments] = useState<boolean>(false);
+
   const [title, setTitle] = useState<string>("");
   const [openPageMoreFun, setOpenPageMoreFun] = useState<boolean>(false);
   const [openPageMenu, setOpenPageMenu] = useState<boolean>(false);
@@ -74,8 +74,8 @@ const TopBar = ({
       const target = event.target as HTMLElement;
       const targetTag = target.tagName.toLowerCase();
       const width = window.outerWidth;
-      if (showAllComments && width < 1024) {
-        setShowAllComments(false);
+      if (openAllComments && width < 1024) {
+        setOpenAllComments(false);
       }
       switch (targetTag) {
         case "button":
@@ -93,7 +93,7 @@ const TopBar = ({
           break;
       }
     },
-    [changeSide, setShowAllComments, showAllComments]
+    [changeSide, setOpenAllComments, openAllComments]
   );
   const onMouseEnterSidBarBtn = useCallback(() => {
     const innerWidth = window.innerWidth;
@@ -119,7 +119,7 @@ const TopBar = ({
         e.setAttribute("style", `max-width:${width}px`)
       );
     };
-    if (showAllComments) {
+    if (openAllComments) {
       if (innerWidth >= 385) {
         const newWidth = innerWidth - (12 + 385 + 5);
         topBarLeftEl?.setAttribute("style", `width: ${newWidth}px`);
@@ -134,20 +134,20 @@ const TopBar = ({
       topBarLeftEl?.setAttribute("style", "width:50%");
       changePathWidth(innerWidth * 0.5 - 26);
     }
-  }, [showAllComments]);
+  }, [openAllComments]);
 
   const onClickViewAllComments = useCallback(() => {
-    if (!showAllComments) {
+    if (!openAllComments) {
       setOpenPageMoreFun(false);
       changeAllCommentAndTopBarStyle();
     }
-    setShowAllComments(!showAllComments);
-  }, [changeAllCommentAndTopBarStyle, setShowAllComments, showAllComments]);
+    setOpenAllComments(!openAllComments);
+  }, [changeAllCommentAndTopBarStyle, setOpenAllComments, openAllComments]);
 
   const onClickMoreBtn = useCallback(() => {
     setOpenPageMoreFun((prev) => !prev);
-    setShowAllComments(false);
-  }, [setShowAllComments, setOpenPageMoreFun]);
+    setOpenAllComments(false);
+  }, [setOpenAllComments, setOpenPageMoreFun]);
 
   const returnFontFamily = (font: FontStyle) => {
     const style: CSSProperties = {
@@ -402,6 +402,7 @@ const TopBar = ({
             </div>
           </div>
         )}
+        {/* //TODO -  modal */}
         {openPageMenu && (
           <PageMenu
             what="page"
