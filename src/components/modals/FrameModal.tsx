@@ -91,9 +91,13 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
     const blockQuickMenuElDomRect = blockQuickMenuEl?.getClientRects()[0];
     if (blockQuickMenuElDomRect) {
       const { top, right } = blockQuickMenuElDomRect;
+      const MENU_HEIGHT = 275;
+      const EXTRA_SPACE = 20;
+      const isOver = window.innerHeight - top - MENU_HEIGHT <= EXTRA_SPACE;
+      const modalTop = isOver ? top - MENU_HEIGHT : top;
       setModalStyle({
         position: "absolute",
-        top: top,
+        top: modalTop,
         left: right,
       });
     }
@@ -229,7 +233,8 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
           currentPageId={props.page.id}
           block={modal.block}
           page={findPage(props.pagesId, props.pages, modal.block.id) as Page}
-          closeRename={props.closeModal}
+          pages={props.pages}
+          pagesId={props.pagesId}
         />
       )}
       {modal.target === "commentInput" && modal.block && (
