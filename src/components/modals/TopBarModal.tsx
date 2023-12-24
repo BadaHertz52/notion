@@ -6,14 +6,16 @@ import React, {
   useState,
 } from "react";
 
-import { ModalPortal, AllComments, TopBarToolMore } from "../index";
+import { ModalPortal, AllComments, TopBarToolMore, PageMenu } from "../index";
 import { AllCommentsProps } from "../comment/AllComments";
 import { TopBarToolMoreProps } from "../topBar/TopBarToolMore";
 
 import { ModalType } from "../../types";
 import { isInTarget, isMobile } from "../../utils";
+import { PageMenuProps } from "../pageMenu/PageMenu";
 
 type TopBarModalProps = AllCommentsProps &
+  Omit<PageMenuProps, "what" | "currentPage"> &
   TopBarToolMoreProps & {
     modal: ModalType;
     closeModal: () => void;
@@ -124,6 +126,9 @@ const TopBarModal = ({ ...props }: TopBarModalProps) => {
       {modal.target === "allComments" && style && <AllComments {...props} />}
       {modal.target === "topBarToolMore" && style && (
         <TopBarToolMore {...props} />
+      )}
+      {modal.target === "pageMenu" && (
+        <PageMenu {...props} what="page" currentPage={props.page} />
       )}
     </ModalPortal>
   );
