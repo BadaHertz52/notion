@@ -260,7 +260,6 @@ const TopBar = ({
               <PageIcon
                 icon={page.header.icon}
                 iconType={page.header.iconType}
-                style={undefined}
               />
               <div>{page.header.title}</div>
             </Link>
@@ -273,11 +272,7 @@ const TopBar = ({
 
                 <Link className="link-page" to={makeRoutePath(path.id)}>
                   <div className="icon-path">
-                    <PageIcon
-                      icon={path.icon}
-                      iconType={path.iconType}
-                      style={undefined}
-                    />
+                    <PageIcon icon={path.icon} iconType={path.iconType} />
                   </div>
                   <div className="path-title">
                     <div>{path.title}</div>

@@ -10,7 +10,7 @@ import { getPageSample } from "../../utils";
 type PageIconProps = {
   icon: string | null;
   iconType: IconType;
-  style: CSSProperties | undefined;
+  style?: CSSProperties;
   handleImgLoad?: () => void;
   isInPageHeader?: boolean;
   openExport?: boolean;

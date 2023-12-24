@@ -66,7 +66,6 @@ const RecentPages = ({
         <PageIcon
           icon={recentPage.header.icon}
           iconType={recentPage.header.iconType}
-          style={undefined}
           handleImgLoad={measure}
         />
         <div className="title">{recentPage.header.title}</div>

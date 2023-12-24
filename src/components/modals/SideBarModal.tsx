@@ -265,7 +265,8 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
         {sideModal.target === "rename" && sideModal.pageId && (
           <Rename
             page={findPage(pagesId, pages, sideModal.pageId)}
-            closeRename={closeModal}
+            pages={pages}
+            pagesId={pagesId}
           />
         )}
         {sideModal.target === "quickFind" && (

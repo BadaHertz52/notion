@@ -189,7 +189,6 @@ const EditableBlock = ({ ...props }: EditableBlockProps) => {
                       <PageIcon
                         icon={block.icon}
                         iconType={block.iconType}
-                        style={undefined}
                         openExport={props.openExport}
                       />
                     </div>

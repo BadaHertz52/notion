@@ -20,26 +20,27 @@ import {
   getEditTime,
   isInTarget,
   changeIconModalStyle,
+  findPage,
 } from "../utils";
 
 import "../assets/rename.scss";
 
 export type RenameProps = {
+  pages: Page[];
+  pagesId: string[];
   currentPageId?: string;
   block?: Block;
   page: Page;
   renameStyle?: CSSProperties;
-  setOpenRename?: Dispatch<SetStateAction<boolean>>;
-  closeRename: () => void;
 };
 
 const Rename = ({
   currentPageId,
   block,
+  pages,
+  pagesId,
   page,
   renameStyle,
-  setOpenRename,
-  closeRename,
 }: RenameProps) => {
   const { editPage, editBlock } = useContext(ActionContext).actions;
 
@@ -57,6 +58,10 @@ const Rename = ({
     (event: ChangeEvent<HTMLInputElement>) => {
       const value = event.target.value;
       const editTime = getEditTime();
+      const {
+        header: { icon, iconType },
+      } = findPage(pagesId, pages, page.id);
+
       if (value !== page.header.title) {
         const templateHtml = document.getElementById("template");
         setTemplateItem(templateHtml, page);
@@ -64,6 +69,8 @@ const Rename = ({
           ...page,
           header: {
             ...page.header,
+            iconType: iconType,
+            icon: icon,
             title: value,
           },
           editTime: editTime,
@@ -72,6 +79,8 @@ const Rename = ({
         if (block && currentPageId) {
           const editedBlock: Block = {
             ...block,
+            iconType: iconType,
+            icon: icon,
             contents: value,
             editTime: editTime,
           };
@@ -90,11 +99,7 @@ const Rename = ({
           className="rename__btn"
           onClick={onClickRenameIcon}
         >
-          <PageIcon
-            icon={page.header.icon}
-            iconType={page.header.iconType}
-            style={undefined}
-          />
+          <PageIcon icon={page.header.icon} iconType={page.header.iconType} />
         </button>
         <label>
           <ScreenOnly text="input to rename " />

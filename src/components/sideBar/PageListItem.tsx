@@ -110,7 +110,6 @@ const PageListItem = ({
           <PageIcon
             icon={item.icon}
             iconType={item.iconType}
-            style={undefined}
             handleImgLoad={handleImgLoad}
           />
           <div>{item.title}</div>

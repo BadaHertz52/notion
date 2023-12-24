@@ -242,7 +242,6 @@ const Templates = ({
                     <PageIcon
                       icon={template.header.icon}
                       iconType={template.header.iconType}
-                      style={undefined}
                     />
                     <div className="page__title">
                       <span>{template.header.title}</span>
@@ -326,7 +325,6 @@ const Templates = ({
                     <PageIcon
                       icon={template.header.icon}
                       iconType={template.header.iconType}
-                      style={undefined}
                     />
                     <div className="page__title">
                       <span>{template.header.title}</span>

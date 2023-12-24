@@ -98,11 +98,7 @@ function SideBarMoreFn({
         {/*mobile ---*/}
         {targetItem && (
           <div className="page__inform">
-            <PageIcon
-              icon={targetItem.icon}
-              iconType={targetItem.iconType}
-              style={undefined}
-            />
+            <PageIcon icon={targetItem.icon} iconType={targetItem.iconType} />
             <div className="page__title">{targetItem.title}</div>
           </div>
         )}

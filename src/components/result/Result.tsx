@@ -26,7 +26,7 @@ const Result = ({ item, width }: ResultProps) => {
 
   return (
     <Link className="result" to={makeRoutePath(item.id)}>
-      <PageIcon icon={item.icon} iconType={item.iconType} style={undefined} />
+      <PageIcon icon={item.icon} iconType={item.iconType} />
       <div>
         <div className="page__title" style={style}>
           {item.title}
