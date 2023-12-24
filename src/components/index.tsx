@@ -39,7 +39,7 @@ import Frame from "./frame/Frame";
 import FrameInner from "./frame/FrameInner";
 //icon
 import EmojiIcon from "./icon/EmojiIcon";
-import IconModal from "./icon/IconModal";
+
 import PageIcon from "./icon/PageIcon";
 //linkLoader
 import LinkLoader from "./linkLoader/LinkLoader";
@@ -51,6 +51,7 @@ import MobileSideMenu from "./menu/MobileSideMenu";
 //modal
 import CommandModal from "./modals/CommandModal";
 import DiscardEditModal from "./modals/DiscardEditModal";
+import IconModal from "./modals/IconModal";
 import FameModal from "./modals/FrameModal";
 import LoaderModal from "./modals/LoaderModal";
 import MobileSideMenuModal from "./modals/MobileSideMenuModal";
@@ -158,7 +159,6 @@ export {
   LinkLoader,
   PageItem,
   EmojiIcon,
-  IconModal,
   PageIcon,
   Frame,
   FrameInner,
@@ -166,6 +166,7 @@ export {
   CommandModal,
   DiscardEditModal,
   FameModal,
+  IconModal,
   LoaderModal,
   MobileSideMenuModal,
   ModalPortal,

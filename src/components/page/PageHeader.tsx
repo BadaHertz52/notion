@@ -28,7 +28,12 @@ import { MainCommentType, Page } from "../../types";
 
 import { ActionContext } from "../../contexts";
 
-import { setTemplateItem, randomEmojiIcon, getEditTime } from "../../utils";
+import {
+  setTemplateItem,
+  randomEmojiIcon,
+  getEditTime,
+  changeIconModalStyle,
+} from "../../utils";
 import { BASIC_PAGE_COVER_URL } from "../../constants";
 
 export type PageHeaderProps = {
@@ -63,9 +68,9 @@ function PageHeader({
   const [openIconModal, setOpenIconModal] = useState<boolean>(false);
   const [openPageCommentInput, setOpenPageCommentInput] =
     useState<boolean>(false);
-  const [iconStyle, setIconStyle] = useState<CSSProperties | undefined>(
-    undefined
-  );
+  const [iconModalStyle, setIconModalStyle] = useState<
+    CSSProperties | undefined
+  >(undefined);
 
   const coverBtnRef = useRef<HTMLButtonElement>(null);
 
@@ -118,21 +123,9 @@ function PageHeader({
 
   const onClickPageIcon = useCallback(
     (event: MouseEvent) => {
-      if (openIconModal !== true) {
-        const currentTarget = event.currentTarget;
-        if (currentTarget.firstElementChild && notCoverRef.current) {
-          const paddingLeft = window.getComputedStyle(
-            notCoverRef.current
-          ).paddingLeft;
-          setIconStyle({
-            position: "absolute",
-            top: (pageIconStyle.width as number) + 4,
-            left: paddingLeft,
-          });
-          setOpenIconModal(true);
-        } else {
-          console.error("Can't find currentTarget");
-        }
+      if (!openIconModal) {
+        changeIconModalStyle(event, setIconModalStyle);
+        setOpenIconModal(true);
       }
     },
     [openIconModal, pageIconStyle.width]
@@ -310,18 +303,20 @@ function PageHeader({
       {openIconModal && (
         <IconModal
           currentPageId={page.id}
-          block={null}
           page={page}
-          style={iconStyle}
-          setOpenIconModal={setOpenIconModal}
+          isOpen={openIconModal}
+          style={iconModalStyle}
+          closeIconModal={() => setOpenIconModal(false)}
         />
       )}
-      <LoaderModal
-        isOpen={openLoaderForCover}
-        targetRef={coverBtnRef}
-        page={page}
-        closeModal={() => setOpenLoaderForCover(false)}
-      />
+      {openLoaderForCover && (
+        <LoaderModal
+          isOpen={openLoaderForCover}
+          targetRef={coverBtnRef}
+          page={page}
+          closeModal={() => setOpenLoaderForCover(false)}
+        />
+      )}
     </div>
   );
 }

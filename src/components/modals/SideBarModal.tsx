@@ -18,7 +18,6 @@ import {
   ScreenOnly,
   PageMenu,
   QuickFindBoard,
-  Templates,
   Trash,
 } from "../index";
 
@@ -265,8 +264,6 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
         )}
         {sideModal.target === "rename" && sideModal.pageId && (
           <Rename
-            currentPageId={null}
-            block={null}
             page={findPage(pagesId, pages, sideModal.pageId)}
             closeRename={closeModal}
           />

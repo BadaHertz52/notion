@@ -5,7 +5,7 @@ import React, {
   useState,
   useContext,
   useCallback,
-  useEffect,
+  MouseEvent,
 } from "react";
 
 import { CSSProperties } from "styled-components";
@@ -14,13 +14,19 @@ import { IconModal, PageIcon, ScreenOnly } from "./index";
 
 import { ActionContext } from "../contexts";
 import { Block, Page } from "../types";
-import { setTemplateItem, closeModal, getEditTime, isInTarget } from "../utils";
+import {
+  setTemplateItem,
+  closeModal,
+  getEditTime,
+  isInTarget,
+  changeIconModalStyle,
+} from "../utils";
 
 import "../assets/rename.scss";
 
 export type RenameProps = {
-  currentPageId: string | null;
-  block: Block | null;
+  currentPageId?: string;
+  block?: Block;
   page: Page;
   renameStyle?: CSSProperties;
   setOpenRename?: Dispatch<SetStateAction<boolean>>;
@@ -36,25 +42,17 @@ const Rename = ({
   closeRename,
 }: RenameProps) => {
   const { editPage, editBlock } = useContext(ActionContext).actions;
-  const inner = document.getElementById("inner");
-  const [openIconModal, setOpenIconModal] = useState<boolean>(false);
-  //TODO -  이모지 모달
-  const handleClick = useCallback(
-    (event: globalThis.MouseEvent) => {
-      if (document.getElementById("rename")) {
-        const isInEmojiModal = isInTarget(event, ",modal");
-        if (!isInTarget(event, "#rename") || !isInEmojiModal) closeRename();
-        openIconModal && closeModal("iconModal", setOpenIconModal, event);
-        closeRename();
-        //setOpenRename && closeModal("rename", setOpenRename, event);
-      }
-    },
-    [openIconModal, setOpenRename]
-  );
 
-  const onClickRenameIcon = () => {
+  const [openIconModal, setOpenIconModal] = useState<boolean>(false);
+  const [iconModalStyle, setIconModalStyle] = useState<
+    CSSProperties | undefined
+  >(undefined);
+
+  const onClickRenameIcon = (event: MouseEvent) => {
     setOpenIconModal(true);
+    changeIconModalStyle(event, setIconModalStyle);
   };
+
   const changeTitle = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       const value = event.target.value;
@@ -84,13 +82,6 @@ const Rename = ({
     [block, currentPageId, editBlock, editPage, page]
   );
 
-  useEffect(() => {
-    inner?.addEventListener("click", handleClick);
-    return () => {
-      inner?.removeEventListener("click", handleClick);
-    };
-  }, [inner, handleClick]);
-
   return (
     <div id="rename" style={renameStyle}>
       <div className="inner">
@@ -118,11 +109,12 @@ const Rename = ({
       </div>
       {openIconModal && (
         <IconModal
+          isOpen={openIconModal}
           page={page}
           currentPageId={currentPageId}
           block={block}
-          style={undefined}
-          setOpenIconModal={setOpenIconModal}
+          style={iconModalStyle}
+          closeIconModal={() => setOpenIconModal(false)}
         />
       )}
     </div>

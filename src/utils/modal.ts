@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import { CSSProperties, Dispatch, SetStateAction, MouseEvent } from "react";
 //TODO -  삭제
 export const closeModal = (
   elementId: string,
@@ -26,4 +26,26 @@ export const closeModalPortal = () => {
 export const isInTarget = (event: globalThis.MouseEvent, target: string) => {
   const eventTarget = event.target as HTMLElement;
   return eventTarget.closest(target);
+};
+
+export const changeIconModalStyle = (
+  event: MouseEvent,
+  setIconModalStyle: Dispatch<SetStateAction<CSSProperties | undefined>>
+) => {
+  const renameEl = document.querySelector("#rename");
+  const { bottom, left, top } = renameEl
+    ? renameEl.getClientRects()[0]
+    : event.currentTarget.getClientRects()[0];
+
+  const GAP = 4;
+  const MODAL_HEIGHT = 173;
+  const EXTRA_SPACE = 20;
+  const isOver =
+    window.innerHeight - (bottom + GAP) - MODAL_HEIGHT <= EXTRA_SPACE;
+  const iconTop = isOver ? top - MODAL_HEIGHT - GAP : bottom + GAP;
+  setIconModalStyle({
+    position: "absolute",
+    top: iconTop,
+    left: left,
+  });
 };

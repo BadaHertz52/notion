@@ -50,13 +50,15 @@ const ImageBlockContents = ({ ...props }: ImageBlockContentsProps) => {
           measure={props.measure}
         />
       )}
-      <LoaderModal
-        {...props}
-        block={block}
-        isOpen={openModal}
-        targetRef={btnRef}
-        closeModal={closeModal}
-      />
+      {openModal && (
+        <LoaderModal
+          {...props}
+          block={block}
+          isOpen={openModal}
+          targetRef={btnRef}
+          closeModal={closeModal}
+        />
+      )}
     </>
   );
 };
