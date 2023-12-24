@@ -12,7 +12,7 @@ import { MobileSideMenuProps } from "./MobileSideMenu";
 
 import { INITIAL_MODAL } from "../../constants";
 import { ActionContext } from "../../contexts";
-import { Block, ModalType, ModalTypeTarget, Page } from "../../types";
+import { Block, ModalType, ModalTargetType, Page } from "../../types";
 import { makeNewBlock, getEditTime } from "../../utils";
 
 import "../../assets/mobileMenu.scss";
@@ -38,7 +38,7 @@ const MobileMenu = ({ ...props }: MobileMenuProps) => {
 
   const [sideMeuModal, setSideMenuModal] = useState<ModalType>(INITIAL_MODAL);
 
-  const openSideMenu = (target: ModalTypeTarget) => {
+  const openSideMenu = (target: ModalTargetType) => {
     setSideMenuModal({
       open: true,
       target: target,

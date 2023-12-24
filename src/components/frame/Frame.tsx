@@ -52,6 +52,8 @@ const Frame = ({ ...props }: FrameProps) => {
     : null;
   const newPageFrame: boolean = page.firstBlocksId === null;
 
+  const [blockQuickMenuModal, setBlockQuickMenuModal] =
+    useState<ModalType>(INITIAL_MODAL);
 
   const [modal, setModal] = useState<ModalType>(INITIAL_MODAL);
 
@@ -90,6 +92,9 @@ const Frame = ({ ...props }: FrameProps) => {
     setModal(INITIAL_MODAL);
   };
 
+  const changeBlockQuickMenuModal = (modal: ModalType) => {
+    setBlockQuickMenuModal(modal);
+  };
 
   const updateBlock = useCallback(() => {
     const item = sessionStorage.getItem(SESSION_KEY.blockToBeEdited);
@@ -201,17 +206,20 @@ const Frame = ({ ...props }: FrameProps) => {
       document.removeEventListener("selectionchange", handleSelectionChange);
   }, [handleSelectionChange]);
 
-  const changeOpenBlockFnModal = useCallback(() => {
-    setOpenBlockFnModal(!(sideAppear === "lock" && window.innerWidth <= 768));
-  }, [setOpenBlockFnModal, sideAppear]);
+  const closeBlockQuickMenuModal = useCallback(() => {
+    if (!(sideAppear === "lock" && window.innerWidth <= 768)) {
+      setBlockQuickMenuModal(INITIAL_MODAL);
+    }
+  }, [setBlockQuickMenuModal, sideAppear]);
 
   useEffect(() => {
-    changeOpenBlockFnModal();
-    window.addEventListener("resize", changeOpenBlockFnModal);
+    closeBlockQuickMenuModal();
+    window.addEventListener("resize", closeBlockQuickMenuModal);
     return () => {
-      window.removeEventListener("resize", changeOpenBlockFnModal);
+      window.removeEventListener("resize", closeBlockQuickMenuModal);
     };
-  }, [changeOpenBlockFnModal]);
+  }, [closeBlockQuickMenuModal]);
+
   //TODO - 삭제
   useEffect(() => {
     console.log("modal", modal);
@@ -225,7 +233,10 @@ const Frame = ({ ...props }: FrameProps) => {
       ref={frameRef}
     >
       <ModalContext.Provider
-        value={{ changeModalState: (modal: ModalType) => setModal(modal) }}
+        value={{
+          changeModalState: (modal: ModalType) => setModal(modal),
+          changeBlockQuickMenuModal: changeBlockQuickMenuModal,
+        }}
       >
         <FrameInner
           userName={props.userName}
@@ -244,14 +255,19 @@ const Frame = ({ ...props }: FrameProps) => {
           frameInnerStyle={frameInnerStyle}
           closeModal={closeModal}
         />
-        {/* modal - blockFn */}
-        <ModalPortal id="modal-blockFn" isOpen={openBlockFnModal}>
-          <BlockFn
-            page={page}
-            movingTargetBlock={movingTargetBlock}
-            setMovingTargetBlock={setMovingTargetBlock}
-            modal={modal}
-          />
+        <ModalPortal
+          id="modal-block-quick-menu"
+          isOpen={blockQuickMenuModal.open}
+        >
+          {blockQuickMenuModal.block && (
+            <BlockQuickMenu
+              page={page}
+              block={blockQuickMenuModal.block}
+              movingTargetBlock={movingTargetBlock}
+              setMovingTargetBlock={setMovingTargetBlock}
+              modal={modal}
+            />
+          )}
         </ModalPortal>
         <FameModal
           page={page}

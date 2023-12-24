@@ -8,10 +8,10 @@ import React, {
 import * as ReactDOM from "react-dom";
 
 import "../../assets/modal.scss";
-import { ModalTypeTarget } from "../../types";
+import { ModalTargetType } from "../../types";
 
 type ModalPortalProps = {
-  target?: ModalTypeTarget;
+  target?: ModalTargetType;
   id?: string;
   isOpen: boolean;
   children: ReactNode;
@@ -28,7 +28,7 @@ const ModalPortal = ({
 }: ModalPortalProps) => {
   const modalRootEl = document.getElementById("modal-root") as HTMLElement;
   const modalRef = useRef<HTMLDivElement>(null);
-  const CENTER_TARGET_ARRAY: ModalTypeTarget[] = [
+  const CENTER_TARGET_ARRAY: ModalTargetType[] = [
     "quickFind",
     "trash",
     "discardEdit",

@@ -64,6 +64,7 @@ const MobileSideMenu = ({
           what="block"
           currentPage={page}
           pages={pages}
+          block={block}
           firstList={firstList}
           closeMenu={closeSideMenu}
         />

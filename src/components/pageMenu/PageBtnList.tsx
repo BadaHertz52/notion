@@ -6,7 +6,6 @@ import { CSSProperties } from "styled-components";
 import { PageButton } from "../index";
 
 import { Block, ListItem, Page } from "../../types";
-import { isMobile } from "../../utils";
 
 type PageBtnListProps = {
   list: ListItem[];
@@ -15,7 +14,7 @@ type PageBtnListProps = {
   currentPage: Page;
   closeMenu: (() => void) | undefined;
   what: "page" | "block";
-  block: Block | null;
+  block?: Block;
 };
 
 const PageBtnList = (props: PageBtnListProps) => {

@@ -5,21 +5,17 @@ import React, {
   useState,
   useContext,
   useCallback,
-  Dispatch,
-  SetStateAction,
 } from "react";
-
-import { CSSProperties } from "styled-components";
 import { AiOutlinePlus } from "react-icons/ai";
 
 import { ActionContext } from "../../contexts";
 import { Block, ListItem, Page } from "../../types";
 import { getEditTime, isMobile, setTemplateItem } from "../../utils";
 import { ScreenOnly, PageBtnList } from "../index";
-import { SESSION_KEY } from "../../constants";
 
 type PageMenuProps = {
   what: "page" | "block";
+  block?: Block;
   currentPage: Page;
   pages: Page[];
   firstList: ListItem[];
@@ -28,6 +24,7 @@ type PageMenuProps = {
 
 const PageMenu = ({
   what,
+  block,
   currentPage,
   pages,
   firstList,
@@ -36,9 +33,9 @@ const PageMenu = ({
   const { changeBlockToPage } = useContext(ActionContext).actions;
 
   const pageMenuRef = useRef<HTMLDivElement>(null);
+
   const [search, setSearch] = useState<boolean>(false);
   const [result, setResult] = useState<ListItem[] | null>(null);
-  const [block, setBlock] = useState<Block | null>(null);
   const listMargin = 16;
   const [listWidth, setListWidth] = useState<number>(320 - listMargin * 2);
 
@@ -66,6 +63,7 @@ const PageMenu = ({
     },
     [pages]
   );
+
   const handleClose = () => {
     if (closeMenu) {
       if (isMobile()) {
@@ -79,6 +77,7 @@ const PageMenu = ({
       return undefined;
     }
   };
+
   const makeNewSubPage = useCallback(() => {
     if (block) {
       setTemplateItem(templateHtml, currentPage);
@@ -92,13 +91,15 @@ const PageMenu = ({
       currentTarget.classList.toggle("on");
     }
   };
+
   useEffect(() => {
     if (pageMenuRef.current) {
       setListWidth(pageMenuRef.current.clientWidth - listMargin * 2);
     }
   }, [pageMenuRef]);
+
   return (
-    <div id="pageMenu" ref={pageMenuRef}>
+    <div id="page-meu" ref={pageMenuRef}>
       <div className="inner">
         <div
           className="search"

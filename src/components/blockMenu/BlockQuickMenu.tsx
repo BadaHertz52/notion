@@ -92,20 +92,29 @@ const BlockQuickMenu = ({
     } else {
       console.error("BlockQuickMenu-openMenu error: there is no session item");
     }
-  }, [movingTargetBlock, modal.open, setMovingTargetBlock, changeModalState]);
+  }, [
+    movingTargetBlock,
+    modal.open,
+    setMovingTargetBlock,
+    changeModalState,
+    block,
+  ]);
 
-  const closeBlockQuickMenu = (event: globalThis.MouseEvent) => {
-    const TARGET = [
-      ".block__contents",
-      "#block-quick-menu",
-      "#menu",
-      ".block__btn",
-    ];
+  const closeBlockQuickMenu = useCallback(
+    (event: globalThis.MouseEvent) => {
+      const TARGET = [
+        ".block__contents",
+        "#block-quick-menu",
+        "#menu",
+        ".block",
+      ];
 
-    if (!TARGET.map((v) => isInTarget(event, v)).some((v) => v)) {
-      changeBlockQuickMenuModal(INITIAL_MODAL);
-    }
-  };
+      if (!TARGET.map((v) => isInTarget(event, v)).some((v) => v)) {
+        changeBlockQuickMenuModal(INITIAL_MODAL);
+      }
+    },
+    [changeBlockQuickMenuModal]
+  );
 
   useEffect(() => {
     document.addEventListener("mousemove", closeBlockQuickMenu);
@@ -116,7 +125,7 @@ const BlockQuickMenu = ({
       document.removeEventListener("mousemove", closeBlockQuickMenu);
       sessionStorage.removeItem(SESSION_KEY.blockQuickMenuTarget);
     };
-  }, [block.id, changeStyle, closeBlockQuickMenu]);
+  }, [block.id, style, changeStyle, closeBlockQuickMenu]);
 
   return (
     <div id="block-quick-menu" className="block-quick-menu" style={style}>

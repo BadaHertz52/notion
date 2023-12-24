@@ -17,9 +17,9 @@ type PageButtonProps = {
   pages: Page[];
   item: ListItem;
   currentPage: Page;
-  closeMenu: (() => void) | undefined;
+  closeMenu?: () => void;
   what: "page" | "block";
-  block: Block | null;
+  block?: Block;
   style: CSSProperties;
 };
 

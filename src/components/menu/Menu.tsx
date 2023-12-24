@@ -24,7 +24,7 @@ import { CommandMenu, PageMenu, Time, ColorMenu, ScreenOnly } from "../index";
 import { ActionContext } from "../../contexts";
 import {
   Block,
-  ModalTypeTarget,
+  ModalTargetType,
   ModalType,
   MenuAndBlockStylerCommonProps,
 } from "../../types";
@@ -130,7 +130,7 @@ const Menu = ({
   }, [closeModal]);
 
   const openPopUpMenu = useCallback(
-    (target: ModalTypeTarget) => {
+    (target: ModalTargetType) => {
       if (setModal)
         setModal({
           open: true,
@@ -366,6 +366,7 @@ const Menu = ({
             what="block"
             currentPage={page}
             pages={pages}
+            block={block}
             firstList={firstList}
           />
         )}

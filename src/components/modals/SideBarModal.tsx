@@ -26,7 +26,7 @@ import { INITIAL_MODAL } from "../../constants";
 import {
   ListItem,
   ModalType,
-  ModalTypeTarget,
+  ModalTargetType,
   Page,
   TrashPage,
   UserState,
@@ -180,7 +180,7 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
   ]);
 
   const changeStyle = useCallback(() => {
-    const CENTER_MODAL: ModalTypeTarget[] = ["quickFind", "templates", "trash"];
+    const CENTER_MODAL: ModalTargetType[] = ["quickFind", "templates", "trash"];
 
     if (sideModal.target && CENTER_MODAL.includes(sideModal.target)) {
       changeCenterModalStyle();

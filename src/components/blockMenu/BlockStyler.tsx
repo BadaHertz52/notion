@@ -21,7 +21,7 @@ import { ActionContext } from "../../contexts";
 import {
   MenuAndBlockStylerCommonProps,
   ModalType,
-  ModalTypeTarget,
+  ModalTargetType,
 } from "../../types";
 import {
   findBlock,
@@ -104,7 +104,7 @@ const BlockStyler = ({ ...props }: BlockStylerProps) => {
     }
   };
 
-  const openSideMenu = (sideMenu: ModalTypeTarget) =>
+  const openSideMenu = (sideMenu: ModalTargetType) =>
     setSideMenuModal({ open: true, target: sideMenu, block: block });
 
   /**
