@@ -88,101 +88,102 @@ const MobileMenu = ({ ...props }: MobileMenuProps) => {
   }, [addBlock, block, duplicatePage, page, closeModal]);
 
   useEffect(() => {
+    console.log(sideMeuModal);
     frameHtml?.classList.add("stop");
     return () => {
       frameHtml?.classList.remove("stop");
     };
-  }, [frameHtml]);
+  }, [frameHtml, sideMeuModal]);
 
   return (
     <>
-      {!sideMeuModal.open ? (
-        <div id="mobile-menu">
-          <div className="inner">
+      <div
+        id="mobile-menu"
+        style={{ opacity: sideMeuModal.target === "commentInput" ? 0 : 1 }}
+      >
+        <div className="inner">
+          <button
+            className="btn-add-block"
+            onTouchEnd={addNewBlock}
+            title="button  to add a block below"
+          >
+            <ScreenOnly text="button  to add a block below" />
+            <div className="mobileBlock__btn__inner">
+              <AiOutlinePlus />
+            </div>
+          </button>
+          <button
+            title="button to duplicate"
+            className="btn-duplicate"
+            onTouchEnd={duplicateBlock}
+          >
+            <ScreenOnly text="button  to duplicate a block below" />
+            <div className="mobileBlock__btn__inner">
+              <HiOutlineDuplicate />
+            </div>
+          </button>
+          {block?.type !== "page" && (
             <button
-              className="btn-add-block"
-              onTouchEnd={addNewBlock}
-              title="button  to add a block below"
+              name="comment"
+              className="btn-comment"
+              title="button to comment"
+              onTouchEnd={() => openSideMenu("commentInput")}
             >
-              <ScreenOnly text="button  to add a block below" />
+              <ScreenOnly text="button  to comment" />
               <div className="mobileBlock__btn__inner">
-                <AiOutlinePlus />
+                <BiCommentDetail />
               </div>
             </button>
-            <button
-              title="button to duplicate"
-              className="btn-duplicate"
-              onTouchEnd={duplicateBlock}
-            >
-              <ScreenOnly text="button  to duplicate a block below" />
-              <div className="mobileBlock__btn__inner">
-                <HiOutlineDuplicate />
+          )}
+          <button
+            title="button to turn into"
+            className="btn-turn-into"
+            onTouchEnd={() => openSideMenu("command")}
+            name="turn into"
+          >
+            <div className="mobileBlock__btn__inner">
+              <div className="text">Turn into</div>
+              <div className="arrow-down">
+                <TiArrowSortedDown />
               </div>
-            </button>
-            {block?.type !== "page" && (
-              <button
-                name="comment"
-                className="btn-comment"
-                title="button to comment"
-                onTouchEnd={() => openSideMenu("commentInput")}
-              >
-                <ScreenOnly text="button  to comment" />
-                <div className="mobileBlock__btn__inner">
-                  <BiCommentDetail />
-                </div>
-              </button>
-            )}
-            <button
-              title="button to turn into"
-              className="btn-turn-into"
-              onTouchEnd={() => openSideMenu("command")}
-              name="turn into"
-            >
-              <div className="mobileBlock__btn__inner">
-                <div className="text">Turn into</div>
-                <div className="arrow-down">
-                  <TiArrowSortedDown />
-                </div>
+            </div>
+          </button>
+          <button
+            title="button to delete"
+            className="btn-delete"
+            onTouchEnd={removeBlock}
+            name="delete"
+          >
+            <ScreenOnly text="button  to delete" />
+            <div className="mobileBlock__btn__inner">
+              <RiDeleteBin6Line />
+            </div>
+          </button>
+          <button
+            title="button to change color"
+            name="color"
+            className="underline menu__btn-edit btn-color "
+            onTouchEnd={() => openSideMenu("color")}
+          >
+            <div className="mobileBlock__btn__inner">
+              <div className="text">Color</div>
+              <div className="arrow-down">
+                <TiArrowSortedDown />
               </div>
-            </button>
-            <button
-              title="button to delete"
-              className="btn-delete"
-              onTouchEnd={removeBlock}
-              name="delete"
-            >
-              <ScreenOnly text="button  to delete" />
-              <div className="mobileBlock__btn__inner">
-                <RiDeleteBin6Line />
-              </div>
-            </button>
-            <button
-              title="button to change color"
-              name="color"
-              className="underline menu__btn-edit btn-color "
-              onTouchEnd={() => openSideMenu("color")}
-            >
-              <div className="mobileBlock__btn__inner">
-                <div className="text">Color</div>
-                <div className="arrow-down">
-                  <TiArrowSortedDown />
-                </div>
-              </div>
-            </button>
-          </div>
+            </div>
+          </button>
         </div>
-      ) : (
-        sideMeuModal.target === "commentInput" && (
-          <CommentInput
-            {...props}
-            pageId={props.page.id}
-            mainComment={null}
-            subComment={null}
-            commentBlock={block}
-            allComments={block.comments}
-            addOrEdit="add"
-          />
-        )
+      </div>
+      {sideMeuModal.target === "commentInput" && (
+        <CommentInput
+          {...props}
+          pageId={props.page.id}
+          mainComment={null}
+          subComment={null}
+          commentBlock={block}
+          allComments={block.comments}
+          addOrEdit="add"
+        />
       )}
       {sideMeuModal.target && sideMeuModal.target !== "commentInput" && (
         <MobileSideMenu

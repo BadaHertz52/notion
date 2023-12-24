@@ -104,7 +104,7 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
   }, []);
 
   const changeBlockStylerModalStyle = useCallback(() => {
-    const pageContentsEl = document.querySelector(".page__contents");
+    const pageContentsEl = document.querySelector(".page__firstBlock");
     const pageContentsElDomRect = pageContentsEl?.getClientRects()[0];
 
     if (modal.block && pageContentsElDomRect) {
@@ -115,24 +115,26 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
 
       if (domeRect && topBarBottom) {
         const top = domeRect.top - GAP - STYLER_HEIGHT;
-        const isOver = pageContentsElDomRect.top <= top;
-
         const isOverlap = top <= topBarBottom;
+        const bottomStyle: CSSProperties = {
+          position: "absolute",
+          bottom: -domeRect.bottom - GAP,
+          left: pageContentsElDomRect.left,
+        };
+        const topStyle: CSSProperties = {
+          position: "absolute",
+          top: top,
+          left: pageContentsElDomRect.left,
+        };
 
-        (!isOver && isOverlap) || isMobile()
-          ? setModalStyle({
-              position: "absolute",
-              top: top,
-              left: pageContentsElDomRect.left,
-            })
-          : setModalStyle({
-              position: "absolute",
-              bottom: -domeRect.bottom - GAP,
-              left: pageContentsElDomRect.left,
-            });
+        if ((isMobile() && modal.target === "blockStyler") || isOverlap) {
+          setModalStyle(bottomStyle);
+          return;
+        }
+        setModalStyle(topStyle);
       }
     }
-  }, [modal.block]);
+  }, [modal.block, modal.target]);
 
   const changeModalStyle = useCallback(() => {
     switch (modal.target) {
@@ -180,6 +182,7 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
       ".text_commentBtn",
       "#mobile-menu",
       "#mobile-side-menu",
+      ".comment-input",
     ];
     return target.map((v) => !!isInTarget(event, v)).some((v) => v);
   }, []);

@@ -36,8 +36,8 @@ $contentHeight: calc(80vh - $topHeight);
   }
   .contents__inner,
   #block-styler__side-menu > .inner {
-    height: calc($contentHeight - 3px);
-    max-height: calc($contentHeight - 3px);
+    height: calc($contentHeight - 110px);
+    max-height: calc($contentHeight - 110px);
   }
   #menu-command,
   #page-meu,
@@ -45,12 +45,14 @@ $contentHeight: calc(80vh - $topHeight);
   #loader-link {
     @include resetModalStyle;
     @include webkitScroll;
+    margin-top: 20px;
     overflow-y: auto;
     position: relative;
     width: inherit;
 
     box-sizing: border-box;
   }
+
   #menu-color section > header {
     margin-bottom: 10px;
   }

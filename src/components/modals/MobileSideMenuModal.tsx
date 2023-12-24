@@ -41,7 +41,6 @@ const MobileSideMenuModal = ({ ...props }: MobileSideMenuModalProps) => {
   };
 
   const closeSideMenu = useCallback(() => {
-    console.log("close");
     setStyle(INITIAL_STYLE);
     setTimeout(() => {
       setSideMenuModal(INITIAL_MODAL);

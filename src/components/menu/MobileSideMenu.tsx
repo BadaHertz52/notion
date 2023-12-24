@@ -1,20 +1,15 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-
-import { CSSProperties } from "styled-components";
+import React, { Dispatch, SetStateAction } from "react";
 
 import {
   ColorMenu,
   CommandMenu,
   LinkLoader,
-  Menu,
   MobileSideMenuModal,
-  ModalPortal,
   PageMenu,
 } from "../index";
 import { MenuAndBlockStylerCommonProps, ModalType } from "../../types";
 
 import "../../assets/mobileSideMenu.scss";
-import { INITIAL_MODAL } from "../../constants";
 
 export type MobileSideMenuProps = Omit<
   MenuAndBlockStylerCommonProps,

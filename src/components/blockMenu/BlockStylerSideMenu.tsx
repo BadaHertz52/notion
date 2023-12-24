@@ -26,7 +26,7 @@ const BlockStylerSideMenu = ({ ...props }: BlockStylerSideMenuProps) => {
     const topBarBottom = document.querySelector("#top-bar")?.clientHeight;
 
     if (style && topBarBottom) {
-      const GAP = 60;
+      const GAP = 20;
       const { bottom, top } = style;
       const y = bottom
         ? -Number(bottom.replace("px", ""))

@@ -75,6 +75,15 @@
       width: fit-content;
     }
   }
+  #modal-frame {
+    .comment-input {
+      @include modalStyle;
+      flex-direction: row;
+      width: max-content;
+      height: max-content;
+      padding: 12px 16px;
+    }
+  }
   #modal-sideBar {
     &.center {
       .modal__menu > .inner {
