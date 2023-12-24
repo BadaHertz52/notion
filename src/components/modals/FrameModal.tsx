@@ -109,7 +109,7 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
 
     if (modal.block && pageContentsElDomRect) {
       const domeRect = getBlockDomRect(modal.block);
-      const topBarBottom = document.querySelector(".topBar")?.clientHeight;
+      const topBarBottom = document.querySelector("#top-bar")?.clientHeight;
       const GAP = 10;
       const STYLER_HEIGHT = 45;
 

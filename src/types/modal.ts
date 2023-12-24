@@ -19,7 +19,9 @@ export type ModalTargetType =
   | "quickFind"
   | "discardEdit"
   | "export"
-  | "color";
+  | "color"
+  | "allComments"
+  | "topBarToolMore";
 
 export type ModalType = {
   open: boolean;

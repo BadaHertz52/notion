@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useCallback,
-  SetStateAction,
-  Dispatch,
-  useEffect,
-} from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import Comments from "./Comments";
 import { Block, MainCommentType, Page } from "../../types";
 
@@ -52,7 +46,7 @@ function AllCommentsContents({
   }, [select, getResult]);
 
   return (
-    <div className="allComments__contents">
+    <div className="all-comments__contents">
       {!result ? (
         <div className="no-result">
           <div>
@@ -66,7 +60,7 @@ function AllCommentsContents({
       ) : (
         result.map((item: ResultItem) => (
           <Comments
-            key={`allComments_${item.block.id}`}
+            key={`all-comments_${item.block.id}`}
             targetMainComments={item.mainComments}
             pageId={page.id}
             page={page}
@@ -80,4 +74,4 @@ function AllCommentsContents({
   );
 }
 
-export default AllCommentsContents;
+export default React.memo(AllCommentsContents);

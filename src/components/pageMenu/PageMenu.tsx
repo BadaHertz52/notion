@@ -13,7 +13,7 @@ import { Block, ListItem, Page } from "../../types";
 import { getEditTime, isMobile, setTemplateItem } from "../../utils";
 import { ScreenOnly, PageBtnList } from "../index";
 
-type PageMenuProps = {
+export type PageMenuProps = {
   what: "page" | "block";
   block?: Block;
   currentPage: Page;

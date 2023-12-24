@@ -9,29 +9,7 @@
   @include modalStyle;
   width: fit-content;
 }
-.modal {
-  .comment-input {
-    @include modalStyle;
-    width: 350px;
-    height: fit-content;
-    box-sizing: border-box;
-    flex-direction: row;
-    font-size: 14px;
-    padding: 10px 14px;
-  }
-}
-.frame.mobile {
-  .modal {
-    height: 60px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .comment-input {
-      height: 100%;
-      margin: 5px;
-    }
-  }
-}
+
 .menu__main-menu {
   @include modalStyle;
   width: 240px;

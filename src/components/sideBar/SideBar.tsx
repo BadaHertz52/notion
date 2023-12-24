@@ -129,7 +129,7 @@ const SideBar = ({
   }, [setSideModal]);
 
   const isAllComments = useCallback(
-    () => !!document.querySelector("#allComments"),
+    () => !!document.querySelector("#all-comments"),
     []
   );
 
@@ -202,20 +202,12 @@ const SideBar = ({
                     <div>{recordIcon}</div>
                   </div>
                   <div className="user">
-                    <div className="userId">
-                      <div>{user.userName}'s Notion</div>
-                      <div>
-                        <FiCode />
-                      </div>
-                    </div>
-                    <div className="userEmail">
-                      <div>{user.userEmail}</div>
-                    </div>
+                    <div className="userId">{user.userName}'s Notion</div>
                   </div>
                 </div>
                 <button
                   title="button to close side menu"
-                  className="btn-close-sideBar topBar__btn-sideBar"
+                  className="btn-close-sideBar top-bar__btn-change-side-bar"
                   onClick={() => changeSide("close")}
                 >
                   <ScreenOnly text="button to close side menu" />

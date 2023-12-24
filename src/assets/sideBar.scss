@@ -25,7 +25,7 @@
       color: $darkgrey;
     }
   }
-  .topBar__btn-sideBar {
+  #top-bar__btn-change-side-bar {
     display: none;
   }
 }
@@ -139,8 +139,8 @@
       }
     }
   }
-  //--topBar__btn-sideBar
-  .topBar__btn-sideBar {
+  //--top-bar__btn-change-side-bar
+  #top-bar__btn-change-side-bar {
     color: $itemSvg;
     fill: $itemSvg;
     font-weight: bolder;
@@ -154,7 +154,7 @@
     top: 10px;
     right: -10%;
   }
-  //--topBar__btn-sideBar
+  //--top-bar__btn-change-side-bar
 
   // -- switcher
   .switcher {
@@ -187,28 +187,12 @@
   }
   .user {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .userEmail {
-    display: none;
+    align-items: center;
   }
   .userId {
-    display: flex;
-    align-items: center;
     height: 18px;
-    div:first-child {
-      font-weight: 500;
-    }
-    div:nth-child(2) {
-      margin-top: -5px;
-      transform: rotate(90deg);
-      svg {
-        margin-right: 0;
-        color: $itemSvg;
-        font-weight: bolder;
-      }
-    }
+    font-size: 16px;
+    font-weight: 500;
   }
   // ---switcher
   //recentPages

@@ -75,7 +75,7 @@ const Comments = ({ ...props }: CommentsProps) => {
     const MAX_HEIGHT_OF_COMMENTS = 160;
     const EXTRA_SPACE = 30;
     if (block) {
-      const topBarHeight = document.querySelector(".topBar")?.clientHeight;
+      const topBarHeight = document.querySelector("#top-bar")?.clientHeight;
       const blockContentsEl = document.getElementById(`${block.id}__contents`);
       const editableBlock = document.getElementsByClassName("editableBlock")[0];
       const editableBlockDomRect = editableBlock.getClientRects()[0];
@@ -193,11 +193,13 @@ const Comments = ({ ...props }: CommentsProps) => {
           templateHtml={templateHtml}
         />
       )}
-      <DiscardEditModal
-        openDiscardEdit={openDiscardEdit}
-        setOpenDiscardEdit={setOpenDiscardEdit}
-        discardEdit={discardEdit}
-      />
+      {openDiscardEdit && (
+        <DiscardEditModal
+          openDiscardEdit={openDiscardEdit}
+          setOpenDiscardEdit={setOpenDiscardEdit}
+          discardEdit={discardEdit}
+        />
+      )}
     </div>
   );
 };

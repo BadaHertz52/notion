@@ -63,7 +63,9 @@ const CommentBlock = ({ ...props }: CommentBlockProps) => {
           <div className="first-letter">
             <div>{firstLetter}</div>
           </div>
-          <div className="userName">{comment.userName}</div>
+          <div className="userName">
+            <div>{comment.userName}</div>
+          </div>
           <Time editTime={comment.editTime} />
         </div>
         <CommentTool {...props} />

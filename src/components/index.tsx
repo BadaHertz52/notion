@@ -58,6 +58,7 @@ import MobileSideMenuModal from "./modals/MobileSideMenuModal";
 import ModalPortal from "./modals/ModalPortal";
 import MovingBlockModal from "./modals/MovingBlockModal";
 import SideBarModal from "./modals/SideBarModal";
+import TopBarModal from "./modals/TopBarModal";
 //notion
 import Notion from "./notion/Notion";
 import NotionHelmet from "./notion/NotionHelmet";
@@ -87,6 +88,8 @@ import SideBarMoreFn from "./sideBar/SideBarMoreFn";
 //topBar
 import FontBtn from "./topBar/FontBtn";
 import TopBar from "./topBar/TopBar";
+import TopBarTool from "./topBar/TopBarTool";
+import TopBarToolMore from "./topBar/TopBarToolMore";
 //trash
 import Trash from "./trash/Trash";
 import TrashResultItem from "./trash/TrashResultItem";
@@ -128,8 +131,12 @@ export {
   CommandMenu,
   CommandInput,
   // --command
+  //topBar--
   FontBtn,
   TopBar,
+  TopBarTool,
+  TopBarToolMore,
+  //--topBar
   //sideBar
   Favorites,
   PageListItem,
@@ -172,6 +179,8 @@ export {
   ModalPortal,
   MovingBlockModal,
   SideBarModal,
+  TopBarModal,
+  //--modal
   Editor,
   AllComments,
   BlockComment,

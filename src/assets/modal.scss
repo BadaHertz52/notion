@@ -58,6 +58,16 @@
     transition: transform 1000ms cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
+#modal-top-bar {
+  & > .inner {
+    width: 100vw;
+    height: 100vh;
+  }
+}
+#modal-top-bar__menu {
+  width: max-content;
+  transition: right 2500ms ease;
+}
 @media screen and (max-width: 768px) {
   .center .modal__menu {
     & > .inner {
@@ -83,7 +93,7 @@
         min-height: 10vh;
       }
     }
-    .topBar {
+    #top-bar {
       height: 60px;
       width: 100vw;
       padding: 10px 20px;
@@ -142,5 +152,9 @@
       margin: 0 5%;
       border-radius: 10px;
     }
+  }
+  #modal-top-bar__menu {
+    transition: top 2500ms ease;
+    z-index: 50;
   }
 }

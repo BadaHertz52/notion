@@ -1,13 +1,13 @@
 import React, {
-  Dispatch,
   MouseEvent,
-  SetStateAction,
-  useEffect,
   useState,
-  useCallback,
   useRef,
+  Dispatch,
+  SetStateAction,
 } from "react";
+
 import { MdKeyboardArrowDown } from "react-icons/md";
+import { FaArrowAltCircleDown } from "react-icons/fa";
 
 import { ScreenOnly } from "../index";
 import AllCommentsContents, {
@@ -15,25 +15,15 @@ import AllCommentsContents, {
 } from "./AllCommentsContents";
 
 import "../../assets/allComments.scss";
+import { isMobile } from "../../utils";
+import { ModalType } from "../../types";
 
-type AllCommentsProps = Omit<AllCommentsContentsProps, "select">;
+export type AllCommentsProps = Omit<AllCommentsContentsProps, "select"> & {
+  setModal: Dispatch<SetStateAction<ModalType>>;
+};
 
-const AllComments = ({ page, userName }: AllCommentsProps) => {
-  const inner = document.getElementById("notion__inner");
+const AllComments = ({ page, userName, setModal }: AllCommentsProps) => {
   const allCommentsRef = useRef<HTMLDivElement>(null);
-  // const closeAllComments = useCallback(
-  //   (event: globalThis.MouseEvent) => {
-  //     if (showAllComments) {
-  //       const target = event.target as HTMLElement | null;
-  //       const isInAllComments = target?.closest("#allComments");
-  //       const isInAllCommentsBtn = target?.closest("#allCommentsBtn");
-  //       if (!isInAllComments && !isInAllCommentsBtn) {
-  //         setShowAllComments(false);
-  //       }
-  //     }
-  //   },
-  //   [setShowAllComments, showAllComments]
-  // );
 
   const [select, setSelect] = useState<"open" | "resolve">("open");
 
@@ -49,42 +39,22 @@ const AllComments = ({ page, userName }: AllCommentsProps) => {
     }
   };
 
-  // const changeStyle = useCallback(() => {
-  //   if (showAllComments) {
-  //     allCommentsRef.current?.classList.remove("hide");
-  //     setTimeout(() => {
-  //       allCommentsRef.current?.classList.add("on");
-  //     }, 50);
-  //   } else {
-  //     const classList = allCommentsRef.current?.classList;
-  //     classList?.contains("on") &&
-  //       allCommentsRef.current?.classList.remove("on");
-  //     !classList?.contains("hide") &&
-  //       setTimeout(() => {
-  //         allCommentsRef.current?.classList.add("hide");
-  //       }, 2500);
-  //   }
-  // }, [showAllComments, allCommentsRef]);
-
-  // useEffect(() => {
-  //   inner?.addEventListener("click", closeAllComments);
-  //   return () => {
-  //     inner?.removeEventListener("click", closeAllComments);
-  //   };
-  // }, [inner, closeAllComments]);
-
-  // useEffect(() => {
-  //   changeStyle();
-  //   window.addEventListener("resize", changeStyle);
-  //   return () => window.removeEventListener("resize", changeStyle);
-  // }, [changeStyle]);
-
   return (
-    <div id="allComments" className="allComments hide" ref={allCommentsRef}>
-      <div className="allComments__inner">
-        <div className="allComments__header">
-          <div>Comments</div>
-          <div className="allComments__btn-group">
+    <div id="all-comments" className="all-comments" ref={allCommentsRef}>
+      <div className="all-comments__inner">
+        <div className="all-comments__header">
+          <div>
+            {isMobile() && (
+              <button
+                title="close"
+                onClick={() => setModal((prev) => ({ ...prev, open: false }))}
+              >
+                <FaArrowAltCircleDown />
+              </button>
+            )}
+            <div>Comments</div>
+          </div>
+          <div className="all-comments__btn-group">
             <button
               className="btn-select"
               onClick={openSelect}

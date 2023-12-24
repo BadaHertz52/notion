@@ -21,12 +21,12 @@ import { frameStyleCode } from "../frameStyle";
 
 import "../assets/export.scss";
 
-type ExportProps = FrameProps & {
-  setOpenExport: Dispatch<SetStateAction<boolean>>;
+export type ExportProps = FrameProps & {
+  closeModal: () => void;
 };
 
 const Export = ({ ...props }: ExportProps) => {
-  const { page, pagesId, pages, setOpenExport } = props;
+  const { page, pagesId, pages, closeModal } = props;
   //TODO - 상수
   const html = "HTML";
   const pdf = "PDF";
@@ -99,9 +99,6 @@ const Export = ({ ...props }: ExportProps) => {
       };
     }
   }
-  const closeExport = useCallback(() => {
-    setOpenExport(false);
-  }, [setOpenExport]);
   const onClickExportBtn = useCallback(() => {
     const includeSubPagesSliderEl = document.getElementById(
       "includeSubPagesSlider"
@@ -229,7 +226,7 @@ const Export = ({ ...props }: ExportProps) => {
           break;
       }
     }
-    closeExport();
+    closeModal();
   }, [
     content,
     exportDocument,
@@ -238,7 +235,7 @@ const Export = ({ ...props }: ExportProps) => {
     page.subPagesId,
     pages,
     pagesId,
-    closeExport,
+    closeModal,
     props,
   ]);
   return (
@@ -295,7 +292,7 @@ const Export = ({ ...props }: ExportProps) => {
           </div>
         </div>
         <div className="btn-group">
-          <button title="cancel button" onClick={closeExport}>
+          <button title="cancel button" onClick={closeModal}>
             Cancel
           </button>
           <button title="export button" onClick={onClickExportBtn}>

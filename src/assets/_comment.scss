@@ -182,8 +182,12 @@
       flex-shrink: 1;
       flex-grow: 1;
       font-weight: bold;
-      line-height: 20px;
-      text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
+      & > div {
+        height: 14px;
+        text-overflow: ellipsis;
+      }
     }
     .time {
       margin: 0;

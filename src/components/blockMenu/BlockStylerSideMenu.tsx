@@ -23,7 +23,7 @@ const BlockStylerSideMenu = ({ ...props }: BlockStylerSideMenuProps) => {
       "#modal-frame__menu"
     ) as HTMLElement | null;
     const style = frameModalEl?.style;
-    const topBarBottom = document.querySelector(".topBar")?.clientHeight;
+    const topBarBottom = document.querySelector("#top-bar")?.clientHeight;
 
     if (style && topBarBottom) {
       const GAP = 60;
