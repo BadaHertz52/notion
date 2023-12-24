@@ -5,7 +5,7 @@
   z-index: 10;
 }
 .menu__main-menu,
-.menu__sideMenu {
+.menu__side-menu {
   @include modalStyle;
   width: fit-content;
 }
@@ -66,7 +66,7 @@
   }
 }
 
-.menu__sideMenu {
+.menu__side-menu {
   display: block;
   position: absolute;
   z-index: 20;
@@ -127,13 +127,13 @@
     margin-left: 5px;
   }
 }
-.menu__sideMenu #pageMenu {
+.menu__side-menu #page-meu {
   .inner {
     width: 100%;
     height: fit-content;
   }
 }
-#pageMenu {
+#page-meu {
   @include modalStyle;
   .inner {
     width: 100%;
@@ -230,13 +230,13 @@
 
 @media screen and (max-width: 768px) {
   .menu__main-menu,
-  .menu__sideMenu {
+  .menu__side-menu {
     width: 200px;
   }
-  .menu__sideMenu > div {
+  .menu__side-menu > div {
     width: 100%;
   }
-  #pageMenu {
+  #page-meu {
     width: 100vw;
     height: calc(100vh - 60px);
     overflow: hidden;

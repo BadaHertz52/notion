@@ -1,7 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
-
-import { Block, ModalType, Page, SelectionType } from "../types";
-import { isMobile } from ".";
+import { Block, Page } from "../types";
 
 // onSelection 이벤트 ---
 /**

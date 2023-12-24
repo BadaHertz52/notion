@@ -57,7 +57,7 @@ const BlockStylerSideMenu = ({ ...props }: BlockStylerSideMenuProps) => {
   }, [changeStyle]);
 
   return (
-    <div id="styler-block__side-menu">
+    <div id="block-styler__side-menu">
       <div className="inner" style={isMobile() ? undefined : style}>
         {sideMenuModal.target === "command" && (
           <CommandMenu {...props} closeCommand={closeSideMenu} />

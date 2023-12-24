@@ -87,10 +87,10 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
   }, [modal.block]);
 
   const changeMenuModalStyle = useCallback(() => {
-    const blockFnEl = document.getElementById("blockFn");
-    const blockFnElDomRect = blockFnEl?.getClientRects()[0];
-    if (blockFnElDomRect) {
-      const { top, right } = blockFnElDomRect;
+    const blockQuickMenuEl = document.getElementById("block-quick-menu");
+    const blockQuickMenuElDomRect = blockQuickMenuEl?.getClientRects()[0];
+    if (blockQuickMenuElDomRect) {
+      const { top, right } = blockQuickMenuElDomRect;
       setModalStyle({
         position: "absolute",
         top: top,

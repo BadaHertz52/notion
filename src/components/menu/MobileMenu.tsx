@@ -1,29 +1,21 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 
-import { CSSProperties } from "styled-components";
-
 import { AiOutlinePlus } from "react-icons/ai";
 import { BiCommentDetail } from "react-icons/bi";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { TiArrowSortedDown } from "react-icons/ti";
+import { HiOutlineDuplicate } from "react-icons/hi";
 
-import { ScreenOnly, BlockStyler, CommentInput } from "../index";
+import { ScreenOnly, MobileSideMenu, CommentInput } from "../index";
+import { CommentInputProps } from "../comment/CommentInput";
+import { MobileSideMenuProps } from "./MobileSideMenu";
 
+import { INITIAL_MODAL } from "../../constants";
 import { ActionContext } from "../../contexts";
-import {
-  Block,
-  ModalType,
-  ModalTypeTarget,
-  Page,
-  StylerCommonProps,
-} from "../../types";
-import { makeNewBlock, findBlock, getEditTime } from "../../utils";
+import { Block, ModalType, ModalTypeTarget, Page } from "../../types";
+import { makeNewBlock, getEditTime } from "../../utils";
 
 import "../../assets/mobileMenu.scss";
-import { INITIAL_MODAL, SESSION_KEY } from "../../constants";
-import MobileSideMenu, { MobileSideMenuProps } from "./MobileSideMenu";
-import { HiOutlineDuplicate } from "react-icons/hi";
-import { CommentInputProps } from "../comment/CommentInput";
 
 export type MobileMenuProps = Omit<
   MobileSideMenuProps,
@@ -53,27 +45,6 @@ const MobileMenu = ({ ...props }: MobileMenuProps) => {
       block: block,
     });
   };
-
-  // const openMobileSideMenu = (what: MobileSideMenuWhat) => {
-  //   const item = sessionStorage.getItem(SESSION_KEY.mobileMenuTargetBlock);
-  //   if (block === undefined && item) {
-  //     setMobileSideMenu({
-  //       block: JSON.parse(item),
-  //       what: what,
-  //     });
-  //     sessionStorage.setItem(SESSION_KEY.mobileSideMenuBlock, item);
-  //   } else {
-  //     sessionStorage.setItem(
-  //       SESSION_KEY.mobileSideMenuBlock,
-  //       JSON.stringify(block)
-  //     );
-  //     setMobileSideMenu({
-  //       block: block,
-  //       what: what,
-  //     });
-  //   }
-  //   closeMM();
-  // };
 
   const addNewBlock = useCallback(() => {
     if (page.blocksId && block) {

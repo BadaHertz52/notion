@@ -35,12 +35,12 @@ $contentHeight: calc(80vh - $topHeight);
     height: $contentHeight;
   }
   .contents__inner,
-  #styler-block__side-menu > .inner {
+  #block-styler__side-menu > .inner {
     height: calc($contentHeight - 3px);
     max-height: calc($contentHeight - 3px);
   }
   #menu-command,
-  #pageMenu,
+  #page-meu,
   #menu-color,
   #loader-link {
     @include resetModalStyle;

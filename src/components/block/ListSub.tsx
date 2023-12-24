@@ -1,4 +1,4 @@
-import React, { MouseEvent, TouchEvent, useRef } from "react";
+import React, { MouseEvent, TouchEvent } from "react";
 
 import { CSSProperties } from "styled-components";
 import { GoPrimitiveDot } from "react-icons/go";

@@ -15,7 +15,7 @@ export const closeModal = (
 export const closeModalPortal = () => {
   const modalEl = document.querySelectorAll("#modal-root .modal");
   modalEl?.forEach((el) => {
-    if (!el.id.includes("blockFn")) el.classList.remove("on");
+    if (!el.id.includes("block-quick-menu")) el.classList.remove("on");
   });
 };
 /**

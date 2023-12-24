@@ -1,5 +1,5 @@
 @import "./common";
-#styler-block {
+#block-styler {
   position: absolute;
   @include modalStyle;
   border-radius: 5px;
@@ -79,7 +79,7 @@
   z-index: 30;
 }
 
-#styler-block__side-menu {
+#block-styler__side-menu {
   position: relative;
   & > .inner {
     max-height: inherit;

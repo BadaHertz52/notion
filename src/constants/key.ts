@@ -1,6 +1,6 @@
 export const SESSION_KEY = {
   originTemplate: "originTemplate",
-  blockFnTarget: "blockFnTarget",
+  blockQuickMenuTarget: "blockQuickMenuTarget",
   blockToBeEdited: "blockToBeEdited",
   mainCommentId: "mainCommentId",
   newBlock: "newBlock",

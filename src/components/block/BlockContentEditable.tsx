@@ -16,7 +16,7 @@ import { CommandInput, CommandModal } from "../index";
 
 import { SESSION_KEY } from "../../constants";
 import { ActionContext } from "../../contexts";
-import { Block, Page, SelectionType } from "../../types";
+import { Block, Page } from "../../types";
 import {
   findPage,
   findParentBlock,
@@ -33,8 +33,6 @@ export type BlockContendEditableProps = {
   pages: Page[];
   pagesId: string[];
   templateHtml: HTMLElement | null;
-  setMobileMenuTargetBlock?: Dispatch<SetStateAction<Block | null>>;
-  setSelection?: Dispatch<SetStateAction<SelectionType | null>>;
 };
 
 const BlockContentEditable = ({
@@ -43,8 +41,7 @@ const BlockContentEditable = ({
   page,
   block,
   templateHtml,
-  setSelection,
-  setMobileMenuTargetBlock,
+
   onClickCommentBtn,
 }: BlockContendEditableProps) => {
   const { editBlock, addBlock, changeToSub, raiseBlock, deleteBlock } =
@@ -446,19 +443,6 @@ const BlockContentEditable = ({
   const blockContents = block.type === "page" ? getPageTitle() : block.contents;
 
   /**
-   * 모바일 브라우저에서 특정 이벤트가 발생 했을 때 mobileMenu 를 열어 주는 함수
-   */
-  const openMobileMenu = useCallback(
-    (event: TouchEvent) => {
-      if (event.currentTarget !== event.target) return;
-      if (!block.comments && setMobileMenuTargetBlock && setSelection) {
-        setMobileMenuTargetBlock(block);
-        setSelection(null);
-      }
-    },
-    [block, setMobileMenuTargetBlock, setSelection]
-  );
-  /**
    * BlockContents 중 link 가 있는 element를 클릭 했을 경우 , 해당 링크를 여는 함수
    */
   const openLink = useCallback((target: HTMLElement) => {
@@ -510,7 +494,6 @@ const BlockContentEditable = ({
           innerRef={contentEditableRef}
           onChange={onChangeContents}
           onKeyDown={onKeyDownContents}
-          onTouchEnd={openMobileMenu}
           onClick={onClickContentEditable}
         />
       ) : (

@@ -24,8 +24,6 @@ type PageMenuProps = {
   pages: Page[];
   firstList: ListItem[];
   closeMenu?: () => void;
-  setPageMenuStyle?: Dispatch<SetStateAction<CSSProperties | undefined>>;
-  style?: CSSProperties;
 };
 
 const PageMenu = ({
@@ -34,19 +32,15 @@ const PageMenu = ({
   pages,
   firstList,
   closeMenu,
-  setPageMenuStyle,
-  style,
 }: PageMenuProps) => {
   const { changeBlockToPage } = useContext(ActionContext).actions;
+
   const pageMenuRef = useRef<HTMLDivElement>(null);
   const [search, setSearch] = useState<boolean>(false);
   const [result, setResult] = useState<ListItem[] | null>(null);
   const [block, setBlock] = useState<Block | null>(null);
   const listMargin = 16;
   const [listWidth, setListWidth] = useState<number>(320 - listMargin * 2);
-  const sessionItem = sessionStorage.getItem(
-    SESSION_KEY.blockFnTarget
-  ) as string;
 
   const templateHtml = document.getElementById("template");
 
@@ -74,10 +68,7 @@ const PageMenu = ({
   );
   const handleClose = () => {
     if (closeMenu) {
-      if (isMobile() && setPageMenuStyle) {
-        setPageMenuStyle({
-          top: "100vh",
-        });
+      if (isMobile()) {
         setTimeout(() => {
           closeMenu();
         }, 1000);
@@ -102,18 +93,12 @@ const PageMenu = ({
     }
   };
   useEffect(() => {
-    if (sessionItem && what === "block") {
-      const block: Block = JSON.parse(sessionItem);
-      setBlock(block);
-    }
-  }, [sessionItem, what]);
-  useEffect(() => {
     if (pageMenuRef.current) {
       setListWidth(pageMenuRef.current.clientWidth - listMargin * 2);
     }
   }, [pageMenuRef]);
   return (
-    <div id="pageMenu" ref={pageMenuRef} style={style}>
+    <div id="pageMenu" ref={pageMenuRef}>
       <div className="inner">
         <div
           className="search"

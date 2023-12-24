@@ -31,7 +31,7 @@
     }
   }
 }
-#modal-blockFn {
+#modal-block-quick-menu {
   z-index: 10;
 }
 #modal-sideBar,
@@ -120,10 +120,10 @@
     }
     #rename,
     .sideBar__moreFn,
-    #pageMenu {
+    #page-meu {
       @include resetModalStyle;
     }
-    #pageMenu {
+    #page-meu {
       height: 100%;
       .inner {
         position: relative;

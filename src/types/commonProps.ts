@@ -1,12 +1,10 @@
 import { CSSProperties, Dispatch, SetStateAction } from "react";
-import { Block, FontStyle, ListItem, Page, CommandType } from ".";
+import { Block, FontStyle, ListItem, Page } from ".";
 
 export type StylerCommonProps = MenuAndBlockStylerCommonProps & {
   pagesId: string[];
   recentPagesId: string[] | null;
   setModalStyle: Dispatch<SetStateAction<CSSProperties | undefined>>;
-  setCommand: Dispatch<SetStateAction<CommandType>>;
-  command: CommandType;
 };
 
 export type TemplateFrameCommonProps = {

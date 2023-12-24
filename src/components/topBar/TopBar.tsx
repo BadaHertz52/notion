@@ -190,7 +190,7 @@ const TopBar = ({
       if (openPageMenu) {
         const target = event.target as HTMLElement | null;
         if (
-          !target?.closest("#pageMenu") &&
+          !target?.closest("#page-meu") &&
           !target?.closest(".page-tool__more")
         ) {
           setOpenPageMenu(false);

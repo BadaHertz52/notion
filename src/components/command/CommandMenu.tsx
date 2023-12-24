@@ -15,7 +15,7 @@ import { VscListOrdered } from "react-icons/vsc";
 
 import { Img } from "../index";
 import { ActionContext } from "../../contexts";
-import { Block, BlockType, Page, SelectionType } from "../../types";
+import { Block, BlockType, Page } from "../../types";
 import {
   makeNewBlock,
   findParentBlock,

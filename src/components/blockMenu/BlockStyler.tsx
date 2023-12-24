@@ -175,7 +175,7 @@ const BlockStyler = ({ ...props }: BlockStylerProps) => {
   const isInBlockStyler = useCallback(
     (event: globalThis.MouseEvent) => {
       const target = [
-        "#styler-block",
+        "#block-styler",
         `#${block.id}__contents`,
         "#menu",
         "#menu-command",
@@ -214,7 +214,7 @@ const BlockStyler = ({ ...props }: BlockStylerProps) => {
   return (
     <>
       <div
-        id="styler-block"
+        id="block-styler"
         style={{
           display: sideMenuModal.target === "commentInput" ? "none" : "block",
         }}

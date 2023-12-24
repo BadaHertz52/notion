@@ -60,7 +60,7 @@ const Menu = ({
   //mobile side menu와 중복되어서 숨김
   const HIDDEN_STYLE: CSSProperties = {
     display:
-      document.querySelector("#styler-block") || isMobile() ? "none" : "flex",
+      document.querySelector("#block-styler") || isMobile() ? "none" : "flex",
   };
   const templateHtml = document.getElementById("template");
 

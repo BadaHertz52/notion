@@ -105,7 +105,7 @@ a:visited {
 }
 
 .editableBlock,
-.blockFn button {
+.block-quick-menu button {
   font-size: inherit;
   line-height: inherit;
 }
@@ -208,7 +208,7 @@ a:visited {
 
 .left,
 .block__contents,
-.blockFn {
+.block-quick-menu {
   height: 18px;
 }
 

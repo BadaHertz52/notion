@@ -17,8 +17,8 @@ import { IoMdCopy } from "react-icons/io";
 import { IoTrashOutline } from "react-icons/io5";
 
 import { ActionContext } from "../../contexts";
-import { Block, ModalType, Page, SelectionType } from "../../types";
-import { findPage, getEditTime } from "../../utils";
+import { Block, Page } from "../../types";
+import { findPage } from "../../utils";
 import { ScreenOnly, PageItem } from "../index";
 
 import "../../assets/linkLoader.scss";
@@ -40,7 +40,6 @@ const LinkLoader = ({
   block,
   closeLink,
 }: LinkLoaderProps) => {
-  const { editBlock } = useContext(ActionContext).actions;
   const selectedHtml = document.querySelector(".selected");
   const recentPages = recentPagesId
     ? recentPagesId.length > 3
@@ -58,7 +57,7 @@ const LinkLoader = ({
     ? notTemplatePages.slice(0.4)
     : notTemplatePages;
 
-  const topDomain = useMemo(
+  const TOP_DOMAIN = useMemo(
     () => [
       ".com",
       ".net",
@@ -331,7 +330,7 @@ const LinkLoader = ({
   const [linkLoaderStyle, setLinkLoaderStyle] = useState<
     CSSProperties | undefined
   >(undefined);
-  const blockStyler = document.getElementById("styler-block");
+  const blockStyler = document.getElementById("block-styler");
   const [searchValue, setSearchValue] = useState<string | null>(null);
   const [candidates, setCandidates] = useState<Page[] | null>(null);
   const [webLink, setWebLink] = useState<boolean>(false);
@@ -354,9 +353,9 @@ const LinkLoader = ({
         setWebLink(false);
       } else {
         setSearchValue(value);
-        const isWebLink = topDomain
-          .map((d: string) => value.includes(d))
-          .includes(true);
+        const isWebLink = TOP_DOMAIN.map((d: string) =>
+          value.includes(d)
+        ).includes(true);
         if (isWebLink) {
           setWebLink(true);
           setCandidates(null);
@@ -369,7 +368,7 @@ const LinkLoader = ({
         }
       }
     },
-    [notTemplatePages, topDomain]
+    [notTemplatePages, TOP_DOMAIN]
   );
   /**
    * dom에 변경이 읽을 때,  block의 내용을 담고 있는 element의 innerHTML을 읽어와서, 변경된 내용을 state에 업데이트하는 함수

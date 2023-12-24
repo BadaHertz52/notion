@@ -1,14 +1,7 @@
 import React, { Dispatch, SetStateAction, useCallback } from "react";
 import styled from "styled-components";
 
-import {
-  BgColorType,
-  Block,
-  ColorType,
-  ModalType,
-  Page,
-  SelectionType,
-} from "../../types";
+import { BgColorType, Block, ColorType, ModalType, Page } from "../../types";
 import { getEditTime, setTemplateItem } from "../../utils";
 import { BACKGROUND_COLOR, COLOR } from "../../constants";
 

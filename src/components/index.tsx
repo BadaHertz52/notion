@@ -9,7 +9,7 @@ import ListSub from "./block/ListSub";
 import MovingTargetBlock from "./block/MovingTargetBlock";
 import PageBlockContents from "./block/PageBlockContents";
 //--block
-import BlockFn from "./blockMenu/BlockFn";
+import BlockQuickMenu from "./blockMenu/BlockQuickMenu";
 import BlockStyler from "./blockMenu/BlockStyler";
 
 //color
@@ -115,7 +115,7 @@ export {
   PageBlockContents,
   //--block
   //blockMenu --
-  BlockFn,
+  BlockQuickMenu,
   BlockStyler,
   BlockStylerSideMenu,
   //--blockMenu

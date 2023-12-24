@@ -43,20 +43,17 @@
   outline: 0px solid transparent;
 }
 .editableBlock,
-.blockFn button {
+.block-quick-menu button {
   font-size: inherit;
   line-height: inherit;
 }
 
-.blockFn {
-  display: none;
-}
-.blockFn.on {
+.block-quick-menu {
   display: flex;
   position: absolute;
   padding-right: 5px;
   z-index: 5;
-  .icon-blockFn {
+  .block-quick-menu__btn-container {
     svg {
       color: $itemSvg;
       fill: $itemSvg;
@@ -69,7 +66,7 @@
   }
 }
 
-.blockFn button,
+.block-quick-menu button,
 .toggle.block .left {
   &:hover {
     background-color: $itemHover;
@@ -201,9 +198,10 @@ document {
 }
 .left,
 .block__contents,
-.blockFn {
+.block-quick-menu {
   height: 18px;
 }
+
 .todo.block,
 .todo_done.block,
 .toggle.block,
@@ -242,7 +240,9 @@ document {
   }
 }
 .todo_done.block {
-  text-decoration: line-through $darkgrey;
+  & > .mainBlock {
+    text-decoration: line-through $darkgrey;
+  }
   path {
     stroke: $darkgrey;
   }

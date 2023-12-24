@@ -22,7 +22,7 @@ import {
 } from "../index";
 
 import { ActionContext } from "../../contexts";
-import { Block, CommandType, Page, SelectionType } from "../../types";
+import { Block, Page } from "../../types";
 import {
   changeFontSizeBySmallText,
   findBlock,
@@ -40,9 +40,6 @@ export type EditableBlockProps = {
   setMovingTargetBlock?: Dispatch<SetStateAction<Block | null>>;
   onClickCommentBtn?: (block: Block) => void;
   templateHtml: HTMLElement | null;
-  setSelection?: Dispatch<SetStateAction<SelectionType | null>>;
-  mobileMenuTargetBlock?: Block | null;
-  setMobileMenuTargetBlock?: Dispatch<SetStateAction<Block | null>>;
   measure?: () => void;
   openExport?: boolean;
 };
