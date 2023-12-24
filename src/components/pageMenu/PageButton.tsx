@@ -7,7 +7,6 @@ import { CSSProperties } from "styled-components";
 import { PageIcon } from "../index";
 
 import { ActionContext } from "../../contexts";
-import { delete_block } from "../../modules/notion/reducer";
 import { Block, Page, ListItem } from "../../types";
 import { getEditTime, setTemplateItem } from "../../utils";
 import { SESSION_KEY } from "../../constants";
@@ -32,14 +31,16 @@ const PageButton = ({
   block,
   style,
 }: PageButtonProps) => {
-  const { addBlock, movePageToPage } = useContext(ActionContext).actions;
+  const { addBlock, movePageToPage, deleteBlock } =
+    useContext(ActionContext).actions;
   const navigate = useNavigate();
   const templateHtml = document.getElementById("template");
+
   const moveBlockToPage = useCallback(
     (destinationPageId: string, block: Block) => {
       setTemplateItem(templateHtml, currentPage);
       // 기존 페이지에서 블록 삭제
-      delete_block(currentPage.id, block, true);
+      deleteBlock(currentPage.id, block, true);
       // 블록을 다른 페이지로 이동
       const newBlock: Block = {
         ...block,
