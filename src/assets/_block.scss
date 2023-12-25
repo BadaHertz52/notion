@@ -73,13 +73,14 @@
   }
 }
 .editableBlock .editable {
-  width: fit-content;
+  width: max-content;
 }
 .editable {
   white-space: normal;
   word-break: break-all;
   overflow: hidden;
   user-select: text;
+  line-height: normal;
   font : {
     size: inherit;
   }

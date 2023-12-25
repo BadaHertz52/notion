@@ -53,8 +53,11 @@
 }
 .page__comments {
   margin-top: 1rem;
-  padding-bottom: 10px;
-  border-bottom: 1px solid rgba(221, 221, 221, 0.799);
+
+  .comments {
+    border-bottom: 1px solid rgba(221, 221, 221, 0.799);
+    padding-bottom: 10px;
+  }
 }
 .page__header {
   position: relative;
