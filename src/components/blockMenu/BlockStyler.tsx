@@ -40,7 +40,6 @@ export type BlockStylerProps = MenuAndBlockStylerCommonProps & {
   recentPagesId: string[] | null;
   setModal: Dispatch<SetStateAction<ModalType>>;
   closeModal: () => void;
-  templateHtml: HTMLElement | null;
 };
 const BlockStyler = ({ ...props }: BlockStylerProps) => {
   const { editBlock } = useContext(ActionContext).actions;

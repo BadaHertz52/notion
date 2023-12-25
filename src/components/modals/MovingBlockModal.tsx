@@ -15,7 +15,7 @@ import {
   getBlockDomRect,
   getEditTime,
   makeNewBlock,
-  setTemplateItem,
+  setOriginTemplateItem,
 } from "../../utils";
 import { Block, Page } from "../../types";
 
@@ -25,7 +25,7 @@ type MovingBlockModalProps = Omit<EditableBlockProps, "block"> & {
   closeModal: () => void;
 };
 const MovingBlockModal = ({ ...props }: MovingBlockModalProps) => {
-  const { editBlock, editPage } = useContext(ActionContext).actions;
+  const { editPage } = useContext(ActionContext).actions;
   const { page, block } = props;
   const [movingBlockStyle, setMovingBlockStyle] = useState<
     CSSProperties | undefined
@@ -268,10 +268,10 @@ const MovingBlockModal = ({ ...props }: MovingBlockModalProps) => {
         editTime: editTime,
         firstBlocksId: firstBlocksId,
       };
-      setTemplateItem(props.templateHtml, page);
+      setOriginTemplateItem(page);
       editPage(page.id, newPage);
     },
-    [editPage, page, props.templateHtml]
+    [editPage, page]
   );
   /**
    * [isMoved]  블록의 위치를 변경하고, 변경된 위치에 따라 page의 data도 변경하는 함수

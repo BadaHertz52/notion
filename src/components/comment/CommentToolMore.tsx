@@ -12,7 +12,7 @@ import { HiOutlinePencil } from "react-icons/hi";
 import { IoTrashOutline } from "react-icons/io5";
 
 import { Block, MainCommentType, Page, SubCommentType } from "../../types";
-import { setTemplateItem, findBlock } from "../../utils";
+import { setOriginTemplateItem, findBlock } from "../../utils";
 import { SESSION_KEY } from "../../constants";
 
 type CommentToolMoreProps = {
@@ -45,7 +45,7 @@ const CommentToolMore = ({
   const editTime = JSON.stringify(Date.now());
 
   const onClickDeleteComment = useCallback(() => {
-    setTemplateItem(templateHtml, page);
+    setOriginTemplateItem(page);
     setMoreOpen(false);
     //page.header.comments 가 아닐 경우
     if (blockId) {
@@ -56,8 +56,7 @@ const CommentToolMore = ({
         const mainCommentIds = blockComments.map((m: MainCommentType) => m.id);
 
         const updateBlock = (changeContent: boolean) => {
-          const templateHtml = document.getElementById("template");
-          setTemplateItem(templateHtml, page);
+          setOriginTemplateItem(page);
           let blockContents = block.contents;
           if (changeContent) {
             blockContents = document.getElementById(`${block.id}__contents`)
@@ -165,7 +164,6 @@ const CommentToolMore = ({
     pageId,
     setAllComments,
     setMoreOpen,
-    templateHtml,
   ]);
 
   const onClickEditComment = useCallback(() => {

@@ -13,13 +13,11 @@ export type TemplateFrameCommonProps = {
   pagesId: string[];
   firstList: ListItem[];
   recentPagesId: string[] | null;
-  openTemplates: boolean;
-  setOpenTemplates: Dispatch<SetStateAction<boolean>>;
   smallText: boolean;
   fullWidth: boolean;
   fontStyle: FontStyle;
 };
-//TODO -  setCommendBlock 삭제
+
 export type MenuAndBlockStylerCommonProps = {
   pages: Page[];
   firstList: ListItem[];

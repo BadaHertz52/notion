@@ -23,7 +23,7 @@ import {
   SubCommentType,
   ModalType,
 } from "../../types";
-import { getEditTime, removeSelected, setTemplateItem } from "../../utils";
+import { getEditTime, setOriginTemplateItem } from "../../utils";
 import { SESSION_KEY } from "../../constants";
 
 export type CommentInputProps = {
@@ -66,7 +66,6 @@ export type CommentInputProps = {
   setModal?: Dispatch<SetStateAction<ModalType>>;
   setOpenDiscardEdit?: Dispatch<SetStateAction<boolean>>;
   setEdit?: Dispatch<SetStateAction<boolean>>;
-  templateHtml: HTMLElement | null;
   frameHtml: HTMLElement | null;
 };
 
@@ -85,7 +84,6 @@ const CommentInput = ({
   addOrEdit,
   setOpenDiscardEdit,
   setEdit,
-  templateHtml,
   frameHtml,
 }: CommentInputProps) => {
   const userNameFirstLetter = userName.substring(0, 1).toUpperCase();
@@ -132,15 +130,7 @@ const CommentInput = ({
         setAllComments && setAllComments(blockComments);
       }
     },
-    [
-      commentBlock,
-      editBlock,
-      frameHtml,
-      page,
-      pageId,
-      selectedHtml,
-      setAllComments,
-    ]
+    [commentBlock, editBlock, pageId, selectedHtml, setAllComments]
   );
   const findMainCommentIndex = (
     comments: MainCommentType[],
@@ -330,10 +320,10 @@ const CommentInput = ({
   const recoveryInputAfterSubmit = useCallback(() => {
     setText("");
     closeInput();
-    page && setTemplateItem(templateHtml, page);
+    page && setOriginTemplateItem(page);
     setEditTargetComment(null);
     sessionStorage.removeItem(SESSION_KEY.editComment);
-  }, [closeInput, page, templateHtml]);
+  }, [closeInput, page]);
 
   const makeNewComment = useCallback(
     (event: MouseEvent) => {

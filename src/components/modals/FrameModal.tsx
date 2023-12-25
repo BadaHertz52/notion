@@ -16,6 +16,7 @@ import {
   Rename,
   BlockStyler,
   MobileMenu,
+  Export,
 } from "../index";
 import { CommentInputProps } from "../comment/CommentInput";
 import { MenuProps } from "../menu/Menu";
@@ -54,7 +55,6 @@ type FrameModalProps = Omit<
   pagesId: string[];
   modal: ModalType;
   closeModal: () => void;
-  templateHtml: HTMLElement | null;
 };
 
 const FrameModal = ({ ...props }: FrameModalProps) => {
@@ -261,13 +261,14 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
           />
         </div>
       )}
-
       {modal.target === "blockStyler" && modal.block && (
         <BlockStyler {...props} block={modal.block} setModal={props.setModal} />
       )}
       {modal.target === "mobileMenu" && modal.block && (
         <MobileMenu {...props} block={modal.block} />
       )}
+      {/* //TODO - export */}
+      {/* {modal.target === "export" && <Export {...props} />} */}
     </ModalPortal>
   );
 };

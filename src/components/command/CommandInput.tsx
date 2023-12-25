@@ -9,17 +9,17 @@ import React, {
   useRef,
   useEffect,
 } from "react";
-import ScreenOnly from "../ScreenOnly";
-import { Block, BlockType, Page } from "../../types";
+
+import { ScreenOnly } from "../index";
+
 import { BLOCK_TYPES } from "../../constants";
-import { getEditTime } from "../../utils";
 import { ActionContext } from "../../contexts";
+import { Block, BlockType, Page } from "../../types";
+import { getEditTime, setOriginTemplateItem } from "../../utils";
 
 type CommandInputProps = {
-  templateHtml: HTMLElement | null;
   page: Page;
   block: Block;
-  setTemplateItem(templateHtml: HTMLElement | null, page: Page): void;
   closeCommand: () => void;
   setCommand: Dispatch<SetStateAction<string | undefined>>;
 };
@@ -27,14 +27,7 @@ type CommandInputProps = {
 const CommandInput = ({ ...props }: CommandInputProps) => {
   const { editBlock } = useContext(ActionContext).actions;
 
-  const {
-    templateHtml,
-    page,
-    block,
-    setCommand,
-    closeCommand,
-    setTemplateItem,
-  } = props;
+  const { page, block, setCommand, closeCommand } = props;
 
   const commentInputRef = useRef<HTMLInputElement>(null);
   const [value, setValue] = useState<string>("/");
@@ -45,7 +38,7 @@ const CommandInput = ({ ...props }: CommandInputProps) => {
    */
   const commandChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
-      setTemplateItem(templateHtml, page);
+      setOriginTemplateItem(page);
       const targetValue = event.target.value;
       setValue(targetValue);
       const SLASH = "/";
@@ -56,7 +49,7 @@ const CommandInput = ({ ...props }: CommandInputProps) => {
         closeCommand();
       }
     },
-    [closeCommand, page, setCommand, setValue, setTemplateItem, templateHtml]
+    [closeCommand, page, setCommand, setValue]
   );
 
   /**
@@ -78,11 +71,11 @@ const CommandInput = ({ ...props }: CommandInputProps) => {
           editTime: getEditTime(),
         };
         editBlock(page.id, newBlock);
-        setTemplateItem(templateHtml, page);
+        setOriginTemplateItem(page);
         closeCommand();
       }
     },
-    [block, closeCommand, editBlock, page, setTemplateItem, templateHtml]
+    [block, closeCommand, editBlock, page]
   );
 
   useEffect(() => {

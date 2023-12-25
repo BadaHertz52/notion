@@ -8,7 +8,7 @@ import { PageIcon } from "../index";
 
 import { ActionContext } from "../../contexts";
 import { Block, Page, ListItem } from "../../types";
-import { getEditTime, setTemplateItem } from "../../utils";
+import { getEditTime, isTemplates, setOriginTemplateItem } from "../../utils";
 import { SESSION_KEY } from "../../constants";
 
 type PageButtonProps = {
@@ -34,11 +34,10 @@ const PageButton = ({
   const { addBlock, movePageToPage, deleteBlock } =
     useContext(ActionContext).actions;
   const navigate = useNavigate();
-  const templateHtml = document.getElementById("template");
 
   const moveBlockToPage = useCallback(
     (destinationPageId: string, block: Block) => {
-      setTemplateItem(templateHtml, currentPage);
+      setOriginTemplateItem(currentPage);
       // 기존 페이지에서 블록 삭제
       deleteBlock(currentPage.id, block, true);
       // 블록을 다른 페이지로 이동
@@ -52,7 +51,7 @@ const PageButton = ({
         (page: Page) => page.id === destinationPageId
       )[0];
       //set origin destinationPage
-      if (templateHtml) {
+      if (isTemplates()) {
         const item = JSON.stringify(destinationPage);
         sessionStorage.setItem(SESSION_KEY.originMoveTargetPage, item);
       }
@@ -65,7 +64,7 @@ const PageButton = ({
       // close Menu and recovery Menu state
       closeMenu && closeMenu();
     },
-    [addBlock, closeMenu, currentPage, pages, templateHtml]
+    [addBlock, closeMenu, currentPage, pages]
   );
 
   const onClickToMove = useCallback(() => {

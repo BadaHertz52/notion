@@ -19,7 +19,7 @@ import { Block, BlockType, Page } from "../../types";
 import {
   makeNewBlock,
   findParentBlock,
-  setTemplateItem,
+  setOriginTemplateItem,
   getEditTime,
 } from "../../utils";
 
@@ -218,8 +218,7 @@ const CommandMenu = ({
 
   const changeType = useCallback(
     (blockType: BlockType) => {
-      const templateHtml = document.getElementById("template");
-      setTemplateItem(templateHtml, page);
+      setOriginTemplateItem(page);
       if (block.type !== blockType) {
         const editedBlock: Block = {
           ...block,

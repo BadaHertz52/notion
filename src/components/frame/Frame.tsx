@@ -19,7 +19,7 @@ import {
 } from "../index";
 import { RootState } from "../../modules";
 import { Block, ModalType, Page, TemplateFrameCommonProps } from "../../types";
-import { findBlock, isMobile } from "../../utils";
+import { findBlock, isMobile, isTemplates } from "../../utils";
 
 import "../../assets/frame.scss";
 import { INITIAL_MODAL, SESSION_KEY } from "../../constants";
@@ -35,7 +35,7 @@ export type FrameProps = TemplateFrameCommonProps & {
  */
 
 const Frame = ({ ...props }: FrameProps) => {
-  const { page, openTemplates, fontStyle, smallText, fullWidth } = props;
+  const { page, fontStyle, smallText, fullWidth } = props;
   const sideAppear = useSelector((state: RootState) => state.side.appear);
   const { editPage, editBlock } = useContext(ActionContext).actions;
   const innerWidth = window.innerWidth;
@@ -43,7 +43,6 @@ const Frame = ({ ...props }: FrameProps) => {
   const inner = document.getElementById("notion__inner");
   const frameRef = useRef<HTMLDivElement>(null);
   const frameHtml = frameRef.current;
-  const [templateHtml, setTemplateHtml] = useState<HTMLElement | null>(null);
   const firstBlocksId = page.firstBlocksId;
   const firstBlocks = firstBlocksId
     ? firstBlocksId.map((id: string) => findBlock(page, id).BLOCK)
@@ -61,15 +60,13 @@ const Frame = ({ ...props }: FrameProps) => {
   const [movingTargetBlock, setMovingTargetBlock] = useState<Block | null>(
     null
   );
-  const [mobileMenuTargetBlock, setMobileMenuTargetBlock] =
-    useState<Block | null>(null);
 
   const scrollbarWidth = 10;
   const sideBarEl = document.querySelector(".sideBar");
   const sideBarWidth =
     sideAppear === "lock" && sideBarEl ? sideBarEl.clientWidth : 0;
   const maxWidth = innerWidth - sideBarWidth - scrollbarWidth - 90;
-  const fontSize: number = openTemplates ? 1.25 : smallText ? 0.8 : 1;
+  const fontSize: number = isTemplates() ? 1.25 : smallText ? 0.8 : 1;
   const frameStyle: CSSProperties = {
     fontFamily: fontStyle,
     fontSize: `${fontSize}rem`,
@@ -77,7 +74,7 @@ const Frame = ({ ...props }: FrameProps) => {
   const frameInnerStyle: CSSProperties = {
     width: isMobile()
       ? "90%"
-      : openTemplates
+      : isTemplates()
       ? "100%"
       : fullWidth
       ? `${maxWidth}px`
@@ -169,19 +166,13 @@ const Frame = ({ ...props }: FrameProps) => {
   );
 
   useEffect(() => {
-    inner?.addEventListener("keyup", updateBlock);
-    inner?.addEventListener("touchstart", updateBlock, { passive: true });
+    document.addEventListener("keyup", updateBlock);
+    document.addEventListener("touchstart", updateBlock, { passive: true });
     return () => {
-      inner?.removeEventListener("keyup", updateBlock);
-      inner?.removeEventListener("touchstart", updateBlock);
+      document.removeEventListener("keyup", updateBlock);
+      document.removeEventListener("touchstart", updateBlock);
     };
   }, [inner, updateBlock]);
-
-  useEffect(() => {
-    openTemplates
-      ? setTemplateHtml(document.getElementById("template"))
-      : setTemplateHtml(null);
-  }, [openTemplates]);
 
   useEffect(() => {
     if (!newPageFrame && firstBlocksId) {
@@ -240,7 +231,6 @@ const Frame = ({ ...props }: FrameProps) => {
           page={page}
           frameRef={frameRef}
           fontSize={fontSize}
-          templateHtml={templateHtml}
           newPageFrame={newPageFrame}
           setMovingTargetBlock={setMovingTargetBlock}
           frameInnerStyle={frameInnerStyle}
@@ -268,7 +258,6 @@ const Frame = ({ ...props }: FrameProps) => {
           recentPagesId={props.recentPagesId}
           userName={props.userName}
           frameHtml={frameHtml}
-          templateHtml={templateHtml}
           fontSize={fontSize}
           modal={modal}
           setModal={setModal}
@@ -283,7 +272,6 @@ const Frame = ({ ...props }: FrameProps) => {
           pages={props.pages}
           pagesId={props.pagesId}
           page={page}
-          templateHtml={templateHtml}
           block={movingTargetBlock}
           fontSize={fontSize}
           closeModal={() => setMovingTargetBlock(null)}

@@ -15,7 +15,7 @@ import { ScreenOnly } from "../index";
 
 import { ActionContext, ModalContext } from "../../contexts";
 import { Block, Page, ModalType } from "../../types";
-import { isInTarget, makeNewBlock, setTemplateItem } from "../../utils";
+import { isInTarget, makeNewBlock, setOriginTemplateItem } from "../../utils";
 import { INITIAL_MODAL, SESSION_KEY } from "../../constants";
 
 type BlockQuickMenuProp = {
@@ -62,8 +62,7 @@ const BlockQuickMenu = ({
   }, [block]);
 
   const makeBlock = useCallback(() => {
-    const templateHtml = document.getElementById("template");
-    setTemplateItem(templateHtml, page);
+    setOriginTemplateItem(page);
     const sessionItem = sessionStorage.getItem(
       SESSION_KEY.blockQuickMenuTarget
     );

@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction, useCallback } from "react";
 import styled from "styled-components";
 
 import { BgColorType, Block, ColorType, ModalType, Page } from "../../types";
-import { getEditTime, setTemplateItem } from "../../utils";
+import { getEditTime, setOriginTemplateItem } from "../../utils";
 import { BACKGROUND_COLOR, COLOR } from "../../constants";
 
 type ColorInformProps = {
@@ -12,7 +12,6 @@ type ColorInformProps = {
   page: Page;
   block: Block;
   editBlock: (pageId: string, block: Block) => void;
-  templateHtml: HTMLElement | null;
   setModal?: Dispatch<SetStateAction<ModalType>>;
   closeMenu?: () => void;
 };
@@ -24,7 +23,6 @@ const ColorInform = ({
   page,
   block,
   editBlock,
-  templateHtml,
   setModal,
   closeMenu,
 }: ColorInformProps) => {
@@ -112,7 +110,7 @@ const ColorInform = ({
   );
   const changeColor = useCallback(() => {
     if (!color && background) {
-      setTemplateItem(templateHtml, page);
+      setOriginTemplateItem(page);
       ///change background color
       if (!setModal) {
         const newBlock: Block = {
@@ -152,7 +150,6 @@ const ColorInform = ({
     editBlock,
     page,
     setModal,
-    templateHtml,
   ]);
   return (
     <button

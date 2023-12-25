@@ -29,10 +29,11 @@ import { MainCommentType, Page } from "../../types";
 import { ActionContext } from "../../contexts";
 
 import {
-  setTemplateItem,
+  setOriginTemplateItem,
   randomEmojiIcon,
   getEditTime,
   changeIconModalStyle,
+  isTemplates,
 } from "../../utils";
 import { BASIC_PAGE_COVER_URL } from "../../constants";
 
@@ -41,7 +42,6 @@ export type PageHeaderProps = {
   page: Page;
   frameRef: RefObject<HTMLDivElement>;
   fontSize: number;
-  templateHtml: HTMLElement | null;
   newPageFrame: boolean;
   handleImgLoad?: () => void;
   openExport?: boolean;
@@ -51,7 +51,6 @@ function PageHeader({
   page,
   frameRef,
   fontSize,
-  templateHtml,
   newPageFrame,
   handleImgLoad,
   openExport,
@@ -128,7 +127,7 @@ function PageHeader({
     },
     [openIconModal, pageIconStyle.width]
   );
-  const isTemplate = () => !!document.querySelector("#templates");
+
   const addRandomIcon = useCallback(() => {
     const icon = randomEmojiIcon();
     const newPageWithIcon: Page = {
@@ -140,11 +139,11 @@ function PageHeader({
       },
       editTime: getEditTime(),
     };
-    if (isTemplate()) {
-      setTemplateItem(templateHtml, page);
+    if (isTemplates()) {
+      setOriginTemplateItem(page);
     }
     editPage(page.id, newPageWithIcon);
-  }, [editPage, page, templateHtml]);
+  }, [editPage, page]);
 
   const onClickAddCover = useCallback(() => {
     const editedPage: Page = {
@@ -161,8 +160,8 @@ function PageHeader({
   const onChangePageTitle = useCallback(
     (event: ContentEditableEvent) => {
       const value = event.target.value;
-      if (isTemplate()) {
-        setTemplateItem(templateHtml, page);
+      if (isTemplates()) {
+        setOriginTemplateItem(page);
       }
       editPage(page.id, {
         ...page,
@@ -173,7 +172,7 @@ function PageHeader({
         editTime: getEditTime(),
       });
     },
-    [editPage, page, templateHtml]
+    [editPage, page]
   );
 
   return (
@@ -285,7 +284,6 @@ function PageHeader({
               allComments={page.header.comments}
               addOrEdit={"add"}
               setEdit={setOpenPageCommentInput}
-              templateHtml={templateHtml}
               frameHtml={frameRef.current}
             />
           ) : (

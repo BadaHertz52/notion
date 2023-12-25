@@ -1,7 +1,6 @@
 import React, {
   Dispatch,
   MouseEvent,
-  MutableRefObject,
   SetStateAction,
   TouchEvent,
   useEffect,
@@ -27,7 +26,7 @@ import {
   changeFontSizeBySmallText,
   findBlock,
   getEditTime,
-  setTemplateItem,
+  setOriginTemplateItem,
 } from "../../utils";
 import { SESSION_KEY } from "../../constants";
 
@@ -39,13 +38,12 @@ export type EditableBlockProps = {
   fontSize: number;
   setMovingTargetBlock?: Dispatch<SetStateAction<Block | null>>;
   onClickCommentBtn?: (block: Block) => void;
-  templateHtml: HTMLElement | null;
   measure?: () => void;
   openExport?: boolean;
 };
 
 const EditableBlock = ({ ...props }: EditableBlockProps) => {
-  const { block, page, templateHtml } = props;
+  const { block, page } = props;
   const { editBlock } = useContext(ActionContext).actions;
   const className =
     block.type !== "toggle"
@@ -96,9 +94,9 @@ const EditableBlock = ({ ...props }: EditableBlockProps) => {
       type: block.type === "todo" ? "todo_done" : "todo",
       editTime: getEditTime(),
     };
-    setTemplateItem(templateHtml, page);
+    setOriginTemplateItem(page);
     editBlock(page.id, editedBlock);
-  }, [block, editBlock, templateHtml, page]);
+  }, [block, editBlock, page]);
 
   const onClickToggle = useCallback((event: React.MouseEvent) => {
     const target = event.currentTarget;

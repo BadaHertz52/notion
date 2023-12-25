@@ -29,6 +29,7 @@ export const getPageSample = (): Page => {
     createTime: editTime,
   };
 };
+
 export const findPage = (
   pagesId: string[],
   pages: Page[],

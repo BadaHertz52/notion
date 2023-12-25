@@ -10,7 +10,7 @@ import { CSSProperties } from "styled-components";
 import { ScreenOnly, Img } from "../index";
 
 import { Block, Page } from "../../types";
-import { getEditTime, setTemplateItem } from "../../utils";
+import { getEditTime, setOriginTemplateItem } from "../../utils";
 
 import "../../assets/imageBox.scss";
 
@@ -124,8 +124,7 @@ const ImageBox = ({ page, block, editBlock, measure }: ImageBoxProps) => {
         },
         editTime: getEditTime(),
       };
-      const templateHtml = document.getElementById("template");
-      setTemplateItem(templateHtml, page);
+      setOriginTemplateItem(page);
       editBlock(page.id, editedBlock);
     }
   }, [block, editBlock, page]);

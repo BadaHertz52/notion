@@ -17,7 +17,7 @@ import { ActionContext } from "../../contexts";
 import { Block, IconType, Page, Emoji, ModalType } from "../../types";
 import { EMOJI_ARRAY } from "../../constants";
 import {
-  setTemplateItem,
+  setOriginTemplateItem,
   randomEmojiIcon,
   changeImgToWebP,
   getEditTime,
@@ -53,8 +53,7 @@ const IconModal = ({
   const changePageIcon = useCallback(
     (icon: string | Emoji | null, iconType: IconType) => {
       const editTime = getEditTime();
-      const templateHtml = document.getElementById("template");
-      setTemplateItem(templateHtml, page);
+      setOriginTemplateItem(page);
       const editedPage: Page = {
         ...page,
         header: {

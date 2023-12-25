@@ -15,7 +15,11 @@ import { EditableBlock, PageHeader, EmptyPageContent } from "../index";
 
 import { ActionContext, ModalContext } from "../../contexts";
 import { Block, Page } from "../../types";
-import { setTemplateItem, getBlockSample, getNewBlockId } from "../../utils";
+import {
+  setOriginTemplateItem,
+  getBlockSample,
+  getNewBlockId,
+} from "../../utils";
 
 export type FrameInnerProps = PageHeaderProps & {
   firstBlocks: Block[] | null;
@@ -25,14 +29,13 @@ export type FrameInnerProps = PageHeaderProps & {
   page: Page;
   fontSize: number;
   frameRef: RefObject<HTMLDivElement>;
-  templateHtml: HTMLElement | null;
   setMovingTargetBlock: Dispatch<SetStateAction<Block | null>>;
   frameInnerStyle: CSSProperties;
   closeModal: () => void;
 };
 
 const FrameInner = (props: FrameInnerProps) => {
-  const { page, firstBlocks, frameRef, templateHtml } = props;
+  const { page, firstBlocks, frameRef } = props;
   const { addBlock } = useContext(ActionContext).actions;
   const { changeModalState } = useContext(ModalContext);
 
@@ -76,8 +79,8 @@ const FrameInner = (props: FrameInnerProps) => {
     } else {
       addBlock(page.id, newBlock, 0, null);
     }
-    setTemplateItem(templateHtml, page);
-  }, [addBlock, page, templateHtml]);
+    setOriginTemplateItem(page);
+  }, [addBlock, page]);
 
   useEffect(() => {
     const scrollContainerEl = frameRef.current?.querySelector(

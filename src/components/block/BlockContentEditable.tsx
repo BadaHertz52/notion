@@ -2,11 +2,8 @@ import React, {
   KeyboardEvent,
   useCallback,
   useContext,
-  Dispatch,
-  SetStateAction,
   MouseEvent,
   useRef,
-  TouchEvent,
   useState,
   CSSProperties,
 } from "react";
@@ -22,7 +19,7 @@ import {
   findParentBlock,
   findPreviousBlockInDoc,
   makeNewBlock,
-  setTemplateItem,
+  setOriginTemplateItem,
   getEditTime,
 } from "../../utils";
 
@@ -32,7 +29,6 @@ export type BlockContendEditableProps = {
   page: Page;
   pages: Page[];
   pagesId: string[];
-  templateHtml: HTMLElement | null;
 };
 
 const BlockContentEditable = ({
@@ -40,8 +36,6 @@ const BlockContentEditable = ({
   pages,
   page,
   block,
-  templateHtml,
-
   onClickCommentBtn,
 }: BlockContendEditableProps) => {
   const { editBlock, addBlock, changeToSub, raiseBlock, deleteBlock } =
@@ -172,7 +166,7 @@ const BlockContentEditable = ({
   const onChangeContents = useCallback(
     (event: ContentEditableEvent) => {
       if (page.blocks && page.blocksId) {
-        setTemplateItem(templateHtml, page);
+        setOriginTemplateItem(page);
         const value = event.target.value;
         const targetBlockIndex = page.blocksId.indexOf(block.id);
 
@@ -184,14 +178,7 @@ const BlockContentEditable = ({
         }
       }
     },
-    [
-      block,
-      page,
-      changeBlockContent,
-      changeModalStyle,
-      setOpenCommandMenu,
-      templateHtml,
-    ]
+    [block, page, changeBlockContent, changeModalStyle, setOpenCommandMenu]
   );
   /**
    * focus를 화면 상의 다음 블록의 contentEditable 에 옮기는 함수
@@ -343,7 +330,7 @@ const BlockContentEditable = ({
       switch (code) {
         case "tab":
           event.preventDefault();
-          setTemplateItem(templateHtml, page);
+          setOriginTemplateItem(page);
           const previousBlockIdInDoc = findPreviousBlockInDoc(page, block)
             .previousBlockInDoc.id;
           if (previousBlockIdInDoc) {
@@ -356,7 +343,7 @@ const BlockContentEditable = ({
 
           break;
         case "backspace":
-          setTemplateItem(templateHtml, page);
+          setOriginTemplateItem(page);
           const text = event.currentTarget.innerText;
           const cursor = document.getSelection();
           const offset = cursor?.anchorOffset;
@@ -429,7 +416,6 @@ const BlockContentEditable = ({
       moveFocus,
       page,
       raiseBlock,
-      templateHtml,
       findNextBlockOfFirstBlock,
       findNextBlockOfSubBlock,
       possibleBlocksId,
@@ -499,10 +485,8 @@ const BlockContentEditable = ({
       ) : (
         <>
           <CommandInput
-            templateHtml={templateHtml}
             page={page}
             block={block}
-            setTemplateItem={setTemplateItem}
             setCommand={setCommand}
             closeCommand={closeCommand}
           />

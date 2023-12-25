@@ -10,7 +10,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 
 import { ActionContext } from "../../contexts";
 import { Block, ListItem, Page } from "../../types";
-import { getEditTime, isMobile, setTemplateItem } from "../../utils";
+import { getEditTime, isMobile, setOriginTemplateItem } from "../../utils";
 import { ScreenOnly, PageBtnList } from "../index";
 
 export type PageMenuProps = {
@@ -38,8 +38,6 @@ const PageMenu = ({
   const [result, setResult] = useState<ListItem[] | null>(null);
   const listMargin = 16;
   const [listWidth, setListWidth] = useState<number>(320 - listMargin * 2);
-
-  const templateHtml = document.getElementById("template");
 
   const findResult = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
@@ -80,10 +78,10 @@ const PageMenu = ({
 
   const makeNewSubPage = useCallback(() => {
     if (block) {
-      setTemplateItem(templateHtml, currentPage);
+      setOriginTemplateItem(currentPage);
       changeBlockToPage(currentPage.id, block);
     }
-  }, [block, changeBlockToPage, currentPage, templateHtml]);
+  }, [block, changeBlockToPage, currentPage]);
 
   const handleTouchMove = (event: React.TouchEvent) => {
     const currentTarget = event.currentTarget as HTMLElement | null;

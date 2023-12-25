@@ -24,7 +24,6 @@ const ColorMenu = ({ page, block, setModal, closeMenu }: ColorMenuProps) => {
             page={page}
             block={block}
             editBlock={editBlock}
-            templateHtml={templateHtml}
             setModal={setModal}
             closeMenu={closeMenu}
           />
@@ -34,7 +33,6 @@ const ColorMenu = ({ page, block, setModal, closeMenu }: ColorMenuProps) => {
             page={page}
             block={block}
             editBlock={editBlock}
-            templateHtml={templateHtml}
             setModal={setModal}
             closeMenu={closeMenu}
           />
@@ -44,7 +42,6 @@ const ColorMenu = ({ page, block, setModal, closeMenu }: ColorMenuProps) => {
             page={page}
             block={block}
             editBlock={editBlock}
-            templateHtml={templateHtml}
             setModal={setModal}
             closeMenu={closeMenu}
           />
@@ -54,7 +51,6 @@ const ColorMenu = ({ page, block, setModal, closeMenu }: ColorMenuProps) => {
             page={page}
             block={block}
             editBlock={editBlock}
-            templateHtml={templateHtml}
             setModal={setModal}
             closeMenu={closeMenu}
           />
@@ -64,7 +60,6 @@ const ColorMenu = ({ page, block, setModal, closeMenu }: ColorMenuProps) => {
             page={page}
             block={block}
             editBlock={editBlock}
-            templateHtml={templateHtml}
             setModal={setModal}
             closeMenu={closeMenu}
           />
@@ -74,7 +69,6 @@ const ColorMenu = ({ page, block, setModal, closeMenu }: ColorMenuProps) => {
             page={page}
             block={block}
             editBlock={editBlock}
-            templateHtml={templateHtml}
             setModal={setModal}
             closeMenu={closeMenu}
           />
@@ -89,7 +83,6 @@ const ColorMenu = ({ page, block, setModal, closeMenu }: ColorMenuProps) => {
             background={"default"}
             block={block}
             editBlock={editBlock}
-            templateHtml={templateHtml}
             setModal={setModal}
             closeMenu={closeMenu}
           />
@@ -99,7 +92,6 @@ const ColorMenu = ({ page, block, setModal, closeMenu }: ColorMenuProps) => {
             background={"grey"}
             block={block}
             editBlock={editBlock}
-            templateHtml={templateHtml}
             setModal={setModal}
             closeMenu={closeMenu}
           />
@@ -109,7 +101,6 @@ const ColorMenu = ({ page, block, setModal, closeMenu }: ColorMenuProps) => {
             background={"yellow"}
             block={block}
             editBlock={editBlock}
-            templateHtml={templateHtml}
             setModal={setModal}
             closeMenu={closeMenu}
           />
@@ -119,7 +110,6 @@ const ColorMenu = ({ page, block, setModal, closeMenu }: ColorMenuProps) => {
             background={"green"}
             block={block}
             editBlock={editBlock}
-            templateHtml={templateHtml}
             setModal={setModal}
             closeMenu={closeMenu}
           />
@@ -129,7 +119,6 @@ const ColorMenu = ({ page, block, setModal, closeMenu }: ColorMenuProps) => {
             background={"blue"}
             block={block}
             editBlock={editBlock}
-            templateHtml={templateHtml}
             setModal={setModal}
             closeMenu={closeMenu}
           />
@@ -139,7 +128,6 @@ const ColorMenu = ({ page, block, setModal, closeMenu }: ColorMenuProps) => {
             background={"pink"}
             block={block}
             editBlock={editBlock}
-            templateHtml={templateHtml}
             setModal={setModal}
             closeMenu={closeMenu}
           />

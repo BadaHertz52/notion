@@ -1,14 +1,13 @@
 import React, { Dispatch, SetStateAction, useCallback } from "react";
 
 import { Block, CommentType, MainCommentType, Page } from "../../types";
-import { setTemplateItem } from "../../utils";
+import { isTemplates, setOriginTemplateItem } from "../../utils";
 
 type ResolveBtnProps = {
   page: Page;
   pageId: string;
   block?: Block;
   comment: MainCommentType;
-  templateHtml: HTMLElement | null;
   editPage?: (pageId: string, newPage: Page) => void;
   editBlock: (pageId: string, block: Block) => void;
   setAllComments: Dispatch<SetStateAction<MainCommentType[] | null>>;
@@ -18,7 +17,6 @@ const ResolveBtn = ({
   page,
   pageId,
   comment,
-  templateHtml,
   block,
   editBlock,
   editPage,
@@ -32,8 +30,8 @@ const ResolveBtn = ({
       type: newType,
       editTime: editTime,
     };
-    if (templateHtml) {
-      setTemplateItem(templateHtml, page);
+    if (isTemplates()) {
+      setOriginTemplateItem(page);
     }
     if (block) {
       const comments = block.comments ? [...block.comments] : [];
@@ -69,16 +67,7 @@ const ResolveBtn = ({
         editPage && editPage(pageId, editedPage);
       }
     }
-  }, [
-    block,
-    comment,
-    editBlock,
-    editPage,
-    page,
-    pageId,
-    setAllComments,
-    templateHtml,
-  ]);
+  }, [block, comment, editBlock, editPage, page, pageId, setAllComments]);
 
   return (
     <button className="comment__tool-resolve" onClick={changeCommentType}>

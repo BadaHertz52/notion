@@ -81,7 +81,6 @@ const CommentTool = ({
           page={page}
           pageId={pageId}
           block={block}
-          templateHtml={templateHtml}
           editBlock={editBlock}
           editPage={editPage}
           setAllComments={setAllComments}

@@ -1,17 +1,10 @@
-import React, {
-  ChangeEvent,
-  useEffect,
-  useState,
-  useCallback,
-  RefObject,
-  useContext,
-} from "react";
+import React, { ChangeEvent, useEffect, useCallback, useContext } from "react";
 import { CSSProperties } from "styled-components";
 
 import { SESSION_KEY } from "../constants";
 import { Block, Page } from "../types";
 import {
-  setTemplateItem,
+  setOriginTemplateItem,
   changeImgToWebP,
   getEditTime,
   isInTarget,
@@ -49,8 +42,7 @@ const Loader = ({ block, page, style, closeModal }: LoaderProps) => {
           contents: src,
           editTime: editTime,
         };
-        const templateHtml = document.getElementById("template");
-        setTemplateItem(templateHtml, page);
+        setOriginTemplateItem(page);
         editBlock(page.id, editedBlock);
       } else {
         //change page cover

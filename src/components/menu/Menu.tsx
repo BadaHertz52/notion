@@ -28,10 +28,9 @@ import {
   ModalType,
   MenuAndBlockStylerCommonProps,
 } from "../../types";
-import { getEditTime, isMobile, setTemplateItem } from "../../utils";
+import { getEditTime, isMobile, setOriginTemplateItem } from "../../utils";
 
 import "../../assets/menu.scss";
-import { SESSION_KEY } from "../../constants";
 
 export type MenuProps = Omit<
   MenuAndBlockStylerCommonProps,
@@ -152,7 +151,7 @@ const Menu = ({
 
   const removeBlock = useCallback(() => {
     handleCloseModal();
-    setTemplateItem(templateHtml, page);
+    setOriginTemplateItem(page);
     deleteBlock(page.id, block, true);
     closeMenu();
   }, [block, closeMenu, deleteBlock, page, templateHtml]);
@@ -160,7 +159,7 @@ const Menu = ({
   const duplicateBlock = useCallback(() => {
     handleCloseModal();
     if (page.blocks && page.blocksId) {
-      setTemplateItem(templateHtml, page);
+      setOriginTemplateItem(page);
       const blockIndex = page.blocksId.indexOf(block.id);
       const previousBlockId = page.blocksId[blockIndex - 1];
       const editTime = getEditTime();
@@ -177,7 +176,7 @@ const Menu = ({
         block.parentBlocksId === null ? null : previousBlockId
       );
 
-      setTemplateItem(templateHtml, page);
+      setOriginTemplateItem(page);
       if (block.type === "page") {
         duplicatePage(block.id);
       }

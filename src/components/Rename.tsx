@@ -15,10 +15,8 @@ import { IconModal, PageIcon, ScreenOnly } from "./index";
 import { ActionContext } from "../contexts";
 import { Block, Page } from "../types";
 import {
-  setTemplateItem,
-  closeModal,
+  setOriginTemplateItem,
   getEditTime,
-  isInTarget,
   changeIconModalStyle,
   findPage,
 } from "../utils";
@@ -64,7 +62,7 @@ const Rename = ({
 
       if (value !== page.header.title) {
         const templateHtml = document.getElementById("template");
-        setTemplateItem(templateHtml, page);
+        setOriginTemplateItem(page);
         const renamedPage: Page = {
           ...page,
           header: {
