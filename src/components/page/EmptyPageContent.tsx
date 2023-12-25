@@ -1,11 +1,4 @@
-import {
-  Dispatch,
-  SetStateAction,
-  memo,
-  useCallback,
-  useContext,
-  useState,
-} from "react";
+import { memo, useCallback, useContext } from "react";
 
 import { GrDocument, GrDocumentText } from "react-icons/gr";
 import { HiTemplate } from "react-icons/hi";
@@ -17,12 +10,11 @@ import { SESSION_KEY } from "../../constants";
 
 type EmptyPageContentProps = {
   page: Page;
+  openTemplates: () => void;
 };
 
-const EmptyPageContent = ({ page }: EmptyPageContentProps) => {
+const EmptyPageContent = ({ page, openTemplates }: EmptyPageContentProps) => {
   const { editPage } = useContext(ActionContext).actions;
-
-  const [openTemplates, setOpenTemplates] = useState<boolean>(false);
   /**
    * 새로 만든 페이지에 firstBlock을 생성하면서 페이지에 내용을 작성할 수 있도록 하는 함수
    * @returns page
@@ -53,20 +45,21 @@ const EmptyPageContent = ({ page }: EmptyPageContentProps) => {
         iconType: "emoji",
       },
     };
-    setOpenTemplates(false);
+
     editPage(page.id, newPageWithIcon);
-  }, [editPage, page.header, page.id, setOpenTemplates, startNewPage]);
+  }, [editPage, page.header, page.id, startNewPage]);
 
   const onClickEmpty = useCallback(() => {
     const newPage = startNewPage();
-    setOpenTemplates(false);
+
     editPage(page.id, newPage);
-  }, [editPage, page.id, setOpenTemplates, startNewPage]);
+  }, [editPage, page.id, startNewPage]);
 
   const onClickTemplateBtn = useCallback(() => {
-    setOpenTemplates(true);
+    openTemplates();
     sessionStorage.setItem(SESSION_KEY.targetPageId, page.id);
-  }, [page.id, setOpenTemplates]);
+  }, [page.id, openTemplates]);
+
   return (
     <div className="empty-page__btn-group">
       <button
@@ -82,6 +75,7 @@ const EmptyPageContent = ({ page }: EmptyPageContentProps) => {
       </button>
       {page.type !== "template" && (
         <button
+          className="btn-open-templates"
           title="button to start  page with template"
           onClick={onClickTemplateBtn}
         >
@@ -89,7 +83,6 @@ const EmptyPageContent = ({ page }: EmptyPageContentProps) => {
           <span>Templates</span>
         </button>
       )}
-      //TODO - tempalte modal
     </div>
   );
 };

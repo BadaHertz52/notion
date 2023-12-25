@@ -1,14 +1,26 @@
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 
 import { NotionHelmet } from "..";
 import { SideBarContainer } from "../index";
 import { SideBarContainerProp } from "../containers/SideBarContainer";
 import NotionRouter from "../../route/NotionRouter";
 
-import { Block, FontStyle, ListItem, Page, UserState } from "../../types";
+import {
+  Block,
+  FontStyle,
+  ListItem,
+  ModalType,
+  Page,
+  UserState,
+} from "../../types";
 import { findPage } from "../../utils";
+import TemplateModal from "../modals/TemplateModal";
+import { SESSION_KEY } from "../../constants";
 
-type NotionProps = Omit<SideBarContainerProp, "firstPages" | "firstList"> & {
+type NotionProps = Omit<
+  SideBarContainerProp,
+  "firstPages" | "firstList" | "openTemplates"
+> & {
   user: UserState;
   currentPage: Page | null;
   currentPageId: string | undefined;
@@ -19,13 +31,24 @@ type NotionProps = Omit<SideBarContainerProp, "firstPages" | "firstList"> & {
 const Notion = ({ ...props }: NotionProps) => {
   const { currentPage, pagesId, pages, firstPagesId } = props;
   //TODO -  수정
-
+  const [templateModal, setTemplateModal] = useState<ModalType>({
+    target: "templates",
+    open: false,
+  });
   const [openExport, setOpenExport] = useState<boolean>(false);
   const [smallText, setSmallText] = useState<boolean>(false);
   const [fullWidth, setFullWidth] = useState<boolean>(false);
-  const [openTemplates, setOpenTemplates] = useState<boolean>(false);
+
   const [fontStyle, setFontStyle] = useState<FontStyle>("default");
 
+  const closeTemplates = useCallback(() => {
+    setTemplateModal((prev) => ({ ...prev, open: false }));
+    sessionStorage.removeItem(SESSION_KEY.originTemplate);
+  }, []);
+
+  const openTemplates = useCallback(() => {
+    setTemplateModal((prev) => ({ ...prev, open: true }));
+  }, []);
   /**
    *
    * @param newModal  변경할 모달이 있을 경우에는 값을 입력하고, 처음 모달 상태로 되돌리려하는 경우네는 값을 비워두면 됨
@@ -64,6 +87,7 @@ const Notion = ({ ...props }: NotionProps) => {
           {...props}
           firstList={firstList}
           firstPages={firstPages}
+          openTemplates={openTemplates}
         />
         <NotionRouter
           {...props}
@@ -72,12 +96,25 @@ const Notion = ({ ...props }: NotionProps) => {
           setSmallText={setSmallText}
           fullWidth={fullWidth}
           setFullWidth={setFullWidth}
-          openTemplates={openTemplates}
-          setOpenTemplates={setOpenTemplates}
           setOpenExport={setOpenExport}
           fontStyle={fontStyle}
           setFontStyle={setFontStyle}
+          openTemplates={openTemplates}
         />
+        {props.currentPage?.id && (
+          <TemplateModal
+            {...props}
+            routePageId={props.currentPage.id}
+            userName={props.user.userName}
+            recentPagesId={props.user.recentPagesId}
+            firstList={firstList}
+            smallText={smallText}
+            fullWidth={fullWidth}
+            fontStyle={fontStyle}
+            templateModal={templateModal}
+            closeTemplates={closeTemplates}
+          />
+        )}
         {/* {pagesId && pages && firstList && (
             <>
               {openExport && currentPage && (
@@ -107,43 +144,7 @@ const Notion = ({ ...props }: NotionProps) => {
                   setMobileSideMenu={setMobileSideMenu}
                 />
               )}
-              {openTemplates && currentPage && (
-                <Templates
-                  routePageId={currentPage.id}
-                  user={user}
-                  userName={user.userName}
-                  pagesId={pagesId}
-                  pages={pages}
-                  firstList={firstList}
-                  recentPagesId={user.recentPagesId}
-                  commentBlock={commentBlock}
-                  openComment={openComment}
-                  setOpenComment={setOpenComment}
-                  modal={modal}
-                  setModal={setModal}
-                  openTemplates={openTemplates}
-                  setOpenTemplates={setOpenTemplates}
-                  setCommentBlock={setCommentBlock}
-                  showAllComments={showAllComments}
-                  smallText={smallText}
-                  fullWidth={fullWidth}
-                  discardEdit={discard_edit}
-                  setDiscardEdit={setDiscardEdit}
-                  fontStyle={fontStyle}
-                  mobileSideMenu={mobileSideMenu}
-                  setMobileSideMenu={setMobileSideMenu}
-                />
-              )}
-              {currentPage && (
-                <AllComments
-                  page={currentPage}
-                  userName={user.userName}
-                  showAllComments={showAllComments}
-                  setShowAllComments={setShowAllComments}
-                  discardEdit={discard_edit}
-                  setDiscardEdit={setDiscardEdit}
-                />
-              )}
+
 
             </>
           )}

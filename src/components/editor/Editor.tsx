@@ -12,14 +12,7 @@ import { Frame, TopBar } from "../index";
 
 import { ActionContext } from "../../contexts";
 import { RootState } from "../../modules";
-import {
-  Block,
-  Page,
-  ListItem,
-  SideAppear,
-  FontStyle,
-  Path,
-} from "../../types/";
+import { Page, ListItem, SideAppear, FontStyle, Path } from "../../types/";
 import { makePagePath } from "../../utils";
 
 import "../../assets/editor.scss";
@@ -38,34 +31,17 @@ export type EditorProps = {
   fullWidth: boolean;
   setFullWidth: Dispatch<SetStateAction<boolean>>;
   setOpenExport: Dispatch<SetStateAction<boolean>>;
-  openTemplates: boolean;
-  setOpenTemplates: Dispatch<SetStateAction<boolean>>;
   fontStyle: FontStyle;
   setFontStyle: Dispatch<SetStateAction<FontStyle>>;
   openExport?: boolean;
+  openTemplates: () => void;
 };
 
-const Editor = ({
-  sideAppear,
-  userName,
-  firstList,
-  page,
-  pages,
-  pagesId,
-  recentPagesId,
-  isInTrash,
-  smallText,
-  setSmallText,
-  fullWidth,
-  setFullWidth,
-  setOpenExport,
-  openTemplates,
-  setOpenTemplates,
-  fontStyle,
-  setFontStyle,
-  openExport,
-}: EditorProps) => {
+const Editor = ({ ...props }: EditorProps) => {
+  const { sideAppear, pages, pagesId, page, isInTrash } = props;
+
   const { restorePage, cleanTrash } = useContext(ActionContext).actions;
+
   const user = useSelector((state: RootState) => state.user);
   const [editorStyle, setEditorStyle] = useState<CSSProperties | undefined>(
     undefined
@@ -112,35 +88,8 @@ const Editor = ({
           </div>
         </div>
       )}
-      <TopBar
-        userName={userName}
-        firstList={firstList}
-        favorites={user.favorites}
-        sideAppear={sideAppear}
-        page={page}
-        pages={pages}
-        pagePath={pagePath}
-        smallText={smallText}
-        setSmallText={setSmallText}
-        fullWidth={fullWidth}
-        setFullWidth={setFullWidth}
-        setOpenExport={setOpenExport}
-        setFontStyle={setFontStyle}
-      />
-      <Frame
-        page={page}
-        userName={userName}
-        pagesId={pagesId}
-        pages={pages}
-        firstList={firstList}
-        recentPagesId={recentPagesId}
-        smallText={smallText}
-        fullWidth={fullWidth}
-        openTemplates={openTemplates}
-        setOpenTemplates={setOpenTemplates}
-        fontStyle={fontStyle}
-        openExport={openExport}
-      />
+      <TopBar {...props} favorites={user.favorites} pagePath={pagePath} />
+      <Frame {...props} />
     </div>
   );
 };

@@ -18,15 +18,25 @@ import {
   MovingBlockModal,
 } from "../index";
 import { RootState } from "../../modules";
-import { Block, ModalType, Page, TemplateFrameCommonProps } from "../../types";
+import {
+  Block,
+  ListItem,
+  ModalType,
+  Page,
+  TemplateFrameCommonProps,
+} from "../../types";
 import { findBlock, isMobile, isTemplates } from "../../utils";
 
 import "../../assets/frame.scss";
 import { INITIAL_MODAL, SESSION_KEY } from "../../constants";
 
 export type FrameProps = TemplateFrameCommonProps & {
+  firstList: ListItem[];
+  pages: Page[];
+  pagesId: string[];
   page: Page;
   openExport?: boolean;
+  openTemplates?: () => void;
 };
 /**
  * mouse drag로 위치를 변경시킬 블록의 내용을 보여주는 component
@@ -224,9 +234,7 @@ const Frame = ({ ...props }: FrameProps) => {
         }}
       >
         <FrameInner
-          userName={props.userName}
-          pages={props.pages}
-          pagesId={props.pagesId}
+          {...props}
           firstBlocks={firstBlocks}
           page={page}
           frameRef={frameRef}
@@ -251,12 +259,8 @@ const Frame = ({ ...props }: FrameProps) => {
           )}
         </ModalPortal>
         <FameModal
+          {...props}
           page={page}
-          pages={props.pages}
-          pagesId={props.pagesId}
-          firstList={props.firstList}
-          recentPagesId={props.recentPagesId}
-          userName={props.userName}
           frameHtml={frameHtml}
           fontSize={fontSize}
           modal={modal}

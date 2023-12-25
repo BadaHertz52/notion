@@ -4,11 +4,9 @@ import React, {
   useState,
   useContext,
   useCallback,
-  Dispatch,
-  SetStateAction,
 } from "react";
 
-import { FiCode, FiChevronsLeft } from "react-icons/fi";
+import { FiChevronsLeft } from "react-icons/fi";
 
 import {
   ScreenOnly,
@@ -16,7 +14,7 @@ import {
   Favorites,
   Private,
   SideBarModal,
-  FnGroup,
+  SideBarFnGroup,
   NewPageBtn,
 } from "../index";
 
@@ -41,8 +39,7 @@ export type SideBarProps = {
   sideAppear: SideAppear;
   firstPages: Page[] | null;
   firstList: ListItem[] | null;
-  setOpenQF?: Dispatch<SetStateAction<boolean>>;
-  setOpenTemplates?: Dispatch<SetStateAction<boolean>>;
+  openTemplates: () => void;
 };
 
 const SideBar = ({
@@ -51,6 +48,7 @@ const SideBar = ({
   sideAppear,
   firstPages,
   firstList,
+  openTemplates,
 }: SideBarProps) => {
   const { addBlock, addPage, changeSide } = useContext(ActionContext).actions;
   const { pages, pagesId, trash } = notion;
@@ -243,16 +241,18 @@ const SideBar = ({
                 onClickMoreBtn={onClickMoreBtn}
               />
             </div>
-            <FnGroup
+            <SideBarFnGroup
               openQuickFindBoard={openQuickFindBoard}
               onClickTrashBtn={onClickTrashBtn}
+              openTemplates={openTemplates}
             />
           </div>
           <NewPageBtn addNewPage={addNewPage} />
           <div className="mobile-btn-group">
-            <FnGroup
+            <SideBarFnGroup
               openQuickFindBoard={openQuickFindBoard}
               onClickTrashBtn={onClickTrashBtn}
+              openTemplates={openTemplates}
             />
             <NewPageBtn addNewPage={addNewPage} />
           </div>

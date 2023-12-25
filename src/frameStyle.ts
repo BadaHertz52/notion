@@ -110,8 +110,7 @@ a:visited {
   line-height: inherit;
 }
 .editableBlock .editable {
-  width: -moz-fit-content;
-  width: fit-content;
+  width: max-content;
 }
 
 .editable {
@@ -121,6 +120,7 @@ a:visited {
   -webkit-user-select: text;
           user-select: text;
   font-size: inherit;
+  line-height: normal;
 }
 
 .bg_default {
@@ -513,6 +513,9 @@ a:visited {
   position: relative;
   width: 100%;
   box-sizing: border-box;
+  border-bottom: 1px solid rgba(221, 221, 221, 0.799);
+  padding-bottom: 10px;
+
 }
 .page__header .comments .comments__comments-group {
   width: inherit;

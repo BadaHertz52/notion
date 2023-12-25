@@ -75,7 +75,7 @@ import Result from "./result/Result";
 import ResultList from "./result/ResultList";
 //sidBar
 import Favorites from "./sideBar/Favorites";
-import FnGroup from "./sideBar/FnGroup";
+import SideBarFnGroup from "./sideBar/SideBarFnGroup";
 import NewPageBtn from "./sideBar/NewPageBtn";
 import PageList from "./sideBar/PageList";
 import PageListItem from "./sideBar/PageListItem";
@@ -93,6 +93,15 @@ import TopBarToolMore from "./topBar/TopBarToolMore";
 //trash
 import Trash from "./trash/Trash";
 import TrashResultItem from "./trash/TrashResultItem";
+//template
+import TemplateDeleteAlert from "./templates/TemplateDeleteAlert";
+import TemplateEditAlert from "./templates/TemplateEditAlert";
+import Template from "./templates/Template";
+import TemplateAlert from "./templates/TemplateAlert";
+import Templates from "./templates/Templates";
+import TemplateSide from "./templates/TemplateSide";
+import NewTemplateBtn from "./templates/NewTemplateBtn";
+import UseTemplateBtn from "./templates/UseTemplateBtn";
 //etc
 import DiscardEditForm from "./DiscardEditForm";
 import Export from "./Export";
@@ -101,7 +110,7 @@ import Loader from "./Loader";
 import Loading from "./Loading";
 import Rename from "./Rename";
 import ScreenOnly from "./ScreenOnly";
-import Templates from "./Templates";
+
 import Time from "./Time";
 import BlockStylerSideMenu from "./blockMenu/BlockStylerSideMenu";
 
@@ -147,7 +156,7 @@ export {
   RecentPages,
   SideBar,
   SideBarMoreFn,
-  FnGroup,
+  SideBarFnGroup,
   NewPageBtn,
   //--sideBar
   //result--
@@ -198,7 +207,16 @@ export {
   NotionHelmet,
   Rename,
   ScreenOnly,
+  //template--
   Templates,
+  TemplateDeleteAlert,
+  TemplateEditAlert,
+  Template,
+  TemplateSide,
+  TemplateAlert,
+  NewTemplateBtn,
+  UseTemplateBtn,
+  //--template
   Time,
   Trash,
   TrashResultItem,

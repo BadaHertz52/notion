@@ -50,10 +50,13 @@
   }
 }
 //modal-sideBar
-#modal-mobile-side-menu {
+#modal-mobile-side-menu,
+#modal-template__menu {
   height: 100vh;
   width: 100vw;
   background-color: $modalBackGroundColor;
+}
+#modal-mobile-side-menu {
   .modal__menu {
     transition: transform 1000ms cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -67,6 +70,14 @@
 #modal-top-bar__menu {
   width: max-content;
   transition: right 2500ms ease;
+}
+#modal-template {
+  z-index: 30;
+}
+#modal-template__menu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 @media screen and (max-width: 768px) {
   .center .modal__menu {

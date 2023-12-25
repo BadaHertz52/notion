@@ -3,13 +3,14 @@ import { BiSearchAlt2 } from "react-icons/bi";
 import { BsFillTrash2Fill } from "react-icons/bs";
 import { HiTemplate } from "react-icons/hi";
 
-type FnGroupProp = {
+type SideBarFnGroupProp = {
   openQuickFindBoard: () => void;
   onClickTrashBtn: () => void;
+  openTemplates: () => void;
 };
-function FnGroup({ ...props }: FnGroupProp) {
+function SideBarFnGroup({ ...props }: SideBarFnGroupProp) {
   return (
-    <div className="fn-group">
+    <div className="side-bar__fn-group">
       <button
         id="btn-open-quickFindBoard"
         title="button to open quick find board"
@@ -21,10 +22,9 @@ function FnGroup({ ...props }: FnGroupProp) {
         </div>
       </button>
       <button
+        className="btn-open-templates"
         title="button to open templates"
-        // onClick={
-        //   //() => setOpenTemplates(true)
-        // }
+        onClick={props.openTemplates}
       >
         <div className="item__inner">
           <HiTemplate />
@@ -45,4 +45,4 @@ function FnGroup({ ...props }: FnGroupProp) {
   );
 }
 
-export default React.memo(FnGroup);
+export default React.memo(SideBarFnGroup);

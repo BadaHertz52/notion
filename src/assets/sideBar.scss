@@ -202,8 +202,8 @@
   .mobile-btn-group {
     display: none;
   }
-  // fn-group-1--
-  .fn-group-1 {
+  // side-bar__fn-group-1--
+  .side-bar__fn-group-1 {
     border-top: none;
     padding-bottom: 20px;
     .item__inner span {
@@ -212,7 +212,7 @@
       font-weight: initial;
     }
   }
-  // --fn-group-1
+  // --side-bar__fn-group-1
   .sideBar___inner__scroll,
   .recentPages {
     .header {
@@ -321,7 +321,7 @@
     }
   }
   //--scroll
-  .fn-group {
+  .side-bar__fn-group {
     display: flex;
     flex-direction: column;
     font-weight: 500;
@@ -538,7 +538,7 @@
         }
       }
     }
-    .fn-group,
+    .side-bar__fn-group,
     .addNewPageBtn {
       display: none;
     }
@@ -549,7 +549,7 @@
       position: absolute;
       bottom: 10px;
       width: 100%;
-      .fn-group,
+      .side-bar__fn-group,
       .addNewPageBtn {
         display: flex;
         padding-bottom: 0;
@@ -561,13 +561,16 @@
           }
         }
       }
-      .fn-group {
+      .side-bar__fn-group {
         .item__inner {
           font-size: 15px;
         }
       }
       .addNewPageBtn {
         margin-top: 14px;
+      }
+      .btn-open-templates {
+        display: none;
       }
     }
   }

@@ -32,6 +32,7 @@ export type FrameInnerProps = PageHeaderProps & {
   setMovingTargetBlock: Dispatch<SetStateAction<Block | null>>;
   frameInnerStyle: CSSProperties;
   closeModal: () => void;
+  openTemplates?: () => void;
 };
 
 const FrameInner = (props: FrameInnerProps) => {
@@ -132,7 +133,12 @@ const FrameInner = (props: FrameInnerProps) => {
             style={{ height: bottomHeight }}
           ></div>
         ) : (
-          <EmptyPageContent page={props.page} />
+          props.openTemplates && (
+            <EmptyPageContent
+              page={props.page}
+              openTemplates={props.openTemplates}
+            />
+          )
         )}
       </div>
     </div>

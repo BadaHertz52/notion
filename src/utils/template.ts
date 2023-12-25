@@ -19,7 +19,7 @@ export function returnTemplateSubBlock(day: string, index: number): Block {
   const TODO_LIST = [
     "6AM :🎽 running",
     "9AM:🏥physical checkup",
-    "😊 Webtoon re-enactment",
+    "😊 Webtoon ",
     "8PM: 🛒Buying food ingredients in mart - sale",
     "6PM :🍴 dinner appointment with friend",
     "Dry cleaning at the dry cleaner",

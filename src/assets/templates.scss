@@ -1,19 +1,20 @@
 @import "./common";
 
-#templates,
-.template__alert {
-  // @include modal;
-}
-#templates .templates__inner,
-.template__alert .template__alert__inner {
-  top: 0;
-  left: 0;
+#templates {
+  @include modalStyle;
+  position: relative;
+  margin: auto;
   width: 85vw;
   height: 85vh;
-  display: flex;
   max-width: none;
   max-height: none;
+  .templates__inner {
+    display: flex;
+    width: inherit;
+    height: inherit;
+  }
 }
+
 #template.expand {
   width: 100%;
 }
@@ -100,14 +101,14 @@
     font-size: 2rem;
   }
 }
-#template__side {
+#templates__side {
   width: 240px;
   background-color: rgb(251, 251, 250);
   display: flex;
   flex-direction: column;
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
-  .template__side__btn-use {
+  .templates__btn-use-template {
     user-select: none;
     transition: background-color 20ms ease-in 0s;
     cursor: pointer;
@@ -134,7 +135,7 @@
       background-color: rgb(6, 156, 205);
     }
   }
-  .template__side__list {
+  .templates__side__list {
     flex-shrink: 1;
     flex-grow: 1;
     padding-bottom: 44px;
@@ -181,7 +182,7 @@
       color: rgba(55, 53, 47, 0.65);
     }
   }
-  .template__side__btn-make {
+  .templates__btn-make {
     height: 48px;
     border-top: 1px solid $mud;
     display: flex;
@@ -206,7 +207,7 @@
     font-size: 1rem;
   }
 }
-#template__side.off {
+#templates__side.off {
   display: none;
 }
 .noTemplate {
@@ -218,9 +219,17 @@
   align-items: center;
   color: $mud;
 }
-.template__alert {
+#template-alert {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  width: inherit;
+  height: inherit;
+  background-color: $modalBackGroundColor;
   z-index: 20;
-  .inner {
+  .template-alert__inner {
+    @include modalStyle;
     width: 380px;
     height: 200px;
     padding: 24px 32px;
@@ -259,6 +268,88 @@
     border: 1px solid rgba(235, 87, 87, 0.5);
     &:hover {
       background-color: rgba(235, 87, 87, 0.1);
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  #templates {
+    @include resetModalStyle;
+    width: 100vw;
+    height: 100vh;
+    background-color: #ffff;
+    .templates__top-bar {
+      width: inherit;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 24px;
+      border-bottom: 1px solid $mud;
+      &.on {
+        background-color: rgb(240, 240, 240);
+        border-bottom: none;
+        .templates__btn {
+          font-size: 24px;
+          font-weight: bolder;
+        }
+      }
+      .templates__btn {
+        opacity: 0.5;
+        &:hover {
+          opacity: 1;
+        }
+      }
+      .templates__btn-close {
+        position: absolute;
+        left: 16px;
+      }
+      .templates__btn-make,
+      .templates__btn-use-template {
+        position: absolute;
+        right: 16px;
+      }
+    }
+    .templates__inner {
+      display: block;
+      width: inherit;
+      height: calc(100vh - 50px);
+    }
+  }
+
+  #template,
+  #templates__side {
+    height: inherit;
+    width: 100vw;
+    background-color: #ffff;
+  }
+  #templates__side {
+    position: relative;
+    .templates__btn-use-template,
+    .templates__btn-make {
+      display: none;
+    }
+    .templates__side__list {
+      flex-grow: inherit;
+      flex-shrink: initial;
+      background-color: rgb(240, 240, 240);
+      height: inherit;
+      .item {
+        border-bottom: 1px solid $mud;
+        padding-top: 8px;
+        padding-bottom: 8px;
+      }
+    }
+  }
+  #template-alert {
+    top: 0;
+    left: 0;
+    .template-alert__inner {
+      padding: 10px;
+    }
+    .template-alert__inner,
+    .template-alert__inner button {
+      font-size: 14px;
     }
   }
 }

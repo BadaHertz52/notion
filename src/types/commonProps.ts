@@ -9,9 +9,6 @@ export type StylerCommonProps = MenuAndBlockStylerCommonProps & {
 
 export type TemplateFrameCommonProps = {
   userName: string;
-  pages: Page[];
-  pagesId: string[];
-  firstList: ListItem[];
   recentPagesId: string[] | null;
   smallText: boolean;
   fullWidth: boolean;

@@ -287,7 +287,8 @@ function PageHeader({
               frameHtml={frameRef.current}
             />
           ) : (
-            newPageFrame && (
+            newPageFrame &&
+            page.type !== "template" && (
               <div>
                 Press Enter to continue with an empty page or pick a template
               </div>
