@@ -13,7 +13,7 @@ type PageIconProps = {
   style?: CSSProperties;
   handleImgLoad?: () => void;
   isInPageHeader?: boolean;
-  openExport?: boolean;
+  isExport?: boolean;
   onClick?: (event: MouseEvent) => void;
 };
 
@@ -23,7 +23,7 @@ const PageIcon = ({
   style,
   handleImgLoad,
   isInPageHeader = false,
-  openExport,
+  isExport,
   onClick,
 }: PageIconProps) => {
   const pageIconClassName: string =
@@ -41,7 +41,7 @@ const PageIcon = ({
             icon={icon as Emoji}
             otherClassName="page__icon__img"
             handleImgLoad={handleImgLoad}
-            openExport={openExport}
+            isExport={isExport}
             isInPageHeader={isInPageHeader}
           />
         )

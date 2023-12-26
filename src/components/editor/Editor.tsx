@@ -5,22 +5,31 @@ import React, {
   useState,
   useContext,
 } from "react";
-import { useSelector } from "react-redux";
+
 import { CSSProperties } from "styled-components";
 
-import { Frame, TopBar } from "../index";
+import { ExportModal, Frame, TopBar } from "../index";
 
 import { ActionContext } from "../../contexts";
-import { RootState } from "../../modules";
-import { Page, ListItem, SideAppear, FontStyle, Path } from "../../types/";
+
+import {
+  Page,
+  ListItem,
+  SideAppear,
+  FontStyle,
+  Path,
+  ModalType,
+} from "../../types/";
 import { makePagePath } from "../../utils";
 
 import "../../assets/editor.scss";
+import { INITIAL_MODAL } from "../../constants";
 
 export type EditorProps = {
   pages: Page[];
   pagesId: string[];
   userName: string;
+  favorites: string[] | null;
   firstList: ListItem[];
   recentPagesId: string[] | null;
   sideAppear: SideAppear;
@@ -30,10 +39,8 @@ export type EditorProps = {
   setSmallText: Dispatch<SetStateAction<boolean>>;
   fullWidth: boolean;
   setFullWidth: Dispatch<SetStateAction<boolean>>;
-  setOpenExport: Dispatch<SetStateAction<boolean>>;
   fontStyle: FontStyle;
   setFontStyle: Dispatch<SetStateAction<FontStyle>>;
-  openExport?: boolean;
   openTemplates: () => void;
 };
 
@@ -42,7 +49,8 @@ const Editor = ({ ...props }: EditorProps) => {
 
   const { restorePage, cleanTrash } = useContext(ActionContext).actions;
 
-  const user = useSelector((state: RootState) => state.user);
+  const [exportModal, setExportModal] = useState<ModalType>(INITIAL_MODAL);
+
   const [editorStyle, setEditorStyle] = useState<CSSProperties | undefined>(
     undefined
   );
@@ -67,10 +75,11 @@ const Editor = ({ ...props }: EditorProps) => {
   useEffect(() => {
     setPagePath(makePagePath(page, pagesId, pages));
   }, [page, page.header.icon, page.header.title, pages, pagesId]);
+
   return (
     <div className="editor" style={editorStyle}>
       {isInTrash && (
-        <div className="isInTrash">
+        <div className="editor-in-trash">
           <div>This is page is in Trash.</div>
           <div className="isInTrash__btn-group">
             <button
@@ -88,8 +97,18 @@ const Editor = ({ ...props }: EditorProps) => {
           </div>
         </div>
       )}
-      <TopBar {...props} favorites={user.favorites} pagePath={pagePath} />
-      <Frame {...props} />
+      <TopBar
+        {...props}
+        pagePath={pagePath}
+        openExportModal={() => setExportModal({ open: true, target: "export" })}
+      />
+      <Frame {...props} isExport={exportModal.open} />
+      {exportModal.open && (
+        <ExportModal
+          {...props}
+          closeModal={() => setExportModal(INITIAL_MODAL)}
+        />
+      )}
     </div>
   );
 };

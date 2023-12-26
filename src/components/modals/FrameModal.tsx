@@ -267,8 +267,6 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
       {modal.target === "mobileMenu" && modal.block && (
         <MobileMenu {...props} block={modal.block} />
       )}
-      {/* //TODO - export */}
-      {/* {modal.target === "export" && <Export {...props} />} */}
     </ModalPortal>
   );
 };

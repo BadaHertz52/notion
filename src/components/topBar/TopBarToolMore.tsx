@@ -27,6 +27,7 @@ export type TopBarToolMoreProps = {
   setFontStyle: Dispatch<SetStateAction<FontStyle>>;
   setModal: Dispatch<SetStateAction<ModalType>>;
   closeModal: () => void;
+  openExportModal: () => void;
 };
 const TopBarToolMore = ({ ...props }: TopBarToolMoreProps) => {
   const {
@@ -39,10 +40,10 @@ const TopBarToolMore = ({ ...props }: TopBarToolMoreProps) => {
     page,
     setModal,
     closeModal,
+    openExportModal,
   } = props;
 
   const { deletePage } = useContext(ActionContext).actions;
-  const { changeModalState } = useContext(ModalContext);
 
   const FONT_BTN_ARRAY: FontStyle[] = ["default", "mono", "serif"];
 
@@ -89,9 +90,10 @@ const TopBarToolMore = ({ ...props }: TopBarToolMoreProps) => {
   };
 
   const onClickExportBtn = useCallback(() => {
-    changeModalState({ open: true, target: "export" });
+    openExportModal();
     closeModal();
-  }, []);
+  }, [closeModal, openExportModal]);
+
   return (
     <div id="top-bar__tool-more">
       <div className="inner">

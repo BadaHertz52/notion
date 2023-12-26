@@ -1,27 +1,19 @@
-import React, { useContext } from "react";
+import React from "react";
 
 import { AiOutlinePlus } from "react-icons/ai";
 
 import { ScreenOnly, PageList } from "../index";
-import { ActionContext } from "../../contexts";
-import { ListItem, Notion, Page } from "../../types";
+import { ListItem, Page } from "../../types";
+import { PageListProp } from "./PageList";
 
-type PrivateProps = {
-  notion: Notion;
+type PrivateProps = Omit<PageListProp, "targetList"> & {
   firstPages: Page[] | null;
   addNewPage: () => void;
-  addNewSubPage: (item: ListItem) => void;
-  onClickMoreBtn: (item: ListItem, target: HTMLElement) => void;
 };
 
-function Private({
-  notion,
-  firstPages,
-  addNewPage,
-  addNewSubPage,
-  onClickMoreBtn,
-}: PrivateProps) {
-  const { changeSide } = useContext(ActionContext).actions;
+function Private({ ...props }: PrivateProps) {
+  const { firstPages, pages } = props;
+
   const targetList: ListItem[] | null = firstPages
     ? firstPages
         .filter((page: Page) => page.parentsId === null)
@@ -43,22 +35,16 @@ function Private({
         <button
           className="btn-addPage"
           title="Quickly add a page inside"
-          onClick={addNewPage}
+          onClick={props.addNewPage}
         >
           <ScreenOnly text="Quickly add a page inside" />
           <AiOutlinePlus />
         </button>
       </div>
-      {notion.pages && (
+      {pages && (
         <div className="list">
-          {notion.pages[0] && targetList && (
-            <PageList
-              notion={notion}
-              targetList={targetList}
-              onClickMoreBtn={onClickMoreBtn}
-              addNewSubPage={addNewSubPage}
-              changeSide={changeSide}
-            />
+          {pages[0] && targetList && (
+            <PageList {...props} targetList={targetList} />
           )}
         </div>
       )}

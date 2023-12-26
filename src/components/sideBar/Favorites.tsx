@@ -3,27 +3,19 @@ import React, { useCallback, useContext } from "react";
 import { PageList } from "../index";
 
 import { ActionContext } from "../../contexts";
-import { ListItem, Notion, Page } from "../../types";
+import { ListItem, Page } from "../../types";
 import { findPage } from "../../utils";
+import { PageListProp } from "./PageList";
 
-type FavoritesProps = {
+type FavoritesProps = Omit<PageListProp, "targetList"> & {
   favorites: string[] | null;
-  notion: Notion;
-  pagesId: string[] | null;
-  pages: Page[] | null;
-  onClickMoreBtn: (item: ListItem, target: HTMLElement) => void;
-  addNewSubPage: (item: ListItem) => void;
 };
 
-function Favorites({
-  favorites,
-  notion,
-  pages,
-  pagesId,
-  onClickMoreBtn,
-  addNewSubPage,
-}: FavoritesProps) {
+function Favorites({ ...props }: FavoritesProps) {
+  const { favorites, pages, pagesId } = props;
+
   const { changeSide } = useContext(ActionContext).actions;
+
   const makeFavoriteList = useCallback(
     (
       favorites: string[] | null,
@@ -61,13 +53,7 @@ function Favorites({
       </div>
       {targetList && (
         <div className="list">
-          <PageList
-            notion={notion}
-            targetList={targetList}
-            onClickMoreBtn={onClickMoreBtn}
-            addNewSubPage={addNewSubPage}
-            changeSide={changeSide}
-          />
+          <PageList {...props} targetList={targetList} />
         </div>
       )}
     </div>

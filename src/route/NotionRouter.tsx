@@ -2,16 +2,16 @@ import React, { useCallback, useContext, useEffect, useMemo } from "react";
 
 import { Route, Routes, useNavigate } from "react-router-dom";
 
-import { NonePage, EditorContainer } from "../components";
-import { EditorContainerProps } from "../components/containers/EditorContainer";
+import { NonePage, Editor } from "../components";
 
 import { SESSION_KEY } from "../constants";
 import { ActionContext } from "../contexts";
 import { ListItem, Page, UserState } from "../types";
 import { findPage, makeRoutePath } from "../utils";
+import { EditorProps } from "../components/editor/Editor";
 
 export type NotionRouterProps = Omit<
-  EditorContainerProps,
+  EditorProps,
   "pages" | "pagesId" | "page" | "firstList" | "isInTrash"
 > & {
   user: UserState;
@@ -99,8 +99,13 @@ const NotionRouter = ({ ...props }: NotionRouterProps) => {
             key={`page_${p.id}`}
             path={makeRoutePath(p.id)}
             element={
-              <EditorContainer
+              <Editor
                 {...props}
+                pages={pages}
+                pagesId={pagesId}
+                userName={props.user.userName}
+                favorites={props.user.favorites}
+                recentPagesId={props.user.recentPagesId}
                 firstList={firstList}
                 page={p}
                 isInTrash={!pagesId.includes(p.id)}

@@ -27,8 +27,8 @@ import {
   ModalType,
   ModalTargetType,
   Page,
-  TrashPage,
   UserState,
+  TrashType,
 } from "../../types";
 import { findPage, isInTarget } from "../../utils";
 import { ActionContext } from "../../contexts";
@@ -41,10 +41,7 @@ type SideBarModalProps = {
   pages: Page[];
   pagesId: string[];
   firstList: ListItem[];
-  trash: {
-    pagesId: string[] | null;
-    pages: TrashPage[] | null;
-  };
+  trash: TrashType;
 };
 
 const SideBarModal = ({ ...props }: SideBarModalProps) => {

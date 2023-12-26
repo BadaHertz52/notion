@@ -2,24 +2,22 @@ import React, { useContext, useCallback, useRef } from "react";
 
 import { PageListItem } from "../index";
 
-import { ListItem, Notion, Page, SideAppear } from "../../types";
+import { ListItem, Page, SideAppear } from "../../types";
 import { ActionContext } from "../../contexts";
 
-type PageListProp = {
-  notion: Notion;
+export type PageListProp = {
+  pages: Page[] | null;
+  pagesId: string[] | null;
   targetList: ListItem[];
   onClickMoreBtn: (item: ListItem, target: HTMLElement) => void;
   addNewSubPage: (item: ListItem) => void;
-  changeSide: (appear: SideAppear) => void;
 };
 
-const PageList = ({
-  notion,
-  targetList,
-  addNewSubPage,
-  onClickMoreBtn,
-}: PageListProp) => {
+const PageList = ({ ...props }: PageListProp) => {
+  const { targetList, pages, pagesId } = props;
+
   const { changeSide } = useContext(ActionContext).actions;
+
   const ulRef = useRef<HTMLUListElement>(null);
   const findSubPage = (
     id: string,
@@ -55,25 +53,18 @@ const PageList = ({
           <div className="main-page">
             <PageListItem
               item={item}
-              onClickMoreBtn={onClickMoreBtn}
-              addNewSubPage={addNewSubPage}
+              onClickMoreBtn={props.onClickMoreBtn}
+              addNewSubPage={props.addNewSubPage}
               changeSide={changeSide}
             />
           </div>
-          {notion.pages &&
-            notion.pagesId &&
+          {pages &&
+            pagesId &&
             (item.subPagesId ? (
               <div className="sub-page">
                 <PageList
-                  notion={notion}
-                  targetList={makeTargetList(
-                    item.subPagesId,
-                    notion.pagesId,
-                    notion.pages
-                  )}
-                  onClickMoreBtn={onClickMoreBtn}
-                  addNewSubPage={addNewSubPage}
-                  changeSide={changeSide}
+                  {...props}
+                  targetList={makeTargetList(item.subPagesId, pagesId, pages)}
                 />
               </div>
             ) : (

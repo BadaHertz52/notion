@@ -44,7 +44,7 @@ export type PageHeaderProps = {
   fontSize: number;
   newPageFrame: boolean;
   handleImgLoad?: () => void;
-  openExport?: boolean;
+  isExport?: boolean;
 };
 function PageHeader({
   userName,
@@ -53,7 +53,7 @@ function PageHeader({
   fontSize,
   newPageFrame,
   handleImgLoad,
-  openExport,
+  isExport,
 }: PageHeaderProps) {
   const pageOpenComments = page.header.comments?.filter(
     (c) => c.type === "open"
@@ -249,7 +249,7 @@ function PageHeader({
             style={pageIconStyle}
             handleImgLoad={handleImgLoad}
             isInPageHeader={true}
-            openExport={openExport}
+            isExport={isExport}
             onClick={onClickPageIcon}
           />
         </div>

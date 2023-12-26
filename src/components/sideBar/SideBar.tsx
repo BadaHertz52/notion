@@ -24,9 +24,9 @@ import {
   Block,
   ListItem,
   ModalType,
-  Notion,
   Page,
   SideAppear,
+  TrashType,
   UserState,
 } from "../../types";
 import { findPage, getBlockSample, getPageSample } from "../../utils";
@@ -34,7 +34,9 @@ import { findPage, getBlockSample, getPageSample } from "../../utils";
 import "../../assets/sideBar.scss";
 
 export type SideBarProps = {
-  notion: Notion;
+  pages: Page[] | null;
+  pagesId: string[] | null;
+  trash: TrashType;
   user: UserState;
   sideAppear: SideAppear;
   firstPages: Page[] | null;
@@ -43,7 +45,9 @@ export type SideBarProps = {
 };
 
 const SideBar = ({
-  notion,
+  pages,
+  pagesId,
+  trash,
   user,
   sideAppear,
   firstPages,
@@ -51,7 +55,6 @@ const SideBar = ({
   openTemplates,
 }: SideBarProps) => {
   const { addBlock, addPage, changeSide } = useContext(ActionContext).actions;
-  const { pages, pagesId, trash } = notion;
 
   const [sideModal, setSideModal] = useState<ModalType>(INITIAL_MODAL);
   const [targetItem, setTargetItem] = useState<ListItem | null>(null);
@@ -226,7 +229,6 @@ const SideBar = ({
             <div className="sideBar__inner__list" style={innerListStyle}>
               <Favorites
                 favorites={user.favorites}
-                notion={notion}
                 pages={pages}
                 pagesId={pagesId}
                 onClickMoreBtn={onClickMoreBtn}
@@ -234,7 +236,8 @@ const SideBar = ({
               />
 
               <Private
-                notion={notion}
+                pages={pages}
+                pagesId={pagesId}
                 firstPages={firstPages}
                 addNewPage={addNewPage}
                 addNewSubPage={addNewSubPage}

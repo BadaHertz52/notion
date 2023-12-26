@@ -39,7 +39,8 @@ const NotionContainer = () => {
   const dispatch = useDispatch();
 
   const rootState = useSelector((state: RootState) => state);
-  const { notion, user } = rootState;
+
+  const { notion, user, side } = rootState;
   const { firstPagesId, pages, pagesId } = notion;
 
   const currentPageId = getCurrentPageId();
@@ -202,10 +203,9 @@ const NotionContainer = () => {
   return (
     <ActionContext.Provider value={{ actions: notionActions }}>
       <Notion
+        {...notion}
         user={user}
-        pages={pages}
-        pagesId={pagesId}
-        firstPagesId={firstPagesId}
+        sideAppear={side.appear}
         currentPage={currentPage}
         currentPageId={currentPageId}
       />

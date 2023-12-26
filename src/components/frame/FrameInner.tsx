@@ -108,7 +108,7 @@ const FrameInner = (props: FrameInnerProps) => {
       id={`page-${page.id}`}
       style={{
         ...props.frameInnerStyle,
-        overflowY: props.openExport ? "scroll" : "initial",
+        overflowY: props.isExport ? "scroll" : "initial",
       }}
     >
       <PageHeader {...props} />

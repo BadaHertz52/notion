@@ -35,7 +35,7 @@ export type FrameProps = TemplateFrameCommonProps & {
   pages: Page[];
   pagesId: string[];
   page: Page;
-  openExport?: boolean;
+  isExport?: boolean;
   openTemplates?: () => void;
 };
 /**
@@ -223,7 +223,7 @@ const Frame = ({ ...props }: FrameProps) => {
     <div
       className={`frame ${newPageFrame ? "newPageFrame" : ""} ${
         isMobile() ? "mobile" : "web"
-      } ${modal.target === "export" ? "export__frame" : ""}`}
+      } ${props.isExport ? "export__frame" : ""}`}
       style={frameStyle}
       ref={frameRef}
     >
@@ -258,17 +258,19 @@ const Frame = ({ ...props }: FrameProps) => {
             />
           )}
         </ModalPortal>
-        <FameModal
-          {...props}
-          page={page}
-          frameHtml={frameHtml}
-          fontSize={fontSize}
-          modal={modal}
-          setModal={setModal}
-          closeModal={closeModal}
-          editBlock={editBlock}
-          editPage={editPage}
-        />
+        {modal.open && (
+          <FameModal
+            {...props}
+            page={page}
+            frameHtml={frameHtml}
+            fontSize={fontSize}
+            modal={modal}
+            setModal={setModal}
+            closeModal={closeModal}
+            editBlock={editBlock}
+            editPage={editPage}
+          />
+        )}
       </ModalContext.Provider>
       {movingTargetBlock && (
         <MovingBlockModal

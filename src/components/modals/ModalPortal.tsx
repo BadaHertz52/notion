@@ -32,6 +32,7 @@ const ModalPortal = ({
     "quickFind",
     "trash",
     "discardEdit",
+    "export",
   ];
   const isCenter: boolean = target
     ? CENTER_TARGET_ARRAY.includes(target)

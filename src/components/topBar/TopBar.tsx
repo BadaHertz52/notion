@@ -40,16 +40,16 @@ type TopBarProps = {
   setSmallText: Dispatch<SetStateAction<boolean>>;
   fullWidth: boolean;
   setFullWidth: Dispatch<SetStateAction<boolean>>;
-  setOpenExport: Dispatch<SetStateAction<boolean>>;
   setFontStyle: Dispatch<SetStateAction<FontStyle>>;
+  openExportModal: () => void;
 };
 
 const TopBar = ({ ...props }: TopBarProps) => {
   const { sideAppear, page, pagePath } = props;
+
   const { changeSide } = useContext(ActionContext).actions;
 
   const [modal, setModal] = useState<ModalType>(INITIAL_MODAL);
-
   const [title, setTitle] = useState<string>("");
 
   const closeModal = useCallback(() => {

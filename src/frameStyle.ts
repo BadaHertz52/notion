@@ -4,6 +4,7 @@ export const frameStyleCode = `label {
 #notion__inner .edit__inform {
   color: rgb(60, 60, 60);
 }
+
 .edit__inform {
   border-top: 1px solid #929292;
   font-size: 12px;
@@ -20,14 +21,12 @@ div {
 }
 div::-webkit-scrollbar {
   background: transparent;
-  width: 10px;
-  height: 10px;
 }
 div::-webkit-scrollbar-thumb {
-  background-color: #d3d1cb;
+  background: transparent;
 }
 div::-webkit-scrollbar-track {
-  background-color: #edece9;
+  background: transparent;
 }
 
 button {
@@ -307,7 +306,10 @@ a:visited {
   align-items: center;
   justify-content: center;
 }
-
+.image-box img{
+  width:inherit;
+  height:inherit
+}
 .blockComponent.on {
   padding: 5px;
   font-size: 1.2rem;
@@ -877,7 +879,12 @@ table {
   overflow-x: hidden;
   overflow-y: scroll;
 }
-
+#notion .export__frame::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+#notion .export__frame:-webkit-scrollbar-track {
+  background:transparent;
+}
 .frame__inner {
   width: 100%;
   height: 100%;
@@ -1062,10 +1069,6 @@ table {
 }
 
 @media screen and (max-width: 768px) {
-  .frame::-webkit-scrollbar {
-    width: 0px;
-    background-color: transparent;
-  }
   .page__header {
     margin-bottom: 5px;
   }

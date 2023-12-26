@@ -39,7 +39,7 @@ export type EditableBlockProps = {
   setMovingTargetBlock?: Dispatch<SetStateAction<Block | null>>;
   onClickCommentBtn?: (block: Block) => void;
   measure?: () => void;
-  openExport?: boolean;
+  isExport?: boolean;
 };
 
 const EditableBlock = ({ ...props }: EditableBlockProps) => {
@@ -187,7 +187,7 @@ const EditableBlock = ({ ...props }: EditableBlockProps) => {
                       <PageIcon
                         icon={block.icon}
                         iconType={block.iconType}
-                        openExport={props.openExport}
+                        isExport={props.isExport}
                       />
                     </div>
                   )}

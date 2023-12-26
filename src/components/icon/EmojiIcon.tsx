@@ -15,7 +15,7 @@ type EmojiIconProps = {
   emojiSrc?: string;
   icon: Emoji;
   handleImgLoad?: () => void;
-  openExport?: boolean;
+  isExport?: boolean;
   pageIconStyle?: CSSProperties;
   isInPageHeader?: boolean;
 };
@@ -24,7 +24,7 @@ const EmojiIcon = ({
   otherClassName,
   icon,
   handleImgLoad,
-  openExport = false,
+  isExport = false,
   isInPageHeader,
 }: EmojiIconProps) => {
   const className: string = `${otherClassName ? otherClassName : ""} emojiIcon`;
@@ -40,7 +40,7 @@ const EmojiIcon = ({
   };
   return (
     <>
-      {openExport ? (
+      {isExport ? (
         <span
           className={className}
           style={{

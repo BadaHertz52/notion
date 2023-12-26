@@ -29,9 +29,7 @@ import CommentToolMore from "./comment/CommentToolMore";
 import Comments from "./comment/Comments";
 import ResolveBtn from "./comment/ResolveBtn";
 //container
-import EditorContainer from "./containers/EditorContainer";
 import NotionContainer from "./containers/NotionContainer";
-import SideBarContainer from "./containers/SideBarContainer";
 //editor
 import Editor from "./editor/Editor";
 //frame
@@ -52,6 +50,7 @@ import MobileSideMenu from "./menu/MobileSideMenu";
 import CommandModal from "./modals/CommandModal";
 import DiscardEditModal from "./modals/DiscardEditModal";
 import IconModal from "./modals/IconModal";
+import ExportModal from "./modals/ExportModal";
 import FameModal from "./modals/FrameModal";
 import LoaderModal from "./modals/LoaderModal";
 import MobileSideMenuModal from "./modals/MobileSideMenuModal";
@@ -181,6 +180,7 @@ export {
   //modal
   CommandModal,
   DiscardEditModal,
+  ExportModal,
   FameModal,
   IconModal,
   LoaderModal,
@@ -221,8 +221,6 @@ export {
   Trash,
   TrashResultItem,
   //container
-  EditorContainer,
-  SideBarContainer,
   NotionContainer,
   Notion,
 };

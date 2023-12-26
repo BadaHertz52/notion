@@ -33,7 +33,7 @@
   position: relative;
   line-height: normal;
   //isInTrash
-  .isInTrash {
+  .editor-in-trash {
     z-index: 20;
     position: absolute;
     align-items: center;
@@ -47,7 +47,7 @@
     background-color: rgb(235, 87, 87);
     color: #ffff;
     font-size: 14px;
-    .isInTrash__btn-group {
+    .editor-in-trash__btn-group {
       display: flex;
       justify-content: space-between;
     }

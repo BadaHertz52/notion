@@ -102,16 +102,16 @@ export type Page = {
 export type TrashPage = Page & {
   subPages: Page[] | null;
 };
-
+export type TrashType = {
+  pagesId: string[] | null;
+  pages: TrashPage[] | null;
+};
 export type Notion = {
   pagesId: string[] | null;
   firstPagesId: string[] | null;
   templatesId: string[] | null;
   pages: Page[] | null;
-  trash: {
-    pagesId: string[] | null;
-    pages: TrashPage[] | null;
-  };
+  trash: TrashType;
 };
 //side
 export type SideAppear = "lock" | "float" | "floatHide" | "close";

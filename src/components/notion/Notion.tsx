@@ -1,24 +1,16 @@
 import React, { useCallback, useMemo, useState } from "react";
 
-import { NotionHelmet } from "..";
-import { SideBarContainer } from "../index";
-import { SideBarContainerProp } from "../containers/SideBarContainer";
+import { NotionHelmet, SideBar } from "..";
 import NotionRouter from "../../route/NotionRouter";
 
-import {
-  Block,
-  FontStyle,
-  ListItem,
-  ModalType,
-  Page,
-  UserState,
-} from "../../types";
+import { FontStyle, ListItem, ModalType, Page, UserState } from "../../types";
 import { findPage } from "../../utils";
 import TemplateModal from "../modals/TemplateModal";
 import { SESSION_KEY } from "../../constants";
+import { SideBarProps } from "../sideBar/SideBar";
 
 type NotionProps = Omit<
-  SideBarContainerProp,
+  SideBarProps,
   "firstPages" | "firstList" | "openTemplates"
 > & {
   user: UserState;
@@ -35,7 +27,6 @@ const Notion = ({ ...props }: NotionProps) => {
     target: "templates",
     open: false,
   });
-  const [openExport, setOpenExport] = useState<boolean>(false);
   const [smallText, setSmallText] = useState<boolean>(false);
   const [fullWidth, setFullWidth] = useState<boolean>(false);
 
@@ -83,7 +74,7 @@ const Notion = ({ ...props }: NotionProps) => {
     <div id="notion">
       <NotionHelmet pageHeader={currentPage?.header} pageId={currentPage?.id} />
       <div id="notion__inner">
-        <SideBarContainer
+        <SideBar
           {...props}
           firstList={firstList}
           firstPages={firstPages}
@@ -91,12 +82,12 @@ const Notion = ({ ...props }: NotionProps) => {
         />
         <NotionRouter
           {...props}
+          {...props.user}
           firstList={firstList}
           smallText={smallText}
           setSmallText={setSmallText}
           fullWidth={fullWidth}
           setFullWidth={setFullWidth}
-          setOpenExport={setOpenExport}
           fontStyle={fontStyle}
           setFontStyle={setFontStyle}
           openTemplates={openTemplates}
@@ -117,7 +108,7 @@ const Notion = ({ ...props }: NotionProps) => {
         )}
         {/* {pagesId && pages && firstList && (
             <>
-              {openExport && currentPage && (
+              {isExport && currentPage && (
                 <Export
                   page={currentPage}
                   pagesId={pagesId}
