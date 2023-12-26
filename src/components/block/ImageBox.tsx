@@ -2,6 +2,7 @@ import React, {
   MouseEvent,
   TouchEvent,
   useCallback,
+  useEffect,
   useRef,
   useState,
 } from "react";
@@ -10,7 +11,11 @@ import { CSSProperties } from "styled-components";
 import { ScreenOnly, Img } from "../index";
 
 import { Block, Page } from "../../types";
-import { getEditTime, setOriginTemplateItem } from "../../utils";
+import {
+  getBlockContentsStyle,
+  getEditTime,
+  setOriginTemplateItem,
+} from "../../utils";
 
 import "../../assets/imageBox.scss";
 
@@ -22,6 +27,7 @@ export type ImageBoxProps = {
 };
 
 const ImageBox = ({ page, block, editBlock, measure }: ImageBoxProps) => {
+  const imageBoxRef = useRef<HTMLDivElement>(null);
   const previousClientX = useRef(0);
   const previousClientY = useRef(0);
   const drag = useRef<boolean>(false);
@@ -30,42 +36,41 @@ const ImageBox = ({ page, block, editBlock, measure }: ImageBoxProps) => {
   const BOTTOM = "bottom";
   type DragBtnName = typeof LEFT | typeof RIGHT | typeof BOTTOM;
   const dragBtn = useRef<DragBtnName>(LEFT);
-  const [imageStyle, setImageStyle] = useState<CSSProperties>();
+  const initialImageStyle = getBlockContentsStyle(block);
+  const [imageStyle, setImageStyle] =
+    useState<CSSProperties>(initialImageStyle);
+
   const imgSrc = block.contents.includes(";base64")
     ? block.contents
     : block.contents +
       `?&height=${block.style.height ? block.style.height : 150}&width=${
         block.style.width || "auto"
       }`;
+
   const resizeImage = useCallback(
     (clientX: number, clientY: number) => {
-      const targetImgContent = document.getElementById(`${block.id}__contents`);
       const changeX = clientX - previousClientX.current;
       const changeY = clientX - previousClientX.current;
       previousClientX.current = clientX;
       previousClientY.current = clientY;
+      const imageDomRect = imageBoxRef.current?.getClientRects()[0];
+      if ((changeX || changeY) && imageDomRect) {
+        const imgWidth = imageDomRect.width;
+        const imgHeight = imageDomRect.height;
+        const width =
+          dragBtn.current === RIGHT ? imgWidth + changeX : imgWidth - changeX;
+        const height =
+          dragBtn.current === LEFT ? imgHeight - changeY : imgHeight + changeY;
 
-      if ((changeX || changeY) && targetImgContent) {
-        const imgDomRect = targetImgContent.getClientRects()[0];
-        if (imgDomRect) {
-          const imgWidth = imgDomRect.width;
-          const imgHeight = imgDomRect.height;
-          const width =
-            dragBtn.current === RIGHT ? imgWidth + changeX : imgWidth - changeX;
-          const height =
-            dragBtn.current === LEFT
-              ? imgHeight - changeY
-              : imgHeight + changeY;
-          const changedStyle = {
-            width:
-              dragBtn.current !== BOTTOM ? `${width}px` : block.style.width,
-            height: `${height}px`,
-          };
-          setImageStyle(changedStyle);
-        }
+        const changedStyle = {
+          width: dragBtn.current !== BOTTOM ? `${width}px` : block.style.width,
+          height:
+            dragBtn.current === BOTTOM ? `${height}px` : block.style.height,
+        };
+        setImageStyle(changedStyle);
       }
     },
-    [block.id, block.style.width]
+    [block.style.width, block.style.height, imageBoxRef]
   );
   const onMouseMove = useCallback(
     (event: MouseEvent) => {
@@ -132,6 +137,7 @@ const ImageBox = ({ page, block, editBlock, measure }: ImageBoxProps) => {
   return (
     <div
       className="img-box"
+      ref={imageBoxRef}
       style={imageStyle}
       onMouseMove={onMouseMove}
       onTouchMove={onTouchMove}
@@ -168,7 +174,7 @@ const ImageBox = ({ page, block, editBlock, measure }: ImageBoxProps) => {
         <ScreenOnly text="bottom button to resize image" />
         <span></span>
       </button>
-      <Img src={imgSrc} alt="block_photo" onLoad={measure} />
+      <Img src={imgSrc} alt="block_photo" onLoad={measure} style={imageStyle} />
     </div>
   );
 };

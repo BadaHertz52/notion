@@ -160,7 +160,7 @@ const BlockContents = ({ ...props }: BlockContentsProps) => {
       id={`${props.block.id}__contents`}
       className={`${block.type}-block__contents block__contents`}
       ref={blockContentsRef}
-      style={getBlockContentsStyle(block)}
+      style={block.type !== "image" ? getBlockContentsStyle(block) : undefined}
       onClick={onClickContents}
       onFocus={onFocusContents}
       onMouseEnter={openBlockQuickMenu}

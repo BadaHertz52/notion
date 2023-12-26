@@ -309,12 +309,10 @@ document {
     border-radius: 5px;
   }
   & > .moving-area {
-    width: 50%;
-  }
-}
-.image_block__contents {
-  & > .moving-area {
-    width: inherit;
+    width: max-content;
+    padding-right: 50px;
+    max-width: 90vw;
+    box-sizing: border-box;
   }
 }
 .media_block__contents {

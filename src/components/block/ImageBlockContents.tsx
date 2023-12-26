@@ -10,6 +10,7 @@ import { MdOutlinePhotoSizeSelectActual } from "react-icons/md";
 
 import { ImageBox, LoaderModal, ScreenOnly } from "../index";
 import { ImageBoxProps } from "./ImageBox";
+import { getBlockContentsStyle } from "../../utils";
 
 type ImageBlockContentsProps = ImageBoxProps;
 
