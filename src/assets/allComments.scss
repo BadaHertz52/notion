@@ -1,8 +1,10 @@
 @import "./common";
 
 .all-comments {
+  @include modalStyle;
+
   display: flex;
-  padding-top: 45px;
+  margin-top: 45px;
   flex-direction: column;
   flex-grow: 0;
   flex-shrink: 0;
@@ -25,7 +27,7 @@
   .all-comments__header {
     display: flex;
     justify-content: space-between;
-    padding: 0 5px;
+    padding: 10px 5px;
     font-size: 13px;
     box-sizing: border-box;
     border-bottom: 1px solid #d6d6d6;
@@ -142,8 +144,10 @@
 
 @media screen and (max-width: 768px) {
   .all-comments {
+    @include resetModalStyle;
     width: 100vw;
     padding-top: 0;
+    margin-top: 0;
     border-left: none;
     .all-comments__header {
       padding: 10px 0;

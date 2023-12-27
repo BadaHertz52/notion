@@ -8,12 +8,17 @@ import React, {
 
 import { Loader, ModalPortal } from "../index";
 import { LoaderProps } from "../Loader";
+import { useModal } from "../../hooks";
 
 type LoaderModalProps = LoaderProps & {
   targetRef: RefObject<HTMLButtonElement>;
   isOpen: boolean;
 };
 const LoaderModal = ({ ...props }: LoaderModalProps) => {
+  const { closeModal } = props;
+
+  const CORRECT_TARGETS = [".btn-change-cover", "#loader", ".btn-addBlockFile"];
+  const modalOpen = useModal(CORRECT_TARGETS);
   const [style, setStyle] = useState<CSSProperties | undefined>(undefined);
   const GAP = 10;
   const changeBlockImageLoaderStyle = useCallback(() => {
@@ -59,6 +64,11 @@ const LoaderModal = ({ ...props }: LoaderModalProps) => {
     changeBlockImageLoaderStyle,
     changePageCoverLoaderStyle,
   ]);
+
+  useEffect(() => {
+    if (!modalOpen) closeModal();
+  }, [modalOpen, closeModal]);
+
   return (
     <ModalPortal id="modal-loader" isOpen={props.isOpen}>
       {props.isOpen && <Loader {...props} block={props.block} style={style} />}

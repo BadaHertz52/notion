@@ -6,8 +6,9 @@ import NotionRouter from "../../route/NotionRouter";
 import { FontStyle, ListItem, ModalType, Page, UserState } from "../../types";
 import { findPage } from "../../utils";
 import TemplateModal from "../modals/TemplateModal";
-import { SESSION_KEY } from "../../constants";
+import { INITIAL_MODAL, SESSION_KEY } from "../../constants";
 import { SideBarProps } from "../sideBar/SideBar";
+import TemplatesContainer from "../containers/TemplatesContainer";
 
 type NotionProps = Omit<
   SideBarProps,
@@ -23,22 +24,19 @@ type NotionProps = Omit<
 const Notion = ({ ...props }: NotionProps) => {
   const { currentPage, pagesId, pages, firstPagesId } = props;
   //TODO -  수정
-  const [templateModal, setTemplateModal] = useState<ModalType>({
-    target: "templates",
-    open: false,
-  });
+  const [templateModal, setTemplateModal] = useState<ModalType>(INITIAL_MODAL);
   const [smallText, setSmallText] = useState<boolean>(false);
   const [fullWidth, setFullWidth] = useState<boolean>(false);
 
   const [fontStyle, setFontStyle] = useState<FontStyle>("default");
 
   const closeTemplates = useCallback(() => {
-    setTemplateModal((prev) => ({ ...prev, open: false }));
+    setTemplateModal(INITIAL_MODAL);
     sessionStorage.removeItem(SESSION_KEY.originTemplate);
   }, []);
 
   const openTemplates = useCallback(() => {
-    setTemplateModal((prev) => ({ ...prev, open: true }));
+    setTemplateModal({ target: "templates", open: true });
   }, []);
   /**
    *
@@ -93,7 +91,7 @@ const Notion = ({ ...props }: NotionProps) => {
           openTemplates={openTemplates}
         />
         {props.currentPage?.id && (
-          <TemplateModal
+          <TemplatesContainer
             {...props}
             routePageId={props.currentPage.id}
             userName={props.user.userName}
@@ -103,6 +101,7 @@ const Notion = ({ ...props }: NotionProps) => {
             fullWidth={fullWidth}
             fontStyle={fontStyle}
             templateModal={templateModal}
+            setTemplateModal={setTemplateModal}
             closeTemplates={closeTemplates}
           />
         )}

@@ -1914,8 +1914,8 @@ export default function notion(
             sessionStorage.removeItem(item);
           }
         };
-        restorePage("originTemplate");
-        restorePage(SESSION_KEY.originMoveTargetPage);
+        restorePage(SESSION_KEY.originTemplate);
+        //restorePage(SESSION_KEY.originMoveTargetPage);
         return {
           pages: pages,
           firstPagesId: firstPagesId,

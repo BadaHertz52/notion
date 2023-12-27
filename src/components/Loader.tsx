@@ -91,24 +91,7 @@ const Loader = ({ block, page, style, closeModal }: LoaderProps) => {
     closeModal();
   }, [editPage, page, closeModal]);
 
-  const handleClose = useCallback(
-    (event: globalThis.MouseEvent) => {
-      const correctTarget = [
-        ".btn-change-cover",
-        "#loader",
-        ".btn-addBlockFile",
-      ];
-      const isNotClose = correctTarget
-        .map((v) => isInTarget(event, v))
-        .some((v) => v);
-
-      if (!isNotClose) closeModal();
-    },
-    [closeModal]
-  );
-
   useEffect(() => {
-    window.addEventListener("click", handleClose);
     if (block) {
       sessionStorage.setItem(
         SESSION_KEY.loaderTargetBlock,
@@ -116,10 +99,9 @@ const Loader = ({ block, page, style, closeModal }: LoaderProps) => {
       );
     }
     return () => {
-      window.removeEventListener("click", handleClose);
       if (block) sessionStorage.removeItem(SESSION_KEY.loaderTargetBlock);
     };
-  }, [handleClose, block]);
+  }, [block]);
 
   return (
     <div id="loader" style={style}>

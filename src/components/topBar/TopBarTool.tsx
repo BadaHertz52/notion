@@ -50,7 +50,7 @@ const TopBarTool = ({ ...props }: TopBarToolProps) => {
     <div id="top-bar__tool">
       <button title="Share or publish to the web">Share</button>
       <button
-        id="allCommentsBtn"
+        id="btn-all-comments"
         title="View all comments"
         onClick={onClickViewAllComments}
       >

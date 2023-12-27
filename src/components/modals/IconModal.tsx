@@ -1,7 +1,5 @@
 import React, {
   ChangeEvent,
-  Dispatch,
-  SetStateAction,
   useState,
   useContext,
   useCallback,
@@ -14,17 +12,17 @@ import { BsEmojiSmile } from "react-icons/bs";
 import { ScreenOnly, EmojiIcon, ModalPortal } from "../index";
 
 import { ActionContext } from "../../contexts";
-import { Block, IconType, Page, Emoji, ModalType } from "../../types";
+import { Block, IconType, Page, Emoji } from "../../types";
 import { EMOJI_ARRAY } from "../../constants";
 import {
   setOriginTemplateItem,
   randomEmojiIcon,
   changeImgToWebP,
   getEditTime,
-  isInTarget,
 } from "../../utils";
 
 import "../../assets/iconMenu.scss";
+import { useModal } from "../../hooks";
 
 type IconModalProps = {
   isOpen: boolean;
@@ -46,6 +44,8 @@ const IconModal = ({
 
   const EMOJI = "emoji";
   const IMAGE = "image";
+  const CORRECT_EVENT_TARGETS = ["#icon-menu", ".page__icon"];
+  const modalOpen = useModal(CORRECT_EVENT_TARGETS);
 
   type Category = typeof EMOJI | typeof IMAGE;
   const [category, setCategory] = useState<Category>(EMOJI);
@@ -112,20 +112,9 @@ const IconModal = ({
     [changePageIcon, changeImg]
   );
 
-  const handleCloseModal = useCallback(
-    (event: globalThis.MouseEvent) => {
-      const TARGET = ["#icon-menu", ".page__icon"];
-
-      if (!TARGET.map((v) => isInTarget(event, v)).some((v) => v))
-        closeIconModal();
-    },
-    [closeIconModal]
-  );
-
   useEffect(() => {
-    document.addEventListener("click", handleCloseModal);
-    return () => document.removeEventListener("click", handleCloseModal);
-  }, [handleCloseModal]);
+    if (!modalOpen) closeIconModal();
+  }, [modalOpen, closeIconModal]);
 
   return (
     <ModalPortal isOpen={isOpen} id="modal-icon" style={style}>

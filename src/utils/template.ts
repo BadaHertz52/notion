@@ -8,7 +8,7 @@ export const isTemplates = () => !!document.querySelector("#templates");
  * @param page  현재 페이지
  */
 export const setOriginTemplateItem = (page: Page) => {
-  if (isTemplates()) {
+  if (isTemplates() && !sessionStorage.getItem(SESSION_KEY.originTemplate)) {
     const originTemplate = JSON.stringify(page);
     sessionStorage.setItem(SESSION_KEY.originTemplate, originTemplate);
   }

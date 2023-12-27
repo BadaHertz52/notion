@@ -88,7 +88,6 @@ const MobileMenu = ({ ...props }: MobileMenuProps) => {
   }, [addBlock, block, duplicatePage, page, closeModal]);
 
   useEffect(() => {
-    console.log(sideMeuModal);
     frameHtml?.classList.add("stop");
     return () => {
       frameHtml?.classList.remove("stop");

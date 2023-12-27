@@ -7,12 +7,14 @@ import {
   cancel_edit_template,
   delete_template,
 } from "../../modules/notion/reducer";
+
+import { TemplateModal } from "../index";
 import { Page } from "../../types";
 import { findPage } from "../../utils";
-import Templates, { TemplatesProps } from "../templates/Templates";
+import { TemplateModalProps } from "../modals/TemplateModal";
 
 export type TemplatesContainerProps = Omit<
-  TemplatesProps,
+  TemplateModalProps,
   | "templates"
   | "templatesId"
   | "pages"
@@ -20,6 +22,8 @@ export type TemplatesContainerProps = Omit<
   | "addTemplate"
   | "cancelEditTemplate"
   | "deleteTemplate"
+  | "alert"
+  | "setAlert"
 >;
 const TemplatesContainer = ({ ...props }: TemplatesContainerProps) => {
   const { templatesId, pages, pagesId } = useSelector(
@@ -54,16 +58,18 @@ const TemplatesContainer = ({ ...props }: TemplatesContainerProps) => {
 
   return (
     <>
-      <Templates
-        {...props}
-        pages={pages}
-        pagesId={pagesId}
-        templates={templates}
-        templatesId={templatesId}
-        addTemplate={addTemplate}
-        cancelEditTemplate={cancelEditTemplate}
-        deleteTemplate={deleteTemplate}
-      />
+      {props.templateModal.target === "templates" && (
+        <TemplateModal
+          {...props}
+          pages={pages}
+          pagesId={pagesId}
+          templates={templates}
+          templatesId={templatesId}
+          addTemplate={addTemplate}
+          cancelEditTemplate={cancelEditTemplate}
+          deleteTemplate={deleteTemplate}
+        />
+      )}
     </>
   );
 };

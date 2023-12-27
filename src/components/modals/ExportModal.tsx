@@ -1,6 +1,5 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React from "react";
 import ModalPortal from "./ModalPortal";
-import { ModalType } from "../../types";
 import Export, { ExportProps } from "../Export";
 
 type ExportModalProps = ExportProps;
@@ -13,4 +12,4 @@ const ExportModal = ({ ...props }: ExportModalProps) => {
   );
 };
 
-export default ExportModal;
+export default React.memo(ExportModal);

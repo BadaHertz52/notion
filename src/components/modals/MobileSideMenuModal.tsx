@@ -7,17 +7,20 @@ import React, {
   useState,
 } from "react";
 import ModalPortal from "./ModalPortal";
-import { ModalType } from "../../types";
-import { INITIAL_MODAL } from "../../constants";
+import { ModalTargetType, ModalType } from "../../types";
+import { INITIAL_MODAL, SESSION_KEY } from "../../constants";
 import { CSSProperties } from "styled-components";
+import { FaArrowAltCircleDown } from "react-icons/fa";
 
 type MobileSideMenuModalProps = {
   sideMenuModal: ModalType;
   setSideMenuModal: Dispatch<SetStateAction<ModalType>>;
+  rightBtn?: ReactNode;
   children: ReactNode;
+  handleAlert?: () => boolean;
 };
 const MobileSideMenuModal = ({ ...props }: MobileSideMenuModalProps) => {
-  const { sideMenuModal, setSideMenuModal } = props;
+  const { sideMenuModal, setSideMenuModal, handleAlert } = props;
 
   const INITIAL_STYLE: CSSProperties = {
     transform: "translateY(110vh)",
@@ -35,6 +38,10 @@ const MobileSideMenuModal = ({ ...props }: MobileSideMenuModalProps) => {
         return "Turn into";
       case "linkLoader":
         return "Link";
+      case "allComments":
+        return "Comments";
+      case "templates":
+        return "Templates";
       default:
         return "Menu";
     }
@@ -47,16 +54,35 @@ const MobileSideMenuModal = ({ ...props }: MobileSideMenuModalProps) => {
     }, 1000);
   }, [setSideMenuModal, INITIAL_STYLE]);
 
-  const changeStyle = () => {
+  const handleCloseTemplates = useCallback(() => {
+    if (handleAlert && !handleAlert()) {
+      closeSideMenu();
+    }
+  }, [closeSideMenu, handleAlert]);
+
+  const handleClose = useCallback(() => {
+    sideMenuModal.target === "templates"
+      ? handleCloseTemplates()
+      : closeSideMenu();
+  }, [sideMenuModal.target, handleCloseTemplates, closeSideMenu]);
+
+  const changeStyle = useCallback(() => {
     if (style === INITIAL_STYLE) {
+      const FULL_MENU: ModalTargetType[] = ["allComments", "templates"];
+      const top =
+        sideMenuModal.target && FULL_MENU.includes(sideMenuModal.target)
+          ? "45px"
+          : "20vh";
       setStyle({
-        transform: "translateY(20vh)",
+        transform: `translateY(${top})`,
+        height: `calc( 100vh - ${top})`,
       });
     }
-  };
+  }, [INITIAL_STYLE, style, setStyle, sideMenuModal.target]);
+
   useEffect(() => {
-    sideMenuModal.open ? changeStyle() : closeSideMenu();
-  }, [sideMenuModal.open, closeSideMenu]);
+    sideMenuModal.open ? changeStyle() : handleClose();
+  }, [sideMenuModal.open, sideMenuModal.target, handleClose, changeStyle]);
 
   return (
     <ModalPortal
@@ -67,10 +93,16 @@ const MobileSideMenuModal = ({ ...props }: MobileSideMenuModalProps) => {
       <div id="mobile-side-menu">
         <div className="inner">
           <div className="top">
-            <div>{getTitle()}</div>
-            <button title="button to close" onClick={closeSideMenu}>
-              close
+            <button
+              className="btn-close"
+              title="button to close"
+              onClick={handleClose}
+            >
+              <FaArrowAltCircleDown />
             </button>
+            <div>{getTitle()}</div>
+
+            {props.rightBtn}
           </div>
           <div className="contents">
             <div className="contents__inner">{props.children}</div>

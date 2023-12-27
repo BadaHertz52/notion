@@ -26,7 +26,6 @@ import {
 import {
   findBlock,
   getContent,
-  isInTarget,
   isMobile,
   removeSelected,
   selectContent,
@@ -34,6 +33,7 @@ import {
 
 import "../../assets/blockStyler.scss";
 import { INITIAL_MODAL } from "../../constants";
+import { useModal } from "../../hooks";
 
 export type BlockStylerProps = MenuAndBlockStylerCommonProps & {
   pagesId: string[];
@@ -46,6 +46,18 @@ const BlockStyler = ({ ...props }: BlockStylerProps) => {
   const { page, block } = props;
 
   const [sideMenuModal, setSideMenuModal] = useState<ModalType>(INITIAL_MODAL);
+
+  const CORRECT_EVENT_TARGETS = [
+    "#block-styler",
+    `#${block.id}__contents`,
+    "#menu",
+    "#menu-command",
+    "#menu-color",
+    ".comment-input",
+    "#loader-link",
+    "#mobile-side-menu",
+  ];
+  const modalOpen = useModal(CORRECT_EVENT_TARGETS);
 
   type BlockFontWeightType = "bold" | "initial";
   type BlockFontStyleType = "italic" | "initial";
@@ -171,44 +183,19 @@ const BlockStyler = ({ ...props }: BlockStylerProps) => {
     [block, page, editBlock, removeOtherTextDeco]
   );
 
-  const isInBlockStyler = useCallback(
-    (event: globalThis.MouseEvent) => {
-      const target = [
-        "#block-styler",
-        `#${block.id}__contents`,
-        "#menu",
-        "#menu-command",
-        "#menu-color",
-        ".comment-input",
-        "#loader-link",
-        "#mobile-side-menu",
-      ];
-
-      return target.map((v) => isInTarget(event, v)).some((v) => v);
-    },
-    [block.id]
-  );
   const closeBlockStyler = useCallback(() => {
     const editedBlock = findBlock(page, block.id).BLOCK;
     removeSelected(editedBlock, editBlock, page);
     props.closeModal();
   }, [block, editBlock, page, props]);
 
-  const handleCloseBlockStyler = useCallback(
-    (event: globalThis.MouseEvent) => {
-      if (!isInBlockStyler(event)) {
-        sideMenuModal.open ? closeSideMenu() : closeBlockStyler();
-      }
-    },
-    [isInBlockStyler, sideMenuModal.open, closeBlockStyler]
-  );
+  const handleCloseBlockStyler = useCallback(() => {
+    sideMenuModal.open ? closeSideMenu() : closeBlockStyler();
+  }, [sideMenuModal.open, closeBlockStyler]);
 
   useEffect(() => {
-    document.addEventListener("click", handleCloseBlockStyler);
-    return () => {
-      document.removeEventListener("click", handleCloseBlockStyler);
-    };
-  }, [handleCloseBlockStyler]);
+    if (!modalOpen) handleCloseBlockStyler();
+  }, [modalOpen, handleCloseBlockStyler]);
 
   return (
     <>

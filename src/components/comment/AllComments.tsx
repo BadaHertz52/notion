@@ -43,17 +43,7 @@ const AllComments = ({ page, userName, setModal }: AllCommentsProps) => {
     <div id="all-comments" className="all-comments" ref={allCommentsRef}>
       <div className="all-comments__inner">
         <div className="all-comments__header">
-          <div>
-            {isMobile() && (
-              <button
-                title="close"
-                onClick={() => setModal((prev) => ({ ...prev, open: false }))}
-              >
-                <FaArrowAltCircleDown />
-              </button>
-            )}
-            <div>Comments</div>
-          </div>
+          <div>{!isMobile() && <div>Comments</div>}</div>
           <div className="all-comments__btn-group">
             <button
               className="btn-select"

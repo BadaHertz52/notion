@@ -328,13 +328,14 @@ document {
 }
 
 .btn-addBlockFile {
-  width: 100%;
+  width: 280px;
   padding: 12px;
   background-color: $pistachioshell;
   color: $itemText;
   cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: center;
   &:hover {
     background-color: $itemHover;
   }

@@ -276,44 +276,11 @@
   #templates {
     @include resetModalStyle;
     width: 100vw;
-    height: 100vh;
+    height: inherit;
     background-color: #ffff;
-    .templates__top-bar {
-      width: inherit;
-      height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0 24px;
-      border-bottom: 1px solid $mud;
-      &.on {
-        background-color: rgb(240, 240, 240);
-        border-bottom: none;
-        .templates__btn {
-          font-size: 24px;
-          font-weight: bolder;
-        }
-      }
-      .templates__btn {
-        opacity: 0.5;
-        &:hover {
-          opacity: 1;
-        }
-      }
-      .templates__btn-close {
-        position: absolute;
-        left: 16px;
-      }
-      .templates__btn-make,
-      .templates__btn-use-template {
-        position: absolute;
-        right: 16px;
-      }
-    }
     .templates__inner {
       display: block;
       width: inherit;
-      height: calc(100vh - 50px);
     }
   }
 

@@ -5,7 +5,6 @@ import React, {
   useEffect,
   useState,
   CSSProperties,
-  useContext,
 } from "react";
 
 import {
@@ -16,23 +15,16 @@ import {
   Rename,
   BlockStyler,
   MobileMenu,
-  Export,
 } from "../index";
+import { EditableBlockProps } from "../block/EditableBlock";
+import { BlockStylerProps } from "../blockMenu/BlockStyler";
 import { CommentInputProps } from "../comment/CommentInput";
 import { MenuProps } from "../menu/Menu";
 import { RenameProps } from "../Rename";
 
+import { useModal } from "../../hooks";
 import { ModalType, Page } from "../../types";
-import {
-  findPage,
-  getBlockDomRect,
-  isInTarget,
-  isMobile,
-  removeSelected,
-} from "../../utils";
-import { EditableBlockProps } from "../block/EditableBlock";
-import { BlockStylerProps } from "../blockMenu/BlockStyler";
-import ActionContext from "./../../contexts/ActionContext";
+import { findPage, getBlockDomRect, isMobile } from "../../utils";
 
 type ChildrenProps = MenuProps &
   RenameProps &
@@ -59,6 +51,23 @@ type FrameModalProps = Omit<
 
 const FrameModal = ({ ...props }: FrameModalProps) => {
   const { modal } = props;
+  const correctEventTargets = [
+    ".modal",
+    "#menu",
+    ".comments-bubble",
+    ".btn-comment",
+    ".comment__tool-more",
+    ".comment__btn-submit",
+    ".text_commentBtn",
+    "#mobile-menu",
+    "#mobile-side-menu",
+    ".comment-input",
+  ];
+
+  if (modal.target === "mobileMenu" && modal.block)
+    correctEventTargets.push(`#block-${modal.block.id}`);
+
+  const modalOpen = useModal(correctEventTargets);
 
   const ID = "modal-frame";
 
@@ -66,7 +75,6 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
     undefined
   );
 
-  //TODO - modal style
   const changeStyleOfModalOnBottomBlock = useCallback(() => {
     if (modal.block) {
       const blockDomRect = getBlockDomRect(modal.block);
@@ -171,48 +179,12 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
     frameEl?.classList.toggle("stop", modal.open);
   }, [modal.open]);
 
-  const isInModal = useCallback((event: globalThis.MouseEvent) => {
-    const target = [
-      ".modal",
-      "#menu",
-      ".comments-bubble",
-      ".btn-comment",
-      ".comment__tool-more",
-      ".comment__btn-submit",
-      ".text_commentBtn",
-      "#mobile-menu",
-      "#mobile-side-menu",
-      ".comment-input",
-    ];
-    return target.map((v) => !!isInTarget(event, v)).some((v) => v);
-  }, []);
-
-  const isOpenMobileMenu = useCallback(
-    (event: globalThis.MouseEvent) => {
-      if (modal.block) {
-        return (
-          isInTarget(event, `#block-${modal.block.id}`) &&
-          modal.target === "mobileMenu"
-        );
-      }
-    },
-    [modal.block, modal.target]
-  );
-
-  const handleCloseModal = useCallback(
-    (event: globalThis.MouseEvent) => {
-      //blockStyler는 sideMenu 문제로 blockStyler에서 다룸
-      if (
-        modal.open &&
-        modal.target !== "blockStyler" &&
-        !isInModal(event) &&
-        !isOpenMobileMenu(event)
-      ) {
-        props.closeModal();
-      }
-    },
-    [props, modal, isInModal, isOpenMobileMenu]
-  );
+  const handleCloseModal = useCallback(() => {
+    //blockStyler는 sideMenu 문제로 blockStyler에서 다룸
+    if (modal.open && modal.target !== "blockStyler") {
+      props.closeModal();
+    }
+  }, [props, modal]);
 
   useEffect(() => {
     changeModalStyle();
@@ -220,11 +192,11 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
 
   useEffect(() => {
     handleScrollOfFrame();
-    window.addEventListener("click", handleCloseModal);
-    return () => {
-      window.removeEventListener("click", handleCloseModal);
-    };
-  }, [handleCloseModal, handleScrollOfFrame]);
+  }, [handleScrollOfFrame]);
+
+  useEffect(() => {
+    if (!modalOpen) handleCloseModal();
+  }, [modalOpen, handleCloseModal]);
 
   return (
     <ModalPortal id={ID} isOpen={modal.open} style={modalStyle}>

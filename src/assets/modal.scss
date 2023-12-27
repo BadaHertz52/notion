@@ -62,6 +62,7 @@
   }
 }
 #modal-top-bar {
+  z-index: 10;
   & > .inner {
     width: 100vw;
     height: 100vh;

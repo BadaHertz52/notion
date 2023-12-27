@@ -1,7 +1,9 @@
-import React, { CSSProperties, useCallback, useEffect } from "react";
+import React, { CSSProperties, useEffect } from "react";
+
 import { ModalPortal, CommandMenu } from "../index";
+
 import { CommandMenuProp } from "../command/CommandMenu";
-import { isInTarget } from "../../utils";
+import { useModal } from "../../hooks";
 
 type CommandModalProps = Omit<CommandMenuProp, "setSelection"> & {
   openCommandMenu: boolean;
@@ -10,22 +12,12 @@ type CommandModalProps = Omit<CommandMenuProp, "setSelection"> & {
 };
 function CommandModal({ ...props }: CommandModalProps) {
   const { closeCommand } = props;
-
-  const handleClose = useCallback(
-    (event: globalThis.MouseEvent) => {
-      const array = ["#menu-command", "#commendInput"];
-      const isNotTarget = array
-        .map((v) => !isInTarget(event, v))
-        .every((v) => v);
-      if (isNotTarget) closeCommand();
-    },
-    [closeCommand]
-  );
+  const CORRECT_EVENT_TARGETS = ["#menu-command", "#commendInput"];
+  const openModal = useModal(CORRECT_EVENT_TARGETS);
 
   useEffect(() => {
-    window.addEventListener("click", handleClose);
-    return () => window.removeEventListener("click", handleClose);
-  }, [handleClose]);
+    if (!openModal) closeCommand();
+  }, [openModal, closeCommand]);
 
   return (
     <ModalPortal

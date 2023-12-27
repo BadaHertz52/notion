@@ -57,6 +57,7 @@ import MobileSideMenuModal from "./modals/MobileSideMenuModal";
 import ModalPortal from "./modals/ModalPortal";
 import MovingBlockModal from "./modals/MovingBlockModal";
 import SideBarModal from "./modals/SideBarModal";
+import TemplateModal from "./modals/TemplateModal";
 import TopBarModal from "./modals/TopBarModal";
 //notion
 import Notion from "./notion/Notion";
@@ -188,6 +189,7 @@ export {
   ModalPortal,
   MovingBlockModal,
   SideBarModal,
+  TemplateModal,
   TopBarModal,
   //--modal
   Editor,

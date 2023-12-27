@@ -1,14 +1,16 @@
 @import "./common";
 $topHeight: 48px;
-$contentHeight: calc(80vh - $topHeight);
+$contentHeight: calc(100% - $topHeight);
 #mobile-side-menu {
   @include modalStyle;
   width: 100vw;
+  height: inherit;
   position: relative;
   background-color: rgb(240, 240, 240);
   overflow: hidden;
   .inner {
     position: relative;
+    height: inherit;
   }
   .top {
     height: $topHeight;
@@ -26,8 +28,17 @@ $contentHeight: calc(80vh - $topHeight);
       position: absolute;
       height: 100%;
       top: 0;
-      right: 1rem;
       font-size: 1rem;
+      opacity: 0.5;
+      & :hover {
+        opacity: 1;
+      }
+    }
+    .btn-close {
+      left: 16px;
+    }
+    & > button:last-child {
+      right: 16px;
     }
   }
   .contents {
@@ -36,8 +47,9 @@ $contentHeight: calc(80vh - $topHeight);
   }
   .contents__inner,
   #block-styler__side-menu > .inner {
-    height: calc($contentHeight - 110px);
-    max-height: calc($contentHeight - 110px);
+    height: calc(100%);
+    max-height: calc(100%);
+    padding-bottom: 10px;
   }
   #menu-command,
   #page-meu,

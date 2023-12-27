@@ -1,18 +1,27 @@
 import React, {
   CSSProperties,
+  Dispatch,
+  SetStateAction,
   useCallback,
   useEffect,
   useMemo,
   useState,
 } from "react";
 
-import { ModalPortal, AllComments, TopBarToolMore, PageMenu } from "../index";
+import {
+  ModalPortal,
+  AllComments,
+  TopBarToolMore,
+  PageMenu,
+  MobileSideMenuModal,
+} from "../index";
 import { AllCommentsProps } from "../comment/AllComments";
 import { TopBarToolMoreProps } from "../topBar/TopBarToolMore";
 
 import { ModalType } from "../../types";
-import { isInTarget, isMobile } from "../../utils";
+import { isMobile } from "../../utils";
 import { PageMenuProps } from "../pageMenu/PageMenu";
+import { useModal } from "../../hooks";
 
 type TopBarModalProps = AllCommentsProps &
   Omit<PageMenuProps, "what" | "currentPage"> &
@@ -24,7 +33,15 @@ type TopBarModalProps = AllCommentsProps &
 const TopBarModal = ({ ...props }: TopBarModalProps) => {
   const { modal, closeModal } = props;
   const [style, setStyle] = useState<CSSProperties | undefined>(undefined);
-
+  const CORRECT_EVENT_TARGETS = [
+    "#btn-all-comments",
+    ".btn-page-tool-more",
+    "#top-bar__tool",
+    "#all-comments",
+    "#page-meu",
+    "#top-bar__tool-more",
+  ];
+  const modalOpen = useModal(CORRECT_EVENT_TARGETS);
   const INITIAL_ALL_COMMENTS_STYLE: CSSProperties = useMemo(
     () =>
       isMobile()
@@ -85,37 +102,21 @@ const TopBarModal = ({ ...props }: TopBarModalProps) => {
   const closeAllComments = useCallback(() => {
     setStyle(INITIAL_ALL_COMMENTS_STYLE);
     setTimeout(() => {
-      console.log("close");
       closeModal();
     }, 2500);
   }, [setStyle, closeModal, INITIAL_ALL_COMMENTS_STYLE]);
 
-  const handleClose = useCallback(
-    (event: globalThis.MouseEvent) => {
-      const TARGET = [
-        "#all-commentsBtn",
-        ".btn-page-tool-more",
-        "#top-bar__tool",
-        "#all-comments",
-        "#page-meu",
-        "#top-bar__tool-more",
-      ];
-
-      if (!TARGET.map((v) => isInTarget(event, v)).some((v) => v)) {
-        modal.target === "allComments" ? closeAllComments() : closeModal();
-      }
-    },
-    [modal.target, closeAllComments, closeModal]
-  );
+  const handleClose = useCallback(() => {
+    modal.target === "allComments" ? closeAllComments() : closeModal();
+  }, [modal.target, closeAllComments, closeModal]);
 
   useEffect(() => {
-    document.addEventListener("click", handleClose);
     if (!style) changeStyle();
+  }, [changeStyle, style]);
 
-    return () => {
-      document.removeEventListener("click", handleClose);
-    };
-  }, [handleClose, changeStyle, style]);
+  useEffect(() => {
+    if (!modalOpen) handleClose();
+  }, [modalOpen, handleClose]);
 
   useEffect(() => {
     if (!modal.open && modal.target === "allComments") closeAllComments();
@@ -123,7 +124,18 @@ const TopBarModal = ({ ...props }: TopBarModalProps) => {
 
   return (
     <ModalPortal isOpen={!!modal.target} id="modal-top-bar" style={style}>
-      {modal.target === "allComments" && style && <AllComments {...props} />}
+      {modal.target === "allComments" &&
+        style &&
+        (isMobile() ? (
+          <MobileSideMenuModal
+            sideMenuModal={modal}
+            setSideMenuModal={props.setModal}
+          >
+            <AllComments {...props} />
+          </MobileSideMenuModal>
+        ) : (
+          <AllComments {...props} />
+        ))}
       {modal.target === "topBarToolMore" && style && (
         <TopBarToolMore {...props} />
       )}

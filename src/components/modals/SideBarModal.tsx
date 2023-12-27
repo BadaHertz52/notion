@@ -30,8 +30,9 @@ import {
   UserState,
   TrashType,
 } from "../../types";
-import { findPage, isInTarget } from "../../utils";
+import { findPage } from "../../utils";
 import { ActionContext } from "../../contexts";
+import { useModal } from "../../hooks";
 
 type SideBarModalProps = {
   user: UserState;
@@ -48,6 +49,15 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
   const { cleanRecentPage } = useContext(ActionContext).actions;
 
   const { sideModal, setSideModal, pages, pagesId } = props;
+  const CORRECT_EVENT_TARGETS = [
+    "#modal-sideBar__menu",
+    ".page-list__item__btn-group",
+    "#sideBar__moreFn",
+    "#btn-open-quickFindBoard",
+    ".btn-trash",
+  ];
+
+  const modalOpen = useModal(CORRECT_EVENT_TARGETS);
 
   const touchResizeBar = useRef<boolean>(false);
   const [modalStyle, setModalStyle] = useState<CSSProperties | undefined>(
@@ -191,34 +201,13 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
     changeCenterModalStyle,
   ]);
 
-  const handleCloseModal = useCallback(
-    (event: globalThis.MouseEvent) => {
-      const NOT_TARGET_ARRAY = [
-        "#modal-sideBar__menu",
-        ".page-list__item__btn-group",
-        "#sideBar__moreFn",
-        "#btn-open-quickFindBoard",
-        ".btn-trash",
-      ];
-
-      const isClose = NOT_TARGET_ARRAY.map((v) => isInTarget(event, v)).every(
-        (v) => !v
-      );
-
-      if (isClose) closeModal();
-    },
-    [closeModal]
-  );
-
   useEffect(() => {
     changeStyle();
   }, [changeStyle]);
 
   useEffect(() => {
-    sideModal.open
-      ? document.addEventListener("click", handleCloseModal)
-      : document.removeEventListener("click", handleCloseModal);
-  }, [handleCloseModal, sideModal.open]);
+    if (!modalOpen) closeModal();
+  }, [modalOpen, closeModal]);
 
   return (
     <ModalPortal
