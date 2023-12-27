@@ -36,6 +36,7 @@ export type FrameProps = TemplateFrameCommonProps & {
   pagesId: string[];
   page: Page;
   isExport?: boolean;
+  isOpenTemplate: boolean;
   openTemplates?: () => void;
 };
 /**
@@ -45,7 +46,7 @@ export type FrameProps = TemplateFrameCommonProps & {
  */
 
 const Frame = ({ ...props }: FrameProps) => {
-  const { page, fontStyle, smallText, fullWidth } = props;
+  const { page, fontStyle, smallText, fullWidth, isOpenTemplate } = props;
   const sideAppear = useSelector((state: RootState) => state.side.appear);
   const { editPage, editBlock } = useContext(ActionContext).actions;
   const innerWidth = window.innerWidth;
@@ -70,7 +71,7 @@ const Frame = ({ ...props }: FrameProps) => {
   const [movingTargetBlock, setMovingTargetBlock] = useState<Block | null>(
     null
   );
-
+  const hideQuickMenu = isOpenTemplate ? page.type !== "template" : false;
   const scrollbarWidth = 10;
   const sideBarEl = document.querySelector(".sideBar");
   const sideBarWidth =
@@ -244,20 +245,22 @@ const Frame = ({ ...props }: FrameProps) => {
           frameInnerStyle={frameInnerStyle}
           closeModal={closeModal}
         />
-        <ModalPortal
-          id="modal-block-quick-menu"
-          isOpen={blockQuickMenuModal.open}
-        >
-          {blockQuickMenuModal.block && (
-            <BlockQuickMenu
-              page={page}
-              block={blockQuickMenuModal.block}
-              movingTargetBlock={movingTargetBlock}
-              setMovingTargetBlock={setMovingTargetBlock}
-              modal={modal}
-            />
-          )}
-        </ModalPortal>
+        {!hideQuickMenu && (
+          <ModalPortal
+            id="modal-block-quick-menu"
+            isOpen={blockQuickMenuModal.open}
+          >
+            {blockQuickMenuModal.block && (
+              <BlockQuickMenu
+                page={page}
+                block={blockQuickMenuModal.block}
+                movingTargetBlock={movingTargetBlock}
+                setMovingTargetBlock={setMovingTargetBlock}
+                modal={modal}
+              />
+            )}
+          </ModalPortal>
+        )}
         {modal.open && (
           <FameModal
             {...props}

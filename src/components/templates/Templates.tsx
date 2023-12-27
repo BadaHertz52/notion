@@ -1,28 +1,7 @@
-import React, {
-  useRef,
-  useState,
-  useCallback,
-  useContext,
-  useEffect,
-  Dispatch,
-  SetStateAction,
-} from "react";
+import React, { useRef, useState, Dispatch, SetStateAction } from "react";
 
-import { FaArrowAltCircleDown, FaPlus } from "react-icons/fa";
-import { IoClose } from "react-icons/io5";
-import { IoMdCheckmark } from "react-icons/io";
+import { Template, TemplateSide, TemplateAlert } from "../index";
 
-import {
-  Template,
-  TemplateSide,
-  TemplateAlert,
-  ScreenOnly,
-  UseTemplateBtn,
-  NewTemplateBtn,
-} from "../index";
-
-import { SESSION_KEY } from "../../constants";
-import { ActionContext } from "../../contexts";
 import {
   ListItem,
   Page,
@@ -30,12 +9,7 @@ import {
   TrashPage,
   UserState,
 } from "../../types";
-import {
-  getEditTime,
-  getNewPageId,
-  isMobile,
-  getPageSample,
-} from "../../utils";
+import { isMobile } from "../../utils";
 
 import "../../assets/templates.scss";
 
@@ -75,6 +49,7 @@ const Templates = ({ ...props }: TemplatesProps) => {
             expand={expand}
             setExpand={setExpand}
             template={template}
+            isOpenTemplate={true}
           />
         )}
         {(!isMobile() || (isMobile() && !template)) && (

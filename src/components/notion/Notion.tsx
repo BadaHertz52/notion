@@ -89,6 +89,7 @@ const Notion = ({ ...props }: NotionProps) => {
           fontStyle={fontStyle}
           setFontStyle={setFontStyle}
           openTemplates={openTemplates}
+          isOpenTemplate={templateModal.open}
         />
         {props.currentPage?.id && (
           <TemplatesContainer

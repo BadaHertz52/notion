@@ -32,10 +32,12 @@
   }
 }
 #modal-block-quick-menu {
+  z-index: 15;
+}
+#modal-template {
   z-index: 10;
 }
-#modal-sideBar,
-#modal-frame {
+#modal-sideBar {
   z-index: 20;
 }
 
@@ -72,9 +74,7 @@
   width: max-content;
   transition: right 2500ms ease;
 }
-#modal-template {
-  z-index: 30;
-}
+
 #modal-template__menu {
   display: flex;
   justify-content: center;

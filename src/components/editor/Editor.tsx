@@ -42,6 +42,7 @@ export type EditorProps = {
   fontStyle: FontStyle;
   setFontStyle: Dispatch<SetStateAction<FontStyle>>;
   openTemplates: () => void;
+  isOpenTemplate: boolean;
 };
 
 const Editor = ({ ...props }: EditorProps) => {
