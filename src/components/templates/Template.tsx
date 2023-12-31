@@ -1,4 +1,10 @@
-import React, { Dispatch, SetStateAction, useCallback, useEffect } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 
 import PageIcon from "../icon/PageIcon";
 import { AiOutlineExpandAlt, AiOutlineShrink } from "react-icons/ai";
@@ -8,7 +14,6 @@ import { Frame } from "../index";
 import { FrameProps } from "../frame/Frame";
 
 import { ListItem, Page } from "../../types";
-import { SESSION_KEY } from "../../constants";
 
 export type TemplateProps = Omit<
   FrameProps,
@@ -19,26 +24,36 @@ export type TemplateProps = Omit<
   firstList: ListItem[] | null;
   expand: boolean;
   setExpand: Dispatch<SetStateAction<boolean>>;
-  template: Page | null;
+  templateId: string | null;
   setAlert: Dispatch<SetStateAction<"edit" | "delete" | undefined>>;
 };
 
 const Template = ({ ...props }: TemplateProps) => {
-  const { expand, template, setExpand, pages, pagesId, firstList, setAlert } =
+  const { expand, templateId, setExpand, pages, pagesId, firstList, setAlert } =
     props;
+
+  const getPage = () => {
+    if (pagesId && templateId && pages) {
+      const index = pagesId.indexOf(templateId);
+
+      return pages[index];
+    }
+  };
+
+  const page = getPage();
 
   return (
     <div id="template" className={expand ? "expand" : ""}>
-      {template && pages && pagesId && firstList ? (
+      {page && pages && pagesId && firstList ? (
         <>
           <div className="template__topBar">
             <div className="template__inform">
               <PageIcon
-                icon={template.header.icon}
-                iconType={template.header.iconType}
+                icon={page.header.icon}
+                iconType={page.header.iconType}
               />
               <div className="page__title">
-                <span>{template.header.title}</span>
+                <span>{page.header.title}</span>
               </div>
             </div>
             <div className="template__tool">
@@ -74,7 +89,7 @@ const Template = ({ ...props }: TemplateProps) => {
           </div>
           <Frame
             {...props}
-            page={template}
+            page={page}
             pages={pages}
             pagesId={pagesId}
             firstList={firstList}

@@ -23,8 +23,8 @@ export type TemplatesProps = TemplateFrameCommonProps & {
   routePageId: string; // 현재 page
   alert: "edit" | "delete" | undefined;
   setAlert: Dispatch<SetStateAction<"edit" | "delete" | undefined>>;
-  template: Page | null;
-  setTemplate: Dispatch<SetStateAction<Page | null>>;
+  templateId: string | null;
+  setTemplateId: Dispatch<SetStateAction<string | null>>;
   addTemplate: (template: Page) => void;
   cancelEditTemplate: (templateId: string) => void;
   deleteTemplate: (templateId: string) => void;
@@ -34,8 +34,8 @@ export type TemplatesProps = TemplateFrameCommonProps & {
 };
 
 const Templates = ({ ...props }: TemplatesProps) => {
-  const { template, setTemplate } = props;
-
+  const { templateId } = props;
+  // template side에서 클릭된 template
   const openTarget = useRef<Page | null>(null);
 
   const [expand, setExpand] = useState<boolean>(false);
@@ -43,29 +43,23 @@ const Templates = ({ ...props }: TemplatesProps) => {
   return (
     <div id="templates">
       <div className="inner templates__inner">
-        {((isMobile() && template) || !isMobile()) && (
+        {((isMobile() && templateId) || !isMobile()) && (
           <Template
             {...props}
             expand={expand}
             setExpand={setExpand}
-            template={template}
+            templateId={templateId}
             isOpenTemplate={true}
           />
         )}
-        {(!isMobile() || (isMobile() && !template)) && (
-          <TemplateSide
-            {...props}
-            expand={expand}
-            setTemplate={setTemplate}
-            openTarget={openTarget}
-          />
+        {(!isMobile() || (isMobile() && !templateId)) && (
+          <TemplateSide {...props} expand={expand} openTarget={openTarget} />
         )}
       </div>
       {props.alert && (
         <TemplateAlert
           {...props}
-          template={template}
-          setTemplate={setTemplate}
+          templateId={templateId}
           openTarget={openTarget}
         />
       )}

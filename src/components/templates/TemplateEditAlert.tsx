@@ -9,16 +9,16 @@ import { Page } from "../../types";
 import { isMobile } from "../../utils";
 
 export type TemplateEditAlertProps = {
-  template: Page | null;
-  setTemplate: Dispatch<SetStateAction<Page | null>>;
+  templateId: string | null;
+  setTemplateId: Dispatch<SetStateAction<string | null>>;
   openTarget: MutableRefObject<Page | null>;
   setAlert: Dispatch<SetStateAction<"edit" | "delete" | undefined>>;
   closeTemplates: () => void;
   cancelEditTemplate: (templateId: string) => void;
 };
 const TemplateEditAlert = ({
-  template,
-  setTemplate,
+  templateId,
+  setTemplateId,
   setAlert,
   closeTemplates,
   openTarget,
@@ -29,8 +29,10 @@ const TemplateEditAlert = ({
    */
   const closeAlertOpenOther = useCallback(() => {
     setAlert(undefined);
-    setTemplate(openTarget.current);
-  }, []);
+    if (openTarget.current) {
+      setTemplateId(openTarget.current.id);
+    }
+  }, [setTemplateId, setAlert, openTarget]);
 
   /**
    * editAlert에서 수정 사항을 취소하거나 저장한 후에, openTarget.current의 값에 따라 templates창을 닫거나, 다른 template을 연다.
@@ -43,14 +45,12 @@ const TemplateEditAlert = ({
   }, [closeTemplates, closeAlertOpenOther, openTarget]);
 
   const onClickDiscardBtn = useCallback(() => {
-    if (template) {
-      const item = sessionStorage.getItem(SESSION_KEY.originTemplate);
-      if (item) {
-        cancelEditTemplate(template.id);
-        afterTemplateEditAlert();
-      }
+    const item = sessionStorage.getItem(SESSION_KEY.originTemplate);
+    if (item) {
+      if (templateId) cancelEditTemplate(templateId);
+      afterTemplateEditAlert();
     }
-  }, [template, cancelEditTemplate, afterTemplateEditAlert]);
+  }, [templateId, cancelEditTemplate, afterTemplateEditAlert]);
 
   return (
     <>

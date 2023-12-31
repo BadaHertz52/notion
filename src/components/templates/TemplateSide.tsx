@@ -13,7 +13,7 @@ import { Page, TrashPage } from "../../types";
 
 type TemplateSideProps = {
   expand: boolean;
-  setTemplate: Dispatch<SetStateAction<Page | null>>;
+  setTemplateId: Dispatch<SetStateAction<string | null>>;
   templates: (Page | TrashPage)[] | null;
   templatesId: string[] | null;
   openTarget: MutableRefObject<Page | null>;
@@ -25,7 +25,7 @@ type TemplateSideProps = {
 
 const TemplateSide = ({
   expand,
-  setTemplate,
+  setTemplateId,
   templates,
   openTarget,
   setAlert,
@@ -37,12 +37,12 @@ const TemplateSide = ({
       const item = sessionStorage.getItem(SESSION_KEY.originTemplate);
       openTarget.current = otherTemplate;
       if (!item) {
-        setTemplate(otherTemplate);
+        setTemplateId(otherTemplate.id);
       } else {
         setAlert("edit");
       }
     },
-    [openTarget, setAlert, setTemplate]
+    [openTarget, setAlert, setTemplateId]
   );
 
   return (

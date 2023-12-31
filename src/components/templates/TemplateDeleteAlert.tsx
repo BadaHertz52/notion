@@ -1,48 +1,41 @@
 import React, { Dispatch, SetStateAction, useCallback } from "react";
-import { Page, TrashPage } from "../../types";
 
 export type TemplateDeleteAlertProps = {
   templatesId: string[] | null;
-  templates: (Page | TrashPage)[] | null;
-  template: Page | null;
-  setTemplate: Dispatch<SetStateAction<Page | null>>;
+  templateId: string | null;
+  setTemplateId: Dispatch<SetStateAction<string | null>>;
   setAlert: Dispatch<SetStateAction<"edit" | "delete" | undefined>>;
   closeTemplates: () => void;
   deleteTemplate: (templateId: string) => void;
 };
 
 const TemplateDeleteAlert = ({
-  templates,
   templatesId,
-  template,
-  setTemplate,
+  templateId,
+  setTemplateId,
   setAlert,
   closeTemplates,
   deleteTemplate,
 }: TemplateDeleteAlertProps) => {
   const onClickDeleteTemplateBtn = useCallback(() => {
-    if (template && templatesId && templates) {
-      const index = templatesId?.indexOf(template.id);
-      if (templatesId.length > 1) {
-        if (index === 0) {
-          const nextTemplate = templates[1];
-          setTemplate(nextTemplate);
-        } else {
-          setTemplate(templates[0]);
-        }
+    if (templateId) {
+      const index = templatesId?.indexOf(templateId);
+      if (templatesId && templateId.length > 1) {
+        index === 0
+          ? setTemplateId(templatesId[1])
+          : setTemplateId(templatesId[0]);
       } else {
         closeTemplates();
       }
-      deleteTemplate(template.id);
+      deleteTemplate(templateId);
     }
     setAlert(undefined);
   }, [
     deleteTemplate,
     closeTemplates,
     setAlert,
-    setTemplate,
-    template,
-    templates,
+    setTemplateId,
+    templateId,
     templatesId,
   ]);
 

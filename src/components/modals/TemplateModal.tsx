@@ -18,6 +18,7 @@ import {
   getNewPageId,
   isMobile,
   getPageSample,
+  findPage,
 } from "../../utils";
 import MobileSideMenuModal from "./MobileSideMenuModal";
 import Templates, { TemplatesProps } from "../templates/Templates";
@@ -32,8 +33,8 @@ export type TemplateModalProps = Omit<
   TemplatesProps,
   | "alert"
   | "setAlert"
-  | "template"
-  | "setTemplate"
+  | "templateId"
+  | "setTemplateId"
   | "onClickUseBtn"
   | "onClickMakeTemplateBtn"
 > & {
@@ -43,31 +44,49 @@ export type TemplateModalProps = Omit<
 };
 
 const TemplateModal = ({ ...props }: TemplateModalProps) => {
-  const { closeTemplates, templateModal, templatesId, addTemplate } = props;
+  const {
+    closeTemplates,
+    templateModal,
+    templatesId,
+    addTemplate,
+    pages,
+    pagesId,
+  } = props;
   const { addPage, editPage } = useContext(ActionContext).actions;
 
   const CORRECT_EVENT_TARGETS = [
-    "#templates",
+    "#template",
     "#template-alert",
     ".btn-open-templates",
     ".templates__side__list",
     ".templates__btn",
+    ".page__icon",
+    ".deco__btn",
+    ".btn-change-cover",
+    "#icon-menu",
+    ".loader-img",
+    "#modal-block-quick-menu",
+    "#modal-frame__menu",
   ];
   const modalOpen = useModal(CORRECT_EVENT_TARGETS);
   const [alert, setAlert] = useState<"edit" | "delete" | undefined>(undefined);
-  const [template, setTemplate] = useState<Page | null>(
-    !props.templates || isMobile() ? null : props.templates[0]
+  const [templateId, setTemplateId] = useState<string | null>(
+    !props.templatesId || isMobile() ? null : props.templatesId[0]
   );
 
   const onClickUseBtn = useCallback(() => {
     const editTime = getEditTime();
     const targetPageId = sessionStorage.getItem(SESSION_KEY.targetPageId);
-    if (template) {
+
+    if (pagesId && pages && templateId) {
+      const template = findPage(pagesId, pages, templateId);
+
       const newPage: Page = {
         ...template,
         id: getNewPageId(),
       };
-      if (targetPageId === null) {
+
+      if (!targetPageId) {
         addPage(newPage);
       } else {
         const editedPage: Page = {
@@ -75,19 +94,20 @@ const TemplateModal = ({ ...props }: TemplateModalProps) => {
           id: targetPageId,
           editTime: editTime,
         };
+
         sessionStorage.removeItem(SESSION_KEY.targetPageId);
         editPage(targetPageId, editedPage);
       }
       closeTemplates();
     }
-  }, [addPage, editPage, template, closeTemplates]);
+  }, [addPage, editPage, templateId, pages, pagesId, closeTemplates]);
 
   const onClickMakeTemplateBtn = useCallback(() => {
     const editTime = getEditTime();
-    const id =
-      templatesId === null
-        ? `template1_${editTime}`
-        : `template${templatesId.length + 1}_${editTime}`;
+    const id = !templatesId
+      ? `template1_${editTime}`
+      : `template${templatesId.length + 1}_${editTime}`;
+
     const newTemplate: Page = {
       ...getPageSample(),
       id: id,
@@ -129,7 +149,7 @@ const TemplateModal = ({ ...props }: TemplateModalProps) => {
           sideMenuModal={props.templateModal}
           handleAlert={handleAlert}
           rightBtn={
-            template ? (
+            templateId ? (
               <UseTemplateBtn onClickUseBtn={onClickUseBtn}>
                 <IoMdCheckmark />
               </UseTemplateBtn>
@@ -147,8 +167,8 @@ const TemplateModal = ({ ...props }: TemplateModalProps) => {
               closeTemplates={closeTemplates}
               alert={alert}
               setAlert={setAlert}
-              template={template}
-              setTemplate={setTemplate}
+              templateId={templateId}
+              setTemplateId={setTemplateId}
               onClickUseBtn={onClickUseBtn}
               onClickMakeTemplateBtn={onClickMakeTemplateBtn}
             />
@@ -162,8 +182,8 @@ const TemplateModal = ({ ...props }: TemplateModalProps) => {
               closeTemplates={closeTemplates}
               alert={alert}
               setAlert={setAlert}
-              template={template}
-              setTemplate={setTemplate}
+              templateId={templateId}
+              setTemplateId={setTemplateId}
               onClickUseBtn={onClickUseBtn}
               onClickMakeTemplateBtn={onClickMakeTemplateBtn}
             />
