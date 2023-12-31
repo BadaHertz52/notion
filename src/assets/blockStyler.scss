@@ -4,6 +4,7 @@
   @include modalStyle;
   border-radius: 5px;
   width: fit-content;
+  max-width: inherit;
   overflow-x: scroll;
   .inner {
     position: relative;

@@ -53,16 +53,19 @@ export const changeModalStyleOnTopOfBlock = (
 
     if (domeRect && topBarBottom) {
       const top = domeRect.top - GAP - STYLER_HEIGHT;
+      const maxWidth = pageContentsElDomRect.width - 10;
       const isOverlap = top <= topBarBottom;
       const bottomStyle: CSSProperties = {
         position: "absolute",
         bottom: -domeRect.bottom - GAP - STYLER_HEIGHT,
         left: pageContentsElDomRect.left,
+        maxWidth: maxWidth,
       };
       const topStyle: CSSProperties = {
         position: "absolute",
         top: top,
         left: pageContentsElDomRect.left,
+        maxWidth: maxWidth,
       };
 
       if (isMobile() || isOverlap) {

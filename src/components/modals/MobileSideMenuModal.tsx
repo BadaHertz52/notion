@@ -4,6 +4,7 @@ import React, {
   SetStateAction,
   useCallback,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import ModalPortal from "./ModalPortal";
@@ -21,6 +22,8 @@ type MobileSideMenuModalProps = {
 };
 const MobileSideMenuModal = ({ ...props }: MobileSideMenuModalProps) => {
   const { sideMenuModal, setSideMenuModal, handleAlert } = props;
+
+  const topRef = useRef<HTMLDivElement>(null);
 
   const INITIAL_STYLE: CSSProperties = {
     transform: "translateY(110vh)",
@@ -82,6 +85,11 @@ const MobileSideMenuModal = ({ ...props }: MobileSideMenuModalProps) => {
 
   useEffect(() => {
     sideMenuModal.open ? changeStyle() : handleClose();
+
+    topRef.current?.classList.toggle(
+      "bg",
+      sideMenuModal.target === "allComments"
+    );
   }, [sideMenuModal.open, sideMenuModal.target, handleClose, changeStyle]);
 
   return (
@@ -92,7 +100,7 @@ const MobileSideMenuModal = ({ ...props }: MobileSideMenuModalProps) => {
     >
       <div id="mobile-side-menu">
         <div className="inner">
-          <div className="top">
+          <div ref={topRef} className="top">
             <button
               className="btn-close"
               title="button to close"

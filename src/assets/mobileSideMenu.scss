@@ -17,6 +17,9 @@ $contentHeight: calc(100% - $topHeight);
     background-color: #ffff;
     text-align: center;
     position: relative;
+    &.bg {
+      background-color: rgb(240, 240, 240);
+    }
     & > div {
       height: 100%;
       line-height: $topHeight;
@@ -64,7 +67,9 @@ $contentHeight: calc(100% - $topHeight);
 
     box-sizing: border-box;
   }
-
+  #menu-command {
+    height: calc(100% - 100px);
+  }
   #menu-color section > header {
     margin-bottom: 10px;
   }

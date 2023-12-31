@@ -81,13 +81,13 @@
   align-items: center;
 }
 #modal-frame__menu,
-#modal-block-style__menu {
+#modal-block-styler__menu {
   .comment-input {
     @include modalStyle;
     flex-direction: row;
     padding: 16px 14px;
     height: max-content;
-    width: 80%;
+    max-width: inherit;
   }
 }
 @media screen and (max-width: 768px) {
