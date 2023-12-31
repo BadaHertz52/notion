@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/notion/static/css/main.b86868ea.css",
-    "main.js": "/notion/static/js/main.618ff528.js",
+    "main.css": "/notion/static/css/main.1b93f061.css",
+    "main.js": "/notion/static/js/main.f1ce41ff.js",
     "static/media/emoji_sprite.png": "/notion/static/media/emoji_sprite.d93f4200cf4280ce3711.png",
     "static/media/vincent-van-gogh-ge1323790d_640.webp": "/notion/static/media/vincent-van-gogh-ge1323790d_640.42ee0a376c5f73cef0e3.webp",
     "static/media/default.jpeg": "/notion/static/media/default.57b9d713e0831a260edb.jpeg",
     "index.html": "/notion/index.html",
     "static/media/transparent.webp": "/notion/static/media/transparent.21f2186739b956eb4395.webp",
-    "main.b86868ea.css.map": "/notion/static/css/main.b86868ea.css.map",
-    "main.618ff528.js.map": "/notion/static/js/main.618ff528.js.map"
+    "main.1b93f061.css.map": "/notion/static/css/main.1b93f061.css.map",
+    "main.f1ce41ff.js.map": "/notion/static/js/main.f1ce41ff.js.map"
   },
   "entrypoints": [
-    "static/css/main.b86868ea.css",
-    "static/js/main.618ff528.js"
+    "static/css/main.1b93f061.css",
+    "static/js/main.f1ce41ff.js"
   ]
 }
