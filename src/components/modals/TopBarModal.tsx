@@ -41,7 +41,7 @@ const TopBarModal = ({ ...props }: TopBarModalProps) => {
     "#page-meu",
     "#top-bar__tool-more",
   ];
-  const modalOpen = useModal(CORRECT_EVENT_TARGETS, "topBar");
+  const modalOpen = useModal(CORRECT_EVENT_TARGETS, "top-bar");
   const INITIAL_ALL_COMMENTS_STYLE: CSSProperties = useMemo(
     () =>
       isMobile()
@@ -115,8 +115,8 @@ const TopBarModal = ({ ...props }: TopBarModalProps) => {
   }, [changeStyle, style]);
 
   useEffect(() => {
-    if (modalOpen.topBar === false) handleClose();
-  }, [modalOpen.topBar, handleClose]);
+    if (modalOpen["top-bar"] === false) handleClose();
+  }, [modalOpen, handleClose]);
 
   useEffect(() => {
     if (!modal.open && modal.target === "allComments") closeAllComments();

@@ -68,6 +68,7 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
     ".text_commentBtn",
     "#mobile-menu",
     "#mobile-side-menu",
+    "#modal-mobile-side-menu",
     ".comment-input",
   ];
 
@@ -148,6 +149,7 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
 
   const handleCloseModal = useCallback(() => {
     //blockStyler는 sideMenu 문제로 blockStyler에서 다룸
+
     if (modal.open && modal.target !== "blockStyler") {
       props.closeModal();
     }

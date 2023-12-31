@@ -3,6 +3,8 @@ import { isInTarget } from "../utils";
 
 /**
  *  correctEventTargets :모달 창이 닫히지 않는 클릭 이벤트 타켓
+ * @param correctEventTargets :  클릭 시, 모달 창을 닫지 않는 티켓들
+ * @param modalName: ModalPortal의 props인 id에서 "modal-" 다음에 위치하는 이름
  */
 const useModal = (correctEventTargets: string[], modalName: string) => {
   const [modalOpen, setModalOpen] = useState<boolean>(true);
