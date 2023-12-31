@@ -1,6 +1,5 @@
 import React, {
   Dispatch,
-  MouseEvent,
   SetStateAction,
   TouchEvent,
   useRef,

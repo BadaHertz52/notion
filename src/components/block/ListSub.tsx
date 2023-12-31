@@ -1,16 +1,7 @@
-import React, { MouseEvent, TouchEvent } from "react";
+import React from "react";
 
-import { CSSProperties } from "styled-components";
-import { GoPrimitiveDot } from "react-icons/go";
-
-import { BlockContentsProps } from "./BlockContents";
 import { EditableBlockProps } from "./EditableBlock";
-import {
-  BlockContents,
-  BlockComment,
-  EditableBlock,
-  MainBlock,
-} from "../index";
+import { EditableBlock, MainBlock } from "../index";
 
 import { Block } from "../../types";
 import { findBlock } from "../../utils";
