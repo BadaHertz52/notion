@@ -19,10 +19,10 @@ const BlockStylerSideMenu = ({ ...props }: BlockStylerSideMenuProps) => {
       setStyle({ position: "absolute", left: 0, top: 0 });
       return;
     }
-    const frameModalEl = document.querySelector(
-      "#modal-frame__menu"
+    const blockStylerModalEl = document.querySelector(
+      "#modal-block-styler__menu"
     ) as HTMLElement | null;
-    const style = frameModalEl?.style;
+    const style = blockStylerModalEl?.style;
     const topBarBottom = document.querySelector("#top-bar")?.clientHeight;
 
     if (style && topBarBottom) {

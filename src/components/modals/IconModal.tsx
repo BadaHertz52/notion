@@ -45,7 +45,7 @@ const IconModal = ({
   const EMOJI = "emoji";
   const IMAGE = "image";
   const CORRECT_EVENT_TARGETS = ["#icon-menu", ".page__icon"];
-  const modalOpen = useModal(CORRECT_EVENT_TARGETS);
+  const modalOpen = useModal(CORRECT_EVENT_TARGETS, "icon");
 
   type Category = typeof EMOJI | typeof IMAGE;
   const [category, setCategory] = useState<Category>(EMOJI);
@@ -113,8 +113,8 @@ const IconModal = ({
   );
 
   useEffect(() => {
-    if (!modalOpen) closeIconModal();
-  }, [modalOpen, closeIconModal]);
+    if (modalOpen.icon === false) closeIconModal();
+  }, [modalOpen.icon, closeIconModal]);
 
   return (
     <ModalPortal isOpen={isOpen} id="modal-icon" style={style}>

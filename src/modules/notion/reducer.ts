@@ -1915,7 +1915,6 @@ export default function notion(
           }
         };
         restorePage(SESSION_KEY.originTemplate);
-        //restorePage(SESSION_KEY.originMoveTargetPage);
         return {
           pages: pages,
           firstPagesId: firstPagesId,

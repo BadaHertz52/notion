@@ -261,7 +261,7 @@ const SideBar = ({
           </div>
         </div>
       </div>
-      {pages && pagesId && firstList && (
+      {pages && pagesId && firstList && sideModal.open && (
         <SideBarModal
           user={user}
           targetItem={targetItem}

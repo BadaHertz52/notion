@@ -80,6 +80,16 @@
   justify-content: center;
   align-items: center;
 }
+#modal-frame__menu,
+#modal-block-style__menu {
+  .comment-input {
+    @include modalStyle;
+    flex-direction: row;
+    padding: 16px 14px;
+    height: max-content;
+    width: 80%;
+  }
+}
 @media screen and (max-width: 768px) {
   .center .modal__menu {
     & > .inner {
@@ -87,10 +97,9 @@
       width: fit-content;
     }
   }
-  #modal-frame {
+  #modal-frame,
+  #modal-block-style__menu {
     .comment-input {
-      @include modalStyle;
-      flex-direction: row;
       width: max-content;
       height: max-content;
       padding: 12px 16px;

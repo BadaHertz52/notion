@@ -57,7 +57,7 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
     ".btn-trash",
   ];
 
-  const modalOpen = useModal(CORRECT_EVENT_TARGETS);
+  const modalOpen = useModal(CORRECT_EVENT_TARGETS, "sideBar");
 
   const touchResizeBar = useRef<boolean>(false);
   const [modalStyle, setModalStyle] = useState<CSSProperties | undefined>(
@@ -206,8 +206,8 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
   }, [changeStyle]);
 
   useEffect(() => {
-    if (!modalOpen) closeModal();
-  }, [modalOpen, closeModal]);
+    if (modalOpen.sideBar === false) closeModal();
+  }, [modalOpen.sideBar, closeModal]);
 
   return (
     <ModalPortal

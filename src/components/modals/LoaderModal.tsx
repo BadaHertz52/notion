@@ -18,7 +18,7 @@ const LoaderModal = ({ ...props }: LoaderModalProps) => {
   const { closeModal } = props;
 
   const CORRECT_TARGETS = [".btn-change-cover", "#loader", ".btn-addBlockFile"];
-  const modalOpen = useModal(CORRECT_TARGETS);
+  const modalOpen = useModal(CORRECT_TARGETS, "loader");
   const [style, setStyle] = useState<CSSProperties | undefined>(undefined);
   const GAP = 10;
   const changeBlockImageLoaderStyle = useCallback(() => {
@@ -66,8 +66,8 @@ const LoaderModal = ({ ...props }: LoaderModalProps) => {
   ]);
 
   useEffect(() => {
-    if (!modalOpen) closeModal();
-  }, [modalOpen, closeModal]);
+    if (modalOpen.loader === false) closeModal();
+  }, [modalOpen.loader, closeModal]);
 
   return (
     <ModalPortal id="modal-loader" isOpen={props.isOpen}>

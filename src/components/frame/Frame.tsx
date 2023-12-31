@@ -9,14 +9,17 @@ import React, {
 
 import { useSelector } from "react-redux";
 
-import { ActionContext, ModalContext } from "../../contexts";
 import {
   BlockQuickMenu,
   FrameInner,
   ModalPortal,
   FameModal,
   MovingBlockModal,
+  BlockStylerModal,
 } from "../index";
+
+import { INITIAL_MODAL, SESSION_KEY } from "../../constants";
+import { ActionContext, ModalContext } from "../../contexts";
 import { RootState } from "../../modules";
 import {
   Block,
@@ -28,7 +31,6 @@ import {
 import { findBlock, isMobile, isTemplates } from "../../utils";
 
 import "../../assets/frame.scss";
-import { INITIAL_MODAL, SESSION_KEY } from "../../constants";
 
 export type FrameProps = TemplateFrameCommonProps & {
   firstList: ListItem[];
@@ -261,19 +263,29 @@ const Frame = ({ ...props }: FrameProps) => {
             )}
           </ModalPortal>
         )}
-        {modal.open && (
-          <FameModal
-            {...props}
-            page={page}
-            frameHtml={frameHtml}
-            fontSize={fontSize}
-            modal={modal}
-            setModal={setModal}
-            closeModal={closeModal}
-            editBlock={editBlock}
-            editPage={editPage}
-          />
-        )}
+        {modal.open &&
+          (modal.target !== "blockStyler" ? (
+            <FameModal
+              {...props}
+              page={page}
+              frameHtml={frameHtml}
+              fontSize={fontSize}
+              modal={modal}
+              setModal={setModal}
+              closeModal={closeModal}
+              editBlock={editBlock}
+              editPage={editPage}
+            />
+          ) : (
+            <BlockStylerModal
+              {...props}
+              page={page}
+              frameHtml={frameHtml}
+              modal={modal}
+              setModal={setModal}
+              closeModal={closeModal}
+            />
+          ))}
       </ModalContext.Provider>
       {movingTargetBlock && (
         <MovingBlockModal

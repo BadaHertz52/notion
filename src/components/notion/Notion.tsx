@@ -106,40 +106,6 @@ const Notion = ({ ...props }: NotionProps) => {
             closeTemplates={closeTemplates}
           />
         )}
-        {/* {pagesId && pages && firstList && (
-            <>
-              {isExport && currentPage && (
-                <Export
-                  page={currentPage}
-                  pagesId={pagesId}
-                  pages={pages}
-                  firstList={firstList}
-                  userName={user.userName}
-                  recentPagesId={user.recentPagesId}
-                  setOpenExport={setOpenExport}
-                  commentBlock={commentBlock}
-                  openComment={openComment}
-                  modal={modal}
-                  setModal={setModal}
-                  setOpenComment={setOpenComment}
-                  setCommentBlock={setCommentBlock}
-                  showAllComments={showAllComments}
-                  smallText={smallText}
-                  fullWidth={fullWidth}
-                  discardEdit={discard_edit}
-                  setDiscardEdit={setDiscardEdit}
-                  openTemplates={openTemplates}
-                  setOpenTemplates={setOpenTemplates}
-                  fontStyle={fontStyle}
-                  mobileSideMenu={mobileSideMenu}
-                  setMobileSideMenu={setMobileSideMenu}
-                />
-              )}
-
-
-            </>
-          )}
-           */}
       </div>
     </div>
   );

@@ -4,18 +4,21 @@ import { isInTarget } from "../utils";
 /**
  *  correctEventTargets :모달 창이 닫히지 않는 클릭 이벤트 타켓
  */
-const useModal = (correctEventTargets: string[]) => {
+const useModal = (correctEventTargets: string[], modalName: string) => {
   const [modalOpen, setModalOpen] = useState<boolean>(true);
 
   const handleCloseModal = useCallback(
     (event: globalThis.MouseEvent) => {
-      const isTarget = correctEventTargets
-        .map((v) => isInTarget(event, v))
-        .some((v) => !!v);
+      const targetModalEl = document.querySelector(`#modal-${modalName}__menu`);
+      if (targetModalEl) {
+        const isTarget = correctEventTargets
+          .map((v) => isInTarget(event, v))
+          .some((v) => !!v);
 
-      setModalOpen(isTarget);
+        setModalOpen(isTarget);
+      }
     },
-    [setModalOpen, correctEventTargets]
+    [setModalOpen, correctEventTargets, modalName]
   );
 
   useEffect(() => {
@@ -23,7 +26,7 @@ const useModal = (correctEventTargets: string[]) => {
     return () => window.removeEventListener("click", handleCloseModal);
   }, [handleCloseModal]);
 
-  return modalOpen;
+  return { [modalName]: modalOpen };
 };
 
 export default useModal;

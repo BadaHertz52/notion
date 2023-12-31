@@ -24,13 +24,20 @@ import { RenameProps } from "../Rename";
 
 import { useModal } from "../../hooks";
 import { ModalType, Page } from "../../types";
-import { findPage, getBlockDomRect, isMobile } from "../../utils";
+import {
+  changeModalStyleOnTopOfBlock,
+  findPage,
+  getBlockDomRect,
+  isMobile,
+  isTemplates,
+} from "../../utils";
+import { MobileMenuProps } from "../menu/MobileMenu";
 
 type ChildrenProps = MenuProps &
   RenameProps &
   CommentInputProps &
   EditableBlockProps &
-  BlockStylerProps;
+  MobileMenuProps;
 type FrameModalProps = Omit<
   ChildrenProps,
   | "block"
@@ -52,7 +59,7 @@ type FrameModalProps = Omit<
 const FrameModal = ({ ...props }: FrameModalProps) => {
   const { modal } = props;
   const correctEventTargets = [
-    ".modal",
+    "#block-quick-menu",
     "#menu",
     ".comments-bubble",
     ".btn-comment",
@@ -67,7 +74,7 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
   if (modal.target === "mobileMenu" && modal.block)
     correctEventTargets.push(`#block-${modal.block.id}`);
 
-  const modalOpen = useModal(correctEventTargets);
+  const modalOpen = useModal(correctEventTargets, "frame");
 
   const ID = "modal-frame";
 
@@ -89,6 +96,7 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
           position: "absolute",
           top: remains > EXTRA_SPACE ? top1 : top2,
           left: blockDomRect.left,
+          width: blockDomRect.width,
         });
       }
     }
@@ -111,39 +119,6 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
     }
   }, []);
 
-  const changeBlockStylerModalStyle = useCallback(() => {
-    const pageContentsEl = document.querySelector(".page__firstBlock");
-    const pageContentsElDomRect = pageContentsEl?.getClientRects()[0];
-
-    if (modal.block && pageContentsElDomRect) {
-      const domeRect = getBlockDomRect(modal.block);
-      const topBarBottom = document.querySelector("#top-bar")?.clientHeight;
-      const GAP = 10;
-      const STYLER_HEIGHT = 45;
-
-      if (domeRect && topBarBottom) {
-        const top = domeRect.top - GAP - STYLER_HEIGHT;
-        const isOverlap = top <= topBarBottom;
-        const bottomStyle: CSSProperties = {
-          position: "absolute",
-          bottom: -domeRect.bottom - GAP,
-          left: pageContentsElDomRect.left,
-        };
-        const topStyle: CSSProperties = {
-          position: "absolute",
-          top: top,
-          left: pageContentsElDomRect.left,
-        };
-
-        if ((isMobile() && modal.target === "blockStyler") || isOverlap) {
-          setModalStyle(bottomStyle);
-          return;
-        }
-        setModalStyle(topStyle);
-      }
-    }
-  }, [modal.block, modal.target]);
-
   const changeModalStyle = useCallback(() => {
     switch (modal.target) {
       case "rename":
@@ -158,21 +133,13 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
       case "menu":
         changeMenuModalStyle();
         break;
-      case "blockStyler":
-        changeBlockStylerModalStyle();
-        break;
       case "mobileMenu":
-        changeBlockStylerModalStyle();
+        changeModalStyleOnTopOfBlock(modal, setModalStyle);
         break;
       default:
         break;
     }
-  }, [
-    modal,
-    changeStyleOfModalOnBottomBlock,
-    changeMenuModalStyle,
-    changeBlockStylerModalStyle,
-  ]);
+  }, [modal, changeStyleOfModalOnBottomBlock, changeMenuModalStyle]);
 
   const handleScrollOfFrame = useCallback(() => {
     const frameEl = document.querySelector(".frame");
@@ -195,8 +162,8 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
   }, [handleScrollOfFrame]);
 
   useEffect(() => {
-    if (!modalOpen) handleCloseModal();
-  }, [modalOpen, handleCloseModal]);
+    if (modalOpen.frame === false) handleCloseModal();
+  }, [modalOpen.frame, modal.target, handleCloseModal]);
 
   return (
     <ModalPortal id={ID} isOpen={modal.open} style={modalStyle}>
@@ -233,9 +200,7 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
           />
         </div>
       )}
-      {modal.target === "blockStyler" && modal.block && (
-        <BlockStyler {...props} block={modal.block} setModal={props.setModal} />
-      )}
+
       {modal.target === "mobileMenu" && modal.block && (
         <MobileMenu {...props} block={modal.block} />
       )}

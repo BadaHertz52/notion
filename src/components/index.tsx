@@ -47,6 +47,7 @@ import Menu from "./menu/Menu";
 import MobileMenu from "./menu/MobileMenu";
 import MobileSideMenu from "./menu/MobileSideMenu";
 //modal
+import BlockStylerModal from "./modals/BlockStylerModal";
 import CommandModal from "./modals/CommandModal";
 import DiscardEditModal from "./modals/DiscardEditModal";
 import IconModal from "./modals/IconModal";
@@ -179,6 +180,7 @@ export {
   Frame,
   FrameInner,
   //modal
+  BlockStylerModal,
   CommandModal,
   DiscardEditModal,
   ExportModal,

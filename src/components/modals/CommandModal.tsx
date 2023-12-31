@@ -13,10 +13,10 @@ type CommandModalProps = Omit<CommandMenuProp, "setSelection"> & {
 function CommandModal({ ...props }: CommandModalProps) {
   const { closeCommand } = props;
   const CORRECT_EVENT_TARGETS = ["#menu-command", "#commendInput"];
-  const openModal = useModal(CORRECT_EVENT_TARGETS);
+  const openModal = useModal(CORRECT_EVENT_TARGETS, "command");
 
   useEffect(() => {
-    if (!openModal) closeCommand();
+    if (openModal.command === false) closeCommand();
   }, [openModal, closeCommand]);
 
   return (

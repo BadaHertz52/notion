@@ -39,31 +39,18 @@ export type BlockStylerProps = MenuAndBlockStylerCommonProps & {
   pagesId: string[];
   recentPagesId: string[] | null;
   setModal: Dispatch<SetStateAction<ModalType>>;
+  sideMenuModal: ModalType;
+  setSideMenuModal: (value: React.SetStateAction<ModalType>) => void;
   closeModal: () => void;
+  closeSideMenu: () => void;
 };
 const BlockStyler = ({ ...props }: BlockStylerProps) => {
   const { editBlock } = useContext(ActionContext).actions;
-  const { page, block } = props;
-
-  const [sideMenuModal, setSideMenuModal] = useState<ModalType>(INITIAL_MODAL);
-
-  const CORRECT_EVENT_TARGETS = [
-    "#block-styler",
-    `#${block.id}__contents`,
-    "#menu",
-    "#menu-command",
-    "#menu-color",
-    ".comment-input",
-    "#loader-link",
-    "#mobile-side-menu",
-  ];
-  const modalOpen = useModal(CORRECT_EVENT_TARGETS);
+  const { page, block, setSideMenuModal, sideMenuModal, closeSideMenu } = props;
 
   type BlockFontWeightType = "bold" | "initial";
   type BlockFontStyleType = "italic" | "initial";
   type TextDecoType = "underline" | "lineThrough";
-
-  const closeSideMenu = () => setSideMenuModal(INITIAL_MODAL);
 
   const prepareForChange = useCallback(() => {
     const selectedEl = document.querySelector(".selected");
@@ -183,147 +170,96 @@ const BlockStyler = ({ ...props }: BlockStylerProps) => {
     [block, page, editBlock, removeOtherTextDeco]
   );
 
-  const closeBlockStyler = useCallback(() => {
-    const editedBlock = findBlock(page, block.id).BLOCK;
-    removeSelected(editedBlock, editBlock, page);
-    props.closeModal();
-  }, [block, editBlock, page, props]);
-
-  const handleCloseBlockStyler = useCallback(() => {
-    sideMenuModal.open ? closeSideMenu() : closeBlockStyler();
-  }, [sideMenuModal.open, closeBlockStyler]);
-
-  useEffect(() => {
-    if (!modalOpen) handleCloseBlockStyler();
-  }, [modalOpen, handleCloseBlockStyler]);
-
   return (
-    <>
-      <div
-        id="block-styler"
-        style={{
-          display: sideMenuModal.target === "commentInput" ? "none" : "block",
-        }}
-      >
-        <div className="inner">
+    <div
+      id="block-styler"
+      style={{
+        display: sideMenuModal.target === "commentInput" ? "none" : "block",
+      }}
+    >
+      <div className="inner">
+        <button
+          title="button to change type"
+          className="blockStyler__btn-type btn"
+          onMouseDown={prepareForChange}
+          onTouchStart={prepareForChange}
+          onClick={() => openSideMenu("command")}
+        >
+          <ScreenOnly text="button to change type and value is current type" />
+          <span>{getBlockType()}</span>
+          <IoIosArrowDown className="arrow-down" />
+        </button>
+        <button
+          title="button to add link "
+          className="blockStyler__btn-link btn"
+          onClick={() => openSideMenu("linkLoader")}
+          onMouseDown={prepareForChange}
+          onTouchStart={prepareForChange}
+        >
+          <ImArrowUpRight2 />
+          <span>Link</span>
+          <IoIosArrowDown className="arrow-down" />
+        </button>
+        <button
+          title="button to comment"
+          className="btn-comment btn"
+          onClick={() => openSideMenu("commentInput")}
+          onMouseDown={prepareForChange}
+          onTouchStart={prepareForChange}
+        >
+          <BsChatLeftText />
+          <span>Comment</span>
+        </button>
+        <div className="style">
           <button
-            title="button to change type"
-            className="blockStyler__btn-type btn"
+            title="button to change bold  style"
+            className="style__btn-bold btn"
+            onClick={() => onClickFontStyleBtn("bold")}
             onMouseDown={prepareForChange}
             onTouchStart={prepareForChange}
-            onClick={() => openSideMenu("command")}
           >
-            <ScreenOnly text="button to change type and value is current type" />
-            <span>{getBlockType()}</span>
-            <IoIosArrowDown className="arrow-down" />
+            B
           </button>
           <button
-            title="button to add link "
-            className="blockStyler__btn-link btn"
-            onClick={() => openSideMenu("linkLoader")}
+            title="button to change italic style "
+            className="style__btn-italic btn"
+            onClick={() => onClickFontStyleBtn("italic")}
             onMouseDown={prepareForChange}
             onTouchStart={prepareForChange}
           >
-            <ImArrowUpRight2 />
-            <span>Link</span>
-            <IoIosArrowDown className="arrow-down" />
+            i
           </button>
           <button
-            title="button to comment"
-            className="btn-comment btn"
-            onClick={() => openSideMenu("commentInput")}
+            title="button to change underline style "
+            className="style__btn-underline btn"
+            onClick={() => onClickFontStyleBtn("underline")}
             onMouseDown={prepareForChange}
             onTouchStart={prepareForChange}
           >
-            <BsChatLeftText />
-            <span>Comment</span>
+            U
           </button>
-          <div className="style">
-            <button
-              title="button to change bold  style"
-              className="style__btn-bold btn"
-              onClick={() => onClickFontStyleBtn("bold")}
-              onMouseDown={prepareForChange}
-              onTouchStart={prepareForChange}
-            >
-              B
-            </button>
-            <button
-              title="button to change italic style "
-              className="style__btn-italic btn"
-              onClick={() => onClickFontStyleBtn("italic")}
-              onMouseDown={prepareForChange}
-              onTouchStart={prepareForChange}
-            >
-              i
-            </button>
-            <button
-              title="button to change underline style "
-              className="style__btn-underline btn"
-              onClick={() => onClickFontStyleBtn("underline")}
-              onMouseDown={prepareForChange}
-              onTouchStart={prepareForChange}
-            >
-              U
-            </button>
-            <button
-              title="button to change lineThrough"
-              className="style__btn-lineThrough btn"
-              onClick={() => onClickFontStyleBtn("lineThrough")}
-              onMouseDown={prepareForChange}
-              onTouchStart={prepareForChange}
-            >
-              S
-            </button>
-          </div>
           <button
-            title="button to change color of content "
-            className="blockStyler__btn-color btn"
-            onClick={() => openSideMenu("color")}
+            title="button to change lineThrough"
+            className="style__btn-lineThrough btn"
+            onClick={() => onClickFontStyleBtn("lineThrough")}
             onMouseDown={prepareForChange}
             onTouchStart={prepareForChange}
           >
-            <span>A</span>
-            <IoIosArrowDown className="arrow-down" />
+            S
           </button>
         </div>
+        <button
+          title="button to change color of content "
+          className="blockStyler__btn-color btn"
+          onClick={() => openSideMenu("color")}
+          onMouseDown={prepareForChange}
+          onTouchStart={prepareForChange}
+        >
+          <span>A</span>
+          <IoIosArrowDown className="arrow-down" />
+        </button>
       </div>
-      {sideMenuModal.target &&
-        sideMenuModal.target !== "commentInput" &&
-        (isMobile() ? (
-          <MobileSideMenuModal
-            sideMenuModal={sideMenuModal}
-            setSideMenuModal={setSideMenuModal}
-          >
-            <BlockStylerSideMenu
-              {...props}
-              block={findBlock(page, block.id).BLOCK}
-              sideMenuModal={sideMenuModal}
-              closeSideMenu={() => {
-                setSideMenuModal((prev) => ({ ...prev, open: false }));
-              }}
-            />
-          </MobileSideMenuModal>
-        ) : (
-          <BlockStylerSideMenu
-            {...props}
-            block={findBlock(page, block.id).BLOCK}
-            sideMenuModal={sideMenuModal}
-            closeSideMenu={closeSideMenu}
-          />
-        ))}
-      {sideMenuModal.target === "commentInput" && (
-        <CommentInput
-          {...props}
-          pageId={props.page.id}
-          commentBlock={props.block}
-          addOrEdit="add"
-          mainComment={null}
-          subComment={null}
-          allComments={props.block.comments}
-        />
-      )}
-    </>
+    </div>
   );
 };
 

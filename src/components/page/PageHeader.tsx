@@ -125,7 +125,7 @@ function PageHeader({
         setOpenIconModal(true);
       }
     },
-    [openIconModal, pageIconStyle.width]
+    [openIconModal]
   );
 
   const addRandomIcon = useCallback(() => {
@@ -185,7 +185,7 @@ function PageHeader({
         >
           <Img
             src={page.header.cover}
-            alt="page cover "
+            alt="page cover"
             onLoad={handleImgLoad}
           />
           <button
@@ -213,7 +213,7 @@ function PageHeader({
                 {!page.header.icon && (
                   <button
                     title="button to  open menu to add page icon"
-                    className="deco__btn-icon"
+                    className="deco__btn deco__btn-icon"
                     onClick={addRandomIcon}
                   >
                     <BsFillEmojiSmileFill />
@@ -223,7 +223,7 @@ function PageHeader({
                 {!page.header.cover && (
                   <button
                     title="button to  open menu to add page cover"
-                    className="deco__btn-cover"
+                    className="deco__btn deco__btn-cover"
                     onClick={onClickAddCover}
                   >
                     <MdInsertPhoto />

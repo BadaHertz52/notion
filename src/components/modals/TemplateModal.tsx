@@ -68,7 +68,7 @@ const TemplateModal = ({ ...props }: TemplateModalProps) => {
     "#modal-block-quick-menu",
     "#modal-frame__menu",
   ];
-  const modalOpen = useModal(CORRECT_EVENT_TARGETS);
+  const modalOpen = useModal(CORRECT_EVENT_TARGETS, "template");
   const [alert, setAlert] = useState<"edit" | "delete" | undefined>(undefined);
   const [templateId, setTemplateId] = useState<string | null>(
     !props.templatesId || isMobile() ? null : props.templatesId[0]
@@ -136,10 +136,10 @@ const TemplateModal = ({ ...props }: TemplateModalProps) => {
   }, [closeTemplates, handleAlert]);
 
   useEffect(() => {
-    if (!modalOpen) {
+    if (modalOpen.template === false) {
       handleCloseTemplates();
     }
-  }, [modalOpen, setAlert, handleCloseTemplates]);
+  }, [modalOpen.template, setAlert, handleCloseTemplates]);
 
   return (
     <>
