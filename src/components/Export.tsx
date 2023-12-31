@@ -21,7 +21,6 @@ export type ExportProps = FrameProps & {
 
 const Export = ({ ...props }: ExportProps) => {
   const { page, pagesId, pages, closeModal } = props;
-  //TODO - 상수
   const FILE_TYPE = {
     html: "HTML",
     pdf: "PDF",

@@ -5,77 +5,36 @@ import { GoPrimitiveDot } from "react-icons/go";
 
 import { BlockContentsProps } from "./BlockContents";
 import { EditableBlockProps } from "./EditableBlock";
-import { BlockContents, BlockComment, EditableBlock } from "../index";
+import {
+  BlockContents,
+  BlockComment,
+  EditableBlock,
+  MainBlock,
+} from "../index";
 
 import { Block } from "../../types";
-import { findBlock, getBlockContentsStyle } from "../../utils";
+import { findBlock } from "../../utils";
+import { MainBlockProps } from "./MainBlock";
 
 type ListSubProps = EditableBlockProps &
-  BlockContentsProps & {
+  MainBlockProps & {
     subBlocks?: Block[];
-    isOpenComments: boolean;
-    markPointBlock: (
-      event: MouseEvent<HTMLDivElement> | TouchEvent<HTMLDivElement>
-    ) => void;
-    cancelPointBlock: (event: MouseEvent<HTMLDivElement>) => void;
   };
 
 const ListSub = ({ ...props }: ListSubProps) => {
   const { page, subBlocks } = props;
-
-  const subBlocksId = subBlocks?.map((v) => v.id);
-
-  const getListMarker = (subBlock: Block) => {
-    return subBlocksId ? subBlocksId.indexOf(subBlock.id) + 1 : 0;
-  };
-
-  const getListStyle = (block: Block): CSSProperties => {
-    const blockContentStyle = getBlockContentsStyle(block);
-    return {
-      ...blockContentStyle,
-      textDecoration: "none",
-      fontStyle: "normal",
-      fontWeight: "normal",
-    };
-  };
 
   return (
     <>
       {subBlocks &&
         subBlocks[0] &&
         subBlocks.map((subBlock: Block, i) => (
-          <div className="listItem" key={`listItem_${i}`}>
-            <div
-              className="mainBlock"
-              key={`listItem_${i}`}
-              onMouseOver={props.markPointBlock}
-              onMouseLeave={props.cancelPointBlock}
-            >
-              <div className="mainBlock__block">
-                <div
-                  id={`block-${subBlock.id}`}
-                  className="block__contents"
-                  style={getListStyle(subBlock)}
-                >
-                  {subBlock.type.includes("List") && (
-                    <div className="listItem-marker">
-                      {subBlock.type.includes("number") ? (
-                        `${getListMarker(subBlock)}.`
-                      ) : (
-                        <GoPrimitiveDot />
-                      )}
-                    </div>
-                  )}
-                  <BlockContents {...props} block={subBlock} />
-                </div>
-              </div>
-              {props.isOpenComments && props.onClickCommentBtn && (
-                <BlockComment
-                  block={subBlock}
-                  onClickCommentBtn={props.onClickCommentBtn}
-                />
-              )}
-            </div>
+          <div
+            className="listItem"
+            id={`block-${subBlock.id}`}
+            key={`listItem_${i}`}
+          >
+            <MainBlock {...props} block={subBlock} subBlocks={subBlocks} />
             {subBlock.subBlocksId && (
               <div className="subBlock-group">
                 {subBlock.subBlocksId

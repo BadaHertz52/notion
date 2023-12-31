@@ -18,6 +18,7 @@ import {
   BlockComment,
   ScreenOnly,
   ListSub,
+  MainBlock,
 } from "../index";
 
 import { ActionContext } from "../../contexts";
@@ -53,59 +54,6 @@ const EditableBlock = ({ ...props }: EditableBlockProps) => {
     (id: string) => findBlock(page, id).BLOCK
   );
 
-  const isOpenComments = useMemo(
-    () =>
-      block.comments
-        ? block.comments.some((comment) => comment.type === "open")
-        : false,
-    [block.comments]
-  );
-  const isMovingBlock = () => !!document.querySelector("#moving-target-block");
-
-  /**
-   * [isMoved] 현재 block을 movingTargetBlock (위치를 변경시킬 block)의 변경된 위치의 기준이 되는 pointBlock으로  지정하는 함수
-   * @param event
-   * @param targetBlock
-   */
-  const markPointBlock = useCallback(
-    (event: MouseEvent<HTMLDivElement> | TouchEvent<HTMLDivElement>) => {
-      if (isMovingBlock()) {
-        event.currentTarget.classList.add("on");
-      }
-    },
-    []
-  );
-  /**
-   * [isMoved] 현재 block을  movingTargetBlock (위치를 변경시킬 block)의 위치변경의 기준이 되는 pointBlock 지정을 취소시키는 함수
-   * @param event
-   */
-  const cancelPointBlock = useCallback(
-    (event: MouseEvent<HTMLDivElement> | TouchEvent<HTMLDivElement>) => {
-      if (isMovingBlock()) {
-        event.currentTarget.classList.remove("on");
-      }
-    },
-    []
-  );
-
-  const onClickTodoBtn = useCallback(() => {
-    const editedBlock: Block = {
-      ...block,
-      type: block.type === "todo" ? "todo_done" : "todo",
-      editTime: getEditTime(),
-    };
-    setOriginTemplateItem(page);
-    editBlock(page.id, editedBlock);
-  }, [block, editBlock, page]);
-
-  const onClickToggle = useCallback((event: React.MouseEvent) => {
-    const target = event.currentTarget;
-    const blockId = target.getAttribute("name");
-    const toggleMainDoc = document.getElementById(`block-${blockId}`);
-    target.classList.toggle("on");
-    toggleMainDoc?.classList.toggle("on");
-  }, []);
-
   useEffect(() => {
     const newBlockItem = sessionStorage.getItem(SESSION_KEY.newBlock);
     if (newBlockItem) {
@@ -130,77 +78,10 @@ const EditableBlock = ({ ...props }: EditableBlockProps) => {
           style={changeFontSizeBySmallText(block, props.fontSize)}
         >
           {block.type.includes("ListArr") ? (
-            <ListSub
-              {...props}
-              subBlocks={subBlocks}
-              isOpenComments={isOpenComments}
-              markPointBlock={markPointBlock}
-              cancelPointBlock={cancelPointBlock}
-            />
+            <ListSub {...props} subBlocks={subBlocks} />
           ) : (
             <>
-              <div
-                className="mainBlock"
-                onMouseEnter={markPointBlock}
-                onMouseLeave={cancelPointBlock}
-              >
-                <div className="mainBlock__block">
-                  {block.type === "todo" && (
-                    <button
-                      title="button to check"
-                      className="checkbox left block__btn"
-                      name={block.id}
-                      onClick={onClickTodoBtn}
-                    >
-                      <ScreenOnly text="button to check" />
-                      <GrCheckbox className="block__btn__svg" />
-                    </button>
-                  )}
-                  {block.type === "todo_done" && (
-                    <button
-                      title="button to uncheck"
-                      className="checkbox done left block__btn"
-                      name={block.id}
-                      onClick={onClickTodoBtn}
-                    >
-                      <ScreenOnly text="button to uncheck" />
-                      <GrCheckboxSelected className="block__btn__svg " />
-                    </button>
-                  )}
-                  {block.type === "toggle" && (
-                    <button
-                      title="button to toggle"
-                      name={block.id}
-                      onClick={onClickToggle}
-                      className={
-                        block.subBlocksId
-                          ? "blockToggleBtn on left block__btn"
-                          : "blockToggleBtn left block__btn"
-                      }
-                    >
-                      <ScreenOnly text="button to toggle" />
-                      <MdPlayArrow className="block__btn__svg" />
-                    </button>
-                  )}
-                  {block.type === "page" && (
-                    <div className="page__icon-outBox left">
-                      <PageIcon
-                        icon={block.icon}
-                        iconType={block.iconType}
-                        isExport={props.isExport}
-                      />
-                    </div>
-                  )}
-
-                  <BlockContents {...props} />
-                </div>
-                {isOpenComments && props.onClickCommentBtn && (
-                  <BlockComment
-                    block={block}
-                    onClickCommentBtn={props.onClickCommentBtn}
-                  />
-                )}
-              </div>
+              <MainBlock {...props} />
               {subBlocks && subBlocks[0] && (
                 <div className="subBlock-group">
                   {subBlocks.map((subBlock: Block) => (

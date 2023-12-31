@@ -210,7 +210,9 @@ a:visited {
 .block-quick-menu {
   height: 18px;
 }
-
+.moving-area {
+  display:flex;
+}
 .todo.block .left,
 .todo_done.block .left,
 .toggle.block .left,

@@ -309,6 +309,8 @@ document {
     border-radius: 5px;
   }
   & > .moving-area {
+    display: flex;
+
     width: max-content;
     padding-right: 50px;
     max-width: 90vw;

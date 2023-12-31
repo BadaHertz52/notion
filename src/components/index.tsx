@@ -1,4 +1,5 @@
 //block---
+import BlockBtn from "./block/BlockBtn";
 import BlockContentEditable from "./block/BlockContentEditable";
 import Contents from "./block/Contents";
 import BlockContents from "./block/BlockContents";
@@ -6,12 +7,16 @@ import EditableBlock from "./block/EditableBlock";
 import ImageBlockContents from "./block/ImageBlockContents";
 import ImageBox from "./block/ImageBox";
 import ListSub from "./block/ListSub";
+import ListItemMarker from "./block/ListItemMarker";
+import MainBlock from "./block/MainBlock";
+
 import MovingTargetBlock from "./block/MovingTargetBlock";
 import PageBlockContents from "./block/PageBlockContents";
 //--block
+//blockMenu--
 import BlockQuickMenu from "./blockMenu/BlockQuickMenu";
 import BlockStyler from "./blockMenu/BlockStyler";
-
+//--blockMenu
 //color
 import ColorInform from "./color/ColorInform";
 import ColorMenu from "./color/ColorMenu";
@@ -119,13 +124,16 @@ import BlockStylerSideMenu from "./blockMenu/BlockStylerSideMenu";
 
 export {
   //block--
+  BlockBtn,
   BlockContentEditable,
   Contents,
   BlockContents,
   EditableBlock,
   ImageBlockContents,
   ImageBox,
+  MainBlock,
   ListSub,
+  ListItemMarker,
   Loader,
   MovingTargetBlock,
   PageBlockContents,

@@ -11,15 +11,22 @@ import React, {
 } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { Contents, PageBlockContents, ImageBlockContents } from "../index";
+import {
+  Contents,
+  PageBlockContents,
+  ImageBlockContents,
+  ListItemMarker,
+} from "../index";
 import { BlockContendEditableProps } from "./BlockContentEditable";
 
 import { ActionContext, ModalContext } from "../../contexts";
-import { INITIAL_MODAL, SESSION_KEY } from "../../constants";
+import { SESSION_KEY } from "../../constants";
 import { Block } from "../../types";
 import { getBlockContentsStyle, isMobile, makeRoutePath } from "../../utils";
 
 export type BlockContentsProps = BlockContendEditableProps & {
+  // List Type 인 블럭의 경우 subBlocks를 넘겨줌
+  subBlocks?: Block[];
   setMovingTargetBlock?: Dispatch<SetStateAction<Block | null>>;
   measure?: () => void;
 };
@@ -57,7 +64,6 @@ const BlockContents = ({ ...props }: BlockContentsProps) => {
   const openBlockQuickMenu = useCallback(() => {
     if (!isMobile()) {
       const blockQuickMenuTarget = getBlockQuickMenuTargetId();
-
       if (blockQuickMenuTarget !== block.id)
         changeBlockQuickMenuModal({
           open: true,
@@ -171,6 +177,13 @@ const BlockContents = ({ ...props }: BlockContentsProps) => {
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
+        {props.subBlocks && block.type.includes("List") && (
+          <ListItemMarker
+            {...props}
+            subBlocks={props.subBlocks}
+            subBlock={block}
+          />
+        )}
         {block.type === "page" ? (
           <PageBlockContents {...props} />
         ) : block.type === "image" ? (
