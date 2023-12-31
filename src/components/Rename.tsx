@@ -10,7 +10,7 @@ import React, {
 
 import { CSSProperties } from "styled-components";
 
-import { IconModal, PageIcon, ScreenOnly } from "./index";
+import { IconMenu, IconModal, PageIcon, ScreenOnly } from "./index";
 
 import { ActionContext } from "../contexts";
 import { Block, Page } from "../types";
@@ -49,7 +49,8 @@ const Rename = ({
 
   const onClickRenameIcon = (event: MouseEvent) => {
     setOpenIconModal(true);
-    changeIconModalStyle(event, setIconModalStyle);
+    if (!event.currentTarget.closest("#modal-sideBar__menu"))
+      changeIconModalStyle(event, setIconModalStyle);
   };
 
   const changeTitle = useCallback(
@@ -61,7 +62,6 @@ const Rename = ({
       } = findPage(pagesId, pages, page.id);
 
       if (value !== page.header.title) {
-        const templateHtml = document.getElementById("template");
         setOriginTemplateItem(page);
         const renamedPage: Page = {
           ...page,
@@ -86,8 +86,10 @@ const Rename = ({
         }
       }
     },
-    [block, currentPageId, editBlock, editPage, page]
+    [block, currentPageId, editBlock, editPage, page, pages]
   );
+
+  const closeIconModal = () => setOpenIconModal(false);
 
   return (
     <div id="rename" style={renameStyle}>
@@ -110,16 +112,24 @@ const Rename = ({
           />
         </label>
       </div>
-      {openIconModal && (
-        <IconModal
-          isOpen={openIconModal}
-          page={page}
-          currentPageId={currentPageId}
-          block={block}
-          style={iconModalStyle}
-          closeIconModal={() => setOpenIconModal(false)}
-        />
-      )}
+      {openIconModal &&
+        (iconModalStyle ? (
+          <IconModal
+            isOpen={openIconModal}
+            page={page}
+            currentPageId={currentPageId}
+            block={block}
+            style={iconModalStyle}
+            closeIconModal={closeIconModal}
+          />
+        ) : (
+          <IconMenu
+            page={page}
+            currentPageId={currentPageId}
+            block={block}
+            closeIconModal={closeIconModal}
+          />
+        ))}
     </div>
   );
 };

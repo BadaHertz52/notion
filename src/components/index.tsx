@@ -37,7 +37,7 @@ import Frame from "./frame/Frame";
 import FrameInner from "./frame/FrameInner";
 //icon
 import EmojiIcon from "./icon/EmojiIcon";
-
+import IconMenu from "./icon/IconMenu";
 import PageIcon from "./icon/PageIcon";
 //linkLoader
 import LinkLoader from "./linkLoader/LinkLoader";
@@ -175,8 +175,11 @@ export {
   MobileSideMenu,
   LinkLoader,
   PageItem,
+  //icon--
   EmojiIcon,
+  IconMenu,
   PageIcon,
+  //--icon
   Frame,
   FrameInner,
   //modal

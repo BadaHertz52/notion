@@ -55,6 +55,7 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
     "#sideBar__moreFn",
     "#btn-open-quickFindBoard",
     ".btn-trash",
+    "#icon-menu",
   ];
 
   const modalOpen = useModal(CORRECT_EVENT_TARGETS, "sideBar");
@@ -264,31 +265,6 @@ const SideBarModal = ({ ...props }: SideBarModalProps) => {
             cleanRecentPage={cleanRecentPage}
           />
         )}
-        {/* //TODO - frame 모달 수정 이후에 수정 */}
-        {/* {sideModal.target === "templates" && (
-          <Templates
-            routePageId={currentPage.id}
-            user={user}
-            userName={user.userName}
-            pagesId={pagesId}
-            pages={pages}
-            firstList={firstList}
-            recentPagesId={user.recentPagesId}
-            commentBlock={null}
-            openComment={openComment}
-            setOpenComment={setOpenComment}
-            openTemplates={openTemplates}
-            setOpenTemplates={setOpenTemplates}
-            setCommentBlock={setCommentBlock}
-
-            smallText={smallText}
-            fullWidth={fullWidth}
-
-            fontStyle={fontStyle}
-            mobileSideMenu={mobileSideMenu}
-            setMobileSideMenu={setMobileSideMenu}
-          />
-        )} */}
         {sideModal.target === "trash" && (
           <Trash
             trashPagesId={props.trash.pagesId}

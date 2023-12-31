@@ -179,10 +179,17 @@
       }
     }
     #rename {
+      position: relative;
       background-color: #fff;
       width: 90%;
       margin: 0 5%;
       border-radius: 10px;
+    }
+    #icon-menu {
+      position: absolute;
+      top: calc(100% + 10px);
+      left: 0;
+      width: 100%;
     }
   }
   #modal-top-bar__menu {
