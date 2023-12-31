@@ -9,9 +9,10 @@ import {
 } from "../../modules/notion/reducer";
 
 import { TemplateModal } from "../index";
+import { TemplateModalProps } from "../modals/TemplateModal";
+
 import { Page } from "../../types";
 import { findPage } from "../../utils";
-import { TemplateModalProps } from "../modals/TemplateModal";
 
 export type TemplatesContainerProps = Omit<
   TemplateModalProps,
@@ -74,4 +75,4 @@ const TemplatesContainer = ({ ...props }: TemplatesContainerProps) => {
   );
 };
 
-export default TemplatesContainer;
+export default React.memo(TemplatesContainer);

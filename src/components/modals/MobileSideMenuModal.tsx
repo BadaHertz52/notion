@@ -1,4 +1,4 @@
-import React, {
+import {
   Dispatch,
   ReactNode,
   SetStateAction,
@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import ModalPortal from "./ModalPortal";
 import { ModalTargetType, ModalType } from "../../types";
-import { INITIAL_MODAL, SESSION_KEY } from "../../constants";
+import { INITIAL_MODAL } from "../../constants";
 import { CSSProperties } from "styled-components";
 import { FaArrowAltCircleDown } from "react-icons/fa";
 

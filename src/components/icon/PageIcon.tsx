@@ -1,6 +1,4 @@
-import React, { MouseEvent } from "react";
-
-import { CSSProperties } from "styled-components";
+import React, { MouseEvent, CSSProperties } from "react";
 
 import { EmojiIcon, Img } from "../index";
 

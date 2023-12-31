@@ -7,9 +7,8 @@ import React, {
   useRef,
   useContext,
   useCallback,
+  CSSProperties,
 } from "react";
-
-import { CSSProperties } from "styled-components";
 
 import { HiOutlineDuplicate, HiOutlinePencilAlt } from "react-icons/hi";
 import { BiCommentDetail } from "react-icons/bi";
@@ -140,21 +139,21 @@ const Menu = ({
     [setModal, block]
   );
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     if (closeModal) closeModal();
-  };
+  }, [closeModal]);
 
   const onOpenCommentInput = useCallback(() => {
     handleCloseModal();
     openPopUpMenu("commentInput");
-  }, [openPopUpMenu]);
+  }, [openPopUpMenu, handleCloseModal]);
 
   const removeBlock = useCallback(() => {
     handleCloseModal();
     setOriginTemplateItem(page);
     deleteBlock(page.id, block, true);
     closeMenu();
-  }, [block, closeMenu, deleteBlock, page, templateHtml]);
+  }, [block, closeMenu, deleteBlock, page, handleCloseModal]);
 
   const duplicateBlock = useCallback(() => {
     handleCloseModal();
@@ -182,7 +181,7 @@ const Menu = ({
       }
       closeMenu();
     }
-  }, [addBlock, block, closeMenu, duplicatePage, page, templateHtml]);
+  }, [addBlock, block, closeMenu, duplicatePage, page, handleCloseModal]);
 
   const onSetEditBtnGroup = useCallback(() => {
     setEditBtnGroup([...document.getElementsByClassName("menu__btn-edit")]);
@@ -206,7 +205,7 @@ const Menu = ({
   const onClickRename = useCallback(() => {
     handleCloseModal();
     openPopUpMenu("rename");
-  }, [openPopUpMenu]);
+  }, [openPopUpMenu, handleCloseModal]);
 
   useEffect(() => {
     window.addEventListener("resize", handleResize);

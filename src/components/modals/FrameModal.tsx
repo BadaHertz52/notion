@@ -13,12 +13,11 @@ import {
   CommentInput,
   Comments,
   Rename,
-  BlockStyler,
   MobileMenu,
 } from "../index";
 import { EditableBlockProps } from "../block/EditableBlock";
-import { BlockStylerProps } from "../blockMenu/BlockStyler";
 import { CommentInputProps } from "../comment/CommentInput";
+import { MobileMenuProps } from "../menu/MobileMenu";
 import { MenuProps } from "../menu/Menu";
 import { RenameProps } from "../Rename";
 
@@ -28,10 +27,7 @@ import {
   changeModalStyleOnTopOfBlock,
   findPage,
   getBlockDomRect,
-  isMobile,
-  isTemplates,
 } from "../../utils";
-import { MobileMenuProps } from "../menu/MobileMenu";
 
 type ChildrenProps = MenuProps &
   RenameProps &

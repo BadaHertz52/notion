@@ -1,28 +1,29 @@
 import React, { useCallback, Dispatch, SetStateAction } from "react";
+
 import { AiOutlineCheck } from "react-icons/ai";
-import { QuickFindBoardOption, ResultType } from "../../types";
+
 import { OPTION } from "../../constants";
+import { QuickFindBoardOption, ResultType } from "../../types";
+
 type QuickFindBoardOptionBtnProp = {
   option: QuickFindBoardOption;
   selectedOption: QuickFindBoardOption;
   setSelectedOption: Dispatch<SetStateAction<QuickFindBoardOption>>;
-  search: boolean;
   result: ResultType[] | undefined;
   bestMatchesResult: ResultType[] | undefined;
   setResult: Dispatch<SetStateAction<ResultType[] | undefined>>;
   openSortOptions: () => void;
 };
 
-function QuickFindBoardOptionBtn({
+const QuickFindBoardOptionBtn = ({
   option,
   selectedOption,
   setSelectedOption,
   result,
   setResult,
   bestMatchesResult,
-  search,
   openSortOptions,
-}: QuickFindBoardOptionBtnProp) {
+}: QuickFindBoardOptionBtnProp) => {
   const compareResult = useCallback(
     (
       a: ResultType,
@@ -59,37 +60,9 @@ function QuickFindBoardOptionBtn({
       if (selected) {
         selected?.classList.remove("selected");
       }
-      const target = event.target as HTMLElement;
-      // switch (target.tagName.toLowerCase()) {
-      //   case "button":
-      //     option = target.firstChild?.textContent as string;
-      //     target.classList.add("selected");
-      //     break;
-      //   case "div":
-      //     target.parentElement?.classList.add("selected");
-      //     if (target.className === "optionName") {
-      //       option = target.textContent as string;
-      //     } else {
-      //       option = target.previousElementSibling?.textContent as string;
-      //     }
-      //     break;
-      //   case "svg":
-      //     option = target.parentElement?.previousElementSibling
-      //       ?.textContent as string;
-      //     target.parentElement?.parentElement?.classList.add("selected");
-      //     break;
-      //   case "path":
-      //     option = target.parentElement?.parentElement?.previousElementSibling
-      //       ?.textContent as string;
-      //     target.parentElement?.parentElement?.parentElement?.classList.add(
-      //       "selected"
-      //     );
-      //     break;
-      //   default:
-      //     break;
-      // }
 
       setSelectedOption(option);
+
       if (result) {
         if (bestMatchesResult) {
           let sortedResult: ResultType[] | undefined = undefined;
@@ -127,7 +100,15 @@ function QuickFindBoardOptionBtn({
       }
       openSortOptions();
     },
-    [bestMatchesResult, openSortOptions, result]
+    [
+      bestMatchesResult,
+      openSortOptions,
+      result,
+      compareResult,
+      option,
+      setResult,
+      setSelectedOption,
+    ]
   );
 
   return (
@@ -143,6 +124,6 @@ function QuickFindBoardOptionBtn({
       </div>
     </button>
   );
-}
+};
 
 export default React.memo(QuickFindBoardOptionBtn);

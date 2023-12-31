@@ -1,15 +1,13 @@
-import React, { useContext, useCallback } from "react";
+import React, { useContext, useCallback, CSSProperties } from "react";
 
 import { useNavigate } from "react-router-dom";
 
-import { CSSProperties } from "styled-components";
-
 import { PageIcon } from "../index";
 
+import { SESSION_KEY } from "../../constants";
 import { ActionContext } from "../../contexts";
 import { Block, Page, ListItem } from "../../types";
 import { getEditTime, isTemplates, setOriginTemplateItem } from "../../utils";
-import { SESSION_KEY } from "../../constants";
 
 type PageButtonProps = {
   itemSize: number;

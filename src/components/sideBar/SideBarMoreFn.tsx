@@ -25,12 +25,12 @@ type SideBarMoreFnProps = {
   closeModal: () => void;
 };
 
-function SideBarMoreFn({
+const SideBarMoreFn = ({
   user,
   targetItem,
   setSideModal,
   closeModal,
-}: SideBarMoreFnProps) {
+}: SideBarMoreFnProps) => {
   const moreFnRef = useRef<HTMLDivElement>(null);
 
   const { deletePage, removeFavorites, addFavorites, duplicatePage } =
@@ -180,6 +180,6 @@ function SideBarMoreFn({
       </div>
     </div>
   );
-}
+};
 
 export default React.memo(SideBarMoreFn);

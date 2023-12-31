@@ -4,6 +4,7 @@ type NewTemplateBtnProps = {
   onClickMakeTemplateBtn: () => void;
   children: ReactNode;
 };
+
 const NewTemplateBtn = ({
   onClickMakeTemplateBtn,
   children,

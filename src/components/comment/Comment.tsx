@@ -1,9 +1,10 @@
 import React from "react";
 
-import { MainCommentType, SubCommentType } from "../../types";
 import { CommentBlock, CommentInput } from "../index";
 import { CommentBlockProps } from "./CommentBlock";
 import { CommentInputProps } from "./CommentInput";
+
+import { MainCommentType, SubCommentType } from "../../types";
 
 type CommentProps = Omit<CommentBlockProps, "isMainComment" | "comment"> &
   Omit<

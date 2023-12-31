@@ -1,9 +1,12 @@
 import React from "react";
+
 import { AiOutlinePlus } from "react-icons/ai";
+
 type NewPageBtnProp = {
   addNewPage: () => void;
 };
-function NewPageBtn({ ...props }: NewPageBtnProp) {
+
+const NewPageBtn = ({ ...props }: NewPageBtnProp) => {
   return (
     <div className="addNewPageBtn">
       <button title="make new page" onClick={props.addNewPage}>
@@ -12,6 +15,6 @@ function NewPageBtn({ ...props }: NewPageBtnProp) {
       </button>
     </div>
   );
-}
+};
 
 export default React.memo(NewPageBtn);

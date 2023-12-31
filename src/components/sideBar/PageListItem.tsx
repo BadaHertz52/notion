@@ -1,6 +1,5 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, CSSProperties } from "react";
 
-import { CSSProperties } from "styled-components";
 import { Link } from "react-router-dom";
 
 import { MdPlayArrow } from "react-icons/md";
@@ -31,6 +30,7 @@ const PageListItem = ({
     transform: "rotate(0deg)",
   });
   const sideBarPageFnRef = useRef<HTMLDivElement>(null);
+
   const onToggleSubPage = useCallback((event: React.MouseEvent) => {
     const target = event.target as HTMLElement;
     const toggleSubPage = (subPageElement: null | undefined | Element) => {
@@ -70,11 +70,13 @@ const PageListItem = ({
     }
     toggleSubPage(subPageElement);
   }, []);
+
   const showPageFn = useCallback(() => {
     if (sideBarPageFnRef.current && !isMobile()) {
       sideBarPageFnRef.current.classList.toggle("on");
     }
   }, []);
+
   const removeOn = useCallback(() => {
     if (
       sideBarPageFnRef.current &&
@@ -84,6 +86,7 @@ const PageListItem = ({
       sideBarPageFnRef.current.classList.remove("on");
     }
   }, []);
+
   const onClickPageName = useCallback(() => {
     if (window.innerWidth <= 768) {
       changeSide("close");
@@ -94,6 +97,7 @@ const PageListItem = ({
     if (sideBarPageFnRef.current)
       onClickMoreBtn(item, sideBarPageFnRef.current);
   };
+
   return (
     <div
       className="page-list__item link-page"

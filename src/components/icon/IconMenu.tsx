@@ -1,5 +1,7 @@
 import React, { useCallback, useContext, useState, ChangeEvent } from "react";
 
+import { BsEmojiSmile } from "react-icons/bs";
+
 import { EmojiIcon, ScreenOnly } from "../index";
 
 import { EMOJI_ARRAY } from "../../constants";
@@ -11,7 +13,6 @@ import {
   setOriginTemplateItem,
 } from "../../utils";
 import { Block, Emoji, Page, IconType } from "../../types";
-import { BsEmojiSmile } from "react-icons/bs";
 
 type IconMenuProps = {
   currentPageId?: string;

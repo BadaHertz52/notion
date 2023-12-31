@@ -28,6 +28,7 @@ function Private({ ...props }: PrivateProps) {
           createTime: page.createTime,
         }))
     : null;
+
   return (
     <div className="private">
       <div className="header">

@@ -1,4 +1,10 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+  CSSProperties,
+} from "react";
 
 import {
   ModalPortal,
@@ -7,20 +13,19 @@ import {
   BlockStylerSideMenu,
   CommentInput,
 } from "../index";
+
 import { BlockStylerProps } from "../blockMenu/BlockStyler";
+
+import { INITIAL_MODAL } from "../../constants";
+import { ActionContext } from "../../contexts";
 import { ModalType } from "../../types";
-import { CSSProperties } from "styled-components";
 import {
   changeModalStyleOnTopOfBlock,
   findBlock,
-  getBlockDomRect,
   isMobile,
-  isTemplates,
   removeSelected,
 } from "../../utils";
-import { INITIAL_MODAL } from "../../constants";
 import { useModal } from "../../hooks";
-import { ActionContext } from "../../contexts";
 
 type BlockStylerModalProps = Omit<
   BlockStylerProps,

@@ -1,6 +1,6 @@
 import { memo, CSSProperties, useCallback, useEffect, useState } from "react";
 
-import { ColorMenu, LinkLoader, CommandMenu, CommentInput } from "../index";
+import { ColorMenu, LinkLoader, CommandMenu } from "../index";
 import { BlockStylerProps } from "./BlockStyler";
 import { ModalType } from "../../types";
 import { isMobile } from "../../utils";

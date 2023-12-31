@@ -5,15 +5,14 @@ import React, {
   MouseEvent,
   useContext,
   useCallback,
+  CSSProperties,
 } from "react";
-
-import { CSSProperties } from "styled-components";
 
 import { Comment, CommentToolMore, DiscardEditModal } from "../index";
 
-import { Block, MainCommentType, Page } from "../../types";
 import { ActionContext } from "../../contexts";
 import { SESSION_KEY } from "../../constants";
+import { Block, MainCommentType, Page } from "../../types";
 
 type CommentsProps = {
   /**

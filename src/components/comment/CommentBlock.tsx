@@ -1,13 +1,17 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-
-import { CSSProperties } from "styled-components";
-
-import { Block, MainCommentType, Page, SubCommentType } from "../../types";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+  CSSProperties,
+} from "react";
 
 import { CommentTool, CommentInput, Time } from "../index";
-import { SESSION_KEY } from "../../constants";
 import { CommentInputProps } from "./CommentInput";
 import { CommentToolProps } from "./CommentTool";
+
+import { SESSION_KEY } from "../../constants";
+import { Block, MainCommentType, Page, SubCommentType } from "../../types";
 
 export type CommentBlockProps = Omit<
   CommentInputProps,

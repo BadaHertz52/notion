@@ -1,7 +1,6 @@
-import React from "react";
+import React, { CSSProperties } from "react";
 
 import { Link } from "react-router-dom";
-import { CSSProperties } from "styled-components";
 
 import { PageIcon } from "../index";
 import { ResultType } from "../../types";

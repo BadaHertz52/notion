@@ -2,7 +2,6 @@ import React, {
   MouseEvent,
   TouchEvent,
   useCallback,
-  useEffect,
   useRef,
   useState,
 } from "react";

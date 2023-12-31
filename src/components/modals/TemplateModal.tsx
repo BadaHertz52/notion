@@ -6,13 +6,24 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import ModalPortal from "./ModalPortal";
-import TemplatesContainer, {
-  TemplatesContainerProps,
-} from "../containers/TemplatesContainer";
-import { ModalType, Page } from "../../types";
+
+import { IoMdCheckmark } from "react-icons/io";
+import { FaPlus } from "react-icons/fa";
+
+import {
+  ModalPortal,
+  MobileSideMenuModal,
+  Templates,
+  UseTemplateBtn,
+  NewTemplateBtn,
+  ScreenOnly,
+} from "../index";
+import { TemplatesProps } from "../templates/Templates";
+
 import { SESSION_KEY } from "../../constants";
+import { ActionContext } from "../../contexts";
 import { useModal } from "../../hooks";
+import { ModalType, Page } from "../../types";
 import {
   getEditTime,
   getNewPageId,
@@ -20,14 +31,6 @@ import {
   getPageSample,
   findPage,
 } from "../../utils";
-import MobileSideMenuModal from "./MobileSideMenuModal";
-import Templates, { TemplatesProps } from "../templates/Templates";
-import UseTemplateBtn from "../templates/UseTemplateBtn";
-import { IoMdCheckmark } from "react-icons/io";
-import NewTemplateBtn from "../templates/NewTemplateBtn";
-import ScreenOnly from "../ScreenOnly";
-import { FaPlus } from "react-icons/fa";
-import { ActionContext } from "../../contexts";
 
 export type TemplateModalProps = Omit<
   TemplatesProps,

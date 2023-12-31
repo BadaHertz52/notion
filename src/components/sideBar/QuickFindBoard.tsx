@@ -1,22 +1,14 @@
-import React, {
-  Dispatch,
-  useCallback,
-  useRef,
-  useState,
-  useEffect,
-} from "react";
+import React, { useCallback, useRef, useState } from "react";
 
-import { AiOutlineCheck } from "react-icons/ai";
 import { BsChevronDown, BsSearch } from "react-icons/bs";
 
-import { ScreenOnly, ResultList } from "../index";
+import { ScreenOnly, ResultList, QuickFindBoardOptionBtn } from "../index";
 
+import { OPTION } from "../../constants";
 import { Page, QuickFindBoardOption, ResultType } from "../../types";
 import { findPage, makeResultType } from "../../utils";
 
 import "../../assets/quickFindBoard.scss";
-import { OPTION } from "../../constants";
-import QuickFindBoardOptionBtn from "./QuickFindBoardOptionBtn";
 
 type QuickFindBoardProps = {
   userName: string;
@@ -126,7 +118,6 @@ const QuickFindBoard = ({
                           option={v as QuickFindBoardOption}
                           selectedOption={selectedOption}
                           setSelectedOption={setSelectedOption}
-                          search={search}
                           result={result}
                           bestMatchesResult={bestMatchesResult}
                           setResult={setResult}

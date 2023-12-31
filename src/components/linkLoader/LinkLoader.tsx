@@ -1,10 +1,7 @@
 import React, {
   useState,
   ChangeEvent,
-  Dispatch,
-  SetStateAction,
   useEffect,
-  useContext,
   useCallback,
   useMemo,
 } from "react";
@@ -16,10 +13,10 @@ import { BsArrowUpRight, BsLink45Deg } from "react-icons/bs";
 import { IoMdCopy } from "react-icons/io";
 import { IoTrashOutline } from "react-icons/io5";
 
-import { ActionContext } from "../../contexts";
+import { ScreenOnly, PageItem } from "../index";
+
 import { Block, Page } from "../../types";
 import { findPage } from "../../utils";
-import { ScreenOnly, PageItem } from "../index";
 
 import "../../assets/linkLoader.scss";
 
@@ -327,10 +324,6 @@ const LinkLoader = ({
   const [linkElements, setLinkElements] = useState<HTMLAnchorElement[] | null>(
     null
   );
-  const [linkLoaderStyle, setLinkLoaderStyle] = useState<
-    CSSProperties | undefined
-  >(undefined);
-  const blockStyler = document.getElementById("block-styler");
   const [searchValue, setSearchValue] = useState<string | null>(null);
   const [candidates, setCandidates] = useState<Page[] | null>(null);
   const [webLink, setWebLink] = useState<boolean>(false);
@@ -370,27 +363,6 @@ const LinkLoader = ({
     },
     [notTemplatePages, TOP_DOMAIN]
   );
-  /**
-   * dom에 변경이 읽을 때,  block의 내용을 담고 있는 element의 innerHTML을 읽어와서, 변경된 내용을 state에 업데이트하는 함수
-   */
-  // const getBlockContents = useCallback(() => {
-  //   const targetBlockContentHtml = document
-  //     .getElementById(`${block.id}__contents`)
-  //     ?.querySelector(".editable");
-  //   if (targetBlockContentHtml && targetBlockContentHtml) {
-  //     const innerHtml = targetBlockContentHtml.innerHTML;
-  //     const newBlock: Block = {
-  //       ...block,
-  //       contents: innerHtml,
-  //       editTime: getEditTime(),
-  //     };
-  //     editBlock(page.id, newBlock);
-  //     setModal((prev) => ({
-  //       ...prev,
-  //       block: newBlock,
-  //     }));
-  //   }
-  // }, [block, editBlock, page.id, setModal]);
 
   const resetLinked = useCallback(() => {
     if (linked && linkElements) {
@@ -527,7 +499,7 @@ const LinkLoader = ({
   }, [selectedHtml]);
 
   return (
-    <div id="loader-link" style={linkLoaderStyle}>
+    <div id="loader-link">
       <div className="inner">
         <div className="search">
           <label>

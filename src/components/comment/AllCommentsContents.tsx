@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
-import Comments from "./Comments";
+
+import { Comments } from "../index";
 import { Block, MainCommentType, Page } from "../../types";
 
 export type AllCommentsContentsProps = {

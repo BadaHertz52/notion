@@ -22,15 +22,20 @@ export type ExportProps = FrameProps & {
 const Export = ({ ...props }: ExportProps) => {
   const { page, pagesId, pages, closeModal } = props;
   //TODO - 상수
-  const html = "HTML";
-  const pdf = "PDF";
-  const markdown = "Markdown";
-  const everything = "Everything";
-  const noFileImage = "No files or images";
-  type Format = typeof html | typeof pdf | typeof markdown;
-  type Content = typeof everything | typeof noFileImage;
-  const [format, setFormat] = useState<Format>(html);
-  const [content, setContent] = useState<Content>(everything);
+  const FILE_TYPE = {
+    html: "HTML",
+    pdf: "PDF",
+    markdown: "Markdown",
+  };
+  const OPTION = {
+    everything: "Everything",
+    noFileImage: "No files or images",
+  };
+  type Format = keyof typeof FILE_TYPE;
+  type Content = keyof typeof OPTION;
+
+  const [format, setFormat] = useState<Format>("html");
+  const [content, setContent] = useState<Content>("everything");
   const exportHtml = document.getElementById("export");
   const openOptions = useCallback((event: MouseEvent) => {
     const currentTarget = event.currentTarget;
@@ -119,7 +124,7 @@ const Export = ({ ...props }: ExportProps) => {
                 align-items:center;
               }
               ${
-                content === noFileImage &&
+                content === "noFileImage" &&
                 "img, .page__header__cover, .page__icon-outBox, .media, .page__icon__img{display:none}"
               }
             </style>
@@ -171,7 +176,7 @@ const Export = ({ ...props }: ExportProps) => {
       }
 
       switch (format) {
-        case html:
+        case "html":
           exportDocument(
             page.header.title,
             currentPageFrameHtml,
@@ -185,7 +190,7 @@ const Export = ({ ...props }: ExportProps) => {
             );
           }
           break;
-        case pdf:
+        case "pdf":
           printPdf(currentPageFrameHtml);
           if (includeSubPage && page.subPagesId) {
             convertSubPageFrameIntoHtml(page.subPagesId).forEach(
@@ -194,7 +199,7 @@ const Export = ({ ...props }: ExportProps) => {
             );
           }
           break;
-        case markdown:
+        case "markdown":
           const markdownText = NodeHtmlMarkdown.translate(currentPageFrameHtml);
           exportDocument(
             page.header.title,
@@ -244,14 +249,14 @@ const Export = ({ ...props }: ExportProps) => {
                 <MdKeyboardArrowDown />
               </button>
               <div className="select__btn-group">
-                <button onClick={(event) => changeFormat(event, html)}>
-                  {html}
+                <button onClick={(event) => changeFormat(event, "html")}>
+                  {FILE_TYPE.html}
                 </button>
-                <button onClick={(event) => changeFormat(event, pdf)}>
-                  {pdf}
+                <button onClick={(event) => changeFormat(event, "pdf")}>
+                  {FILE_TYPE.pdf}
                 </button>
-                <button onClick={(event) => changeFormat(event, markdown)}>
-                  {markdown}
+                <button onClick={(event) => changeFormat(event, "markdown")}>
+                  {FILE_TYPE.markdown}
                 </button>
               </div>
             </div>
@@ -264,11 +269,13 @@ const Export = ({ ...props }: ExportProps) => {
                 <MdKeyboardArrowDown />
               </button>
               <div className="select__btn-group">
-                <button onClick={(event) => changeContent(event, everything)}>
-                  {everything}
+                <button onClick={(event) => changeContent(event, "everything")}>
+                  {OPTION.everything}
                 </button>
-                <button onClick={(event) => changeContent(event, noFileImage)}>
-                  {noFileImage}
+                <button
+                  onClick={(event) => changeContent(event, "noFileImage")}
+                >
+                  {OPTION.noFileImage}
                 </button>
               </div>
             </div>

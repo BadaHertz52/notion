@@ -2,16 +2,11 @@ import React, { ChangeEvent, useEffect, useCallback, useContext } from "react";
 import { CSSProperties } from "styled-components";
 
 import { SESSION_KEY } from "../constants";
+import { ActionContext } from "./../contexts/";
 import { Block, Page } from "../types";
-import {
-  setOriginTemplateItem,
-  changeImgToWebP,
-  getEditTime,
-  isInTarget,
-} from "../utils";
+import { setOriginTemplateItem, changeImgToWebP, getEditTime } from "../utils";
 
 import "../assets/loader.scss";
-import ActionContext from "./../contexts/ActionContext";
 
 export type LoaderProps = {
   //page cover -> block=undefined , image block loader -> block:Block

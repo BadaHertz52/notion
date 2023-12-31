@@ -22,6 +22,8 @@ import {
 } from "../index";
 
 import { INITIAL_MODAL } from "../../constants";
+import { ActionContext } from "../../contexts";
+import { useModal } from "../../hooks";
 import {
   ListItem,
   ModalType,
@@ -31,8 +33,6 @@ import {
   TrashType,
 } from "../../types";
 import { findPage } from "../../utils";
-import { ActionContext } from "../../contexts";
-import { useModal } from "../../hooks";
 
 type SideBarModalProps = {
   user: UserState;

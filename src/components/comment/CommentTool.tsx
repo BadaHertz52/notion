@@ -1,13 +1,11 @@
-import React, { Dispatch, SetStateAction, useRef } from "react";
-
-import { CSSProperties } from "styled-components";
+import React, { Dispatch, SetStateAction, useRef, CSSProperties } from "react";
 
 import { BsThreeDots } from "react-icons/bs";
 
 import { ScreenOnly, ResolveBtn } from "../index";
 
-import { Block, MainCommentType, Page, SubCommentType } from "../../types";
 import { SESSION_KEY } from "../../constants";
+import { Block, MainCommentType, Page, SubCommentType } from "../../types";
 
 export type CommentToolProps = {
   isMainComment: boolean;

@@ -7,8 +7,9 @@ import React, {
 } from "react";
 import * as ReactDOM from "react-dom";
 
-import "../../assets/modal.scss";
 import { ModalTargetType } from "../../types";
+
+import "../../assets/modal.scss";
 
 type ModalPortalProps = {
   target?: ModalTargetType;
@@ -18,6 +19,7 @@ type ModalPortalProps = {
   style?: CSSProperties;
   onTouchMove?: (event: TouchEvent<HTMLDivElement>) => void;
 };
+
 const ModalPortal = ({
   target,
   id,

@@ -1,7 +1,5 @@
 import React, {
   CSSProperties,
-  Dispatch,
-  SetStateAction,
   useCallback,
   useEffect,
   useMemo,
@@ -17,11 +15,11 @@ import {
 } from "../index";
 import { AllCommentsProps } from "../comment/AllComments";
 import { TopBarToolMoreProps } from "../topBar/TopBarToolMore";
+import { PageMenuProps } from "../pageMenu/PageMenu";
 
+import { useModal } from "../../hooks";
 import { ModalType } from "../../types";
 import { isMobile } from "../../utils";
-import { PageMenuProps } from "../pageMenu/PageMenu";
-import { useModal } from "../../hooks";
 
 type TopBarModalProps = AllCommentsProps &
   Omit<PageMenuProps, "what" | "currentPage"> &

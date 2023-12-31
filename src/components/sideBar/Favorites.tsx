@@ -1,11 +1,10 @@
-import React, { useCallback, useContext } from "react";
+import React, { useCallback } from "react";
 
 import { PageList } from "../index";
+import { PageListProp } from "./PageList";
 
-import { ActionContext } from "../../contexts";
 import { ListItem, Page } from "../../types";
 import { findPage } from "../../utils";
-import { PageListProp } from "./PageList";
 
 type FavoritesProps = Omit<PageListProp, "targetList"> & {
   favorites: string[] | null;
@@ -13,8 +12,6 @@ type FavoritesProps = Omit<PageListProp, "targetList"> & {
 
 function Favorites({ ...props }: FavoritesProps) {
   const { favorites, pages, pagesId } = props;
-
-  const { changeSide } = useContext(ActionContext).actions;
 
   const makeFavoriteList = useCallback(
     (

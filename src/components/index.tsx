@@ -20,6 +20,7 @@ import CommandMenu from "./command/CommandMenu";
 import CommandInput from "./command/CommandInput";
 //comment
 import AllComments from "./comment/AllComments";
+import AllCommentsContents from "./comment/AllCommentsContents";
 import BlockComment from "./comment/BlockComment";
 import Comment from "./comment/Comment";
 import CommentBlock from "./comment/CommentBlock";
@@ -30,6 +31,7 @@ import Comments from "./comment/Comments";
 import ResolveBtn from "./comment/ResolveBtn";
 //container
 import NotionContainer from "./containers/NotionContainer";
+import TemplatesContainer from "./containers/TemplatesContainer";
 //editor
 import Editor from "./editor/Editor";
 //frame
@@ -198,7 +200,9 @@ export {
   TopBarModal,
   //--modal
   Editor,
+  //comment--
   AllComments,
+  AllCommentsContents,
   BlockComment,
   Comment,
   CommentBlock,
@@ -207,6 +211,7 @@ export {
   CommentTool,
   CommentToolMore,
   ResolveBtn,
+  //--comment
   DiscardEditForm,
   Export,
   Img,
@@ -229,5 +234,7 @@ export {
   TrashResultItem,
   //container
   NotionContainer,
+  TemplatesContainer,
+  //--container
   Notion,
 };

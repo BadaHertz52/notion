@@ -1,4 +1,5 @@
 import React from "react";
+
 import { BiSearchAlt2 } from "react-icons/bi";
 import { BsFillTrash2Fill } from "react-icons/bs";
 import { HiTemplate } from "react-icons/hi";
@@ -8,7 +9,8 @@ type SideBarFnGroupProp = {
   onClickTrashBtn: () => void;
   openTemplates: () => void;
 };
-function SideBarFnGroup({ ...props }: SideBarFnGroupProp) {
+
+const SideBarFnGroup = ({ ...props }: SideBarFnGroupProp) => {
   return (
     <div className="side-bar__fn-group">
       <button
@@ -43,6 +45,6 @@ function SideBarFnGroup({ ...props }: SideBarFnGroupProp) {
       </button>
     </div>
   );
-}
+};
 
 export default React.memo(SideBarFnGroup);

@@ -40,11 +40,14 @@ const RecentPages = ({
     : window.innerWidth >= 425 && window.innerWidth <= 768
     ? window.innerWidth * 0.95
     : window.innerWidth;
+
   const onClickRecentPageItem = useCallback(() => {
     changeSide("close");
   }, [changeSide]);
+
   const Row = ({ index, measure }: { index: number; measure?: () => void }) => {
     const recentPage = recentPages?.[index];
+
     return recentPage ? (
       <Link
         to={makeRoutePath(recentPage.id)}
@@ -74,6 +77,7 @@ const RecentPages = ({
       <div> No pages visited recently </div>
     );
   };
+
   return (
     <div className="recentPages">
       <div className="header">RECENTLY VISITED PAGE</div>

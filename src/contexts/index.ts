@@ -1,2 +1,4 @@
-export { default as ActionContext } from "./ActionContext";
-export { default as ModalContext } from "./ModalContext";
+import ActionContext from "./ActionContext";
+import ModalContext from "./ModalContext";
+
+export { ActionContext, ModalContext };

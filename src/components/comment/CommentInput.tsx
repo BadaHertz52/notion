@@ -7,15 +7,15 @@ import React, {
   useEffect,
   useCallback,
   useRef,
+  CSSProperties,
 } from "react";
-
-import { CSSProperties } from "styled-components";
 
 import { IoMdCloseCircle } from "react-icons/io";
 import { IoArrowUpCircleSharp, IoCheckmarkCircle } from "react-icons/io5";
 
 import { ScreenOnly } from "../index";
 
+import { SESSION_KEY } from "../../constants";
 import {
   Block,
   MainCommentType,
@@ -24,7 +24,6 @@ import {
   ModalType,
 } from "../../types";
 import { getEditTime, setOriginTemplateItem } from "../../utils";
-import { SESSION_KEY } from "../../constants";
 
 export type CommentInputProps = {
   userName: string;

@@ -1,4 +1,4 @@
-import React, {
+import {
   MouseEvent,
   RefObject,
   memo,
@@ -24,10 +24,9 @@ import {
   LoaderModal,
 } from "../index";
 
-import { MainCommentType, Page } from "../../types";
-
+import { BASIC_PAGE_COVER_URL } from "../../constants";
 import { ActionContext } from "../../contexts";
-
+import { MainCommentType, Page } from "../../types";
 import {
   setOriginTemplateItem,
   randomEmojiIcon,
@@ -35,7 +34,6 @@ import {
   changeIconModalStyle,
   isTemplates,
 } from "../../utils";
-import { BASIC_PAGE_COVER_URL } from "../../constants";
 
 export type PageHeaderProps = {
   userName: string;

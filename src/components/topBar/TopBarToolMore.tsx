@@ -13,7 +13,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 
 import { FontBtn } from "../index";
 
-import { ActionContext, ModalContext } from "../../contexts";
+import { ActionContext } from "../../contexts";
 import { isMobile } from "../../utils";
 import { FontStyle, ModalType, Page, SideAppear } from "../../types";
 

@@ -5,9 +5,11 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import ModalPortal from "./ModalPortal";
+
+import { ModalPortal } from "../index";
 import { EditableBlockProps } from "../block/EditableBlock";
 import MovingTargetBlock from "../block/MovingTargetBlock";
+
 import { ActionContext } from "../../contexts";
 import {
   findBlock,
@@ -24,6 +26,7 @@ type MovingBlockModalProps = Omit<EditableBlockProps, "block"> & {
   isOpen: boolean;
   closeModal: () => void;
 };
+
 const MovingBlockModal = ({ ...props }: MovingBlockModalProps) => {
   const { editPage } = useContext(ActionContext).actions;
   const { page, block } = props;

@@ -4,9 +4,8 @@ import React, {
   useEffect,
   useState,
   useContext,
+  CSSProperties,
 } from "react";
-
-import { CSSProperties } from "styled-components";
 
 import { ExportModal, Frame, TopBar } from "../index";
 

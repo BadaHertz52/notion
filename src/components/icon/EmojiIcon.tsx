@@ -6,7 +6,6 @@ import { EMOJI_ARRAY, EMOJI_DATA } from "../../constants";
 import { Emoji } from "../../types";
 
 import "../../assets/emoji.scss";
-
 import transparentImg from "../../assets/img/transparent.webp";
 import spritePng from "../../assets/img/emoji_sprite.png";
 

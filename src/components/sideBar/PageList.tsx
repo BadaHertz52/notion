@@ -2,8 +2,8 @@ import React, { useContext, useCallback, useRef } from "react";
 
 import { PageListItem } from "../index";
 
-import { ListItem, Page, SideAppear } from "../../types";
 import { ActionContext } from "../../contexts";
+import { ListItem, Page } from "../../types";
 
 export type PageListProp = {
   pages: Page[] | null;
@@ -19,6 +19,7 @@ const PageList = ({ ...props }: PageListProp) => {
   const { changeSide } = useContext(ActionContext).actions;
 
   const ulRef = useRef<HTMLUListElement>(null);
+
   const findSubPage = (
     id: string,
     pagesId: string[],
@@ -26,6 +27,7 @@ const PageList = ({ ...props }: PageListProp) => {
   ): ListItem => {
     const index = pagesId.indexOf(id);
     const subPage: Page = pages[index];
+
     return {
       id: subPage.id,
       title: subPage.header.title,
@@ -37,6 +39,7 @@ const PageList = ({ ...props }: PageListProp) => {
       createTime: subPage.createTime,
     };
   };
+
   const makeTargetList = useCallback(
     (ids: string[], pagesId: string[], pages: Page[]): ListItem[] => {
       const listItemArr: ListItem[] = ids.map((id: string) =>
@@ -46,6 +49,7 @@ const PageList = ({ ...props }: PageListProp) => {
     },
     []
   );
+
   return (
     <ul ref={ulRef} className="page-list">
       {targetList.map((item) => (

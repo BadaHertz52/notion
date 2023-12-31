@@ -1,11 +1,4 @@
-import React, {
-  Dispatch,
-  SetStateAction,
-  useContext,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import React, { useContext, useCallback, useEffect, useState } from "react";
 
 import { FcTodoList } from "react-icons/fc";
 import { IoIosList } from "react-icons/io";

@@ -7,16 +7,14 @@ import React, {
 } from "react";
 
 import { MdKeyboardArrowDown } from "react-icons/md";
-import { FaArrowAltCircleDown } from "react-icons/fa";
 
-import { ScreenOnly } from "../index";
-import AllCommentsContents, {
-  AllCommentsContentsProps,
-} from "./AllCommentsContents";
+import { ScreenOnly, AllCommentsContents } from "../index";
+import { AllCommentsContentsProps } from "./AllCommentsContents";
 
-import "../../assets/allComments.scss";
 import { isMobile } from "../../utils";
 import { ModalType } from "../../types";
+
+import "../../assets/allComments.scss";
 
 export type AllCommentsProps = Omit<AllCommentsContentsProps, "select"> & {
   setModal: Dispatch<SetStateAction<ModalType>>;

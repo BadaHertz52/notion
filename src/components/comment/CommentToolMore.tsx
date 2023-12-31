@@ -4,16 +4,15 @@ import React, {
   useCallback,
   useEffect,
   useState,
+  CSSProperties,
 } from "react";
-
-import { CSSProperties } from "styled-components";
 
 import { HiOutlinePencil } from "react-icons/hi";
 import { IoTrashOutline } from "react-icons/io5";
 
+import { SESSION_KEY } from "../../constants";
 import { Block, MainCommentType, Page, SubCommentType } from "../../types";
 import { setOriginTemplateItem, findBlock } from "../../utils";
-import { SESSION_KEY } from "../../constants";
 
 type CommentToolMoreProps = {
   pageId: string;
