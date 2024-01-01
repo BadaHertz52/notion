@@ -139,14 +139,13 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
     }
   }, [modal, changeStyleOfModalOnBottomBlock, changeMenuModalStyle]);
 
-  const handleScrollOfFrame = useCallback(() => {
+  const handleScrollOfFrame = useCallback((open: boolean) => {
     const frameEl = document.querySelector(".frame");
-    frameEl?.classList.toggle("stop", modal.open);
-  }, [modal.open]);
+    frameEl?.classList.toggle("stop", open);
+  }, []);
 
   const handleCloseModal = useCallback(() => {
     //blockStyler는 sideMenu 문제로 blockStyler에서 다룸
-
     if (modal.open && modal.target !== "blockStyler") {
       props.closeModal();
     }
@@ -157,7 +156,10 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
   }, [modal, changeModalStyle]);
 
   useEffect(() => {
-    handleScrollOfFrame();
+    handleScrollOfFrame(true);
+    return () => {
+      handleScrollOfFrame(false);
+    };
   }, [handleScrollOfFrame]);
 
   useEffect(() => {
