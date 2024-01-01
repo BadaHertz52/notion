@@ -65,29 +65,22 @@ npm run start
 
 ## <div id="layout">1) Layout</div>
 
-- Main
-  - Sidebar
-  - Editor
-    - Topbar
-    - Frame
-      - Page header
-      - Page content
+#### Main
+
+- Sidebar
+- Editor
+  - TopBar
+  - Frame
+    - Page header
+    - Page content
+      - block
 
 <img src="./image/readMeFile/layout.jpg"  width="450px" height="auto">
 
-- Template
+#### Template
 
 <img src="./image/readMeFile/template.png" width="450px" height="auto">
 <br/>
-
-- Responsible web - Mobile 화면 (sideMenu)
-  <br/>
-
-  <img 
-    height="400px"
-    width="auto"
-    src="./image/readMeFile/mobile_side.gif"
-    alt="mobile web simulation"/>
 
 ## <div id="data"> 2) Data </div>
 
@@ -129,7 +122,7 @@ npm run start
 
 ## <div id="function"> 3) Function </div>
 
-레이아웃을 기준으로 notion에서 사용할 수 있는 기능들 입니다.
+레이아웃을 기준으로 notion에서 사용할 수 있는 기능들입니다.
 
 ### A. Sidebar
 
@@ -170,9 +163,9 @@ npm run start
     src="https://user-images.githubusercontent.com/69838872/209685375-979f13b7-2617-425a-bdba-23f2ef21278a.gif"
   />
 
-### <div id="topBar_function"> a. Topbar </div>
+### <div id="topBar_function"> a. TopBar </div>
 
-#### 📼 Topbar simulation
+#### 📼 TopBar simulation
 
 <img 
     width="50%"
@@ -208,34 +201,40 @@ npm run start
     - 페이지 아이콘을 랜덤으로 추가
     - 템플릿 이용
 - 페이지 내 글 (block)에 대한 기능
+
   - block생성
     - 페이지 하단 클릭 시 새로운 블록 생성
     - 작성 중인 block에서 enter 키 누르면, 끝에서 누를 경우는 내용이 빈 블록이 생성되고 block의 내용 중간에서 enter키 누르면 커서 뒷 부분의 내용을 가진 블록이 생성
     - 블럭 옆에 생성된 "+" 버튼을 눌러서 새로운 블록 생성
-- block 복제
-- block 내용 수정
-- image 타입의 block의 경우 image의 사이즈를 수정 가능
-- block 타입 수정
+  - block 복제
+  - block 내용 수정
+  - image 타입의 block의 경우 image의 사이즈를 수정 가능
+  - block 타입 수정
   - 빈 블록에서 "/" 입력으로 블록 타입을 수정할 수 있는 command 창을 열어서 블록 타입을 수정
   - 메뉴(Menu), 블럭 내 내용 선택(BlockStyler)을 통해서 타입 수정
-- block 스타일 변경
-  - block 전체 스타일 변경 (Menu)
-  - block 내 일부 스타일 변경 가능 (BlockStyler)
-- block에 링크 추가
-- block에 대한 comment 생성,comment 속성(open,resolve)변경, 삭제
-- block 삭제
-  - 내용이 빈 블록에서 backspace를 누르면 해당 블록 삭제
-  - 메뉴에서 해당 블록 삭제 가능
-- page 내 block 위치 변경
-  - 마우스 드래그를 통해 block 의 위치를 변경
-  - 변경된 위치에 따라 block의 부모 block과 subBlock(자식 block), page.firstBlocksId 에 변동 사항이 생길 수 있음
-- tab 키와 backspace 키를 통해 block 들여쓰기 내여쓰기 가능
-- 키보드 방향키를 통한 블록간의 커서 이동
-- 블럭을 다른 페이지로 이동
+  - block 스타일 변경
+    - block 전체 스타일 변경 (Menu)
+    - block 내 일부 스타일 변경 가능 (BlockStyler)
+  - block에 링크 추가
+  - block에 대한 comment 생성,comment 속성(open,resolve)변경, 삭제
+  - block 삭제
+    - 내용이 빈 블록에서 backspace를 누르면 해당 블록 삭제
+    - 메뉴에서 해당 블록 삭제 가능
+  - page 내 block 위치 변경
+    - 마우스 드래그를 통해 block 의 위치를 변경
+    - 변경된 위치에 따라 block의 부모 block과 subBlock(자식 block), page.firstBlocksId 에 변동 사항이 생길 수 있음
+  - tab 키와 backspace 키를 통해 block 들여쓰기 내여쓰기 가능
+  - 키보드 방향키를 통한 블록간의 커서 이동
+  - 블럭을 다른 페이지로 이동
+
+- comment
+  - 블록 전체나 블록의 일부분에 대한 comment 생성 가능
+  - comment 삭제,수정,수정 취소 가능
+  - comment 타입은 open->resolve로 수정 가능
 
 #### 📼 PageContent simulation
 
-- block 생성 및 타입 변경
+block 생성 및 타입 변경
 
 <img 
     alt="make newBlock and change block type"
@@ -243,7 +242,7 @@ npm run start
     src="https://user-images.githubusercontent.com/69838872/209687777-fb568d78-b367-4437-9e0a-03c909882a70.gif"
   />
 
-- image 타입 블럭 생성 및 image 사이즈 변경
+image 타입 블럭 생성 및 image 사이즈 변경
 
 <img 
     alt="imgBlock"
@@ -251,13 +250,13 @@ npm run start
     src="https://user-images.githubusercontent.com/69838872/209687927-d5d5ea4b-2865-4ddb-ab30-b8020c0597dc.gif"
   />
 
-- comment
+comment
 
-<img ait="comment" width="50%" src="./image/readMeFile/m_comment.gif" />
+<img ait="comment" width="50%" src="./image/readMeFile/comment.gif" />
 
 <br/>
 
-- blockStyler - web browser
+blockStyler
 
 <img 
     alt="blockStyler_web"
@@ -265,19 +264,15 @@ npm run start
     src="https://user-images.githubusercontent.com/69838872/209688273-bc6bd45b-bf0b-48be-aa1d-1020963f193d.gif"
   />
 
-- blockStyler - mobile browser
-
-<img alt="blockStyler_mobile" width="40%" src="./image/readMeFile/m_b%20.gif"/>
-
 <br/>
 
-- 다른 페이지로 블록 이동
+다른 페이지로 블록 이동
 
 <img ait="changePosition"
 width="50%"
 src="https://user-images.githubusercontent.com/69838872/209688434-5db37fcc-7987-460b-80a7-43db53d410c3.gif">
 
-- 블록 위치 변경
+블록 위치 변경
 
 <img
   ait="changePosition"
@@ -285,15 +280,7 @@ src="https://user-images.githubusercontent.com/69838872/209688434-5db37fcc-7987-
   src="https://user-images.githubusercontent.com/69838872/209688434-5db37fcc-7987-460b-80a7-43db53d410c3.gif"/>
 <br/>
 
-- 블록 위치 변경 - mobile browser
-
-<img 
-    ait="changePosition"
-    width="40%"
-    src="./image/readMeFile/moveBlock_mobile.gif"
-/>
-
-- 기타: 키보드를 통한 조작, 블럭 삭제, 블럭 내용 선택등등
+기타: 키보드를 통한 조작, 블럭 삭제, 블럭 내용 선택등등
 
 <img 
     width="50%"
@@ -301,35 +288,22 @@ src="https://user-images.githubusercontent.com/69838872/209688434-5db37fcc-7987-
     src="https://user-images.githubusercontent.com/69838872/209688197-d6aacef5-a7af-438c-8543-e9e40d16a8bb.gif"
 />
 
-- menu - mobile browser
+### c) mobile browser
 
-<img 
-  width="40%" 
-  alt="menu in mobile" 
-  src="./image/readMeFile/mobile_m.gif"
-/>
-
-- sideMenu of menu - mobile browser
-
-<img 
-  width="40%" 
-  alt="sideMenu of menu in mobile" 
-  src="./image/readMeFile/m_mm.gif"
-/>
-
----
+## <img alt="mobile browser" height="300px" src="./image/readMeFile/mobile.gif">
 
 ## <div id="update">4. Update </div>
 
 #### 🔧2022.12 업데이트
 
-- sideBar,allComment 변경,<span style="text-decoration:line-through"> Mobile Menu 추가 </span>, 모바일에서도 ImageContent 사이즈 변경가능하도록 수정
+- sideBar,allComment 변경
+- 모바일에서도 ImageContent 사이즈 변경가능하도록 수정
   <br/>
 
 #### 🔧2023.3 업데이트 및 수정
 
 - 모바일 브라우저에서 사용될 block 에 대한 메뉴와 그 사이드 메뉴를 담당하는 MobileBlockMenu, MobileSideMenu 추가
-- 모바일 브라우저에서도 block의 contents 중 특정 글자를 선택할 때 해당 글자에 대한 BlockStyler 의 기능을 사용 가능
+- 모바일 브라우저에서도 block의 contents 중 특정 글자를 선택할 때 해당 글자에 대한 BlockStyler 의 기능을 사용 가능하도록 수정
 - block 전체 뿐만 아니라 일부 내용에 대해서도 comment 추가 할 수 있음
 - 모바일 브라우저에서 블럭간 이동이 안되는 오류 수정
   <br/>
@@ -346,9 +320,13 @@ src="https://user-images.githubusercontent.com/69838872/209688434-5db37fcc-7987-
 - css-sprite, webP 형식 이미지 사용으로 이미지 최적화
   - gif를 제외한 이미지들을 webP형식으로 저장되고 생성되며, webP를 지원하지 않는 브라우저에서는 jpeg 형식을 지원하도록 함
 - 모바일 브라우저에서 블럭 이동,selection 기능 사용 시 매끄럽지 못한 부분 수정
-- 모바일 브라우저에서 스크롤로 인한 "overfolow:hidden" 이 제대로 작동하지 않는 오류 수정
+- 모바일 브라우저에서 스크롤로 인한 "overflow:hidden" 이 제대로 작동하지 않는 오류 수정
 - react-window 라이브러리 사용해, page 목록 나오는 부분 최적화
 - 글자, 아이콘의 색상 대비 개선
+
+### 🔧 2023.12 업데이트
+
+- React Portals를 이용해 모달 리팩토링 진행
 
 ---
 
