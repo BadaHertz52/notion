@@ -1,34 +1,10 @@
-import React, {
-  Dispatch,
-  MouseEvent,
-  SetStateAction,
-  TouchEvent,
-  useEffect,
-  useContext,
-  useMemo,
-  useCallback,
-} from "react";
+import React, { Dispatch, SetStateAction, useEffect, useContext } from "react";
 
-import { GrCheckbox, GrCheckboxSelected } from "react-icons/gr";
-import { MdPlayArrow } from "react-icons/md";
-
-import {
-  BlockContents,
-  PageIcon,
-  BlockComment,
-  ScreenOnly,
-  ListSub,
-  MainBlock,
-} from "../index";
+import { ListSub, MainBlock } from "../index";
 
 import { ActionContext } from "../../contexts";
 import { Block, Page } from "../../types";
-import {
-  changeFontSizeBySmallText,
-  findBlock,
-  getEditTime,
-  setOriginTemplateItem,
-} from "../../utils";
+import { changeFontSizeBySmallText, findBlock } from "../../utils";
 import { SESSION_KEY } from "../../constants";
 
 export type EditableBlockProps = {
@@ -45,7 +21,7 @@ export type EditableBlockProps = {
 
 const EditableBlock = ({ ...props }: EditableBlockProps) => {
   const { block, page } = props;
-  const { editBlock } = useContext(ActionContext).actions;
+
   const className =
     block.type !== "toggle"
       ? `${block.type} block `
