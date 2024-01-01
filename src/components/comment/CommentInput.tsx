@@ -8,6 +8,7 @@ import React, {
   useCallback,
   useRef,
   CSSProperties,
+  useContext,
 } from "react";
 
 import { IoMdCloseCircle } from "react-icons/io";
@@ -24,6 +25,7 @@ import {
   ModalType,
 } from "../../types";
 import { getEditTime, setOriginTemplateItem } from "../../utils";
+import { ActionContext } from "../../contexts";
 
 export type CommentInputProps = {
   userName: string;
@@ -65,7 +67,6 @@ export type CommentInputProps = {
   setModal?: Dispatch<SetStateAction<ModalType>>;
   setOpenDiscardEdit?: Dispatch<SetStateAction<boolean>>;
   setEdit?: Dispatch<SetStateAction<boolean>>;
-  frameHtml: HTMLElement | null;
 };
 
 const CommentInput = ({
@@ -74,8 +75,6 @@ const CommentInput = ({
   page,
   mainComment,
   subComment,
-  editBlock,
-  editPage,
   commentBlock,
   allComments,
   setAllComments,
@@ -83,8 +82,9 @@ const CommentInput = ({
   addOrEdit,
   setOpenDiscardEdit,
   setEdit,
-  frameHtml,
 }: CommentInputProps) => {
+  const { editBlock, editPage } = useContext(ActionContext).actions;
+
   const userNameFirstLetter = userName.substring(0, 1).toUpperCase();
 
   const [editTargetComment, setEditTargetComment] = useState<
@@ -107,7 +107,7 @@ const CommentInput = ({
 
   const updateBlock = useCallback(
     (blockComments: MainCommentType[]) => {
-      if (commentBlock && editBlock) {
+      if (commentBlock) {
         let editedBlock: Block = {
           ...commentBlock,
           comments: blockComments,
@@ -124,13 +124,13 @@ const CommentInput = ({
             };
           }
         }
-        console.log("blockcomments", blockComments, "edited", editedBlock);
         editBlock(pageId, editedBlock);
         setAllComments && setAllComments(blockComments);
       }
     },
     [commentBlock, editBlock, pageId, selectedHtml, setAllComments]
   );
+
   const findMainCommentIndex = (
     comments: MainCommentType[],
     mainComment: MainCommentType
@@ -139,6 +139,7 @@ const CommentInput = ({
     const mainCommentIndex = commentsId.indexOf(mainComment.id);
     return mainCommentIndex;
   };
+
   const findMainComment = useCallback((): {
     mainComment: MainCommentType;
     mainCommentIndex: number;
@@ -170,12 +171,13 @@ const CommentInput = ({
       });
     }
   }, []);
+
   const addMainComment = useCallback(() => {
     const editTime = getEditTime();
     if (commentBlock) {
       const newId = `main_${editTime}`;
       if (selectedHtml) {
-        selectedHtml.className = `text_commentBtn mainId_${newId}`;
+        selectedHtml.className = `text__btn-comment ${newId}`;
       }
       const newBlockComment: MainCommentType = {
         id: newId,
@@ -188,10 +190,10 @@ const CommentInput = ({
         subCommentsId: null,
         type: "open",
       };
-      const newBlockComments =
-        allComments === null
-          ? [newBlockComment]
-          : allComments.concat(newBlockComment);
+      const newBlockComments = !allComments
+        ? [newBlockComment]
+        : allComments.concat(newBlockComment);
+
       updateBlock(newBlockComments);
     }
   }, [
@@ -327,6 +329,7 @@ const CommentInput = ({
   const makeNewComment = useCallback(
     (event: MouseEvent) => {
       event.preventDefault();
+
       if (commentBlock) {
         !mainComment ? addMainComment() : addSubComment();
       } else {

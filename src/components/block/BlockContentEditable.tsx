@@ -457,7 +457,7 @@ const BlockContentEditable = ({
         openLink(target);
         return;
       }
-      if (target.classList.contains("text_commentBtn")) {
+      if (target.classList.contains("text__btn-comment")) {
         openBlockComments(target);
         return;
       }

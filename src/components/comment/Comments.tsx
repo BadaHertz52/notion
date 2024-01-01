@@ -13,6 +13,7 @@ import { Comment, CommentToolMore, DiscardEditModal } from "../index";
 import { ActionContext } from "../../contexts";
 import { SESSION_KEY } from "../../constants";
 import { Block, MainCommentType, Page } from "../../types";
+import { isInTarget } from "../../utils";
 
 type CommentsProps = {
   /**
@@ -31,7 +32,6 @@ type CommentsProps = {
 
 const Comments = ({ ...props }: CommentsProps) => {
   const { targetMainComments, block, frameHtml } = props;
-
   const { editBlock, editPage } = useContext(ActionContext).actions;
   const inner = document.getElementById("notion__inner");
 
@@ -54,10 +54,16 @@ const Comments = ({ ...props }: CommentsProps) => {
   }, []);
 
   const closeToolMore = useCallback(
-    (event: MouseEvent | globalThis.MouseEvent) => {
+    (event: globalThis.MouseEvent) => {
       if (moreOpen) {
-        const target = event.target as HTMLElement | null;
-        const isInToolMore = target?.closest(".comment__tool-more");
+        const CORRECT_TARGETS = [
+          ".btn-comment__tool-more",
+          ".comment__tool-more",
+        ];
+        const isInToolMore = CORRECT_TARGETS.map((v) =>
+          isInTarget(event, v)
+        ).some((v) => !!v);
+
         if (!isInToolMore) {
           setMoreOpen(false);
           sessionStorage.removeItem(SESSION_KEY.toolMoreItem);
@@ -137,10 +143,10 @@ const Comments = ({ ...props }: CommentsProps) => {
   }, [changeCommentsStyle]);
 
   useEffect(() => {
-    inner?.addEventListener("click", closeToolMore);
+    document.addEventListener("click", closeToolMore);
 
     return () => {
-      inner?.removeEventListener("click", closeToolMore);
+      document.removeEventListener("click", closeToolMore);
     };
   }, [inner, closeToolMore]);
 
@@ -171,7 +177,6 @@ const Comments = ({ ...props }: CommentsProps) => {
               setAllComments={setAllComments}
               moreOpen={moreOpen}
               setMoreOpen={setMoreOpen}
-              templateHtml={templateHtml}
               setToolMoreStyle={setToolMoreStyle}
               openDiscardEdit={openDiscardEdit}
               setOpenDiscardEdit={setOpenDiscardEdit}
@@ -189,7 +194,6 @@ const Comments = ({ ...props }: CommentsProps) => {
           editPage={editPage}
           setAllComments={setAllComments}
           setMoreOpen={setMoreOpen}
-          templateHtml={templateHtml}
         />
       )}
       {openDiscardEdit && (

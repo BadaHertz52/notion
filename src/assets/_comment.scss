@@ -103,24 +103,7 @@
     padding: 0;
   }
 }
-#block-comments {
-  @include hiddenScrollBar;
-  @include modalStyle;
-  width: inherit;
-  position: absolute;
-  z-index: 20;
-  padding-bottom: 0;
-  overflow-y: scroll;
-  .comments__comments-group {
-    width: 100%;
-    margin: 0;
-    padding-bottom: 0;
-  }
-  .comment-input {
-    @include resetModalStyle;
-    display: flex;
-  }
-}
+
 .page__comments {
   position: relative;
   .commentBlock {

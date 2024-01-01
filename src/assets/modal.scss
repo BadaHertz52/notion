@@ -90,6 +90,26 @@
     max-width: inherit;
   }
 }
+#modal-frame__menu {
+  #block-comments {
+    @include hiddenScrollBar;
+    @include modalStyle;
+    width: max-content;
+    position: absolute;
+    z-index: 20;
+    padding-bottom: 0;
+    overflow-y: scroll;
+    .comments__comments-group {
+      width: 100%;
+      margin: 0;
+      padding-bottom: 0;
+    }
+    .comment-input {
+      @include resetModalStyle;
+      display: flex;
+    }
+  }
+}
 @media screen and (max-width: 768px) {
   .center .modal__menu {
     & > .inner {

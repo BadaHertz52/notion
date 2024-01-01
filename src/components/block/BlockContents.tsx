@@ -71,7 +71,6 @@ const BlockContents = ({ ...props }: BlockContentsProps) => {
         });
     }
   }, [block, changeBlockQuickMenuModal]);
-
   //--blockQuickMenu
 
   const onClickContents = useCallback(() => {
@@ -135,6 +134,7 @@ const BlockContents = ({ ...props }: BlockContentsProps) => {
     },
     [markMovingTargetBlock]
   );
+
   const handleTouchMove = () => {
     if (
       startMarkMovingBlock.current &&

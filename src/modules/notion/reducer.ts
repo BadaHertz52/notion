@@ -409,7 +409,7 @@ export const initialNotionState: Notion = {
         {
           id: "h2",
           contents:
-            "<span class='text_commentBtn mainId_comment_h2_1'>h</span>ead<span class='text_commentBtn mainId_comment_h2_2'>er</span>2",
+            "<span class='text_commentBtn comment_h2_1'>h</span>ead<span class='text_commentBtn comment_h2_2'>er</span>2",
           firstBlock: true,
           subBlocksId: null,
           parentBlocksId: null,

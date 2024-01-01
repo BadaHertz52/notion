@@ -1,4 +1,10 @@
-import React, { Dispatch, SetStateAction, useRef, CSSProperties } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useRef,
+  CSSProperties,
+  useContext,
+} from "react";
 
 import { BsThreeDots } from "react-icons/bs";
 
@@ -6,6 +12,7 @@ import { ScreenOnly, ResolveBtn } from "../index";
 
 import { SESSION_KEY } from "../../constants";
 import { Block, MainCommentType, Page, SubCommentType } from "../../types";
+import { ActionContext } from "../../contexts";
 
 export type CommentToolProps = {
   isMainComment: boolean;
@@ -13,14 +20,10 @@ export type CommentToolProps = {
   block?: Block;
   page: Page;
   pageId: string;
-  editBlock: (pageId: string, block: Block) => void;
-  editPage?: (pageId: string, newPage: Page) => void;
-  frameHtml: HTMLElement | null;
   setAllComments: Dispatch<SetStateAction<MainCommentType[] | null>>;
   moreOpen: boolean;
   setMoreOpen: Dispatch<SetStateAction<boolean>>;
   setToolMoreStyle: Dispatch<SetStateAction<CSSProperties | undefined>>;
-  templateHtml: HTMLElement | null;
 };
 
 const CommentTool = ({
@@ -29,15 +32,12 @@ const CommentTool = ({
   block,
   page,
   pageId,
-  editBlock,
-  editPage,
-  frameHtml,
   setAllComments,
   moreOpen,
   setMoreOpen,
   setToolMoreStyle,
-  templateHtml,
 }: CommentToolProps) => {
+  const { editBlock, editPage } = useContext(ActionContext).actions;
   const commentToolRef = useRef<HTMLDivElement>(null);
 
   const openToolMore = (event: React.MouseEvent<HTMLButtonElement>) => {

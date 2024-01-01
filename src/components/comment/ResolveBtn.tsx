@@ -22,6 +22,22 @@ const ResolveBtn = ({
   editPage,
   setAllComments,
 }: ResolveBtnProps) => {
+  const removeTextComment = useCallback(() => {
+    if (comment.selectedText) {
+      const textComment = document
+        .querySelector(`#${block?.id}__contents`)
+        ?.querySelector(`.text__btn-comment.${comment.id}`);
+
+      if (textComment) {
+        textComment.outerHTML = textComment.innerHTML;
+      }
+
+      return document
+        .querySelector(`#${block?.id}__contents`)
+        ?.querySelector(".editable")?.innerHTML;
+    }
+  }, [block?.id, comment.id, comment.selectedText]);
+
   const changeCommentType = useCallback(() => {
     const newType: CommentType = comment.type === "open" ? "resolve" : "open";
     const editTime = JSON.stringify(Date.now());
@@ -41,8 +57,10 @@ const ResolveBtn = ({
       const index = commentIdes.indexOf(comment.id);
       comments.splice(index, 1, newComment);
       const openComments = comments.filter((c) => c.type === "open");
+      const contents = removeTextComment() || block.contents;
       const editedBlock: Block = {
         ...block,
+        contents: contents,
         comments: comments,
         editTime: editTime,
       };

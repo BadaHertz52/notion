@@ -9,9 +9,11 @@ type ContentsProps = BlockContendEditableProps & {
 };
 const Contents = ({ ...props }: ContentsProps) => {
   const { block, onClickCommentBtn } = props;
+
   const handleClick = () => {
     if (onClickCommentBtn) onClickCommentBtn(block);
   };
+
   return (
     <>
       {props.isOpenComments ? (

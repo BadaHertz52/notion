@@ -359,11 +359,10 @@ document {
   }
 }
 .block__contents .btn-comment,
-.block__contents .text_commentBtn {
+.block__contents .text__btn-comment {
   color: inherit;
   text-decoration: inherit;
   width: fit-content;
-  z-index: 2;
   font : {
     size: inherit;
     weight: inherit;
@@ -375,14 +374,12 @@ document {
 }
 .block__contents .btn-comment {
   background-color: $comment;
-  padding: 4px;
 }
 .block__contents {
-  .text_commentBtn {
+  .text__btn-comment {
     background-color: $comment_text;
     display: inline-block;
     position: relative;
-    padding: 4px;
   }
 }
 .mainBlock,

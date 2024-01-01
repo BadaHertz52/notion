@@ -28,7 +28,7 @@ const Comment = ({ ...props }: CommentProps) => {
               {...props}
               key={`commentBlock_${subComment.id}`}
               comment={subComment}
-              isMainComment={true}
+              isMainComment={false}
             />
           ))}
         </div>

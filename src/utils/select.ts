@@ -563,5 +563,4 @@ export const removeSelected = (
   const editedBlock = getContent(block);
   editBlock(page.id, editedBlock);
 };
-
 // ----  select 취소 변경

@@ -52,6 +52,7 @@ const BlockStylerModal = ({ ...props }: BlockStylerModalProps) => {
     ".comment-input",
     "#loader-link",
     "#mobile-side-menu",
+    "#comment__btn-submit",
   ];
 
   const modalOpen = useModal(CORRECT_EVENT_TARGETS, "block-styler");

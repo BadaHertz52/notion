@@ -277,12 +277,9 @@ function PageHeader({
               userName={userName}
               mainComment={null}
               subComment={null}
-              editBlock={editBlock}
-              editPage={editPage}
               allComments={page.header.comments}
               addOrEdit={"add"}
               setEdit={setOpenPageCommentInput}
-              frameHtml={frameRef.current}
             />
           ) : (
             newPageFrame &&

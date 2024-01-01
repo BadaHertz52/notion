@@ -19,7 +19,6 @@ export type CommentBlockProps = Omit<
 > &
   CommentToolProps & {
     comment: SubCommentType | MainCommentType;
-    isMainComment: boolean;
     block?: Block;
     page: Page;
     moreOpen: boolean;

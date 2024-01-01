@@ -23,7 +23,6 @@ type CommentToolMoreProps = {
   setAllComments: Dispatch<SetStateAction<MainCommentType[] | null>>;
   setMoreOpen: Dispatch<SetStateAction<boolean>>;
   toolMoreStyle: CSSProperties | undefined;
-  templateHtml: HTMLElement | null;
 };
 
 const CommentToolMore = ({
@@ -35,7 +34,6 @@ const CommentToolMore = ({
   setAllComments,
   setMoreOpen,
   toolMoreStyle,
-  templateHtml,
 }: CommentToolMoreProps) => {
   const toolMoreItem = sessionStorage.getItem(SESSION_KEY.toolMoreItem);
   const [comment, setComment] = useState<

@@ -61,11 +61,12 @@ const FrameModal = ({ ...props }: FrameModalProps) => {
     ".btn-comment",
     ".comment__tool-more",
     ".comment__btn-submit",
-    ".text_commentBtn",
+    ".text__btn-comment",
     "#mobile-menu",
     "#mobile-side-menu",
     "#modal-mobile-side-menu",
     ".comment-input",
+    "#block-comments",
   ];
 
   if (modal.target === "mobileMenu" && modal.block)
