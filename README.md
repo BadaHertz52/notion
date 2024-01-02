@@ -195,6 +195,9 @@ npm run start
 
 ### b) PageContent
 
+- 주소창으로 페이지간 이동 가능
+  - 존재하지 않는 페이지 입력시 , 페이지 없음이라는 화면이 나옴
+  - 깃헙의 새로 고침 이슈로 로컬 환경에서만 가능
 - 새로운 페이지 작성 시 옵션 선택
   - 옵션
     - 페이지 아이콘 추가
@@ -233,6 +236,10 @@ npm run start
   - comment 타입은 open->resolve로 수정 가능
 
 #### 📼 PageContent simulation
+
+주소창을 이용한 페이지 이동
+
+<img  alt="주소창을 이용한 페이지 이동" src="./image/readMeFile/페이지_이동.gif" width="50%"/>
 
 block 생성 및 타입 변경
 
